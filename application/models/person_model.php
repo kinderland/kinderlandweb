@@ -5,11 +5,14 @@ class person_model extends CI_Model{
 		parent::__construct();
 	}
 
-	public function insertNewPerson($fullname, $gender, $email){
-		$sql = 'INSERT INTO person (fullname, date_created, gender, email) VALUES (?, current_timestamp, ?, ?)';
-		$result = $this->db->query($sql, array($fullname, $gender, $email));
+	public function insertNewPerson($fullname, $gender, $email, $addressId){
+		$sql = 'INSERT INTO person (fullname, date_created, gender, email, address_id) VALUES (?, current_timestamp, ?, ?, ?)';
+		$result = $this->db->query($sql, array($fullname, $gender, $email, $addressId));
 
-		return $this->db->insert_id();
+		if($result)
+			return $this->db->insert_id();
+
+		return false;
 	}
 
 }

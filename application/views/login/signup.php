@@ -219,7 +219,7 @@ $(document).pngFix( );
 	<!--  start content-table-inner -->
 	<div id="content-table-inner">
 	
-	<form name="signup_form" method="POST" action="<?=$this->config->item('basic_url')?>completeSignup" id="signup_form">
+	<form name="signup_form" method="POST" action="<?=$this->config->item('url_link')?>login/completeSignup" id="signup_form">
 		<table border="0" width="100%" cellpadding="0" cellspacing="0">
 		<tr valign="top">
 		<td>

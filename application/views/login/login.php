@@ -43,7 +43,7 @@ $(document).pngFix( );
 		</tr>
 		<tr>
 			<th>Senha</th>
-			<td><input type="password" value="************"  onfocus="this.value=''" class="login-inp" /></td>
+			<td><input type="password" value=""  onfocus="this.value=''" class="login-inp" /></td>
 		</tr>
 		<tr>
 			<th></th>
@@ -53,7 +53,7 @@ $(document).pngFix( );
 	</div>
  	<!--  end login-inner -->
 	<div class="clear"></div>
-	<a href="<?=$this->config->item('urllink')?>login/signup" class="forgot-pwd">Fazer o cadastro</a>
+	<a href="<?=$this->config->item('url_link')?>login/signup" class="forgot-pwd">Fazer o cadastro</a>
 </div>
 <!--  end loginbox -->
  
