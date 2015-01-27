@@ -30,7 +30,7 @@ CREATE TABLE telephone (
 CREATE TABLE person_user (
     person_id integer REFERENCES person,
     cpf character varying(20) PRIMARY KEY,
-    login character varying(20) UNIQUE NOT NULL,
+    login character varying(120) UNIQUE NOT NULL,
     password character varying(50) NOT NULL,
     occupation character varying(40)
 );
