@@ -16,24 +16,16 @@
 	
 	<!--  start login-inner -->
 	<div id="login-inner">
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<th>Nome de usuário</th>
-			<td><input type="text"  class="login-inp" /></td>
-		</tr>
-		<tr>
-			<th>Senha</th>
-			<td><input type="password" value=""  onfocus="this.value=''" class="login-inp" /></td>
-		</tr>
-		<tr>
-			<th></th>
-			<td><input type="button" class="submit-login"  /></td>
-		</tr>
-		</table>
+		<h1> Olá, <?=$name?> </h1>
+		<br />
+		<p> 
+			Seu cadastro foi efetuado com sucesso! <br />Para acessar sua conta, use seu email como login.
+		</p>
+
+		<a href="<?=$this->config->item('url_link');?>login/index" class="forgot-pwd">Voltar a tela inicial</a>
 	</div>
  	<!--  end login-inner -->
 	<div class="clear"></div>
-	<a href="<?=$this->config->item('url_link')?>login/signup" class="forgot-pwd">Fazer o cadastro</a>
 </div>
 <!--  end loginbox -->
  
