@@ -16,7 +16,7 @@ class Login extends CI_Controller {
 	}
 
 	public function completeSignup(){
-		$sqlResult = $this->person_model->insertNewPerson($_POST['fullname'], $_POST['gender'], $_POST['email']);
+		$sqlResult = $this->person_model->insertNewPerson($_GET['fullname'], $_POST['gender'], $_POST['email']);
 		print_r($sqlResult);
 	}
 }
