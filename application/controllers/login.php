@@ -6,6 +6,7 @@ class Login extends CI_Controller {
 		parent::__construct();
 		$this->load->model('person_model');
 		$this->load->model('address_model');
+		$this->load->model('telephone_model');
 	}
 
 	public function index(){
@@ -35,8 +36,14 @@ class Login extends CI_Controller {
 
 
 		$addressId = $this->address_model->insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
-		$sqlResult = $this->person_model->insertNewPerson($fullname, $gender, $email, $addressId);
-		print_r($sqlResult);
+		$personId = $this->person_model->insertNewPerson($fullname, $gender, $email, $addressId);
+		
+		$this->telephone_model->insertNewTelephone($phone1,$personId);
+
+		if($phone2)
+			$this->telephone_model->insertNewTelephone($phone2,$personId);
+
+		print_r($personId);
 	}
 }
 
