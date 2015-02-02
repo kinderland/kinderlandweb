@@ -6,7 +6,7 @@
     city character varying(40),
     cep character varying(9),
     uf character varying(2),
-	neighborhood character varying(35)
+    neighborhood character varying(35)
 );
  
 CREATE TABLE person (

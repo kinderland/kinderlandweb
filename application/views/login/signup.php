@@ -1,6 +1,20 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
+	var x = document.forms["signup_form"]["email"].value;
+    var atpos = x.indexOf("@");
+    var dotpos = x.lastIndexOf(".");
+    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+        alert("Not a valid e-mail address");
+        return false;
+    }
+
+    var x = document.forms["signup_form"]["fullname"].value;
+    if (x==null || x=="") {
+        alert("First name must be filled out");
+        return false;
+    }
+
 	$("#signup_form").submit();
 }
 
@@ -142,9 +156,9 @@ function validateForm(){
 
 			<tr>
 				<th valign="top">Senha*:</th>
-				<td><input type="text" id="password" name="password" class="inp-form" /></td>
+				<td><input type="password" id="password" name="password" class="inp-form" /></td>
 				<th valign="top" class="offset-left">Confirme a senha*:</th>
-				<td><input type="text" id="confirm_password" name="confirm_password" class="inp-form" /></td>
+				<td><input type="password" id="confirm_password" name="confirm_password" class="inp-form" /></td>
 			</tr>
 
 			<tr>
