@@ -21,8 +21,6 @@ class Login extends CI_Controller {
 	}
 
 	public function completeSignup(){
-		$error = false;
-
 		$fullname = $_POST['fullname'];
 		$gender = $_POST['gender'];
 		$email = $_POST['email'];
@@ -41,6 +39,10 @@ class Login extends CI_Controller {
 
 
 		try{
+			//Inicia transação no banco
+			$this->generic_model->startTransaction();
+
+			//Faz todo o processo que tem que ser feito no banco
 			$addressId = $this->address_model->insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$personId = $this->person_model->insertNewPerson($fullname, $gender, $email, $addressId);
 			$userId = $this->personuser_model->insertNewUser($personId, $cpf, $email, $password, $occupation);
@@ -49,11 +51,16 @@ class Login extends CI_Controller {
 			if($phone2)
 				$this->telephone_model->insertNewTelephone($phone2, $personId);
 
+			//Caso tenha ocorrido tudo bem, salva as mudanças
+			$this->generic_model->commitTransaction();
+
 			$data['name'] = $fullname;
 
 			$this->load->view('include/header');
 			$this->load->view('login/signup_completed', $data);
 		} catch (Exception $ex) {
+			//Caso tenha capturado algum erro, volta atrás nas alterações feitas antes do erro acontecer
+			$this->generic_model->rollbackTransaction();
 			$data['error'] = true;
 			$this->load->view('include/header');
 			$this->load->view('login/signup', $data);

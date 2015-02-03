@@ -6,8 +6,8 @@ class person_model extends CI_Model{
 	}
 
 	public function insertNewPerson($fullname, $gender, $email, $addressId){
-		$sql = 'INSERT INTO person (fullname, date_created, gender, email, address_id) VALUES (?, current_timestamp, ?, ?, ?)';
-		$result = $this->db->query($sql, array($fullname, $gender, $email, $addressId));
+		$sql = 'INSERT INTO person (fullname, date_created, gender, email, address_id) VALUES (?, current_timestamp, ?, ?, '.$addressId.')';
+		$result = $this->db->query($sql, array($fullname, $gender, $email));
 
 		if($result)
 			return $this->db->insert_id();
