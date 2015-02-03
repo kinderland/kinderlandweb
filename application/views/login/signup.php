@@ -1,25 +1,24 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-	var x = document.forms["signup_form"]["email"].value;
-    var atpos = x.indexOf("@");
-    var dotpos = x.lastIndexOf(".");
-    if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {
-        alert("Not a valid e-mail address");
-        return false;
-    }
+	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome"))
+		return false;
 
-    var x = document.forms["signup_form"]["fullname"].value;
-    if (x==null || x=="") {
-        alert("First name must be filled out");
-        return false;
-    }
+	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
+		return false;
 
-	$("#signup_form").submit();
+
+		$("#signup_form").submit();
+}
+
+function callMasks(){
+
+	$("input[name='cpf']").mask("999.999.999-99");
+
 }
 
 </script>
-<body> 
+<body onload="callMasks()"> 
 <!-- Start: page-top-outer -->
 <div id="page-top-outer">    
 

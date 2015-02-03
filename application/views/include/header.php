@@ -12,6 +12,12 @@
 <!--  jquery core -->
 <script src="<?=$this->config->item('assets');?>js/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
  
+<!--  jquery mask -->
+<script src="<?=$this->config->item('assets');?>js/jquery/jquery.maskedinput-1.3.min.js" type="text/javascript"></script>
+
+<!--  Form validation -->
+<script src="<?=$this->config->item('assets');?>js/formValidationFunctions.js" type="text/javascript"></script>
+
 <!--  checkbox styling script -->
 <script src="<?=$this->config->item('assets');?>js/jquery/ui.core.js" type="text/javascript"></script>
 <script src="<?=$this->config->item('assets');?>js/jquery/ui.checkbox.js" type="text/javascript"></script>
