@@ -17,6 +17,16 @@ class personuser_model extends CI_Model{
 		throw new Exception("User not inserted");
 	}
 
+	public function userLogin($login, $password){
+		$sql = "select * from person_user where login = $login and password = $password";
+		$result = $this->db->query($sql, array($person_id, $cpf, $login, $password, $occupation));
+
+		if($result)
+			return true;
+
+		return false;
+	}
+
 }
 
 ?>

@@ -19,6 +19,21 @@ class Login extends CI_Controller {
 		$this->load->view('include/header');
 		$this->load->view('login/signup');
 	}
+	
+	public function loginSuccessful(){
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$this->load->view('include/header');
+
+		$result = $this->personuser_model->userLogin($email, $password);
+		$data['email'] = $email;
+		$data['password'] = $password;
+		 if ($result) {  
+			$this->load->view('login/login_successful', $data);
+		 }
+		  
+		$this->load->view('login/login');
+	}
 
 	public function completeSignup(){
 		$fullname = $_POST['fullname'];
