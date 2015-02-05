@@ -7,6 +7,8 @@ function validateForm(){
 	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
 		return false;
 
+	if(!confirmField("email","confirm_email","E-mail") || !confirmField("password","confirm_password","Senha"))
+		return false;
 
 		$("#signup_form").submit();
 }
@@ -14,6 +16,10 @@ function validateForm(){
 function callMasks(){
 
 	$("input[name='cpf']").mask("999.999.999-99");
+	$("input[name='phone1']").mask("(99)99999-9999");
+	$("input[name='phone2']").mask("(99)99999-9999");
+	$("input[name='cep']").mask("99999-999");
+	$("input[name='number']").mask("999999");
 
 }
 

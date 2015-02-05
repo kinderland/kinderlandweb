@@ -41,3 +41,14 @@ function validateNotEmptyField(formName, fieldName, fieldUserName){
 
     return true;
 }
+
+function confirmField(field, confirmField, fieldUserName) {
+    var field = document.getElementById(field).value
+    var confField = document.getElementById(confirmField).value
+    if(field != confField) {
+        alert('Por favor, confirme ' + fieldUserName + '.');
+        return false;
+    }
+
+    return true;
+}
