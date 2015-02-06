@@ -11,8 +11,9 @@ class Login extends CI_Controller {
 	}
 
 	public function index(){
+		$data['error'] = false;
 		$this->load->view('include/header');
-		$this->load->view('login/login');
+		$this->load->view('login/login', $data);
 	}
 
 	public function signup(){
@@ -21,18 +22,23 @@ class Login extends CI_Controller {
 	}
 	
 	public function loginSuccessful(){
-		$email = $_POST['email'];
+		$login = $_POST['login'];
 		$password = $_POST['password'];
 		$this->load->view('include/header');
 
-		$result = $this->personuser_model->userLogin($email, $password);
-		$data['email'] = $email;
+		$result = $this->personuser_model->userLogin($login, $password);
+		$data['login'] = $login;
 		$data['password'] = $password;
+		$data['error'] = false;
+
 		 if ($result) {  
 			$this->load->view('login/login_successful', $data);
 		 }
-		  
-		$this->load->view('login/login');
+		 else {
+		 	$data['error'] = true;
+		 	$this->load->view('login/login', $data);
+		 }
+
 	}
 
 	public function completeSignup(){

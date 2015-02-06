@@ -4,9 +4,6 @@ function validateLogin(){
 	
 	if(!validateNotEmptyField("login_form","login","Nome de usuário") || !validateNotEmptyField("login_form","password","Senha"))
 		return false;
-	
-	
-
 
 		$("#login_form").submit();
 }
@@ -32,7 +29,10 @@ function validateLogin(){
 	<div id="login-inner">
 
 	<form name="login_form" method="POST" action="<?=$this->config->item('url_link')?>login/loginSuccessful" id="login_form">
-
+			<?php 
+			if ($error == true)
+				echo "Login e/ou senha inválidos."
+			?> 
 		<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<th>Nome de usuário</th>
@@ -45,6 +45,7 @@ function validateLogin(){
 		<tr>
 			<th></th>
 			<td><input type="button" class="submit-login" onClick="validateLogin()"/></td>
+
 		</tr>
 		</table>
 	</div>

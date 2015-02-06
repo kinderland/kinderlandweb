@@ -19,7 +19,7 @@
 		<h1> Bem vindo(a).</h1>
 		<br />
 		<p> 
-			Esta é sua conta no Sistema Kinderland. Você está logado(a) como  <?=$email?>.
+			Esta é sua conta no Sistema Kinderland. Você está logado(a) como  <?=$login?>.
 		</p>
 
 		<a href="<?=$this->config->item('url_link');?>login/index" class="forgot-pwd">Voltar a tela inicial</a>

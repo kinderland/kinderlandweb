@@ -18,13 +18,15 @@ class personuser_model extends CI_Model{
 	}
 
 	public function userLogin($login, $password){
-		$sql = "select * from person_user where login = $login and password = $password";
-		$result = $this->db->query($sql, array($person_id, $cpf, $login, $password, $occupation));
+		$sql = "SELECT * FROM person_user WHERE login = ? AND password = ?";
+		$rows = $this->db->query($sql, array($login, $password));
 
-		if($result)
+		if($rows->num_rows() > 0){
 			return true;
-
-		return false;
+		}
+		else{
+			return false;
+		}
 	}
 
 }
