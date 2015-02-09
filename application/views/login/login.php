@@ -31,7 +31,7 @@ function validateLogin(){
 	<form name="login_form" method="POST" action="<?=$this->config->item('url_link')?>login/loginSuccessful" id="login_form">
 			<?php 
 			if ($error == true)
-				echo "Login e/ou senha inválidos."
+				echo "<p>Login e/ou senha inválidos.</p><br />"
 			?> 
 		<table border="0" cellpadding="0" cellspacing="0">
 		<tr>

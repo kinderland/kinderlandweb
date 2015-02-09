@@ -18,15 +18,36 @@ class personuser_model extends CI_Model{
 	}
 
 	public function userLogin($login, $password){
-		$sql = "SELECT * FROM person_user WHERE login = ? AND password = ?";
+		$sql = "SELECT person_id FROM person_user WHERE login = ? AND password = ?";
 		$rows = $this->db->query($sql, array($login, $password));
 
 		if($rows->num_rows() > 0){
-			return true;
+			return $rows->row()->person_id;
 		}
 		else{
 			return false;
 		}
+	}
+
+	public function getUserById($person_id){
+		$sql = "select 
+				p.person_id, pu.cpf, pu.occupation, 
+				p.fullname, p.gender, p.email, p.benemerit, a.street, 
+				a.place_number, a.complement, a.city, a.cep, a.uf, 
+				a.neighborhood 
+				from person_user as pu 
+				natural join person as p 
+				natural join address as a 
+				where p.person_id = ?";
+
+		$rows = $this->db->query($sql, array($person_id));
+
+		if($rows->num_rows() > 0){
+			return $rows->row();
+		}
+
+		return null;
+
 	}
 
 }

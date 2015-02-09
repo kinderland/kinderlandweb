@@ -4,14 +4,20 @@ class Login extends CI_Controller {
 
 	public function __construct(){
 		parent::__construct();
+		$this->load->helper('url');
 		$this->load->model('person_model');
 		$this->load->model('address_model');
+		$this->load->model('generic_model');
 		$this->load->model('telephone_model');
 		$this->load->model('personuser_model');
 	}
 
 	public function index(){
-		$data['error'] = false;
+		if(isset($_GET['error']))
+			$data['error'] = $_GET['error'];
+		else
+			$data['error'] = false;
+
 		$this->load->view('include/header');
 		$this->load->view('login/login', $data);
 	}
@@ -32,11 +38,11 @@ class Login extends CI_Controller {
 		$data['error'] = false;
 
 		 if ($result) {  
-			$this->load->view('login/login_successful', $data);
+			//$this->load->view('system/menu', $data);
+			redirect("user/edit?id=".$result);
 		 }
 		 else {
-		 	$data['error'] = true;
-		 	$this->load->view('login/login', $data);
+		 	redirect("login/index?error=true");
 		 }
 
 	}

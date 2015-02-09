@@ -12,7 +12,7 @@
 			$this->db->query("COMMIT");
 		}
 
-		public function startTransaction(){
+		public function rollbackTransaction(){
 			$this->db->query("ROLLBACK");
 		}
 	}
