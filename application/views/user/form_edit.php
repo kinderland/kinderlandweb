@@ -1,16 +1,16 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome"))
+	if(!validateEmail("edit_form","email","e-mail") || !validateNotEmptyField("edit_form","fullname","Nome"))
 		return false;
 
-	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
+	if(!validateNotEmptyField("edit_form","cpf","CPF") || !validateNotEmptyField("edit_form","gender","Sexo"))
 		return false;
 
 	if(!confirmField("email","confirm_email","E-mail") || !confirmField("password","confirm_password","Senha"))
 		return false;
 
-		$("#signup_form").submit();
+	$("#edit_form").submit();
 }
 
 function callMasks(){
@@ -75,7 +75,7 @@ function callMasks(){
 	<!--  start content-table-inner -->
 	<div id="content-table-inner">
 	
-	<form name="signup_form" method="POST" action="<?=$this->config->item('url_link')?>login/completeSignup" id="signup_form">
+	<form name="edit_form" method="POST" action="<?=$this->config->item('url_link')?>user/save" id="edit_form">
 		<table border="0" width="100%" cellpadding="0" cellspacing="0">
 		<tr valign="top">
 		<td>
@@ -83,9 +83,9 @@ function callMasks(){
 			<table border="0" cellpadding="0" cellspacing="0"  id="id-form">
 			<tr>
 				<th valign="top">Nome completo*:</th>
-				<td><input type="text" id="fullname" name="fullname" class="inp-form" value="<?=$user->fullname?>"/></td>
+				<td><input type="text" id="fullname" name="fullname" class="inp-form" value="<?=$user->getFullname()?>"/></td>
 				<th valign="top" class="offset-left">CPF*:</th>
-				<td><input type="text" id="cpf" name="cpf" class="inp-form" value="<?=$user->cpf?>"/></td>
+				<td><input type="text" id="cpf" name="cpf" class="inp-form" value="<?=$user->getCPF()?>"/></td>
 				<th valign="top" class="offset-left">Sexo*:</th>
 				<td>	
 				<select  class="styledselect_form_1" id="gender" name="gender" >
@@ -97,31 +97,31 @@ function callMasks(){
 			</tr>
 			<tr>
 				<th valign="top">E-mail*:</th>
-				<td><input type="text" id="email" name="email" class="inp-form" value="<?=$user->email?>"/></td>
+				<td><input type="text" id="email" name="email" class="inp-form" value="<?=$user->getEmail()?>"/></td>
 				<th valign="top" class="offset-left">Ocupação:</th>
-				<td><input type="text" id="occupation" name="occupation" class="inp-form" value="<?=$user->occupation?>"/></td>
+				<td><input type="text" id="occupation" name="occupation" class="inp-form" value="<?=$user->getOccupation()?>"/></td>
 			</tr>
 			<tr>
 				<th valign="top">Logradouro*:</th>
-				<td><input type="text" id="street" name="street" class="inp-form" value="<?=$user->street?>"/></td>
+				<td><input type="text" id="street" name="street" class="inp-form" value="<?=$user->getAddress()->getStreet()?>"/></td>
 				<th valign="top" class="offset-left">Número*:</th>
-				<td><input type="text" id="number" name="number" class="inp-form" value="<?=$user->place_number?>"/></td>
+				<td><input type="text" id="number" name="number" class="inp-form" value="<?=$user->getAddress()->getPlaceNumber()?>"/></td>
 				<th valign="top" class="offset-left">Complemento:</th>
-				<td><input type="text" id="complement" name="complement" class="inp-form" value="<?=$user->complement?>"/></td>
+				<td><input type="text" id="complement" name="complement" class="inp-form" value="<?=$user->getAddress()->getComplement()?>"/></td>
 			</tr>
 			<tr>
 				<th valign="top">Cidade*:</th>
-				<td><input type="text" id="city" name="city" class="inp-form" value="<?=$user->city?>"/></td>
+				<td><input type="text" id="city" name="city" class="inp-form" value="<?=$user->getAddress()->getCity()?>"/></td>
 				<th valign="top" class="offset-left">CEP*:</th>
-				<td><input type="text" id="cep" name="cep" class="inp-form" value="<?=$user->cep?>"/></td>
+				<td><input type="text" id="cep" name="cep" class="inp-form" value="<?=$user->getAddress()->getCEP()?>"/></td>
 				<th valign="top" class="offset-left">Bairro:</th>
-				<td><input type="text" id="neighborhood" name="neighborhood" class="inp-form" value="<?=$user->neighborhood?>"/></td>
+				<td><input type="text" id="neighborhood" name="neighborhood" class="inp-form" value="<?=$user->getAddress()->getNeighborhood()?>"/></td>
 			</tr>
 			<tr>
 				<th valign="top">Telefone 1*:</th>
-				<td><input type="text" id="phone1" name="phone1" class="inp-form" value="<?=$user->phone1?>"/></td>
+				<td><input type="text" id="phone1" name="phone1" class="inp-form" value="<?='To do...'?>"/></td>
 				<th valign="top" class="offset-left">Telefone 2:</th>
-				<td><input type="text" id="phone2" name="phone2" class="inp-form" value="<?=$user->phone2?>"/></td>
+				<td><input type="text" id="phone2" name="phone2" class="inp-form" value="<?='To do...'?>"/></td>
 				<th valign="top" class="offset-left">Estado*:</th>
 				<td>
 					<select  class="styledselect_form_1" id="uf" name="uf">

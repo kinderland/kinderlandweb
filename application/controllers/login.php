@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
 class Login extends CI_Controller {
 
@@ -13,6 +13,7 @@ class Login extends CI_Controller {
 	}
 
 	public function index(){
+
 		if(isset($_GET['error']))
 			$data['error'] = $_GET['error'];
 		else
@@ -20,6 +21,7 @@ class Login extends CI_Controller {
 
 		$this->load->view('include/header');
 		$this->load->view('login/login', $data);
+		echo APPPATH;
 	}
 
 	public function signup(){

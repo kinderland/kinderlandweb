@@ -30,7 +30,6 @@ $config['url_link'] = 'http://localhost/kinderlandweb/index.php/';
 | Path fisico do diretorio application
 |
 */
-
 $config['application_path'] = substr_replace(dirname(__FILE__), '', -6);
 
 /*
@@ -252,7 +251,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'SIOVUS9cvsS8O0vdkbuaodabvfuvfdO9UFDdgvOUVBFD';
 
 /*
 |--------------------------------------------------------------------------

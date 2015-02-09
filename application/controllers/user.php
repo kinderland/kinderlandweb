@@ -1,5 +1,6 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php 
 
+require_once APPPATH . 'core/personuser.php';
 class User extends CI_Controller {
 
 	public function __construct(){
@@ -35,7 +36,7 @@ class User extends CI_Controller {
 		$complement = $_POST['complement'];
 		$neighborhood = $_POST['neighborhood'];
 		$uf = $_POST['uf'];
-		$password = $_POST['password'];
+		
 		
 	}
 

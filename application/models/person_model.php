@@ -1,4 +1,5 @@
 <?php
+
 class person_model extends CI_Model{
 
 	public function __construct(){
@@ -15,5 +16,6 @@ class person_model extends CI_Model{
 		return false;
 	}
 
+	
 }
 ?>

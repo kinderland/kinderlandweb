@@ -38,12 +38,12 @@ class personuser_model extends CI_Model{
 				from person_user as pu 
 				natural join person as p 
 				natural join address as a 
-				where p.person_id = ?";
+				where p.person_id = ". $person_id;
 
-		$rows = $this->db->query($sql, array($person_id));
+		$rows = $this->db->query($sql);
 
 		if($rows->num_rows() > 0){
-			return $rows->row();
+			return PersonUser::createUserObject($rows->row(), true);
 		}
 
 		return null;
