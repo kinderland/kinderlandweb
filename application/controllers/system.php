@@ -1,6 +1,6 @@
 <?php 
-
-class System extends CI_Controller {
+require_once APPPATH . 'core/CK_Controller.php';
+class System extends CK_Controller {
 
 	public function __construct(){
 		parent::__construct();

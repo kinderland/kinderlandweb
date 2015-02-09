@@ -1,6 +1,7 @@
 <?php
-
-class Login extends CI_Controller {
+require_once APPPATH . 'core/CK_Controller.php';
+require_once APPPATH . 'core/personuser.php';
+class Login extends CK_Controller {
 
 	public function __construct(){
 		parent::__construct();
@@ -19,34 +20,35 @@ class Login extends CI_Controller {
 		else
 			$data['error'] = false;
 
-		$this->load->view('include/header');
-		$this->load->view('login/login', $data);
-		echo APPPATH;
+		$this->loadView('login/login', $data);
 	}
 
 	public function signup(){
-		$this->load->view('include/header');
-		$this->load->view('login/signup');
+		$this->loadView('login/signup');
 	}
 	
 	public function loginSuccessful(){
 		$login = $_POST['login'];
 		$password = $_POST['password'];
-		$this->load->view('include/header');
 
-		$result = $this->personuser_model->userLogin($login, $password);
-		$data['login'] = $login;
-		$data['password'] = $password;
-		$data['error'] = false;
+		$userId = $this->personuser_model->userLogin($login, $password);
 
-		 if ($result) {  
+		if ($userId) {  
+		 	$user = $this->personuser_model->getUserById($userId);
+		 	$this->session->set_userdata("user", $user);
+
 			//$this->load->view('system/menu', $data);
-			redirect("user/edit?id=".$result);
-		 }
-		 else {
+			redirect("user/edit");
+		}else {
 		 	redirect("login/index?error=true");
-		 }
+		}
+	}
 
+	public function logout(){
+		if(!$this->checkSession())
+			redirect("Login/index");
+		$this->session->session_destroy();
+		redirect("Login/index");
 	}
 
 	public function completeSignup(){
@@ -85,14 +87,12 @@ class Login extends CI_Controller {
 
 			$data['name'] = $fullname;
 
-			$this->load->view('include/header');
-			$this->load->view('login/signup_completed', $data);
+			$this->loadView('login/signup_completed', $data);
 		} catch (Exception $ex) {
 			//Caso tenha capturado algum erro, volta atrás nas alterações feitas antes do erro acontecer
 			$this->generic_model->rollbackTransaction();
 			$data['error'] = true;
-			$this->load->view('include/header');
-			$this->load->view('login/signup', $data);
+			$this->loadView('login/signup', $data);
 		}
 	}
 }

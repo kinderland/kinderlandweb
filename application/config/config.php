@@ -248,39 +248,37 @@ $config['cache_path'] = '';
 |--------------------------------------------------------------------------
 |
 | If you use the Encryption class or the Session class you
-| MUST set an encryption key.  See the user guide for info.
+| MUST set an encryption key. See the user guide for info.
 |
 */
-$config['encryption_key'] = 'SIOVUS9cvsS8O0vdkbuaodabvfuvfdO9UFDdgvOUVBFD';
-
+$config['encryption_key'] = 'jifAEfiEFIANNFfnfnaiqoooFuOiQwwR';
 /*
 |--------------------------------------------------------------------------
 | Session Variables
 |--------------------------------------------------------------------------
 |
-| 'sess_cookie_name'		= the name you want for the cookie
-| 'sess_expiration'			= the number of SECONDS you want the session to last.
-|   by default sessions last 7200 seconds (two hours).  Set to zero for no expiration.
-| 'sess_expire_on_close'	= Whether to cause the session to expire automatically
-|   when the browser window is closed
-| 'sess_encrypt_cookie'		= Whether to encrypt the cookie
-| 'sess_use_database'		= Whether to save the session data to a database
-| 'sess_table_name'			= The name of the session database table
-| 'sess_match_ip'			= Whether to match the user's IP address when reading the session data
-| 'sess_match_useragent'	= Whether to match the User Agent when reading the session data
-| 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
+| 'sess_cookie_name' = the name you want for the cookie
+| 'sess_expiration' = the number of SECONDS you want the session to last.
+| by default sessions last 7200 seconds (two hours). Set to zero for no expiration.
+| 'sess_expire_on_close' = Whether to cause the session to expire automatically
+| when the browser window is closed
+| 'sess_encrypt_cookie' = Whether to encrypt the cookie
+| 'sess_use_database' = Whether to save the session data to a database
+| 'sess_table_name' = The name of the session database table
+| 'sess_match_ip' = Whether to match the user's IP address when reading the session data
+| 'sess_match_useragent' = Whether to match the User Agent when reading the session data
+| 'sess_time_to_update' = how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'ci_session';
-$config['sess_expiration']		= 7200;
-$config['sess_expire_on_close']	= FALSE;
-$config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= FALSE;
-$config['sess_table_name']		= 'ci_sessions';
-$config['sess_match_ip']		= FALSE;
-$config['sess_match_useragent']	= TRUE;
-$config['sess_time_to_update']	= 300;
-
+$config['sess_cookie_name'] = 'ci_session';
+$config['sess_expiration'] = 7200;
+$config['sess_expire_on_close'] = FALSE;
+$config['sess_encrypt_cookie'] = FALSE;
+$config['sess_use_database'] = FALSE;
+$config['sess_table_name'] = 'ci_sessions';
+$config['sess_match_ip'] = FALSE;
+$config['sess_match_useragent'] = TRUE;
+$config['sess_time_to_update'] = 300;
 /*
 |--------------------------------------------------------------------------
 | Cookie Related Variables
@@ -288,15 +286,14 @@ $config['sess_time_to_update']	= 300;
 |
 | 'cookie_prefix' = Set a prefix if you need to avoid collisions
 | 'cookie_domain' = Set to .your-domain.com for site-wide cookies
-| 'cookie_path'   =  Typically will be a forward slash
-| 'cookie_secure' =  Cookies will only be set if a secure HTTPS connection exists.
+| 'cookie_path' = Typically will be a forward slash
+| 'cookie_secure' = Cookies will only be set if a secure HTTPS connection exists.
 |
 */
-$config['cookie_prefix']	= "";
-$config['cookie_domain']	= "";
-$config['cookie_path']		= "/";
-$config['cookie_secure']	= FALSE;
-
+$config['cookie_prefix'] = "";
+$config['cookie_domain'] = "";
+$config['cookie_path'] = "/";
+$config['cookie_secure'] = FALSE;
 /*
 |--------------------------------------------------------------------------
 | Global XSS Filtering
@@ -307,7 +304,6 @@ $config['cookie_secure']	= FALSE;
 |
 */
 $config['global_xss_filtering'] = FALSE;
-
 /*
 |--------------------------------------------------------------------------
 | Cross Site Request Forgery
@@ -324,7 +320,6 @@ $config['csrf_protection'] = FALSE;
 $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
-
 /*
 |--------------------------------------------------------------------------
 | Output Compression

@@ -1,7 +1,7 @@
 <?php 
-
+require_once APPPATH . 'core/CK_Controller.php';
 require_once APPPATH . 'core/personuser.php';
-class User extends CI_Controller {
+class User extends CK_Controller {
 
 	public function __construct(){
 		parent::__construct();
@@ -14,11 +14,11 @@ class User extends CI_Controller {
 	}
 
 	public function edit(){
-		$user = $this->personuser_model->getUserById($_GET['id']);
+		$alldata = $this->session->all_userdata("user");
+		print_r($alldata);
 
-		$data['user'] = $user;
-		$this->load->view('include/header');
-		$this->load->view('user/form_edit', $data);
+		$data['user'] = $this->session->userdata("user");
+		//$this->loadView('user/form_edit', $data);
 	}
 
 	public function save(){

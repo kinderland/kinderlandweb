@@ -23,9 +23,9 @@
 
 		public static function createAddressObject($resultRow){
 			return new Address(
-				$resultRow->addressId,
+				$resultRow->address_id,
 				$resultRow->street,
-				$resultRow->placeNumber,
+				$resultRow->place_number,
 				$resultRow->complement,
 				$resultRow->cep,
 				$resultRow->city,

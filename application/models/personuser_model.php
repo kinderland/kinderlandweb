@@ -31,7 +31,7 @@ class personuser_model extends CI_Model{
 
 	public function getUserById($person_id){
 		$sql = "select 
-				p.person_id, pu.cpf, pu.occupation, 
+				p.person_id, pu.login, a.address_id, pu.cpf, pu.occupation, 
 				p.fullname, p.gender, p.email, p.benemerit, a.street, 
 				a.place_number, a.complement, a.city, a.cep, a.uf, 
 				a.neighborhood 

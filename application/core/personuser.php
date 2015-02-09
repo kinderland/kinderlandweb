@@ -7,7 +7,7 @@
 		private $occupation;
 
 		public function __construct($personId, $fullname, 
-			$gender, $email, $associate, $benemerit, $address, $login,
+			$gender, $email, /*$associate,*/ $benemerit, $address, $login,
 			$cpf, $occupation){
 			parent::__construct($personId, $fullname, 
 			$gender, $email, $benemerit, $address);
@@ -23,7 +23,7 @@
 				$resultRow->fullname,
 				$resultRow->gender, 
 				$resultRow->email,
-				$resultRow->associate, 
+				//$resultRow->associate, 
 				$resultRow->benemerit,
 				null,
 				$resultRow->login,
