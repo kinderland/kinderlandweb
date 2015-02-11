@@ -3,11 +3,11 @@
 function validateForm(){
 	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome")||
 	 (!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))||
-	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password"))||
 	 (!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
 	 (!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
 	 (!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
-	 (!validateNotEmptyField("signup_form","phone1","Telefone 1")))
+	 (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
+	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
 		return false;
 
 
@@ -28,7 +28,7 @@ function validateForm(){
 
 	if(!validateNotEmptyField("signup_form","phone1","Telefone 1"))
 		return false;*/
-	
+
 		$("#signup_form").submit();
 }
 
