@@ -17,13 +17,19 @@
 	<body>
 		<header class="navbar navbar-sags" role="banner" id="top">
 			<div class="container">
-				<a class="navbar-brand" href="<?=$this->config->item('url_link')?>system/menu">Colônia Kinderland</a>
-				<div class="navbar-form navbar-right">
+				<a class="navbar-brand" href="<?=$this->config->item('url_link')?>system/menu">
+					<img src="<?=$this->config->item('assets');?>images/kinderland/logo-kinderland.png" width=140 height=50 />
+				</a>
+				<div class="navbar-form navbar-right" style="margin-top:20px">
 					<?php if(isset($user_id)){ ?>
 					<span class="login-span"> 
 						Olá, <?=$fullname;?><br /> 
 						<a href="<?=$this->config->item('url_link')?>login/logout">Sair do Sistema</a>
 					</span>
+					<?php } else { ?>
+
+					<a href="<?=$this->config->item('url_link')?>login/signup"><button class="btn btn-primary">Cadastre-se</button></a>
+
 					<?php } ?>
 				</div>
 			</div>

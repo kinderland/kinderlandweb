@@ -25,7 +25,8 @@ class Login extends CK_Controller {
 	}
 
 	public function signup(){
-		$this->loadView('login/signup');
+		$data = array();
+		$this->loadView('login/signup', $data);
 	}
 	
 	public function loginSuccessful(){
@@ -67,9 +68,14 @@ class Login extends CK_Controller {
 	}
 
 	public function logout(){
+		$this->session->unset_userdata("fullname");
+		$this->session->unset_userdata("user_id");
+		$this->session->unset_userdata("user_type");
+		$this->session->sess_destroy();
+
 		if(!$this->checkSession())
 			redirect("login/index");
-		$this->session->session_destroy();
+		
 		redirect("login/index");
 	}
 

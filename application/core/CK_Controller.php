@@ -9,6 +9,11 @@ class CK_Controller extends CI_Controller{
 	}
 
 	public function loadView($viewName, $data){
+		if($this->session->userdata("fullname")){
+			$data['fullname'] = $this->session->userdata("fullname");
+			$data['user_id'] = $this->session->userdata("user_id");
+		}
+
 		$output  = $this->load->view('include/header', $data, true);
 		$output .= $this->load->view($viewName, $data, true);
 		$output .= $this->load->view('include/footer', $data, true);
@@ -18,7 +23,7 @@ class CK_Controller extends CI_Controller{
 
 	public function checkSession(){
 		//print_r($this->session->userdata('operator'));
-		if(!is_null($this->session->userdata('user_id')) && strlen($this->session->userdata('user_id')) > 0)
+		if(!$this->session->userdata('user_id') || !$this->session->userdata('fullname'))
 			return false;
 		return true;
 	}
