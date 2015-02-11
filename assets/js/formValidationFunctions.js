@@ -46,9 +46,21 @@ function confirmField(field, confirmField, fieldUserName) {
     var field = document.getElementById(field).value
     var confField = document.getElementById(confirmField).value
     if(field != confField) {
-        alert('Por favor, confirme ' + fieldUserName + '.');
+        alert("Por favor, confirme " + fieldUserName + ".");
         return false;
     }
 
     return true;
+}
+
+function confirmPassword(password, confPassword) {
+    var pass1 = document.getElementById(password).value;
+    var pass2 = document.getElementById(confPassword).value;
+    var ok = true;
+    if (pass1 != pass2) {
+        alert("O campo Senha não confere com o campo Confirmação de senha.");
+        ok = false;
+    }
+
+    return ok;
 }

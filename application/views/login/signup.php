@@ -1,15 +1,34 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome"))
+	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome")||
+	 (!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))||
+	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password"))||
+	 (!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
+	 (!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
+	 (!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
+	 (!validateNotEmptyField("signup_form","phone1","Telefone 1")))
 		return false;
 
-	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
+
+/*	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
 		return false;
 
-	if(!confirmField("email","confirm_email","E-mail") || !confirmField("password","confirm_password","Senha"))
+	if(!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password"))
 		return false;
 
+	if(!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))
+		return false;
+
+	if(!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))
+		return false;
+
+	if(!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))
+		return false;
+
+	if(!validateNotEmptyField("signup_form","phone1","Telefone 1"))
+		return false;*/
+	
 		$("#signup_form").submit();
 }
 
@@ -19,7 +38,7 @@ function callMasks(){
 	$("input[name='phone1']").mask("(99)99999-9999");
 	$("input[name='phone2']").mask("(99)99999-9999");
 	$("input[name='cep']").mask("99999-999");
-	$("input[name='number']").mask("999999");
+	//$("input[name='number']").mask("999999");
 
 }
 
