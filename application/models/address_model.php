@@ -17,6 +17,26 @@ class address_model extends CI_Model{
 		return false;
 	}
 
+	public function getAddressByPersonId($person_id){
+        $sql = "SELECT * FROM person WHERE person_id=".$person_id;
+        $rows = $this->db->query($sql);
+    
+        if($rows->num_rows() > 0) {
+            return Address::createAddressObject($rows->row());
+        }
+        else {
+            return false;
+        }
+    }
+
+    public function updateAddress($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, $address_id) {
+        $sql = "UPDATE address SET street=?, place_number=?, complement=?, city=?, cep=?, uf=?, neighborhood=? WHERE address_id=?";
+        if ($this->db->query($sql, array($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, $address_id)))
+            return true;
+        return false;
+    }
+
+
 }
 
 ?>

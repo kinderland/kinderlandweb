@@ -5,58 +5,37 @@ function validateLogin(){
 	if(!validateNotEmptyField("login_form","login","Nome de usuário") || !validateNotEmptyField("login_form","password","Senha"))
 		return false;
 
-		$("#login_form").submit();
+		$("#login-middle").submit();
 }
 
 </script>
-<body id="login-bg"> 
- 
-<!-- Start: login-holder -->
-<div id="login-holder">
 
-	<!-- start logo -->
-	<div id="logo-login">
-		<a href="index.html"><img src="<?=$this->config->item('assets');?>images/kinderland/logo.png" width="156" height="40" alt="" /></a>
+<div class="row">
+	<div class="col-lg-6 col-lg-push-3 login-middle">
+		<form name="login-middle" class="form-horizontal" action="<?=$this->config->item('url_link')?>login/loginSuccessful"
+			method="post">
+			<div class="form-group <?php if(isset($error)) echo" has-error"?>">
+				<label for="login" class="col-lg-2 control-label"> Login: </label>
+				<div class="col-lg-10">
+					<input type="text" class="form-control" placeholder="Login"
+						name="login" />
+				</div>
+			</div>
+
+			<div class="form-group <?php if(isset($error)) echo" has-error"?>">
+				<label for="password" class="col-lg-2 control-label"> Senha: </label>
+				<div class="col-lg-10">
+					<input type="password" class="form-control" placeholder="Senha"
+						name="password" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-lg-10 col-lg-offset-2">
+					<button class="btn btn-primary" onClick="validateLogin()">Entrar</button>
+					<?php if(isset($error)) echo"  Login e/ou senha incorretos"?>
+				</div>
+			</div>
+		</form>
 	</div>
-	<!-- end logo -->
-	
-	<div class="clear"></div>
-	
-	<!--  start loginbox ................................................................................. -->
-	<div id="loginbox">
-	
-	<!--  start login-inner -->
-	<div id="login-inner">
-
-	<form name="login_form" method="POST" action="<?=$this->config->item('url_link')?>login/loginSuccessful" id="login_form">
-			<?php 
-			if ($error == true)
-				echo "<p>Login e/ou senha inválidos.</p><br />"
-			?> 
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<th>Nome de usuário</th>
-			<td><input type="text" id="login" name="login" class="login-inp" /></td>
-		</tr>
-		<tr>
-			<th>Senha</th>
-			<td><input type="password" value=""  onfocus="this.value=''" id="password" name="password" class="login-inp" /></td>
-		</tr>
-		<tr>
-			<th></th>
-			<td><input type="button" class="submit-login" onClick="validateLogin()"/></td>
-
-		</tr>
-		</table>
-	</div>
- 	<!--  end login-inner -->
-	<div class="clear"></div>
-	<a href="<?=$this->config->item('url_link')?>login/signup" class="forgot-pwd">Fazer o cadastro</a>
 </div>
-<!--  end loginbox -->
- 
-
-</div>
-<!-- End: login-holder -->
-</body>
-</html>

@@ -14,11 +14,12 @@ class Login extends CK_Controller {
 	}
 
 	public function index(){
+		if($this->checkSession())
+			redirect("system/menu");
 
+		$data = array();
 		if(isset($_GET['error']))
 			$data['error'] = $_GET['error'];
-		else
-			$data['error'] = false;
 
 		$this->loadView('login/login', $data);
 	}
@@ -37,19 +38,39 @@ class Login extends CK_Controller {
 		 	$user = $this->personuser_model->getUserById($userId);
 		 	$this->session->set_userdata("user_id", $user->getPersonId());
 		 	$this->session->set_userdata("fullname", $user->getFullname());
+		 	$this->session->set_userdata("user_type", $user->getUserType());
 
-			//$this->load->view('system/menu', $data);
-			redirect("user/edit");
-		}else {
+			switch($user->getUserType()){
+				case COMMON_USER:
+					redirect("user/edit");
+					break;
+				case SYSTEM_ADMIN:
+					//TO DO LATER
+					break;
+				case DIRECTOR:
+					//TO DO LATER
+					break;
+				case SECRETARY:
+					//TO DO LATER
+					break;
+				case COORDINATOR:
+					//TO DO LATER
+					break;
+				default:
+					redirect("login/index?error=true");
+					break;
+			}
+			
+		} else {
 		 	redirect("login/index?error=true");
 		}
 	}
 
 	public function logout(){
 		if(!$this->checkSession())
-			redirect("Login/index");
+			redirect("login/index");
 		$this->session->session_destroy();
-		redirect("Login/index");
+		redirect("login/index");
 	}
 
 	public function completeSignup(){
@@ -87,8 +108,10 @@ class Login extends CK_Controller {
 			$this->generic_model->commitTransaction();
 
 			$data['name'] = $fullname;
-
-			$this->loadView('login/signup_completed', $data);
+			$this->session->set_userdata("user_id", $personId);
+			$this->session->set_userdata("fullname", $fullname);
+			$this->session->set_userdata("user_type", COMMON_USER);
+			redirect("system/menu");
 		} catch (Exception $ex) {
 			//Caso tenha capturado algum erro, volta atrás nas alterações feitas antes do erro acontecer
 			$this->generic_model->rollbackTransaction();

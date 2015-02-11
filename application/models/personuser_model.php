@@ -31,7 +31,7 @@ class personuser_model extends CI_Model{
 
 	public function getUserById($person_id){
 		$sql = "select 
-				p.person_id, pu.login, a.address_id, pu.cpf, pu.occupation, 
+				p.person_id, pu.user_type, pu.login, a.address_id, pu.cpf, pu.occupation, 
 				p.fullname, p.gender, p.email, p.benemerit, a.street, 
 				a.place_number, a.complement, a.city, a.cep, a.uf, 
 				a.neighborhood 
@@ -49,6 +49,14 @@ class personuser_model extends CI_Model{
 		return null;
 
 	}
+
+	public function updatePersonUser($email, $cpf, $occupation, $person_id) {
+        $sql = "UPDATE person_user SET login=?, cpf=?, occupation=? WHERE person_id=".$person_id;
+        if ($this->db->query($sql, array($email, $cpf, $occupation)))
+            return true;
+        return false;
+    
+    }
 
 }
 

@@ -13,8 +13,8 @@ class System extends CK_Controller {
 	}
 
 	public function menu(){
-		
-
+		$data['fullname'] = $this->session->userdata("fullname");
+		$this->loadView("system/menu", $data);
 	}
 
 }

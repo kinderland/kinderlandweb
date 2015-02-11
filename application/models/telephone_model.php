@@ -17,6 +17,18 @@ class telephone_model extends CI_Model{
 		return false;
 	}
 
+	public function updatePhone($person_id, $phone1, $phone2) {
+        $sqlDel = "DELETE FROM telephone WHERE person_id=".$person_id;
+        $this->db->query($sqlDel);
+        
+        $this->telephone_model->insertNewTelephone($phone1, $person_id);
+        if($phone2){
+            $this->telephone_model->insertNewTelephone($phone2, $person_id);
+        }
+
+    }
+
+
 }
 
 ?>

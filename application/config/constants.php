@@ -37,5 +37,23 @@ define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 
+/*
+|--------------------------------------------------------------------------
+| User Login types
+|--------------------------------------------------------------------------
+|
+| These modes are used when working with fopen()/popen()
+|
+*/
+
+define('COMMON_USER',	1);
+define('SYSTEM_ADMIN',	2);
+define('DIRECTOR',		3);
+define('SECRETARY',		4);
+define('COORDINATOR', 	5);
+
+
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

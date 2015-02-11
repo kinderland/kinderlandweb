@@ -1,0 +1,22 @@
+.red_letters{
+	color: #FF0000;
+}
+
+.system-menu-list{
+	list-style-type: none;
+}
+.system-menu-list li{
+	margin:10px 0;
+}
+.system-menu-list li a{
+	color:#EEEEEE;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.system-menu-list li a:hover{
+	color:#333333;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-decoration: underline;
+}

@@ -17,6 +17,7 @@ class User extends CK_Controller {
 		$user = $this->personuser_model->getUserById($this->session->userdata("user_id"));
 
 		$data['user'] = $user;
+		$data['fullname'] = $this->session->userdata("fullname");
 		$this->loadView('user/form_edit', $data);
 	}
 
@@ -38,6 +39,47 @@ class User extends CK_Controller {
 		
 		
 	}
+
+	public function update(){
+        $person_id = $this->session->userdata("user_id");
+        $fullname = $_POST['fullname'];
+        $gender = $_POST['gender'];
+        $email = $_POST['email'];
+        $cpf = $_POST['cpf'];
+        $street = $_POST['street'];
+        $number = $_POST['number'];
+        $city = $_POST['city'];
+        $phone1 = $_POST['phone1'];
+        $phone2 = $_POST['phone2'];
+        $cep = $_POST['cep'];
+        $occupation = $_POST['occupation'];
+        $complement = $_POST['complement'];
+        $neighborhood = $_POST['neighborhood'];
+        $uf = $_POST['uf'];
+
+
+        $address = $this->address_model->getAddressByPersonId($person_id);
+
+        try{
+            $this->generic_model->startTransaction();
+
+            $this->person_model->updatePerson($fullname, $gender, $email, $person_id);
+            $this->personuser_model->updatePersonUser($email, $cpf, $occupation, $person_id);
+            $this->address_model->updateAddress($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, $address->getAddressId());
+            $this->telephone_model->updatePhone($person_id, $phone1, $phone2);
+
+            $this->session->set_userdata("fullname", $fullname);
+            
+            $this->generic_model->commitTransaction();
+
+           	redirect("system/menu");
+
+        } catch(Exception $ex){
+
+            $this->generic_model->rollbackTransaction();
+        }
+
+    } 
 
 }
 

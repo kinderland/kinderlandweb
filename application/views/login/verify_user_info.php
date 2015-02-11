@@ -10,26 +10,6 @@ function redirectEditUser(){
 
 </script>
 
-<body> 
-<!-- Start: page-top-outer -->
-<div id="page-top-outer">    
-
-<!-- Start: page-top -->
-<div id="page-top">
-
-	<!-- start logo -->
-	<div id="logo">
-	<a href=""><img src="<?=$this->config->item('assets');?>images/kinderland/logo.png" width="156" height="40" alt="" /></a>
-	</div>
-	<!-- end logo -->
-
- 	<div class="clear"></div>
-
-</div>
-<!-- End: page-top -->
-
-</div>
-<!-- End: page-top-outer -->
 	
 <div class="clear">&nbsp;</div>
  
@@ -143,19 +123,3 @@ function redirectEditUser(){
 </div>
 <!--  end content-outer -->
 
- 
-
-<div class="clear">&nbsp;</div>
-    
-<!-- start footer -->         
-<div id="footer">
-	<!--  start footer-left -->
-	<div id="footer-left">
-	Admin Skin &copy; Copyright Internet Dreams Ltd. <a href="">www.netdreams.co.uk</a>. All rights reserved.</div>
-	<!--  end footer-left -->
-	<div class="clear">&nbsp;</div>
-</div>
-<!-- end footer -->
- 
-</body>
-</html>

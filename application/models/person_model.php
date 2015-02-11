@@ -16,6 +16,12 @@ class person_model extends CI_Model{
 		return false;
 	}
 
+ 	public function updatePerson($fullname, $gender, $email, $person_id) {
+        $sql = "UPDATE person SET fullname=?, gender=?, email=? WHERE person_id=".$person_id;
+        if ($this->db->query($sql, array($fullname, $gender, $email)))
+            return true;
+        return false;
+    } 
 	
 }
 ?>
