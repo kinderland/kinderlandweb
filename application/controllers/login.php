@@ -35,7 +35,8 @@ class Login extends CK_Controller {
 
 		if ($userId) {  
 		 	$user = $this->personuser_model->getUserById($userId);
-		 	$this->session->set_userdata("user", $user);
+		 	$this->session->set_userdata("user_id", $user->getPersonId());
+		 	$this->session->set_userdata("fullname", $user->getFullname());
 
 			//$this->load->view('system/menu', $data);
 			redirect("user/edit");

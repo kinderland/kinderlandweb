@@ -165,3 +165,36 @@ $(document).ready(function(){
 $(document).pngFix( );
 });
 </script>
+
+<body>
+
+<!-- Start: page-top-outer -->
+<div id="page-top-outer">    
+
+<!-- Start: page-top -->
+<div id="page-top">
+
+	<!-- start logo -->
+	<div id="logo">
+	<a href=""><img src="images/shared/logo.png" width="156" height="40" alt="" /></a>
+	</div>
+	<!-- end logo -->
+	
+	<!--  start top-search -->
+	<div id="top-search">
+		<?php if(isset($fullname)) { ?>
+		<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			Olá, <strong><?=$fullname?></strong>
+		</tr>
+		</table>
+		<?php } ?>
+	</div>
+ 	<!--  end top-search -->
+ 	<div class="clear"></div>
+
+</div>
+<!-- End: page-top -->
+
+</div>
+<!-- End: page-top-outer -->

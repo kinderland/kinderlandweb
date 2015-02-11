@@ -14,11 +14,10 @@ class User extends CK_Controller {
 	}
 
 	public function edit(){
-		$alldata = $this->session->all_userdata("user");
-		print_r($alldata);
+		$user = $this->personuser_model->getUserById($this->session->userdata("user_id"));
 
-		$data['user'] = $this->session->userdata("user");
-		//$this->loadView('user/form_edit', $data);
+		$data['user'] = $user;
+		$this->loadView('user/form_edit', $data);
 	}
 
 	public function save(){
