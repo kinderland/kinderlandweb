@@ -1,4 +1,3 @@
-
 <?php
 
 class telephone_model extends CI_Model{
@@ -9,7 +8,7 @@ class telephone_model extends CI_Model{
 
 	public function insertNewTelephone($number, $personId){
 		$sql = 'INSERT INTO telephone(phone_number, person_id) VALUES (?,?)';
-		$result = $this->db->query($sql, array($number, $personId));
+		$result = $this->db->query($sql, array($number, intval($personId)));
 
 		if($result)
 			return true;
@@ -18,8 +17,8 @@ class telephone_model extends CI_Model{
 	}
 
 	public function updatePhone($person_id, $phone1, $phone2) {
-        $sqlDel = "DELETE FROM telephone WHERE person_id=".$person_id;
-        $this->db->query($sqlDel);
+        $sqlDel = "DELETE FROM telephone WHERE person_id=?";
+        $this->db->query($sqlDel, array(intval($person_id)));
         
         $this->telephone_model->insertNewTelephone($phone1, $person_id);
         if($phone2){

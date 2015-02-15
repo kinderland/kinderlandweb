@@ -113,7 +113,6 @@ class Login extends CK_Controller {
 			//Caso tenha ocorrido tudo bem, salva as mudanças
 			$this->generic_model->commitTransaction();
 
-			$data['name'] = $fullname;
 			$this->session->set_userdata("user_id", $personId);
 			$this->session->set_userdata("fullname", $fullname);
 			$this->session->set_userdata("user_type", COMMON_USER);

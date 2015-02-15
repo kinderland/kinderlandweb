@@ -15,7 +15,7 @@ class User extends CK_Controller {
 
 	public function edit(){
 		$user = $this->personuser_model->getUserById($this->session->userdata("user_id"));
-
+		
 		$data['user'] = $user;
 		$data['fullname'] = $this->session->userdata("fullname");
 		$this->loadView('user/form_edit', $data);
@@ -65,7 +65,7 @@ class User extends CK_Controller {
 
             $this->person_model->updatePerson($fullname, $gender, $email, $person_id);
             $this->personuser_model->updatePersonUser($email, $cpf, $occupation, $person_id);
-            $this->address_model->updateAddress($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, $address->getAddressId());
+            $this->address_model->updateAddress($street, $number, $complement, $city, $cep, $uf, $neighborhood, $address->getAddressId());
             $this->telephone_model->updatePhone($person_id, $phone1, $phone2);
 
             $this->session->set_userdata("fullname", $fullname);

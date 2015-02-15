@@ -18,7 +18,7 @@
 		<h2> Bem vindo(a), <?=$fullname?>.</h2>
 		<br />
 		<ul class="system-menu-list">
-			<li><a href="">Próximos Eventos</a>
+			<li><a href="<?=$this->config->item('url_link');?>events/index">Próximos Eventos</a>
 			<li><a href="">Doação Associado Kinderland 2015</a>
 			<li><a href="">Doação Avulsa</a>
 			<li><a href="">Inscrição MiniKinderland 2015 e Kinderland 2016</a>

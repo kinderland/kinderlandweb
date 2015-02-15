@@ -9,7 +9,7 @@ class personuser_model extends CI_Model{
 
 	public function insertNewUser($personId, $cpf, $login, $password, $occupation){
 		$sql = 'INSERT INTO person_user(person_id, cpf, login, password, occupation) VALUES (?,?,?,?,?)';
-		$result = $this->db->query($sql, array($personId, $cpf, $login, $password, $occupation));
+		$result = $this->db->query($sql, array(intval($personId), $cpf, $login, $password, $occupation));
 
 		if($result)
 			return true;
@@ -38,9 +38,9 @@ class personuser_model extends CI_Model{
 				from person_user as pu 
 				natural join person as p 
 				natural join address as a 
-				where p.person_id = ". $person_id;
+				where p.person_id = ?";
 
-		$rows = $this->db->query($sql);
+		$rows = $this->db->query($sql, array(intval($person_id)));
 
 		if($rows->num_rows() > 0){
 			return PersonUser::createUserObject($rows->row(), true);
@@ -51,8 +51,8 @@ class personuser_model extends CI_Model{
 	}
 
 	public function updatePersonUser($email, $cpf, $occupation, $person_id) {
-        $sql = "UPDATE person_user SET login=?, cpf=?, occupation=? WHERE person_id=".$person_id;
-        if ($this->db->query($sql, array($email, $cpf, $occupation)))
+        $sql = "UPDATE person_user SET login=?, cpf=?, occupation=? WHERE person_id=?";
+        if ($this->db->query($sql, array($email, $cpf, $occupation, intval($person_id))))
             return true;
         return false;
     

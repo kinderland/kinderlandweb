@@ -53,7 +53,7 @@ function callMasks(){
 		</div>
 		<hr />
 
-		<form name="edit_form" method="POST" action="<?=$this->config->item('url_link')?>user/update" id="edit_form">
+		<form name="edit_form" method="POST" action="<?=$this->config->item('url_link')?>login/completeSignup" id="edit_form">
 			<div class="row">
 				<div class="form-group">
 					<label for="fullname" class="col-lg-1 control-label"> Nome Completo*: </label>

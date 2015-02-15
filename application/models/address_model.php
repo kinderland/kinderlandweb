@@ -1,4 +1,3 @@
-
 <?php
 
 class address_model extends CI_Model{
@@ -9,7 +8,7 @@ class address_model extends CI_Model{
 
 	public function insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf){
 		$sql = 'INSERT INTO address(street, place_number, complement, city, cep, neighborhood, uf) VALUES (?,?,?,?,?,?,?)';
-		$result = $this->db->query($sql, array($street, $number, $complement, $city, $cep, $neighborhood, $uf));
+		$result = $this->db->query($sql, array($street, intval($number), $complement, $city, $cep, $neighborhood, $uf));
 
 		if($result)
 			return $this->db->insert_id();
@@ -18,8 +17,8 @@ class address_model extends CI_Model{
 	}
 
 	public function getAddressByPersonId($person_id){
-        $sql = "SELECT * FROM person NATURAL JOIN address WHERE person_id=".$person_id;
-        $rows = $this->db->query($sql);
+        $sql = "SELECT * FROM person NATURAL JOIN address WHERE person_id=?";
+        $rows = $this->db->query($sql, array(intval($person_id)));
     
         if($rows->num_rows() > 0) {
             return Address::createAddressObject($rows->row());
@@ -30,8 +29,8 @@ class address_model extends CI_Model{
     }
 
     public function updateAddress($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, $address_id) {
-        $sql = "UPDATE address SET street=?, place_number=?, complement=?, city=?, cep=?, uf=?, neighborhood=? WHERE address_id=".$address_id;
-        if ($this->db->query($sql, array($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, $address_id)))
+        $sql = "UPDATE address SET street=?, place_number=?, complement=?, city=?, cep=?, uf=?, neighborhood=? WHERE address_id=?";
+        if ($this->db->query($sql, array($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, intval($address_id))))
             return true;
         return false;
     }

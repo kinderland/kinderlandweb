@@ -78,3 +78,14 @@
 .red_letters { 
 	color:#FF0000;
 }
+
+.event-row {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color: #EEEEEE;
+}
+
+.event-row:hover{
+	background-color: #DDDDDD;
+}
