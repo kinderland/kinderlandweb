@@ -1,12 +1,34 @@
 <?php
 include_once APPPATH.'core/personuser.php';
+include_once APPPATH.'libraries/logger.php';
 
 // Colonia Kinderland Controller -> CK_Controller
 class CK_Controller extends CI_Controller{
 
+	protected $pid;
+    protected $Logger;
+
 	public function __construct(){
 		parent::__construct();
+		$this->pid = getmypid();
+        $this->setLogger();
 	}
+
+	public function __destruct() {
+        if ($this->Logger) 
+            $this->Logger->endTransaction(); 
+    }
+
+	private function setLogger(){
+        $this->config->load('logger', true);
+        $logPath = $this->config->item('log_path', 'logger');
+        $logFilename = strtolower(get_class($this));
+        $logLevel = $this->config->item('log_level', 'logger');
+        $this->Logger = new Logger($logLevel, $logPath, $logFilename);
+        $this->Logger->startTransaction();
+        $this->Logger->info('[ENVIRONMENT]['.strtoupper(ENVIRONMENT).']');
+        $this->Logger->info("[PROCESS ID][{$this->pid}]");
+    }
 
 	public function loadView($viewName, $data){
 		if($this->session->userdata("fullname")){
@@ -22,9 +44,14 @@ class CK_Controller extends CI_Controller{
 	}
 
 	public function checkSession(){
+		$this->Logger->info("Running: ". __METHOD__);
 		//print_r($this->session->userdata('operator'));
-		if(!$this->session->userdata('user_id') || !$this->session->userdata('fullname'))
+		if(!$this->session->userdata('user_id') || !$this->session->userdata('fullname')){
+			$this->Logger->info("Session expired or doesnt exist");
 			return false;
+		}
+		
+		$this->Logger->info("Session ok - User ". $this->session->userdata('user_id'));
 		return true;
 	}
 }

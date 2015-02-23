@@ -1,6 +1,7 @@
 <?php
+    require_once APPPATH . 'core/CK_Model.php';
 
-    class cielotransaction_model extends CI_Model {
+    class cielotransaction_model extends CK_Model {
         const SelectQuery = 'Select tid, payment_type, cardflag, payment_portions, donation_id, description as payment_status, date_created, date_updated, transaction_value 
         from cielo_transaction join payment_status on cielo_transaction.payment_status = payment_status.payment_status ';
         

@@ -1,24 +1,27 @@
 <?php
-
-class person_model extends CI_Model{
+require_once APPPATH . 'core/CK_Model.php';
+class person_model extends CK_Model{
 
 	public function __construct(){
 		parent::__construct();
 	}
 
 	public function insertNewPerson($fullname, $gender, $email, $addressId){
-		$sql = 'INSERT INTO person (fullname, date_created, gender, email, address_id) VALUES (?, current_timestamp, ?, ?, ?)';
-		$result = $this->db->query($sql, array($fullname, $gender, $email, intval($addressId)));
+		$this->Logger->info("Running: " . __METHOD__);
 
-		if($result)
-			return $this->db->insert_id();
+		$sql = 'INSERT INTO person (fullname, date_created, gender, email, address_id) VALUES (?, current_timestamp, ?, ?, ?)';
+		$returnId = $this->executeReturningId($this->db, $sql, array($fullname, $gender, $email, intval($addressId)));
+		if($returnId)
+			return $returnId;
 
 		return false;
 	}
 
  	public function updatePerson($fullname, $gender, $email, $person_id) {
+ 		$this->Logger->info("Running: " . __METHOD__);
+ 		
         $sql = "UPDATE person SET fullname=?, gender=?, email=? WHERE person_id=?";
-        if ($this->db->query($sql, array($fullname, $gender, $email, intval($person_id))))
+        if ($this->execute($this->db, $sql, array($fullname, $gender, $email, intval($person_id))))
             return true;
         return false;
     } 

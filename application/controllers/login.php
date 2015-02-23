@@ -11,9 +11,17 @@ class Login extends CK_Controller {
 		$this->load->model('generic_model');
 		$this->load->model('telephone_model');
 		$this->load->model('personuser_model');
+
+		$this->person_model->setLogger($this->Logger);
+		$this->address_model->setLogger($this->Logger);
+		$this->generic_model->setLogger($this->Logger);
+		$this->telephone_model->setLogger($this->Logger);
+		$this->personuser_model->setLogger($this->Logger);
 	}
 
 	public function index(){
+		$this->Logger->info("Starting " . __METHOD__);
+
 		if($this->checkSession())
 			redirect("system/menu");
 
@@ -25,18 +33,27 @@ class Login extends CK_Controller {
 	}
 
 	public function signup(){
+		$this->Logger->info("Starting " . __METHOD__);
 		$data = array();
 		$this->loadView('login/signup', $data);
 	}
 	
 	public function loginSuccessful(){
+		$this->Logger->info("Starting " . __METHOD__);
 		$login = $_POST['login'];
 		$password = $_POST['password'];
 
-		$userId = $this->personuser_model->userLogin($login, $password);
+		$this->Logger->info("Login given: ". $login);
 
+		$this->Logger->info("Authenticating user...");
+		$userId = $this->personuser_model->userLogin($login, $password);
+		$this->Logger->info("UserId found given the credentials: ". $userId);
 		if ($userId) {  
+			$this->Logger->info("Found, retrieving data about personuser");
 		 	$user = $this->personuser_model->getUserById($userId);
+
+		 	$this->Logger->info("User type: ". $user->getUserType());
+		 	$this->Logger->info("Saving data in session");
 		 	$this->session->set_userdata("user_id", $user->getPersonId());
 		 	$this->session->set_userdata("fullname", $user->getFullname());
 		 	$this->session->set_userdata("user_type", $user->getUserType());
@@ -63,23 +80,29 @@ class Login extends CK_Controller {
 			}
 			
 		} else {
+			$this->Logger->error("Nothing found, redirecting to login with error screen");
 		 	redirect("login/index?error=true");
 		}
 	}
 
 	public function logout(){
+		$this->Logger->info("Starting " . __METHOD__);
+
+		if(!$this->checkSession())
+			redirect("login/index");
+
+		$this->Logger->info("Logging out user: ".$this->session->userdata("user_id") . " - " . $this->session->userdata("fullname"));
 		$this->session->unset_userdata("fullname");
 		$this->session->unset_userdata("user_id");
 		$this->session->unset_userdata("user_type");
 		$this->session->sess_destroy();
-
-		if(!$this->checkSession())
-			redirect("login/index");
 		
 		redirect("login/index");
 	}
 
 	public function completeSignup(){
+		$this->Logger->info("Starting " . __METHOD__);
+
 		$fullname = $_POST['fullname'];
 		$gender = $_POST['gender'];
 		$email = $_POST['email'];
@@ -98,6 +121,7 @@ class Login extends CK_Controller {
 
 
 		try{
+			$this->Logger->info("Inserting new user");
 			//Inicia transação no banco
 			$this->generic_model->startTransaction();
 
@@ -113,11 +137,15 @@ class Login extends CK_Controller {
 			//Caso tenha ocorrido tudo bem, salva as mudanças
 			$this->generic_model->commitTransaction();
 
+			$this->Logger->info("New user successfully inserted");
+		 	$this->Logger->info("Saving data in session");
+
 			$this->session->set_userdata("user_id", $personId);
 			$this->session->set_userdata("fullname", $fullname);
 			$this->session->set_userdata("user_type", COMMON_USER);
 			redirect("system/menu");
 		} catch (Exception $ex) {
+			$this->Logger->error("Failed to insert new user");
 			//Caso tenha capturado algum erro, volta atrás nas alterações feitas antes do erro acontecer
 			$this->generic_model->rollbackTransaction();
 			$data['error'] = true;

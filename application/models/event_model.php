@@ -1,6 +1,7 @@
 <?php
+require_once APPPATH . 'core/CK_Model.php';
 
-class event_model extends CI_Model{
+class event_model extends CK_Model{
 
 	public function __construct(){
 		parent::__construct();

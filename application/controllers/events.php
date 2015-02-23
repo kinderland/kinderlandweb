@@ -10,6 +10,11 @@ class Events extends CK_Controller {
 		$this->load->model('generic_model');
 		$this->load->model('personuser_model');
 		$this->load->model('event_model');
+
+		$this->person_model->setLogger($this->Logger);
+		$this->generic_model->setLogger($this->Logger);
+		$this->event_model->setLogger($this->Logger);
+		$this->personuser_model->setLogger($this->Logger);
 	}
 
 	public function index(){

@@ -10,6 +10,12 @@ class System extends CK_Controller {
 		$this->load->model('generic_model');
 		$this->load->model('telephone_model');
 		$this->load->model('personuser_model');
+		
+		$this->person_model->setLogger($this->Logger);
+		$this->address_model->setLogger($this->Logger);
+		$this->generic_model->setLogger($this->Logger);
+		$this->telephone_model->setLogger($this->Logger);
+		$this->personuser_model->setLogger($this->Logger);
 	}
 
 	public function menu(){

@@ -1,6 +1,7 @@
 <?php
 
-class telephone_model extends CI_Model{
+require_once APPPATH . 'core/CK_Model.php';
+class telephone_model extends CK_Model{
 
 	public function __construct(){
 		parent::__construct();
