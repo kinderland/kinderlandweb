@@ -41,9 +41,6 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 |--------------------------------------------------------------------------
 | User Login types
 |--------------------------------------------------------------------------
-|
-| These modes are used when working with fopen()/popen()
-|
 */
 
 define('COMMON_USER',	1);
@@ -51,6 +48,21 @@ define('SYSTEM_ADMIN',	2);
 define('DIRECTOR',		3);
 define('SECRETARY',		4);
 define('COORDINATOR', 	5);
+
+
+/*
+|--------------------------------------------------------------------------
+| Subscription Status types
+|--------------------------------------------------------------------------
+*/
+
+define('SUSCRIPTION_STATUS_EXCLUDED', 					-3);
+define('SUSCRIPTION_STATUS_GIVEN_UP',		 			-2);
+define('SUSCRIPTION_STATUS_CANCELLED',		 			-1);
+define('SUSCRIPTION_STATUS_PRE_SUBSCRIBED_INCOMPLETE',	0);
+define('SUSCRIPTION_STATUS_PRE_SUBSCRIBED',				1);
+define('SUSCRIPTION_STATUS_WAITING_PAYMENT',			2);
+define('SUSCRIPTION_STATUS_SUBSCRIPTION_OK',			3);
 
 
 

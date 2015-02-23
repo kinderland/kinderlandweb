@@ -13,13 +13,13 @@
 					<p>
 						Data: 
 						<strong>
-							<?=$event->getDateStart();?> 
-							<?= ($event->getDateStart() != $event->getDateFinish())? " - ".$event->getDateFinish():""?>
+							<?= date_format(date_create($event->getDateStart()), 'd/m/y H:i');?> 
+							<?= ($event->getDateStart() != $event->getDateFinish())? " - ".date_format(date_create($event->getDateFinish()), 'd/m/y H:i'):""?>
 						</strong>
 					</p>
 				</div>
 				<div class="col-lg-4">
-					<h3>Preço: <strong>R$<?=$event->getPrice()?></strong></h3>
+					<h3>Preço: <strong>R$<?=number_format($event->getPrice(), 2, ',', '.')?></strong></h3>
 				</div>
 
 				<div class="col-lg-10 col-lg-offset-1">

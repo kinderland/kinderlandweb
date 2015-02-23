@@ -20,6 +20,7 @@ class User extends CK_Controller {
 	}
 
 	public function edit(){
+		$this->Logger->info("Starting " . __METHOD__);
 		$user = $this->personuser_model->getUserById($this->session->userdata("user_id"));
 		
 		$data['user'] = $user;
@@ -27,26 +28,10 @@ class User extends CK_Controller {
 		$this->loadView('user/form_edit', $data);
 	}
 
-	public function save(){
-		$fullname = $_POST['fullname'];
-		$gender = $_POST['gender'];
-		$email = $_POST['email'];
-		$cpf = $_POST['cpf'];
-		$street = $_POST['street'];
-		$number = $_POST['number'];
-		$city = $_POST['city'];
-		$phone1 = $_POST['phone1'];
-		$phone2 = $_POST['phone2'];
-		$cep = $_POST['cep'];
-		$occupation = $_POST['occupation'];
-		$complement = $_POST['complement'];
-		$neighborhood = $_POST['neighborhood'];
-		$uf = $_POST['uf'];
-		
-		
-	}
 
 	public function update(){
+		$this->Logger->info("Starting " . __METHOD__);
+
         $person_id = $this->session->userdata("user_id");
         $fullname = $_POST['fullname'];
         $gender = $_POST['gender'];
@@ -63,10 +48,9 @@ class User extends CK_Controller {
         $neighborhood = $_POST['neighborhood'];
         $uf = $_POST['uf'];
 
-
-        $address = $this->address_model->getAddressByPersonId($person_id);
-
         try{
+        	$this->Logger->info("Starting upadte user");
+        	$address = $this->address_model->getAddressByPersonId($person_id);
             $this->generic_model->startTransaction();
 
             $this->person_model->updatePerson($fullname, $gender, $email, $person_id);
@@ -74,6 +58,7 @@ class User extends CK_Controller {
             $this->address_model->updateAddress($street, $number, $complement, $city, $cep, $uf, $neighborhood, $address->getAddressId());
             $this->telephone_model->updatePhone($person_id, $phone1, $phone2);
 
+            $this->Logger->info("User data updated, saving fullname in session");
             $this->session->set_userdata("fullname", $fullname);
             
             $this->generic_model->commitTransaction();
@@ -81,8 +66,11 @@ class User extends CK_Controller {
            	redirect("system/menu");
 
         } catch(Exception $ex){
-
+        	$this->Logger->error("Failed to update user");
             $this->generic_model->rollbackTransaction();
+
+            //Returns to edit screen
+            $this->edit();
         }
 
     } 

@@ -10,20 +10,20 @@ class address_model extends CK_Model{
 
 	public function insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf){
 		$sql = 'INSERT INTO address(street, place_number, complement, city, cep, neighborhood, uf) VALUES (?,?,?,?,?,?,?)';
-		$result = $this->db->query($sql, array($street, intval($number), $complement, $city, $cep, $neighborhood, $uf));
+		$result = $this->executeReturningId($this->db, $sql, array($street, intval($number), $complement, $city, $cep, $neighborhood, $uf));
 
 		if($result)
-			return $this->db->insert_id();
+			return $result;
 
 		return false;
 	}
 
 	public function getAddressByPersonId($person_id){
         $sql = "SELECT * FROM person NATURAL JOIN address WHERE person_id=?";
-        $rows = $this->db->query($sql, array(intval($person_id)));
+        $row = $this->executeRow($this->db, $sql, array(intval($person_id)));
     
-        if($rows->num_rows() > 0) {
-            return Address::createAddressObject($rows->row());
+        if($row) {
+            return Address::createAddressObject($row);
         }
         else {
             return false;
@@ -32,7 +32,7 @@ class address_model extends CK_Model{
 
     public function updateAddress($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, $address_id) {
         $sql = "UPDATE address SET street=?, place_number=?, complement=?, city=?, cep=?, uf=?, neighborhood=? WHERE address_id=?";
-        if ($this->db->query($sql, array($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, intval($address_id))))
+        if ($this->execute($this->db, $sql, array($street, $place_number, $complement, $city, $cep, $uf, $neighborhood, intval($address_id))))
             return true;
         return false;
     }

@@ -162,7 +162,7 @@ class CK_Model extends CI_Model {
             //$this->setErrorVerbosity($conn);
             $startTime = $this->getMicroTime();
             $rows = $conn->query($query, $arrParam);
-            $this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
+            //$this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $endTime = $this->getMicroTime();
             $totalTime = $endTime-$startTime;
             $this->Logger->info('Total time spent: '.$totalTime);
