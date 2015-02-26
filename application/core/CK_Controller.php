@@ -22,9 +22,10 @@ class CK_Controller extends CI_Controller{
 	private function setLogger(){
         $this->config->load('logger', true);
         $logPath = $this->config->item('log_path', 'logger');
-        $logFilename = strtolower(get_class($this));
+        //$logFilename = strtolower(get_class($this));
         $logLevel = $this->config->item('log_level', 'logger');
-        $this->Logger = new Logger($logLevel, $logPath, $logFilename);
+        //$this->Logger = new Logger($logLevel, $logPath, $logFilename);
+        $this->Logger = new Logger($logLevel, $logPath, "kinderland");
         $this->Logger->startTransaction();
         $this->Logger->info('[ENVIRONMENT]['.strtoupper(ENVIRONMENT).']');
         $this->Logger->info("[PROCESS ID][{$this->pid}]");

@@ -2,6 +2,7 @@
  
 require_once(APPPATH.'core/ModelException.php');
  
+ // Colonia Kinderland Model -> CK_Model
 class CK_Model extends CI_Model {
     protected $Logger;
  
@@ -56,19 +57,19 @@ class CK_Model extends CI_Model {
     }
     protected function executeNoLog($conn, $query, $arrParam=null) {
         try {
-            //$this->setErrorVerbosity($conn);
-            //$startTime = $this->getMicroTime();
+            $this->setErrorVerbosity($conn);
+            $startTime = $this->getMicroTime();
             $rows = $conn->query($query, $arrParam);
             //$this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
-            //$endTime = $this->getMicroTime();
-            //$totalTime = $endTime-$startTime;
-            //$this->Logger->info('Total time spent: '.$totalTime);
+            $endTime = $this->getMicroTime();
+            $totalTime = $endTime-$startTime;
+            $this->Logger->info('Total time spent: '.$totalTime);
             $this->throwLastError($conn);
-            //$this->Logger->info('['.get_class($this).']Successfully executed');
+            $this->Logger->info('['.get_class($this).']Successfully executed');
             return true;
         } catch (Exception $e) {
             $this->Logger->error('['.get_class($this).']Failed to execute');
-            $this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
+            //$this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $this->Logger->error('['.get_class($this).']error[' . $e . ']');
             $this->Logger->info('['.get_class($this).']End');
             throw new MyException($e->getMessage(),$e->getCode());

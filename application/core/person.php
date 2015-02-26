@@ -1,13 +1,13 @@
 <?php
 	require_once APPPATH . 'core/address.php';
 	class Person {
-		private $personId;
-		private $fullname;
-		private $gender;
-		private $email;
+		public $personId;
+		public $fullname;
+		public $gender;
+		public $email;
 		//private $associate = false;
-		private $benemerit = false;
-		private $address;
+		public $benemerit = false;
+		public $address;
 
 		public function __construct($personId, $fullname, $gender, $email/*, $associate*/, $benemerit, $address){
 			$this->personId = $personId;

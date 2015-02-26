@@ -9,12 +9,12 @@ class event_model extends CK_Model{
 
     public function getPublicOpenEvents(){
         $sql = "SELECT * FROM open_public_events";
-        $resultSet = $this->db->query($sql);
+        $resultSet = $this->executeRows($this->db, $sql);
 
         $eventArray = array();
 
-        if($resultSet->num_rows() > 0)
-            foreach ($resultSet->result() as $row)
+        if($resultSet)
+            foreach ($resultSet as $row)
                 $eventArray[] = Event::createEventObject($row);
             
         return $eventArray;
@@ -22,11 +22,11 @@ class event_model extends CK_Model{
 
     public function getEventById($eventId){
         $sql = "SELECT * FROM event WHERE event_id=?";
-        $resultSet = $this->db->query($sql, array(intval($eventId)));
+        $resultSet = $this->executeRow($this->db, $sql, array(intval($eventId)));
 
 
-        if($resultSet->num_rows() > 0)
-            return Event::createEventObject($resultSet->row());
+        if($resultSet)
+            return Event::createEventObject($resultSet);
 
         return null;
     }

@@ -180,9 +180,9 @@ class Logger {
      *
      * @param string $message
      */
-    public function trace($message) {
-        $this->writeLine($message, self::TRACE);
-    }
+    //public function trace($message) {
+    //    $this->writeLine($message, self::TRACE);
+    //}
  
     /**
      * Writes a DEBUG message

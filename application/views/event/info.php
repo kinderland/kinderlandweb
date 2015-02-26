@@ -12,9 +12,6 @@
 				);
 			}
 
-			function subscribePerson(userId, eventId){
-				alert("To do");
-			}
 		</script>
 
 		<?php 
@@ -51,14 +48,15 @@
 					<div align="center">
 						<h4>Solicitar convite:</h4>
 						<button class="btn btn-primary" style="margin-right:40px" onClick="subscribeUserOnSession(<?=$user_id?>, <?=$event->getEventId()?>)">Para mim</button>
-						<button class="btn btn-primary" onClick="subscribePerson(<?=$user_id?>, <?=$event->getEventId()?>)">Para outros</button>
+						<a href="<?=$this->config->item("url_link")?>events/subscribeNewPerson/<?=$event->getEventId()?>"><button class="btn btn-primary" >Para outros</button></a>
 					</div>
 				</div>
 			</div>
+
 			<div class="row">
 				&nbsp;
 			</div>
-			<? 
+			<?php 
 				if(count($subscriptions) > 0) {
 			?>
 				<div class="row">
@@ -72,20 +70,20 @@
 								<th>Nome do convidado</th>
 								<th>Descrição do convite</th>
 							</tr>
-							<? 
+							<?php 
 								foreach($subscriptions as $subscr){
 							?>
 								<td><input type="checkbox" name="subscriptions" value="<?=$subscr->person_id?>" /></td>
 								<td><img src="<?= $this->config->item('assets') ."images/kinderland/". ( ($subscr->subscription_status == SUSCRIPTION_STATUS_SUBSCRIPTION_OK)?'confirma.png':'nao-confirma.png' ) ?>" width="20px" height="20px"/></td>
 								<td><?= $subscr->fullname ?></td>
 								<td>R$ <?= number_format($subscr->final_price, 2, ',', '.') ?></td>
-							<?
+							<?php
 								}
 							?>
 						</table>
 					</form>
 				</div>
-			<?
+			<?php
 				} 
 			?>
 					
