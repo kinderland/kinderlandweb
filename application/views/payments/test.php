@@ -1,30 +1,178 @@
+
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("input:radio[name='cartao']").click(function() {
+                    var toggle = ($(this).val() == 'visaelectron' || $(this).val() == 'maestro') ? true : false;
+                    $('#parcelas option:eq(0)').prop('selected', toggle);
+                    $("#parcelas option:not(:selected)").attr("disabled", toggle);
+                });
+                
+             });    
+            
+            function validateForm(thisForm) {
+                var x = thisForm.valorPagamento.value;
+                if (x == null || x == "") {
+                    alert("O valor para doação deve ser preenchido.");
+                    return false;
+                }
+            }
+            
+            function verificaValor(objTextBox){
+                var valorMinimo = '20,00';
+                var valorString = objTextBox.value;
+                valorString = valorString.replace('.','');
+                var valorCampo = parseFloat(valorString);
+                var minimo = parseFloat(valorMinimo); 
+                if((Math.round(parseFloat(valorCampo)*100)/100) < (Math.round(parseFloat(minimo)*100)/100) || (valorString.length == 0)){
+                    objTextBox.value = valorMinimo;
+                    alert('Desculpe, o menor valor para a doação é R$ '+valorMinimo);
+                }
+            }
+
+            function formataMoeda(objTextBox,SeparadorMilesimo, SeparadorDecimal,e){
+                var sep = 0;
+                var key = '';
+                var i = j = 0;
+                var len = len2 = 0;
+                var strCheck = '0123456789';
+                var aux = aux2 = '';
+                if(navigator.appName == "Netscape") 
+                    var whichCode = (window.Event) ? e.which : e.charCode;
+                else 
+                    var whichCode = (window.Event) ? e.which : e.keyCode;
+
+                var whichCode = (window.Event) ? e.which : e.keyCode;
+                if ((whichCode == 13) ||(whichCode == 8))
+                    return true;
+                key = String.fromCharCode(whichCode);
+                if (strCheck.indexOf(key) == -1) 
+                    return false;
+                len = objTextBox.value.length;
+                for(i = 0; i < len; i++)
+                    if ((objTextBox.value.charAt(i) != '0') && (objTextBox.value.charAt(i) != SeparadorDecimal)) break;
+                aux = '';
+                for(; i < len; i++)
+                    if (strCheck.indexOf(objTextBox.value.charAt(i))!=-1) aux += objTextBox.value.charAt(i);
+                aux += key;
+                len = aux.length;
+                if (len == 0) objTextBox.value = '';
+                if (len == 1) objTextBox.value = '0'+ SeparadorDecimal + '0' + aux;
+                if (len == 2) objTextBox.value = '0'+ SeparadorDecimal + aux;
+                if (len > 2) {
+                    aux2 = '';
+                    for (j = 0, i = len - 3; i >= 0; i--) {
+                        if (j == 3) {
+                            aux2 += SeparadorMilesimo;
+                            j = 0;
+                        }
+                        aux2 += aux.charAt(i);
+                        j++;
+                    }
+                    objTextBox.value = '';
+                    len2 = aux2.length;
+                    for (i = len2 - 1; i >= 0; i--)
+                    objTextBox.value += aux2.charAt(i);
+                    objTextBox.value += SeparadorDecimal + aux.substr(len - 2, len);
+                }
+                return false;
+            }
+
+        </script>
+
 <body>
-    <form action="https://cieloecommerce.cielo.com.br/Transactional/Order/Index" method="post">
-<input type="hidden" name="merchant_id" value="C89FDFBB-DBE2-4E77-806A-6D75CD397DAC" />
-<input type="hidden" name="order_number" value="0000000001" />
-<input type="hidden" name="shipping_type" value="2" />
-<input type="hidden" name="Shipping_Zipcode" value="01452002" />
-<input type="hidden" name="cart_1_name" value="Camiseta Branca" />
-<input type="hidden" name="cart_1_unitprice" value="10000" />
-<input type="hidden" name="cart_1_quantity" value="1" />
-<input type="hidden" name="cart_1_weight" value="100" />
-<input type="hidden" name="cart_1_zipcode" value="20020080" />
-<input type="hidden" name="cart_1_type" value="1" />
-<input type="hidden" name="shipping_1_name" value="Servico da Loja" />
-<input type="hidden" name="shipping_1_price" value="500" />
-<input type="hidden" name="shipping_2_name" value="Motoboy" />
-<input type="hidden" name="shipping_2_price" value="800" />
-<input type="hidden" name="Shipping_Address_Name" value="Av. Brigadeiro Faria Lima" />
-<input type="hidden" name="Shipping_Address_Number" value="1461" />
-<input type="hidden" name="Shipping_Address_Complement" value="" />
-<input type="hidden" name="Shipping_Address_District" value="Jd. Paulista" />
-<input type="hidden" name="Shipping_Address_City" value="Sao Paulo" />
-<input type="hidden" name="Shipping_Address_State" value="SP" />
-<input type="hidden" name="Customer_Name" value="João da Silva" />
-<input type="hidden" name="Customer_Email" value="jsilva@braspag.com.br" />
-<input type="hidden" name="Customer_Identity" value="26636640650" />
-<input type="hidden" name="Customer_Phone" value="1122223333" />
-<input type="submit" value="Comprar" />
+    <form action="http://www.kinderlandteste.com/kinderlandweb/index.php/payments/executarPagamentoSimples" method="post">
+        <table style="width: 550px;">
+            <tr>
+                <tr>
+                <th colspan='5' align='center'
+                style="border-bottom-color:white;
+                border-bottom-style: solid; border-bottom-width: 1px;">
+                <h3>Selecione a bandeira de
+                        pagamento</h3></th>
+            </tr>
+            </tr>
+            <tr>
+                <td colspan='3' align='center'
+                    style="border-bottom-color:white; border-right-color:white; 
+                    border-bottom-style: solid; border-bottom-width: 1px; 
+                    border-right-style: solid; border-width: 1px;">
+                    <strong>Cartões de Crédito<br /></strong>
+                </td>
+                <td colspan="2" align='center'
+                    style="border-bottom-color:white;
+                    border-bottom-style:solid; border-bottom-width:1px;">
+                    <strong>Cartão de Débito<br /></strong></td>
+            </tr>
+            <tr>
+                <td style="width: 20%;">
+                    <center>
+                    <img src="../../assets/images/payment/visa.png" alt="Visa" width="80px" height="80px"/>
+                    <br>
+                    <input type="radio" style="width:20px; height:20px;" name="card_flag" checked value="visa">
+                    </center>
+                </td>
+                <td style="width: 20%;">
+                    <center>
+                    <img src="../../assets/images/payment/mastercard.png" alt="MasterCard" width="80px" height="80px"/>
+                    <br>
+                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="mastercard">
+                    </center>
+                </td>
+                <td style="width: 20%;border-right-style:solid; border-right-color:white; border-right-width:1px">
+                    <center>
+                    <img src="../../assets/images/payment/amex.png" alt="American Express" width="80px" height="80px"/>
+                    <br>
+                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="amex">
+                    </center>
+                </td>
+            
+                <td style="width: 20%;">
+                    <center>
+                    <img src="../../assets/images/payment/visaelectron.png" alt="Visa Electron" width="68px" style="margin-top:20px" />
+                    <br>
+                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="visaelectron">
+                    </center>
+                </td>
+            
+                <td style="width: 20%;">
+                    <center>
+                    <img src="../../assets/images/payment/maestro.png" alt="MasterCard Maestro" width="80px" height="80px"/>
+                    <br>
+                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="maestro" disabled>
+                    </center>
+                </td>
+            
+            </tr>
+
+            <tr>
+                <td>
+                    <strong>Valor da doação:</strong><br/>
+                </td>
+                <td colspan='2'>
+                    <input style="text-align='left';" Onblur="verificaValor(this)" onKeyPress="return(formataMoeda(this,'.',',',event))" class="required" 
+                     id="transaction_value" name="transaction_value" value="">
+                </td>
+                <td alig="center">
+                </td>
+            </tr>   
+
+            <tr>
+                <td colspan='5'>
+                    <br/>
+                    <center>
+                        <button type="submit" style="border: 0;" >
+                            <img src="../../assets/images/payment/greenicon.png" width="20" height="20"><span style="font-size: 18px"> - Prosseguir com a doação.</span>
+                        </button>
+                    </center>
+                    <input type="hidden" name="description" value="Pagamento de doação avulsa">
+                    <input type="hidden" name="payment_portions" value="1">
+                    <input type="hidden" name="donation_id" value="1">
+                    
+                </td>
+            </tr>   
+
+        </table>
 </form>
     
 </body>

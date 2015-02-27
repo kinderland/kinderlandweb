@@ -3,7 +3,7 @@
 	<div class="col-lg-10 middle-content">
 
 		<?php 
-			if($transaction != null && $transaction instanceof Event) { 
+			if($transaction != null && $transaction instanceof CieloTransaction) { 
 		?>
 		<div class='row'>
 			<div class="col-lg-8">
@@ -22,7 +22,7 @@
 
 			<div class="col-lg-10 col-lg-offset-1">
 				<p align="center">
-					<?=$transaction->getPayment_status();?>
+					Status: <?=$transaction->getPayment_status();?>
 				</p>
 			</div>
 		</div>

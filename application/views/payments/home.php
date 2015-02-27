@@ -6,7 +6,7 @@
 			if(isset($transactions) && count($transactions) > 0) { 
 				foreach($transactions as $transaction) {
 		?>
-		<a href="<?=$this->config->item("url_link")?>payments/info/<?=$transaction->getPaymentById()?>">
+		<a href="<?=$this->config->item("url_link")?>payments/info/<?=$transaction->getTId()?>">
 			<div class='row event-row'>
 				<div class="col-lg-8">
 					<h3><?=$transaction->getTId();?></h3>
@@ -24,7 +24,7 @@
 
 				<div class="col-lg-10 col-lg-offset-1">
 					<p align="center">
-						<?=$transaction->getPayment_status();?>
+						Status:<?=$transaction->getPayment_status();?>
 					</p>
 				</div>
 			</div>
