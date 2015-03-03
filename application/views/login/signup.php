@@ -204,7 +204,7 @@ function callMasks(){
 
 					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" name="confirm_password" />
+						<input type="password" class="form-control" name="confirm_password" />
 					</div>
 				</div>
 			</div>
