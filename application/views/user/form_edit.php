@@ -68,6 +68,12 @@ function callMasks(){
 							name="email" value="<?=$user->getEmail()?>" />
 					</div>
 
+					<label for="email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
+					<div class="col-lg-3">
+						<input type="text" class="form-control" placeholder="Email"
+							name="email" value="<?=$user->getEmail()?>" />
+					</div>
+
 					<label for="occupation" class="col-lg-1 control-label"> Ocupação*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Ocupação"
@@ -167,7 +173,21 @@ function callMasks(){
 						</select>
 					</div>
 				</div>
+			</div>
+			<br/>
+				<div class="row">
+				<div class="form-group">
+					<label for="password" class="col-lg-1 control-label"> Senha*: </label>
+					<div class="col-lg-3">
+						<input type="password" class="form-control" placeholder="" name="password" />
+					</div>
 
+					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
+					<div class="col-lg-3">
+						<input type="password" class="form-control" name="confirm_password" />
+					</div>
+				</div>
+			</div>
 				<br /><br /><br />
 
 				<div class="form-group">
