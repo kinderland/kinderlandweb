@@ -10,8 +10,8 @@ function validateForm(){
 	 (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
 	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
 		return false;
-
-
+  	
+  	
 /*	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
 		return false;
 
@@ -43,6 +43,7 @@ function callMasks(){
 
 }
 
+
 </script>
 
 <div class="row">
@@ -59,18 +60,19 @@ function callMasks(){
 					<label for="fullname" class="col-lg-1 control-label"> Nome Completo*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Nome Completo"
-							name="fullname" />
+							name="fullname" required/>
+							
 					</div>
 
 					<label for="cpf" class="col-lg-1 control-label"> CPF*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CPF"
-							name="cpf" />
+							name="cpf" required/>
 					</div>
 
 					<label for="gender" class="col-lg-1 control-label"> Sexo*: </label>
 					<div class="col-lg-3">
-						<select  class="form-control" id="gender" name="gender" >
+						<select  class="form-control" id="gender" name="gender" required>
 							<option value="" selected>-- Selecione --</option>
 							<option value="M">Masculino</option>
 							<option value="F">Feminino</option>
@@ -84,19 +86,19 @@ function callMasks(){
 					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Email"
-							name="email" />
+							name="email" required/>
 					</div>
 
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Email"
-							name="confirm_email" />
+							name="confirm_email" required/>
 					</div>
 
 					<label for="occupation" class="col-lg-1 control-label"> Ocupação*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Ocupação"
-							name="occupation" />
+							name="occupation" required/>
 					</div>
 				</div>
 			</div>
@@ -106,13 +108,13 @@ function callMasks(){
 					<label for="street" class="col-lg-1 control-label"> Rua*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Logradouro"
-							name="street" />
+							name="street" required/>
 					</div>
 
 					<label for="number" class="col-lg-1 control-label"> Número*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Número"
-							name="number" />
+							name="number" required/>
 					</div>
 
 					<label for="complement" class="col-lg-2 control-label"> Complemento: </label>
@@ -128,13 +130,13 @@ function callMasks(){
 					<label for="city" class="col-lg-1 control-label"> Cidade*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Cidade"
-							name="city" />
+							name="city" required/>
 					</div>
 
 					<label for="cep" class="col-lg-1 control-label"> CEP*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
-							name="cep" />
+							name="cep" required/>
 					</div>
 
 					<label for="neighborhood" class="col-lg-2 control-label"> Bairro: </label>
@@ -150,10 +152,10 @@ function callMasks(){
 					<label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 1"
-							name="phone1" />
+							name="phone1" required/>
 					</div>
 
-					<label for="phone2" class="col-lg-1 control-label"> Telefone 2*: </label>
+					<label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 2"
 							name="phone2" />
@@ -161,7 +163,7 @@ function callMasks(){
 
 					<label for="uf" class="col-lg-1 control-label"> Estado*: </label>
 					<div class="col-lg-3">
-						<select  class="form-control" id="uf" name="uf" >
+						<select  class="form-control" id="uf" name="uf" required>
 							<option value="" selected> -- Selecione -- </option>
 							<option value="RJ">RJ</option>
 							<option value="AC">AC</option>
@@ -199,12 +201,12 @@ function callMasks(){
 				<div class="form-group">
 					<label for="password" class="col-lg-1 control-label"> Senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" placeholder="" name="password" />
+						<input type="password" class="form-control" placeholder="" name="password" required/>
 					</div>
 
 					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" name="confirm_password" />
+						<input type="password" class="form-control" name="confirm_password" required/>
 					</div>
 				</div>
 			</div>
