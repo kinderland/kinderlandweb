@@ -42,14 +42,13 @@ function callMasks(){
 
 }
 
-
 </script>
 
 <div class="row">
 	<div class="col-lg-12 middle-content">
 		<div class="row">
 			<div class="col-lg-8"><h4>Cadastro de usuário</h4></div>
-			<div class="col-lg-4"><h6><span class="red_letters">Campos com * são de preenchimento obrigatório.</span></h6></div>
+			<!--<div class="col-lg-4"><h6><span class="red_letters">Campos com * são de preenchimento obrigatório.</span></h6></div>-->
 		</div>
 		<hr />
 
