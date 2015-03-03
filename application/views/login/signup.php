@@ -11,7 +11,6 @@ function validateForm(){
 	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
 		return false;
   	
-  	
 /*	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
 		return false;
 
@@ -60,19 +59,25 @@ function callMasks(){
 					<label for="fullname" class="col-lg-1 control-label"> Nome Completo*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Nome Completo"
-							name="fullname" required/>
+							name="fullname" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 							
 					</div>
 
 					<label for="cpf" class="col-lg-1 control-label"> CPF*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CPF"
-							name="cpf" required/>
+							name="cpf" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="gender" class="col-lg-1 control-label"> Sexo*: </label>
 					<div class="col-lg-3">
-						<select  class="form-control" id="gender" name="gender" required>
+						<select  class="form-control" id="gender" name="gender" required
+							oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
+    						oninput="setCustomValidity('')">
 							<option value="" selected>-- Selecione --</option>
 							<option value="M">Masculino</option>
 							<option value="F">Feminino</option>
@@ -86,19 +91,25 @@ function callMasks(){
 					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Email"
-							name="email" required/>
+							name="email" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Email"
-							name="confirm_email" required/>
+							name="confirm_email" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="occupation" class="col-lg-1 control-label"> Ocupação*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Ocupação"
-							name="occupation" required/>
+							name="occupation" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 				</div>
 			</div>
@@ -108,13 +119,17 @@ function callMasks(){
 					<label for="street" class="col-lg-1 control-label"> Rua*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Logradouro"
-							name="street" required/>
+							name="street" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="number" class="col-lg-1 control-label"> Número*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Número"
-							name="number" required/>
+							name="number" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="complement" class="col-lg-2 control-label"> Complemento: </label>
@@ -130,13 +145,17 @@ function callMasks(){
 					<label for="city" class="col-lg-1 control-label"> Cidade*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Cidade"
-							name="city" required/>
+							name="city" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="cep" class="col-lg-1 control-label"> CEP*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
-							name="cep" required/>
+							name="cep" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="neighborhood" class="col-lg-2 control-label"> Bairro: </label>
@@ -152,7 +171,9 @@ function callMasks(){
 					<label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 1"
-							name="phone1" required/>
+							name="phone1" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
@@ -163,7 +184,9 @@ function callMasks(){
 
 					<label for="uf" class="col-lg-1 control-label"> Estado*: </label>
 					<div class="col-lg-3">
-						<select  class="form-control" id="uf" name="uf" required>
+						<select  class="form-control" id="uf" name="uf" required
+							oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
+    						oninput="setCustomValidity('')">
 							<option value="" selected> -- Selecione -- </option>
 							<option value="RJ">RJ</option>
 							<option value="AC">AC</option>
@@ -201,12 +224,16 @@ function callMasks(){
 				<div class="form-group">
 					<label for="password" class="col-lg-1 control-label"> Senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" placeholder="" name="password" required/>
+						<input type="password" class="form-control" placeholder="" name="password" required
+						oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    					oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" name="confirm_password" required/>
+						<input type="password" class="form-control" name="confirm_password" required
+						oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    					oninput="setCustomValidity('')"/>
 					</div>
 				</div>
 			</div>
