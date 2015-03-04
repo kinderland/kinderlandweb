@@ -36,13 +36,14 @@ class personuser_model extends CK_Model{
 		$this->Logger->info("Running: " . __METHOD__);
 
 		$sql = "select 
-				p.person_id, pu.user_type, pu.login, a.address_id, pu.cpf, pu.occupation, 
+				p.person_id, put.user_type, pu.login, a.address_id, pu.cpf, pu.occupation, 
 				p.fullname, p.gender, p.email, p.benemerit, a.street, 
 				a.place_number, a.complement, a.city, a.cep, a.uf, 
 				a.neighborhood 
 				from person_user as pu 
 				natural join person as p 
 				natural join address as a 
+				natural join person_user_type as put
 				where p.person_id = ?";
 
 		$rows = $this->executeRows($this->db, $sql, array(intval($person_id)));

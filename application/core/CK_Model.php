@@ -30,7 +30,7 @@ class CK_Model extends CI_Model {
         try{
             return $this->load->database($dbIdentifier, true);
         }catch(Exception $ex){
-            throw new MyException("Couldn't connect to the database");
+            throw new ModelException("Couldn't connect to the database");
         }
     }
  
@@ -43,6 +43,8 @@ class CK_Model extends CI_Model {
             $endTime = $this->getMicroTime();
             $totalTime = $endTime-$startTime;
             $this->Logger->info('Total time spent: '.$totalTime);
+            if(!$rows)
+                throw new Exception("Failed to execute");
             $this->throwLastError($conn);
             //$this->Logger->info("Rows affected:[".$conn->affected_rows()."]");
             $this->Logger->info('['.get_class($this).']Successfully executed');
@@ -52,7 +54,7 @@ class CK_Model extends CI_Model {
             $this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $this->Logger->error('['.get_class($this).']error[' . $e . ']');
             $this->Logger->info('['.get_class($this).']End');
-            throw new MyException($e->getMessage(),$e->getCode());
+            throw new ModelException($e->getMessage(),$e->getCode());
         }
     }
     protected function executeNoLog($conn, $query, $arrParam=null) {
@@ -72,7 +74,7 @@ class CK_Model extends CI_Model {
             //$this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $this->Logger->error('['.get_class($this).']error[' . $e . ']');
             $this->Logger->info('['.get_class($this).']End');
-            throw new MyException($e->getMessage(),$e->getCode());
+            throw new ModelException($e->getMessage(),$e->getCode());
         }
     }
  
@@ -99,7 +101,7 @@ class CK_Model extends CI_Model {
             $this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $this->Logger->error('['.get_class($this).']error[' . $e . ']');
             $this->Logger->info('['.get_class($this).']End');
-            throw new MyException($e->getMessage(),$e->getCode());
+            throw new ModelException($e->getMessage(),$e->getCode());
         }
     }
  
@@ -126,7 +128,7 @@ class CK_Model extends CI_Model {
             $this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $this->Logger->error('['.get_class($this).']error[' . $e . ']');
             $this->Logger->info('['.get_class($this).']End');
-            throw new MyException($e->getMessage(),$e->getCode());
+            throw new ModelException($e->getMessage(),$e->getCode());
         }
     }
  
@@ -154,7 +156,7 @@ class CK_Model extends CI_Model {
             $this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $this->Logger->error('['.get_class($this).']error[' . $e . ']');
             $this->Logger->info('['.get_class($this).']End');
-            throw new MyException($e->getMessage(),$e->getCode());
+            throw new ModelException($e->getMessage(),$e->getCode());
         }
     }
  
@@ -182,7 +184,7 @@ class CK_Model extends CI_Model {
             $this->Logger->debug('['.get_class($this).']query[' . $conn->last_query() . ']');
             $this->Logger->error('['.get_class($this).']error[' . $e . ']');
             $this->Logger->info('['.get_class($this).']End');
-            throw new MyException($e->getMessage(),$e->getCode());
+            throw new ModelException($e->getMessage(),$e->getCode());
         }
     }
  
@@ -232,7 +234,7 @@ class CK_Model extends CI_Model {
     protected function throwLastError($conn){
         $error= $this->getLastError($conn);
         if($error){
-            throw new MyException($error);
+            throw new ModelException($error);
         }
     }
  

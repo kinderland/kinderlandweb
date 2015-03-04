@@ -41,11 +41,22 @@ CREATE TABLE person_user (
     person_id integer REFERENCES person PRIMARY KEY,
     cpf character varying(20) UNIQUE,
     login character varying(120) UNIQUE NOT NULL,
-    password character varying(50) NOT NULL,
+    password character varying(300) NOT NULL,
     occupation character varying(40),
-    user_type integer NOT NULL default 1 REFERENCES user_type
-    
 );
+
+CREATE TABLE person_user_type
+(
+  person_id integer NOT NULL,
+  user_type integer NOT NULL,
+  CONSTRAINT pk_person_user_type PRIMARY KEY (person_id, user_type),
+  CONSTRAINT fk_person FOREIGN KEY (person_id)
+      REFERENCES person_user (person_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_user_type FOREIGN KEY (user_type)
+      REFERENCES user_type (user_type) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
   
 CREATE TABLE donation_type(
     donation_type integer PRIMARY KEY NOT NULL,

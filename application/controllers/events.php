@@ -119,18 +119,18 @@ class Events extends CK_Controller {
 
 		$eventId = $_POST['event_id'];
 		$userId = $_POST['user_id'];
-		$personId = $_POST['person_id'];
+		$personId = (isset($_POST['person_id'])) ? $_POST['person_id'] : null;
 
 		try{
 			$this->generic_model->startTransaction();
-			if($personId == ""){
+			if($personId == null){
 				$gender = $_POST['gender'];
 				$fullname = $_POST['fullname'];
 				$this->Logger->info("Subscribing new person.");
 				$this->Logger->info("Inserting person in database");
 
 				$personId = $this->person_model->insertPersonSimple($fullname, $gender);
-				if(!$person_id)
+				if(!$personId)
 					throw new Exception("Failed to create person");
 			} else {
 				$this->Logger->info("The user to be subscribed is already registered as a person (id={$personId})");
