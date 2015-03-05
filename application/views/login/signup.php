@@ -1,45 +1,35 @@
-
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome")||
-	 (!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))||
-	 (!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
-	 (!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
-	 (!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
-	 (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
-	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
-		return false;
-  	
-/*	if(!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))
-		return false;
+	// if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome")||
+	//  (!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))||
+	//  (!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
+	//  (!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
+	//  (!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
+	//  (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
+	//  (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
+	// 	return false;
 
-	if(!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password"))
-		return false;
-
-	if(!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))
-		return false;
-
-	if(!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))
-		return false;
-
-	if(!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))
-		return false;
-
-	if(!validateNotEmptyField("signup_form","phone1","Telefone 1"))
-		return false;*/
-
-		$("#signup_form").submit();
+	$("#signup_form").submit();
 }
 
 function callMasks(){
 
 	$("input[name='cpf']").mask("999.999.999-99");
-	$("input[name='phone1']").mask("(99)99999-9999");
-	$("input[name='phone2']").mask("(99)99999-9999");
 	$("input[name='cep']").mask("99999-999");
+	//$("input[name='phone1']").mask("(99)99999-9999");
+	//$("input[name='phone2']").mask("(99)99999-9999");
 	//$("input[name='number']").mask("999999");
 
+}
+
+function validateNumberInput(evt){
+
+    var key_code = (evt.which) ? evt.which : evt.keyCode; 
+    if (key_code >= 48 && key_code <= 57) {
+    	return true;
+    }
+	return false;
 }
 
 </script>
@@ -67,7 +57,7 @@ function callMasks(){
 					<label for="cpf" class="col-lg-1 control-label"> CPF*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CPF"
-							name="cpf" required
+							name="cpf" maxlength="11" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -126,7 +116,7 @@ function callMasks(){
 					<label for="number" class="col-lg-1 control-label"> Número*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Número"
-							name="number" required
+							name="number" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -152,7 +142,7 @@ function callMasks(){
 					<label for="cep" class="col-lg-1 control-label"> CEP*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
-							name="cep" required
+							name="cep" maxlength="9" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -170,7 +160,7 @@ function callMasks(){
 					<label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 1"
-							name="phone1" required
+							name="phone1" maxlength="25" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -178,7 +168,7 @@ function callMasks(){
 					<label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 2"
-							name="phone2" />
+							name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"/>
 					</div>
 
 					<label for="uf" class="col-lg-1 control-label"> Estado*: </label>
