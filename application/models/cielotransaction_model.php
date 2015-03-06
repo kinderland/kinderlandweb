@@ -11,7 +11,19 @@
 
         public function getAllPayments() {
             $sql = self::SelectQuery;
-            $resultSet = $this -> executeRows($this->db, $sql);
+            $resultSet = $this -> executeRows($this -> db, $sql);
+            $paymentsArray = array();
+
+            if ($resultSet)
+                foreach ($resultSet as $row)
+                    $paymentsArray[] = CieloTransaction::loadCieloTransactionObject($row);
+
+            return $paymentsArray;
+        }
+
+        public function getAllPaymentsByDonationId($donation_id) {
+            $sql = self::SelectQuery . " where donation_id = $donation_id order by date_created";
+            $resultSet = $this -> executeRows($this -> db, $sql);
             $paymentsArray = array();
 
             if ($resultSet)
@@ -30,6 +42,16 @@
                 return CieloTransaction::loadCieloTransactionObject($resultSet);
 
             return null;
+        }
+
+        public function updatePaymentStatus($payment, $status) {
+            $payment->setPayment_status($status);
+
+            $sql = "update cielo_transaction set payment_status = ?, date_updated = NOW() WHERE tid=?";
+
+            $resultSet = $this -> execute($this -> db, $sql, array($status, $payment -> getTId()));
+
+            return $resultSet;
         }
 
         public function insertNewPayment($payment) {

@@ -1,6 +1,7 @@
 <?php
     require_once APPPATH . 'core/CK_Controller.php';
     require_once APPPATH . 'core/cielotransaction.php';
+    
     class Payments extends CK_Controller {
 
         public function __construct() {
@@ -50,7 +51,7 @@
 
             $status = $xml->status;
             if ($status == NULL || $status != "0") {
-                $this -> Logger -> error("Erro ao iniciar operação com a Cielo, código de erro: " . $status . "\nDetalhes do erro: " . $xml);
+                $this -> Logger -> error("Erro ao iniciar operação com a Cielo, código de erro: " . $status . "\nDetalhes do erro: " . var_export($xml, true));
                 //TODO Pagina de erro.                
                 return;
             }
@@ -68,6 +69,49 @@
             $data["data"] = $this -> cielotransaction_model -> insertNewPayment($transaction);
             header("Location: ".$url_redirect);
             die();
+        }
+
+        public function retornoPagamento(){
+            $donation_id = $this -> input -> get('donation_id', TRUE);
+            
+            $payments = $this->cielotransaction_model -> getAllPaymentsByDonationId($donation_id);
+                 
+            $retorno = array();
+                        
+            foreach($payments as $payment){
+                $xml = $this->updatePaymentStatus($payment);                
+                $retorno[] = $this->transactionResultToText($xml,$payment);                
+            }
+                                        
+            $data["transactions"] = $retorno;
+           
+            $this -> loadView("payments/result", $data);                        
+        }
+
+        public function updatePaymentStatus($payment){
+                $xml = $payment->requestTransactionResult();
+                
+                $status = $xml->status;
+                if ($status == NULL) {
+                    $this -> Logger -> error("Erro ao iniciar operação com a Cielo, código de erro: " . $status . "\nDetalhes do erro: " . var_export($xml, true));
+                    //TODO PAGINA DEERRO
+                }
+                
+                $this->cielotransaction_model -> updatePaymentStatus($payment,$status);            
+                return $xml;
+        }
+        
+        public function transactionResultToText($xml,$payment){
+                $write = "TId de numero ".$payment->getTId()." tem agora o status: ".$this->cielotransaction_model->getPaymentById($payment->getTId())->getPayment_status();                
+                switch($xml->status){
+                    case CieloTransaction::TRANSACAO_CANCELADA:
+                        $write .= " e tem como dados extras ".$xml->cancelamentos->cancelamento->mensagem;                    
+                        break;
+                    case CieloTransaction::TRANSACAO_CAPTURADA:
+                        $write .= " e tem como dados extras ".$xml->captura->mensagem;
+                        break;            
+                }
+                return $write;
         }
 
     }

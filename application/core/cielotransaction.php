@@ -1,10 +1,13 @@
 <?php
 
+
+
     function extract_payment_type($cardflag) {
 
         if ($cardflag === "maestro" || $cardflag === "visaelectron") {
             return "debito";
-        } else {
+        }
+        else {
             return "credito";
         }
 
@@ -31,7 +34,8 @@
 
         if ($payment_type === "credito") {
             return $payment_portions === "1" ? $payment_portions : "2";
-        } else {
+        }
+        else {
             return "A";
         }
     }
@@ -62,10 +66,26 @@
         private $date_created;
         private $date_updated;
         private $transaction_value;
+
         const CIELO_SHOP_ID_TEST = 1001734898;
         const CIELO_SHOP_KEY_TEST = "e84827130b9837473681c2787007da5914d6359947015a5cdb2b8843db0fa832";
         const CIELO_URL_TEST = "https://qasecommerce.cielo.com.br/servicos/ecommwsec.do";
 
+        const CIELO_SHOP_ID = 1028329897;
+        const CIELO_SHOP_KEY = "5a8e5f99b224826fe9d5405783b95764a4e36d99b47a23665b8a955a7c0e0a36";
+        const CIELO_URL = "https://ecommerce.cielo.com.br/servicos/ecommwsec.do";
+
+        const TRANSACAO_CRIADA = 0;
+        const TRANSACAO_EM_ANDAMENTO = 1;
+        const TRANSACAO_AUTENTICADA = 2;
+        const TRANSACAO_NAO_AUTENTICADA = 3;
+        const TRANSACAO_AUTORIZADA = 4;
+        const TRANSACAO_NAO_AUTORIZADA = 5;
+        const TRANSACAO_CAPTURADA = 6;
+        const TRANSACAO_CANCELADA = 9;
+        const TRANSACAO_EM_AUTENTICACAO = 10;
+        const TRANSACAO_EM_CANCELAMENTO = 12;
+        
         public function __construct($tId, $payment_type, $payment_portions, $cardflag, $donation_id, $payment_status, $date_created, $date_updated, $transaction_value) {
             $this -> tId = $tId;
             $this -> payment_type = $payment_type;
@@ -84,27 +104,21 @@
             return new CieloTransaction(NULL, $payment_type, $payment_portions, $cardflag, $donation_id, NULL, NULL, NULL, $transaction_value);
         }
 
-        function createTransactionCieloBuyPage($description) {
+        function requestTransactionResult() {
 
-            $xml = $this -> generateTransactionXML($description);
+            $xml = " <requisicao-consulta id=\"6fcf758e-bc60-4d6a-acf4-496593a40441\" versao=\"1.3.0\"> ";
+            $xml .= "<tid>" . $this -> tId . "</tid> ";
+            $xml .= " <dados-ec> ";
+            $xml .= " <numero>" . CieloTransaction::getShopId() . "</numero> ";
+            $xml .= " <chave>" . CieloTransaction::getAuthKey() . " </chave> ";
+            $xml .= " </dados-ec> ";
+            $xml .= " </requisicao-consulta> ";
 
-            $url = CieloTransaction::CIELO_URL_TEST;
+            return CieloTransaction::sendXml($xml);
 
-            $params = array("mensagem" => $xml);
-
-            //Opções de contexto para garantir um cabeçalho HTTP bem formado
-            $opts = array('http' => array('header' => "Content-type: application/x-www-form-urlencoded\r\n", 'method' => 'POST', 'content' => http_build_query($params)), "ssl" => array("ciphers" => 'AES256-SHA'), );
-
-            $stream = stream_context_create($opts);
-
-            $result = file_get_contents($url, false, $stream);
-
-            $XML = simplexml_load_string($result);
-
-            return $XML;
         }
 
-        function generateTransactionXML($description) {
+        function createTransactionCieloBuyPage($description) {
             $date = getCieloDateNow();
             $productCodeCielo = defineCieloProductCode($this -> payment_type, $this -> payment_portions);
             $authCode = ($productCodeCielo === "A") ? "2" : "3";
@@ -113,9 +127,9 @@
             // Codigo informando que queremos uma transação.
             $xml = " <requisicao-transacao id=\"b646a02f-9983-4df8-91b9-75b48345715a\" versao=\"1.3.0\"> ";
             // Numero do comerciante
-            $xml .= " <dados-ec> " . " <numero>" . CieloTransaction::CIELO_SHOP_ID_TEST . "</numero> ";
+            $xml .= " <dados-ec> " . " <numero>" . CieloTransaction::getShopId() . "</numero> ";
             //Chave do comerciante
-            $xml .= " <chave>" . CieloTransaction::CIELO_SHOP_KEY_TEST . "</chave> ";
+            $xml .= " <chave>" . CieloTransaction::getAuthKey() . "</chave> ";
             //Numero do pagamento, por enquanto só temos tId que só recebemos
             // depois então estou usando donation_id
             $xml .= " </dados-ec> " . " <dados-pedido> " . " <numero>" . $this -> donation_id . "</numero> ";
@@ -128,12 +142,73 @@
             //Parcelas
             $xml .= " <parcelas>" . $this -> payment_portions . "</parcelas> " . " </forma-pagamento> ";
             //Define url que deve tratar o retorno
-            $xml .= " <url-retorno>" . site_url("payments/resultadoPagamentoSimples") . "?tId=" . $this -> donation_id . "</url-retorno> ";
+            $xml .= " <url-retorno>" . site_url("payments/retornoPagamento") . "?donation_id=" . $this -> donation_id . "</url-retorno> ";
             //Code de autenticação 3 significa Pular autenticação.
             $xml .= " <autorizar>" . $authCode . "</autorizar> ";
             $xml .= " <capturar>true</capturar> ";
             $xml .= " <gerar-token>false</gerar-token> " . " </requisicao-transacao>";
-            return $xml;
+
+            return CieloTransaction::sendXml($xml);
+        }
+
+        private static function sendXml($xml) {
+            $url = CieloTransaction::getCieloUrl();
+
+            $params = array("mensagem" => $xml);
+
+            //Opções de contexto para garantir um cabeçalho HTTP bem formado
+            $opts = array('http' => array('header' => "Content-type: application/x-www-form-urlencoded\r\n", 'method' => 'POST', 'content' => http_build_query($params)), "ssl" => array("ciphers" => 'AES256-SHA'), );
+
+            $stream = stream_context_create($opts);
+
+            $result = file_get_contents($url, false, $stream);
+            
+            $arquivo = fopen("/teste/lastReceived", "w");
+            fwrite($arquivo, $result);
+
+            $XML = simplexml_load_string($result);
+
+            return $XML;
+
+        }
+
+        private static function getAuthKey() {
+            if (defined('ENVIRONMENT')) {
+                switch (ENVIRONMENT) {
+                    case 'development' :
+                        return CieloTransaction::CIELO_SHOP_KEY_TEST;
+                    case 'production' :
+                        return CieloTransaction::CIELO_SHOP_KEY;
+                    default :
+                        return CieloTransaction::CIELO_SHOP_KEY_TEST;
+                }
+            }
+        }
+
+        private static function getShopId() {
+            if (defined('ENVIRONMENT')) {
+                switch (ENVIRONMENT) {
+                    case 'development' :
+                        return CieloTransaction::CIELO_SHOP_ID_TEST;
+                    case 'production' :
+                        return CieloTransaction::CIELO_SHOP_ID;
+                    default :
+                        return CieloTransaction::CIELO_SHOP_ID_TEST;
+                }
+            }
+        }
+
+        private static function getCieloUrl() {
+            if (defined('ENVIRONMENT')) {
+                switch (ENVIRONMENT) {
+                    case 'development' :
+                        return CieloTransaction::CIELO_URL_TEST;
+                    case 'production' :
+                        return CieloTransaction::CIELO_URL;
+                    default :
+                        return CieloTransaction::CIELO_URL_TEST;
+                }
+            }
         }
 
         public static function loadCieloTransactionObject($resultRow) {
