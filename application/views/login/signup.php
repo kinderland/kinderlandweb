@@ -22,7 +22,7 @@ function callMasks(){
 	//$("input[name='number']").mask("999999");
 
 }
-
+/* permite apenas numeros */
 function validateNumberInput(evt){
 
     var key_code = (evt.which) ? evt.which : evt.keyCode; 
@@ -30,6 +30,43 @@ function validateNumberInput(evt){
     	return true;
     }
 	return false;
+}
+/* permite letras, letras com acentos, hifen e espaco */
+function validateLetterInput(evt) {
+
+    var key_code = (evt.which) ? evt.which : evt.keyCode;
+
+	if ((key_code >= 65 && key_code <= 90) || (key_code >= 97 && key_code <= 122) 
+		|| key_code == 45 || key_code == 32  || (key_code >= 180 && key_code <= 252)) {
+
+            return true;
+    }
+    return false;
+} 
+/* tirado diretamente do site da receita federal */
+function TestaCPF(strCPF) {
+    var Soma;
+    var Resto;
+    Soma = 0;   
+    //strCPF  = RetiraCaracteresInvalidos(strCPF,11);
+    if (strCPF == "00000000000")
+		return false;
+    for (i=1; i<=9; i++)
+		Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (11 - i); 
+    Resto = (Soma * 10) % 11;
+    if ((Resto == 10) || (Resto == 11)) 
+		Resto = 0;
+    if (Resto != parseInt(strCPF.substring(9, 10)) )
+		return false;
+	Soma = 0;
+    for (i = 1; i <= 10; i++)
+       Soma = Soma + parseInt(strCPF.substring(i-1, i)) * (12 - i);
+    Resto = (Soma * 10) % 11;
+    if ((Resto == 10) || (Resto == 11)) 
+		Resto = 0;
+    if (Resto != parseInt(strCPF.substring(10, 11) ) )
+        return false;
+    return true;
 }
 
 </script>
@@ -48,7 +85,7 @@ function validateNumberInput(evt){
 					<label for="fullname" class="col-lg-1 control-label"> Nome Completo*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Nome Completo"
-							name="fullname" required
+							name="fullname" onkeypress="return validateLetterInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 							
@@ -56,10 +93,24 @@ function validateNumberInput(evt){
 
 					<label for="cpf" class="col-lg-1 control-label"> CPF*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="CPF"
+						<input type="text" id="cpf" class="form-control" placeholder="CPF"
 							name="cpf" maxlength="11" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
+    					<script type="text/javascript">
+					        window.onload = function(){
+					        var cpfCheck = document.getElementById("cpf");
+					        cpfCheck.onchange = function(){
+					            if(TestaCPF(cpfCheck.value)){
+					                cpfCheck.style.backgroundColor = "#79F774";
+					            }
+					            else{
+					                cpfCheck.style.backgroundColor = "#F78D8D"; 
+					            }
+					        };
+					    };
+					    </script>
+
 					</div>
 
 					<label for="gender" class="col-lg-1 control-label"> Sexo*: </label>
@@ -79,7 +130,7 @@ function validateNumberInput(evt){
 				<div class="form-group">
 					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="Email"
+						<input type="text" id="email" class="form-control" placeholder="Email"
 							name="email" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
@@ -87,16 +138,30 @@ function validateNumberInput(evt){
 
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="Email"
+						<input type="text" id="confirm_email" class="form-control" placeholder="Email"
 							name="confirm_email" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
+    					<script type="text/javascript">
+					     //    window.onload = function(){
+					     //    var email = document.getElementById("email");
+					     //    var confirm_email = document.getElementById("confirm_email");
+					     //    confirm_email.onchange = function(){
+					     //        if(email.value === confirm_email.value){
+					     //            confirm_email.style.backgroundColor = "#79F774";
+					     //        }
+					     //        else{
+					     //            confirm_email.style.backgroundColor = "#F78D8D"; 
+					     //        }
+					     //    };
+					   		// };
+					    </script>
 					</div>
 
 					<label for="occupation" class="col-lg-1 control-label"> Ocupação*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Ocupação"
-							name="occupation" required
+							name="occupation" onkeypress="return validateLetterInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -108,7 +173,7 @@ function validateNumberInput(evt){
 					<label for="street" class="col-lg-1 control-label"> Rua*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Logradouro"
-							name="street" required
+							name="street" onkeypress="return validateLetterInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -124,7 +189,7 @@ function validateNumberInput(evt){
 					<label for="complement" class="col-lg-2 control-label"> Complemento: </label>
 					<div class="col-lg-2">
 						<input type="text" class="form-control" placeholder="Complemento"
-							name="complement" />
+							name="complement"/>
 					</div>
 				</div>
 			</div>
@@ -134,7 +199,7 @@ function validateNumberInput(evt){
 					<label for="city" class="col-lg-1 control-label"> Cidade*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Cidade"
-							name="city" required
+							name="city" onkeypress="return validateLetterInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -150,7 +215,7 @@ function validateNumberInput(evt){
 					<label for="neighborhood" class="col-lg-2 control-label"> Bairro: </label>
 					<div class="col-lg-2">
 						<input type="text" class="form-control" placeholder="Bairro"
-							name="neighborhood" />
+							name="neighborhood" onkeypress="return validateLetterInput(event);"/>
 					</div>
 				</div>
 			</div>
@@ -213,16 +278,30 @@ function validateNumberInput(evt){
 				<div class="form-group">
 					<label for="password" class="col-lg-1 control-label"> Senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" placeholder="" name="password" required
+						<input type="password" id="password" class="form-control" placeholder="" name="password" required
 						oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     					oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" name="confirm_password" required
+						<input type="password" id="confirm_password" class="form-control" name="confirm_password" required
 						oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     					oninput="setCustomValidity('')"/>
+    					 <script type="text/javascript">
+					    //     window.onload = function(){
+					    //     var password = document.getElementById("password");
+					    //     var confirm_password = document.getElementById("confirm_password");
+					    //     confirm_password.onchange = function(){
+					    //         if(password.value === confirm_password.value){
+					    //             confirm_password.style.backgroundColor = "#79F774";
+					    //         }
+					    //         else{
+					    //             confirm_password.style.backgroundColor = "#F78D8D"; 
+					    //         }
+					    //     };
+					    // };
+					     </script>
 					</div>
 				</div>
 			</div>
