@@ -69,6 +69,44 @@ function TestaCPF(strCPF) {
     return true;
 }
 
+function funcCpf(){
+	var cpfCheck = document.getElementById("cpf");
+	cpfCheck.onchange = function(){
+		if(TestaCPF(cpfCheck.value)){
+			cpfCheck.style.backgroundColor = "#79F774";
+		}
+		else{
+			cpfCheck.style.backgroundColor = "#F78D8D"; 
+		}
+	};
+}
+
+function funcEmail(){
+	var email = document.getElementById("email");
+	var confirm_email = document.getElementById("confirm_email");
+	confirm_email.onchange = function(){
+		if(email.value === confirm_email.value){
+			confirm_email.style.backgroundColor = "#79F774";
+		}
+		else{
+			 confirm_email.style.backgroundColor = "#F78D8D"; 
+		}
+	};
+}
+
+function funcPassword(){
+	var password = document.getElementById("password");
+	var confirm_password = document.getElementById("confirm_password");
+	confirm_password.onchange = function(){
+		if(password.value === confirm_password.value){
+			confirm_password.style.backgroundColor = "#79F774";
+		}
+		else{
+			 confirm_password.style.backgroundColor = "#F78D8D"; 
+		}
+	};
+}
+
 </script>
 
 <div class="row">
@@ -98,17 +136,7 @@ function TestaCPF(strCPF) {
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
     					<script type="text/javascript">
-					        window.onload = function(){
-					        var cpfCheck = document.getElementById("cpf");
-					        cpfCheck.onchange = function(){
-					            if(TestaCPF(cpfCheck.value)){
-					                cpfCheck.style.backgroundColor = "#79F774";
-					            }
-					            else{
-					                cpfCheck.style.backgroundColor = "#F78D8D"; 
-					            }
-					        };
-					    };
+					        window.onload = funcCpf();
 					    </script>
 
 					</div>
@@ -143,18 +171,7 @@ function TestaCPF(strCPF) {
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
     					<script type="text/javascript">
-					     //    window.onload = function(){
-					     //    var email = document.getElementById("email");
-					     //    var confirm_email = document.getElementById("confirm_email");
-					     //    confirm_email.onchange = function(){
-					     //        if(email.value === confirm_email.value){
-					     //            confirm_email.style.backgroundColor = "#79F774";
-					     //        }
-					     //        else{
-					     //            confirm_email.style.backgroundColor = "#F78D8D"; 
-					     //        }
-					     //    };
-					   		// };
+					        window.onload = funcEmail();
 					    </script>
 					</div>
 
@@ -289,18 +306,7 @@ function TestaCPF(strCPF) {
 						oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     					oninput="setCustomValidity('')"/>
     					 <script type="text/javascript">
-					    //     window.onload = function(){
-					    //     var password = document.getElementById("password");
-					    //     var confirm_password = document.getElementById("confirm_password");
-					    //     confirm_password.onchange = function(){
-					    //         if(password.value === confirm_password.value){
-					    //             confirm_password.style.backgroundColor = "#79F774";
-					    //         }
-					    //         else{
-					    //             confirm_password.style.backgroundColor = "#F78D8D"; 
-					    //         }
-					    //     };
-					    // };
+					        window.onload = funcPassword();
 					     </script>
 					</div>
 				</div>
