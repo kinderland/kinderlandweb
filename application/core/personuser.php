@@ -5,18 +5,18 @@
 		private $login;
 		private $cpf;
 		private $occupation;
-		private $userType;
+		private $userTypes;
 
 		public function __construct($personId, $fullname, 
 			$gender, $email, /*$associate,*/ $benemerit, $address, $login,
-			$cpf, $occupation, $userType){
+			$cpf, $occupation, $userTypes){
 			parent::__construct($personId, $fullname, 
 			$gender, $email, $benemerit, $address);
 
 			$this->login = $login;
 			$this->cpf = $cpf;
 			$this->occupation = $occupation;
-			$this->userType = $userType;
+			$this->userTypes = $userTypes;
 		}
 
 		public static function createUserObject($resultRow, $addressIncluded = false){
@@ -31,7 +31,7 @@
 				$resultRow->login,
 				$resultRow->cpf,
 				$resultRow->occupation,
-				$resultRow->user_type
+				null
 			);
 			if($addressIncluded)
 				$user->setAddress(Address::createAddressObject($resultRow));
@@ -60,11 +60,11 @@
 			return $this->occupation;
 		}
 
-		public function setUserType($userType){
-			$this->userType = $userType;
+		public function setUserTypes($userTypes){
+			$this->userTypes = $userTypes;
 		}
-		public function getUserType(){
-			return $this->userType;
+		public function getUserTypes(){
+			return $this->userTypes;
 		}
 
 	}

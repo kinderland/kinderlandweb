@@ -13,6 +13,7 @@ class personuser_model extends CK_Model{
 		$sql = 'INSERT INTO person_user(person_id, cpf, login, password, occupation) VALUES (?,?,?,?,?)';
 
 		if($this->execute($this->db, $sql, array(intval($personId), $cpf, $login, $password, $occupation))){
+			//Inserts the person type as COMMON_USER
 			$sqlPersonType = "INSERT INTO person_user_type (person_id, user_type) VALUES (?, ?)";
 			if($this->execute($this->db, $sqlPersonType, array(intval($personId), COMMON_USER)))
 				return true;
@@ -52,11 +53,33 @@ class personuser_model extends CK_Model{
 		$rows = $this->executeRows($this->db, $sql, array(intval($person_id)));
 
 		if(isset($rows[0])) {
-			return PersonUser::createUserObject($rows[0], true);
+			$personUser = PersonUser::createUserObject($rows[0], true);
+			$personUser->setUserTypes($this->getUserPermissions($person_id));
+
+			return $personUser;
 		}
 
 		return null;
 
+	}
+
+	public function getUserPermissions($person_id){
+		$this->Logger->info("Running: " . __METHOD__);
+
+		$sql = "select 
+				put.user_type
+				from person_user_type put
+				where put.person_id = ?";
+
+		$rows = $this->executeRows($this->db, $sql, array(intval($person_id)));
+
+		$permissions = array();
+		if(count($rows) > 0)
+			foreach ($rows as $row) 
+				$permissions[] = $row->user_type;
+			
+
+		return $permissions;
 	}
 
 	public function updatePersonUser($email, $cpf, $occupation, $person_id) {

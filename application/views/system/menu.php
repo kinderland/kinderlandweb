@@ -1,4 +1,14 @@
- 
+<?php
+
+	function hasPermission($permissions, $permissionRequested){
+		foreach($permissions as $permission)
+			if($permission == $permissionRequested)
+				return true;
+
+		return false;
+	}
+
+?>
 <!-- Start: login-holder -->
 <div id="login-holder">
 
@@ -18,12 +28,28 @@
 		<h2> Bem vindo(a), <?=$fullname?>.</h2>
 		<br />
 		<ul class="system-menu-list">
-			<li><a href="<?=$this->config->item('url_link');?>events/index">Próximos Eventos</a>
-            <li><a href="<?=$this->config->item('url_link');?>payments/index">Ver todos os pagamentos cielo</a>
-			<li><a href="">Doação Associado Kinderland 2015</a>
-			<li><a href="">Doação Avulsa</a>
-			<li><a href="">Inscrição MiniKinderland 2015 e Kinderland 2016</a>
-			<li><a href="<?=$this->config->item('url_link');?>user/edit">Atualizar Cadastro</a>
+
+			<!--TO DO: Completar hrefs com os links para as devidas chamadas quando estiverem prontas-->
+
+			<?php if(hasPermission($permissions, COMMON_USER)) { ?>
+				<li><a href="<?=$this->config->item('url_link');?>user/menu">Sistema de usuários comuns</a>
+			<?php } ?>
+
+			<?php if(hasPermission($permissions, SYSTEM_ADMIN)) { ?>
+            	<li><a href="#">Painel do Administrador</a>
+            <?php } ?>
+
+            <?php if(hasPermission($permissions, DIRECTOR)) { ?>
+				<li><a href="#">Painel do Diretor</a>
+			<?php } ?>
+
+			<?php if(hasPermission($permissions, SECRETARY)) { ?>
+				<li><a href="#">Painel da Secretária</a>
+			<?php } ?>
+
+			<?php if(hasPermission($permissions, COORDINATOR)) { ?>
+				<li><a href="#">Painel do Coordenador</a>
+			<?php } ?>
 		</ul>
 		
 		<a href="<?=$this->config->item('url_link');?>login/logout" class="forgot-pwd">Sair do Sistema</a>
