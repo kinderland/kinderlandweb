@@ -4,12 +4,23 @@
 		<script type="text/javascript">
 
 			function subscribeUserOnSession(userId, eventId){
+				var alreadyInvited = false;
+
+				$(".subscriptions").each(function(){
+					if($(this).val() == userId){
+						alert("Convite já solicitado.");
+						alreadyInvited = true;
+					}
+				});
+
+				if(!alreadyInvited){
 				$.post( "<?=$this->config->item('url_link')?>events/subscribeUser", 
-						{ event_id: eventId, user_id: userId },
-						function ( data ){
-							location.reload();
-						}
-				);
+							{ event_id: eventId, user_id: userId },
+							function ( data ){
+								location.reload();
+							}
+					);
+				}	
 			}
 
 		</script>
@@ -56,34 +67,49 @@
 			<div class="row">
 				&nbsp;
 			</div>
+			<div class="row">
+				&nbsp;
+				<hr />
+			</div>
 			<?php 
 				if(count($subscriptions) > 0) {
 			?>
 				<div class="row">
-					<form action="<?=$this->config->item("url_link")?>events/checkoutSubcriptions" method="POST" name="form_submit_payment" id="form_submit_payment">
-						<input type="hidden" name="user_id" value="<=$user_id?>" />
-						<h4>Meus convites:</h4>
-						<table class="table table-condensed table-hover">
-							<tr>
-								<th>-</th>
-								<th>Pago</th>
-								<th>Nome do convidado</th>
-								<th>Descrição do convite</th>
-							</tr>
-							<?php 
-								foreach($subscriptions as $subscr){
-							?>
+					<div class="col-lg-12">
+						<form action="<?=$this->config->item("url_link")?>events/checkoutSubcriptions" method="POST" name="form_submit_payment" id="form_submit_payment">
+							<input type="hidden" name="user_id" value="<=$user_id?>" />
+							<div class="col-lg-8">
+								<h4>Meus convites:</h4>
+							</div>
+							<div class="col-lg-4">
+								<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$user_id?>, <?=$event->getEventId()?>)">Pagar</button>
+								<button class="btn btn-warning" style="float:right; margin-right:40px" onClick="deleteSubscriptions(<?=$user_id?>, <?=$event->getEventId()?>)">Deletar</button>
+							</div>
+							<div class="row">
+								&nbsp;
+							</div>
+							<table class="table table-condensed table-hover">
 								<tr>
-									<td><input type="checkbox" name="subscriptions" value="<?=$subscr->person_id?>" /></td>
-									<td><img src="<?= $this->config->item('assets') ."images/kinderland/". ( ($subscr->subscription_status == SUSCRIPTION_STATUS_SUBSCRIPTION_OK)?'confirma.png':'nao-confirma.png' ) ?>" width="20px" height="20px"/></td>
-									<td><?= $subscr->fullname ?></td>
-									<td>R$ <?= number_format($subscr->final_price, 2, ',', '.') ?></td>
+									<th>-</th>
+									<th>Pago</th>
+									<th>Nome do convidado</th>
+									<th>Descrição do convite</th>
 								</tr>
-							<?php
-								}
-							?>
-						</table>
-					</form>
+								<?php 
+									foreach($subscriptions as $subscr){
+								?>
+									<tr>
+										<td><input type="checkbox" name="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" /></td>
+										<td><img src="<?= $this->config->item('assets') ."images/kinderland/". ( ($subscr->subscription_status == SUSCRIPTION_STATUS_SUBSCRIPTION_OK)?'confirma.png':'nao-confirma.png' ) ?>" width="20px" height="20px"/></td>
+										<td><?= $subscr->fullname ?></td>
+										<td>R$ <?= number_format($subscr->final_price, 2, ',', '.') ?></td>
+									</tr>
+								<?php
+									}
+								?>
+							</table>
+						</form>
+					<div>
 				</div>
 			<?php
 				} 

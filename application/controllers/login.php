@@ -52,37 +52,49 @@ class Login extends CK_Controller {
 			$this->Logger->info("Found, retrieving data about personuser");
 		 	$user = $this->personuser_model->getUserById($userId);
 
-		 	$this->Logger->info("User type: ". $user->getUserType());
+		 	$permissions = $user->getUserTypes();
+		 	
+		 	$this->Logger->info("User type: ". print_r($user->getUserTypes(), true));
 		 	$this->Logger->info("Saving data in session");
 		 	$this->session->set_userdata("user_id", $user->getPersonId());
 		 	$this->session->set_userdata("fullname", $user->getFullname());
-		 	$this->session->set_userdata("user_type", $user->getUserType());
+		 	$this->session->set_userdata("user_types", $permissions);
 
-			switch($user->getUserType()){
-				case COMMON_USER:
-					redirect("user/edit");
-					break;
-				case SYSTEM_ADMIN:
-					//TO DO LATER
-					break;
-				case DIRECTOR:
-					//TO DO LATER
-					break;
-				case SECRETARY:
-					//TO DO LATER
-					break;
-				case COORDINATOR:
-					//TO DO LATER
-					break;
-				default:
-					redirect("login/index?error=true");
-					break;
-			}
+		 	if(count($permissions) == 1)
+		 		$this->redirectToSystemScreen($permissions[0]);
+		 	else
+		 		redirect("system/menu"); //permissions are saved in session
+			
 			
 		} else {
 			$this->Logger->error("Nothing found, redirecting to login with error screen");
 		 	redirect("login/index?error=true");
 		}
+	}
+
+	private function redirectToSystemScreen($permission){
+		$this->Logger->info("Starting " . __METHOD__);
+		switch($permission){
+			case COMMON_USER:
+				redirect("user/edit");
+				break;
+			case SYSTEM_ADMIN:
+				//TO DO LATER
+				break;
+			case DIRECTOR:
+				//TO DO LATER
+				break;
+			case SECRETARY:
+				//TO DO LATER
+				break;
+			case COORDINATOR:
+				//TO DO LATER
+				break;
+			default:
+				redirect("login/index?error=true");
+				break;
+		}
+		return;
 	}
 
 	public function logout(){
@@ -94,7 +106,7 @@ class Login extends CK_Controller {
 		$this->Logger->info("Logging out user: ".$this->session->userdata("user_id") . " - " . $this->session->userdata("fullname"));
 		$this->session->unset_userdata("fullname");
 		$this->session->unset_userdata("user_id");
-		$this->session->unset_userdata("user_type");
+		$this->session->unset_userdata("user_types");
 		$this->session->sess_destroy();
 		
 		redirect("login/index");
@@ -142,8 +154,8 @@ class Login extends CK_Controller {
 
 			$this->session->set_userdata("user_id", $personId);
 			$this->session->set_userdata("fullname", $fullname);
-			$this->session->set_userdata("user_type", COMMON_USER);
-			redirect("system/menu");
+			$this->session->set_userdata("user_types", array(COMMON_USER));
+			redirect("user/menu");
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to insert new user");
 			//Caso tenha capturado algum erro, volta atrás nas alterações feitas antes do erro acontecer

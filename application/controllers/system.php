@@ -19,7 +19,12 @@ class System extends CK_Controller {
 	}
 
 	public function menu(){
+		$this->Logger->info("Starting " . __METHOD__);
 		$data['fullname'] = $this->session->userdata("fullname");
+		$data['permissions'] = $this->session->userdata("user_types");
+
+		$this->Logger->debug(print_r($data ,true));
+
 		$this->loadView("system/menu", $data);
 	}
 

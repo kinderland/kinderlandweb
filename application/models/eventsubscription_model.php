@@ -28,8 +28,8 @@
 
         public function getPeopleRelatedToUser($userId){
             $sql = "SELECT p.* from event_subscription es inner join person p on p.person_id=es.person_id 
-            inner join person_user pu on pu.person_id = es.person_user_id where es.person_user_id = ?";
-            $rs = $this->executeRows($this->db, $sql, array(intval($userId)));
+            inner join person_user pu on pu.person_id = es.person_user_id where es.person_user_id = ? and es.person_id <> ?";
+            $rs = $this->executeRows($this->db, $sql, array(intval($userId), intval($userId)));
 
             $people = array();
             foreach($rs as $result)

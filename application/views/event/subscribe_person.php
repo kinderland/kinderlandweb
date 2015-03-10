@@ -47,7 +47,6 @@ function validateFormInfo(){
 						  		$i = 0;
 						  		foreach($people as $person) { 
 						  	?>
-
 						  		<option value="<?=$i++?>"><?=$person->getFullname()?></option>
 						  	<?php } ?>
 						</select> 

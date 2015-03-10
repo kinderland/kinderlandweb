@@ -63,7 +63,7 @@ class User extends CK_Controller {
             
             $this->generic_model->commitTransaction();
 
-           	redirect("system/menu");
+           	redirect("user/menu");
 
         } catch(Exception $ex){
         	$this->Logger->error("Failed to update user");
@@ -74,6 +74,11 @@ class User extends CK_Controller {
         }
 
     } 
+
+    public function menu() {
+        $data['fullname'] = $this->session->userdata("fullname");
+        $this->loadView("user/menu", $data);
+    }
 
 }
 
