@@ -65,6 +65,16 @@ class personuser_model extends CK_Model{
     
     }
 
+    public function cpfExists($cpf) {
+    	$sql = "SELECT * FROM person_user WHERE cpf=?";
+        $resultSet = $this->executeRow($this->db, $sql, array($cpf));
+
+        if($resultSet)
+        	return true;
+
+        return false;
+    }
+
 }
 
 ?>

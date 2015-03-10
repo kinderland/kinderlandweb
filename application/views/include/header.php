@@ -12,7 +12,7 @@
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/ui/jquery-ui.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/jquerysettings.js"></script>
-		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/validateForms.js"></script>
+		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/formValidationFunctions.js"></script>
 	</head>
 	<body>
 		<header class="navbar navbar-sags" role="banner" id="top">

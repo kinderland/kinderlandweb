@@ -1,16 +1,28 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-	// if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome")||
-	//  (!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))||
-	//  (!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
-	//  (!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
-	//  (!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
-	//  (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
-	//  (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
-	// 	return false;
+	/*
+	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome")||
+	 (!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))||
+	 (!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
+	 (!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
+	 (!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
+	 (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
+	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
+		return false;
+	*/
 
-	$("#signup_form").submit();
+	$.get(
+		"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
+		function( data ) {
+			if(data == "true")
+				alert( "Este CPF já está cadastrado." );
+			else{
+				//alert("CPF ok");
+				$("#signup_form").submit();
+			}
+		});
+
 }
 
 function callMasks(){
@@ -19,14 +31,12 @@ function callMasks(){
 	$("input[name='cep']").mask("99999-999");
 	//$("input[name='phone1']").mask("(99)99999-9999");
 	//$("input[name='phone2']").mask("(99)99999-9999");
-	//$("input[name='number']").mask("999999");
-
 }
-/* permite apenas numeros */
+/* permite apenas numeros, tab e backspace*/
 function validateNumberInput(evt){
 
     var key_code = (evt.which) ? evt.which : evt.keyCode; 
-    if (key_code >= 48 && key_code <= 57) {
+    if ((key_code >= 48 && key_code <= 57) || key_code == 9 || key_code == 8) {
     	return true;
     }
 	return false;
@@ -36,8 +46,8 @@ function validateLetterInput(evt) {
 
     var key_code = (evt.which) ? evt.which : evt.keyCode;
 
-	if ((key_code >= 65 && key_code <= 90) || (key_code >= 97 && key_code <= 122) 
-		|| key_code == 45 || key_code == 32  || (key_code >= 180 && key_code <= 252)) {
+	if ((key_code >= 65 && key_code <= 90) || (key_code >= 97 && key_code <= 122) || key_code == 9
+		|| key_code == 8 || key_code == 45 || key_code == 32  || (key_code >= 180 && key_code <= 252)) {
 
             return true;
     }
@@ -76,7 +86,7 @@ function funcCpf(){
 	var cpfCheck = document.getElementById("cpf");
 	cpfCheck.onchange = function(){
 		if(TestaCPF(cpfCheck.value)){
-			cpfCheck.style.backgroundColor = "#79F774";
+			cpfCheck.style.backgroundColor = "#FFFFFF";
 		}
 		else{
 			cpfCheck.style.backgroundColor = "#F78D8D"; 
@@ -89,7 +99,7 @@ function funcEmail(){
 	var confirm_email = document.getElementById("confirm_email");
 	confirm_email.onchange = function(){
 		if(email.value === confirm_email.value){
-			confirm_email.style.backgroundColor = "#79F774";
+			confirm_email.style.backgroundColor = "#FFFFFF";
 		}
 		else{
 			 confirm_email.style.backgroundColor = "#F78D8D"; 
@@ -102,10 +112,11 @@ function funcPassword(){
 	var confirm_password = document.getElementById("confirm_password");
 	confirm_password.onchange = function(){
 		if(password.value === confirm_password.value){
-			confirm_password.style.backgroundColor = "#79F774";
+			confirm_password.style.backgroundColor = "#FFFFFF";
 		}
 		else{
-			 confirm_password.style.backgroundColor = "#F78D8D"; 
+			 confirm_password.style.backgroundColor = "#F78D8D";
+			 //$("#confirm_password > div").attr("class", "has-error"); 
 		}
 	};
 }
@@ -126,7 +137,7 @@ function funcPassword(){
 					<label for="fullname" class="col-lg-1 control-label"> Nome Completo*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Nome Completo"
-							name="fullname" onkeypress="return validateLetterInput(event);" required
+							name="fullname" onkeypress="return validateLetterInput(event);"  required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 							
@@ -161,17 +172,17 @@ function funcPassword(){
 				<div class="form-group">
 					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" id="email" class="form-control" placeholder="Email"
+						<input type="email" id="email" class="form-control" placeholder="Email"
 							name="email" required
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email. Favor incluir @ e .')"
     						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" id="confirm_email" class="form-control" placeholder="Email"
+						<input type="email" id="confirm_email" class="form-control" placeholder="Email"
 							name="confirm_email" required
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email. Favor incluir @ e .')"
     						oninput="setCustomValidity('')"/>
     					<script type="text/javascript">
 					        window.onload = funcEmail();
@@ -227,7 +238,7 @@ function funcPassword(){
 					<label for="cep" class="col-lg-1 control-label"> CEP*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
-							name="cep" maxlength="9" onkeypress="return validateNumberInput(event);" required
+							name="cep" maxlength="8" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
@@ -319,7 +330,7 @@ function funcPassword(){
 
 			<div class="form-group">
 				<div class="col-lg-10">
-					<button class="btn btn-primary" style="margin-right:40px" onClick="validateFormInfo()">Confirmar</button>
+					<button class="btn btn-primary" style="margin-right:40px" onClick="validateForm()">Confirmar</button>
 					<a href="<?=$this->config->item('url_link')?>login/index"><button class="btn btn-warning">Voltar</button></a>
 				</div>
 			</div>
