@@ -10,7 +10,23 @@ function validateForm(){
 	 (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
 	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
 		return false;
-	*/
+	
+
+	if(!validateEmail("signup_form","email","e-mail"))
+		return false;
+	if(!validateNotEmptyField("signup_form","fullname","Nome"))
+		return false;
+	if(!validateNotEmptyField("signup_form","cpf","CPF"))
+		return false;
+	if(!validateNotEmptyField("signup_form","gender","Sexo"))
+		return false;
+	
+	(!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
+	(!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
+	(!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
+	(!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
+	(!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
+	
 
 	$.get(
 		"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
@@ -21,7 +37,9 @@ function validateForm(){
 				//alert("CPF ok");
 				$("#signup_form").submit();
 			}
-		});
+		});*/
+
+	$("#signup_form").submit();
 
 }
 
@@ -46,7 +64,7 @@ function validateLetterInput(evt) {
 
     var key_code = (evt.which) ? evt.which : evt.keyCode;
 
-	if ((key_code >= 65 && key_code <= 90) || (key_code >= 97 && key_code <= 122) || key_code == 9
+	if ((key_code >= 65 && key_code <= 90) || (key_code >= 97 && key_code <= 122) || key_code == 9 || key_code == 39
 		|| key_code == 8 || key_code == 45 || key_code == 32  || (key_code >= 180 && key_code <= 252)) {
 
             return true;
@@ -87,6 +105,12 @@ function funcCpf(){
 	cpfCheck.onchange = function(){
 		if(TestaCPF(cpfCheck.value)){
 			cpfCheck.style.backgroundColor = "#FFFFFF";
+			$.get(
+			"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
+			function( data ) {
+				if(data == "true")
+					alert( "Este CPF já está cadastrado." );
+			});
 		}
 		else{
 			cpfCheck.style.backgroundColor = "#F78D8D"; 
@@ -102,7 +126,8 @@ function funcEmail(){
 			confirm_email.style.backgroundColor = "#FFFFFF";
 		}
 		else{
-			 confirm_email.style.backgroundColor = "#F78D8D"; 
+			 confirm_email.style.backgroundColor = "#F78D8D";
+			 alert( "E-mail e confirmação de e-mail não estão iguais. Favor verificar." ); 
 		}
 	};
 }
@@ -115,7 +140,8 @@ function funcPassword(){
 			confirm_password.style.backgroundColor = "#FFFFFF";
 		}
 		else{
-			 confirm_password.style.backgroundColor = "#F78D8D";
+			confirm_password.style.backgroundColor = "#F78D8D";
+			alert( "Senha e confirmação de senha não estão iguais. Favor verificar." );
 			 //$("#confirm_password > div").attr("class", "has-error"); 
 		}
 	};
@@ -137,7 +163,7 @@ function funcPassword(){
 					<label for="fullname" class="col-lg-1 control-label"> Nome Completo*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Nome Completo"
-							name="fullname" onkeypress="return validateLetterInput(event);"  required
+							name="fullname" onkeypress="return validateLetterInput(event);" required 
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 							
@@ -157,9 +183,7 @@ function funcPassword(){
 
 					<label for="gender" class="col-lg-1 control-label"> Sexo*: </label>
 					<div class="col-lg-3">
-						<select  class="form-control" id="gender" name="gender" required
-							oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
-    						oninput="setCustomValidity('')">
+						<select  class="form-control" id="gender" name="gender" >
 							<option value="" selected>-- Selecione --</option>
 							<option value="M">Masculino</option>
 							<option value="F">Feminino</option>
