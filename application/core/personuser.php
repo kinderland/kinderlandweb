@@ -9,9 +9,9 @@
 
 		public function __construct($personId, $fullname, 
 			$gender, $email, /*$associate,*/ $benemerit, $address, $login,
-			$cpf, $occupation, $userTypes){
+			$cpf, $occupation, $phone1, $phone2, $userTypes){
 			parent::__construct($personId, $fullname, 
-			$gender, $email, $benemerit, $address);
+			$gender, $email, $benemerit, $address, $phone1, $phone2);
 
 			$this->login = $login;
 			$this->cpf = $cpf;
@@ -31,6 +31,8 @@
 				$resultRow->login,
 				$resultRow->cpf,
 				$resultRow->occupation,
+				$resultRow->phone1,
+				$resultRow->phone2,
 				null
 			);
 			if($addressIncluded)

@@ -39,18 +39,19 @@ class personuser_model extends CK_Model{
 	public function getUserById($person_id){
 		$this->Logger->info("Running: " . __METHOD__);
 
-		$sql = "select 
+		$sql = "SELECT 
 				p.person_id, put.user_type, pu.login, a.address_id, pu.cpf, pu.occupation, 
 				p.fullname, p.gender, p.email, p.benemerit, a.street, 
 				a.place_number, a.complement, a.city, a.cep, a.uf, 
-				a.neighborhood 
-				from person_user as pu 
-				natural join person as p 
-				natural join address as a 
-				natural join person_user_type as put
-				where p.person_id = ?";
+				a.neighborhood, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,
+				(SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
+				FROM person_user AS pu 
+				NATURAL JOIN person AS p 
+				NATURAL JOIN address AS a 
+				NATURAL JOIN person_user_type AS put
+				WHERE p.person_id = ?";
 
-		$rows = $this->executeRows($this->db, $sql, array(intval($person_id)));
+		$rows = $this->executeRows($this->db, $sql, array(intval($person_id), intval($person_id), intval($person_id)));
 
 		if(isset($rows[0])) {
 			$personUser = PersonUser::createUserObject($rows[0], true);

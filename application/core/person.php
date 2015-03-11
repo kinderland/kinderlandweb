@@ -8,8 +8,10 @@
 		//private $associate = false;
 		public $benemerit = false;
 		public $address;
+		public $phone1;
+		public $phone2;
 
-		public function __construct($personId, $fullname, $gender, $email/*, $associate*/, $benemerit, $address){
+		public function __construct($personId, $fullname, $gender, $email/*, $associate*/, $benemerit, $address, $phone1, $phone2){
 			$this->personId = $personId;
 			$this->fullname = $fullname;
 			$this->gender = $gender;
@@ -17,6 +19,8 @@
 			//$this->associate = $associate;
 			$this->benemerit = $benemerit;
 			$this->address = $address;
+			$this->phone1 = $phone1;
+			$this->phone2 = $phone2;
 		}
 
 		public static function createPersonObject($resultRow){
@@ -27,6 +31,8 @@
 				$resultRow->email,
 				//$resultRow->associate, 
 				$resultRow->benemerit,
+				$resultRow->phone1,
+				$resultRow->phone2,
 				null
 			);
 		}
@@ -85,6 +91,20 @@
 		}
 		public function getAddress(){
 			return $this->address;
+		}
+
+		public function setPhone1($phone1){
+			$this->phone1 = $phone1;
+		}
+		public function getPhone1(){
+			return $this->phone1;
+		}
+
+		public function setPhone2($phone2){
+			$this->phone2 = $phone2;
+		}
+		public function getPhone2(){
+			return $this->phone2;
 		}
 
 	}
