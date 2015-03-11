@@ -42,9 +42,11 @@ class Events extends CK_Controller {
 			$event = $this->event_model->getEventById($eventId);
 
 			$subscriptions = $this->eventsubscription_model->getSubscriptionsForEventByUserId($this->session->userdata("user_id"), $eventId);
+			$price = $this->eventsubscription_model->getEventPrices($eventId);
 
 			$data['event'] = $event;
 			$data['subscriptions'] = $subscriptions;
+			$data['price'] = $price;
 			$data['user_id'] = $this->session->userdata("user_id");
 
 			$this->Logger->debug("Subscriptions: ".print_r($subscriptions, true));
@@ -74,6 +76,7 @@ class Events extends CK_Controller {
 
 			$data['event'] = $event;
 			$data['user_id'] = $userId;
+			$data['age_group'] = $this->eventsubscription_model->getAgeGroups();
 			$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($userId);
 			$data['peoplejson'] = json_encode($data['people']);
 

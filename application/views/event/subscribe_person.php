@@ -78,6 +78,29 @@ function validateFormInfo(){
 					</div>
 				</div>
 			</div>
+
+			<div class="row">
+				<div class="form-group">
+					<div class="col-lg-4">
+						<p>
+							<label for="associate" class="control-label"> Dependente de sócio: </label>
+							<input type="checkbox" class="" name="associate" id="associate"/>
+						</p>
+					</div>
+
+					<label for="age_group" class="col-lg-1 control-label"> Faixa Etária: </label>
+					<div class="col-lg-3">
+						<select class="form-control" id="age_group" name="age_group" >
+							<option value="" selected>-- Selecione --</option>
+							<?php
+								foreach($age_group as $group){
+									echo "<option value='".$group->age_group_id."'>".$group->description."</option>";
+								}
+							?>
+						</select>
+					</div>
+				</div>
+			</div>
 			
 			<div class="row">
 				<br /><br /><br />

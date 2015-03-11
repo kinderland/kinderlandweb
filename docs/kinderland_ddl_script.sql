@@ -87,8 +87,7 @@ CREATE TABLE event (
     date_finish timestamp without time zone NOT NULL,
     date_start_show timestamp without time zone NOT NULL,
     date_finish_show timestamp without time zone NOT NULL,
-    private boolean NOT NULL default false,
-    price decimal(9, 2) NOT NULL
+    private boolean NOT NULL default false
 );
 
 CREATE TABLE subscription_status(
@@ -97,17 +96,32 @@ CREATE TABLE subscription_status(
 );
 INSERT INTO subscription_status VALUES (1, 'pre-inscrito'), (0, 'pre-inscrito incompleto'), (2, 'aguardando pagamento'), (3, 'inscrito'), (-1, 'cancelado'), (-2, 'desistente'), (-3, 'excluido');
 
+CREATE TABLE payment_period (
+    payment_period_id SERIAL,
+    event_id INTEGER NOT NULL REFERENCES event,
+    date_start TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    date_finish TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    full_price decimal(9,2) NOT NULL,
+    children_price decimal(9,2) NOT NULL,
+    middle_price numeric(9,2) NOT NULL,
+    associate_discount decimal(3,2) NOT NULL DEFAULT 0.0,
+
+    PRIMARY KEY(payment_period_id)
+);
+
 CREATE TABLE event_subscription (
     person_id integer NOT NULL REFERENCES person, -- id from the person that is going
     event_id integer NOT NULL REFERENCES event,
-    person_user_id integer REFERENCES person_user (person_id), -- cpf from the user that is buying, may be or not the person who is going
-    discount decimal(2, 2), --discount format: 0.6 = 60%
-    final_price decimal(9, 2),
-    subscription_status integer,
+    person_user_id integer NOT NULL,
+    subscription_status integer REFERENCES subscription_status,
     donation_id integer REFERENCES donation,
-    date_created timestamp without time zone DEFAULT current_timestamp,
+    date_created timestamp without time zone DEFAULT now(),
+    age_group_id integer NOT NULL REFERENCES age_group DEFAULT 3,
+    associate boolean default false,
 
-    PRIMARY KEY (person_id, event_id)
+    PRIMARY KEY (person_id, event_id),
+    CONSTRAINT fk_person_user_event FOREIGN KEY (person_user_id)
+      REFERENCES person_user (person_id)
 );
 
 CREATE TABLE payment_status(
@@ -126,6 +140,14 @@ CREATE TABLE cielo_transaction (
     date_updated timestamp without time zone,
     transaction_value decimal(9,2)
 );
+
+
+
+CREATE TABLE age_group (
+    age_group_id INTEGER NOT NULL PRIMARY KEY,
+    description VARCHAR NOT NULL
+);
+INSERT INTO age_group VALUES (1, '0-6 anos'), (2, '7-17 anos'), (3, '+18 anos');
 
 CREATE VIEW open_public_events as (SELECT * FROM event 
                 WHERE current_timestamp BETWEEN date_start_show AND date_finish_show 

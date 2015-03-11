@@ -40,7 +40,7 @@
 					</p>
 				</div>
 				<div class="col-lg-4">
-					<h3>Preço: <strong>R$<?=number_format($event->getPrice(), 2, ',', '.')?></strong></h3>
+					<?=($price != null)?"<h3>Preço: <strong>R$".number_format($price->full_price, 2, ',', '.')."</strong></h3>":""?>
 				</div>
 			</div>
 			<div class="row">
@@ -102,7 +102,20 @@
 										<td><input type="checkbox" name="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" /></td>
 										<td><img src="<?= $this->config->item('assets') ."images/kinderland/". ( ($subscr->subscription_status == SUSCRIPTION_STATUS_SUBSCRIPTION_OK)?'confirma.png':'nao-confirma.png' ) ?>" width="20px" height="20px"/></td>
 										<td><?= $subscr->fullname ?></td>
-										<td>R$ <?= number_format($subscr->final_price, 2, ',', '.') ?></td>
+										<td>
+											<?php switch($subscr->age_group_id){
+												case 1:
+													echo "R$ ".number_format($price->children_price, 2, ',', '.');
+													break;
+												case 2:
+													echo "R$ ".number_format($price->middle_price, 2, ',', '.');
+													break;
+												case 3:
+												default:
+													echo "R$ ".number_format($price->full_price, 2, ',', '.');
+													break;
+											}
+										  ?></td>
 									</tr>
 								<?php
 									}
