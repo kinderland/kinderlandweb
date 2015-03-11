@@ -164,6 +164,15 @@ class Login extends CK_Controller {
 			$this->loadView('login/signup', $data);
 		}
 	}
+
+	public function checkExistingCpf(){
+		$cpf = $_GET['cpf'];
+		if($this->personuser_model->cpfExists($cpf))
+			echo "true";
+		else
+			echo "false";
+	}
+	
 }
 
 ?>
