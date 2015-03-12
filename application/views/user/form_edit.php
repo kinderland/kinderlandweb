@@ -1,23 +1,10 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-	// if(!validateEmail("edit_form","email","e-mail") || !validateNotEmptyField("edit_form","fullname","Nome"))
-	// 	return false;
-
-	// if(!validateNotEmptyField("edit_form","cpf","CPF") || !validateNotEmptyField("edit_form","gender","Sexo"))
-	// 	return false;
-
 
 	$("#edit_form").submit();
 }
 
-function callMasks(){
-
-	$("input[name='cpf']").mask("999.999.999-99");
-	$("input[name='cep']").mask("99999-999");
-	//$("input[name='phone1']").mask("(99)99999-9999");
-	//$("input[name='phone2']").mask("(99)99999-9999");
-}
 /* permite apenas numeros, tab e backspace*/
 function validateNumberInput(evt){
 
@@ -131,9 +118,9 @@ function funcPassword(){
     						oninput="setCustomValidity('')"/>
 					</div>
 
-					<label for="cpf" id="cpf" class="col-lg-1 control-label"> CPF*: </label>
+					<label for="cpf" class="col-lg-1 control-label"> CPF*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="CPF"
+						<input type="text" id="cpf" class="form-control" placeholder="CPF"
 							name="cpf" value="<?=$user->getCPF()?>" 
 							maxlength="11" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
@@ -157,17 +144,17 @@ function funcPassword(){
 			<br />
 			<div class="row">
 				<div class="form-group">
-					<label for="email" id="email" class="col-lg-1 control-label"> E-mail*: </label>
+					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="Email"
+						<input type="text" id="email" class="form-control" placeholder="Email"
 							name="email" value="<?=$user->getEmail()?>" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
 
-					<label for="email" id="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
+					<label for="email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="Email"
+						<input type="text" id="confirm_email" class="form-control" placeholder="Email"
 							name="email" value="<?=$user->getEmail()?>" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
@@ -299,12 +286,15 @@ function funcPassword(){
 				<div class="form-group">
 					<label for="password" class="col-lg-1 control-label"> Senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" placeholder="" name="password" />
+						<input type="password" id="password" class="form-control" placeholder="" name="password" />
 					</div>
 
 					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" class="form-control" name="confirm_password" />
+						<input type="password" id="confirm_password" class="form-control" name="confirm_password" />
+						<script type="text/javascript">
+					        window.onload = funcPassword();
+					    </script>
 					</div>
 				</div>
 			</div>
