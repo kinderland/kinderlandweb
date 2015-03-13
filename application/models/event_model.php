@@ -31,6 +31,21 @@ class event_model extends CK_Model{
         return null;
     }
 
+    public function insertNewEvent($event_name, $description, $date_start, $date_finish, 
+        $date_start_show, $date_finish_show, $private, $price){
+
+        $this->Logger->info("Running: " . __METHOD__);
+        
+        $sql = 'INSERT INTO event(event_name, description, date_created, date_start, date_finish, 
+            date_start_show, date_finish_show, private, price) VALUES (?,?, current_timestamp,?,?,?,?,?,?)';
+        $returnId = $this->executeReturningId($this->db, $sql, array($event_name, $description, $date_start, $date_finish, 
+                $date_start_show, $date_finish_show, $private, $price));
+        if($returnId)
+            return $returnId;
+
+        return false;
+    }
+
 
 }
 

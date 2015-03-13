@@ -155,6 +155,36 @@ class Events extends CK_Controller {
 		}
 	}
 
+	public function eventCreate(){
+		$this->Logger->info("Starting " . __METHOD__);
+
+		$event_name = $_POST['event_name'];
+		$description = $_POST['description'];
+		$date_start = $_POST['date_start'];
+		$date_finish = $_POST['date_finish'];
+		$date_start_show = $_POST['date_start_show'];
+		$date_finish_show = $_POST['date_finish_show'];
+		$private = $_POST['private'];
+		$price = $_POST['price'];
+
+		try{
+			$this->Logger->info("Inserting new event");
+			$this->generic_model->startTransaction();
+			
+			$eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, 
+				$date_start_show, $date_finish_show, $private, $price);
+			
+			$this->generic_model->commitTransaction();
+			$this->Logger->info("New event successfully inserted");
+			redirect("event/home");
+
+		} catch (Exception $ex) {
+			$this->Logger->error("Failed to insert new event");
+			$this->generic_model->rollbackTransaction();
+			$data['error'] = true;
+			$this->loadView('event/event_create', $data);
+		}
+	}
 }
 
 ?>
