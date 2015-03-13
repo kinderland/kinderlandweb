@@ -47,6 +47,7 @@ class User extends CK_Controller {
         $complement = $_POST['complement'];
         $neighborhood = $_POST['neighborhood'];
         $uf = $_POST['uf'];
+        $password = $_POST['password'];
 
         try{
         	$this->Logger->info("Starting upadte user");
@@ -57,6 +58,8 @@ class User extends CK_Controller {
             $this->personuser_model->updatePersonUser($email, $cpf, $occupation, $person_id);
             $this->address_model->updateAddress($street, $number, $complement, $city, $cep, $uf, $neighborhood, $address->getAddressId());
             $this->telephone_model->updatePhone($person_id, $phone1, $phone2);
+            if($password != '')
+                $this->personuser_model->updatePassword($password, $person_id);
 
             $this->Logger->info("User data updated, saving fullname in session");
             $this->session->set_userdata("fullname", $fullname);

@@ -92,6 +92,14 @@ class personuser_model extends CK_Model{
     
     }
 
+    public function updatePassword($password, $person_id) {
+    	$this->Logger->info("Running: " . __METHOD__);
+        $sql = "UPDATE person_user SET password=? WHERE person_id=?";
+        if ($this->execute($this->db, $sql, array($password, intval($person_id))))
+            return true;
+        return false;
+    }
+
     public function cpfExists($cpf) {
     	$sql = "SELECT * FROM person_user WHERE cpf=?";
         $resultSet = $this->executeRow($this->db, $sql, array($cpf));
