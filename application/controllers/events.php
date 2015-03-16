@@ -114,6 +114,32 @@ class Events extends CK_Controller {
 		}
 	}
 
+	public function unsubscribeUsers(){
+		$this->Logger->info("Starting " . __METHOD__);
+
+		if(!$this->checkSession())
+			redirect("login/index");
+
+		$eventId = $_POST['event_id'];
+		$userIds = $_POST['user_ids'];
+
+		$this->Logger->info("EventID: $eventId => List of user ids to unsubscribe: $userIds");
+
+		try{
+			$this->generic_model->startTransaction();
+
+			$this->eventsubscription_model->unsubscribeUsersFromEvent($userIds, $eventId);
+
+			$this->generic_model->commitTransaction();
+
+			$this->info($eventId);
+		} catch (Exception $ex) {
+			$this->generic_model->rollbackTransaction();
+			$this->Logger->error("Failed to subscribe user on event");
+			$this->info($eventId, true);
+		}
+	}
+
 	public function subscribePerson(){
 		$this->Logger->info("Starting " . __METHOD__);
 

@@ -18,18 +18,29 @@
             throw new ModelException("Failed to create subscription");
         }
 
+        public function unsubscribeUsersFromEvent($usersId, $eventId){
+            $sql = "UPDATE event_subscription SET subscription_status = -1 WHERE event_id = ? AND person_id in (".$usersId.")";
+            if ($this->execute($this->db, $sql, array(intval($eventId))))
+                return true;
+
+            throw new ModelException("Failed to create subscription");
+        }
+
         public function getSubscriptionsForEventByUserId($userId, $eventId){
-            $sql = "SELECT es.*, p.fullname from event_subscription as es 
+            $sql = "SELECT es.*, p.fullname, ag.description as age_description from event_subscription as es 
                     inner join person as p on p.person_id = es.person_id 
-                    where es.event_id = ? and es.person_user_id = ?";
+                    inner join age_group as ag on ag.age_group_id = es.age_group_id
+                    where es.event_id = ? and es.person_user_id = ? and subscription_status >= 0";
 
             return $this->executeRows($this->db, $sql, array(intval($eventId), intval($userId)));
         }
 
         public function getPeopleRelatedToUser($userId){
-            $sql = "SELECT p.* from event_subscription es inner join person p on p.person_id=es.person_id 
+            $sql = "SELECT p.*, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,
+                (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
+                 from event_subscription es inner join person p on p.person_id=es.person_id 
             inner join person_user pu on pu.person_id = es.person_user_id where es.person_user_id = ? and es.person_id <> ?";
-            $rs = $this->executeRows($this->db, $sql, array(intval($userId), intval($userId)));
+            $rs = $this->executeRows($this->db, $sql, array(intval($userId), intval($userId), intval($userId), intval($userId)));
 
             $people = array();
             foreach($rs as $result)

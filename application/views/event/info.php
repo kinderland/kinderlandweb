@@ -14,13 +14,36 @@
 				});
 
 				if(!alreadyInvited){
-				$.post( "<?=$this->config->item('url_link')?>events/subscribeUser", 
+					$.post( "<?=$this->config->item('url_link')?>events/subscribeUser", 
 							{ event_id: eventId, user_id: userId },
 							function ( data ){
 								location.reload();
 							}
 					);
 				}	
+			}
+
+			function deleteSubscriptions(eventId){
+				var userIds = $("input[name=subscriptions]:checked").map(function() {
+								    return this.value;
+								}).get().join(",");
+			    
+			    if(userIds.length == 0){
+			    	alert("Selecione os convites que deseja deletar.");
+			    	return;
+			    }
+
+			    $.post( "<?=$this->config->item('url_link')?>events/unsubscribeUsers", 
+						{ event_id: eventId, user_ids: userIds },
+						function ( data ){
+							location.reload();
+						}
+				);
+			}
+
+			function paymentDetailsScreen(){
+				// TODO: toda a logica por tras deste submit
+				$("#form_submit_payment").submit();
 			}
 
 		</script>
@@ -40,7 +63,7 @@
 					</p>
 				</div>
 				<div class="col-lg-4">
-					<?=($price != null)?"<h3>Preço: <strong>R$".number_format($price->full_price, 2, ',', '.')."</strong></h3>":""?>
+					<?=($price != null)?"<h3>Preço: <strong>R$".number_format($price->full_price, 2, ',', '.')."</strong></h3><small>(Preço padrão adulto e sem desconto)</small>":""?>
 				</div>
 			</div>
 			<div class="row">
@@ -75,46 +98,61 @@
 				if(count($subscriptions) > 0) {
 			?>
 				<div class="row">
-					<div class="col-lg-12">
+					<div class="col-lg-12">	
+						<div class="col-lg-8">
+							<h4>Meus convites:</h4>
+						</div>
+						<div class="col-lg-4">
+							<?php
+								if($price != null){
+							?>
+								<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$user_id?>, <?=$event->getEventId()?>)">Pagar</button>
+							<?php
+								}
+							?>
+							
+							<button class="btn btn-warning" style="float:right; margin-right:40px" onClick="deleteSubscriptions(<?=$event->getEventId()?>)">Deletar</button>
+						</div>
+						<div class="row">
+							&nbsp;
+						</div>
 						<form action="<?=$this->config->item("url_link")?>events/checkoutSubcriptions" method="POST" name="form_submit_payment" id="form_submit_payment">
 							<input type="hidden" name="user_id" value="<=$user_id?>" />
-							<div class="col-lg-8">
-								<h4>Meus convites:</h4>
-							</div>
-							<div class="col-lg-4">
-								<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$user_id?>, <?=$event->getEventId()?>)">Pagar</button>
-								<button class="btn btn-warning" style="float:right; margin-right:40px" onClick="deleteSubscriptions(<?=$user_id?>, <?=$event->getEventId()?>)">Deletar</button>
-							</div>
-							<div class="row">
-								&nbsp;
-							</div>
 							<table class="table table-condensed table-hover">
 								<tr>
 									<th>-</th>
 									<th>Pago</th>
 									<th>Nome do convidado</th>
+									<th>Faixa etária</th>
 									<th>Descrição do convite</th>
 								</tr>
 								<?php 
 									foreach($subscriptions as $subscr){
 								?>
 									<tr>
-										<td><input type="checkbox" name="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" /></td>
+										<td><input type="checkbox" name="subscriptions" id="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" /></td>
 										<td><img src="<?= $this->config->item('assets') ."images/kinderland/". ( ($subscr->subscription_status == SUSCRIPTION_STATUS_SUBSCRIPTION_OK)?'confirma.png':'nao-confirma.png' ) ?>" width="20px" height="20px"/></td>
 										<td><?= $subscr->fullname ?></td>
+										<td><?= $subscr->age_description ?></td>
 										<td>
-											<?php switch($subscr->age_group_id){
-												case 1:
-													echo "R$ ".number_format($price->children_price, 2, ',', '.');
-													break;
-												case 2:
-													echo "R$ ".number_format($price->middle_price, 2, ',', '.');
-													break;
-												case 3:
-												default:
-													echo "R$ ".number_format($price->full_price, 2, ',', '.');
-													break;
-											}
+											<?php
+												if($price != null){
+													switch($subscr->age_group_id){
+														case 1:
+															echo "R$ ".number_format($price->children_price, 2, ',', '.');
+															break;
+														case 2:
+															echo "R$ ".number_format($price->middle_price, 2, ',', '.');
+															break;
+														case 3:
+														default:
+															echo "R$ ".number_format($price->full_price, 2, ',', '.');
+															break;
+													} 
+												
+												} else {
+													echo "Prazo de pagamento terminado";
+												}
 										  ?></td>
 									</tr>
 								<?php
