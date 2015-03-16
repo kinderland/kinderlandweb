@@ -9,13 +9,27 @@
         }
 
         public function createSubcription($event, $userId, $personId, $subscriptionStatus) {
-            $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate) 
+            $subs = $this->getSubscriptionByPersonIdAndEventId($personId, $event->getEventId());
+            if(count($subs) == 0){
+                $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate) 
                     VALUES(?,?,?,?,3,false)";
 
-            if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus )))
-                return true;
-
+                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus )))
+                    return true;
+            } else {
+                $this->Logger->info("Failed to insert new, trying to update an existing one.");
+                $sqlUpdate = "UPDATE event_subscription SET person_user_id = ?, subscription_status = ?, age_group_id = 3, associate = false
+                              WHERE event_id = ? AND person_id = ?";
+                if($this->execute($this->db, $sqlUpdate, array(  intval($userId), $subscriptionStatus, intval($event->getEventId()), intval($personId))))
+                    return true;
+            }
             throw new ModelException("Failed to create subscription");
+        }
+
+        public function getSubscriptionByPersonIdAndEventId($personId, $eventId){
+            $sql = "SELECT * FROM event_subscription WHERE person_id = ? AND event_id = ?";
+
+            return $this->executeRows($this->db, $sql, array(intval($personId), intval($eventId)));
         }
 
         public function unsubscribeUsersFromEvent($usersId, $eventId){
