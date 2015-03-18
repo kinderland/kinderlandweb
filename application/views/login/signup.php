@@ -1,55 +1,9 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-	/*
-	if(!validateEmail("signup_form","email","e-mail") || !validateNotEmptyField("signup_form","fullname","Nome")||
-	 (!validateNotEmptyField("signup_form","cpf","CPF") || !validateNotEmptyField("signup_form","gender","Sexo"))||
-	 (!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
-	 (!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
-	 (!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
-	 (!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
-	 (!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
-		return false;
-	
-
-	if(!validateEmail("signup_form","email","e-mail"))
-		return false;
-	if(!validateNotEmptyField("signup_form","fullname","Nome"))
-		return false;
-	if(!validateNotEmptyField("signup_form","cpf","CPF"))
-		return false;
-	if(!validateNotEmptyField("signup_form","gender","Sexo"))
-		return false;
-	
-	(!validateNotEmptyField("signup_form","password","Senha") || !validateNotEmptyField("signup_form","street","Logradouro"))||
-	(!validateNotEmptyField("signup_form","number","Número") || !validateNotEmptyField("signup_form","city","Cidade"))||
-	(!validateNotEmptyField("signup_form","cep","CEP") || !validateNotEmptyField("signup_form","uf","Estado"))||
-	(!validateNotEmptyField("signup_form","phone1","Telefone 1"))||
-	(!confirmField("email","confirm_email","E-mail") || !confirmPassword("password","confirm_password")))
-	
-
-	$.get(
-		"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
-		function( data ) {
-			if(data == "true")
-				alert( "Este CPF já está cadastrado." );
-			else{
-				//alert("CPF ok");
-				$("#signup_form").submit();
-			}
-		});*/
-
 	$("#signup_form").submit();
-
 }
 
-function callMasks(){
-
-	$("input[name='cpf']").mask("999.999.999-99");
-	$("input[name='cep']").mask("99999-999");
-	//$("input[name='phone1']").mask("(99)99999-9999");
-	//$("input[name='phone2']").mask("(99)99999-9999");
-}
 /* permite apenas numeros, tab e backspace*/
 function validateNumberInput(evt){
 
@@ -355,7 +309,8 @@ function funcPassword(){
 			<div class="form-group">
 				<div class="col-lg-10">
 					<button class="btn btn-primary" style="margin-right:40px" onClick="validateForm()">Confirmar</button>
-					<a href="<?=$this->config->item('url_link')?>login/index"><button class="btn btn-warning">Voltar</button></a>
+					<a href="<?=$this->config->item('url_link')?>login/index"><button class="btn btn-warning" 
+						onClick="history.go(-1);return true;">Voltar</button></a>
 				</div>
 			</div>
 			

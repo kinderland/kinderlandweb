@@ -1,7 +1,6 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
-
 	$("#edit_form").submit();
 }
 
@@ -62,7 +61,8 @@ function funcCpf(){
 			cpfCheck.style.backgroundColor = "#FFFFFF";
 		}
 		else{
-			cpfCheck.style.backgroundColor = "#F78D8D"; 
+			cpfCheck.style.backgroundColor = "#F78D8D";
+			alert( "Este CPF não é válido." ); 
 		}
 	};
 }
@@ -237,10 +237,12 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 1"
 							name="phone1" value="<?=$user->getPhone1()?>"
-							onkeypress="return validateNumberInput(event);"/>
+							onkeypress="return validateNumberInput(event);" required
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
 					</div>
 
-					<label for="phone2" class="col-lg-1 control-label"> Telefone 2*: </label>
+					<label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 2"
 							name="phone2" value="<?=$user->getPhone2()?>"

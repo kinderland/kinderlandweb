@@ -183,6 +183,12 @@ class Events extends CK_Controller {
 
 	public function eventCreate(){
 		$this->Logger->info("Starting " . __METHOD__);
+		$data = array();
+		$this->loadView('event/event_create', $data);
+	}
+
+	public function completeEvent(){
+		$this->Logger->info("Starting " . __METHOD__);
 
 		$event_name = $_POST['event_name'];
 		$description = $_POST['description'];
@@ -202,7 +208,7 @@ class Events extends CK_Controller {
 			
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("New event successfully inserted");
-			redirect("event/home");
+			redirect("events/index");
 
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to insert new event");
