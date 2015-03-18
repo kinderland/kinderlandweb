@@ -9,9 +9,12 @@
 		private $dateFinishShow;
 		private $description;
 		private $private;
+		private $capacityMale;
+		private $capacityFemale;
 
 		public function __construct($eventId, $eventName, $dateStart, 
-			$dateFinish, $price, $dateStartShow, $dateFinishShow, $description, $private){
+			$dateFinish, $price, $dateStartShow, $dateFinishShow, $description, $private,
+			$capacityMale, $capacityFemale){
 			$this->eventId = $eventId;
 			$this->eventName = $eventName;
 			$this->dateStart = $dateStart;
@@ -21,6 +24,8 @@
 			$this->dateFinishShow = $dateFinishShow;
 			$this->description = $description;
 			$this->private = $private;
+			$this->capacityMale = $capacityMale;
+			$this->capacityFemale = $capacityFemale;
 		}
 
 		public static function createEventObject($resultRow){
@@ -33,7 +38,9 @@
 				$resultRow->date_start_show,
 				$resultRow->date_finish_show,
 				$resultRow->description,
-				$resultRow->private
+				$resultRow->private,
+				$resultRow->capacity_male,
+				$resultRow->capacity_female
 			);
 		}
 
@@ -98,6 +105,20 @@
 		}
 		public function isPrivate(){
 			return $this->private;
+		}
+
+		public function setCapacityMale($capacityMale){
+			$this->capacityMale = $capacityMale;
+		}
+		public function getCapacityMale(){
+			return $this->capacityMale;
+		}
+
+		public function setCapacityFemale($capacityFemale){
+			$this->capacityFemale = $capacityFemale;
+		}
+		public function getCapacityFemale(){
+			return $this->capacityFemale;
 		}
 
 	}
