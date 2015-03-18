@@ -17,7 +17,12 @@
 	<body>
 		<header class="navbar navbar-sags" role="banner" id="top">
 			<div class="container">
-				<a class="navbar-brand" href="<?=$this->config->item('url_link')?>system/menu">
+				<?php if(isset($user_id)){ ?>
+					<a class="navbar-brand" href="<?=$this->config->item('url_link')?>system/menu">
+				<?php } else { ?>
+					<a class="navbar-brand" href="<?=$this->config->item('url_link')?>login/index">
+				<?php } ?>	
+
 					<img src="<?=$this->config->item('assets');?>images/kinderland/logo-kinderland.png" width=140 height=50 />
 				</a>
 				<div class="navbar-form navbar-right" style="margin-top:20px">
