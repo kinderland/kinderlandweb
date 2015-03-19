@@ -16,9 +16,9 @@ function validateForm(){
 		<form name="event_form" method="POST" action="<?=$this->config->item('url_link')?>events/completeEvent" id="event_form">
 			<div class="row">
 				<div class="form-group">
-					<label for="eventname" class="col-lg-2 control-label"> Nome do Evento*: </label>
+					<label for="event_name" class="col-lg-2 control-label"> Nome do Evento*: </label>
 					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="Nome do Evento" name="eventname" 
+						<input type="text" class="form-control" placeholder="Nome do Evento" name="event_name" 
 							required 
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
@@ -76,24 +76,16 @@ function validateForm(){
 			</div>
 			<br />
 			<div class="row">
-				<div class="form-group">
-					<label for="price" class="col-lg-2 control-label"> Preço*: </label>
-					<div class="col-lg-3">
-						<input type="text" class="form-control" placeholder="Preço" name="price" 
-							required 
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
-					</div>
 
 					<label for="private" class="col-lg-2 control-label"> Privado*: </label>
 					<div class="col-lg-4">
 
 						<input type="radio" placeholder="Privado"
-							name="private" value="no" checked/>Não
+							name="private" value="FALSE" checked/>Não
 						
 						
 						<input type="radio" class="" style="margin-left:10px"  placeholder="Privado"
-							name="private" value="yes"/>Sim
+							name="private" value="TRUE"/>Sim
 	
 					</div>
 				</div>
@@ -105,7 +97,8 @@ function validateForm(){
 			<div class="form-group">
 				<div class="col-lg-10">
 					<button class="btn btn-primary" style="margin-right:40px" onClick="validateForm()">Confirmar</button>
-					<a href="<?=$this->config->item('url_link')?>events/index"><button class="btn btn-warning">Voltar</button></a>
+					<a href="<?=$this->config->item('url_link')?>events/index"><button class="btn btn-warning"
+						onClick="history.go(-1);return true;">Voltar</button></a>
 				</div>
 			</div>
 			
