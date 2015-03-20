@@ -1,6 +1,16 @@
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(){
+	
+	/*var cpf = document.getElementById("cpf";)
+	if(TestaCPF(cpf.value)) {
+		$("#signup_form").submit();
+	}
+	else {
+		alert("Este cpf não é válido.");
+		return false;
+	}*/
+
 	$("#signup_form").submit();
 }
 
@@ -65,9 +75,12 @@ function funcCpf(){
 				if(data == "true")
 					alert( "Este CPF já está cadastrado." );
 			});
+			return true;
 		}
 		else{
 			cpfCheck.style.backgroundColor = "#F78D8D"; 
+			alert( "Este CPF não é válido." ); 
+			return false;
 		}
 	};
 }

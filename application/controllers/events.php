@@ -47,7 +47,16 @@ class Events extends CK_Controller {
 			$data['event'] = $event;
 			$data['subscriptions'] = $subscriptions;
 			$data['price'] = $price;
+			$data['age_groups'] = $this->eventsubscription_model->getAgeGroups();
 			$data['user_id'] = $this->session->userdata("user_id");
+			$data['user_associate'] = true;//$this->personuser_model->isAssociate($this->session->userdata("user_id"));
+			$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($this->session->userdata("user_id"));
+			$data['peoplejson'] = json_encode($data['people']);
+
+			$this->Logger->debug("People json: ".$data['peoplejson']);
+
+			$this->Logger->info("Loading screen");
+
 
 			$this->Logger->debug("Subscriptions: ".print_r($subscriptions, true));
 			$this->Logger->debug("Count subscriptions = ". count($subscriptions));
@@ -149,6 +158,8 @@ class Events extends CK_Controller {
 		$eventId = $_POST['event_id'];
 		$userId = $_POST['user_id'];
 		$personId = (isset($_POST['person_id'])) ? $_POST['person_id'] : null;
+		$age_group_id = $_POST['age_group'];
+		$isAssociate = (isset($_POST['associate']))? 'true': 'false';
 
 		try{
 			$this->generic_model->startTransaction();
@@ -168,7 +179,7 @@ class Events extends CK_Controller {
 			$this->Logger->info("Subscribing person {$personId} on event {$eventId} under responsability of user {$userId}");
 			$event = $this->event_model->getEventById($eventId);
 
-			$this->eventsubscription_model->createSubcription($event, $userId, $personId, SUSCRIPTION_STATUS_WAITING_PAYMENT);
+			$this->eventsubscription_model->createSubcription($event, $userId, $personId, SUSCRIPTION_STATUS_WAITING_PAYMENT, $age_group_id, $isAssociate);
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("Person subscribed");
 			$this->Logger->info("Loading event details page");

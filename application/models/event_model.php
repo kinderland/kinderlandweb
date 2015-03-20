@@ -24,6 +24,30 @@ class event_model extends CK_Model{
         $sql = "SELECT * FROM event WHERE event_id=?";
         $resultSet = $this->executeRow($this->db, $sql, array(intval($eventId)));
 
+        $sqlCapacity = "
+            select 
+                'M' as gender, count(es.event_id) as vagas_ocupadas
+            from person p
+            left outer join event_subscription es
+                on es.person_id = p.person_id
+            where es.event_id = ? and es.subscription_status = 3
+                and p.gender = 'M'
+
+            UNION
+
+            select 
+                'F' as gender, count(es.event_id) as vagas_ocupadas
+            from person p
+            left outer join event_subscription es
+                on es.person_id = p.person_id
+            where es.event_id = ? and es.subscription_status = 3
+                and p.gender = 'F'
+        ";
+
+        $capacityResultSet = $this->executeRows($this->db, $sqlCapacity, array(intval($eventId), intval($eventId)));
+
+        $resultSet->capacity_male   = $resultSet->capacity_male   - $capacityResultSet[1]->vagas_ocupadas;
+        $resultSet->capacity_female = $resultSet->capacity_female - $capacityResultSet[0]->vagas_ocupadas;
 
         if($resultSet)
             return Event::createEventObject($resultSet);

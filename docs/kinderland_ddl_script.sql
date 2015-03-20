@@ -94,7 +94,9 @@ CREATE TABLE event (
     date_finish timestamp without time zone NOT NULL,
     date_start_show timestamp without time zone NOT NULL,
     date_finish_show timestamp without time zone NOT NULL,
-    private boolean NOT NULL default false
+    private boolean NOT NULL default false,
+    capacity_male integer NOT NULL DEFAULT 0,
+    capacity_female integer NOT NULL DEFAULT 0
 );
 
 CREATE TABLE subscription_status(
