@@ -11,7 +11,16 @@ function validateForm(){
 		return false;
 	}*/
 
+	$.get(
+			"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
+			function( data ) {
+				if(data == "true") {
+					alert( "Este CPF já está cadastrado." );
+				}
+			});
+	
 	$("#signup_form").submit();
+	
 }
 
 /* permite apenas numeros, tab e backspace*/
@@ -132,7 +141,8 @@ function funcPassword(){
 						<input type="text" class="form-control" placeholder="Nome Completo"
 							name="fullname" onkeypress="return validateLetterInput(event);" required 
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')" 
+    						value="<?php if (!empty($_POST['fullname'])) { echo $_POST['fullname']; } ?>"/>
 							
 					</div>
 
@@ -141,7 +151,8 @@ function funcPassword(){
 						<input type="text" id="cpf" class="form-control" placeholder="CPF"
 							name="cpf" maxlength="11" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['cpf'])) { echo $_POST['cpf']; } ?>"/>
     					<script type="text/javascript">
 					        window.onload = funcCpf();
 					    </script>
@@ -152,8 +163,10 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<select  class="form-control" id="gender" name="gender" >
 							<option value="" selected>-- Selecione --</option>
-							<option value="M">Masculino</option>
-							<option value="F">Feminino</option>
+							<option value="M" 
+							<?php if(!empty($_POST['gender']) && ($_POST['gender'] == "M")) echo "selected" ?> >Masculino</option>
+							<option value="F"
+							<?php if(!empty($_POST['gender']) && ($_POST['gender'] == "F")) echo "selected" ?>>Feminino</option>
 						</select>
 					</div>
 				</div>
@@ -166,7 +179,8 @@ function funcPassword(){
 						<input type="email" id="email" class="form-control" placeholder="Email"
 							name="email" required
 							oninvalid="this.setCustomValidity('Este campo requer um endereço de email. Favor incluir @ e .')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['email'])) { echo $_POST['email']; } ?>"/>
 					</div>
 
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
@@ -174,7 +188,8 @@ function funcPassword(){
 						<input type="email" id="confirm_email" class="form-control" placeholder="Email"
 							name="confirm_email" required
 							oninvalid="this.setCustomValidity('Este campo requer um endereço de email. Favor incluir @ e .')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['confirm_email'])) { echo $_POST['confirm_email']; } ?>"/>
     					<script type="text/javascript">
 					        window.onload = funcEmail();
 					    </script>
@@ -185,7 +200,8 @@ function funcPassword(){
 						<input type="text" class="form-control" placeholder="Ocupação"
 							name="occupation" onkeypress="return validateLetterInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['occupation'])) { echo $_POST['occupation']; } ?>"/>
 					</div>
 				</div>
 			</div>
@@ -197,7 +213,8 @@ function funcPassword(){
 						<input type="text" class="form-control" placeholder="Logradouro"
 							name="street" onkeypress="return validateLetterInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['street'])) { echo $_POST['street']; } ?>"/>
 					</div>
 
 					<label for="number" class="col-lg-1 control-label"> Número*: </label>
@@ -205,13 +222,15 @@ function funcPassword(){
 						<input type="text" class="form-control" placeholder="Número"
 							name="number" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['number'])) { echo $_POST['number']; } ?>"/>
 					</div>
 
 					<label for="complement" class="col-lg-2 control-label"> Complemento: </label>
 					<div class="col-lg-2">
 						<input type="text" class="form-control" placeholder="Complemento"
-							name="complement"/>
+							name="complement"
+							value="<?php if (!empty($_POST['complement'])) { echo $_POST['complement']; } ?>"/>
 					</div>
 				</div>
 			</div>
@@ -223,7 +242,8 @@ function funcPassword(){
 						<input type="text" class="form-control" placeholder="Cidade"
 							name="city" onkeypress="return validateLetterInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['city'])) { echo $_POST['city']; } ?>"/>
 					</div>
 
 					<label for="cep" class="col-lg-1 control-label"> CEP*: </label>
@@ -231,13 +251,15 @@ function funcPassword(){
 						<input type="text" class="form-control" placeholder="CEP"
 							name="cep" maxlength="8" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['cep'])) { echo $_POST['cep']; } ?>"/>
 					</div>
 
 					<label for="neighborhood" class="col-lg-2 control-label"> Bairro: </label>
 					<div class="col-lg-2">
 						<input type="text" class="form-control" placeholder="Bairro"
-							name="neighborhood" onkeypress="return validateLetterInput(event);"/>
+							name="neighborhood" onkeypress="return validateLetterInput(event);"
+							value="<?php if (!empty($_POST['neighborhood'])) { echo $_POST['neighborhood']; } ?>"/>
 					</div>
 				</div>
 			</div>
@@ -249,13 +271,15 @@ function funcPassword(){
 						<input type="text" class="form-control" placeholder="Telefone de contato 1"
 							name="phone1" maxlength="25" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"/>
+    						oninput="setCustomValidity('')"
+    						value="<?php if (!empty($_POST['phone1'])) { echo $_POST['phone1']; } ?>"/>
 					</div>
 
 					<label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 2"
-							name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"/>
+							name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
+							value="<?php if (!empty($_POST['phone2'])) { echo $_POST['phone2']; } ?>"/>
 					</div>
 
 					<label for="uf" class="col-lg-1 control-label"> Estado*: </label>
@@ -264,33 +288,33 @@ function funcPassword(){
 							oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
     						oninput="setCustomValidity('')">
 							<option value="" selected> -- Selecione -- </option>
-							<option value="RJ">RJ</option>
-							<option value="AC">AC</option>
-							<option value="AL">AL</option>
-							<option value="AM">AM</option>
-							<option value="AP">AP</option>
-							<option value="BA">BA</option>
-							<option value="CE">CE</option>
-							<option value="DF">DF</option>
-							<option value="ES">ES</option>
-							<option value="GO">GO</option>
-							<option value="MA">MA</option>
-							<option value="MG">MG</option>
-							<option value="MS">MS</option>
-							<option value="MT">MT</option>
-							<option value="PA">PA</option>
-							<option value="PB">PB</option>
-							<option value="PE">PE</option>
-							<option value="PI">PI</option>
-							<option value="PR">PR</option>
-							<option value="RN">RN</option>
-							<option value="RO">RO</option>
-							<option value="RR">RR</option>
-							<option value="RS">RS</option>
-							<option value="SC">SC</option>
-							<option value="SE">SE</option>
-							<option value="SP">SP</option>
-							<option value="TO">TO</option>
+							<option value="RJ" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "RJ")) echo "selected" ?>>RJ</option>
+							<option value="AC" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "AC")) echo "selected" ?>>AC</option>
+							<option value="AL" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "AL")) echo "selected" ?>>AL</option>
+							<option value="AM" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "AM")) echo "selected" ?>>AM</option>
+							<option value="AP" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "AP")) echo "selected" ?>>AP</option>
+							<option value="BA" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "BA")) echo "selected" ?>>BA</option>
+							<option value="CE" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "CE")) echo "selected" ?>>CE</option>
+							<option value="DF" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "DF")) echo "selected" ?>>DF</option>
+							<option value="ES" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "ES")) echo "selected" ?>>ES</option>
+							<option value="GO" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "GO")) echo "selected" ?>>GO</option>
+							<option value="MA" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "MA")) echo "selected" ?>>MA</option>
+							<option value="MG" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "MG")) echo "selected" ?>>MG</option>
+							<option value="MS" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "MS")) echo "selected" ?>>MS</option>
+							<option value="MT" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "MT")) echo "selected" ?>>MT</option>
+							<option value="PA" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "PA")) echo "selected" ?>>PA</option>
+							<option value="PB" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "PB")) echo "selected" ?>>PB</option>
+							<option value="PE" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "PE")) echo "selected" ?>>PE</option>
+							<option value="PI" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "PI")) echo "selected" ?>>PI</option>
+							<option value="PR" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "PR")) echo "selected" ?>>PR</option>
+							<option value="RN" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "RN")) echo "selected" ?>>RN</option>
+							<option value="RO" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "RO")) echo "selected" ?>>RO</option>
+							<option value="RR" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "RR")) echo "selected" ?>>RR</option>
+							<option value="RS" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "RS")) echo "selected" ?>>RS</option>
+							<option value="SC" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "SC")) echo "selected" ?>>SC</option>
+							<option value="SE" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "SE")) echo "selected" ?>>SE</option>
+							<option value="SP" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "SP")) echo "selected" ?>>SP</option>
+							<option value="TO" <?php if(!empty($_POST['uf']) && ($_POST['uf'] == "TO")) echo "selected" ?>>TO</option>
 						</select>
 					</div>
 				</div>
