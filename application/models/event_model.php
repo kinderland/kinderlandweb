@@ -6,6 +6,20 @@ class event_model extends CK_Model{
 	public function __construct(){
 		parent::__construct();
 	}
+    
+    public function getAllEvents(){
+        $sql = "SELECT * FROM event";
+        $resultSet = $this->executeRows($this->db, $sql);
+
+        $eventArray = array();
+
+        if($resultSet)
+            foreach ($resultSet as $row)
+                $eventArray[] = Event::createEventObject($row);
+            
+        return $eventArray;
+    }
+    
 
     public function getPublicOpenEvents(){
         $sql = "SELECT * FROM open_public_events";

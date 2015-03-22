@@ -227,6 +227,23 @@ class Events extends CK_Controller {
 			$this->loadView('event/event_create', $data);
 		}
 	}
+
+    public function manageEvents() {
+        $this -> Logger -> info("Starting " . __METHOD__);
+        
+        if (!$this -> checkSession())
+            redirect("login/index");
+        
+        if (!$this -> checkPermition(array(SECRETARY, SYSTEM_ADMIN))) {
+            $this -> denyAcess(___METHOD___);
+        }
+        
+        $events = $this->event_model->getAllEvents();
+        $data["events"] = $events;
+        
+        $this -> loadView("event/manage", $data);
+    }
+
 }
 
 ?>

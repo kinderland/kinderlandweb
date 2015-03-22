@@ -8,11 +8,14 @@
 		<!--<link href="<?=$this->config->item('assets');?>css/old/screen.css" rel="stylesheet" />-->
 		<link href="<?=$this->config->item('assets');?>css/bootstrap.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="<?=$this->config->item('assets');?>css/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="<?=$this->config->item('assets');?>css/bootstrap-switch.min.css"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/jquery-2.0.3.min.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/ui/jquery-ui.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/jquerysettings.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript" src="<?=$this->config->item('assets');?>js/bootstrap-switch.min.js"></script>
+
 	</head>
 	<body>
 		<header class="navbar navbar-sags" role="banner" id="top">
