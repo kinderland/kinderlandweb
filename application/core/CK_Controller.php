@@ -40,7 +40,6 @@ class CK_Controller extends CI_Controller{
 		$output  = $this->load->view('include/header', $data, true);
 		$output .= $this->load->view($viewName, $data, true);
 		$output .= $this->load->view('include/footer', $data, true);
-
 		$this->output->set_output($output);
 	}
 
@@ -55,5 +54,21 @@ class CK_Controller extends CI_Controller{
 		$this->Logger->info("Session ok - User ". $this->session->userdata('user_id'));
 		return true;
 	}
+    
+    public function denyAcess($methodName){
+            $this->Logger->warn("Usuário com id =".$this->session->userdata("user_id")." tentou se conectar ao methodo ".$methodName." que ele não possui acesso.");    
+            return redirect("login/index");
+    }
+    
+    public function checkPermition($permitions = array() ){
+        
+        foreach($permitions as $permition){
+            foreach($this->session->userdata('user_types') as $permitionUser){
+                if($permition == $permitionUser)
+                    return true;
+            }
+        }
+        return false;
+    }
 }
 ?>
