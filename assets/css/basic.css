@@ -89,3 +89,8 @@
 .event-row:hover{
 	background-color: #DDDDDD;
 }
+
+#cart-info{
+	margin-top: 30px;
+	font-size: 16px;
+}

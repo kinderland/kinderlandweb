@@ -48,6 +48,10 @@
 
 			$("document").ready(function(){
 				var peopleJson = <?=$peoplejson?>;
+				var subscriptions = <?=json_encode($subscriptions)?>;
+				var price = <?=json_encode($price)?>;
+
+				$(".subscriptions").prop("checked", false);
 
 				$("#box_options").change(function(){
 					var person = peopleJson[parseInt($("#box_options").val())];
@@ -60,10 +64,65 @@
 						$("#fullname").val("");
 						$("#gender").val("");
 						$("#person_id").val("");
+					}	
+				});
+
+				$(".subscriptions").change(function(){
+					var sub = getSubscriptionByPersonId(subscriptions, this.value);
+					console.log(sub);
+					var priceAge = getPriceByAgeGroup(price, sub.age_group_id);
+
+					if(this.checked) {
+						var subtotal = parseFloat($("#subtotal").text().replace(",", ".")) + parseFloat(priceAge);
+
+						$("#subtotal").text(subtotal.toFixed(2).toString().replace(".", ","));
+						$("#qtd_invites").text(parseInt($("#qtd_invites").text()) + 1);
+						if(sub.associate == "t"){
+							var discount = parseFloat($("#discount").text().replace(",", ".")) + parseFloat(priceAge) * price.associate_discount;
+							$("#discount").text(discount.toFixed(2).toString().replace(".", ","));
+						}
+							
+
+						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
+						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
+						//$("#cart-info").show();
+					} else {
+						var subtotal = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat(priceAge);
+						$("#subtotal").text(subtotal.toFixed(2).toString().replace(".", ","));
+						$("#qtd_invites").text(parseInt($("#qtd_invites").text()) - 1);
+						if(sub.associate == "t"){
+							var discount = parseFloat($("#discount").text().replace(",", ".")) - parseFloat(priceAge) * price.associate_discount;
+							$("#discount").text(discount.toFixed(2).toString().replace(".", ","));
+						}
+
+						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
+						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
+						//if(parseInt($("#qtd_invites").text()) == 0)
+						//	$("#cart-info").hide();
 					}
 						
+
 				});
 			});
+
+			function getPriceByAgeGroup(prices, ageGroup){
+				if(ageGroup == 1)
+					return prices.children_price;
+				else if(ageGroup == 2)
+					return prices.middle_price;
+				else
+					return prices.full_price;
+			}
+
+			function getSubscriptionByPersonId(subscriptions, personId) {
+				for(sub in subscriptions){
+					if(subscriptions[sub].person_id == personId){
+						return subscriptions[sub];
+					}
+				}
+
+				return null;
+			}
 
 			function validateFormInfo(){
 				// TODO: Validate info
@@ -163,15 +222,7 @@
 						<div class="col-lg-8">
 							<h4>Meus convites:</h4>
 						</div>
-						<div class="col-lg-4">
-							<?php
-								if($price != null){
-							?>
-								<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$user_id?>, <?=$event->getEventId()?>)">Pagar</button>
-							<?php
-								}
-							?>
-							
+						<div class="col-lg-4">							
 							<button class="btn btn-warning" style="float:right; margin-right:40px" onClick="deleteSubscriptions(<?=$event->getEventId()?>)">Deletar</button>
 						</div>
 						<div class="row">
@@ -191,7 +242,11 @@
 									foreach($subscriptions as $subscr){
 								?>
 									<tr>
-										<td><input type="checkbox" name="subscriptions" id="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" /></td>
+										<td>
+											<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK) { ?>
+												<input type="checkbox" name="subscriptions" id="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" />
+											<?php } ?>
+										</td>
 										<td><img src="<?= $this->config->item('assets') ."images/kinderland/". ( ($subscr->subscription_status == SUSCRIPTION_STATUS_SUBSCRIPTION_OK)?'confirma.png':'nao-confirma.png' ) ?>" width="20px" height="20px"/></td>
 										<td><?= $subscr->fullname ?></td>
 										<td><?= $subscr->age_description ?></td>
@@ -335,6 +390,35 @@
 						<button type="button" class="btn btn-primary" onClick="validateFormInfo()">Confirmar</button>
 					</div>
 				</div>
+			</div>
+		</div>
+
+		<div class="row" id="cart-info">
+
+			<div class="col-lg-3 col-lg-offset-5" style="border-left-style:solid; border-left-width:1px; border-left-color:#cccccc">
+				Quantidade de convites:<br />
+				Subtotal:<br />
+				Desconto:<br />
+
+				Total:
+			</div>
+			<div class="col-lg-2">
+				<span id="qtd_invites">0</span><br />
+				R$<span id="subtotal">0,00</span><br />
+				R$<span id="discount">0,00</span><br />
+				R$<span id="price_total">0,00</span>
+			</div>
+			<div class="col-lg-1">
+				<?php
+					if($price != null){
+				?>
+					<br />
+					<br />
+
+					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$user_id?>, <?=$event->getEventId()?>)">Pagar</button>
+				<?php
+					}
+				?>
 			</div>
 		</div>
 
