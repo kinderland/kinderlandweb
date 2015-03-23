@@ -4,19 +4,19 @@
 		private $eventName;
 		private $dateStart;
 		private $dateFinish;
-		private $price;
+		//private $price;
 		private $dateStartShow;
 		private $dateFinishShow;
 		private $description;
 		private $private;
 
 		public function __construct($eventId, $eventName, $dateStart, 
-			$dateFinish, $price, $dateStartShow, $dateFinishShow, $description, $private){
+			$dateFinish, /*$price,*/ $dateStartShow, $dateFinishShow, $description, $private){
 			$this->eventId = $eventId;
 			$this->eventName = $eventName;
 			$this->dateStart = $dateStart;
 			$this->dateFinish = $dateFinish;
-			$this->price = $price;
+			//$this->price = $price;
 			$this->dateStartShow = $dateStartShow;
 			$this->dateFinishShow = $dateFinishShow;
 			$this->description = $description;
@@ -29,7 +29,7 @@
 				$resultRow->event_name,
 				$resultRow->date_start,
 				$resultRow->date_finish,
-				$resultRow->price,
+				//$resultRow->price,
 				$resultRow->date_start_show,
 				$resultRow->date_finish_show,
 				$resultRow->description,
@@ -64,13 +64,13 @@
 		public function getDateFinish(){
 			return $this->dateFinish;
 		}
-
+		/*
 		public function setPrice($price){
 			$this->price = $price;
 		}
 		public function getPrice(){
 			return $this->price;
-		}
+		}*/
 
 		public function setDateStartShow($dateStartShow){
 			$this->dateStartShow = $dateStartShow;

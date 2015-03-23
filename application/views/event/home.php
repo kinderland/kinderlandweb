@@ -19,7 +19,7 @@
 					</p>
 				</div>
 				<div class="col-lg-4">
-					<h3>Preço: <strong>R$<?=number_format($event->getPrice(), 2, ',', '.')?></strong></h3>
+					
 				</div>
 
 				<div class="col-lg-10 col-lg-offset-1">

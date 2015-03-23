@@ -8,19 +8,19 @@
             parent::__construct();
         }
 
-        public function createSubcription($event, $userId, $personId, $subscriptionStatus) {
+        public function createSubcription($event, $userId, $personId, $subscriptionStatus, $ageGroup, $isAssociate) {
             $subs = $this->getSubscriptionByPersonIdAndEventId($personId, $event->getEventId());
             if(count($subs) == 0){
                 $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate) 
-                    VALUES(?,?,?,?,3,false)";
+                    VALUES(?,?,?,?,?,?)";
 
-                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus )))
+                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate )))
                     return true;
             } else {
                 $this->Logger->info("Failed to insert new, trying to update an existing one.");
-                $sqlUpdate = "UPDATE event_subscription SET person_user_id = ?, subscription_status = ?, age_group_id = 3, associate = false
+                $sqlUpdate = "UPDATE event_subscription SET person_user_id = ?, subscription_status = ?, age_group_id = ?, associate = ?
                               WHERE event_id = ? AND person_id = ?";
-                if($this->execute($this->db, $sqlUpdate, array(  intval($userId), $subscriptionStatus, intval($event->getEventId()), intval($personId))))
+                if($this->execute($this->db, $sqlUpdate, array(  intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate, intval($event->getEventId()), intval($personId))))
                     return true;
             }
             throw new ModelException("Failed to create subscription");
@@ -53,7 +53,7 @@
             $sql = "SELECT p.*, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,
                 (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
                  from event_subscription es inner join person p on p.person_id=es.person_id 
-            inner join person_user pu on pu.person_id = es.person_user_id where es.person_user_id = ? and es.person_id <> ?";
+            inner join person_user pu on pu.person_id = es.person_user_id where es.person_user_id = ?";
             $rs = $this->executeRows($this->db, $sql, array(intval($userId), intval($userId), intval($userId), intval($userId)));
 
             $people = array();
@@ -85,7 +85,7 @@
         }
 
         public function getAgeGroups(){
-            $sql = "SELECT * FROM age_group";
+            $sql = "SELECT * FROM age_group ORDER BY age_group_id";
 
             return $this->executeRows($this->db, $sql);
         }
