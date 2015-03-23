@@ -131,16 +131,16 @@
 						<tr>
 							<td>Pavilhão Masculino</td>
 							<td><?=$event->getCapacityMale()?></td>
-							<td><?=$price->full_price?></td>
-							<td><?=$price->middle_price?></td>
-							<td><?=$price->children_price?></td>
+							<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
+							<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
+							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
 						</tr>
 						<tr>
 							<td>Pavilhão Feminino</td>
 							<td><?=$event->getCapacityFemale()?></td>
-							<td><?=$price->full_price?></td>
-							<td><?=$price->middle_price?></td>
-							<td><?=$price->children_price?></td>
+							<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
+							<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
+							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
 						</tr>
 					</table>
 				</div>

@@ -17,6 +17,8 @@
                 if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate )))
                     return true;
             } else {
+                //Tratar do caso se a inscrição estiver confirmada.
+                
                 $this->Logger->info("Failed to insert new, trying to update an existing one.");
                 $sqlUpdate = "UPDATE event_subscription SET person_user_id = ?, subscription_status = ?, age_group_id = ?, associate = ?
                               WHERE event_id = ? AND person_id = ?";
