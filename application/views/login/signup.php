@@ -1,26 +1,38 @@
 <script type="text/javascript" charset="utf-8">
 
-function validateForm(){
-	
-	/*var cpf = document.getElementById("cpf";)
-	if(TestaCPF(cpf.value)) {
-		$("#signup_form").submit();
-	}
-	else {
-		alert("Este cpf não é válido.");
-		return false;
-	}*/
+function validateForm(event){
 
 	$.get(
 			"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
 			function( data ) {
 				if(data == "true") {
 					alert( "Este CPF já está cadastrado." );
+					event.preventDefault();
 				}
 			});
-	
+
+	var email = document.getElementById("email");
+	var confirm_email = document.getElementById("confirm_email");
+	if(email.value != confirm_email.value){
+		alert( "E-mail e confirmação de e-mail não estão iguais. Favor verificar." );
+		event.preventDefault();
+	}
+
+	var password = document.getElementById("password");
+	var confirm_password = document.getElementById("confirm_password");
+	if(password.value != confirm_password.value){
+		alert( "Senha e confirmação de senha não estão iguais. Favor verificar." );
+		event.preventDefault();
+	}
+
+	var cpf = document.getElementById("cpf");
+	if(!TestaCPF(cpf.value)){
+		alert( "Este CPF não é válido." );
+		event.preventDefault();
+	}
+
+
 	$("#signup_form").submit();
-	
 }
 
 /* permite apenas numeros, tab e backspace*/
@@ -345,7 +357,7 @@ function funcPassword(){
 
 			<div class="form-group">
 				<div class="col-lg-10">
-					<button class="btn btn-primary" style="margin-right:40px" onClick="validateForm()">Confirmar</button>
+					<button class="btn btn-primary" style="margin-right:40px" onClick="validateForm(event)">Confirmar</button>
 					<a href="<?=$this->config->item('url_link')?>login/index"><button class="btn btn-warning" 
 						onClick="history.go(-1);return true;">Voltar</button></a>
 				</div>
