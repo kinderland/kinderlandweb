@@ -207,14 +207,16 @@ class Events extends CK_Controller {
 		$date_finish = $_POST['date_finish'];
 		$date_start_show = $_POST['date_start_show'];
 		$date_finish_show = $_POST['date_finish_show'];
-		$private = $_POST['private'];
+		$enabled = $_POST['enabled'];
+		$capacity_male = $_POST['capacity_male'];
+		$capacity_female = $_POST['capacity_female'];
 
 		try{
 			$this->Logger->info("Inserting new event");
 			$this->generic_model->startTransaction();
 			
 			$eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, 
-				$date_start_show, $date_finish_show, $private);
+				$date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female);
 			
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("New event successfully inserted");

@@ -76,16 +76,36 @@ function validateForm(){
 			</div>
 			<br />
 			<div class="row">
+				<div class="form-group">
+					<label for="capacity_male" class="col-lg-2 control-label"> Capacidade Masculino*: </label>
+					<div class="col-lg-3">
+						<input type="text" class="form-control" placeholder="Capacidade pavilhão masculino" name="capacity_male" 
+							required 
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
+					</div>
 
-					<label for="private" class="col-lg-2 control-label"> Privado*: </label>
+					<label for="capacity_female" class="col-lg-2 control-label"> Capacidade Feminino*: </label>
+					<div class="col-lg-3">
+						<input type="text" class="form-control" placeholder="Capacidade pavilhão feminino" name="capacity_female" 
+							required 
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+    						oninput="setCustomValidity('')"/>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">	
+
+					<label for="enabled" class="col-lg-2 control-label"> Habilitado*: </label>
 					<div class="col-lg-4">
 
-						<input type="radio" placeholder="Privado"
-							name="private" value="FALSE" checked/>Não
+						<input type="radio" placeholder="Habilitado"
+							name="enabled" value="FALSE" checked/>Não
 						
 						
-						<input type="radio" class="" style="margin-left:10px"  placeholder="Privado"
-							name="private" value="TRUE"/>Sim
+						<input type="radio" class="" style="margin-left:10px"  placeholder="Habilitado"
+							name="enabled" value="TRUE"/>Sim
 	
 					</div>
 				</div>
