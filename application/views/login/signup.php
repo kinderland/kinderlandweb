@@ -2,11 +2,18 @@
 
 function validateForm(event){
 
+	var cpfInvalidErr = false;
+	var cpfExistingErr = false;
+	var emailErr = false;
+	var passErr = false;
+
 	$.get(
 			"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
 			function( data ) {
 				if(data == "true") {
-					alert( "Este CPF já está cadastrado." );
+					//alert( "Este CPF já está cadastrado." );
+					cpfExistingErr = true;
+
 					event.preventDefault();
 				}
 			});
@@ -14,22 +21,77 @@ function validateForm(event){
 	var email = document.getElementById("email");
 	var confirm_email = document.getElementById("confirm_email");
 	if(email.value != confirm_email.value){
-		alert( "E-mail e confirmação de e-mail não estão iguais. Favor verificar." );
+		emailErr = true;
 		event.preventDefault();
 	}
 
 	var password = document.getElementById("password");
 	var confirm_password = document.getElementById("confirm_password");
 	if(password.value != confirm_password.value){
-		alert( "Senha e confirmação de senha não estão iguais. Favor verificar." );
+		passErr = true;
 		event.preventDefault();
 	}
 
 	var cpf = document.getElementById("cpf");
 	if(!TestaCPF(cpf.value)){
-		alert( "Este CPF não é válido." );
+		cpfInvalidErr = true;
 		event.preventDefault();
 	}
+
+	//alert(cpfExistingErr);
+
+	if(passErr && emailErr && cpfInvalidErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF não é válido."+'\n'+ 
+			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+	}
+	else if(passErr && emailErr && cpfExistingErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF já está cadastrado."+'\n'+ 
+			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+	}
+	else if(passErr && emailErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+	}
+	else if(passErr && cpfInvalidErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF não é válido."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+	}
+	else if(emailErr && cpfInvalidErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF não é válido."+'\n'+
+			"E-mail e confirmação de e-mail não estão iguais.");
+	}
+	else if(emailErr && cpfExistingErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF já está cadastrado."+'\n'+
+			"E-mail e confirmação de e-mail não estão iguais.");
+	}
+	else if(passErr && cpfExistingErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF já está cadastrado."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+	}
+	else if(cpfInvalidErr){
+		alert("Este CPF não é válido.");
+	}
+	else if(cpfExistingErr){
+		alert("Este CPF já está cadastrado.");
+	}
+	else if(passErr){
+		alert("Senha e confirmação de senha não estão iguais.");
+	}
+	else if(emailErr){
+		alert("E-mail e confirmação de e-mail não estão iguais.");
+	}
+
+
+
 
 
 	$("#signup_form").submit();
@@ -45,7 +107,7 @@ function validateNumberInput(evt){
 	return false;
 }
 /* permite letras, letras com acentos, hifen e espaco */
-function validateLetterInput(evt) {
+function validateLetterInput(evt){
 
     var key_code = (evt.which) ? evt.which : evt.keyCode;
 
@@ -56,6 +118,18 @@ function validateLetterInput(evt) {
     }
     return false;
 } 
+/* permite letras e numeros */
+function validateLetterAndNumberInput(evt){
+
+	var key_code = (evt.which) ? evt.which : evt.keyCode;
+
+	if (((key_code >= 65 && key_code <= 90) || (key_code >= 97 && key_code <= 122)) 
+		|| ((key_code >= 48 && key_code <= 57) || key_code == 9 || key_code == 8)) {
+
+            return true;
+    }
+    return false;
+}
 /* tirado diretamente do site da receita federal */
 function TestaCPF(strCPF) {
     var Soma;
@@ -189,8 +263,8 @@ function funcPassword(){
 					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="email" id="email" class="form-control" placeholder="Email"
-							name="email" required
-							oninvalid="this.setCustomValidity('Este campo requer um endereço de email. Favor incluir @ e .')"
+							name="email" required title ="Este campo requer um endereço de email. Favor incluir '@' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['email'])) { echo $_POST['email']; } ?>"/>
 					</div>
@@ -198,8 +272,8 @@ function funcPassword(){
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="email" id="confirm_email" class="form-control" placeholder="Email"
-							name="confirm_email" required
-							oninvalid="this.setCustomValidity('Este campo requer um endereço de email. Favor incluir @ e .')"
+							name="confirm_email" required title ="Este campo requer um endereço de email. Favor incluir '@'' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['confirm_email'])) { echo $_POST['confirm_email']; } ?>"/>
     					<script type="text/javascript">
@@ -232,7 +306,7 @@ function funcPassword(){
 					<label for="number" class="col-lg-1 control-label"> Número*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Número"
-							name="number" onkeypress="return validateNumberInput(event);" required
+							name="number" onkeypress="return validateLetterAndNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['number'])) { echo $_POST['number']; } ?>"/>
@@ -261,7 +335,8 @@ function funcPassword(){
 					<label for="cep" class="col-lg-1 control-label"> CEP*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
-							name="cep" maxlength="8" onkeypress="return validateNumberInput(event);" required
+							name="cep" maxlength="8" onkeypress="return validateNumberInput(event);" 
+							pattern=".{8,}" required title="O CEP precisa de 8 dígitos." 
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['cep'])) { echo $_POST['cep']; } ?>"/>
