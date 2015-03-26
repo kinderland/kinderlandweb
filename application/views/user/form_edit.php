@@ -1,6 +1,30 @@
 <script type="text/javascript" charset="utf-8">
 
-function validateForm(){
+function validateForm(event){
+
+	var email = document.getElementById("email");
+	var confirm_email = document.getElementById("confirm_email");
+	if(email.value != confirm_email.value){
+		alert("E-mail e confirmação de e-mail não estão iguais.");
+		event.preventDefault();
+		return false;
+	}
+
+	var password = document.getElementById("password");
+	var confirm_password = document.getElementById("confirm_password");
+	if(password.value != confirm_password.value){
+		alert("Senha e confirmação de senha não estão iguais.");
+		event.preventDefault();
+		return false;
+	}
+
+	var cpf = document.getElementById("cpf");
+	if(!TestaCPF(cpf.value)){
+		alert("Este CPF não é válido.");
+		event.preventDefault();
+		return false;
+	}
+
 	$("#edit_form").submit();
 }
 
@@ -304,7 +328,7 @@ function funcPassword(){
 
 				<div class="form-group">
 					<div class="col-lg-10">
-						<button class="btn btn-primary" style="margin-right:40px" onClick="validateFormInfo()">Atualizar cadastro</button>
+						<button class="btn btn-primary" style="margin-right:40px" onClick="validateForm(event)">Atualizar cadastro</button>
 						<button class="btn btn-warning" onClick="goToMainMenu()">Voltar</button>
 					</div>
 				</div>
