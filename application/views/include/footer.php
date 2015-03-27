@@ -4,7 +4,7 @@
 		<div class="container footer-section">
 			<div class="row">
 				<div class="col-lg-6">
-					<p>Colônia Kinderland v2.0</p>
+					<p>Associação Kinderland</p>
 				</div>
 				<div class="col-lg-6">
 					<p align="right">

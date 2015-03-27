@@ -23,18 +23,10 @@
 				}	
 			}
 
-			function deleteSubscriptions(eventId){
-				var userIds = $("input[name=subscriptions]:checked").map(function() {
-								    return this.value;
-								}).get().join(",");
-			    
-			    if(userIds.length == 0){
-			    	alert("Selecione os convites que deseja deletar.");
-			    	return;
-			    }
+			function deleteSubscription(eventId, userId){
 
 			    $.post( "<?=$this->config->item('url_link')?>events/unsubscribeUsers", 
-						{ event_id: eventId, user_ids: userIds },
+						{ event_id: eventId, user_ids: userId },
 						function ( data ){
 							location.reload();
 						}
@@ -165,8 +157,7 @@
 			<div class="row">
 				<div class="col-lg-10 col-lg-offset-1" style="border-style:solid;border-width:1px">
 					<p align="center">
-						Você que é sócio, marque a caixa indicativa de sócios no ato da solicitação de convite para ganhar <?=$price->associate_discount*100?>% de desconto!<br />
-						Válido para você e seus dependentes.
+						<?=$fullname?>, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos.
 					</p>
 				</div>
 			</div>
@@ -232,11 +223,11 @@
 							<input type="hidden" name="user_id" value="<=$user_id?>" />
 							<table class="table table-condensed table-hover">
 								<tr>
-									<th>-</th>
-									<th>Pago</th>
+									<th>Pagar</th>
 									<th>Nome do convidado</th>
 									<th>Faixa etária</th>
 									<th>Descrição do convite</th>
+									<th>Deletar</th>
 								</tr>
 								<?php 
 									foreach($subscriptions as $subscr){
@@ -245,9 +236,10 @@
 										<td>
 											<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK) { ?>
 												<input type="checkbox" name="subscriptions" id="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" />
+											<?php }  else { ?>
+												<img src="<?= $this->config->item('assets') ."images/kinderland/confirma.png" ?>" width="20px" height="20px"/>
 											<?php } ?>
 										</td>
-										<td><img src="<?= $this->config->item('assets') ."images/kinderland/". ( ($subscr->subscription_status == SUSCRIPTION_STATUS_SUBSCRIPTION_OK)?'confirma.png':'nao-confirma.png' ) ?>" width="20px" height="20px"/></td>
 										<td><?= $subscr->fullname ?></td>
 										<td><?= $subscr->age_description ?></td>
 										<td>
@@ -270,6 +262,11 @@
 													echo "Prazo de pagamento terminado";
 												}
 										  ?></td>
+										 <td>
+										 	<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK) { ?>
+										 		<img src="<?= $this->config->item('assets') ."images/kinderland/lixo.png"  ?>" width="20px" height="20px" onClick="deleteSubscription(<?=$event->getEventId()?>, <?=$subscr->person_id?>)"/>
+										 	<?php } ?>
+										 </td>
 									</tr>
 								<?php
 									}
@@ -296,7 +293,7 @@
 
 		<!-- Button trigger modal -->
 		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-			+
+			Novo convite
 		</button>
 
 		<!-- Modal -->
@@ -363,8 +360,9 @@
 										<div class="form-group">
 											<div class="col-lg-6">
 												<p>
-													<label for="associate" class="control-label"> Dependente de sócio: </label>
-													<input type="checkbox" class="" name="associate" id="associate"/>
+													<label for="associate" class="control-label"> Dependente de sócio?: </label>
+													<input type="radio" class="" name="associate" id="associate" value="true" /> Sim 
+													<input type="radio" class="" name="associate" id="associate" value="false" /> Não
 												</p>
 											</div>
 

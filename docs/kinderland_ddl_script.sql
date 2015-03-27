@@ -154,4 +154,4 @@ CREATE TABLE cielo_transaction (
 
 CREATE VIEW open_public_events as (SELECT * FROM event 
                 WHERE current_timestamp BETWEEN date_start_show AND date_finish_show 
-                AND enabled = false);
+                AND enabled = true);

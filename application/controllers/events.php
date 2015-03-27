@@ -159,7 +159,7 @@ class Events extends CK_Controller {
 		$userId = $_POST['user_id'];
 		$personId = (isset($_POST['person_id'])) ? $_POST['person_id'] : null;
 		$age_group_id = $_POST['age_group'];
-		$isAssociate = (isset($_POST['associate']))? 'true': 'false';
+		$isAssociate = (isset($_POST['associate']))? $_POST['associate']: 'false';
 
 		try{
 			$this->generic_model->startTransaction();
