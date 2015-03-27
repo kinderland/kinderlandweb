@@ -88,6 +88,18 @@ function validateLetterInput(evt) {
     }
     return false;
 } 
+/* permite letras e numeros */
+function validateLetterAndNumberInput(evt){
+
+	var key_code = (evt.which) ? evt.which : evt.keyCode;
+
+	if (((key_code >= 65 && key_code <= 90) || (key_code >= 97 && key_code <= 122)) 
+		|| ((key_code >= 48 && key_code <= 57) || key_code == 9 || key_code == 8)) {
+
+            return true;
+    }
+    return false;
+}
 /* tirado diretamente do site da receita federal */
 function TestaCPF(strCPF) {
     var Soma;
@@ -252,7 +264,7 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Número"
 							name="number" value="<?=$user->getAddress()->getPlaceNumber()?>" 
-							onkeypress="return validateNumberInput(event);" required
+							onkeypress="return validateLetterAndNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
