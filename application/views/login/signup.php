@@ -7,17 +7,7 @@ function validateForm(event){
 	var emailErr = false;
 	var passErr = false;
 
-	$.get(
-			"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
-			function( data ) {
-				if(data == "true") {
-					//alert( "Este CPF já está cadastrado." );
-					cpfExistingErr = true;
-
-					event.preventDefault();
-				}
-			});
-
+	
 	var email = document.getElementById("email");
 	var confirm_email = document.getElementById("confirm_email");
 	if(email.value != confirm_email.value){
@@ -38,61 +28,63 @@ function validateForm(event){
 		event.preventDefault();
 	}
 
-	//alert(cpfExistingErr);
-
-	if(passErr && emailErr && cpfInvalidErr){
-		alert("Os seguintes campos possuem um erro:"+'\n\n'+
-			"Este CPF não é válido."+'\n'+ 
-			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
-			"Senha e confirmação de senha não estão iguais.");
-	}
-	else if(passErr && emailErr && cpfExistingErr){
-		alert("Os seguintes campos possuem um erro:"+'\n\n'+
-			"Este CPF já está cadastrado."+'\n'+ 
-			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
-			"Senha e confirmação de senha não estão iguais.");
-	}
-	else if(passErr && emailErr){
-		alert("Os seguintes campos possuem um erro:"+'\n\n'+
-			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
-			"Senha e confirmação de senha não estão iguais.");
-	}
-	else if(passErr && cpfInvalidErr){
-		alert("Os seguintes campos possuem um erro:"+'\n\n'+
-			"Este CPF não é válido."+'\n'+
-			"Senha e confirmação de senha não estão iguais.");
-	}
-	else if(emailErr && cpfInvalidErr){
-		alert("Os seguintes campos possuem um erro:"+'\n\n'+
-			"Este CPF não é válido."+'\n'+
-			"E-mail e confirmação de e-mail não estão iguais.");
-	}
-	else if(emailErr && cpfExistingErr){
-		alert("Os seguintes campos possuem um erro:"+'\n\n'+
-			"Este CPF já está cadastrado."+'\n'+
-			"E-mail e confirmação de e-mail não estão iguais.");
-	}
-	else if(passErr && cpfExistingErr){
-		alert("Os seguintes campos possuem um erro:"+'\n\n'+
-			"Este CPF já está cadastrado."+'\n'+
-			"Senha e confirmação de senha não estão iguais.");
-	}
-	else if(cpfInvalidErr){
-		alert("Este CPF não é válido.");
-	}
-	else if(cpfExistingErr){
-		alert("Este CPF já está cadastrado.");
-	}
-	else if(passErr){
-		alert("Senha e confirmação de senha não estão iguais.");
-	}
-	else if(emailErr){
-		alert("E-mail e confirmação de e-mail não estão iguais.");
-	}
-
-
-
-
+	$.get(
+			"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
+			function( data ) {
+				if(data == "true") {
+					cpfExistingErr = true;
+					event.preventDefault();
+				}
+				if(passErr && emailErr && cpfExistingErr){
+					alert("Os seguintes campos possuem um erro:"+'\n\n'+
+					"Este CPF já está cadastrado."+'\n'+ 
+					"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+					"Senha e confirmação de senha não estão iguais.");
+				}
+				else if(passErr && emailErr && cpfInvalidErr){
+					alert("Os seguintes campos possuem um erro:"+'\n\n'+
+					"Este CPF não é válido."+'\n'+ 
+					"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+					"Senha e confirmação de senha não estão iguais.");
+				}
+				else if(emailErr && cpfExistingErr){
+					alert("Os seguintes campos possuem um erro:"+'\n\n'+
+					"Este CPF já está cadastrado."+'\n'+
+					"E-mail e confirmação de e-mail não estão iguais.");
+				}
+				else if(passErr && cpfExistingErr){
+					alert("Os seguintes campos possuem um erro:"+'\n\n'+
+					"Este CPF já está cadastrado."+'\n'+
+					"Senha e confirmação de senha não estão iguais.");
+				}
+				else if(passErr && emailErr){
+					alert("Os seguintes campos possuem um erro:"+'\n\n'+
+					"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+					"Senha e confirmação de senha não estão iguais.");
+				}
+				else if(passErr && cpfInvalidErr){
+					alert("Os seguintes campos possuem um erro:"+'\n\n'+
+					"Este CPF não é válido."+'\n'+
+					"Senha e confirmação de senha não estão iguais.");
+				}
+				else if(emailErr && cpfInvalidErr){
+					alert("Os seguintes campos possuem um erro:"+'\n\n'+
+					"Este CPF não é válido."+'\n'+
+					"E-mail e confirmação de e-mail não estão iguais.");
+				}
+				else if(cpfInvalidErr){
+					alert("Este CPF não é válido.");
+				}
+				else if(passErr){
+					alert("Senha e confirmação de senha não estão iguais.");
+				}
+				else if(emailErr){
+					alert("E-mail e confirmação de e-mail não estão iguais.");
+				}
+				else if(cpfExistingErr){
+					alert("Este CPF já está cadastrado.");
+				}
+			});
 
 	$("#signup_form").submit();
 }

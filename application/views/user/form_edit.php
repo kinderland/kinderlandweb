@@ -2,26 +2,65 @@
 
 function validateForm(event){
 
+	var cpfInvalidErr = false;
+	var emailErr = false;
+	var passErr = false;
+
 	var email = document.getElementById("email");
 	var confirm_email = document.getElementById("confirm_email");
 	if(email.value != confirm_email.value){
-		alert("E-mail e confirmação de e-mail não estão iguais.");
+		emailErr = true;
 		event.preventDefault();
-		return false;
 	}
 
 	var password = document.getElementById("password");
 	var confirm_password = document.getElementById("confirm_password");
 	if(password.value != confirm_password.value){
-		alert("Senha e confirmação de senha não estão iguais.");
+		passErr = true;
 		event.preventDefault();
-		return false;
 	}
 
 	var cpf = document.getElementById("cpf");
 	if(!TestaCPF(cpf.value)){
-		alert("Este CPF não é válido.");
+		cpfInvalidErr = true;
 		event.preventDefault();
+	}
+
+	if(passErr && emailErr && cpfInvalidErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF não é válido."+'\n'+ 
+			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+		return false;
+	}
+	else if(passErr && emailErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"E-mail e confirmação de e-mail não estão iguais."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+		return false;
+	}
+	else if(passErr && cpfInvalidErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF não é válido."+'\n'+
+			"Senha e confirmação de senha não estão iguais.");
+		return false;
+	}
+	else if(emailErr && cpfInvalidErr){
+		alert("Os seguintes campos possuem um erro:"+'\n\n'+
+			"Este CPF não é válido."+'\n'+
+			"E-mail e confirmação de e-mail não estão iguais.");
+		return false;
+	}
+	else if(cpfInvalidErr){
+		alert("Este CPF não é válido.");
+		return false;
+	}
+	else if(passErr){
+		alert("Senha e confirmação de senha não estão iguais.");
+		return false;
+	}
+	else if(emailErr){
+		alert("E-mail e confirmação de e-mail não estão iguais.");
 		return false;
 	}
 
@@ -241,7 +280,8 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
 							name="cep" value="<?=$user->getAddress()->getCEP()?>" maxlength="8"
-							onkeypress="return validateNumberInput(event);" required
+							pattern=".{8,}" required title="O CEP precisa de 8 dígitos."
+							onkeypress="return validateNumberInput(event);" 
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
     						oninput="setCustomValidity('')"/>
 					</div>
