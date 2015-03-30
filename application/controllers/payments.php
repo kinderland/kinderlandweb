@@ -8,7 +8,12 @@
             parent::__construct();
             $this -> load -> helper('url');
             $this -> load -> model('cielotransaction_model');
+            $this -> load -> model('donation_model');
+            $this -> load -> model('eventsubscription_model');
+
             $this->cielotransaction_model->setLogger($this->Logger);
+            $this->donation_model->setLogger($this->Logger);
+            $this->eventsubscription_model->setLogger($this->Logger);
         }
 
         public function index() {
@@ -29,17 +34,28 @@
 
         public function checkout($donationId) {
             $this -> Logger -> info("Starting " . __METHOD__);
-            
 
-            $data = "";
-            $this -> loadView("payments/checkout", $data);
+            try{
+                $donation = $this->donation_model->getDonationById($donationId);
+                $portionsMax = $this->donation_model->getDonationPortionsMax($donation);
+
+                $data['donation'] = $donation;
+                $data['portions'] = $portionsMax;
+
+                $this -> loadView("payments/checkout", $data);
+            } catch (Exception $ex) {
+                $data['error'] = true;
+                $this -> loadView("payments/checkout", $data);
+            }
+            
         }
 
         public function executarPagamentoSimples() {
             $this -> Logger -> info("Starting " . __METHOD__);
 
             $donation_id = $this -> input -> post('donation_id', TRUE);
-            $transaction_value = $this -> input -> post('transaction_value', TRUE);
+            $donation = $this->donation_model->getDonationById($donation_id);
+            $transaction_value = $donation->donated_value;//$this -> input -> post('transaction_value', TRUE);
             $description = $this -> input -> post('description', TRUE);
             $card_flag = $this -> input -> post('card_flag', TRUE);
             $payment_portions = $this -> input -> post('payment_portions', TRUE);

@@ -2,12 +2,11 @@
 
         <script type="text/javascript">
             $(document).ready(function(){
-                $("input:radio[name='cartao']").click(function() {
+                $("input:radio[name='card_flag']").change(function() {
                     var toggle = ($(this).val() == 'visaelectron' || $(this).val() == 'maestro') ? true : false;
-                    $('#parcelas option:eq(0)').prop('selected', toggle);
-                    $("#parcelas option:not(:selected)").attr("disabled", toggle);
-                });
-                
+                    $('#payment_portions option:eq(1)').prop('selected', toggle);
+                    $("#payment_portions").attr("disabled", toggle);
+                }); 
              });    
             
             function validateForm(thisForm) {
@@ -81,47 +80,46 @@
         </script>
 
 <body>
-    <form action="http://www.kinderlandteste.com/kinderlandweb/index.php/payments/executarPagamentoSimples" method="post">
+    <form action="<?=$this->config->item('url_link')?>payments/executarPagamentoSimples" method="post">
         <table style="width: 550px;">
             <tr>
-                <tr>
-                <th colspan='5' align='center'
+                <th colspan='6' align='center'
                 style="border-bottom-color:white;
                 border-bottom-style: solid; border-bottom-width: 1px;">
                 <h3>Selecione a bandeira de
                         pagamento</h3></th>
             </tr>
-            </tr>
             <tr>
                 <td colspan='3' align='center'
-                    style="border-bottom-color:white; border-right-color:white; 
+                    style="border-bottom-color:gray; border-right-color:gray; 
                     border-bottom-style: solid; border-bottom-width: 1px; 
                     border-right-style: solid; border-width: 1px;">
                     <strong>Cartões de Crédito<br /></strong>
                 </td>
                 <td colspan="2" align='center'
-                    style="border-bottom-color:white;
+                    style="border-bottom-color:gray;
                     border-bottom-style:solid; border-bottom-width:1px;">
                     <strong>Cartão de Débito<br /></strong></td>
             </tr>
-            <tr>
+            <tr style="border-bottom-color:gray;
+                    border-bottom-style:solid; border-bottom-width:1px;">
                 <td style="width: 20%;">
                     <center>
-                    <img src="../../assets/images/payment/visa.png" alt="Visa" width="80px" height="80px"/>
+                    <img src="<?=$this->config->item('assets')?>images/payment/visa.png" alt="Visa" width="80px" height="80px"/>
                     <br>
                     <input type="radio" style="width:20px; height:20px;" name="card_flag" checked value="visa">
                     </center>
                 </td>
                 <td style="width: 20%;">
                     <center>
-                    <img src="../../assets/images/payment/mastercard.png" alt="MasterCard" width="80px" height="80px"/>
+                    <img src="<?=$this->config->item('assets')?>images/payment/mastercard.png" alt="MasterCard" width="80px" height="80px"/>
                     <br>
                     <input type="radio" style="width:20px; height:20px;" name="card_flag" value="mastercard">
                     </center>
                 </td>
-                <td style="width: 20%;border-right-style:solid; border-right-color:white; border-right-width:1px">
+                <td style="width: 20%;border-right-style:solid; border-right-color:gray; border-right-width:1px">
                     <center>
-                    <img src="../../assets/images/payment/amex.png" alt="American Express" width="80px" height="80px"/>
+                    <img src="<?=$this->config->item('assets')?>images/payment/amex.png" alt="American Express" width="80px" height="80px"/>
                     <br>
                     <input type="radio" style="width:20px; height:20px;" name="card_flag" value="amex">
                     </center>
@@ -129,7 +127,7 @@
             
                 <td style="width: 20%;">
                     <center>
-                    <img src="../../assets/images/payment/visaelectron.png" alt="Visa Electron" width="68px" style="margin-top:20px" />
+                    <img src="<?=$this->config->item('assets')?>images/payment/visaelectron.png" alt="Visa Electron" width="68px" style="margin-top:20px" />
                     <br>
                     <input type="radio" style="width:20px; height:20px;" name="card_flag" value="visaelectron">
                     </center>
@@ -137,12 +135,17 @@
             
                 <td style="width: 20%;">
                     <center>
-                    <img src="../../assets/images/payment/maestro.png" alt="MasterCard Maestro" width="80px" height="80px"/>
+                    <img src="<?=$this->config->item('assets')?>images/payment/maestro.png" alt="MasterCard Maestro" width="80px" height="80px"/>
                     <br>
                     <input type="radio" style="width:20px; height:20px;" name="card_flag" value="maestro" disabled>
                     </center>
                 </td>
             
+            </tr>
+            <tr>
+                <td colspan='6'>
+                    &nbsp;
+                </td>
             </tr>
 
             <tr>
@@ -150,10 +153,21 @@
                     <strong>Valor da doação:</strong><br/>
                 </td>
                 <td colspan='2'>
-                    <input style="text-align='left';" Onblur="verificaValor(this)" onKeyPress="return(formataMoeda(this,'.',',',event))" class="required" 
-                     id="transaction_value" name="transaction_value" value="">
+                    <p>R$ <?=number_format($donation->donated_value, 2, ',', '.')?></p>
+                     <!--Onblur="verificaValor(this)"-->
                 </td>
-                <td alig="center">
+                <td>
+                    <strong>Número de parcelas:</strong><br/>
+                </td>
+                <td colspan='2'>
+                    <select class="form-control" id="payment_portions" name="payment_portions">
+                        <option value="" selected>----</option>
+                        <?php 
+                            for($i = 1; $i <= $portions; $i++) { 
+                        ?>
+                            <option value="<?=$i?>"><?=$i?></option>
+                        <?php } ?>
+                    </select> 
                 </td>
             </tr>   
 
@@ -162,12 +176,11 @@
                     <br/>
                     <center>
                         <button type="submit" style="border: 0;" >
-                            <img src="../../assets/images/payment/greenicon.png" width="20" height="20"><span style="font-size: 18px"> - Prosseguir com a doação.</span>
+                            <img src="<?=$this->config->item('assets')?>images/payment/greenicon.png" width="20" height="20"><span style="font-size: 18px"> - Prosseguir com a doação.</span>
                         </button>
                     </center>
-                    <input type="hidden" name="description" value="Pagamento de doação avulsa">
-                    <input type="hidden" name="payment_portions" value="1">
-                    <input type="hidden" name="donation_id" value="1">
+                    <input type="hidden" name="description" value="<?=$donation->donation_type ?>">
+                    <input type="hidden" name="donation_id" value="<?=$donation->donation_id ?>">
                     
                 </td>
             </tr>   

@@ -17,6 +17,14 @@ class donation_model extends CK_Model{
         return null;
     }
 
+    public function getDonationPortionsMax($donation){
+        $sql = "select * from payment_period where event_id in (select event_id from event_subscription where donation_id = ?) 
+                and date_start <= ? and date_finish >= ?";
+        $result = $this->executeRow($this->db, $sql, array($donation->donation_id, $donation->date_created, $donation->date_created));
+
+        return $result->portions;
+    }
+
     public function createDonation($userId, $totalPrice, $donationType){
         $this->Logger->info("Running: ". __METHOD__);
         $sql = "INSERT INTO donation(person_id, donated_value, donation_type, donation_status) 

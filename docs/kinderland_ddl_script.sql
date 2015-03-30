@@ -141,6 +141,19 @@ CREATE TABLE payment_status(
     description character varying(30)
 );
 
+INSERT INTO payment_status VALUES
+(0,'Transação Criada'),
+(1,'Transação em Andamento'),
+(2,'Transação Autenticada'),
+(3,'Transação não Autenticada'),
+(4,'Transação Autorizada'),
+(5,'Transação não Autorizada'),
+(6,'Transação Capturada'),
+(9,'Transação Cancelada'),
+(10,'Transação em Autenticação'),
+(12,'Transação em Cancelamento');
+
+
 CREATE TABLE cielo_transaction (
     tid character varying(50) PRIMARY KEY,
     payment_type character varying(20), -- debito/credito
