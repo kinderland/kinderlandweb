@@ -65,6 +65,27 @@ define('SUSCRIPTION_STATUS_WAITING_PAYMENT',			2);
 define('SUSCRIPTION_STATUS_SUBSCRIPTION_OK',			3);
 
 
+/*
+|--------------------------------------------------------------------------
+| Age Groups
+|--------------------------------------------------------------------------
+*/
+
+define('AGE_GROUP_CHILDREN_PRICE',	1);
+define('AGE_GROUP_MIDDLE_PRICE',	2);
+define('AGE_GROUP_FULL_PRICE',		3);
+
+
+/*
+|--------------------------------------------------------------------------
+| Donation Types
+|--------------------------------------------------------------------------
+*/
+
+define('DONATION_TYPE_AVULSO',		1);
+define('DONATION_TYPE_ASSOCIACAO',	2);
+define('DONATION_TYPE_INSCRICAO',	3);
+
 
 
 /* End of file constants.php */

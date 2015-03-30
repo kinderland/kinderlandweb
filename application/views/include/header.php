@@ -13,6 +13,7 @@
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/ui/jquery-ui.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/jquerysettings.js"></script>
+		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/jquery/jquery.redirect.js"></script>
 		<script type="text/javascript" src="<?=$this->config->item('assets');?>js/formValidationFunctions.js"></script>
         <script type="text/javascript" src="<?=$this->config->item('assets');?>js/bootstrap-switch.min.js"></script>
 

@@ -80,7 +80,7 @@
                     and date_start = (SELECT max(date_start) from payment_period
                     where event_id = ?)";
 
-                $prices =  $this->executeRow($this->db, $sql, array(intval($eventId), date('Y-m-d H:m:s') ));
+                $prices = $this->executeRow($this->db, $sql, array(intval($eventId), date('Y-m-d H:m:s') ));
                 return $prices;
             }
                 
@@ -90,6 +90,58 @@
             $sql = "SELECT * FROM age_group ORDER BY age_group_id";
 
             return $this->executeRows($this->db, $sql);
+        }
+
+        public function getSubscriptions($userId, $eventId, $personIds){
+            $sql = "SELECT es.*, p.fullname, ag.description as age_description from event_subscription as es 
+                    inner join person as p on p.person_id = es.person_id 
+                    inner join age_group as ag on ag.age_group_id = es.age_group_id
+                    where es.event_id = ? and es.person_user_id = ? and subscription_status >= 0 and es.person_id in (".$personIds.")";
+
+            return $this->executeRows($this->db, $sql, array(intval($eventId), intval($userId), $personIds));
+        }
+
+        public function updateSubscriptionsDonationId($personIds, $userId, $eventId, $donationId){
+            $this->Logger->info("Running: " . __METHOD__);
+            $sql = "UPDATE event_subscription SET donation_id = ? WHERE event_id = ? AND person_user_id = ? AND person_id in (".$personIds.")";
+            return $this->execute($this->db, $sql, array( intval($donationId), intval($eventId), intval($userId) ));
+        }
+
+        public function evaluateCheckoutValues($subscriptions, $paymentOptions){
+            $this->Logger->info("Running: " . __METHOD__);
+            $this->Logger->debug("Parameter 1: ". print_r($subscriptions, true));
+            $this->Logger->debug("Parameter 2: ". print_r($paymentOptions, true));
+            $totalPrice = 0.00;
+            $totalDiscounted = 0.00;
+            foreach ($subscriptions as $sub){
+                $value = 0.00;
+                switch ($sub->age_group_id){
+                    case AGE_GROUP_CHILDREN_PRICE:
+                        $this->Logger->info("Children price age group =====> R$".$paymentOptions->children_price);
+                        $value = $paymentOptions->children_price;
+                        break;
+                    case AGE_GROUP_MIDDLE_PRICE:
+                        $this->Logger->info("Middle price age group =====> R$".$paymentOptions->middle_price);
+                        $value = $paymentOptions->middle_price;
+                        break;
+                    case AGE_GROUP_FULL_PRICE:
+                    default:
+                        $this->Logger->info("Full price age group =====> R$".$paymentOptions->full_price);
+                        $value = $paymentOptions->full_price;
+                        break;
+
+                }
+
+                if($sub->associate == "t"){
+                    $discount = $value * $paymentOptions->associate_discount;
+                    $totalDiscounted += $discount;
+                    $value -= $discount;
+                }
+                    
+                $totalPrice += $value;
+            }
+        
+            return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted);
         }
 
     }

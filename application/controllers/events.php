@@ -9,6 +9,7 @@ class Events extends CK_Controller {
 		$this->load->model('person_model');
 		$this->load->model('generic_model');
 		$this->load->model('personuser_model');
+		$this->load->model('donation_model');
 		$this->load->model('event_model');
 		$this->load->model('eventsubscription_model');
 
@@ -16,6 +17,7 @@ class Events extends CK_Controller {
 		$this->generic_model->setLogger($this->Logger);
 		$this->event_model->setLogger($this->Logger);
 		$this->personuser_model->setLogger($this->Logger);
+		$this->donation_model->setLogger($this->Logger);
 		$this->eventsubscription_model->setLogger($this->Logger);
 	}
 
@@ -190,6 +192,57 @@ class Events extends CK_Controller {
 			$this->Logger->error("Failed to subscribe person on event");
 			$this->info($eventId, true);
 		}
+	}
+
+	public function checkoutSubscriptions(){
+		$this->Logger->info("Starting " . __METHOD__);
+
+		if(!$this->checkSession())
+			redirect("login/index");
+
+		$personIds  = $_POST['person_ids'];
+		$userId 	= $this->session->userdata("user_id");//$_POST['user_id'];
+		$eventId 	= $_POST['event_id'];
+
+		try {
+			$this->generic_model->startTransaction();
+
+			$this->Logger->info("Getting subscriptions: ". $personIds);
+			//Get subscriptions
+			$subscriptions = $this->eventsubscription_model->getSubscriptions($userId, $eventId, $personIds);
+
+			$this->Logger->info("Getting prices");
+			//Get prices
+			$prices = $this->eventsubscription_model->getEventPrices($eventId);
+			if(!$prices)
+				throw new Exception("Prices array not set, payment period probably expired");
+
+			$this->Logger->info("Calculating price");
+			//Evaluate price to donate
+			$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
+			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
+
+			$this->Logger->info("Creating donation");
+			//Create donation
+			$donationId = $this->donation_model->createDonation($userId, $totalPrice["total_price"], DONATION_TYPE_INSCRICAO);
+			$this->Logger->info("Created donation with id: ". $donationId);
+
+			$this->Logger->info("Total of subscriptions to update: ". count($subscriptions));
+			//Update subscriptions
+			$this->eventsubscription_model->updateSubscriptionsDonationId($personIds, $userId, $eventId, $donationId);
+			$this->Logger->info("Successfully updated");
+
+			$this->generic_model->commitTransaction();
+
+			//Redirect to checkout
+			redirect("payments/checkout/".$donationId);
+		} catch (Exception $ex) {
+			$this->generic_model->rollbackTransaction();
+			$this->Logger->error("Failed to proceed with checkout");
+			$this->info($eventId, true);
+		}
+
+
 	}
 
 	public function eventCreate(){

@@ -33,9 +33,19 @@
 				);
 			}
 
-			function paymentDetailsScreen(){
-				// TODO: toda a logica por tras deste submit
-				$("#form_submit_payment").submit();
+			function paymentDetailsScreen(eventId){
+				var personIds = $("input[name=subscriptions]:checked").map(function() {
+							return this.value;
+						}).get().join(",");
+
+				if(personIds.length == 0){
+					alert("Selecione os convites que deseja deletar.");
+					return;
+				}
+
+				$.redirect( "<?=$this->config->item('url_link')?>events/checkoutSubscriptions", 
+						{ event_id: eventId, person_ids: personIds },
+						"POST");
 			}
 
 			$("document").ready(function(){
@@ -155,7 +165,7 @@
 				if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 			?>
 			<div class="row">
-				<div class="col-lg-10 col-lg-offset-1" style="border-style:solid;border-width:1px">
+				<div class="col-lg-10 col-lg-offset-1">
 					<p align="center">
 						<?=$fullname?>, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos.
 					</p>
@@ -212,9 +222,6 @@
 					<div class="col-lg-12">	
 						<div class="col-lg-8">
 							<h4>Meus convites:</h4>
-						</div>
-						<div class="col-lg-4">							
-							<button class="btn btn-warning" style="float:right; margin-right:40px" onClick="deleteSubscriptions(<?=$event->getEventId()?>)">Deletar</button>
 						</div>
 						<div class="row">
 							&nbsp;
@@ -311,6 +318,9 @@
 									<div class="col-lg-8"><h4>Inscrição de pessoa no evento: <?=$event->getEventName()?></h4></div>
 								</div>
 								<hr />
+
+								<div>
+								</div>
 
 								<?php if(isset($people) && is_array($people) && count($people) > 0) { ?>
 									<br />
@@ -413,7 +423,7 @@
 					<br />
 					<br />
 
-					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$user_id?>, <?=$event->getEventId()?>)">Pagar</button>
+					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$event->getEventId()?>)">Pagar</button>
 				<?php
 					}
 				?>

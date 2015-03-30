@@ -27,11 +27,12 @@
             $this -> loadView('payments/info', $data);
         }
 
-        public function test() {
+        public function checkout($donationId) {
             $this -> Logger -> info("Starting " . __METHOD__);
+            
 
             $data = "";
-            $this -> loadView("payments/test", $data);
+            $this -> loadView("payments/checkout", $data);
         }
 
         public function executarPagamentoSimples() {

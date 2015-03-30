@@ -69,11 +69,13 @@ CREATE TABLE donation_type(
     donation_type integer PRIMARY KEY NOT NULL,
     description character varying(30) NOT NULL
 );
+INSERT INTO donation_type VALUES (1, 'avulsa'), (2, 'associacao'), (3, 'inscricao');
   
 CREATE TABLE donation_status(
     donation_status integer PRIMARY KEY NOT NULL,
     description character varying(30)
 );
+INSERT INTO donation_status VALUES (1, 'aberto'), (-1, 'abandonado');
   
 CREATE TABLE donation (
     donation_id serial PRIMARY KEY,
