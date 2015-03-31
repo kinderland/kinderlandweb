@@ -334,8 +334,8 @@ function funcPassword(){
     						value="<?php if (!empty($_POST['cep'])) { echo $_POST['cep']; } ?>"/>
 					</div>
 
-					<label for="neighborhood" class="col-lg-2 control-label"> Bairro: </label>
-					<div class="col-lg-2">
+					<label for="neighborhood" class="col-lg-1 control-label"> Bairro: </label>
+					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Bairro"
 							name="neighborhood" onkeypress="return validateLetterInput(event);"
 							value="<?php if (!empty($_POST['neighborhood'])) { echo $_POST['neighborhood']; } ?>"/>
