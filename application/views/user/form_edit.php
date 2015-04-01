@@ -218,8 +218,8 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="email" id="email" class="form-control" placeholder="Email"
 							name="email" value="<?=$user->getEmail()?>" 
-							required title ="Este campo requer um endereço de email. Favor incluir '@'' e '.' ."
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							required title ="Favor incluir '@'' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
     						oninput="setCustomValidity('')"/>
 					</div>
 
@@ -227,8 +227,8 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="email" id="confirm_email" class="form-control" placeholder="Email"
 							name="email" value="<?=$user->getEmail()?>" 
-							required title ="Este campo requer um endereço de email. Favor incluir '@'' e '.' ."
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							required title ="Favor incluir '@'' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
     						oninput="setCustomValidity('')"/>
     					<script type="text/javascript">
 					        window.onload = funcEmail();
@@ -289,9 +289,9 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
 							name="cep" value="<?=$user->getAddress()->getCEP()?>" maxlength="8"
-							pattern=".{8,}" required title="O CEP precisa de 8 dígitos."
+							pattern=".{8,}" required
 							onkeypress="return validateNumberInput(event);" 
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
     						oninput="setCustomValidity('')"/>
 					</div>
 
@@ -361,12 +361,12 @@ function funcPassword(){
 				<div class="form-group">
 					<label for="password" class="col-lg-1 control-label"> Senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" id="password" class="form-control" name="password" />
+						<input type="password" id="password" class="form-control" placeholder="●●●●●" name="password" />
 					</div>
 
 					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" id="confirm_password" class="form-control" placeholder="" name="confirm_password" />
+						<input type="password" id="confirm_password" class="form-control" placeholder="●●●●●" name="confirm_password" />
 						<script type="text/javascript">
 					        window.onload = funcPassword();
 					    </script>
