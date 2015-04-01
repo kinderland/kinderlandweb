@@ -255,8 +255,8 @@ function funcPassword(){
 					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="email" id="email" class="form-control" placeholder="Email"
-							name="email" required title ="Este campo requer um endereço de email. Favor incluir '@' e '.' ."
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							name="email" required title ="Favor incluir '@' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['email'])) { echo $_POST['email']; } ?>"/>
 					</div>
@@ -264,8 +264,8 @@ function funcPassword(){
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
 						<input type="email" id="confirm_email" class="form-control" placeholder="Email"
-							name="confirm_email" required title ="Este campo requer um endereço de email. Favor incluir '@'' e '.' ."
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							name="confirm_email" required title ="Favor incluir '@'' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['confirm_email'])) { echo $_POST['confirm_email']; } ?>"/>
     					<script type="text/javascript">
@@ -328,14 +328,14 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
 							name="cep" maxlength="8" onkeypress="return validateNumberInput(event);" 
-							pattern=".{8,}" required title="O CEP precisa de 8 dígitos." 
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							pattern=".{8,}" required  
+							oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['cep'])) { echo $_POST['cep']; } ?>"/>
 					</div>
 
-					<label for="neighborhood" class="col-lg-2 control-label"> Bairro: </label>
-					<div class="col-lg-2">
+					<label for="neighborhood" class="col-lg-1 control-label"> Bairro: </label>
+					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Bairro"
 							name="neighborhood" onkeypress="return validateLetterInput(event);"
 							value="<?php if (!empty($_POST['neighborhood'])) { echo $_POST['neighborhood']; } ?>"/>

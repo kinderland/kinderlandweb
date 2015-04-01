@@ -64,9 +64,7 @@ function validateForm(event){
 		return false;
 	}
 
-	$("#edit_form").submit();
 }
-
 /* permite apenas numeros, tab e backspace*/
 function validateNumberInput(evt){
 
@@ -128,7 +126,6 @@ function TestaCPF(strCPF) {
         return false;
     return true;
 }
-
 function funcCpf(){
 	var cpfCheck = document.getElementById("cpf");
 	cpfCheck.onchange = function(){
@@ -141,7 +138,6 @@ function funcCpf(){
 		}
 	};
 }
-
 function funcEmail(){
 	var email = document.getElementById("email");
 	var confirm_email = document.getElementById("confirm_email");
@@ -155,7 +151,6 @@ function funcEmail(){
 		}
 	};
 }
-
 function funcPassword(){
 	var password = document.getElementById("password");
 	var confirm_password = document.getElementById("confirm_password");
@@ -221,17 +216,19 @@ function funcPassword(){
 				<div class="form-group">
 					<label for="email" class="col-lg-1 control-label"> E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" id="email" class="form-control" placeholder="Email"
-							name="email" value="<?=$user->getEmail()?>" required
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+						<input type="email" id="email" class="form-control" placeholder="Email"
+							name="email" value="<?=$user->getEmail()?>" 
+							required title ="Favor incluir '@'' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
     						oninput="setCustomValidity('')"/>
 					</div>
 
 					<label for="email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
 					<div class="col-lg-3">
-						<input type="text" id="confirm_email" class="form-control" placeholder="Email"
-							name="email" value="<?=$user->getEmail()?>" required
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+						<input type="email" id="confirm_email" class="form-control" placeholder="Email"
+							name="email" value="<?=$user->getEmail()?>" 
+							required title ="Favor incluir '@'' e '.' ."
+							oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
     						oninput="setCustomValidity('')"/>
     					<script type="text/javascript">
 					        window.onload = funcEmail();
@@ -292,14 +289,14 @@ function funcPassword(){
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="CEP"
 							name="cep" value="<?=$user->getAddress()->getCEP()?>" maxlength="8"
-							pattern=".{8,}" required title="O CEP precisa de 8 dígitos."
+							pattern=".{8,}" required
 							onkeypress="return validateNumberInput(event);" 
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
     						oninput="setCustomValidity('')"/>
 					</div>
 
-					<label for="neighborhood" class="col-lg-2 control-label"> Bairro: </label>
-					<div class="col-lg-2">
+					<label for="neighborhood" class="col-lg-1 control-label"> Bairro: </label>
+					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Bairro"
 							name="neighborhood" value="<?=$user->getAddress()->getNeighborhood()?>" 
 							onkeypress="return validateLetterInput(event);"/>
@@ -364,12 +361,12 @@ function funcPassword(){
 				<div class="form-group">
 					<label for="password" class="col-lg-1 control-label"> Senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" id="password" class="form-control" placeholder="" name="password" />
+						<input type="password" id="password" class="form-control" placeholder="●●●●●" name="password" />
 					</div>
 
 					<label for="confirm_password" class="col-lg-2 control-label"> Confirme a senha*: </label>
 					<div class="col-lg-3">
-						<input type="password" id="confirm_password" class="form-control" name="confirm_password" />
+						<input type="password" id="confirm_password" class="form-control" placeholder="●●●●●" name="confirm_password" />
 						<script type="text/javascript">
 					        window.onload = funcPassword();
 					    </script>
