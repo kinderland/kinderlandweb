@@ -60,11 +60,15 @@
 					if(person != null){
 						$("#fullname").val(person.fullname);
 						$("#gender").val(person.gender.toUpperCase());
+						$("#fullname").attr("disabled", true);
+						$("#gender").attr("disabled", true);
 						$("#person_id").val(person.personId);
 					}
 					else{
 						$("#fullname").val("");
 						$("#gender").val("");
+						$("#fullname").prop("disabled", false);
+						$("#gender").prop("disabled", false);;
 						$("#person_id").val("");
 					}	
 				});
@@ -183,21 +187,18 @@
 					<table class="table table-condensed table-hover">
 						<tr>
 							<th></th>
-							<th>Vagas</th>
 							<th><?=$age_groups[2]->description?></th>
 							<th><?=$age_groups[1]->description?></th>
 							<th><?=$age_groups[0]->description?></th>
 						</tr>
 						<tr>
-							<td>Pavilhão Masculino</td>
-							<td><?=$event->getCapacityMale()?></td>
+							<td>Masculino</td>
 							<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
 							<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
 							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
 						</tr>
 						<tr>
-							<td>Pavilhão Feminino</td>
-							<td><?=$event->getCapacityFemale()?></td>
+							<td>Feminino</td>
 							<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
 							<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
 							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
@@ -370,9 +371,22 @@
 										<div class="form-group">
 											<div class="col-lg-6">
 												<p>
-													<label for="associate" class="control-label"> Dependente de sócio?: </label>
-													<input type="radio" class="" name="associate" id="associate" value="true" /> Sim 
-													<input type="radio" class="" name="associate" id="associate" value="false" /> Não
+													<?php
+														if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
+													?>
+														<label for="associate" class="control-label"> Dependente de sócio?: </label>
+														<input type="radio" class="" name="associate" id="associate" value="true" /> Sim 
+														<input type="radio" class="" name="associate" id="associate" value="false" /> Não
+													<?php
+														} else {
+													?>
+														<label for="associate" class="control-label"> Dependente de sócio?: </label>
+														<input type="radio" class="" name="associate" id="associate" value="true" disabled/> Sim 
+														<input type="radio" class="" name="associate" id="associate" value="false" checked disabled /> Não
+													<?php
+														}
+													?>
+
 												</p>
 											</div>
 

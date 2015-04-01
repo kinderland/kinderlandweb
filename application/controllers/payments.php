@@ -114,7 +114,11 @@
                     //TODO PAGINA DEERRO
                 }
                 
-                $this->cielotransaction_model -> updatePaymentStatus($payment,$status);            
+                $this->cielotransaction_model -> updatePaymentStatus($payment,$status);
+                if($status == CieloTransaction::TRANSACAO_CAPTURADA){
+                    $this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);
+                }
+
                 return $xml;
         }
         

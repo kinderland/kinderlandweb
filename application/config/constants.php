@@ -87,6 +87,20 @@ define('DONATION_TYPE_ASSOCIACAO',	2);
 define('DONATION_TYPE_INSCRICAO',	3);
 
 
+/*
+|--------------------------------------------------------------------------
+| Donation Types
+|--------------------------------------------------------------------------
+*/
+
+define('SUBSCRIPTION_STATUS_EXCLUDED',	-3);
+define('SUBSCRIPTION_STATUS_GIVEN_UP',	-2);
+define('SUBSCRIPTION_STATUS_CANCELLED',	-1);
+define('SUBSCRIPTION_STATUS_PRE_SUBSCRIPTION_INCOMPLETE',	0);
+define('SUBSCRIPTION_STATUS_PRE_SUBSCRIPTION',	1);
+define('SUBSCRIPTION_STATUS_WAITING_PAYMENT',	2);
+define('SUBSCRIPTION_STATUS_SUBSCRIBED',	3);
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

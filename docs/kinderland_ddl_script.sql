@@ -24,7 +24,7 @@ CREATE TABLE age_group (
     age_group_id INTEGER NOT NULL PRIMARY KEY,
     description VARCHAR NOT NULL
 );
-INSERT INTO age_group VALUES (1, '0-6 anos'), (2, '7-17 anos'), (3, '+18 anos');
+INSERT INTO age_group VALUES (1, '0-5 anos'), (2, '6-17 anos'), (3, '+18 anos');
   
 CREATE TABLE person (
     person_id serial PRIMARY KEY,

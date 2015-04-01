@@ -51,7 +51,7 @@ class Events extends CK_Controller {
 			$data['price'] = $price;
 			$data['age_groups'] = $this->eventsubscription_model->getAgeGroups();
 			$data['user_id'] = $this->session->userdata("user_id");
-			$data['user_associate'] = true;//$this->personuser_model->isAssociate($this->session->userdata("user_id"));
+			$data['user_associate'] = false;///true;//$this->personuser_model->isAssociate($this->session->userdata("user_id"));
 			$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($this->session->userdata("user_id"));
 			$data['peoplejson'] = json_encode($data['people']);
 

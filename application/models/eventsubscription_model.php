@@ -144,5 +144,10 @@
             return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted);
         }
 
+        public function updateSubscriptionsStatusByDonationId($donation_id, $status){
+            $sql = "UPDATE event_subscription SET subscription_status = ? WHERE donation_id = ?";
+            return $this->execute($this->db, $sql, array($status, intval($donation_id)));
+        }
+
     }
 ?>
