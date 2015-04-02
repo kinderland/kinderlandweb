@@ -142,6 +142,7 @@ class personuser_model extends CK_Model {
 
 	public function updatePassword($password, $person_id) {
 		$this -> Logger -> info("Running: " . __METHOD__);
+		$password = personuser_model::createPasswordHash($password);
 		$sql = "UPDATE person_user SET password=? WHERE person_id=?";
 		if ($this -> execute($this -> db, $sql, array($password, intval($person_id))))
 			return true;
