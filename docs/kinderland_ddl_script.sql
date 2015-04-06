@@ -67,9 +67,10 @@ CREATE TABLE person_user_type
   
 CREATE TABLE donation_type(
     donation_type integer PRIMARY KEY NOT NULL,
-    description character varying(30) NOT NULL
+    description character varying(30) NOT NULL,
+    minimum_price numeric(7,2) DEFAULT 0.0
 );
-INSERT INTO donation_type VALUES (1, 'avulsa'), (2, 'associacao'), (3, 'inscricao');
+INSERT INTO donation_type VALUES (1, 'avulsa', 20.00), (2, 'associacao', 660.00), (3, 'inscricao', 0.00);
   
 CREATE TABLE donation_status(
     donation_status integer PRIMARY KEY NOT NULL,
@@ -170,3 +171,41 @@ CREATE TABLE cielo_transaction (
 CREATE VIEW open_public_events as (SELECT * FROM event 
                 WHERE current_timestamp BETWEEN date_start_show AND date_finish_show 
                 AND enabled = true);
+
+CREATE VIEW associates AS (
+    SELECT
+        pu.*
+    FROM person_user pu
+    INNER JOIN donation d 
+        ON d.person_id = pu.person_id
+    WHERE
+        d.donation_type = 2
+        AND EXTRACT(YEAR FROM d.date_created) = 
+        EXTRACT(YEAR FROM current_timestamp) 
+);
+
+CREATE VIEW donations_completed AS (
+    SELECT *
+    FROM donation
+    WHERE
+        donation_status = 2
+);
+
+CREATE VIEW donation_detailed AS (
+    SELECT
+        d.donation_id,
+        d.person_id,
+        dt.description as donation_type,
+        ds.description as donation_status,
+        d.date_created,
+        d.donated_value
+    FROM
+        donation d
+    INNER JOIN
+        donation_type dt
+    ON dt.donation_type = d.donation_type
+    INNER JOIN
+        donation_status ds
+    ON ds.donation_status = d.donation_status
+    
+);

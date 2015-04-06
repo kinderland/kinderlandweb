@@ -116,6 +116,7 @@
                 
                 $this->cielotransaction_model -> updatePaymentStatus($payment,$status);
                 if($status == CieloTransaction::TRANSACAO_CAPTURADA){
+                    $this->donation_model->updateDonationStatus($payment->getDonation_id(), DONATION_STATUS_PAID);
                     $this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);
                 }
 
@@ -133,6 +134,15 @@
                         break;            
                 }
                 return $write;
+        }
+
+        public function history() {
+            $this->Logger->info("Running: ". __METHOD__);
+
+            $donations = $this->donation_model->getDonationsByUserId($this->session->userdata("user_id"));
+            $data['donations'] = $donations;
+
+            $this->loadView("payments/history", $data);
         }
 
     }

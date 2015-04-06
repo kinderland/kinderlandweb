@@ -82,9 +82,9 @@ define('AGE_GROUP_FULL_PRICE',		3);
 |--------------------------------------------------------------------------
 */
 
-define('DONATION_TYPE_AVULSO',		1);
-define('DONATION_TYPE_ASSOCIACAO',	2);
-define('DONATION_TYPE_INSCRICAO',	3);
+define('DONATION_TYPE_FREEDONATION',	1);
+define('DONATION_TYPE_ASSOCIATE',		2);
+define('DONATION_TYPE_SUBSCRIPTION',	3);
 
 
 /*
@@ -100,6 +100,17 @@ define('SUBSCRIPTION_STATUS_PRE_SUBSCRIPTION_INCOMPLETE',	0);
 define('SUBSCRIPTION_STATUS_PRE_SUBSCRIPTION',	1);
 define('SUBSCRIPTION_STATUS_WAITING_PAYMENT',	2);
 define('SUBSCRIPTION_STATUS_SUBSCRIBED',	3);
+
+
+/*
+|--------------------------------------------------------------------------
+| Donation Status
+|--------------------------------------------------------------------------
+*/
+
+define('DONATION_STATUS_ABANDONED', -1);
+define('DONATION_STATUS_OPEN',		 1);
+define('DONATION_STATUS_PAID',  	 2);
 
 /*
 |--------------------------------------------------------------------------

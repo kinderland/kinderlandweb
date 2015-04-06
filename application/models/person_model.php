@@ -36,6 +36,17 @@ class person_model extends CK_Model{
             return true;
         return false;
     } 
+
+    public function getPersonById($personId){
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "SELECT * FROM person WHERE person_id = ?";
+    	$result = $this->executeRow($this->db, $sql, array(intval($personId)));
+
+    	if($result)
+    		return Person::createPersonObjectSimple($result);
+
+    	return null;
+    }
 	
 }
 ?>

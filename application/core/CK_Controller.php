@@ -31,7 +31,7 @@ class CK_Controller extends CI_Controller{
         $this->Logger->info("[PROCESS ID][{$this->pid}]");
     }
 
-	public function loadView($viewName, $data){
+	public function loadView($viewName, $data=array()){
 		if($this->session->userdata("fullname")){
 			$data['fullname'] = $this->session->userdata("fullname");
 			$data['user_id'] = $this->session->userdata("user_id");

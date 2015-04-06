@@ -37,6 +37,18 @@
 			);
 		}
 
+		public static function createPersonObjectSimple($resultRow){
+			return new Person(
+				$resultRow->person_id, 
+				$resultRow->fullname,
+				$resultRow->gender, 
+				$resultRow->email,
+				//$resultRow->associate, 
+				$resultRow->benemerit,
+				null, null,	null
+			);
+		}
+
 		public static function createPersonObjectWithAddress($resultRow){
 			$person = $this->createPersonObject($resultRow);
 			$person->setAddress(Address::createAddressObject($resultRow));

@@ -75,7 +75,6 @@
 
 				$(".subscriptions").change(function(){
 					var sub = getSubscriptionByPersonId(subscriptions, this.value);
-					console.log(sub);
 					var priceAge = getPriceByAgeGroup(price, sub.age_group_id);
 
 					if(this.checked) {
@@ -91,7 +90,6 @@
 
 						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
 						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
-						//$("#cart-info").show();
 					} else {
 						var subtotal = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat(priceAge);
 						$("#subtotal").text(subtotal.toFixed(2).toString().replace(".", ","));
@@ -103,8 +101,6 @@
 
 						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
 						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
-						//if(parseInt($("#qtd_invites").text()) == 0)
-						//	$("#cart-info").hide();
 					}
 						
 
