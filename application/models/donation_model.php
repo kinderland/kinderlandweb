@@ -78,6 +78,17 @@ class donation_model extends CK_Model {
 		$sql = "SELECT * FROM donation_detailed WHERE person_id = ? ORDER BY date_created DESC";
 		return $this -> executeRows($this -> db, $sql, array(intval($userId)));
 	}
+	
+	public function getAllPendingTransactions(){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "SELECT * FROM donation WHERE donation_status = ? ORDER BY date_created DESC";
+		$resultSet = $this -> executeRows($this -> db, $sql, array ( 1 ) );		
+		$donations = array();
+		foreach($resultSet as $row){
+			$donations[] = Donation::createDonationObject($row);		
+		}
+		return $donations;
+	}
 
 }
 ?>

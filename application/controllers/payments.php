@@ -107,6 +107,22 @@
             $this -> loadView("payments/result", $data);                        
         }
 		
+        public function rotinaPagamentos(){
+        	$donations = $this->donation_model->getAllPendingTransactions();
+            $retorno = array();
+            
+            foreach($donations as $donation){
+	            $payments = $this->cielotransaction_model -> getAllPaymentsByDonationId($donation->getDonationId);
+	            foreach($payments as $payment){
+    	            $xml = $this->updatePaymentStatus($payment);                
+        	        $retorno[] = $xml;                
+            	}
+            }               
+                                        
+            $data["transactions"] = $retorno;
+           
+            $this -> loadView("payments/result", $data);                        
+        }
 		
 
         public function updatePaymentStatus($payment){
