@@ -76,7 +76,7 @@ CREATE TABLE donation_status(
     donation_status integer PRIMARY KEY NOT NULL,
     description character varying(30)
 );
-INSERT INTO donation_status VALUES (1, 'aberto'), (-1, 'abandonado');
+INSERT INTO donation_status VALUES (1, 'aberto'), (2, 'pago'),(-1, 'abandonado');
   
 CREATE TABLE donation (
     donation_id serial PRIMARY KEY,
