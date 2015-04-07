@@ -1,0 +1,250 @@
+<div class="row">
+	<?php require_once APPPATH.'views/include/common_user_left_menu.php' ?>
+	<div class="col-lg-10 middle-content">
+		<script type="text/javascript">
+
+			function paymentDetailsScreen(eventId){
+				var personIds = $("input[name=subscriptions]:checked").map(function() {
+							return this.value;
+						}).get().join(",");
+
+				if(personIds.length == 0){
+					alert("Selecione os convites que deseja deletar.");
+					return;
+				}
+
+				$.redirect( "<?=$this->config->item('url_link')?>events/checkoutSubscriptions", 
+						{ event_id: eventId, person_ids: personIds },
+						"POST");
+			}
+
+			$("document").ready(function(){
+				var peopleJson = <?=$peoplejson?>;
+				var subscriptions = <?=json_encode($subscriptions)?>;
+				var price = <?=json_encode($price)?>;
+
+				$(".subscriptions").prop("checked", false);
+
+				$("#box_options").change(function(){
+					var person = peopleJson[parseInt($("#box_options").val())];
+					if(person != null){
+						$("#fullname").val(person.fullname);
+						$("#gender").val(person.gender.toUpperCase());
+						$("#person_id").val(person.personId);
+					}
+					else{
+						$("#fullname").val("");
+						$("#gender").val("");
+						$("#person_id").val("");
+					}	
+				});
+
+				$(".subscriptions").change(function(){
+					var sub = getSubscriptionByPersonId(subscriptions, this.value);
+					console.log(sub);
+					var priceAge = getPriceByAgeGroup(price, sub.age_group_id);
+
+					if(this.checked) {
+						var subtotal = parseFloat($("#subtotal").text().replace(",", ".")) + parseFloat(priceAge);
+
+						$("#subtotal").text(subtotal.toFixed(2).toString().replace(".", ","));
+						$("#qtd_invites").text(parseInt($("#qtd_invites").text()) + 1);
+						if(sub.associate == "t"){
+							var discount = parseFloat($("#discount").text().replace(",", ".")) + parseFloat(priceAge) * price.associate_discount;
+							$("#discount").text(discount.toFixed(2).toString().replace(".", ","));
+						}
+							
+
+						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
+						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
+						//$("#cart-info").show();
+					} else {
+						var subtotal = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat(priceAge);
+						$("#subtotal").text(subtotal.toFixed(2).toString().replace(".", ","));
+						$("#qtd_invites").text(parseInt($("#qtd_invites").text()) - 1);
+						if(sub.associate == "t"){
+							var discount = parseFloat($("#discount").text().replace(",", ".")) - parseFloat(priceAge) * price.associate_discount;
+							$("#discount").text(discount.toFixed(2).toString().replace(".", ","));
+						}
+
+						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
+						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
+						//if(parseInt($("#qtd_invites").text()) == 0)
+						//	$("#cart-info").hide();
+					}
+						
+
+				});
+			});
+
+			function getPriceByAgeGroup(prices, ageGroup){
+				if(ageGroup == 1)
+					return prices.children_price;
+				else if(ageGroup == 2)
+					return prices.middle_price;
+				else
+					return prices.full_price;
+			}
+
+			
+
+			function validateFormInfo(){
+				// TODO: Validate info
+
+				$("#form_subscribe").submit();
+			}
+
+			function printFunction() {
+    			window.print();
+			}	
+
+		</script>
+
+		<?php 
+			if($event != null && $event instanceof Event) { 
+		?>
+			
+			<div class='row'>
+				<div class="col-lg-1">
+				</div>
+				<div class="col-lg-3">
+					<select  class="form-control" id="event" name="event" >
+							<option value="" selected>-- Selecione --</option>
+							<?php
+								$i = 0;
+								foreach($events as $event) {
+							?>
+							<option value="<?=$i++?>"><?=$event->getEventName()?></option>
+							<?php } ?>
+						</select>
+
+					</br>
+				<div class="col-lg-3">	
+					<select  class="form-control" id="report_type" name="report_type" >
+							<option value="" selected>-- Selecione --</option>
+							<option value="panel">Painel</option>
+							<option value="op2">Opção 2</option>
+							<option value="op3">Opção 3</option>
+						</select>
+				</div>
+
+				<button onclick="myFunction()">Imprimir</button>
+			</div>
+			<div class="row">
+				<div class="form-group">
+					<div class="col-lg-3">
+					
+					<table border="1" style="width:90%">
+					  <tr>
+					  	<td>Ingressos</td>
+					    <td>Feminino</td>
+					    <td>Masculino</td>		
+					    <td>Sem Pernoite</td>
+					    <td>Total</td>
+					  </tr>
+					</table>
+
+					<table style="width:90%">
+					  <tr>
+					  	<td>Disponibilizado</td>
+					    <td>fem</td>
+					    <td>masc</td>		
+					    <td>sem p</td>
+					    <td>total</td>
+					  </tr>
+					  <tr>
+					  	<td>Vendido</td>
+					    <td>fem</td>
+					    <td>masc</td>		
+					    <td>sem p</td>
+					    <td>total</td>
+					  </tr>
+					  <tr>
+					  	<td>Disponível</td>
+					    <td>fem</td>
+					    <td>masc</td>		
+					    <td>sem p</td>
+					    <td>total</td>
+					  </tr>
+					</table>
+					</div>
+				
+			</div>
+			<hr> 
+			<div class="row">
+				&nbsp;
+			</div>
+
+			<div class="row">
+				<div class="col-lg-10 col-lg-offset-1">
+					<table border="1" style="width:90%">
+						 <tr>
+					  	<td>Por faixa etária</td>
+					    <td>Feminino +18</td>
+					    <td>6 - 17</td>		
+					    <td>0 - 5</td>
+					    <td>Masculino +18</td>
+					    <td>6 - 17</td>		
+					    <td>0 - 5</td>
+					  </tr>
+					</table>
+					<table style="width:90%">
+						 <tr>
+					  	<td>Vendido</td>
+					    <td>Fem +18</td>
+					    <td>6 - 17</td>		
+					    <td>0 - 5</td>
+					    <td>Masc +18</td>
+					    <td>6 - 17</td>		
+					    <td>0 - 5</td>
+					  </tr>
+					</table>
+				</div>
+			</div>
+
+			<hr>
+				<div class="row">
+					<div class="col-lg-12">	
+						<div class="col-lg-3">
+					
+					<table border="1" style="width:90%">
+					  <tr>
+					  	<td>Financeiro</td>
+					    <td>+18</td>
+					    <td>6 - 17</td>	
+					    <td>0 - 5</td>		
+					    <td>Sem Pernoite</td>
+					    <td>Total</td>
+					  </tr>
+					</table>
+
+					<table style="width:90%">
+					  <tr>
+					  	<td>Sem desconto</td>
+					    <td>+18</td>
+					    <td>6 - 17</td>	
+					    <td>0 - 5</td>		
+					    <td>Sem Pernoite</td>
+					    <td>Total</td>
+					  </tr>
+					  <tr>
+					  	<td>Com desconto sócio</td>
+					    <td>+18</td>
+					    <td>6 - 17</td>	
+					    <td>0 - 5</td>		
+					    <td>Sem Pernoite</td>
+					    <td>Total</td>
+					  </tr>
+					  <tr>
+					  	<td>Total</td>
+					    <td>+18</td>
+					    <td>6 - 17</td>	
+					    <td>0 - 5</td>		
+					    <td>Sem Pernoite</td>
+					    <td>Total</td>
+					  </tr>
+					</table>
+					</div>
+				</div>
+			
+	</div>

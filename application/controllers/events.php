@@ -251,6 +251,12 @@ class Events extends CK_Controller {
 		$this->loadView('event/event_create', $data);
 	}
 
+	public function reportPanel(){
+		$this->Logger->info("Starting " . __METHOD__);
+		$data = array();
+		$this->loadView('event/report_panel', $data);
+	}
+
 	public function completeEvent(){
 		$this->Logger->info("Starting " . __METHOD__);
 
