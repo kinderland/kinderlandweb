@@ -9,7 +9,7 @@
 				<li><a href="<?=$this->config->item('url_link');?>events/index">Próximos Eventos</a>
 	            <li><a href="<?=$this->config->item('url_link');?>payments/index">Ver todos os pagamentos cielo</a>
 				<li><a href="#">Doação Associado Kinderland 2015</a>
-				<li><a href="#">Doação Avulsa</a>
+				<li><a href="<?=$this->config->item('url_link');?>donations/freeDonation">Doação Avulsa</a>
 				<li><a href="#">Inscrição MiniKinderland 2015 e Kinderland 2016</a>
 				<li><a href="<?=$this->config->item('url_link');?>user/edit">Atualizar Cadastro</a>
 			</ul>
