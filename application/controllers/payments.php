@@ -55,7 +55,7 @@
 
             $donation_id = $this -> input -> post('donation_id', TRUE);
             $donation = $this->donation_model->getDonationById($donation_id);
-            $transaction_value = $donation->donated_value;//$this -> input -> post('transaction_value', TRUE);
+            $transaction_value = $donation->getDonatedValue();//$this -> input -> post('transaction_value', TRUE);
             $description = $this -> input -> post('description', TRUE);
             $card_flag = $this -> input -> post('card_flag', TRUE);
             $payment_portions = $this -> input -> post('payment_portions', TRUE);
@@ -104,6 +104,8 @@
            
             $this -> loadView("payments/result", $data);                        
         }
+		
+		
 
         public function updatePaymentStatus($payment){
                 $xml = $payment->requestTransactionResult();
@@ -113,11 +115,15 @@
                     $this -> Logger -> error("Erro ao iniciar operação com a Cielo, código de erro: " . $status . "\nDetalhes do erro: " . var_export($xml, true));
                     //TODO PAGINA DEERRO
                 }
+				$this->cielotransaction_model -> updatePaymentStatus($payment,$status);
                 
-                $this->cielotransaction_model -> updatePaymentStatus($payment,$status);
+                $donation = $this->donation_model->getDonationById($payment->getDonation_id());               
+				if($donation->getDonationStatus() == $status)
+					return $xml;
                 if($status == CieloTransaction::TRANSACAO_CAPTURADA){
                     $this->donation_model->updateDonationStatus($payment->getDonation_id(), DONATION_STATUS_PAID);
-                    $this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);
+//					$this->sendMail($donation->getType(),$donation->get);
+                    $this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);					
                 }
 
                 return $xml;

@@ -153,7 +153,7 @@
                     <strong>Valor da doação:</strong><br/>
                 </td>
                 <td colspan='2'>
-                    <p>R$ <?=number_format($donation->donated_value, 2, ',', '.')?></p>
+                    <p>R$ <?=number_format($donation->getDonatedValue(), 2, ',', '.')?></p>
                      <!--Onblur="verificaValor(this)"-->
                 </td>
                 <td>
@@ -179,8 +179,8 @@
                             <img src="<?=$this->config->item('assets')?>images/payment/greenicon.png" width="20" height="20"><span style="font-size: 18px"> - Prosseguir com a doação.</span>
                         </button>
                     </center>
-                    <input type="hidden" name="description" value="<?=$donation->donation_type ?>">
-                    <input type="hidden" name="donation_id" value="<?=$donation->donation_id ?>">
+                    <input type="hidden" name="description" value="<?=$donation->getDonationType() ?>">
+                    <input type="hidden" name="donation_id" value="<?=$donation->getDonationId() ?>">
                     
                 </td>
             </tr>   

@@ -27,9 +27,7 @@
 				$resultRow->date_created,
 				$resultRow->date_updated,
 				$resultRow->donated_value,
-				$resultRow->donation_status,
-				null
-			);
+				$resultRow->donation_status);
 		}
 		
 		public function setPersonId($personId){

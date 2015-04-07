@@ -1,5 +1,6 @@
 <?php
 require_once APPPATH . 'core/CK_Model.php';
+require_once APPPATH . 'core/donation.php';
 
 class donation_model extends CK_Model {
 
@@ -12,16 +13,15 @@ class donation_model extends CK_Model {
 		$resultSet = $this -> executeRow($this -> db, $sql, array(intval($donationId)));
 
 		if ($resultSet)
-			return $resultSet;
-		Donation::createDonationObject($row);
+			$donation = Donation::createDonationObject($resultSet);
 
-		return null;
+		return $donation;
 	}
 
 	public function getDonationPortionsMax($donation) {
 		$sql = "select * from payment_period where event_id in (select event_id from event_subscription where donation_id = ?) 
                 and date_start <= ? and date_finish >= ?";
-		$result = $this -> executeRow($this -> db, $sql, array($donation -> donation_id, $donation -> date_created, $donation -> date_created));
+		$result = $this -> executeRow($this -> db, $sql, array($donation -> getDonationId(), $donation -> getDateCreated(), $donation -> getDateCreated()));
 
 		if ($result)
 			return $result -> portions;
@@ -45,16 +45,8 @@ class donation_model extends CK_Model {
 		$sql = "UPDATE donation SET donation_status = ? WHERE donation_id = ?";
 		$result = $this -> execute($this -> db, $sql, array($donationStatus, intval($donationId)));
 
-		if ($result) {
-			$donation = getDonationById($donationId);
-			if ($donation.isForAssociation()) {
-				$this->sendMail($donation.getPersonId());
-				
-												// Cadastra sócio
-			}
+		if ($result)
 			return true;
-
-		}
 
 		return false;
 	}
