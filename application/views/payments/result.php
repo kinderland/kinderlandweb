@@ -16,7 +16,7 @@
 			} else {
 		?>
 			<h3> 
-				Nenhum retorno cielo.
+				ERRO! Nenhum retorno da cielo.
 			</h3>
 		<?php
 			}

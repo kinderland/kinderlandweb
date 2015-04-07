@@ -10,10 +10,12 @@
             $this -> load -> model('cielotransaction_model');
             $this -> load -> model('donation_model');
             $this -> load -> model('eventsubscription_model');
+            $this -> load -> model('person_model');
 
             $this->cielotransaction_model->setLogger($this->Logger);
             $this->donation_model->setLogger($this->Logger);
             $this->eventsubscription_model->setLogger($this->Logger);
+            $this->person_model->setLogger($this->Logger);
         }
 
         public function index() {
@@ -97,10 +99,10 @@
                         
             foreach($payments as $payment){
                 $xml = $this->updatePaymentStatus($payment);                
-                $retorno[] = $this->transactionResultToText($xml,$payment);                
+                $retorno = $xml;                
             }
                                         
-            $data["transactions"] = $retorno;
+            $data["transactions"] = $retorno->captura->mensagem;
            
             $this -> loadView("payments/result", $data);                        
         }
@@ -118,12 +120,13 @@
 				$this->cielotransaction_model -> updatePaymentStatus($payment,$status);
                 
                 $donation = $this->donation_model->getDonationById($payment->getDonation_id());               
-				if($donation->getDonationStatus() == $status)
-					return $xml;
                 if($status == CieloTransaction::TRANSACAO_CAPTURADA){
+					if($donation->getDonationStatus() == DONATION_STATUS_PAID)
+						return $xml;
                     $this->donation_model->updateDonationStatus($payment->getDonation_id(), DONATION_STATUS_PAID);
-//					$this->sendMail($donation->getType(),$donation->get);
+					$this->sendPaymentConfirmationMail($donation,$payment);
                     $this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);					
+					return $xml;
                 }
 
                 return $xml;
