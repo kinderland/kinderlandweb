@@ -172,7 +172,7 @@ function funcPassword(){
 	<?php require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
 		<div class="row">
-			<div class="col-lg-8"><h4>Confirmação de dados</h4></div>
+			<div class="col-lg-8"><h4>Dados cadastrais</h4></div>
 		</div>
 		<hr />
 

@@ -24,7 +24,7 @@
 		
 		<div class="clear"></div>
 		<div class="row">
-			<center><h2> Bem vindo(a), <?=$fullname?>.</h2></center>
+			<center><h2> Bem <?=($gender=="M")?"vindo":"vinda"?>, <?=$fullname?>.</h2></center>
 			<br />
 
 				<!--TO DO: Completar hrefs com os links para as devidas chamadas quando estiverem prontas-->

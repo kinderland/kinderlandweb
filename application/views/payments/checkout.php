@@ -29,6 +29,15 @@
                 }
             }
 
+            function verificaParcelas(){
+                var parcelas = $("#payment_portions").val();
+                if(parcelas < 1){
+                    alert("Por favor, selecione a quantidade de parcelas.");
+                } else {
+                    $("#form_checkout").submit();
+                }
+            }
+
             function formataMoeda(objTextBox,SeparadorMilesimo, SeparadorDecimal,e){
                 var sep = 0;
                 var key = '';
@@ -79,113 +88,132 @@
 
         </script>
 
-<body>
-    <form action="<?=$this->config->item('url_link')?>payments/executarPagamentoSimples" method="post">
-        <table style="width: 550px;">
-            <tr>
-                <th colspan='6' align='center'
-                style="border-bottom-color:white;
-                border-bottom-style: solid; border-bottom-width: 1px;">
-                <h3>Selecione a bandeira de
-                        pagamento</h3></th>
-            </tr>
-            <tr>
-                <td colspan='3' align='center'
-                    style="border-bottom-color:gray; border-right-color:gray; 
-                    border-bottom-style: solid; border-bottom-width: 1px; 
-                    border-right-style: solid; border-width: 1px;">
-                    <strong>Cartões de Crédito<br /></strong>
-                </td>
-                <td colspan="2" align='center'
-                    style="border-bottom-color:gray;
-                    border-bottom-style:solid; border-bottom-width:1px;">
-                    <strong>Cartão de Débito<br /></strong></td>
-            </tr>
-            <tr style="border-bottom-color:gray;
-                    border-bottom-style:solid; border-bottom-width:1px;">
-                <td style="width: 20%;">
-                    <center>
-                    <img src="<?=$this->config->item('assets')?>images/payment/visa.png" alt="Visa" width="80px" height="80px"/>
-                    <br>
-                    <input type="radio" style="width:20px; height:20px;" name="card_flag" checked value="visa">
-                    </center>
-                </td>
-                <td style="width: 20%;">
-                    <center>
-                    <img src="<?=$this->config->item('assets')?>images/payment/mastercard.png" alt="MasterCard" width="80px" height="80px"/>
-                    <br>
-                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="mastercard">
-                    </center>
-                </td>
-                <td style="width: 20%;border-right-style:solid; border-right-color:gray; border-right-width:1px">
-                    <center>
-                    <img src="<?=$this->config->item('assets')?>images/payment/amex.png" alt="American Express" width="80px" height="80px"/>
-                    <br>
-                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="amex">
-                    </center>
-                </td>
-            
-                <td style="width: 20%;">
-                    <center>
-                    <img src="<?=$this->config->item('assets')?>images/payment/visaelectron.png" alt="Visa Electron" width="68px" style="margin-top:20px" />
-                    <br>
-                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="visaelectron">
-                    </center>
-                </td>
-            
-                <td style="width: 20%;">
-                    <center>
-                    <img src="<?=$this->config->item('assets')?>images/payment/maestro.png" alt="MasterCard Maestro" width="80px" height="80px"/>
-                    <br>
-                    <input type="radio" style="width:20px; height:20px;" name="card_flag" value="maestro" disabled>
-                    </center>
-                </td>
-            
-            </tr>
-            <tr>
-                <td colspan='6'>
-                    &nbsp;
-                </td>
-            </tr>
+<div class="row">
+    <div class="col-lg-8 col-lg-offset-2">
+        <form action="<?=$this->config->item('url_link')?>payments/executarPagamentoSimples" method="post" id="form_checkout">
+            <table style="width: 100%;">
+                <tr>
+                    <th colspan='6' align='center'
+                    style="border-bottom-color:white;
+                    border-bottom-style: solid; border-bottom-width: 1px;">
+                    <h3>Selecione a bandeira de
+                            pagamento</h3></th>
+                </tr>
+                <tr>
+                    <td colspan='3' align='center'
+                        style="border-bottom-color:gray; border-right-color:gray; 
+                        border-bottom-style: solid; border-bottom-width: 1px; 
+                        border-right-style: solid; border-width: 1px;">
+                        <strong>Cartões de Crédito<br /></strong>
+                    </td>
+                    <td colspan="2" align='center'
+                        style="border-bottom-color:gray;
+                        border-bottom-style:solid; border-bottom-width:1px;">
+                        <strong>Cartão de Débito<br /></strong></td>
+                </tr>
+                <tr style="border-bottom-color:gray;
+                        border-bottom-style:solid; border-bottom-width:1px;">
+                    <td style="width: 20%;">
+                        <center>
+                        <img src="<?=$this->config->item('assets')?>images/payment/visa.png" alt="Visa" width="80px" height="80px"/>
+                        <br>
+                        <input type="radio" style="width:20px; height:20px;" name="card_flag" checked value="visa">
+                        </center>
+                    </td>
+                    <td style="width: 20%;">
+                        <center>
+                        <img src="<?=$this->config->item('assets')?>images/payment/mastercard.png" alt="MasterCard" width="80px" height="80px"/>
+                        <br>
+                        <input type="radio" style="width:20px; height:20px;" name="card_flag" value="mastercard">
+                        </center>
+                    </td>
+                    <td style="width: 20%;border-right-style:solid; border-right-color:gray; border-right-width:1px">
+                        <center>
+                        <img src="<?=$this->config->item('assets')?>images/payment/amex.png" alt="American Express" width="80px" height="80px"/>
+                        <br>
+                        <input type="radio" style="width:20px; height:20px;" name="card_flag" value="amex">
+                        </center>
+                    </td>
+                
+                    <td style="width: 20%;">
+                        <center>
+                        <img src="<?=$this->config->item('assets')?>images/payment/visaelectron.png" alt="Visa Electron" width="68px" style="margin-top:20px" />
+                        <br>
+                        <input type="radio" style="width:20px; height:20px;" name="card_flag" value="visaelectron">
+                        </center>
+                    </td>
+                
+                    <td style="width: 20%;">
+                        <center>
+                        <img src="<?=$this->config->item('assets')?>images/payment/maestro.png" alt="MasterCard Maestro" width="80px" height="80px"/>
+                        <br>
+                        <input type="radio" style="width:20px; height:20px;" name="card_flag" value="maestro" disabled>
+                        </center>
+                    </td>
+                
+                </tr>
+                <tr>
+                    <td colspan='6'>
+                        &nbsp;
+                    </td>
+                </tr>
 
-            <tr>
-                <td>
-                    <strong>Valor da doação:</strong><br/>
-                </td>
-                <td colspan='2'>
-                    <p>R$ <?=number_format($donation->getDonatedValue(), 2, ',', '.')?></p>
-                     <!--Onblur="verificaValor(this)"-->
-                </td>
-                <td>
-                    <strong>Número de parcelas:</strong><br/>
-                </td>
-                <td colspan='2'>
-                    <select class="form-control" id="payment_portions" name="payment_portions">
-                        <option value="" selected>----</option>
-                        <?php 
-                            for($i = 1; $i <= $portions; $i++) { 
-                        ?>
-                            <option value="<?=$i?>"><?=$i?></option>
-                        <?php } ?>
-                    </select> 
-                </td>
-            </tr>   
+                <tr>
+                    <td>
+                        <strong>Valor da doação:</strong><br/>
+                    </td>
+                    <td colspan='2'>
+                        <p>R$ <?=number_format($donation->getDonatedValue(), 2, ',', '.')?></p>
+                         <!--Onblur="verificaValor(this)"-->
+                    </td>
+                    <td>
+                        <strong>Número de parcelas:</strong><br/>
+                    </td>
+                    <td colspan='2'>
+                        <?php if($portions == 1) { ?>
+                            <select class="form-control" id="payment_portions" name="payment_portions" disabled> 
+                                <option value="1" selected>1</option>
+                            </select>
+                        <?php } else { ?>
+                        <select class="form-control" id="payment_portions" name="payment_portions">
+                            <option value="" selected>----</option>
+                            <?php 
+                                for($i = 1; $i <= $portions; $i++) { 
+                            ?>
+                                <option value="<?=$i?>"><?=$i?></option>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </select> 
+                    </td>
+                </tr>   
 
-            <tr>
-                <td colspan='5'>
-                    <br/>
-                    <center>
-                        <button type="submit" style="border: 0;" >
-                            <img src="<?=$this->config->item('assets')?>images/payment/greenicon.png" width="20" height="20"><span style="font-size: 18px"> - Prosseguir com a doação.</span>
-                        </button>
-                    </center>
-                    <input type="hidden" name="description" value="<?=$donation->getDonationType() ?>">
-                    <input type="hidden" name="donation_id" value="<?=$donation->getDonationId() ?>">
-                    
-                </td>
-            </tr>   
+                <tr>
+                    <td colspan='5'>
+                        <br/>
+                        <center>
+                            <button type="button" onClick="verificaParcelas()" class="btn btn-primary">
+                                Prosseguir com a doação.
+                            </button>
+                        </center>
+                        <input type="hidden" name="description" value="<?=$donation->getDonationType() ?>">
+                        <input type="hidden" name="donation_id" value="<?=$donation->getDonationId() ?>">
+                        
+                    </td>
+                </tr>  
+                <tr>
+                    <td colspan='5'>
+                        <br/>
+                        <center>
+                            <button type="button" class="btn btn-danger" onClick="history.back(-1)">
+                                Não desejo prosseguir com a doação agora.
+                            </button>
+                        </center>                
+                    </td>
+                </tr>  
 
-        </table>
-</form>
-    
-</body>
+            </table>
+        </form>
+    </div>
+</div>

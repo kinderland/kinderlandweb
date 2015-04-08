@@ -224,7 +224,7 @@ class Events extends CK_Controller {
 
 			$this->Logger->info("Creating donation");
 			//Create donation
-			$donationId = $this->donation_model->createDonation($userId, $totalPrice["total_price"], DONATION_TYPE_INSCRICAO);
+			$donationId = $this->donation_model->createDonation($userId, $totalPrice["total_price"], DONATION_TYPE_SUBSCRIPTION);
 			$this->Logger->info("Created donation with id: ". $donationId);
 
 			$this->Logger->info("Total of subscriptions to update: ". count($subscriptions));

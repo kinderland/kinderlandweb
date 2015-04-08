@@ -58,6 +58,7 @@ class Login extends CK_Controller {
 		 	$this->Logger->info("Saving data in session");
 		 	$this->session->set_userdata("user_id", $user->getPersonId());
 		 	$this->session->set_userdata("fullname", $user->getFullname());
+		 	$this->session->set_userdata("gender", $user->getGender());
 		 	$this->session->set_userdata("user_types", $permissions);
 
 		 	if(count($permissions) == 1)

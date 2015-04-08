@@ -76,6 +76,7 @@ class CK_Controller extends CI_Controller {
 		if ($this -> session -> userdata("fullname")) {
 			$data['fullname'] = $this -> session -> userdata("fullname");
 			$data['user_id'] = $this -> session -> userdata("user_id");
+			$data['gender'] = $this -> session -> userdata("gender");
 		}
 
 		$output = $this -> load -> view('include/header', $data, true);
