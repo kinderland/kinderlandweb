@@ -113,7 +113,7 @@ public class Coiote extends Base {
             log.title("Inserindo endereços");
             ResultSet enderecos = this.getTodos("select_todos_enderecos");
             while (enderecos.next()) {
-                log.msgPrint(enderecos.getString("rua"));
+                log.msgPrint(enderecos.getString("bairro"));
                 PreparedStatement preparedStatement = driver.prepareStatement(this.propertiesFile.getProperty("insert_adress"));
                 preparedStatement.setInt(1, i);
                 preparedStatement.setString(2, enderecos.getString("rua"));
@@ -126,7 +126,7 @@ public class Coiote extends Base {
                 driver.executeUpdate(preparedStatement);
                 PreparedStatement preparedStatement2 = driver.prepareStatement("update person set address_id = ? where person_id = ?;");
                 preparedStatement2.setInt(1, i++);
-                preparedStatement2.setInt(2, enderecos.getInt("sequencial"));
+                preparedStatement2.setInt(2, enderecos.getInt("person_id"));
                 driver.executeUpdate(preparedStatement2);
             }
         } catch (SQLException ex) {
@@ -135,24 +135,24 @@ public class Coiote extends Base {
     }
 
     public void migrar() {
-//        driver.beginTransaction();
-//        this.limpaBD();
-//        driver.commitTransaction();
-//        driver.beginTransaction();
-//        this.insertPerson();
-//        driver.commitTransaction();
-//        driver.beginTransaction();
-//        this.insertPersonUser();
-//        driver.commitTransaction();
-//        driver.beginTransaction();
-//        this.insertTelephone();
-//        driver.commitTransaction();
+        driver.beginTransaction();
+        this.limpaBD();
+        driver.commitTransaction();
+        driver.beginTransaction();
+        this.insertPerson();
+        driver.commitTransaction();
+        driver.beginTransaction();
+        this.insertPersonUser();
+        driver.commitTransaction();
+        driver.beginTransaction();
+        this.insertTelephone();
+        driver.commitTransaction();
         driver.beginTransaction();
         this.insertAdress();
         driver.commitTransaction();
-//        driver.beginTransaction();
-//        this.insertPersonUserType();
-//        driver.commitTransaction();
+        driver.beginTransaction();
+        this.insertPersonUserType();
+        driver.commitTransaction();
     }
 
 }
