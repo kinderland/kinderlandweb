@@ -21,13 +21,44 @@ class System extends CK_Controller {
 	public function menu(){
 		$this->Logger->info("Starting " . __METHOD__);
 		$data['fullname'] = $this->session->userdata("fullname");
-		$data['permissions'] = $this->session->userdata("user_types");
+		$permissions = $this->session->userdata("user_types");
 
 		$this->Logger->debug(print_r($data ,true));
 
-		$this->loadView("system/menu", $data);
+		if(count($permissions) == 1){
+			$this->redirectToSystemScreen($permissions[0]);
+		} else {
+			$data['permissions'] = $permissions;
+			$this->loadView("system/menu", $data);
+		}
+
+
 	}
 
+	private function redirectToSystemScreen($permission){
+		$this->Logger->info("Starting " . __METHOD__);
+		switch($permission){
+			case COMMON_USER:
+				redirect("user/menu");
+				break;
+			case SYSTEM_ADMIN:
+				//TO DO LATER
+				break;
+			case DIRECTOR:
+				//TO DO LATER
+				break;
+			case SECRETARY:
+				//TO DO LATER
+				break;
+			case COORDINATOR:
+				//TO DO LATER
+				break;
+			default:
+				redirect("login/index?error=true");
+				break;
+		}
+		return;
+	}
 }
 
 ?>
