@@ -144,9 +144,13 @@
             return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted);
         }
 
-        public function updateSubscriptionsStatusByDonationId($donation_id, $status){
+        public function updateSubscriptionsStatusByDonationId($donation_id, $status) {
             $sql = "UPDATE event_subscription SET subscription_status = ? WHERE donation_id = ?";
             return $this->execute($this->db, $sql, array($status, intval($donation_id)));
+        }
+        public function getSubscriptionsByEventId ($eventId){
+            $sql = "SELECT * FROM event_subscription WHERE event_id = ?";
+            return $this->executeRows($this->db, $sql, array(intval($eventId)));
         }
 
     }
