@@ -182,6 +182,7 @@ CREATE VIEW associates AS (
         d.donation_type = 2
         AND EXTRACT(YEAR FROM d.date_created) = 
         EXTRACT(YEAR FROM current_timestamp) 
+        AND d.donation_status = 2
 );
 
 CREATE VIEW donations_completed AS (
