@@ -251,8 +251,19 @@ class Events extends CK_Controller {
 		$this->loadView('event/event_create', $data);
 	}
 
-	public function reportPanel($eventId){
+	public function reportPanel(){
 		$this->Logger->info("Starting " . __METHOD__);
+		$data = array();
+		$this->loadView('event/report_panel', $data);
+	}
+
+	/*
+	public function loadReportPanel(){
+		$this->Logger->info("Starting " . __METHOD__);
+
+		$eventId = $_POST['event_id'];
+		$reportType = $_POST['report_type'];
+
 		$data = array();
 
 		if(!$this->checkSession())
@@ -271,14 +282,17 @@ class Events extends CK_Controller {
 			$data['price'] = $price;
 			$data['age_groups'] = $age_groups;
 
+			if($error)
+				$data['error'] = $error;
 
 			$this->loadView('event/report_panel', $data);
+			
 		} catch (Exception $ex) {
 			$this->Logger->error("Unable to load information about event with id: ". $eventId);
-			$this->loadView('event/index', $data);
+			$this->index();
 		}
 		
-	}
+	}*/
 
 	public function completeEvent(){
 		$this->Logger->info("Starting " . __METHOD__);
