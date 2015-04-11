@@ -163,9 +163,6 @@
 
             $result = file_get_contents($url, false, $stream);
             
-            $arquivo = fopen("/teste/lastReceived", "w");
-            fwrite($arquivo, $result);
-
             $XML = simplexml_load_string($result);
 
             return $XML;
