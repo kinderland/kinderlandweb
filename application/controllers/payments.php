@@ -61,6 +61,8 @@
             $description = $this -> input -> post('description', TRUE);
             $card_flag = $this -> input -> post('card_flag', TRUE);
             $payment_portions = $this -> input -> post('payment_portions', TRUE);
+			if($payment_portions === FALSE)
+				$payment_portions = "1";
 
             $transaction_value = preg_replace("/\D/", ".", $transaction_value);
             
