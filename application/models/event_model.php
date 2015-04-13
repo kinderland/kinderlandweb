@@ -70,19 +70,37 @@ class event_model extends CK_Model{
     }
 
     public function insertNewEvent($event_name, $description, $date_start, $date_finish, 
-        $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female){
+        $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female,$capacity_nonsleeper){
 
         $this->Logger->info("Running: " . __METHOD__);
         
         $sql = 'INSERT INTO event(event_name, description, date_created, date_start, date_finish, 
-            date_start_show, date_finish_show, enabled, capacity_male, capacity_female) VALUES (?,?, current_timestamp,?,?,?,?,?,?,?)';
+            date_start_show, date_finish_show, enabled, capacity_male, capacity_female,capacity_nonsleeper) VALUES (?,?, current_timestamp,?,?,?,?,?,?,?,?)';
+        
         $returnId = $this->executeReturningId($this->db, $sql, array($event_name, $description, $date_start, $date_finish, 
-                $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female));
+                $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female,$capacity_nonsleeper));
+				
         if($returnId)
             return $returnId;
 
         return false;
     }
+		
+	public function insertNewPaymentPeriod($eventId, $date_start, $date_finish, $full_price,$middle_price,$children_price,$associate_discount,$portions){
+        $this->Logger->info("Running: " . __METHOD__);
+        
+        $sql = 'INSERT INTO payment_period(event_id, date_start, date_finish, full_price, middle_price, 
+            children_price, associate_discount, portions) VALUES (?,?,?,?,?,?,?,?)';
+        
+        $returnId = $this->executeReturningId($this->db, $sql, array($eventId, $date_start, $date_finish, 
+                $full_price, $middle_price, $children_price, $associate_discount, $portions,));
+				
+        if($returnId)
+            return $returnId;
+
+        return false;
+		
+	}
 
 
 }

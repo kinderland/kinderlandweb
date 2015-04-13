@@ -297,22 +297,59 @@ class Events extends CK_Controller {
 	public function completeEvent(){
 		$this->Logger->info("Starting " . __METHOD__);
 
-		$event_name = $_POST['event_name'];
-		$description = $_POST['description'];
-		$date_start = $_POST['date_start'];
-		$date_finish = $_POST['date_finish'];
-		$date_start_show = $_POST['date_start_show'];
-		$date_finish_show = $_POST['date_finish_show'];
-		$enabled = $_POST['enabled'];
-		$capacity_male = $_POST['capacity_male'];
-		$capacity_female = $_POST['capacity_female'];
-
+		$event_name = $this -> input -> post('event_name', TRUE);
+		$description = $this -> input -> post('description', TRUE);
+		$date_start = $this -> input -> post('date_start', TRUE);
+		$date_finish = $this -> input -> post('date_finish', TRUE);
+		$date_start_show = $this -> input -> post('date_start_show', TRUE);
+		$date_finish_show = $this -> input -> post('date_finish_show', TRUE);
+		$capacity_male = $this -> input -> post('capacity_male', TRUE);
+		$capacity_female = $this -> input -> post('capacity_female', TRUE);
+		$capacity_nonsleeper = $this -> input -> post('capacity_nonsleeper', TRUE);
+		$payments = array();
+		$payment_date_end = $this -> input -> post("payment_date_end", TRUE);		
+		$payment_date_start = $this -> input -> post("payment_date_start", TRUE); 
+		$full_price=$this -> input -> post("full_price", TRUE);
+		$children_price=$this -> input -> post("children_price", TRUE);
+		$middle_price=$this -> input -> post("middle_price", TRUE);
+		$payment_portions=$this -> input -> post("payment_portions", TRUE);
+		$associated_discount=$this -> input -> post("associated_discount", TRUE);
+		
+		if(is_array($full_price)){
+			for($i=0;$i<count($full_price);$i++){
+				$payments[] = array(
+					"payment_date_start" => $payment_date_start[$i],
+					"payment_date_end"=> $payment_date_end[$i],		
+					"full_price"=>$full_price[$i],
+					"children_price"=>$children_price[$i],
+					"middle_price"=>$middle_price[$i],
+					"payment_portions"=>$payment_portions[$i],
+					"associated_discount"=>$associated_discount[$i]/100,			
+				);
+			}	
+		} else if($full_price !== FALSE){
+			$payments[] = array(
+				"payment_date_start" => $payment_date_start,
+				"payment_date_end"=> $payment_date_end,		
+				"full_price"=>$full_price,
+				"children_price"=>$children_price,
+				"middle_price"=>$middle_price,
+				"payment_portions"=>$payment_portions,
+				"associated_discount"=>$associated_discount/100,			
+			);			
+		}
+		
 		try{
 			$this->Logger->info("Inserting new event");
 			$this->generic_model->startTransaction();
 			
 			$eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, 
-				$date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female);
+				$date_start_show, $date_finish_show, "false", $capacity_male, $capacity_female,$capacity_nonsleeper);
+			
+			foreach($payments as $payment){
+				$this->event_model->insertNewPaymentPeriod($eventId,$payment["payment_date_start"],$payment["payment_date_end"],$payment["full_price"],$payment["middle_price"],
+				$payment["children_price"],$payment["associated_discount"],$payment["payment_portions"]);
+			}
 			
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("New event successfully inserted");
@@ -332,7 +369,7 @@ class Events extends CK_Controller {
         if (!$this -> checkSession())
             redirect("login/index");
         
-        if (!$this -> checkPermition(array(SECRETARY, SYSTEM_ADMIN))) {
+        if (!$this -> checkPermition(array(COMMON_USER,SECRETARY, SYSTEM_ADMIN))) {
             $this -> denyAcess(___METHOD___);
         }
         
