@@ -84,8 +84,9 @@ class Donations extends CK_Controller {
 		if(!$this->checkSession())
 			redirect("login/index");
 
-		$donationValue = $_POST['donation_value'];
+		$donationValueString = $_POST['donation_value'];
 		$userId = $this->session->userdata("user_id");
+		$donationValue = floatval(str_replace(",",".",$donationValueString));
 
 		try{
 			$this->generic_model->startTransaction();
