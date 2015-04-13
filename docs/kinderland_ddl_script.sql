@@ -99,7 +99,8 @@ CREATE TABLE event (
     date_finish_show timestamp without time zone,
     enabled boolean NOT NULL default false,
     capacity_male integer NOT NULL DEFAULT 0,
-    capacity_female integer NOT NULL DEFAULT 0
+    capacity_female integer NOT NULL DEFAULT 0,
+    capacity_nonsleeper integer NOT NULL DEFAULT 0
 );
 
 CREATE TABLE subscription_status(

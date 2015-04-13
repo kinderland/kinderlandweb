@@ -245,9 +245,22 @@ class Events extends CK_Controller {
 
 	}
 
-	public function eventCreate(){
+	public function eventCreate($errors = array(),$event_name=NULL,$description=NULL,
+			$date_start=NULL,$date_finish=NULL,$date_start_show=NULL,$date_finish_show=NULL,$capacity_male=NULL,$capacity_female=NULL,$capacity_nonsleeper=NULL,$payments=array()){
 		$this->Logger->info("Starting " . __METHOD__);
 		$data = array();
+		$data["errors"] = $errors;
+		$data["event_name"] = $event_name;
+		$data["description"] = $description;
+		$data["date_start"] = Events::toMMDDYYYY($date_start);
+		$data["date_finish"] = Events::toMMDDYYYY($date_finish);
+		$data["date_start_show"] = Events::toMMDDYYYY($date_start_show);
+		$data["date_finish_show"] = Events::toMMDDYYYY($date_finish_show);
+		$data["capacity_male"] = $capacity_male;
+		$data["capacity_female"] = $capacity_female;
+		$data["capacity_nonsleeper"] = $capacity_nonsleeper;
+		$data["payments"] = $payments;
+		
 		$this->loadView('event/event_create', $data);
 	}
 
@@ -293,7 +306,22 @@ class Events extends CK_Controller {
 		}
 		
 	}*/
-
+	
+	public static function toMMDDYYYY($date){
+		if($date !== "" && $date !== FALSE && $date !== NULL){
+			$date = explode("/", $date);
+			return $date[1]."/".$date[0]."/".$date[2];
+		}
+	}
+	
+	public static function verifyAntecedence($dateBefore,$dateAfter){
+		if($dateBefore == NULL || $dateAfter == NULL)
+			return FALSE;
+		$dateBefore = implode('', array_reverse(explode('/', $dateBefore)));
+		$dateAfter = implode('', array_reverse(explode('/', $dateAfter)));
+		return $dateBefore <= $dateAfter;
+	}
+	
 	public function completeEvent(){
 		$this->Logger->info("Starting " . __METHOD__);
 
@@ -314,9 +342,47 @@ class Events extends CK_Controller {
 		$middle_price=$this -> input -> post("middle_price", TRUE);
 		$payment_portions=$this -> input -> post("payment_portions", TRUE);
 		$associated_discount=$this -> input -> post("associated_discount", TRUE);
+		$errors = array();
+		
+		if($event_name === "")
+			$errors[] = "O campo nome é obrigatório";			
+		if(!$date_start)
+			$date_start = NULL;
+		if(!$date_start_show)
+			$date_start_show = NULL;
+		if(!$date_finish)
+			$date_finish = NULL;
+		if(!$date_finish_show)
+			$date_finish_show = NULL;
+		
+		if($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
+			$errors[] = "A data do ínicio do período do evento antecede a data de fim";
+
+		if($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
+			$errors[] = "A data do ínicio do período de inscrições antecede a data de fim";
+
+		if($capacity_male === "")
+			$capacity_male = 0;
+		if($capacity_female === "")
+			$capacity_female = 0;
+		if($capacity_nonsleeper === "")
+			$capacity_nonsleeper = 0;
 		
 		if(is_array($full_price)){
 			for($i=0;$i<count($full_price);$i++){
+				if(!$payment_date_start[$i])
+					$errors[] = "O pagamento de numero ".($i+1)." não tem data de inicio";
+				if(!$payment_date_end[$i])
+					$errors[] = "O pagamento de numero ".($i+1)." não tem data de fim";
+				if(!$full_price[$i])
+					$errors[] = "O pagamento de numero ".($i+1)." não tem valor ";
+				if(!$middle_price[$i])
+					$middle_price[$i] = $full_price[$i];
+				if(!$children_price[$i])
+					$children_price[$i] = $middle_price[$i];
+				if($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])){
+					$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
+				}
 				$payments[] = array(
 					"payment_date_start" => $payment_date_start[$i],
 					"payment_date_end"=> $payment_date_end[$i],		
@@ -328,6 +394,20 @@ class Events extends CK_Controller {
 				);
 			}	
 		} else if($full_price !== FALSE){
+				if(!$payment_date_start)
+					$errors[] = "O pagamento não tem data de inicio";
+				if(!$payment_date_end)
+					$errors[] = "O pagamento não tem data de fim";
+				if(!$full_price)
+					$errors[] = "O pagamento não tem valor ";
+				if(!$middle_price)
+					$middle_price = $full_price;
+				if(!$children_price)
+					$children_price = $middle_price;
+				if($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])){
+					$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
+				}
+				
 			$payments[] = array(
 				"payment_date_start" => $payment_date_start,
 				"payment_date_end"=> $payment_date_end,		
@@ -337,7 +417,11 @@ class Events extends CK_Controller {
 				"payment_portions"=>$payment_portions,
 				"associated_discount"=>$associated_discount/100,			
 			);			
-		}
+		}	
+		if(count($errors) > 0)
+			return $this->eventCreate($errors,$event_name,$description,
+			$date_start,$date_finish,$date_start_show,$date_finish_show,$capacity_male,$capacity_female,$capacity_nonsleeper,$payments);		
+		
 		
 		try{
 			$this->Logger->info("Inserting new event");
