@@ -11,10 +11,11 @@
 		private $enabled;
 		private $capacityMale;
 		private $capacityFemale;
+		private $capacityNonSleeper;
 
 		public function __construct($eventId, $eventName, $dateStart, 
 			$dateFinish, /*$price,*/ $dateStartShow, $dateFinishShow, $description, $enabled,
-			$capacityMale, $capacityFemale){
+			$capacityMale, $capacityFemale, $capacityNonSleeper){
 			$this->eventId = $eventId;
 			$this->eventName = $eventName;
 			$this->dateStart = $dateStart;
@@ -26,6 +27,7 @@
 			$this->enabled = $enabled;
 			$this->capacityMale = $capacityMale;
 			$this->capacityFemale = $capacityFemale;
+			$this->capacityNonSleeper = $capacityNonSleeper;
 		}
 
 		public static function createEventObject($resultRow){
@@ -40,7 +42,8 @@
 				$resultRow->description,
 				$resultRow->enabled,
 				$resultRow->capacity_male,
-				$resultRow->capacity_female
+				$resultRow->capacity_female,
+				$resultRow->capacity_nonsleeper
 			);
 		}
 
@@ -121,6 +124,13 @@
 		}
 		public function getCapacityFemale(){
 			return $this->capacityFemale;
+		}
+
+		public function setCapacityNonSleeper($capacityNonSleeper){
+			$this->capacityNonSleeper = $capacityNonSleeper;
+		}
+		public function getCapacityNonSleeper(){
+			return $this->capacityNonSleeper;
 		}
 
 	}

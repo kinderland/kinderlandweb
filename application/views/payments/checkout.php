@@ -3,9 +3,12 @@
         <script type="text/javascript">
             $(document).ready(function(){
                 $("input:radio[name='card_flag']").change(function() {
-                    var toggle = ($(this).val() == 'visaelectron' || $(this).val() == 'maestro') ? true : false;
-                    $('#payment_portions option:eq(1)').prop('selected', toggle);
-                    $("#payment_portions").attr("disabled", toggle);
+                    if($('select#payment_portions option').length > 1) {
+                         var toggle = ($(this).val() == 'visaelectron' || $(this).val() == 'maestro') ? true : false;
+                        $('#payment_portions option:eq(1)').prop('selected', toggle);
+                        $("#payment_portions").attr("disabled", toggle);
+                    }
+                   
                 }); 
              });    
             

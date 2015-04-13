@@ -399,6 +399,15 @@
 											</div>
 										</div>
 									</div>
+									<div class="row">
+										<div class="form-group">
+											<div class="col-lg-6">
+												<label for="nonsleeper" class="control-label"> Sem pernoite: </label>
+												<input type="radio" class="" name="nonsleeper" id="nonsleeper" value="true" /> Sim 
+												<input type="radio" class="" name="nonsleeper" id="nonsleeper" value="false" /> Não 
+											</div>
+										</div>
+									</div>
 								</form>
 							</div>
 						</div>

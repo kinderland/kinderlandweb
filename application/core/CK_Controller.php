@@ -1,5 +1,7 @@
 <?php
 include_once APPPATH . 'core/personuser.php';
+include_once APPPATH . 'core/event.php';
+include_once APPPATH . 'core/donation.php';
 include_once APPPATH . 'libraries/logger.php';
 
 // Colonia Kinderland Controller -> CK_Controller
@@ -19,22 +21,45 @@ class CK_Controller extends CI_Controller {
 			$this -> Logger -> endTransaction();
 	}
 
+	public function sendSignupEmail($person){
+		$this->Logger->info("Running :" . __METHOD__);
+
+		$emailString = "Olá " . $person -> getFullname() . ", <br><br>" . "Seu cadastro foi efetuado com sucesso.<br><br><br><br>" . "Diretoria da Associação Kinderland";
+		$emailSubject = "[Kinderland] Confirmação de cadastro";
+
+		return $this -> sendMail($emailSubject, $emailString, $person);
+	}
+
 	public function sendPaymentConfirmationMail($donation, $payment) {
 		if ($donation -> getDonationType() == DONATION_TYPE_ASSOCIATE) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
-			$emailString = "Prezado (a)" . $person -> getFullname() . ", <br><br>" . "Sua doação para a Kinderland com a finalidade de se tornar sócio foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
-			$emailSubject = "[Kinderland] Grato pela doacao: " . $person -> getFullname();
+			$emailString = "Prezad".(($person->getGender() == 'F')?'a':'o') . " " . $person -> getFullname() . ", <br><br>" . 
+			"Sua doação para a Associação Kinderland foi recebida com sucesso. Estamos registrando seu 
+			CPF em nossa base de associados do ano 2015.<br><br> Muito obrigado pela sua contribuição, ela é 
+			muito importante para nós.<br><br><br><br> Diretoria da Associação Kinderland";
+			$emailSubject = "[Kinderland] Grato pela doacao";
 
 			return $this -> sendMail($emailSubject,$emailString, $person);
-		}
-		else if ($donation -> getDonationType() == DONATION_TYPE_FREEDONATION) {
+
+		} else if ($donation -> getDonationType() == DONATION_TYPE_FREEDONATION) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
-			$emailString = "Prezado (a)" . $person -> getFullname() . ", <br><br>" . "Sua doação para a Kinderland foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
-			$emailSubject = "[Kinderland] Grato pela doacao: " . $person -> getFullname();
+			$emailString = "Prezad".(($person->getGender() == 'F')?'a':'o') . " " . $person -> getFullname() . ", <br><br>" . "Sua doação para a Kinderland 
+			foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para 
+			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
+			$emailSubject = "[Kinderland] Grato pela doacao";
 
 			return $this -> sendMail($emailSubject,$emailString, $person);
-		}else if($donation -> getDonationType() == DONATION_TYPE_SUBSCRIPTION){
-			
+
+		} else if($donation -> getDonationType() == DONATION_TYPE_SUBSCRIPTION) {
+			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
+			$event = $this -> event_model -> getDonationEvent($donation -> getDonationId());
+			$emailString = "Prezad".(($person->getGender() == 'F')?'a':'o') . " " . $person -> getFullname() . ", <br><br>" . "Sua inscrição para o ".
+			$event->getEventName()." foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para 
+			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
+			$emailSubject = "[Kinderland] Inscrição ". $event->getEventName() ." confirmada";
+
+			return $this -> sendMail($emailSubject,$emailString, $person);
+
 		} 
 		
 	}
