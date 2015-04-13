@@ -101,6 +101,15 @@ class event_model extends CK_Model{
         return false;
 		
 	}
+	
+	public function toggleEventEnable($eventId){
+        $this->Logger->info("Running: " . __METHOD__);
+        
+        $sql = 'update event set enabled = NOT enabled where event_id = ?;';
+        
+        return $this->execute($this->db, $sql, array($eventId));
+				
+	}
 
 
 }

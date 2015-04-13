@@ -1,7 +1,12 @@
 <script>$( document ).ready(function() {
   $("[name='my-checkbox']").bootstrapSwitch();
+  $("[name='my-checkbox']").each(function( index ) {
+  	if($(this).attr("checkedInDatabase") != undefined)
+  		$(this).bootstrapSwitch('state', true, true);
+  });
   $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
-    console.log(event); // jQuery event
+    var string = "<?=$this->config->item("url_link")?>events/toggleEnable/".concat($(this).attr("id"));
+	window.location=string;
   });
 });
 </script>
@@ -21,7 +26,7 @@
 		<td><a href="<?=$this->config->item("url_link")?>events/info/<?=$event->getEventId()?>"><?=$event->getEventName();?></a></td>
         <td><?= date_format(date_create($event->getDateStart()), 'd/m/y');?> </td>
         <td><?= date_format(date_create($event->getDateFinish()), 'd/m/y')?> </td>
-        <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" <?php if($event->isEnabled()) echo "checked";?></td>
+        <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$event->getEventId()?>" <?php if($event->isEnabled()) echo "checkedInDatabase='true'";?></td>
 		</tr>
 		<?php 
 				}

@@ -462,6 +462,11 @@ class Events extends CK_Controller {
         
         $this -> loadView("event/manage", $data);
     }
+    
+    public function toggleEnable($eventId){
+		$this->event_model->toggleEventEnable($eventId);
+		$this->manageEvents();
+    }
 
 }
 

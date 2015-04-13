@@ -104,7 +104,9 @@
 			$this->enabled = $enabled;
 		}
 		public function isEnabled(){
-			return $this->enabled;
+			if($this->enabled == "t")
+				return TRUE;
+			return FALSE;
 		}
 
 		public function setCapacityMale($capacityMale){
