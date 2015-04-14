@@ -48,12 +48,12 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
+$db['default']['hostname'] = 'www.sistemaskinderland.com.br';
 $db['default']['port'] = '5432';
 
 $db['default']['username'] = 'postgres';
-$db['default']['password'] = 'postgres';
-$db['default']['database'] = 'kinder1';
+$db['default']['password'] = 'campateri14';
+$db['default']['database'] = 'kinderland_teste';
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
