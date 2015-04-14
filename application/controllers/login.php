@@ -155,7 +155,13 @@ class Login extends CK_Controller {
 
 			$this->session->set_userdata("user_id", $personId);
 			$this->session->set_userdata("fullname", $fullname);
+			$this->session->set_userdata("gender", $gender);
 			$this->session->set_userdata("user_types", array(COMMON_USER));
+
+			$person = $this->personuser_model->getUserById($personId);
+			$this->Logger->info("Sending sign up confirmation email to: " . $person->getEmail());
+			$this->sendSignupEmail($person);
+
 			redirect("user/menu");
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to insert new user");

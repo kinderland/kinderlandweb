@@ -132,6 +132,7 @@ CREATE TABLE event_subscription (
     date_created timestamp without time zone DEFAULT now(),
     age_group_id integer NOT NULL REFERENCES age_group DEFAULT 3,
     associate boolean default false,
+    nonsleeper boolean default false,
 
     PRIMARY KEY (person_id, event_id),
     CONSTRAINT fk_person_user_event FOREIGN KEY (person_user_id)

@@ -162,6 +162,7 @@ class Events extends CK_Controller {
 		$personId = (isset($_POST['person_id'])) ? $_POST['person_id'] : null;
 		$age_group_id = $_POST['age_group'];
 		$isAssociate = (isset($_POST['associate']))? $_POST['associate']: 'false';
+		$nonSleeper = (isset($_POST['nonsleeper']))? $_POST['nonsleeper']: 'false';
 
 		try{
 			$this->generic_model->startTransaction();
@@ -181,7 +182,7 @@ class Events extends CK_Controller {
 			$this->Logger->info("Subscribing person {$personId} on event {$eventId} under responsability of user {$userId}");
 			$event = $this->event_model->getEventById($eventId);
 
-			$this->eventsubscription_model->createSubcription($event, $userId, $personId, SUSCRIPTION_STATUS_WAITING_PAYMENT, $age_group_id, $isAssociate);
+			$this->eventsubscription_model->createSubcription($event, $userId, $personId, SUSCRIPTION_STATUS_WAITING_PAYMENT, $age_group_id, $isAssociate, $nonSleeper);
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("Person subscribed");
 			$this->Logger->info("Loading event details page");

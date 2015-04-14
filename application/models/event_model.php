@@ -111,6 +111,21 @@ class event_model extends CK_Model{
 				
 	}
 
+    public function getDonationEvent($donationId){
+        $sql = "select e.* from event e 
+            inner join event_subscription es
+            on es.event_id = e.event_id
+            where es.donation_id = ?";
+
+        $resultSet = $this->executeRows($this->db, $sql, array(intval($donationId)));
+
+        if($resultSet)
+            return Event::createEventObject($resultSet[0]);
+
+        return null;
+
+    }
+
 
 }
 

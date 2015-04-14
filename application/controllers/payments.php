@@ -10,12 +10,14 @@
             $this -> load -> model('cielotransaction_model');
             $this -> load -> model('donation_model');
             $this -> load -> model('eventsubscription_model');
+            $this -> load -> model('event_model');
             $this -> load -> model('person_model');
 
             $this->cielotransaction_model->setLogger($this->Logger);
             $this->donation_model->setLogger($this->Logger);
             $this->eventsubscription_model->setLogger($this->Logger);
             $this->person_model->setLogger($this->Logger);
+            $this->event_model->setLogger($this->Logger);
         }
 
         public function index() {
@@ -62,7 +64,7 @@
             $card_flag = $this -> input -> post('card_flag', TRUE);
             $payment_portions = $this -> input -> post('payment_portions', TRUE);
 			if($payment_portions === FALSE)
-				$payment_portions = "1";
+				$payment_portions = '1';
 
             $transaction_value = preg_replace("/\D/", ".", $transaction_value);
             
