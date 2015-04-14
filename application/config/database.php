@@ -53,7 +53,7 @@ $db['default']['port'] = '5432';
 
 $db['default']['username'] = 'postgres';
 $db['default']['password'] = 'campateri14';
-$db['default']['database'] = 'kinderland_teste';
+$db['default']['database'] = 'kinderland_producao';
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

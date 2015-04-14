@@ -20,7 +20,7 @@ $config['base_url'] .= '://' . $_SERVER['HTTP_HOST'];
 $config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 //$config['base_url'] = '';
 
-$config['url_link'] = 'http://localhost:2222/kinderlandweb/index.php/';
+$config['url_link'] = 'http://www.sistemaskinderland.com.br/kinderlandweb/index.php/';
 
 /*
 |--------------------------------------------------------------------------
