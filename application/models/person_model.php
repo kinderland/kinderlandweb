@@ -48,5 +48,14 @@ class person_model extends CK_Model{
     	return null;
     }
 	
+	public function emailExists($email) {
+		$sql = "SELECT * FROM person WHERE email=?";
+		$resultSet = $this -> executeRow($this -> db, $sql, array($email));
+
+		if ($resultSet)
+			return true;
+
+		return false;
+	}
 }
 ?>

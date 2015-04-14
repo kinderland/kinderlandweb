@@ -1,3 +1,4 @@
+
 <script type="text/javascript" charset="utf-8">
 
 function validateForm(event){
@@ -5,8 +6,14 @@ function validateForm(event){
 	var cpfInvalidErr = false;
 	var cpfExistingErr = false;
 	var emailErr = false;
+	var emailExistingErr = false;
 	var passErr = false;
-
+	var msgGeneral = "Os seguintes campos possuem um erro:";
+	var msgInvalidCPF = "Este CPF não é válido.";
+	var msgExistingCPF = "Este CPF já está cadastrado.";
+	var msgEmail = "E-mail e confirmação de e-mail não estão iguais.";
+	var msgExistingEmail = "Este email já está cadastrado.";
+	var msgPass = "Senha e confirmação de senha não estão iguais.";
 	
 	var email = document.getElementById("email");
 	var confirm_email = document.getElementById("confirm_email");
@@ -29,6 +36,16 @@ function validateForm(event){
 	}
 
 	$.get(
+		"<?=$this->config->item('url_link')?>login/checkExistingEmail?email=" + $("#email").val(),
+		function( data ) {
+				if(data == "true") {
+					alert(msgExistingEmail);
+					emailExistingErr = true;
+					event.preventDefault();
+				}
+		});
+
+	$.get(
 			"<?=$this->config->item('url_link')?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
 			function( data ) {
 				if(data == "true") {
@@ -36,53 +53,37 @@ function validateForm(event){
 					event.preventDefault();
 				}
 				if(passErr && emailErr && cpfExistingErr){
-					alert("Os seguintes campos possuem um erro:"+'\n\n'+
-					"Este CPF já está cadastrado."+'\n'+ 
-					"E-mail e confirmação de e-mail não estão iguais."+'\n'+
-					"Senha e confirmação de senha não estão iguais.");
+					alert(msgGeneral+'\n\n'+msgExistingCPF+'\n'+msgEmail+'\n'+msgPass);
 				}
 				else if(passErr && emailErr && cpfInvalidErr){
-					alert("Os seguintes campos possuem um erro:"+'\n\n'+
-					"Este CPF não é válido."+'\n'+ 
-					"E-mail e confirmação de e-mail não estão iguais."+'\n'+
-					"Senha e confirmação de senha não estão iguais.");
+					alert(msgGeneral+'\n\n'+msgInvalidCPF+'\n'+msgEmail+'\n'+msgPass);
 				}
 				else if(emailErr && cpfExistingErr){
-					alert("Os seguintes campos possuem um erro:"+'\n\n'+
-					"Este CPF já está cadastrado."+'\n'+
-					"E-mail e confirmação de e-mail não estão iguais.");
+					alert(msgGeneral+'\n\n'+msgExistingCPF+'\n'+msgEmail);
 				}
 				else if(passErr && cpfExistingErr){
-					alert("Os seguintes campos possuem um erro:"+'\n\n'+
-					"Este CPF já está cadastrado."+'\n'+
-					"Senha e confirmação de senha não estão iguais.");
+					alert(msgGeneral+'\n\n'+msgExistingCPF+'\n'+msgPass);
 				}
 				else if(passErr && emailErr){
-					alert("Os seguintes campos possuem um erro:"+'\n\n'+
-					"E-mail e confirmação de e-mail não estão iguais."+'\n'+
-					"Senha e confirmação de senha não estão iguais.");
+					alert(msgGeneral+'\n\n'+msgEmail+'\n'+msgPass);
 				}
 				else if(passErr && cpfInvalidErr){
-					alert("Os seguintes campos possuem um erro:"+'\n\n'+
-					"Este CPF não é válido."+'\n'+
-					"Senha e confirmação de senha não estão iguais.");
+					alert(msgGeneral+'\n\n'+msgInvalidCPF+'\n'+msgPass);
 				}
 				else if(emailErr && cpfInvalidErr){
-					alert("Os seguintes campos possuem um erro:"+'\n\n'+
-					"Este CPF não é válido."+'\n'+
-					"E-mail e confirmação de e-mail não estão iguais.");
+					alert(msgGeneral+'\n\n'+msgInvalidCPF+'\n'+msgEmail);
 				}
 				else if(cpfInvalidErr){
-					alert("Este CPF não é válido.");
+					alert(msgInvalidCPF);
 				}
 				else if(passErr){
-					alert("Senha e confirmação de senha não estão iguais.");
+					alert(msgPass);
 				}
 				else if(emailErr){
-					alert("E-mail e confirmação de e-mail não estão iguais.");
+					alert(msgEmail);
 				}
 				else if(cpfExistingErr){
-					alert("Este CPF já está cadastrado.");
+					alert(msgExistingCPF);
 				}
 			});
 
@@ -201,6 +202,28 @@ function funcPassword(){
 	};
 }
 
+function funcExistingEmail(){
+
+	var email = document.getElementById("email");
+	email.onchange = function() {
+		$.get(
+		"<?=$this->config->item('url_link')?>login/checkExistingEmail?email=" + $("#email").val(),
+		function( data ) {
+				if(data == "true") {
+					alert("Este email já está cadastrado.");
+					event.preventDefault();
+					return true;
+				}
+		});
+	};
+	return false;
+}
+
+jQuery(document).ready(function($) {
+    $("#phone1").mask("(99) 9999-9999?9");
+});
+
+
 </script>
 
 <div class="row">
@@ -259,6 +282,9 @@ function funcPassword(){
 							oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
     						oninput="setCustomValidity('')"
     						value="<?php if (!empty($_POST['email'])) { echo $_POST['email']; } ?>"/>
+    					<script type="text/javascript">
+					        window.onload = funcExistingEmail();
+					    </script>
 					</div>
 
 					<label for="confirm_email" class="col-lg-1 control-label"> Confirme o E-mail*: </label>
@@ -330,10 +356,14 @@ function funcPassword(){
 							name="cep" maxlength="8" onkeypress="return validateNumberInput(event);" 
 							pattern=".{8,}" required  
 							oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
-    						oninput="setCustomValidity('')"
+    						oninput="setCustomValidity('')" onblur="maskCEP(this)"
     						value="<?php if (!empty($_POST['cep'])) { echo $_POST['cep']; } ?>"/>
 					</div>
-
+							<script>
+							jQuery(function($){
+							       $("#cep").mask("99999-999");
+							});
+							</script>
 					<label for="neighborhood" class="col-lg-1 control-label"> Bairro: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Bairro"
@@ -348,9 +378,9 @@ function funcPassword(){
 					<label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
 					<div class="col-lg-3">
 						<input type="text" class="form-control" placeholder="Telefone de contato 1"
-							name="phone1" maxlength="25" onkeypress="return validateNumberInput(event);" required
+							name="phone1" id="phone1" maxlength="25" onkeypress="return validateNumberInput(event);" required
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-    						oninput="setCustomValidity('')"
+    						oninput="setCustomValidity('')" 
     						value="<?php if (!empty($_POST['phone1'])) { echo $_POST['phone1']; } ?>"/>
 					</div>
 

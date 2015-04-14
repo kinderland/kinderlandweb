@@ -173,6 +173,14 @@ class Login extends CK_Controller {
 		else
 			echo "false";
 	}
+
+	public function checkExistingEmail(){
+		$email = $_GET['email'];
+		if($this->person_model->emailExists($email))
+			echo "true";
+		else
+			echo "false";
+	}
 	
 }
 
