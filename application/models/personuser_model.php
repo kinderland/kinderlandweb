@@ -113,6 +113,24 @@ class personuser_model extends CK_Model {
 
 	}
 
+	public function getPersonIdByEmail($email) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+
+		$sql = "SELECT 
+				p.person_id
+				FROM person_user AS pu 
+				NATURAL JOIN person AS p 
+				WHERE p.email = ?";
+
+		$row = $this -> executeRow($this->db, $sql, array($email));
+
+		if ($row) {
+			return $row->person_id;
+		}
+
+		return null;
+	}
+
 	public function getUserPermissions($person_id) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 

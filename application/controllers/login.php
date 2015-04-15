@@ -26,8 +26,14 @@ class Login extends CK_Controller {
         if ($this->checkSession())
             redirect("system/menu");
         $data = array();
+
+        // Means the login credencials were incorrect
         if (isset($_GET['error']))
             $data['error'] = $_GET['error'];
+
+        // Means the user returned from a successfull password reset procedure
+        if (isset($_GET['rp']))
+            $data['resetPassword'] = $_GET['rp'];
         $this->loadView('login/login', $data);
     }
 
@@ -162,11 +168,64 @@ class Login extends CK_Controller {
             redirect("user/menu");
         } catch (Exception $ex) {
             $this->Logger->error("Failed to insert new user");
-            //Caso tenha capturado algum erro, volta atrás nas alterações feitas antes do erro acontecer
             $this->generic_model->rollbackTransaction();
             $data['error'] = true;
             $this->loadView('login/signup', $data);
         }
+    }
+
+    public function resetPassword($data=null){
+        $this->loadView('login/reset_password', $data);
+    }
+
+    public function updateUserPassword(){
+        $this->Logger->info("Starting " . __METHOD__);
+        try{
+            if(!isset($_POST['email']))
+                throw new Exception("Invalid Post Parameters");
+
+            $email = $_POST['email'];
+
+            $personId = $this->personuser_model->getPersonIdByEmail($email);
+            if($personId == null){
+                $this->Logger->error("Email: " . $email . " does not exist inside the database");
+                throw new Exception("Email does not exist");
+            }
+            
+            $randomString = $this->rand_string(8);
+            $this->Logger->debug("Random string generated: \"".$randomString."\"");
+
+            $this->generic_model->startTransaction();
+            if(! $this->personuser_model->updatePassword($randomString, $personId) ){
+                $this->Logger->error("Email: " . $email . " does not exist inside the database");
+                throw new Exception("Failed to update password");
+            }
+            $this->generic_model->commitTransaction();
+
+            $person = $this->personuser_model->getUserById($personId);
+            $this->sendNewPasswordEmail($person, $randomString);
+
+            $data['reset_password'] = true;
+            redirect('login/index?rp=true');
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to execute " . __METHOD__ . " function");
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+            $this->loadView('login/reset_password', $data);
+        }
+        
+    }
+
+    private function rand_string( $length ) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $str = null;
+        $size = strlen( $chars );
+
+        for ( $i = 0; $i < $length; $i++) {
+            $str .= $chars[ rand( 0, $size - 1 ) ];
+        }
+
+        return $str;
     }
 
     public function checkExistingCpf() {
