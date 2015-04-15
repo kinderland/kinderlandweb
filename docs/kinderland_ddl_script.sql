@@ -103,6 +103,24 @@ CREATE TABLE event (
     capacity_nonsleeper integer NOT NULL DEFAULT 0
 );
 
+CREATE TABLE communication (
+    communication_id serial PRIMARY KEY NOT NULL,
+    content text NOT NULL,
+    date_sent timestamp without time zone DEFAULT now() NOT NULL,
+    type character varying(10) NOT NULL,
+    successfully_sent boolean NOT NULL
+);
+
+
+CREATE TABLE communication_recipient (
+    communication_id integer NOT NULL,
+    recipient character varying(200) NOT NULL,
+    recipient_type character varying(20) NOT NULL,
+    PRIMARY KEY (communication_id, recipient, recipient_type),
+    FOREIGN KEY (communication_id) REFERENCES communication(communication_id)
+);
+
+
 CREATE TABLE subscription_status(
     subscription_status integer PRIMARY KEY NOT NULL,
     description character varying(30)
