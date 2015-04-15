@@ -74,7 +74,7 @@ class Login extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
         switch ($permission) {
             case COMMON_USER:
-                redirect("user/edit");
+                redirect("user/menu");
                 break;
             case SYSTEM_ADMIN:
                 //TO DO LATER
