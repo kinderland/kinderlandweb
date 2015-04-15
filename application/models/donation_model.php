@@ -26,8 +26,13 @@ class donation_model extends CK_Model {
 
         if ($result)
             return $result->portions;
-        else
-            return 3;
+        else {
+            if ($donation->getDonationType() == 1) {
+                return 1;
+            } else {
+                return 3;
+            }
+        }
     }
 
     public function createDonation($userId, $totalPrice, $donationType) {
