@@ -81,7 +81,7 @@ class donation_model extends CK_Model {
 
     public function getDonationsByUserId($userId) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * FROM donation_detailed WHERE person_id = ? ORDER BY date_created DESC";
+        $sql = "SELECT * FROM donation_detailed WHERE donation_status like 'pago' AND person_id = ? ORDER BY date_created DESC";
         return $this->executeRows($this->db, $sql, array(intval($userId)));
     }
 
