@@ -61,7 +61,7 @@ class CK_Controller extends CI_Controller {
         }
     }
 
-    protected function sendMail($subject, $content, $person) {
+    protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
         $myMail = "testekinderland2015@gmail.com";
         $config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail,
             'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
@@ -72,7 +72,11 @@ class CK_Controller extends CI_Controller {
         $this->email->set_newline("\r\n");
         $this->email->subject($subject);
         $this->email->message($content);
-        if ($this->email->send()) {
+        if($cc != NULL)
+			$this->email->cc($cc);
+		if($bcc != NULL)
+			$this->email->bcc($bcc);
+	    if ($this->email->send()) {
             $this->Logger->info("Email enviado com sucesso para: " . $person->getFullname() . " com o assunto " . $subject);
             return TRUE;
         } else {
