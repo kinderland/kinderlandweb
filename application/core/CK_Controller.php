@@ -40,7 +40,7 @@ class CK_Controller extends CI_Controller {
 			muito importante para nós.<br><br><br><br> Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Doacao campanha associados";
 
-			return $this -> sendMail($emailSubject, $emailString, $person);
+			return $this -> sendMail($emailSubject, $emailString, $person, $person,array("secretaria@kinderland.com.br"));
 		} else if ($donation -> getDonationType() == DONATION_TYPE_FREEDONATION) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
 			$emailString = "Prezad" . (($person -> getGender() == 'F') ? 'a' : 'o') . " " . $person -> getFullname() . ", <br><br>" . "Sua doação para a Kinderland
@@ -48,7 +48,7 @@ class CK_Controller extends CI_Controller {
 			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Doacao avulsa";
 
-			return $this -> sendMail($emailSubject, $emailString, $person,array("zonenschein@gmail.com"));
+			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
 		} else if ($donation -> getDonationType() == DONATION_TYPE_SUBSCRIPTION) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
 			$event = $this -> event_model -> getDonationEvent($donation -> getDonationId());
@@ -56,7 +56,7 @@ class CK_Controller extends CI_Controller {
 			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Inscricao " . $event -> getEventName() . " confirmada";
 
-			return $this -> sendMail($emailSubject, $emailString, $person,array("zonenschein@gmail.com"));
+			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
 		}
 	}
 
@@ -67,7 +67,7 @@ class CK_Controller extends CI_Controller {
                 "<br><br>". "Caso você não tenha solicitado essa mudança de senha, favor entrar em contato com a secretaria Kinderland.". 
                 "<br><br><br><br>" . "Diretoria da Associação Kinderland";
 
-        return $this->sendMail($emailSubject, $emailString, $person,array("zonenschein@gmail.com"));
+        return $this->sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
     }
 
 	protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
@@ -87,7 +87,7 @@ class CK_Controller extends CI_Controller {
 		$this -> email -> subject($subject);
 		$this -> email -> message($content);
 		if($cc == NULL){
-			$cc = array("zonenschein@gmail.com");
+			$cc = array("secretaria@kinderland.com.br");
 		}
 		if ($cc != NULL)
 			$this -> email -> cc($cc);
