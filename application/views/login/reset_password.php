@@ -37,6 +37,12 @@ function validateReset(event){
 					<?php if(isset($error)) echo "Email inválido"?>
 					<button class="btn btn-primary" onClick="validateReset(event)">Solicitar nova senha</button>
 				</div>
+				<div class="col-lg-4">
+					<button type="button" class="btn btn-danger" onclick="history.back(-1)">
+                        Voltar
+                    </button>
+				</div>
+				
 			</div>
 		</form>
 	</div>

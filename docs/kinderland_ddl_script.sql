@@ -193,16 +193,21 @@ CREATE VIEW open_public_events as (SELECT * FROM event
                 AND enabled = true);
 
 CREATE VIEW associates AS (
-    SELECT
-        pu.*
-    FROM person_user pu
-    INNER JOIN donation d 
-        ON d.person_id = pu.person_id
-    WHERE
-        d.donation_type = 2
-        AND EXTRACT(YEAR FROM d.date_created) = 
-        EXTRACT(YEAR FROM current_timestamp) 
-        AND d.donation_status = 2
+  SELECT pu.person_id,
+    pu.cpf,
+    pu.login,
+    pu.occupation
+   FROM person_user pu
+     JOIN donation d ON d.person_id = pu.person_id
+  WHERE d.donation_type = 2 AND date_part('year'::text, d.date_created) = date_part('year'::text, now()) AND d.donation_status = 2
+  UNION 
+  SELECT pu.person_id,
+    pu.cpf,
+    pu.login,
+    pu.occupation
+   FROM person_user pu
+  INNER JOIN person p on p.person_id = pu.person_id
+  WHERE p.benemerit = true
 );
 
 CREATE VIEW donations_completed AS (

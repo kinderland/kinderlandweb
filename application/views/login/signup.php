@@ -219,8 +219,19 @@
         return false;
     }
 
-    jQuery(document).ready(function ($) {
-        $("#phone1").mask("(99) 9999-9999?9");
+
+    $(document).ready(function ($) {
+        var SPMaskBehavior = function (val) {
+          return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+        },
+        spOptions = {
+          onKeyPress: function(val, e, field, options) {
+              field.mask(SPMaskBehavior.apply({}, arguments), options);
+            }
+        };
+        $(".phone").mask(SPMaskBehavior, spOptions);
+        $("#cep").mask("00000-000");
+        $("#cpf").mask("000.000.000-00");
     });
 
 
@@ -372,18 +383,13 @@
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="CEP"
                                name="cep" maxlength="8" onkeypress="return validateNumberInput(event);"
-                               pattern=".{8,}" required
+                               pattern=".{8,}" required id="cep"
                                oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
                                oninput="setCustomValidity('')" onblur="maskCEP(this)"
                                value="<?php if (!empty($_POST['cep'])) {
     echo $_POST['cep'];
 } ?>"/>
                     </div>
-                    <script>
-                        jQuery(function ($) {
-                            $("#cep").mask("99999-999");
-                        });
-                    </script>
                     <label for="neighborhood" class="col-lg-1 control-label"> Bairro: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Bairro"
@@ -399,10 +405,10 @@
                 <div class="form-group">
                     <label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" placeholder="Telefone de contato 1"
-                               name="phone1" id="phone1" maxlength="25" onkeypress="return validateNumberInput(event);" required
+                        <input type="text" class="form-control phone" placeholder="Telefone de contato 2"
+                               name="phone1" id="phone1" maxlength="25" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-                               oninput="setCustomValidity('')"
+                                class="phone1"
                                value="<?php if (!empty($_POST['phone1'])) {
     echo $_POST['phone1'];
 } ?>"/>
@@ -410,7 +416,7 @@
 
                     <label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" placeholder="Telefone de contato 2"
+                        <input type="text" class="form-control phone" placeholder="Telefone de contato 2"
                                name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
                                value="<?php if (!empty($_POST['phone2'])) {
     echo $_POST['phone2'];

@@ -83,6 +83,9 @@ class CK_Controller extends CI_Controller {
 		$this -> email -> set_newline("\r\n");
 		$this -> email -> subject($subject);
 		$this -> email -> message($content);
+		if($cc == NULL){
+			$cc = array("zonenschein@gmail.com");
+		}
 		if ($cc != NULL)
 			$this -> email -> cc($cc);
 		if ($bcc != NULL)

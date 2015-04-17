@@ -33,13 +33,18 @@ function validateLogin(){
 			<div class="form-group">
 				<div class="col-lg-4 col-lg-offset-2">
 					<button class="btn btn-primary" onClick="validateLogin()">Entrar</button>
-					<?php if(isset($error)) echo"  Login e/ou senha incorretos"?>
+					
 				</div>
 
 				<div class="col-lg-4 col-lg-offset-2">
 					<a href="<?=$this->config->item('url_link')?>login/resetPassword"> Esqueci minha senha </a>
 				</div>
 			</div>
+			<?php if(isset($error)) { ?>
+				<div class="col-lg-12">
+					<p align="center"><strong>Login e/ou senha incorretos.</strong></p>
+				</div>
+			<?php } ?>
 			<?php if(isset($resetPassword)) { ?>
 				<div class="col-lg-12">
 					<p align="center"><strong>Uma nova senha foi enviada para seu email.</strong></p>
