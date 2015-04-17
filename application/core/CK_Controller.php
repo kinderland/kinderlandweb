@@ -47,7 +47,7 @@ class CK_Controller extends CI_Controller {
 			muito importante para nós.<br><br><br><br> Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Doacao campanha associados";
 
-			return $this -> sendMail($emailSubject, $emailString, $person, $person,array("secretaria@kinderland.com.br"));
+			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
 		} else if ($donation -> getDonationType() == DONATION_TYPE_FREEDONATION) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
 			$emailString = "Prezad" . (($person -> getGender() == 'F') ? 'a' : 'o') . " " . $person -> getFullname() . ", <br><br>" . "Sua doação para a Kinderland
