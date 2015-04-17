@@ -239,7 +239,7 @@
               field.mask(SPMaskBehavior.apply({}, arguments), options);
             }
         };
-       // $(".phone").mask(SPMaskBehavior, spOptions);
+        $(".phone").mask(SPMaskBehavior, spOptions);
         $("#cep").mask("00000-000");
         $("#cpf").mask("000.000.000-00");
     });
