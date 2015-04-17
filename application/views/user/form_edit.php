@@ -330,7 +330,7 @@
                 <div class="form-group">
                     <label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" placeholder="Telefone de contato 1"
+                        <input type="text" class="form-control phone" placeholder="Telefone de contato 1"
                                name="phone1" value="<?= $user->getPhone1() ?>" id="phone1"
                                onkeypress="return validateNumberInput(event);" required
                                class = "phone1"
@@ -340,7 +340,7 @@
 
                     <label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control" placeholder="Telefone de contato 2"
+                        <input type="text" class="form-control phone" placeholder="Telefone de contato 2"
                                name="phone2" value="<?= $user->getPhone2() ?>"
                                onkeypress="return validateNumberInput(event);"/>
                     </div>
