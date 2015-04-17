@@ -36,7 +36,14 @@ class CK_Controller extends CI_Controller {
 		if ($donation -> getDonationType() == DONATION_TYPE_ASSOCIATE) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
 			$emailString = "Prezad" . (($person -> getGender() == 'F') ? 'a' : 'o') . " " . $person -> getFullname() . ", <br><br>" . "Sua doação para a Associação Kinderland foi recebida com sucesso. Estamos registrando seu
-			CPF em nossa base de associados do ano 2015.<br><br> Muito obrigado pela sua contribuição, ela é
+			CPF em nossa base de associados do ano 2015.<br><br> Lembramos que nossos associados têm como benefícios, entre outros:<br><br>
+			<ul>
+  <li>Desconto nas doações pela cessão do espaço físico da colônia Kinderland para festas de aniversário, finais de semana com amigos ou outros eventos particulares;</li>
+  <li>Desconto nos eventos especiais organizados e realizados pela Associação Kinderland (ex. evento MaCK - Mostre a Colônia Kinderland);</li>
+  <li>Pré-inscrição antecipada sem garantia de vaga para a temporada de verão</li>
+</ul>
+<br><br>
+			Muito obrigado pela sua contribuição, ela é
 			muito importante para nós.<br><br><br><br> Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Doacao campanha associados";
 
