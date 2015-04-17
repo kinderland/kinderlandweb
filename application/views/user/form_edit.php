@@ -26,6 +26,10 @@
             event.preventDefault();
         }
 
+        var cpfNoMask = cpf.value.replace(".", "");
+        cpfNoMask = cpfNoMask.replace(".","");
+        cpfNoMask = cpfNoMask.replace("-","");
+
         if (passErr && emailErr && cpfInvalidErr) {
             alert("Os seguintes campos possuem um erro:" + '\n\n' +
                     "Este CPF não é válido." + '\n' +
@@ -64,6 +68,7 @@
             return false;
         }
 
+        cpf.value = cpfNoMask;
     }
     /* permite apenas numeros, tab e backspace*/
     function validateNumberInput(evt) {
@@ -100,29 +105,32 @@
     }
     /* tirado diretamente do site da receita federal */
     function TestaCPF(strCPF) {
+        var cpf = strCPF.replace(".", "");
+        cpf = cpf.replace(".","");
+        cpf = cpf.replace("-","");
         var Soma;
         var Resto;
         Soma = 0;
         //strCPF  = RetiraCaracteresInvalidos(strCPF,11);
         //pequena modificaçao para verificar todos os cpfs com todos os digitos iguais, antes so era verificado o primeiro caso
-        if (strCPF == "00000000000" || strCPF == "11111111111" || strCPF == "22222222222" || strCPF == "33333333333" ||
-                strCPF == "44444444444" || strCPF == "55555555555" || strCPF == "66666666666" || strCPF == "77777777777" ||
-                strCPF == "88888888888" || strCPF == "99999999999")
+        if (cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" ||
+                cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" ||
+                cpf == "88888888888" || cpf == "99999999999")
             return false;
         for (i = 1; i <= 9; i++)
-            Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);cpf
         Resto = (Soma * 10) % 11;
         if ((Resto == 10) || (Resto == 11))
             Resto = 0;
-        if (Resto != parseInt(strCPF.substring(9, 10)))
+        if (Resto != parseInt(cpf.substring(9, 10)))
             return false;
         Soma = 0;
         for (i = 1; i <= 10; i++)
-            Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
         Resto = (Soma * 10) % 11;
         if ((Resto == 10) || (Resto == 11))
             Resto = 0;
-        if (Resto != parseInt(strCPF.substring(10, 11)))
+        if (Resto != parseInt(cpf.substring(10, 11)))
             return false;
         return true;
     }
@@ -179,7 +187,7 @@
             $("#cep").mask("00000-000");
             $("#cpf").mask("000.000.000-00");
         });
-    
+
 </script>
 
 <div class="row">
@@ -303,7 +311,7 @@
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="CEP"
                                name="cep" value="<?= $user->getAddress()->getCEP() ?>" maxlength="8"
-                               pattern=".{8,}" required
+                               pattern=".{8,}" required id="cep"
                                onkeypress="return validateNumberInput(event);"
                                oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
                                oninput="setCustomValidity('')"/>
@@ -323,8 +331,9 @@
                     <label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Telefone de contato 1"
-                               name="phone1" value="<?= $user->getPhone1() ?>"
+                               name="phone1" value="<?= $user->getPhone1() ?>" id="phone1"
                                onkeypress="return validateNumberInput(event);" required
+                               class = "phone1"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"/>
                     </div>
