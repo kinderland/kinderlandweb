@@ -75,8 +75,7 @@ class CK_Controller extends CI_Controller {
 //		$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
 
 		$myMail = "secretaria@kinderland.com.br";
-//		$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://br154.hostgator.com.br', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
-		$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
+		$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://br154.hostgator.com.br', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'secretaria@kinderland.com.br', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
 
 		$this -> load -> library('email', $config);
 		$this->load->model('email_model');
