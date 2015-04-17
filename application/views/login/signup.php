@@ -30,10 +30,15 @@
         }
 
         var cpf = document.getElementById("cpf");
+
         if (!TestaCPF(cpf.value)) {
             cpfInvalidErr = true;
             event.preventDefault();
         }
+
+        var cpfNoMask = cpf.value.replace(".", "");
+        cpfNoMask = cpfNoMask.replace(".","");
+        cpfNoMask = cpfNoMask.replace("-","");
 
         $.get(
                 "<?= $this->config->item('url_link') ?>login/checkExistingEmail?email=" + $("#email").val(),
@@ -46,7 +51,7 @@
                 });
 
         $.get(
-                "<?= $this->config->item('url_link') ?>login/checkExistingCpf?cpf=" + $("#cpf").val(),
+                "<?= $this->config->item('url_link') ?>login/checkExistingCpf?cpf=" + cpfNoMask,
                 function (data) {
                     if (data == "true") {
                         cpfExistingErr = true;
@@ -86,7 +91,8 @@
                         alert(msgExistingCPF);
                     }
                 });
-
+        
+        cpf.value = cpfNoMask;
         $("#signup_form").submit();
     }
 
@@ -125,35 +131,39 @@
     }
     /* tirado diretamente do site da receita federal */
     function TestaCPF(strCPF) {
+        var cpf = strCPF.replace(".", "");
+        cpf = cpf.replace(".","");
+        cpf = cpf.replace("-","");
         var Soma;
         var Resto;
         Soma = 0;
         //strCPF  = RetiraCaracteresInvalidos(strCPF,11);
         //pequena modificaçao para verificar todos os cpfs com todos os digitos iguais, antes so era verificado o primeiro caso
-        if (strCPF == "00000000000" || strCPF == "11111111111" || strCPF == "22222222222" || strCPF == "33333333333" ||
-                strCPF == "44444444444" || strCPF == "55555555555" || strCPF == "66666666666" || strCPF == "77777777777" ||
-                strCPF == "88888888888" || strCPF == "99999999999")
+        if (cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" ||
+                cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" ||
+                cpf == "88888888888" || cpf == "99999999999")
             return false;
         for (i = 1; i <= 9; i++)
-            Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);cpf
         Resto = (Soma * 10) % 11;
         if ((Resto == 10) || (Resto == 11))
             Resto = 0;
-        if (Resto != parseInt(strCPF.substring(9, 10)))
+        if (Resto != parseInt(cpf.substring(9, 10)))
             return false;
         Soma = 0;
         for (i = 1; i <= 10; i++)
-            Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
         Resto = (Soma * 10) % 11;
         if ((Resto == 10) || (Resto == 11))
             Resto = 0;
-        if (Resto != parseInt(strCPF.substring(10, 11)))
+        if (Resto != parseInt(cpf.substring(10, 11)))
             return false;
         return true;
     }
 
     function funcCpf() {
         var cpfCheck = document.getElementById("cpf");
+
         cpfCheck.onchange = function () {
             if (TestaCPF(cpfCheck.value)) {
                 cpfCheck.style.backgroundColor = "#FFFFFF";
@@ -229,7 +239,7 @@
               field.mask(SPMaskBehavior.apply({}, arguments), options);
             }
         };
-        $(".phone").mask(SPMaskBehavior, spOptions);
+       // $(".phone").mask(SPMaskBehavior, spOptions);
         $("#cep").mask("00000-000");
         $("#cpf").mask("000.000.000-00");
     });
@@ -408,7 +418,7 @@
                         <input type="text" class="form-control phone" placeholder="Telefone de contato 2"
                                name="phone1" id="phone1" maxlength="25" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-                                class="phone1"
+                               class="phone1"
                                value="<?php if (!empty($_POST['phone1'])) {
     echo $_POST['phone1'];
 } ?>"/>
