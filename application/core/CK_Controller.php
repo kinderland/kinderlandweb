@@ -40,7 +40,7 @@ class CK_Controller extends CI_Controller {
 			"<ul>" .
   "<li>" . "Desconto nas doações pela cessão do espaço físico da colônia Kinderland para festas de aniversário, finais de semana com amigos ou outros eventos particulares;</li>" .
   "<li>" . "Desconto nos eventos especiais organizados e realizados pela Associação Kinderland (ex. evento MaCK - Mostre a Colônia Kinderland);</li>" .
-  "<li>" . "Pré-inscrição antecipada sem garantia de vaga para a temporada de verão</li>" .
+  "<li>" . "Pré-inscrição antecipada <b>sem garantia de vaga</b> para a temporada de verão</li>" .
 "</ul>" .
 "<br><br>" .
 			"Muito obrigado pela sua contribuição, ela é
