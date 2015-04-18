@@ -24,8 +24,9 @@
 
                 <p align="justify">
                     A Associação Kinderland considera como associado as pessoas pertencentes ao nosso cadastro
-                </p>
+<!--                </p>
                 <p align="justify">
+-->
                     <?php if (isset($benemerito) && $benemerito) { ?>
                         identificadas como beneméritas ou membros da diretoria. Nestes casos, não há necessidade de doação. Entretanto, se houver interesse e possibilidade, sugerimos aos beneméritos que utilizem a opção de “Doação Avulsa” do Sistema Kinderland.
                     <?php } else { ?>
