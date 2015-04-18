@@ -195,6 +195,7 @@
     <div class="col-lg-10 middle-content">
         <div class="row">
             <div class="col-lg-8"><h4>Dados cadastrais</h4></div>
+            <div class="col-lg-4"><h6><span class="red_letters">Campos com * são de preenchimento obrigatório.</span></h6></div>
         </div>
         <hr />
 
@@ -257,13 +258,12 @@
                         </script>
                     </div>
 
-                    <label for="occupation" class="col-lg-1 control-label"> Ocupação*: </label>
+                    <label for="occupation" class="col-lg-1 control-label"> Ocupação: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Ocupação"
                                name="occupation"  value="<?= $user->getOccupation() ?>"
-                               onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-                               oninput="setCustomValidity('')"/>
+                               onkeypress="return validateLetterInput(event);"
+                               />
                     </div>
                 </div>
             </div>
@@ -328,9 +328,9 @@
             <br />
             <div class="row">
                 <div class="form-group">
-                    <label for="phone1" class="col-lg-1 control-label"> Telefone 1*: </label>
+                    <label for="phone1" class="col-lg-1 control-label"> Telefone*: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control phone" placeholder="Telefone de contato 1"
+                        <input type="text" class="form-control phone" placeholder="(ddd) Telefone de contato"
                                name="phone1" value="<?= $user->getPhone1() ?>" id="phone1"
                                onkeypress="return validateNumberInput(event);" required
                                class = "phone1"
@@ -338,9 +338,9 @@
                                oninput="setCustomValidity('')"/>
                     </div>
 
-                    <label for="phone2" class="col-lg-1 control-label"> Telefone 2: </label>
+                    <label for="phone2" class="col-lg-1 control-label"> Telefone Secundário: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control phone" placeholder="Telefone de contato 2"
+                        <input type="text" class="form-control phone" placeholder="(ddd) Telefone secundário"
                                name="phone2" value="<?= $user->getPhone2() ?>"
                                onkeypress="return validateNumberInput(event);"/>
                     </div>
