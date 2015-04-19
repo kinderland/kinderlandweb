@@ -35,16 +35,25 @@ class CK_Controller extends CI_Controller {
 	public function sendPaymentConfirmationMail($donation, $payment) {
 		if ($donation -> getDonationType() == DONATION_TYPE_ASSOCIATE) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
-			$emailString = "Prezad" . (($person -> getGender() == 'F') ? 'a' : 'o') . " " . $person -> getFullname() . ", <br><br>" . "Sua doação para a Associação Kinderland foi recebida com sucesso. Estamos registrando seu
-			CPF em nossa base de associados do ano 2015.<br><br>" . "Lembramos que nossos associados têm como benefícios, entre outros:<br><br>" .
+			$emailString = "Prezad" . (($person -> getGender() == 'F') ? 'a' : 'o') . " " . $person -> getFullname() . ", <br><br>" . 
+			"Sua doação para a Associação Kinderland foi recebida com sucesso. Estamos registrando seu
+			CPF em nossa base de associados do ano 2015.<br><br>" . 
+			"Esta contribuição é muito importante para nós, pois permite que façamos diversos investimentos 
+			no patrimônio da Colônia para que as futuras gerações possam usufruir desta experiência única 
+			que é a Kinderland.<br><br>
+			Da mesma forma, sua colaboração permite que continuemos a promover os projetos sociais em 
+			parceria com outras instituições, com o objetivo de contribuir para a construção de uma 
+			sociedade mais justa e igualitária.<br><br>
+			Os sócios-doadores da Kinderland têm, entre outros, os seguintes benefícios:<br><br>" .
 			"<ul>" .
-  "<li>" . "Desconto nas doações pela cessão do espaço físico da colônia Kinderland para festas de aniversário, finais de semana com amigos ou outros eventos particulares;</li>" .
-  "<li>" . "Desconto nos eventos especiais organizados e realizados pela Associação Kinderland (ex. evento MaCK - Mostre a Colônia Kinderland);</li>" .
-  "<li>" . "Pré-inscrição antecipada <b>sem garantia de vaga</b> para a temporada de verão</li>" .
-"</ul>" .
-"<br><br>" .
-			"Muito obrigado pela sua contribuição, ela é
-			muito importante para nós.<br><br><br><br> Diretoria da Associação Kinderland";
+			  "<li>" . "Desconto nas doações pela cessão do espaço físico da colônia Kinderland para festas de aniversário, finais de semana com amigos ou outros eventos particulares;</li>" .
+			  "<li>" . "Desconto nos eventos especiais organizados e realizados pela Associação Kinderland (ex. evento MaCK - Mostre a Colônia Kinderland);</li>" .
+			  "<li>" . "Pré-inscrição antecipada <b>sem garantia de vaga</b> para a temporada de verão</li>" .
+			"</ul>" .
+			"<br><br>" .
+			"Recomendamos que leiam atentamente as condições dos sócios-doadores  disponíveis no nosso site: 
+			<a href='http://www.kinderland.com.br/como-ajudar/quero-ser-socio/' target='_blank'>http://www.kinderland.com.br/como-ajudar/quero-ser-socio/</a> <br><br>
+ 			Mais uma vez, nosso MUITO OBRIGADO!<br><br>Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Doacao campanha associados";
 
 			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
