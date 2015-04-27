@@ -59,6 +59,12 @@
 
             $donation_id = $this -> input -> post('donation_id', TRUE);
             $donation = $this->donation_model->getDonationById($donation_id);
+            if ($donation->getDonationStatus() != 1){
+                $this->Logger->info("Donation outdated or closed. Redirecting to screen reporting this problem");
+                $data['donation'] = $donation;
+                $this->loadView("payments/checkout_timeout", $data);
+                return;
+            }
             $transaction_value = $donation->getDonatedValue();//$this -> input -> post('transaction_value', TRUE);
             $description = $this -> input -> post('description', TRUE);
             $card_flag = $this -> input -> post('card_flag', TRUE);
@@ -112,20 +118,37 @@
         }
 		
         public function rotinaPagamentos(){
+            $this->Logger->info("Iniciando rotina de recuperacao de pagamentos Cielo");
         	$donations = $this->donation_model->getAllPendingTransactions();
             $retorno = array();
             
+            $this->Logger->info("Doacoes a serem analisadas");
+            $this->Logger->debug(print_r($donations, true));
+
+            $abandoned = 0;
+
             foreach($donations as $donation){
-	            $payments = $this->cielotransaction_model -> getAllPaymentsByDonationId($donation->getDonationId);
-	            foreach($payments as $payment){
-    	            $xml = $this->updatePaymentStatus($payment);                
-        	        $retorno[] = $xml;                
-            	}
+                $this->Logger->info("Pagamentos:");
+	            $payments = $this->cielotransaction_model -> getAllPaymentsByDonationId($donation->getDonationId());
+                $this->Logger->debug(print_r($payments, true));
+                if(count($payments) == 0) {
+                    $this->Logger->info("Configurando doacao como abandonada");
+                    $abandoned++;
+                    $this->donation_model->updateDonationStatus($donation->getDonationId(), DONATION_STATUS_ABANDONED);
+                } else {
+                    foreach($payments as $payment){
+                        $this->Logger->info("Atualizando status");
+                        $xml = $this->updatePaymentStatus($payment);                
+                        $retorno[] = $xml;   
+                        $this->Logger->debug(print_r($xml, true));             
+                    }
+                }   
             }               
-                                        
-            $data["transactions"] = $retorno;
-           
-            $this -> loadView("payments/result", $data);                        
+            $this->Logger->info("Total de doacoes processadas: ". count($donations));
+            $this->Logger->info("Total de doacoes abandonadas: ". $abandoned);
+            $this->Logger->info("Total de doacoes atualizadas: ". (count($donations)-$abandoned));
+
+            $this->Logger->info("Fim da execucao da rotina de atualizacao de pagamentos");
         }
 		
 
@@ -144,9 +167,23 @@
 					if($donation->getDonationStatus() == DONATION_STATUS_PAID)
 						return $xml;
                     $this->donation_model->updateDonationStatus($payment->getDonation_id(), DONATION_STATUS_PAID);
-					$this->sendPaymentConfirmationMail($donation,$payment);
+					//$this->sendPaymentConfirmationMail($donation,$payment);
                     $this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);					
 					return $xml;
+                } else if($status == CieloTransaction::TRANSACAO_CANCELADA){
+                    if($donation->getDonationStatus() == DONATION_STATUS_PAID)
+                        return $xml;
+                    $this->donation_model->updateDonationStatus($payment->getDonation_id(), DONATION_STATUS_ABANDONED);
+                    //$this->sendPaymentConfirmationMail($donation,$payment);
+                    //$this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);                  
+                    return $xml;
+                } else if($status == CieloTransaction::TRANSACAO_NAO_AUTORIZADA || $status == CieloTransaction::TRANSACAO_NAO_AUTENTICADA){
+                    if($donation->getDonationStatus() == DONATION_STATUS_PAID)
+                        return $xml;
+                    $this->donation_model->updateDonationStatus($payment->getDonation_id(), DONATION_STATUS_ERROR);
+                    //$this->sendPaymentConfirmationMail($donation,$payment);
+                    //$this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);                  
+                    return $xml;
                 }
 
                 return $xml;

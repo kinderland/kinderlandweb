@@ -87,8 +87,8 @@ class donation_model extends CK_Model {
 
     public function getAllPendingTransactions() {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * FROM donation WHERE donation_status = ? ORDER BY date_created DESC";
-        $resultSet = $this->executeRows($this->db, $sql, array(1));
+        $sql = "SELECT * FROM donations_pending";
+        $resultSet = $this->executeRows($this->db, $sql);
         $donations = array();
         foreach ($resultSet as $row) {
             $donations[] = Donation::createDonationObject($row);

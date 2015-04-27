@@ -80,5 +80,17 @@
 			return $this->donationType;
 		}
 
+		public function getDonationStatusName(){
+			switch($this->donationStatus){
+				case DONATION_STATUS_ABANDONED:
+					return "abandonada";
+				case DONATION_STATUS_OPEN:
+					return "aberta";
+				case DONATION_STATUS_PAID:
+					return "pago";
+				case DONATION_STATUS_ERROR:
+					return "não autorizada";
+			}
+		}
 	}
 ?>
