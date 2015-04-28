@@ -30,7 +30,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, COMMON_USER)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/menu">
+                        <a href="<?= $this->config->item('url_link'); ?>user/menu/user">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%; ">Usuário comum</button>
                         </a>
                     </div>
@@ -51,7 +51,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, DIRECTOR)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="#">
+                        <a href="<?= $this->config->item('url_link'); ?>user/menu/director">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Diretor</button>
                         </a>
                     </div>

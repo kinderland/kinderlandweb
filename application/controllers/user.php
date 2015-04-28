@@ -75,9 +75,19 @@ class User extends CK_Controller {
         }
     }
 
-    public function menu() {
-        $data['fullname'] = $this->session->userdata("fullname");
-        $this->loadView("user/menu", $data);
+    public function menu($type) {
+        switch ($type) {
+            case "user":
+                $data['fullname'] = $this->session->userdata("fullname");
+                $this->loadView("user/menu", $data);
+                break;
+            case "director":
+                $data['fullname'] = $this->session->userdata("fullname");
+                $this->loadView("user/menu_director", $data);
+                break;
+            default:
+                break;
+        }
     }
 
 }
