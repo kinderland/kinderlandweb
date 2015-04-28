@@ -4,10 +4,10 @@
         <h3>Relatório de usuários</h3><br>
         <table>
             <tr>
-                <td>
+                <td width='150px'>
                     Cadastrados
                 </td>
-                <td>
+                <td align='right'>
                     <?php echo $users[0]->count_users; ?>
                 </td>
             </tr>
@@ -15,7 +15,7 @@
                 <td>
                     Associados
                 </td>
-                <td>
+                <td align='right'>
                     <?php echo $users[0]->count_associates; ?>
                 </td>
             </tr>
@@ -23,7 +23,7 @@
                 <td>
                     Beneméritos
                 </td>
-                <td>
+                <td align='right'>
                     <?php echo $users[0]->count_benemerit; ?>
                 </td>
             </tr>
@@ -31,7 +31,7 @@
                 <td>
                     Não associados
                 </td>
-                <td>
+                <td align='right'>
                     <?php echo $users[0]->count_non_associate; ?>
                 </td>
             </tr>
