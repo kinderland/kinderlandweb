@@ -1,6 +1,7 @@
 <div class = "row">
     <?php require_once APPPATH . 'views/include/director_left_menu.php' ?>
     <div class="col-lg-10" bgcolor="red">
+        <h3>Relatório de usuários</h3><br>
         <table>
             <tr>
                 <td>
