@@ -64,6 +64,28 @@
 
             return false;
         }
+		
+		public function statisticsPaymentsByCardFlag($searchfor){
+			$where = "";
+			if($searchfor !== FALSE){
+				$where = "where payment_status = $searchfor";
+			}
+
+            $sql = "Select payment_type,cardflag,payment_portions,count(distinct donation_id) as contagem from cielo_transaction $where group by payment_type,cardflag,payment_portions";
+
+            $resultSet = $this -> executeRows($this -> db, $sql);
+			
+			foreach($resultSet as $row){
+				$payment_type = $row->payment_type;
+				$cardflag = $row->cardflag;
+				$payment_portions = $row->payment_portions;
+				$result[$payment_type][$cardflag][$payment_portions] = $row->contagem;
+			}
+
+            return $result;
+
+			
+		}
 
     }
 ?>
