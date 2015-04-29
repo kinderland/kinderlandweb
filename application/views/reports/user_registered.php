@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 <td>
-                    Associados
+                    Sócios contribuintes
                 </td>
                 <td align='right'>
                     <?php echo $users[0]->count_associates; ?>
@@ -21,7 +21,7 @@
             </tr>
             <tr>
                 <td>
-                    Beneméritos
+                    Sócios beneméritos
                 </td>
                 <td align='right'>
                     <?php echo $users[0]->count_benemerit; ?>
