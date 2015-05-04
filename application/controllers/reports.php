@@ -44,8 +44,7 @@ class Reports extends CK_Controller {
 		}
 		$debito = 0;
 		if (isset($results["debito"])) {
-			foreach ($results[
-			"debito" ] as $result) {
+			foreach ($results["debito"] as $result) {
 				$debito += $result;
 			}
 		}

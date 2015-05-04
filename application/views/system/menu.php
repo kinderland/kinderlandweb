@@ -30,7 +30,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, COMMON_USER)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/menu/user">
+                        <a href="<?= $this->config->item('url_link'); ?>user/menu">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%; ">Usuário comum</button>
                         </a>
                     </div>
@@ -41,7 +41,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, SYSTEM_ADMIN)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/menu/administrador">
+                        <a href="<?= $this->config->item('url_link'); ?>user/administrador">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Administrador</button>
                         </a>
                     </div>
@@ -51,7 +51,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, DIRECTOR)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/menu/director">
+                        <a href="<?= $this->config->item('url_link'); ?>user/director">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Diretor</button>
                         </a>
                     </div>
@@ -61,7 +61,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, SECRETARY)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/menu/secretaria">
+                        <a href="<?= $this->config->item('url_link'); ?>user/secretaria">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Secretária</button>
                         </a>
                     </div>
@@ -71,7 +71,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, COORDINATOR)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/menu/coordenador">
+                        <a href="<?= $this->config->item('url_link'); ?>user/coordenador">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Coordenador</button>
                         </a>
                     </div>

@@ -111,6 +111,7 @@ define('SUBSCRIPTION_STATUS_SUBSCRIBED',	3);
 define('DONATION_STATUS_ABANDONED', -1);
 define('DONATION_STATUS_OPEN',		 1);
 define('DONATION_STATUS_PAID',  	 2);
+define('DONATION_STATUS_ERROR',  	 3);
 
 /*
 |--------------------------------------------------------------------------

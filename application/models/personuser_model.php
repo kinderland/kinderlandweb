@@ -95,7 +95,7 @@ class personuser_model extends CK_Model {
                     (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
                     FROM person_user AS pu
                     NATURAL JOIN person AS p
-                    NATURAL JOIN address AS a
+                    LEFT JOIN address AS a on a.address_id = p.address_id
                     NATURAL JOIN person_user_type AS put
                     WHERE p.person_id = ?";
 

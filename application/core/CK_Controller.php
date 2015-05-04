@@ -123,7 +123,7 @@ class CK_Controller extends CI_Controller {
 			$this -> Logger -> info("Email enviado com sucesso para: " . $person -> getFullname() . " com o assunto " . $subject);
 			return TRUE;
 		} else {
-			$this -> email_model-> saveEmail($subject, $content, $person -> getEmail, $cc, $bcc, TRUE);
+			$this -> email_model-> saveEmail($subject, $content, $person -> getEmail(), $cc, $bcc, TRUE);
 			$this -> Logger -> error("Problema ao enviar email para: " . $person -> getFullname() . " com o assunto " . $subject . "\n Texto de debug foi: " . $this -> email -> print_debugger());
 			return FALSE;
 		}

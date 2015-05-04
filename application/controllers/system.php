@@ -45,7 +45,7 @@ class System extends CK_Controller {
 				//TO DO LATER
 				break;
 			case DIRECTOR:
-				//TO DO LATER
+				redirect("user/director");
 				break;
 			case SECRETARY:
 				//TO DO LATER

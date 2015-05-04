@@ -243,3 +243,22 @@ CREATE OR REPLACE VIEW donations_pending AS (
     WHERE donation_status = 1 
     AND (current_timestamp - donation.date_created) > '1 hour'::interval
 );
+
+CREATE OR REPLACE VIEW v_report_user_registered AS 
+ SELECT count_users.count_users,
+    count_associates.count_associates,
+    count_benemerit.count_benemerit,
+    count_non_benemerit.count_non_associate
+   FROM ( SELECT count(*) AS count_users
+           FROM person_user) count_users,
+    ( SELECT count(*) AS count_associates
+           FROM associates
+             JOIN person ON associates.person_id = person.person_id AND person.benemerit = false) count_associates,
+    ( SELECT count(*) AS count_benemerit
+           FROM associates
+             JOIN person ON associates.person_id = person.person_id AND person.benemerit = true) count_benemerit,
+    ( SELECT count(*) AS count_non_associate
+           FROM person_user
+          WHERE NOT (person_user.person_id IN ( SELECT associates.person_id
+                   FROM associates))) count_non_benemerit;
+
