@@ -155,6 +155,12 @@ class CK_Controller extends CI_Controller {
 		$this -> output -> set_output($output);
 	}
 
+	public function loadReportView($viewName, $data = array()) {
+		$output = $this -> load -> view('include/report/header', true);
+		$output .= $this -> load -> view($viewName, $data, true);
+		$this -> output -> set_output($output);
+	}
+
 	public function checkSession() {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		if (!$this -> session -> userdata('user_id') || !$this -> session -> userdata('fullname')) {

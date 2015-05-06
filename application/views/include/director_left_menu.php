@@ -1,11 +1,39 @@
+
+<script>
+	$(function() {
+		$( "#accordion" ).accordion({
+	        collapsible: true
+		});
+	});
+</script>
 <div class="col-lg-2  left-action-bar">
-    <ul class="nav nav-pills nav-stacked">
-        <li>Relatórios
-            <ul class="nav nav-pills nav-stacked">
-                <li><a href="<?= $this->config->item('url_link'); ?>reports/user_registered">Usuários</a></li>
-                <!-- Relatorio ainda nao funcionando, descomentar quando estiver operante -->
-                	<li><a href="<?= $this->config->item('url_link'); ?>reports/payments_bycard">Pagamentos</a></li>
-                
-            </ul>
-        </li>
+	<div id="accordion">
+		<h3>Usuários</h3>
+		<div>
+			<a href="#">
+				Administração
+			</a>
+			<br />
+			<a href="<?= $this->config->item('url_link'); ?>reports/user_reports">
+				Relatórios
+			</a>
+		</div>
+		<h3>Campanha de sócios</h3>
+		<div>
+			
+		</div>
+		<h3>Colônia</h3>
+		<div>
+
+		</div>
+		<h3>Eventos</h3>
+		<div>
+			
+		</div>
+		<h3>Financeiro</h3>
+		<div>
+			Administração <br />
+			<a href="<?= $this->config->item('url_link'); ?>reports/finance_reports">Relatórios</a>
+		</div>
+	</div>
 </div>

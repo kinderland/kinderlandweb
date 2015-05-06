@@ -13,9 +13,18 @@ class Reports extends CK_Controller {
 		$this -> cielotransaction_model -> setLogger($this -> Logger);
 	}
 
+	public function user_reports() {
+		$this->loadView("reports/users/user_reports_container");
+	}
+
 	public function user_registered() {
 		$data['users'] = $this -> personuser_model -> getAllUserRegistered();
-		$this -> loadView("reports/user_registered", $data);
+		$this -> loadReportView("reports/users/user_registered", $data);
+	}
+
+	public function all_users() {
+		$data['users'] = $this->personuser_model->getAllUsersDetailed();
+		$this->loadReportView("reports/users/all_users", $data);
 	}
 
 	public function payments_bycard() {
@@ -52,7 +61,7 @@ class Reports extends CK_Controller {
 		$data['debito'] = $debito;
 		$data['soma'] = $debito + $creditos[1] + $creditos[2] + $creditos[3];
 		$data['title_extra'] = $title_extra;
-		$this -> loadView("reports/payments_bycard", $data);
+		$this -> loadView("reports/finances/payments_bycard", $data);
 	}
 
 }
