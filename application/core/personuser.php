@@ -8,10 +8,10 @@
 		private $userTypes;
 
 		public function __construct($personId, $fullname, 
-			$gender, $email, /*$associate,*/ $benemerit, $address, $login,
+			$gender, $email, $address, $login,
 			$cpf, $occupation, $phone1, $phone2, $userTypes){
 			parent::__construct($personId, $fullname, 
-			$gender, $email, $benemerit, $address, $phone1, $phone2);
+			$gender, $email, $address, $phone1, $phone2);
 
 			$this->login = $login;
 			$this->cpf = $cpf;
@@ -25,8 +25,6 @@
 				$resultRow->fullname,
 				$resultRow->gender, 
 				$resultRow->email,
-				//$resultRow->associate, 
-				$resultRow->benemerit,
 				null,
 				$resultRow->login,
 				$resultRow->cpf,

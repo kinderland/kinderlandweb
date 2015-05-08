@@ -43,7 +43,7 @@
                                 foreach($users as $user) {
                             ?>
                                 <tr>
-                                    <td><?= $user->fullname ?></td>
+                                    <td><a target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $user->person_id ?>"><?= $user->fullname ?></a></td>
                                     <td><?= $user->email ?></td>
                                     <td><?= ($user->associate)?"SIM":"NÃO" ?></td>
                                 </tr>

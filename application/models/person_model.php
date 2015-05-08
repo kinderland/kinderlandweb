@@ -28,11 +28,11 @@ class person_model extends CK_Model{
 		return false;
 	}
 
- 	public function updatePerson($fullname, $gender, $email, $person_id) {
+ 	public function updatePerson($fullname, $gender, $email, $person_id, $address_id) {
  		$this->Logger->info("Running: " . __METHOD__);
  		
-        $sql = "UPDATE person SET fullname=?, gender=?, email=? WHERE person_id=?";
-        if ($this->execute($this->db, $sql, array($fullname, $gender, $email, intval($person_id))))
+        $sql = "UPDATE person SET fullname=?, gender=?, email=?, address_id=? WHERE person_id=?";
+        if ($this->execute($this->db, $sql, array($fullname, $gender, $email, $address_id, intval($person_id))))
             return true;
         return false;
     } 
@@ -46,6 +46,22 @@ class person_model extends CK_Model{
     		return Person::createPersonObjectSimple($result);
 
     	return null;
+    }
+
+    public function getPersonFullById($personId){
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "SELECT *, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,
+                    (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
+    			FROM person p
+    			LEFT JOIN address a on a.address_id = p.address_id
+    			LEFT JOIN person_user pu on pu.person_id = p.person_id
+    			WHERE p.person_id = ?";
+    	$result = $this->executeRow($this->db, $sql, array(intval($personId), intval($personId), intval($personId)));
+
+    	if(!$result)
+    		return null;
+
+    	return $result;
     }
 	
 	public function emailExists($email) {

@@ -2,6 +2,7 @@
 
 require_once APPPATH . 'core/CK_Controller.php';
 require_once APPPATH . 'core/personuser.php';
+require_once APPPATH . 'core/donation.php';
 
 class Login extends CK_Controller {
 
@@ -34,6 +35,7 @@ class Login extends CK_Controller {
         // Means the user returned from a successfull password reset procedure
         if (isset($_GET['rp']))
             $data['resetPassword'] = $_GET['rp'];
+
         $this->loadView('login/login', $data);
     }
 

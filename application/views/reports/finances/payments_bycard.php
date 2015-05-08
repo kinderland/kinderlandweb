@@ -1,6 +1,4 @@
 <div class = "row">
-	<?php require_once APPPATH . 'views/include/director_left_menu.php'
-	?>
 	<div class="col-lg-10" bgcolor="red">
 		<h3>Pagamentos por cartão <?php echo $title_extra ?> </h3>
         <a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard">

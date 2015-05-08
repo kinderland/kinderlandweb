@@ -55,9 +55,14 @@ class User extends CK_Controller {
             $address = $this->address_model->getAddressByPersonId($person_id);
             $this->generic_model->startTransaction();
 
-            $this->person_model->updatePerson($fullname, $gender, $email, $person_id);
+            if( $address )
+                $this->address_model->updateAddress($street, $number, $complement, $city, $cep, $uf, $neighborhood, $address->getAddressId());
+            else
+                $addressId = $this->address_model->insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
+
+            $this->person_model->updatePerson($fullname, $gender, $email, $person_id, $addressId);
             $this->personuser_model->updatePersonUser($email, $cpf, $occupation, $person_id);
-            $this->address_model->updateAddress($street, $number, $complement, $city, $cep, $uf, $neighborhood, $address->getAddressId());
+
             $this->telephone_model->updatePhone($person_id, $phone1, $phone2);
             if ($password != '')
                 $this->personuser_model->updatePassword($password, $person_id);
@@ -73,6 +78,29 @@ class User extends CK_Controller {
             $this->generic_model->rollbackTransaction();
             $this->edit();
         }
+    }
+
+    public function details() {
+        if (!isset($_GET['id'])){
+            $this->loadView("user/not_found");
+            return;
+        }
+
+        $personId = $_GET['id'];
+        if($personId == null || strlen($personId) == 0){
+            $this->loadView("user/not_found");
+            return;
+        }
+
+        $user = $this->person_model->getPersonFullById($personId);
+        if ( !$personId ){
+            $this->loadView("user/not_found");
+            return;
+        }
+           
+        $data["user"] = $user;
+        $this->loadView("user/details", $data); 
+
     }
 
     public function menu() {

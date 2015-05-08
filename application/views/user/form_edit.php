@@ -270,20 +270,20 @@
             <br />
             <div class="row">
                 <div class="form-group">
-                    <label for="street" class="col-lg-1 control-label"> Rua*: </label>
+                    <label for="street" class="col-lg-1 control-label"> Rua: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Logradouro"
                                name="street" value="<?= $user->getAddress()->getStreet() ?>"
-                               onkeypress="return validateLetterInput(event);" required
+                               onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"/>
                     </div>
 
-                    <label for="number" class="col-lg-1 control-label"> Número*: </label>
+                    <label for="number" class="col-lg-1 control-label"> Número: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Número"
                                name="number" value="<?= $user->getAddress()->getPlaceNumber() ?>"
-                               onkeypress="return validateLetterAndNumberInput(event);" required
+                               onkeypress="return validateLetterAndNumberInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"/>
                     </div>
@@ -298,20 +298,20 @@
             <br />
             <div class="row">
                 <div class="form-group">
-                    <label for="city" class="col-lg-1 control-label"> Cidade*: </label>
+                    <label for="city" class="col-lg-1 control-label"> Cidade: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Cidade"
                                name="city" value="<?= $user->getAddress()->getCity() ?>"
-                               onkeypress="return validateLetterInput(event);" required
+                               onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"/>
                     </div>
 
-                    <label for="cep" class="col-lg-1 control-label"> CEP*: </label>
+                    <label for="cep" class="col-lg-1 control-label"> CEP: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="CEP"
                                name="cep" value="<?= $user->getAddress()->getCEP() ?>" maxlength="8"
-                               pattern=".{8,}" required id="cep"
+                               pattern=".{8,}" id="cep"
                                onkeypress="return validateNumberInput(event);"
                                oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
                                oninput="setCustomValidity('')"/>

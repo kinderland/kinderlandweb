@@ -89,14 +89,14 @@ class personuser_model extends CK_Model {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "SELECT
                     p.person_id, put.user_type, pu.login, a.address_id, pu.cpf, pu.occupation,
-                    p.fullname, p.gender, p.email, p.benemerit, a.street,
+                    p.fullname, p.gender, p.email, a.street,
                     a.place_number, a.complement, a.city, a.cep, a.uf,
                     a.neighborhood, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,
                     (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
                     FROM person_user AS pu
-                    NATURAL JOIN person AS p
+                    INNER JOIN person AS p on p.person_id = pu.person_id
                     LEFT JOIN address AS a on a.address_id = p.address_id
-                    NATURAL JOIN person_user_type AS put
+                    LEFT JOIN person_user_type AS put on put.person_id = pu.person_id
                     WHERE p.person_id = ?";
 
         $rows = $this->executeRows($this->db, $sql, array(intval($person_id), intval($person_id), intval($person_id)));

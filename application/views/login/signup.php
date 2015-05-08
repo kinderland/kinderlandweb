@@ -331,7 +331,7 @@
                     <label for="occupation" class="col-lg-1 control-label"> Ocupação: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Ocupação"
-                               name="occupation" onkeypress="return validateLetterInput(event);" required
+                               name="occupation" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
                                value=""/>
@@ -341,10 +341,10 @@
             <br />
             <div class="row">
                 <div class="form-group">
-                    <label for="street" class="col-lg-1 control-label"> Logradouro*: </label>
+                    <label for="street" class="col-lg-1 control-label"> Logradouro: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Logradouro"
-                               name="street" onkeypress="return validateLetterInput(event);" required
+                               name="street" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
                                value="<?php if (!empty($_POST['street'])) {
@@ -352,10 +352,10 @@
 } ?>"/>
                     </div>
 
-                    <label for="number" class="col-lg-1 control-label"> Número*: </label>
+                    <label for="number" class="col-lg-1 control-label"> Número: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Número"
-                               name="number" onkeypress="return validateLetterAndNumberInput(event);" required
+                               name="number" onkeypress="return validateLetterAndNumberInput(event);" 
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
                                value="<?php if (!empty($_POST['number'])) {
@@ -376,10 +376,10 @@
             <br />
             <div class="row">
                 <div class="form-group">
-                    <label for="city" class="col-lg-1 control-label"> Cidade*: </label>
+                    <label for="city" class="col-lg-1 control-label"> Cidade: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Cidade"
-                               name="city" onkeypress="return validateLetterInput(event);" required
+                               name="city" onkeypress="return validateLetterInput(event);" 
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
                                value="<?php if (!empty($_POST['city'])) {
@@ -387,11 +387,11 @@
 } ?>"/>
                     </div>
 
-                    <label for="cep" class="col-lg-1 control-label"> CEP*: </label>
+                    <label for="cep" class="col-lg-1 control-label"> CEP: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="CEP"
                                name="cep" maxlength="8" onkeypress="return validateNumberInput(event);"
-                               pattern=".{8,}" required id="cep"
+                               pattern=".{8,}" id="cep"
                                oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
                                oninput="setCustomValidity('')" onblur="maskCEP(this)"
                                value="<?php if (!empty($_POST['cep'])) {

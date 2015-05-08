@@ -16,6 +16,9 @@ class Reports extends CK_Controller {
 	public function user_reports() {
 		$this->loadView("reports/users/user_reports_container");
 	}
+	public function finance_reports() {
+		$this->loadView("reports/finances/finance_reports_container");
+	}
 
 	public function user_registered() {
 		$data['users'] = $this -> personuser_model -> getAllUserRegistered();
@@ -61,7 +64,7 @@ class Reports extends CK_Controller {
 		$data['debito'] = $debito;
 		$data['soma'] = $debito + $creditos[1] + $creditos[2] + $creditos[3];
 		$data['title_extra'] = $title_extra;
-		$this -> loadView("reports/finances/payments_bycard", $data);
+		$this -> loadReportView("reports/finances/payments_bycard", $data);
 	}
 
 }

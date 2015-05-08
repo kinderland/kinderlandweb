@@ -33,7 +33,6 @@ CREATE TABLE person (
     date_updated timestamp without time zone,
     gender character(1),
     email character varying(120),
-    benemerit boolean default false,
     address_id integer REFERENCES address,
     CHECK (gender = 'M' OR gender = 'F')
 );
@@ -187,6 +186,12 @@ CREATE TABLE cielo_transaction (
     transaction_value decimal(9,2)
 );
 
+CREATE TABLE benemerits (
+    person_id integer not null REFERENCES person PRIMARY KEY,
+    date_started timestamp without time zone default current_timestamp,
+    date_finished timestamp without time zone,
+);
+
 
 CREATE VIEW open_public_events as (SELECT * FROM event 
                 WHERE current_timestamp BETWEEN date_start_show AND date_finish_show 
@@ -206,8 +211,8 @@ CREATE VIEW associates AS (
     pu.login,
     pu.occupation
    FROM person_user pu
-  INNER JOIN person p on p.person_id = pu.person_id
-  WHERE p.benemerit = true
+  INNER JOIN benemerits b on b.person_id = pu.person_id
+  WHERE p.date_finished is null
 );
 
 CREATE VIEW donations_completed AS (
@@ -252,11 +257,10 @@ CREATE OR REPLACE VIEW v_report_user_registered AS
    FROM ( SELECT count(*) AS count_users
            FROM person_user) count_users,
     ( SELECT count(*) AS count_associates
-           FROM associates
-             JOIN person ON associates.person_id = person.person_id AND person.benemerit = false) count_associates,
+           FROM associates) count_associates,
     ( SELECT count(*) AS count_benemerit
-           FROM associates
-             JOIN person ON associates.person_id = person.person_id AND person.benemerit = true) count_benemerit,
+           FROM benemerits b
+          WHERE date_finished is null) count_benemerit,
     ( SELECT count(*) AS count_non_associate
            FROM person_user
           WHERE NOT (person_user.person_id IN ( SELECT associates.person_id
