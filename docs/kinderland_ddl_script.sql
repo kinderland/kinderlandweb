@@ -189,7 +189,7 @@ CREATE TABLE cielo_transaction (
 CREATE TABLE benemerits (
     person_id integer not null REFERENCES person PRIMARY KEY,
     date_started timestamp without time zone default current_timestamp,
-    date_finished timestamp without time zone,
+    date_finished timestamp without time zone
 );
 
 
@@ -212,7 +212,7 @@ CREATE VIEW associates AS (
     pu.occupation
    FROM person_user pu
   INNER JOIN benemerits b on b.person_id = pu.person_id
-  WHERE p.date_finished is null
+  WHERE b.date_finished is null
 );
 
 CREATE VIEW donations_completed AS (
