@@ -125,6 +125,8 @@ class Login extends CK_Controller {
         $gender = $_POST['gender'];
         $email = $_POST['email'];
         $cpf = $_POST['cpf'];
+		$cpf =  str_replace(".", "", $cpf);
+		$cpf =  str_replace("-", "", $cpf);		
         $street = $_POST['street'];
         $number = $_POST['number'];
         $city = $_POST['city'];

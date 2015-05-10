@@ -68,7 +68,7 @@
             return false;
         }
 
-        cpf.value = cpfNoMask;
+        //cpf.value = cpfNoMask;
     }
     /* permite apenas numeros, tab e backspace*/
     function validateNumberInput(evt) {

@@ -92,7 +92,7 @@
                     }
                 });
         
-        cpf.value = cpfNoMask;
+//        cpf.value = cpfNoMask;
         $("#signup_form").submit();
     }
 
@@ -413,10 +413,10 @@
                 <div class="form-group">
                     <label for="phone1" class="col-lg-1 control-label"> Telefone*: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control phone" placeholder="(ddd) Telefone de contato"
-                               name="phone1" id="phone1" maxlength="25" required
+                        <input type="text" class="form-control phone phone1" placeholder="(ddd) Telefone de contato"
+                               name="phone1" id="phone1" maxlength="25" required onkeypress="return validateNumberInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-                               class="phone1"
+                               oninput="setCustomValidity('')"
                                value="<?php if (!empty($_POST['phone1'])) {
     echo $_POST['phone1'];
 } ?>"/>
