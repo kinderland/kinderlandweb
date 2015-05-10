@@ -176,6 +176,8 @@
                         return CieloTransaction::CIELO_SHOP_KEY_TEST;
                     case 'production' :
                         return CieloTransaction::CIELO_SHOP_KEY;
+                    case 'testing' :
+                        return CieloTransaction::CIELO_SHOP_KEY;
                     default :
                         return CieloTransaction::CIELO_SHOP_KEY_TEST;
                 }
@@ -189,6 +191,8 @@
                         return CieloTransaction::CIELO_SHOP_ID_TEST;
                     case 'production' :
                         return CieloTransaction::CIELO_SHOP_ID;
+                    case 'testing' :
+                        return CieloTransaction::CIELO_SHOP_ID;
                     default :
                         return CieloTransaction::CIELO_SHOP_ID_TEST;
                 }
@@ -201,6 +205,8 @@
                     case 'development' :
                         return CieloTransaction::CIELO_URL_TEST;
                     case 'production' :
+                        return CieloTransaction::CIELO_URL;
+                    case 'testing' :
                         return CieloTransaction::CIELO_URL;
                     default :
                         return CieloTransaction::CIELO_URL_TEST;
