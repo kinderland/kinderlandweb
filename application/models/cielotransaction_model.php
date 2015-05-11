@@ -74,7 +74,7 @@
             $sql = "Select payment_type,cardflag,payment_portions,count(distinct donation_id) as contagem from cielo_transaction $where group by payment_type,cardflag,payment_portions";
 
             $resultSet = $this -> executeRows($this -> db, $sql);
-			
+			$result = array();
 			foreach($resultSet as $row){
 				$payment_type = $row->payment_type;
 				$cardflag = $row->cardflag;

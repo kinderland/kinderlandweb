@@ -45,7 +45,7 @@
                                 <tr>
                                     <td><a target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $user->person_id ?>"><?= $user->fullname ?></a></td>
                                     <td><?= $user->email ?></td>
-                                    <td><?= ($user->associate)?"SIM":"NÃO" ?></td>
+                                    <td><?= ($user->associate == "t")?"SIM":"NÃO" ?></td>
                                 </tr>
                             <?php
                                 }

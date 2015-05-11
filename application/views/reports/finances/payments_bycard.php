@@ -22,7 +22,6 @@ function imprimeDados($result, $tipo, $cartao) {
 	<div class="col-lg-10" bgcolor="red">
 		<h5>Número de sócios contribuintes: <?php echo $associates ?> </h5>
 
-		<h3>Doações por cartão </h3>
 		<link href="http://www.kinderlandteste.com/kinderlandweb/assets/css/basic.css" rel="stylesheet" />
 		<!--<link href="http://www.kinderlandteste.com/kinderlandweb/assets/css/old/screen.css" rel="stylesheet" />-->
 		<link href="http://www.kinderlandteste.com/kinderlandweb/assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -40,7 +39,7 @@ function imprimeDados($result, $tipo, $cartao) {
 		<script type="text/javascript" src="http://www.kinderlandteste.com/kinderlandweb/assets/js/jquery.tablesorter.js"></script>
 		<script type="text/javascript" src="http://www.kinderlandteste.com/kinderlandweb/assets/js/jquery.tablesorter.widgets.js"></script>
 
-		<!--
+		
 		<a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard">
 		<button class="btn btn-primary" style="margin: 0px auto; ">Todos os pagamentos</button>
 		</a>
@@ -50,7 +49,7 @@ function imprimeDados($result, $tipo, $cartao) {
 		<a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard?type=canceled">
 		<button class="btn btn-primary" style="margin: 0px auto; ">Pagamentos cancelados</button>
 		</a>
-		!-->
+		
 		<br>
 		<table class="table table-bordered table-striped" style="max-width: 850px;">
 			<tr>

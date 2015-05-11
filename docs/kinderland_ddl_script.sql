@@ -269,7 +269,7 @@ CREATE OR REPLACE VIEW v_report_user_registered AS
 -- Essa view ainda precisa ser aprimorada para exibir que tipo de sócio a pessoa é
 CREATE VIEW v_report_all_users AS (
     SELECT 
-        p.fullname, p.email, COALESCE((SELECT true from associates where person_id = p.person_id), false) as associate
+        p.fullname, p.email, COALESCE((SELECT true from associates where person_id = p.person_id), false) as associate, p.person_id
     FROM
         person p 
     INNER JOIN 

@@ -2,36 +2,35 @@
     <div class="main-container">
         <div class = "row">
             <div class="col-lg-10" bgcolor="red">
-                <h3>Relatório de usuários</h3><br>
                 <table>
                     <tr>
-                        <td width='150px'>
+                        <th align="right" width='200px'>
                             Cadastrados
-                        </td>
-                        <td align='right'>
+                        </th>
+                        <td width="60px" align='right'>
                             <?php echo $users[0]->count_users; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <th align="right" >
                             Sócios contribuintes
-                        </td>
+                        </th>
                         <td align='right'>
                             <?php echo $users[0]->count_associates; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <th align="right" >
                             Sócios beneméritos
-                        </td>
+                        </th>
                         <td align='right'>
                             <?php echo $users[0]->count_benemerit; ?>
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <th align="right" >
                             Não associados
-                        </td>
+                        </th>
                         <td align='right'>
                             <?php echo $users[0]->count_non_associate; ?>
                         </td>

@@ -1,5 +1,5 @@
 <div class = "row">
-    <?php $actual_screen = "FINANCE"; ?>
+    <?php $actual_screen = "FINANCEIRO"; ?>
     <?php require_once APPPATH . 'views/include/director_left_menu.php' ?>
     <script>
         $(function() {
@@ -10,11 +10,11 @@
             });
         });
     </script>
-    <div class="col-lg-10">
+    <div class="col-lg-9">
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
-                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard">Painel de pagamentos</option>
+                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard">Painel de doações</option>
                 </select>
             </div>
         </div>
