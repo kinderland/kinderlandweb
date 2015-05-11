@@ -1,5 +1,5 @@
 <body>
-    <div class="main-container">
+    <div class="main-container-report">
         <div class = "row">
             <div class="col-lg-10" bgcolor="red">
                 <table>

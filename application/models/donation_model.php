@@ -39,6 +39,7 @@ class donation_model extends CK_Model {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "INSERT INTO donation(person_id, donated_value, donation_type, donation_status)
                 VALUES ($userId, $totalPrice, $donationType, 1)";
+        $result = $this->executeReturningId($this->db, $sql);
 
 		if ($result) {
 			return $result;

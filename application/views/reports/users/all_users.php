@@ -26,9 +26,9 @@
                 $("#sortable-table").tablesorter({widgets: ['zebra']});
             });
         </script>
-        <div class="main-container">
+        <div class="main-container-report">
             <div class = "row">
-                <div class="col-lg-9">
+                <div class="col-lg-12">
 
                     <table class="sortable-table" id="sortable-table">
                         <thead> 
