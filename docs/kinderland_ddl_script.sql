@@ -192,6 +192,54 @@ CREATE TABLE benemerits (
     date_finished timestamp without time zone
 );
 
+CREATE TABLE school (
+    school_name varchar(70) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE summer_camp (
+    summer_camp_id SERIAL PRIMARY KEY NOT NULL,
+    camp_name varchar (150) not null,
+    description varchar(500),
+    date_created timestamp without time zone DEFAULT now(),
+    date_start timestamp without time zone,
+    date_finish timestamp without time zone,
+    pre_subscriptions_enabled boolean default false,
+    capacity_male integer not null default 0,
+    capacity_female integer not null default 0
+);
+
+CREATE TABLE colonist (
+    colonist_id SERIAL NOT NULL PRIMARY KEY,
+    person_id INTEGER NOT NULL REFERENCES person,
+    birth_date timestamp without time zone NOT NULL,
+    date_created timestamp without time zone default now(),
+    document_number varchar(100),
+    document_type varchar(25),
+    emergency_phonenumber varchar(30)
+);
+
+CREATE TABLE summer_camp_subscription_status (
+    status integer not null PRIMARY KEY,
+    description varchar(50)
+);
+INSERT INTO summer_camp_subscription_status VALUES
+(1, 'Candidato não ok'), (2, 'Candidato ok'), (3, 'Aguardando pagamento'),
+(4, 'Inscrito'), (5, 'Desistente'), (6, 'Excluido');
+
+
+CREATE TABLE summer_camp_subscription (
+    summer_camp_id INTEGER NOT NULL REFERENCES summer_camp,
+    colonist_id INTEGER NOT NULL REFERENCES colonist,
+    person_user_id INTEGER NOT NULL REFERENCES person_user(person_id),
+    situation INTEGER NOT NULL REFERENCES summer_camp_subscription_status(status),
+    donation_id integer REFERENCES donation,
+    date_created timestamp without time zone,
+    school_name varchar(70),
+    school_year integer not null,
+    accepted_terms boolean default false,
+    accepted_travel_terms boolean default false
+);
+
 
 CREATE VIEW open_public_events as (SELECT * FROM event 
                 WHERE current_timestamp BETWEEN date_start_show AND date_finish_show 
