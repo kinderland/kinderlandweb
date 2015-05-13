@@ -150,7 +150,7 @@
                         <center>
                         <img src="<?=$this->config->item('assets')?>images/payment/maestro.png" alt="MasterCard Maestro" width="80px" height="80px"/>
                         <br>
-                        <input type="radio" style="width:20px; height:20px;" name="card_flag" value="maestro" disabled>
+                        <input type="radio" style="width:20px; height:20px;" name="card_flag" value="maestro">
                         </center>
                     </td>
                 
