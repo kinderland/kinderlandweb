@@ -203,6 +203,8 @@ CREATE TABLE summer_camp (
     date_created timestamp without time zone DEFAULT now(),
     date_start timestamp without time zone,
     date_finish timestamp without time zone,
+    date_start_pre_subscriptions timestamp without time zone,
+    date_finish_pre_subscriptions timestamp without time zone,
     pre_subscriptions_enabled boolean default false,
     capacity_male integer not null default 0,
     capacity_female integer not null default 0
@@ -223,8 +225,8 @@ CREATE TABLE summer_camp_subscription_status (
     description varchar(50)
 );
 INSERT INTO summer_camp_subscription_status VALUES
-(1, 'Candidato não ok'), (2, 'Candidato ok'), (3, 'Aguardando pagamento'),
-(4, 'Inscrito'), (5, 'Desistente'), (6, 'Excluido');
+(0, 'Candidato não ok'), (1, 'Candidato ok'), (2, 'Aguardando pagamento'),
+(3, 'Inscrito'), (-1, 'Desistente'), (-2, 'Excluido');
 
 
 CREATE TABLE summer_camp_subscription (
@@ -238,6 +240,16 @@ CREATE TABLE summer_camp_subscription (
     school_year integer not null,
     accepted_terms boolean default false,
     accepted_travel_terms boolean default false
+);
+
+CREATE TABLE camp_payment_period (
+    camp_payment_period_id SERIAL,
+    summer_camp_id INTEGER NOT NULL REFERENCES event,
+    date_start TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    date_finish TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    portions integer NOT NULL DEFAULT 1,
+
+    PRIMARY KEY(camp_payment_period_id)
 );
 
 

@@ -308,20 +308,7 @@ class Events extends CK_Controller {
 		
 	}*/
 	
-	public static function toMMDDYYYY($date){
-		if($date !== "" && $date !== FALSE && $date !== NULL){
-			$date = explode("/", $date);
-			return $date[1]."/".$date[0]."/".$date[2];
-		}
-	}
 	
-	public static function verifyAntecedence($dateBefore,$dateAfter){
-		if($dateBefore == NULL || $dateAfter == NULL)
-			return FALSE;
-		$dateBefore = implode('', array_reverse(explode('/', $dateBefore)));
-		$dateAfter = implode('', array_reverse(explode('/', $dateAfter)));
-		return $dateBefore <= $dateAfter;
-	}
 	
 	public function completeEvent(){
 		$this->Logger->info("Starting " . __METHOD__);

@@ -120,3 +120,8 @@
 	min-width: 80px;
 	text-align: center;
 }
+
+.form-control{
+	float:left !important;
+	width: 70% !important;
+}

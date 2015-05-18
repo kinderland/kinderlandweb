@@ -161,6 +161,21 @@ class CK_Controller extends CI_Controller {
 		$this -> output -> set_output($output);
 	}
 
+	public static function toMMDDYYYY($date){
+		if($date !== "" && $date !== FALSE && $date !== NULL){
+			$date = explode("/", $date);
+			return $date[1]."/".$date[0]."/".$date[2];
+		}
+	}
+	
+	public static function verifyAntecedence($dateBefore,$dateAfter){
+		if($dateBefore == NULL || $dateAfter == NULL)
+			return FALSE;
+		$dateBefore = implode('', array_reverse(explode('/', $dateBefore)));
+		$dateAfter = implode('', array_reverse(explode('/', $dateAfter)));
+		return $dateBefore <= $dateAfter;
+	}
+
 	public function checkSession() {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		if (!$this -> session -> userdata('user_id') || !$this -> session -> userdata('fullname')) {

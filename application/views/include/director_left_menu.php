@@ -45,7 +45,13 @@
 		</div>
 		<h3>Colônia</h3>
 		<div>
-
+			<a href="<?= $this->config->item('url_link'); ?>admin/camp">
+				Administração
+			</a>
+			<br />
+			<a href="#">
+				Relatórios
+			</a>
 		</div>
 		<h3>Eventos</h3>
 		<div>
@@ -53,7 +59,10 @@
 		</div>
 		<h3>Financeiro</h3>
 		<div>
-			Administração <br />
+			<a href="#">
+				Administração
+			</a>
+			<br />
 			<a href="<?= $this->config->item('url_link'); ?>reports/finance_reports">Relatórios</a>
 		</div>
 	</div>
