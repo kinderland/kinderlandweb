@@ -97,6 +97,13 @@ class donation_model extends CK_Model {
 		return $this -> executeRows($this -> db, $sql, array(intval($userId)));
 	}
 
+	public function countFreeDonations() {
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "SELECT count(distinct donation_id) as contagem FROM donation_detailed WHERE donation_status like 'pago' and donation_type like 'avulsa'";
+		return $this->executeRow($this -> db, $sql)-> contagem;
+	}
+
+
 	public function getAllPendingTransactions() {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "SELECT * FROM donations_pending";

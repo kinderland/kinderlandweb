@@ -69,6 +69,7 @@ class Reports extends CK_Controller {
 		}
 		$data['credito'] = $creditos;
 		$data['debito'] = $debito;
+		$data['avulsas'] = $this->donation_model->countFreeDonations();
 		$data['title_extra'] = $title_extra;
 		$this -> loadReportView("reports/finances/payments_bycard", $data);
 	}

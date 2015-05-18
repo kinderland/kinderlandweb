@@ -21,6 +21,7 @@ function imprimeDados($result, $tipo, $cartao) {
 <div class = "row">
 	<div class="col-lg-10" bgcolor="red">
 		<h5>Número de sócios contribuintes: <?php echo $associates ?> </h5>
+		<h5>Número de doações avulsas: <?php echo $avulsas ?> </h5>
 
 		<link href="http://www.kinderlandteste.com/kinderlandweb/assets/css/basic.css" rel="stylesheet" />
 		<!--<link href="http://www.kinderlandteste.com/kinderlandweb/assets/css/old/screen.css" rel="stylesheet" />-->
