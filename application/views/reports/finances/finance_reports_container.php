@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
-                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard">Painel de doações</option>
+                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard">Painel de doações (quantitativo)</option>
                 </select>
             </div>
         </div>

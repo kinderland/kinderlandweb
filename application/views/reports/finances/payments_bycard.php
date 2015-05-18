@@ -5,7 +5,7 @@ function imprimeDados($result, $tipo, $cartao) {
 		foreach ($result[$tipo][$cartao] as $resultado)
 			$total += $resultado;
 	}
-	echo "<td>$total</td>";
+	echo "<td style='text-align: center;'>$total</td>";
 	for ($i = 1; $i <= 6; $i++) { echo "<td>";
 		if (isset($result[$tipo][$cartao][$i]))
 			echo $result[$tipo][$cartao][$i];
@@ -39,7 +39,7 @@ function imprimeDados($result, $tipo, $cartao) {
 		<script type="text/javascript" src="http://www.kinderlandteste.com/kinderlandweb/assets/js/jquery.tablesorter.js"></script>
 		<script type="text/javascript" src="http://www.kinderlandteste.com/kinderlandweb/assets/js/jquery.tablesorter.widgets.js"></script>
 
-		
+<!--		
 		<a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard">
 		<button class="btn btn-primary" style="margin: 0px auto; ">Todos os pagamentos</button>
 		</a>
@@ -49,43 +49,43 @@ function imprimeDados($result, $tipo, $cartao) {
 		<a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard?type=canceled">
 		<button class="btn btn-primary" style="margin: 0px auto; ">Pagamentos cancelados</button>
 		</a>
-		
 		<br>
+-->	
 		<table class="table table-bordered table-striped" style="max-width: 850px;">
 			<tr>
-				<td colspan="8"> Crédito: </td> <?php $tipo = "credito"; ?>
+				<td colspan="8"> <h4> <b>Cartão de crédito: </b></h4> </td> <?php $tipo = "credito"; ?>
 			</tr>
 			<tr>
-				<td> Bandeira do cartão: </td>
-				<td> Total: </td>
-				<td> À vista: </td>
-				<td> 2x: </td>
-				<td> 3x: </td>
-				<td> 4x: </td>
-				<td> 5x: </td>
-				<td> 6x: </td>
+				<td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
+				<td style="text-align: center;"><h4> <b> Total </b></h4> </td>
+				<td><h4> <b> 1x </b></h4></td>
+				<td><h4> <b> 2x </b></h4></td>
+				<td><h4> <b> 3x </b></h4></td>
+				<td><h4> <b> 4x </b></h4></td>
+				<td><h4> <b> 5x </b></h4></td>
+				<td><h4> <b> 6x </b></h4> </td>
 			</tr>
 			<tr>
-				<td> Amex </td>
+				<td style="text-align: right;"> Amex </td>
 				<?php $cartao = "amex";
 					imprimeDados($result, $tipo, $cartao);
 				?>
 			</tr>
 			<tr>
-				<td > Mastercard </td>
+				<td style="text-align: right;"> Mastercard </td>
 				<?php $cartao = "mastercard";
 					imprimeDados($result, $tipo, $cartao);
 				?>
 			</tr>
 			<tr>
-				<td > Visa </td>
+				<td style="text-align: right;"> Visa </td>
 				<?php $cartao = "visa";
 					imprimeDados($result, $tipo, $cartao);
 				?>
 			</tr>
 			<tr>
-				<td > Totais crédito </td>
-				<td ><?php $total = 0;
+				<td style="text-align: right;"> Totais crédito </td>
+				<td style="text-align: center;"><?php $total = 0;
 					foreach ($credito as $resultado)
 						$total += $resultado;
 					echo $total;
@@ -99,19 +99,34 @@ function imprimeDados($result, $tipo, $cartao) {
 				</td>
 			</tr>
 			<tr>
-				<td colspan="8"> Débito: </td>
+				<td colspan="2" style="text-align: center;"> <h4> <b>Cartão de débito: </b></h4> </td>
 			</tr>
 			<tr>
-				<td colspan=2> Maestro </td>
-				<td colspan=6><?php if(isset ($result["debito"]["mastercard"][1])) echo $result["debito"]["mastercard"][1]; else echo 0; ?></td>
+					<td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
+				<td style="text-align: center;"><h4> <b> Total </b></h4> </td>
+
 			</tr>
 			<tr>
-				<td colspan=2> Visa Electron </td>
-				<td colspan=6><?php if(isset ($result["debito"]["visa"][1])) echo $result["debito"]["visa"][1]; else echo 0;?></td>
+				<td colspan=1 style="text-align: right;"> Maestro </td>
+				<td colspan=1 style="text-align: center;"><?php
+				if (isset($result["debito"]["mastercard"][1]))
+					echo $result["debito"]["mastercard"][1];
+				else
+					echo 0;
+ ?></td>
 			</tr>
 			<tr>
-				<td colspan=2> Total débito </td>
-				<td colspan=6><?php echo $debito; ?></td>
+				<td colspan=1 style="text-align: right;"> Visa Electron </td>
+				<td colspan=1 style="text-align: center;"><?php
+				if (isset($result["debito"]["visa"][1]))
+					echo $result["debito"]["visa"][1];
+				else
+					echo 0;
+				?></td>
+			</tr>
+			<tr>
+				<td colspan=1 style="text-align: right;"> Total débito </td>
+				<td colspan=1 style="text-align: center;"><?php echo $debito; ?></td>
 			</tr>
 		</table>
 	</div>
