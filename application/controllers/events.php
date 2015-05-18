@@ -343,6 +343,7 @@ class Events extends CK_Controller {
 		$middle_price=$this -> input -> post("middle_price", TRUE);
 		$payment_portions=$this -> input -> post("payment_portions", TRUE);
 		$associated_discount=$this -> input -> post("associated_discount", TRUE);
+		$enabled=$this -> input -> post("enabled", TRUE);
 		$errors = array();
 		
 		if($event_name === "")
@@ -355,13 +356,20 @@ class Events extends CK_Controller {
 			$date_finish = NULL;
 		if(!$date_finish_show)
 			$date_finish_show = NULL;
+		if(!$enabled)
+			$enabled = "false";
+		else if($enabled === "1")
+			$enabled = "true";			
 		
 		if($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
-			$errors[] = "A data do ínicio do período do evento antecede a data de fim";
+			$errors[] = "A data do ínicio do período do evento antecede a data de fim do evento";
 
 		if($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
-			$errors[] = "A data do ínicio do período de inscrições antecede a data de fim";
+			$errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições";
 
+		if($date_start && $date_finish_show && Events::verifyAntecedence($date_start, $date_finish_show))
+			$errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições";
+					
 		if($capacity_male === "")
 			$capacity_male = 0;
 		if($capacity_female === "")
@@ -384,6 +392,13 @@ class Events extends CK_Controller {
 				if($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])){
 					$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
 				}
+				if($payment_date_start[$i] && $payment_date_end[$i] && (
+					!Events::verifyAntecedence($payment_date_start[$i], $date_finish_show) ||
+					!Events::verifyAntecedence($payment_date_end[$i], $date_finish_show)   ||
+					!Events::verifyAntecedence($date_start_show, $payment_date_start[$i])  ) 
+					)
+					$errors[] = "O pagamento de numero ".($i+1)." está fora do periodo de inscrições";
+					
 				$payments[] = array(
 					"payment_date_start" => $payment_date_start[$i],
 					"payment_date_end"=> $payment_date_end[$i],		
@@ -429,7 +444,7 @@ class Events extends CK_Controller {
 			$this->generic_model->startTransaction();
 			
 			$eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, 
-				$date_start_show, $date_finish_show, "false", $capacity_male, $capacity_female,$capacity_nonsleeper);
+				$date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female,$capacity_nonsleeper);
 			
 			foreach($payments as $payment){
 				$this->event_model->insertNewPaymentPeriod($eventId,$payment["payment_date_start"],$payment["payment_date_end"],$payment["full_price"],$payment["middle_price"],
@@ -438,7 +453,7 @@ class Events extends CK_Controller {
 			
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("New event successfully inserted");
-			redirect("events/index");
+			redirect("events/manageEvents");
 
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to insert new event");

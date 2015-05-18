@@ -37,8 +37,11 @@ function alertRequiredFields(){
 
 	if(document.getElementsByName("payment_date_start[]")[0] == undefined)
    		error = error.concat("Não tem data de ínicio de pagamento\n");
-	if(error != "")
-		alert("Tentaremos salvar o evento, porém faltam alguns dados considerados mínimos para que o cadastro possa ser considerado como completo.\nOs dados incompletos são:\n".concat(error));	
+	if(error != ""){
+		alert("Tentaremos salvar o evento, porém faltam alguns dados considerados mínimos para que o cadastro possa ser considerado como completo.\nOs dados incompletos são:\n".concat(error));
+		document.getElementsByName("enabled")[0].value = 0;
+	}
+	document.getElementsByName("enabled")[0].value = 1;
 }
 
 function datepickers(){
@@ -178,6 +181,7 @@ if(string !== ""){
 	<br />
 	<div class="form-group">
 		<div class="col-lg-10">
+			<input type="hidden" name="enabled" id="enabled" value="0" />
 			<button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
 				<a href="<?=$this->config->item('url_link')?>events/index"><button  type="button" class="btn btn-warning"
 					onClick="history.go(-1);return true;">Voltar</button></a>
