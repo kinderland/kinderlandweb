@@ -326,7 +326,6 @@ CREATE OR REPLACE VIEW v_report_user_registered AS
           WHERE NOT (person_user.person_id IN ( SELECT associates.person_id
                    FROM associates))) count_non_benemerit;
 
--- Essa view ainda precisa ser aprimorada para exibir que tipo de sócio a pessoa é
 CREATE VIEW v_report_all_users AS (
     SELECT 
         p.fullname, p.email, COALESCE((SELECT true from associates where person_id = p.person_id), false) as associate, p.person_id
@@ -334,4 +333,53 @@ CREATE VIEW v_report_all_users AS (
         person p 
     INNER JOIN 
         person_user pu on p.person_id = pu.person_id
+);
+
+CREATE VIEW v_report_all_users_association_detailed AS (
+    SELECT * FROM (
+        SELECT  p.fullname,
+            p.email,
+            'não sócio' as associate,
+            p.person_id
+        FROM
+            person_user pu
+        INNER JOIN 
+            person p on pu.person_id = p.person_id
+        WHERE
+            pu.person_id not in( SELECT p.person_id FROM associates )
+
+        UNION
+
+        SELECT  p.fullname,
+            p.email,
+            'contribuinte' AS associate,
+            p.person_id
+        FROM associates a 
+        INNER JOIN 
+            person p ON p.person_id = a.person_id
+        WHERE
+            a.person_id not in (
+            SELECT  
+                p.person_id
+            FROM
+                benemerits b
+            INNER JOIN
+                person p on p.person_id = b.person_id 
+            WHERE
+                b.date_finished is null
+        )
+        UNION
+
+        SELECT  p.fullname,
+            p.email,
+            'benemerito' AS associate,
+            p.person_id
+        FROM
+            benemerits b
+        INNER JOIN
+            person p on p.person_id = b.person_id 
+        WHERE
+            b.date_finished is null
+    ) as A
+    ORDER BY A.fullname
 );

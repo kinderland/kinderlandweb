@@ -181,7 +181,7 @@ class personuser_model extends CK_Model {
 
     public function getAllUsersDetailed() {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * from v_report_all_users";
+        $sql = "SELECT * from v_report_all_users_association_detailed";
         $rows = $this->executeRows($this->db, $sql);
         return $rows;
     }
