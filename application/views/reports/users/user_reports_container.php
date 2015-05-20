@@ -1,27 +1,7 @@
 <div class = "row">
     <?php $actual_screen = "USUARIO"; ?>
     <?php require_once APPPATH . 'views/include/director_left_menu.php' ?>
-    <script>
-        $(function() {
-            //$( "#report_select" ).selectmenu();
-            $(".frame-section").attr("src", $( "#report_select option:selected" ).val());
-
-            $( "#report_select" ).change(function() {
-                $(".frame-section").attr("src", $( "#report_select option:selected" ).val());
-            });
-
-            $(function(){
-                var height = window.innerHeight;
-                $('iframe').css('height', height);
-            });
-
-            //And if the outer div has no set specific height set.. 
-            $(window).resize(function(){
-                var height = window.innerHeight;
-                $('iframe').css('height', height);
-            });
-        });
-    </script>
+    <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/select.box.iframe.js"></script>
     <div class="col-lg-9">
         <div class="row">
             <div class="col-lg-8">
