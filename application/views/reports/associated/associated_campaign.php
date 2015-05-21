@@ -1,5 +1,5 @@
 <div class = "row">
-    <?php $actual_screen = "USUARIO"; ?>
+    <?php $actual_screen = "CAMPANHA_ASSOCIADOS"; ?>
     <?php require_once APPPATH . 'views/include/director_left_menu.php' ?>
     <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/select.box.iframe.js"></script>
     <div class="col-lg-9">
