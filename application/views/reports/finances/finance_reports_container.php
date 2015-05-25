@@ -6,14 +6,15 @@
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
-                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard">Painel de doações (quantitativo)</option>
+                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_QUANTITY?>">Painel de doações (quantitativo)</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_VALUES?>">Painel de doações (valores)</option>
                 </select>
             </div>
         </div>
         <hr class="footer-hr" />
 
         <div class="row">
-            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>reports/payments_bycard" />
+            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_QUANTITY?>" />
         </div>
     </div>
 

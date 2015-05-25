@@ -29,7 +29,7 @@
             if ($resultSet)
                 foreach ($resultSet as $row)
                     $paymentsArray[] = CieloTransaction::loadCieloTransactionObject($row);
-
+				
             return $paymentsArray;
         }
 
@@ -65,13 +65,17 @@
             return false;
         }
 		
-		public function statisticsPaymentsByCardFlag($searchfor){
+		public function statisticsPaymentsByCardFlag($searchfor,$option){
 			$where = "";
 			if($searchfor !== FALSE){
 				$where = "where payment_status = $searchfor";
 			}
+			if($option == PAYMENT_REPORTBYCARD_QUANTITY)
+				$aggregator = "count(distinct donation_id)";
+			else if ($option == PAYMENT_REPORTBYCARD_VALUES)
+				$aggregator = "sum(transaction_value)";
 
-            $sql = "Select payment_type,cardflag,payment_portions,count(distinct donation_id) as contagem from cielo_transaction $where group by payment_type,cardflag,payment_portions";
+            $sql = "Select payment_type,cardflag,payment_portions,".$aggregator." as aggregator from cielo_transaction $where group by payment_type,cardflag,payment_portions";
 
             $resultSet = $this -> executeRows($this -> db, $sql);
 			$result = array();
@@ -79,7 +83,7 @@
 				$payment_type = $row->payment_type;
 				$cardflag = $row->cardflag;
 				$payment_portions = $row->payment_portions;
-				$result[$payment_type][$cardflag][$payment_portions] = $row->contagem;
+				$result[$payment_type][$cardflag][$payment_portions] = $row->aggregator;
 			}
 
             return $result;

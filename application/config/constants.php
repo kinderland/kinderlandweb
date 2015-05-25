@@ -122,7 +122,14 @@ define('DONATION_STATUS_ERROR',  	 3);
 */
 define("bcryptocost", 11);
 
+/*
+|--------------------------------------------------------------------------
+| Payment report by card types
+|--------------------------------------------------------------------------
+*/
 
+define('PAYMENT_REPORTBYCARD_QUANTITY', 1);
+define('PAYMENT_REPORTBYCARD_VALUES', 2);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

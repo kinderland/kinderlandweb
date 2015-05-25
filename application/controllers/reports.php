@@ -37,6 +37,7 @@ class Reports extends CK_Controller {
 
     public function payments_bycard() {
         $type = $this->input->get('type', TRUE);
+        $option = $this->input->get('option', TRUE);
         //Por enquanto só o tipo finalizado é pra ser mostrado.
         $type = "captured";
         $title_extra = "";
@@ -48,7 +49,7 @@ class Reports extends CK_Controller {
             $searchfor = 9;
             $title_extra = " - Cancelados";
         }
-        $results = $this->cielotransaction_model->statisticsPaymentsByCardFlag($searchfor);
+        $results = $this->cielotransaction_model->statisticsPaymentsByCardFlag($searchfor,$option);
         $countAssociates = $this->donation_model->countPayingAssociates();
         $data['result'] = $results;
         $data['associates'] = $countAssociates;
@@ -74,6 +75,7 @@ class Reports extends CK_Controller {
         $data['debito'] = $debito;
         $data['avulsas'] = $this->donation_model->countFreeDonations();
         $data['title_extra'] = $title_extra;
+		$data['option'] = $option;
         $this->loadReportView("reports/finances/payments_bycard", $data);
     }
 

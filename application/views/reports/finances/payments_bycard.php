@@ -3,36 +3,47 @@
         <meta charset="UTF-8">
         <title>Colônia Kinderland</title>
 
-        <link href="<?= $this->config->item('assets'); ?>css/basic.css" rel="stylesheet" />
+        <link href="<?= $this -> config -> item('assets'); ?>css/basic.css" rel="stylesheet" />
         <!--<link href="<?= $this->config->item('assets'); ?>css/old/screen.css" rel="stylesheet" />-->
-        <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
-        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css"></script>
-        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+        <link href="<?= $this -> config -> item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="<?= $this -> config -> item('assets'); ?>css/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="<?= $this -> config -> item('assets'); ?>css/bootstrap-switch.min.css"></script>
+        <link rel="stylesheet" href="<?= $this -> config -> item('assets'); ?>css/theme.default.css" />
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/jquerysettings.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/jquery/jquery.redirect.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/bootstrap-switch.min.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/jquery/jquery.mask.js"></script>
+        <script type="text/javascript" src="<?= $this -> config -> item('assets'); ?>js/jquery.tablesorter.js"></script>
 
     </head>
 <?php
-function imprimeDados($result, $tipo, $cartao) {
+
+function formatarEMostrar($valor, $opcao) {
+	if ($opcao == PAYMENT_REPORTBYCARD_VALUES)
+		echo 'R$: ' . $valor . ',00';
+	else
+		echo $valor;
+}
+
+function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 	$total = 0;
 	if (isset($result[$tipo][$cartao])) {
 		foreach ($result[$tipo][$cartao] as $resultado)
 			$total += $resultado;
 	}
-	echo "<td style='text-align: center;'>$total</td>";
+	echo "<td style='text-align: center;'>";
+	formatarEMostrar($total, $opcao);
+	echo "</td>";
+
 	for ($i = 1; $i <= 6; $i++) { echo "<td>";
 		if (isset($result[$tipo][$cartao][$i]))
-			echo $result[$tipo][$cartao][$i];
+			formatarEMostrar(intval($result[$tipo][$cartao][$i]), $opcao);
 		else
-			echo 0;
+			formatarEMostrar(0, $opcao);
 
 		echo "</td>";
 	}
@@ -74,19 +85,19 @@ function imprimeDados($result, $tipo, $cartao) {
 				<tr>
 					<td style="text-align: right;"> Amex </td>
 					<?php $cartao = "amex";
-						imprimeDados($result, $tipo, $cartao);
+						imprimeDados($result, $tipo, $cartao, $option);
 					?>
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Mastercard </td>
 					<?php $cartao = "mastercard";
-						imprimeDados($result, $tipo, $cartao);
+						imprimeDados($result, $tipo, $cartao, $option);
 					?>
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Visa </td>
 					<?php $cartao = "visa";
-						imprimeDados($result, $tipo, $cartao);
+						imprimeDados($result, $tipo, $cartao, $option);
 					?>
 				</tr>
 				<tr>
@@ -94,14 +105,16 @@ function imprimeDados($result, $tipo, $cartao) {
 					<td style="text-align: center;"><?php $total = 0;
 						foreach ($credito as $resultado)
 							$total += $resultado;
-						echo $total;
+						formatarEMostrar($total, $option);
 					?>
-					<td><?php echo $credito[1]?></td>
-					<td><?php echo $credito[2]?></td>
-					<td><?php echo $credito[3]?></td>
-					<td><?php echo $credito[4]?></td>
-					<td><?php echo $credito[5]?></td>
-					<td><?php echo $credito[6]?></td>
+					</td>
+					<?php
+						for ($i = 1; $i <= 6; $i++) {
+							echo "<td>";
+							formatarEMostrar($credito[$i], $option);
+							echo "</td>";
+						}
+					?>
 				</tr>
 			</table>
 			<table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px;">
@@ -116,24 +129,24 @@ function imprimeDados($result, $tipo, $cartao) {
 				<tr>
 					<td style="text-align: right;"> Maestro </td>
 					<td style="text-align: center;"><?php
-						if (isset($result["debito"]["mastercard"][1]))
-							echo $result["debito"]["mastercard"][1];
-						else
-							echo 0;
+					if (isset($result["debito"]["mastercard"][1]))
+						echo formatarEMostrar(intval($result["debito"]["mastercard"][1]), $option);
+					else
+						echo formatarEMostrar(0, $option);
 		 			?></td>
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Visa Electron </td>
 					<td style="text-align: center;"><?php
 					if (isset($result["debito"]["visa"][1]))
-						echo $result["debito"]["visa"][1];
+						echo formatarEMostrar(intval($result["debito"]["visa"][1]), $option);
 					else
-						echo 0;
+						echo formatarEMostrar(0, $option);
 					?></td>
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Total débito </td>
-					<td style="text-align: center;"><?php echo $debito; ?></td>
+					<td style="text-align: center;"><?php echo formatarEMostrar($debito, $option); ?></td>
 				</tr>
 			</table>
 		</div>
