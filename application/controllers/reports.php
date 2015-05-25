@@ -50,9 +50,16 @@ class Reports extends CK_Controller {
             $title_extra = " - Cancelados";
         }
         $results = $this->cielotransaction_model->statisticsPaymentsByCardFlag($searchfor,$option);
-        $countAssociates = $this->donation_model->countPayingAssociates();
         $data['result'] = $results;
-        $data['associates'] = $countAssociates;
+		if($option == PAYMENT_REPORTBYCARD_VALUES){
+	        $data['avulsas'] = $this->donation_model->sumFreeDonations();
+	        $sumAssociates = $this->donation_model->sumPayingAssociates();
+			$data['associates'] = $sumAssociates;				
+		}else {
+	        $data['avulsas'] = $this->donation_model->countFreeDonations();
+	        $countAssociates = $this->donation_model->countPayingAssociates();
+			$data['associates'] = $countAssociates;	
+		}
         $creditos[1] = 0;
         $creditos[2] = 0;
         $creditos[3] = 0;
@@ -73,7 +80,6 @@ class Reports extends CK_Controller {
         }
         $data['credito'] = $creditos;
         $data['debito'] = $debito;
-        $data['avulsas'] = $this->donation_model->countFreeDonations();
         $data['title_extra'] = $title_extra;
 		$data['option'] = $option;
         $this->loadReportView("reports/finances/payments_bycard", $data);

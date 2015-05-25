@@ -53,8 +53,8 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 <body>
 	<div class = "row">
 		<div class="col-lg-10" bgcolor="red">
-			<h4>Número de sócios contribuintes: <?php echo $associates ?> </h4>
-			<h4>Número de doações avulsas: <?php echo $avulsas ?> </h4>
+			<h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates),$option); ?> </h4>
+			<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas),$option); ?> </h4>
 
 	<!--		
 			<a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard">
