@@ -6,7 +6,15 @@
   });
   $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
     var string = "<?=$this->config->item("url_link")?>events/toggleEnable/".concat($(this).attr("id"));
-	window.location=string;
+    var recarrega = "<?=$this->config->item("url_link")?>events/manageEvents/";
+    $.post( string ).done(function( data ) {
+    	if(data == 1)
+		    alert( "Evento modificado com sucesso" );
+		else{
+			alert( "Problema ao modificar o estado do evento" );
+			window.location=recarrega;
+		}
+		});
   });
 });
 </script>
@@ -26,7 +34,8 @@
 		<td><a href="<?=$this->config->item("url_link")?>events/info/<?=$event->getEventId()?>"><?=$event->getEventName();?></a></td>
         <td><?= date_format(date_create($event->getDateStart()), 'd/m/y');?> </td>
         <td><?= date_format(date_create($event->getDateFinish()), 'd/m/y')?> </td>
-        <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$event->getEventId()?>" <?php if($event->isEnabled()) echo "checkedInDatabase='true'";?></td>
+        <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$event->getEventId()?>" 
+        	<?php if(!$event->getIsValid()) echo " disabled "; if($event->isEnabled()) echo "checkedInDatabase='true'";?></td>
 		</tr>
 		<?php 
 				}

@@ -367,11 +367,11 @@ class Events extends CK_Controller {
 		if(is_array($full_price)){
 			for($i=0;$i<count($full_price);$i++){
 				if(!$payment_date_start[$i])
-					$errors[] = "O pagamento de numero ".($i+1)." não tem data de inicio";
+ 					$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem data de inicio";
 				if(!$payment_date_end[$i])
-					$errors[] = "O pagamento de numero ".($i+1)." não tem data de fim";
+					$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem data de fim";
 				if(!$full_price[$i])
-					$errors[] = "O pagamento de numero ".($i+1)." não tem valor ";
+					$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem valor ";
 				if(!$middle_price[$i])
 					$middle_price[$i] = $full_price[$i];
 				if(!$children_price[$i])
@@ -385,6 +385,22 @@ class Events extends CK_Controller {
 					!Events::verifyAntecedence($date_start_show, $payment_date_start[$i])  ) 
 					)
 					$errors[] = "O pagamento de numero ".($i+1)." está fora do periodo de inscrições";
+				for($j=$i+1;$j<count($full_price);$j++ ){
+					if 
+					(
+						(
+							Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j]) 
+							&& Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
+						) 
+						|| 
+						(
+							Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) 
+							&& Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
+						)
+					)
+					$errors[] = "Os pagamentos de numero".($i+1)." e ".($j+1)." se sobrepoem";
+				}
+				
 					
 				$payments[] = array(
 					"payment_date_start" => $payment_date_start[$i],
@@ -461,14 +477,26 @@ class Events extends CK_Controller {
         }
         
         $events = $this->event_model->getAllEvents();
-        $data["events"] = $events;
+		$eventsToScreen = array();
+		foreach ($events as $event) {
+			$payments = $this->event_model->getEventPaymentPeriods($event->getEventId());
+			$event->setIsValid($payments);
+			$eventsToScreen[] = $event;
+		}
+        $data["events"] = $eventsToScreen;
+	
         
         $this -> loadView("event/manage", $data);
     }
     
     public function toggleEnable($eventId){
-		$this->event_model->toggleEventEnable($eventId);
-		$this->manageEvents();
+    	$event = $this->event_model->getEventById($eventId);
+		$payments = $this->event_model->getEventPaymentPeriods($event->getEventId());
+		$event->setIsValid($payments);
+		if($event->getIsValid())
+			echo $this->event_model->toggleEventEnable($eventId);
+		else
+			echo "0";
     }
 
 }
