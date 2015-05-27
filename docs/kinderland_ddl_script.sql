@@ -335,3 +335,68 @@ CREATE VIEW v_report_all_users AS (
     INNER JOIN 
         person_user pu on p.person_id = pu.person_id
 );
+
+CREATE VIEW v_report_all_users_association_detailed AS (
+    SELECT * FROM (
+        SELECT p.fullname,
+            p.email,
+            'não sócio' as associate,
+            p.person_id
+        FROM
+            person_user pu
+        INNER JOIN
+            person p on pu.person_id = p.person_id
+        WHERE
+            pu.person_id not in( SELECT p.person_id FROM associates )
+        UNION
+        SELECT p.fullname,
+            p.email,
+            'contribuinte' AS associate,
+            p.person_id
+        FROM associates a
+        INNER JOIN
+            person p ON p.person_id = a.person_id
+        WHERE
+            a.person_id not in (
+                SELECT
+                    p.person_id
+                FROM
+                    benemerits b
+                INNER JOIN
+                    person p on p.person_id = b.person_id
+                WHERE
+                    b.date_finished is null
+            )
+        UNION
+        SELECT p.fullname,
+            p.email,
+            'benemerito' AS associate,
+            p.person_id
+        FROM
+            benemerits b
+        INNER JOIN
+            person p on p.person_id = b.person_id
+        WHERE
+            b.date_finished is null
+    ) as A
+    ORDER BY A.fullname
+);
+
+CREATE OR REPLACE VIEW v_rel_associated_campaign AS (
+    SELECT vall.fullname,
+        vall.email,
+        vall.associate,
+        vall.person_id,
+        CASE
+            WHEN vall.associate = 'contribuinte'::text THEN ( SELECT donation.date_created
+               FROM donation
+              WHERE donation.person_id = vall.person_id AND donation.donation_status = 2 AND donation.donation_type = 2)
+            WHEN vall.associate = 'benemerito'::text THEN ( SELECT benemerits.date_started
+               FROM benemerits
+              WHERE benemerits.person_id = vall.person_id AND benemerits.date_finished IS NULL)
+            ELSE NULL::timestamp without time zone
+        END AS data_associacao
+    FROM v_report_all_users_association_detailed vall
+    WHERE vall.associate = 'contribuinte'::text
+);s
+ 

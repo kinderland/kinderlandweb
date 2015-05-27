@@ -54,7 +54,6 @@
                         <thead> 
                             <tr>
                                 <th>Nome</th>
-                                <th>Data Criação</th>
                                 <th>Data Inicío</th>
                                 <th>Data Fim</th>
                                 <th>Habilitar pré-inscrições</th>
@@ -70,7 +69,6 @@
 
                             <tr>
                                 <td><?= $camp->getCampName() ?></td>
-                                <td><?= date_format(date_create($camp->getDateCreated()), 'd/m/y');?></td>
                                 <td><?= date_format(date_create($camp->getDateStart()), 'd/m/y');?></td>
                                 <td><?= date_format(date_create($camp->getDateFinish()), 'd/m/y');?></td>
                                 <td>

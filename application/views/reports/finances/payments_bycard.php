@@ -68,7 +68,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 			</a>
 			<br>
 	-->	
-			<table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px;">
+			<table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px">
 				<tr>
 					<td colspan="8"> <h4> <b>Cartão de crédito: </b></h4> </td> <?php $tipo = "credito"; ?>
 				</tr>

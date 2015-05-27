@@ -193,6 +193,13 @@ class personuser_model extends CK_Model {
         return $rows;
     }
 
+    public function getContribuintsAssociatesDetailed() {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT * from v_rel_associated_campaign";
+        $rows = $this->executeRows($this->db, $sql);
+        return $rows;
+    }
+
 }
 
 ?>

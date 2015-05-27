@@ -34,18 +34,18 @@
                         <?php
                         foreach ($summary as $row) {
                             switch ($row->donation_status) {
-                                case "abandonado":
+                                /*case "abandonado":
                                     echo "<tr><th align='right' >Doações abandonadas</th><td align='right'>$row->count </td></tr>";
-                                    break;
+                                    break;*/
                                 case "pago":
-                                    echo "<tr><th align='right' >Doações recebidas</th><td align='right'>$row->count </td></tr>";
+                                    echo "<tr><th align='right' >Número de sócios contribuintes</th><td align='right'>$row->count </td></tr>";
                                     break;
                                 case "aberto":
                                     echo "<tr><th align='right' >Doações aguardando confirmação (abertas)</th><td align='right'>$row->count </td></tr>";
                                     break;
-                                case "não autorizado":
+                                /*case "não autorizado":
                                     echo "<tr><th align='right' >Doações não autorizadas</th><td align='right'>$row->count </td></tr>";
-                                    break;
+                                    break;*/
                                 default:
                                     break;
                             }
@@ -72,7 +72,6 @@
                                 <tr>
                                     <td><a target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $user->person_id ?>"><?= $user->fullname ?></a></td>
                                     <td><?= $user->email ?></td>
-
                                     <td><?= date("d/m/Y", strtotime($user->data_associacao)) ?></td>
                                 </tr>
                                 <?php
