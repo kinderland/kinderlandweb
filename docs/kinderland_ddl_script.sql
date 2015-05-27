@@ -347,7 +347,7 @@ CREATE VIEW v_report_all_users_association_detailed AS (
         INNER JOIN
             person p on pu.person_id = p.person_id
         WHERE
-            pu.person_id not in( SELECT p.person_id FROM associates )
+            pu.person_id not in( SELECT person_id FROM associates )
         UNION
         SELECT p.fullname,
             p.email,
