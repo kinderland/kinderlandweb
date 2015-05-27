@@ -9,8 +9,8 @@ class campaign_model extends CK_Model {
     }
 
     public function getYearsCampaign() {
-        $sql = "SELECT EXTRACT(YEAR FROM date_start) as year_event FROM event;";
-        $row = $this->executeRow($this->db, $sql);
+        $sql = "SELECT distinct EXTRACT(YEAR FROM date_created) as year_event FROM donation WHERE donation_type = 2;";
+        $row = $this->executeRows($this->db, $sql);
         return $row;
     }
 

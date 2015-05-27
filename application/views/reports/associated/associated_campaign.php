@@ -7,7 +7,7 @@
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <?php foreach ($years as $year) { ?>
-                        <option value="<?= $this->config->item('url_link'); ?>reports/associated_year/<?php echo $year; ?>">Campanha <?php echo $year; ?></option>
+                        <option value="<?= $this->config->item('url_link'); ?>reports/associated_year/<?php echo $year->year_event; ?>">Campanha <?php echo $year->year_event; ?></option>
                     <?php } ?>
                 </select>
             </div>
