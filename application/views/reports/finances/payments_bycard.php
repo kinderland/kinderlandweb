@@ -24,7 +24,7 @@
 
 function formatarEMostrar($valor, $opcao) {
 	if ($opcao == PAYMENT_REPORTBYCARD_VALUES)
-		echo 'R$: ' . $valor . ',00';
+		echo $valor . ',00';
 	else
 		echo $valor;
 }
@@ -35,11 +35,11 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 		foreach ($result[$tipo][$cartao] as $resultado)
 			$total += $resultado;
 	}
-	echo "<td style='text-align: center;'>";
+	echo "<td style='text-align: right;'>";
 	formatarEMostrar($total, $opcao);
 	echo "</td>";
 
-	for ($i = 1; $i <= 6; $i++) { echo "<td>";
+	for ($i = 1; $i <= 6; $i++) { echo "<td  style='text-align: right;'>";
 		if (isset($result[$tipo][$cartao][$i]))
 			formatarEMostrar(intval($result[$tipo][$cartao][$i]), $opcao);
 		else
@@ -55,6 +55,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 		<div class="col-lg-10" bgcolor="red">
 			<h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates),$option); ?> </h4>
 			<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas),$option); ?> </h4>
+			<h4>Total: <?php formatarEMostrar(intval($associates)+intval($avulsas),$option); ?> </h4>
 
 	<!--		
 			<a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard">
@@ -74,7 +75,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 				</tr>
 				<tr>
 					<td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
-					<td style="text-align: center;"><h4> <b> Total </b></h4> </td>
+					<td style="text-align: right;"><h4> <b> Total </b></h4> </td>
 					<td><h4> <b> 1x </b></h4></td>
 					<td><h4> <b> 2x </b></h4></td>
 					<td><h4> <b> 3x </b></h4></td>
@@ -102,7 +103,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Totais crédito </td>
-					<td style="text-align: center;"><?php $total = 0;
+					<td style="text-align: right;"><?php $total = 0;
 						foreach ($credito as $resultado)
 							$total += $resultado;
 						formatarEMostrar($total, $option);
@@ -110,7 +111,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 					</td>
 					<?php
 						for ($i = 1; $i <= 6; $i++) {
-							echo "<td>";
+							echo "<td style='text-align: right;'>";
 							formatarEMostrar($credito[$i], $option);
 							echo "</td>";
 						}
@@ -128,7 +129,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Maestro </td>
-					<td style="text-align: center;"><?php
+					<td style="text-align: right;"><?php
 					if (isset($result["debito"]["mastercard"][1]))
 						echo formatarEMostrar(intval($result["debito"]["mastercard"][1]), $option);
 					else
@@ -137,7 +138,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Visa Electron </td>
-					<td style="text-align: center;"><?php
+					<td style="text-align: right;"><?php
 					if (isset($result["debito"]["visa"][1]))
 						echo formatarEMostrar(intval($result["debito"]["visa"][1]), $option);
 					else
@@ -146,7 +147,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Total débito </td>
-					<td style="text-align: center;"><?php echo formatarEMostrar($debito, $option); ?></td>
+					<td style="text-align: right;"><?php echo formatarEMostrar($debito, $option); ?></td>
 				</tr>
 			</table>
 		</div>

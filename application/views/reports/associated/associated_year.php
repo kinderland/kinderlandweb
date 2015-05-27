@@ -40,9 +40,9 @@
                                 case "pago":
                                     echo "<tr><th align='right' >Número de sócios contribuintes</th><td align='right'>$row->count </td></tr>";
                                     break;
-                                case "aberto":
+                                /*case "aberto":
                                     echo "<tr><th align='right' >Doações aguardando confirmação (abertas)</th><td align='right'>$row->count </td></tr>";
-                                    break;
+                                    break;*/
                                 /*case "não autorizado":
                                     echo "<tr><th align='right' >Doações não autorizadas</th><td align='right'>$row->count </td></tr>";
                                     break;*/

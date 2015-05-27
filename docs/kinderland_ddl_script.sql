@@ -69,7 +69,7 @@ CREATE TABLE donation_type(
     description character varying(30) NOT NULL,
     minimum_price numeric(7,2) DEFAULT 0.0
 );
-INSERT INTO donation_type VALUES (1, 'avulsa', 20.00), (2, 'associacao', 660.00), (3, 'inscricao', 0.00);
+INSERT INTO donation_type VALUES (1, 'avulsa', 20.00), (2, 'associação', 720.00), (3, 'inscrição', 0.00);
   
 CREATE TABLE donation_status(
     donation_status integer PRIMARY KEY NOT NULL,
@@ -398,5 +398,5 @@ CREATE OR REPLACE VIEW v_rel_associated_campaign AS (
         END AS data_associacao
     FROM v_report_all_users_association_detailed vall
     WHERE vall.associate = 'contribuinte'::text
-);s
+);
  
