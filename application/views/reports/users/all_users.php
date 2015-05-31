@@ -17,19 +17,30 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
+		
 
     </head>
     <body>
         <script>
-            $(function () {
-                $("#sortable-table").tablesorter({widgets: ['zebra']});
-            });
+			$( document ).ready(function() {
+				$('#sortable-table').datatable({
+					pageSize:         Number.MAX_VALUE,
+    				sort: [
+    				function (l, r) { return l.toLowerCase().localeCompare(r.toLowerCase()); }, //Evita problemas com caps-lock
+    				function (l, r) { return l.toLowerCase().localeCompare(r.toLowerCase()); }, //Evita problemas com caps-lock
+    				true],
+    				filters: [true, true, 'select'],
+    				filterText: 'Escreva para filtrar... '
+				});
+			});
         </script>
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
 
-                    <table class="sortable-table" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome </th>
@@ -42,7 +53,7 @@
                             foreach ($users as $user) {
                                 ?>
                                 <tr>
-                                    <td><a target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $user->person_id ?>"><?= $user->fullname ?></a></td>
+                                    <td><a id="<?= $user->fullname ?>" target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $user->person_id ?>"><?= $user->fullname ?></a></td>
                                     <td><?= $user->email ?></td>
                                     <td><?= $user->associate ?></td>
                                 </tr>
