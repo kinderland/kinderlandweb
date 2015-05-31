@@ -8,6 +8,7 @@
                 <select class="report-select" name="report_select" id="report_select">
                     <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_QUANTITY?>">Painel de doações (quantitativo)</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_VALUES?>">Painel de doações (valores)</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>
                 </select>
             </div>
         </div>
