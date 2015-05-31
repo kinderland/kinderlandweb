@@ -80,7 +80,7 @@
                     and date_start = (SELECT max(date_start) from payment_period
                     where event_id = ?)";
 
-                $prices = $this->executeRow($this->db, $sql, array(intval($eventId), date('Y-m-d H:m:s') ));
+                $prices = $this->executeRow($this->db, $sql, array(intval($eventId), intval($eventId) ));
                 return $prices;
             }
                 
