@@ -9,6 +9,9 @@
                     <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_QUANTITY?>">Painel de doações (quantitativo)</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_VALUES?>">Painel de doações (valores)</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/user_donation_history">Histórico individual de doações</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/free_donations">Doações avulsas</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/associate_campaign_donations">Campanha de sócios</option>
                 </select>
             </div>
         </div>

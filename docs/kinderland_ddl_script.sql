@@ -205,6 +205,8 @@ CREATE TABLE summer_camp (
     date_finish timestamp without time zone,
     date_start_pre_subscriptions timestamp without time zone,
     date_finish_pre_subscriptions timestamp without time zone,
+    date_start_pre_subscriptions_associate timestamp without time zone,
+    date_finish_pre_subscriptions_associate timestamp without time zone,
     pre_subscriptions_enabled boolean default false,
     capacity_male integer not null default 0,
     capacity_female integer not null default 0
@@ -399,4 +401,19 @@ CREATE OR REPLACE VIEW v_rel_associated_campaign AS (
     FROM v_report_all_users_association_detailed vall
     WHERE vall.associate = 'contribuinte'::text
 );
+
+CREATE OR REPLACE VIEW v_report_free_donations AS 
+ SELECT c.date_created,
+    p.person_id,
+    p.fullname,
+    p.associate,
+    d.donated_value,
+    c.payment_type,
+    c.cardflag,
+    c.payment_portions,
+    d.donation_type
+   FROM donation d
+     JOIN v_report_all_users_association_detailed p ON d.person_id = p.person_id
+     JOIN cielo_transaction c ON c.donation_id = d.donation_id
+  WHERE c.payment_status = 6;
  

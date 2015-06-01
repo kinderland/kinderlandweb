@@ -124,6 +124,29 @@
                     &nbsp;
                 </div>
                 <div class="row">
+                    <div class="col-lg-6 form-group">
+                        Período de pré-inscrições para associados:
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 form-group">
+                        <label for="date_start_pre_associate" class="col-lg-2 control-label"> Data Início: </label>
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_start_pre_associate" id="date_start_pre_associate"/>
+                        </div>
+
+                        <label for="date_finish_pre_associate" class="col-lg-2 control-label"> Data Fim: </label>
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_finish_pre_associate" id="date_finish_pre_associate"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    &nbsp;
+                </div>
+
+                <div class="row">
                     <div class="col-lg-4 form-group">
                         Período de pré-inscrições:
                     </div>

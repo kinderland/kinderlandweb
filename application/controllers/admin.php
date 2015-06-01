@@ -39,6 +39,8 @@ class Admin extends CK_Controller {
 						$_POST['date_finish'],
 						$_POST['date_start_pre'],
 						$_POST['date_finish_pre'],
+						$_POST['date_start_pre_associate'],
+						$_POST['date_finish_pre_associate'],
 						null, //description
 						true, //preEnabled
 						$_POST['capacity_male'],
@@ -54,7 +56,7 @@ class Admin extends CK_Controller {
 			
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("New summer camp successfully inserted");
-			redirect("admin/manageCamps");
+			redirect("admin/camp");
 
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to insert new camp");

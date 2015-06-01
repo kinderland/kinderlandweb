@@ -47,6 +47,7 @@
         </div>
         <h3>Colônia</h3>
         <div>
+            <!--
             <a href="<?= $this->config->item('url_link'); ?>admin/camp">
                 Administração
             </a>
@@ -54,6 +55,7 @@
             <a href="#">
                 Relatórios
             </a>
+            -->
         </div>
         <h3>Eventos</h3>
         <div>

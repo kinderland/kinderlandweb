@@ -110,6 +110,57 @@ class Reports extends CK_Controller {
 			$data['ano'] = $ano;
         $this->loadReportView("reports/finances/all_transactions", $data);
     }
+
+    public function user_donation_history() {
+        $data['users'] = $this->personuser_model->getAllUsersDetailed();
+        $this->loadReportView("reports/finances/donation_history", $data);
+    }
+
+    public function associate_campaign_donations() {
+        $years = array();
+        $start = 2015;
+        $end = date('Y');
+        while ( $start <= $end ){
+            $years[] = $start;
+            $start++;
+        }
+
+        $month = null;
+        $year = null;
+        if(isset($_GET['mes']) && $_GET['mes'] != 0)
+            $month = $_GET['mes'];
+        if(isset($_GET['ano']) && $_GET['ano'] != 0)
+            $year = $_GET['ano'];
+
+        $data['year'] = $year;
+        $data['years'] = $years;
+        $data['month'] = $month;
+        $data['donations'] = $this->donation_model->getDonationsDetailed(DONATION_TYPE_ASSOCIATE, $month, $year);
+        $this->loadReportView("reports/finances/donations", $data);
+    }
+
+    public function free_donations() {
+        $years = array();
+        $start = 2015;
+        $end = date('Y');
+        while ( $start <= $end ){
+            $years[] = $start;
+            $start++;
+        }
+
+        $month = null;
+        $year = null;
+        if(isset($_GET['mes']) && $_GET['mes'] != 0)
+            $month = $_GET['mes'];
+        if(isset($_GET['ano']) && $_GET['ano'] != 0)
+            $year = $_GET['ano'];
+
+        $data['year'] = $year;
+        $data['years'] = $years;
+        $data['month'] = $month;
+        $data['donations'] = $this->donation_model->getDonationsDetailed(DONATION_TYPE_FREEDONATION, $month, $year);
+        $this->loadReportView("reports/finances/donations", $data);
+    }
 	
 
 }

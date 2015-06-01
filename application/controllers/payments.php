@@ -204,11 +204,21 @@
 
         public function history() {
             $this->Logger->info("Running: ". __METHOD__);
+            $userid = $this->session->userdata("user_id");
+            if(isset($_GET['userid'])){
+                $userid = $_GET['userid'];
+                $donations = $this->donation_model->getDonationsByUserId($userid);
+                $data['donations'] = $donations;
+                $data['user'] = $this->person_model->getPersonById($userid);
+                $this->loadReportView("reports/finances/user_donation_history", $data);
+            } else {
+                $donations = $this->donation_model->getDonationsByUserId($userid);
+                $data['donations'] = $donations;
 
-            $donations = $this->donation_model->getDonationsByUserId($this->session->userdata("user_id"));
-            $data['donations'] = $donations;
+                $this->loadView("payments/history", $data);
+            }
 
-            $this->loadView("payments/history", $data);
+            
         }
 
     }

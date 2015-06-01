@@ -27,13 +27,15 @@ class summercamp_model extends CK_Model{
                     date_start, 
                     date_finish, 
                     date_start_pre_subscriptions, 
-                    date_finish_pre_subscriptions, 
+                    date_finish_pre_subscriptions,
+                    date_start_pre_subscriptions_associate, 
+                    date_finish_pre_subscriptions_associate, 
                     description, 
                     pre_subscriptions_enabled, 
                     capacity_male, 
                     capacity_female
                 ) VALUES (
-                    ?,?,?,?,?,?,".(($camp->isEnabled())?"true":"false").",?,?
+                    ?,?,?,?,?,?,?,?,".(($camp->isEnabled())?"true":"false").",?,?
                 )";
 
         $paramArray = array(
@@ -42,6 +44,8 @@ class summercamp_model extends CK_Model{
                 $camp->getDateFinish(),
                 $camp->getDateStartPre(),
                 $camp->getDateFinishPre(),
+                $camp->getDateStartPreAssociate(),
+                $camp->getDateFinishPreAssociate(),
                 $camp->getDescription(),
                 intval($camp->getCapacityMale()),
                 intval($camp->getCapacityFemale())

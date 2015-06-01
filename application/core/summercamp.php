@@ -7,13 +7,16 @@
 		private $dateFinish;
 		private $dateStartPre;
 		private $dateFinishPre;
+		private $dateStartPreAssociate;
+		private $dateFinishPreAssociate;
 		private $description;
 		private $preEnabled;
 		private $capacityMale;
 		private $capacityFemale;
 
 		public function __construct($campId, $campName, $dateCreated, $dateStart, 
-			$dateFinish, $dateStartPre, $dateFinishPre, $description, $preEnabled,
+			$dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, 
+			$description, $preEnabled,
 			$capacityMale, $capacityFemale){
 			$this->campId = $campId;
 			$this->campName = $campName;
@@ -22,6 +25,8 @@
 			$this->dateFinish = $dateFinish;
 			$this->dateStartPre = $dateStartPre;
 			$this->dateFinishPre = $dateFinishPre;
+			$this->dateStartPreAssociate = $dateStartPreAssociate;
+			$this->dateFinishPreAssociate = $dateFinishPreAssociate;
 			$this->description = $description;
 			$this->preEnabled = $preEnabled;
 			$this->capacityMale = $capacityMale;
@@ -38,6 +43,8 @@
 				//$resultRow->price,
 				$resultRow->date_start_pre_subscriptions,
 				$resultRow->date_finish_pre_subscriptions,
+				$resultRow->date_start_pre_subscriptions_associate,
+				$resultRow->date_finish_pre_subscriptions_associate,
 				$resultRow->description,
 				$resultRow->pre_subscriptions_enabled,
 				$resultRow->capacity_male,
@@ -92,6 +99,20 @@
 		}
 		public function getDateFinishPre(){
 			return $this->dateFinishPre;
+		}
+
+		public function setDateStartPreAssociate($dateStartPreAssociate){
+			$this->dateStartPreAssociate = $dateStartPreAssociate;
+		}
+		public function getDateStartPreAssociate(){
+			return $this->dateStartPreAssociate;
+		}
+
+		public function setDateFinishPreAssociate($dateFinishPreAssociate){
+			$this->dateFinishPreAssociate = $dateFinishPreAssociate;
+		}
+		public function getDateFinishPreAssociate(){
+			return $this->dateFinishPreAssociate;
 		}
 
 		public function setDescription($description){

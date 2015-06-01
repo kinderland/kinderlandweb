@@ -30,7 +30,7 @@ class donation_model extends CK_Model {
 			if ($donation -> getDonationType() == 1) {
 				return 6;
 			} else {
-				return 2;
+				return 1;
 			}
 		}
 	}
@@ -132,6 +132,31 @@ class donation_model extends CK_Model {
 			$donations[] = Donation::createDonationObject($row);
 		}
 		return $donations;
+	}
+
+	public function getDonationsDetailed($donationType=null, $mes=null, $ano=null){
+		$sql = "SELECT * 
+				FROM v_report_free_donations ";
+		if($donationType != null || $mes != null || $ano != null) {
+			$sql .= " WHERE ";
+
+			if($donationType != null)
+				$sql .= " donation_type = " .$donationType. " AND";
+
+			if($ano != null)
+				$sql .= " to_char(date_created, 'YYYY')::integer = " .$ano. " AND";
+
+			if($mes != null)
+				$sql .= " to_char(date_created, 'MM')::integer = " .$mes. " AND";
+
+			$sql = substr($sql, 0, strlen($sql) -3);
+		}
+
+		$sql .= " ORDER BY date_created DESC";
+
+		$resultSet = $this -> executeRows($this -> db, $sql);
+
+		return $resultSet;
 	}
 
 }
