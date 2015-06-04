@@ -4,7 +4,7 @@
 
     class cielotransaction_model extends CK_Model {
         const SelectQuery = 'Select tid, payment_type, cardflag, payment_portions, donation_id, description as payment_status, date_created, date_updated, transaction_value 
-        from cielo_transaction join payment_status on cielo_transaction.payment_status = payment_status.payment_status order by date_created desc';
+        from cielo_transaction join payment_status on cielo_transaction.payment_status = payment_status.payment_status ';
 
         public function __construct() {
             parent::__construct();
