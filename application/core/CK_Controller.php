@@ -56,7 +56,7 @@ class CK_Controller extends CI_Controller {
  			Mais uma vez, nosso MUITO OBRIGADO!<br><br>Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Doacao campanha associados";
 
-			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
+			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br",array("diretoria@kinderland.com.br")));
 		} else if ($donation -> getDonationType() == DONATION_TYPE_FREEDONATION) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
 			$emailString = "Prezad" . (($person -> getGender() == 'F') ? 'a' : 'o') . " " . $person -> getFullname() . ", <br><br>" . "Sua doação para a Kinderland
@@ -73,7 +73,7 @@ class CK_Controller extends CI_Controller {
 			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Doacao avulsa";
 
-			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
+			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"),array("diretoria@kinderland.com.br"));
 		} else if ($donation -> getDonationType() == DONATION_TYPE_SUBSCRIPTION) {
 			$person = $this -> person_model -> getPersonById($donation -> getPersonId());
 			$event = $this -> event_model -> getDonationEvent($donation -> getDonationId());
@@ -81,7 +81,7 @@ class CK_Controller extends CI_Controller {
 			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
 			$emailSubject = "[Kinderland] Inscricao " . $event -> getEventName() . " confirmada";
 
-			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"));
+			return $this -> sendMail($emailSubject, $emailString, $person,array("secretaria@kinderland.com.br"),array("diretoria@kinderland.com.br"));
 		}
 	}
 
