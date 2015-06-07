@@ -43,9 +43,11 @@
 			$where = "";
         	if($ano)
 				$where = " where to_char(ct.date_created, 'YYYY') = ? ";
-            $sql = "Select to_char(ct.date_created, 'DD/MM/YY HH24:MI:SS') as date_created, payment_type,ct.tid, description,
-            p.fullname,ct.cardflag,ct.payment_portions from cielo_transaction ct natural join payment_status 
-            join donation d on d.donation_id = ct.donation_id join person p on p.person_id = d.person_id $where 
+            $sql = "Select to_char(ct.date_created, 'DD/MM/YY HH24:MI:SS') as date_created, payment_type,ct.tid, ps.description as description,
+            p.fullname,ct.cardflag,ct.payment_portions, d.donated_value as value, dt.description as reason from 
+            cielo_transaction ct join payment_status ps on ct.payment_status = ps.payment_status 
+            join donation d on d.donation_id = ct.donation_id join person p on p.person_id = d.person_id
+            join donation_type dt on dt.donation_type = d.donation_type $where 
             order by ct.date_created desc";
 			if(!$ano)
 	            $resultSet = $this -> executeRows($this -> db, $sql);
@@ -62,7 +64,9 @@
 					$payment["name"] = $row->fullname;
 					$payment["cardflag"] = $row->payment_type." ".$row->cardflag;						
 					$payment["payment_portions"] = $row->payment_portions;
-				    $paymentsArray[] = $payment;
+					$payment["value"] = $row->value;						
+					$payment["reason"] = $row->reason;						
+					$paymentsArray[] = $payment;
 				}
 
             return $paymentsArray;

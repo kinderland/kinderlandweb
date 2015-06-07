@@ -73,7 +73,7 @@
         When the empty value is picked, the selected array will contain all available keys. */
         return true ;
     }
-}, true, 'select',true,true,'select'],
+}, true, 'select',true,'select','select','select','select'],
     				filterText: 'Escreva para filtrar... '
 				});
 			});
@@ -99,8 +99,10 @@
                                 <th> Id </th>
                                 <th> Status </th>
                                 <th> Nome </th>
+                                <th style="width:40px;"> Valor </th>
                                 <th> Forma de Pagamento </th>
                                 <th> Parcelas </th>                                
+                                <th> Motivo </th>                                
                             </tr>
                         </thead>
                         <tbody>
@@ -112,8 +114,10 @@
                                     <td><?= $payment["tid"] ?></td>
                                     <td><?= $payment["payment_status"] ?></td>
                                     <td><?= $payment["name"] ?></td>
+                                    <td>R$<?= intval($payment["value"]) ?>.00</td>
                                     <td><?= $payment["cardflag"] ?></td>
                                     <td><?= $payment["payment_portions"] ?></td>
+                                    <td><?= $payment["reason"] ?></td>
                                 </tr>
                                 <?php
                             }
