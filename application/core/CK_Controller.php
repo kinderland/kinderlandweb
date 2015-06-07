@@ -4,6 +4,7 @@ include_once APPPATH . 'core/personuser.php';
 include_once APPPATH . 'core/event.php';
 include_once APPPATH . 'core/donation.php';
 include_once APPPATH . 'libraries/logger.php';
+include_once APPPATH . 'libraries/csv.php';
 
 // Colonia Kinderland Controller -> CK_Controller
 class CK_Controller extends CI_Controller {
