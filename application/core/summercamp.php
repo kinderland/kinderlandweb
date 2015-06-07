@@ -62,6 +62,7 @@
 		public function setCampName($campName){
 			$this->campName = $campName;
 		}
+		
 		public function getCampName(){
 			return $this->campName;
 		}
