@@ -107,14 +107,34 @@ class CK_Controller extends CI_Controller {
 		$this->load->model('email_model');
 		$this->email_model->setLogger($this->Logger);
 
-		$this -> email -> from($myMail);
-		$this -> email -> to($person -> getEmail());
-		$this -> email -> set_newline("\r\n");
-		$this -> email -> subject($subject);
-		$this -> email -> message($content);
+		$to = $person -> getEmail();
+
 		if($cc == NULL){
 			$cc = array("secretaria@kinderland.com.br");
 		}
+
+		
+		if(ENVIRONMENT != 'production'){
+			$addToSubject = "[TESTE][to:$to][cc=";
+			foreach($cc as $carboncopy){
+				$addToSubject.=$carboncopy;
+			}
+			$addToSubject.="][bcc=";
+			foreach($bcc as $carboncopy){
+				$addToSubject.=$carboncopy;
+			}
+			$addToSubject.="]";
+			$to = "teste.kinderland@gmail.com";
+			$cc = NULL;
+			$bcc = NULL;
+			$subject = $addToSubject.$subject;
+		}
+		
+		$this -> email -> from($myMail);
+		$this -> email -> to($to);
+		$this -> email -> set_newline("\r\n");
+		$this -> email -> subject($subject);
+		$this -> email -> message($content);
 		if ($cc != NULL)
 			$this -> email -> cc($cc);
 		if ($bcc != NULL)
@@ -124,7 +144,7 @@ class CK_Controller extends CI_Controller {
 			$this -> Logger -> info("Email enviado com sucesso para: " . $person -> getFullname() . " com o assunto " . $subject);
 			return TRUE;
 		} else {
-			$this -> email_model-> saveEmail($subject, $content, $person -> getEmail(), $cc, $bcc, TRUE);
+			$this -> email_model-> saveEmail($subject, $content, $person -> getEmail(), $cc, $bcc, FALSE);
 			$this -> Logger -> error("Problema ao enviar email para: " . $person -> getFullname() . " com o assunto " . $subject . "\n Texto de debug foi: " . $this -> email -> print_debugger());
 			return FALSE;
 		}
