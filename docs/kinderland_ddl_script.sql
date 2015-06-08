@@ -227,8 +227,15 @@ CREATE TABLE summer_camp_subscription_status (
     description varchar(50)
 );
 INSERT INTO summer_camp_subscription_status VALUES
-(0, 'Candidato não ok'), (1, 'Candidato ok'), (2, 'Aguardando pagamento'),
-(3, 'Inscrito'), (-1, 'Desistente'), (-2, 'Excluido');
+(0, 'pre-inscricao em elaboracao'), 
+(1, 'pre-inscricao aguardando validação'), 
+(2, 'pre-inscrição validada'),
+(3, 'pre-inscricao na fila de espera'), 
+(3, 'pre-inscricao aguardando pagamento'), 
+(3, 'inscrito'), 
+(-1, 'desistente'), 
+(-2, 'excluido'),
+(-3, 'cancelado');
 
 
 CREATE TABLE summer_camp_subscription (
