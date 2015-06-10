@@ -27,8 +27,12 @@
 
         	function prepareModal(personId) {
 				var users = <?= print_r(json_encode($users), true) ?>;
+				var admins = 0; var selectedIsAdmin = false;
 				for(var i=0;i<users.length;i++){
 			        var user = users[i];
+			        if (user['system_admin']==1)
+			        	admins++;
+
 			        if (user['person_id'] == personId){
 			        	$("#modal_title").text("Permissões concedidas a " + user['fullname']);
 
@@ -39,10 +43,15 @@
 			        	$("#doctor").prop('checked', user['doctor']==1);
 			        	$("#secretary").prop('checked', user['secretary']==1);
 			        	$("#monitor_instructor").prop('checked', user['monitor_instructor']==1);
-
-			        	break;
+			        	if (user['system_admin']==1)
+			        		selectedIsAdmin = true;
 			        }
 			    }
+			    if(admins < 2 && selectedIsAdmin)
+			    	$("#system_admin").attr('disabled', true);
+			    else
+			    	$("#system_admin").attr('disabled', false);
+
 			}
 
 			function updatePersonPermissions() {
@@ -77,8 +86,8 @@
                         </thead>
                         <tbody id="tablebody">
                             <?php
-                            foreach ($users as $user) {
-                                ?>
+                            	foreach ($users as $user) {
+                            ?>
                                 <tr>
                                     <td><a onclick="prepareModal(<?=$user->person_id ?>)" data-toggle="modal" data-target="#myModal"><?= $user->fullname ?></a></td>
                                     <td><input type="checkbox" <?=($user->system_admin)?"checked":""?> /></td>
@@ -88,7 +97,7 @@
                                     <td><input type="checkbox" <?=($user->doctor)?"checked":""?> /></td>
                                     <td><input type="checkbox" <?=($user->monitor_instructor)?"checked":""?>/></td>
                                 </tr>
-                                <?php
+                            <?php
 								}
                             ?>
                         </tbody>
