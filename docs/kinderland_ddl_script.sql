@@ -7,7 +7,14 @@ CREATE TABLE user_type (
     user_type integer PRIMARY KEY,
     description character varying(50) NOT NULL
 );
-INSERT INTO user_type VALUES (1, 'common user'), (2, 'system admin'), (3, 'director'), (4, 'secretary'), (5, 'coordinator');
+INSERT INTO user_type VALUES 
+(1, 'common user'), 
+(2, 'system admin'), 
+(3, 'director'), 
+(4, 'secretary'), 
+(5, 'coordinator'),
+(6, 'doctor'),
+(7, 'monitor-instructor');
 
 CREATE TABLE address (
     address_id serial PRIMARY KEY,

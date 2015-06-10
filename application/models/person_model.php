@@ -73,5 +73,46 @@ class person_model extends CK_Model{
 
 		return false;
 	}
+
+	public function getUserPermissionsDetailed() {
+		$this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT * FROM v_users_permissions";
+
+        $rows = $this->executeRows($this->db, $sql);
+
+        return $rows;
+	}
+
+	public function updateUserPermissions($person_id, $arrNewPermissions) {
+		$this->Logger->info("Running: " . __METHOD__);
+        $deleteSql = "DELETE FROM person_user_type WHERE person_id = ?";
+		if(!$this->execute($this->db, $deleteSql, array(intval($person_id))))
+			throw new Exception("Failed to delete previous records");
+
+		$insertSql = "INSERT INTO person_user_type(person_id, user_type) VALUES 
+					(".$person_id.", 1)";
+		if($arrNewPermissions['system_admin'])
+			$insertSql .= ", (".$person_id.", 2)";
+		
+		if($arrNewPermissions['director'])
+			$insertSql .= ", (".$person_id.", 3)";
+
+		if($arrNewPermissions['secretary'])
+			$insertSql .= ", (".$person_id.", 4)";
+
+		if($arrNewPermissions['coordinator'])
+			$insertSql .= ", (".$person_id.", 5)";
+
+		if($arrNewPermissions['doctor'])
+			$insertSql .= ", (".$person_id.", 6)";
+
+		if($arrNewPermissions['monitor'])
+			$insertSql .= ", (".$person_id.", 7)";
+
+		if(!$this->execute($this->db, $insertSql))
+			throw new Exception("Failed to insert new records");
+
+        return true;
+	}
 }
 ?>

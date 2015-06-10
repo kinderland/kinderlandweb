@@ -31,7 +31,7 @@
     <div id="accordion">
         <h3>Usuários</h3>
         <div>
-            <a href="#">
+            <a href="<?= $this->config->item('url_link'); ?>admin/users">
                 Administração
             </a>
             <br />

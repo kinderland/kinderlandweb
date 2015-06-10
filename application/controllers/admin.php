@@ -8,10 +8,12 @@ class Admin extends CK_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this -> load -> helper('url');
+		$this -> load -> model('person_model');
 		$this -> load -> model('personuser_model');
 		$this -> load -> model('summercamp_model');
 		$this -> load -> model('donation_model');
 		$this -> load -> model('generic_model');
+		$this -> person_model -> setLogger($this -> Logger);
 		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
 		$this -> donation_model -> setLogger($this -> Logger);
@@ -88,5 +90,46 @@ class Admin extends CK_Controller {
 		}
 	}
 
+
+	public function users () {
+		$this->loadView("admin/users/user_admin_container");
+	}
 	
+	public function userPermissions() {
+		$data['users'] = $this -> person_model -> getUserPermissionsDetailed();
+		$this -> loadReportView("admin/users/user_permissions", $data);
+	}
+
+	public function updatePersonPermissions() {
+		$this->Logger->info("Running: ". __METHOD__);
+
+		$this->Logger->info("Array POST: " . print_r($_POST, true));
+		$personId = $_POST['person_id'];
+
+		$arrNewPermissions = array(
+				'system_admin' => isset($_POST['system_admin']),
+				'director' => isset($_POST['director']),
+				'secretary' => isset($_POST['secretary']),
+				'coordinator' => isset($_POST['coordinator']),
+				'doctor' => isset($_POST['doctor']),
+				'monitor' => isset($_POST['monitor'])
+			);
+
+		$this->Logger->info("Array New Permissions: " . print_r($arrNewPermissions, true));
+		try{
+			$this->Logger->info("Updating user's permissions");
+			$this->generic_model->startTransaction();
+			
+			$this->person_model->updateUserPermissions($personId, $arrNewPermissions);
+			
+			$this->generic_model->commitTransaction();
+			$this->Logger->info("Updated user's permissions");
+
+		} catch (Exception $ex) {
+			$this->Logger->error("Failed to update user's permissions");
+			$this->generic_model->rollbackTransaction();
+		}	
+
+		redirect("admin/userPermissions");
+	}
 }
