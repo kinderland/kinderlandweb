@@ -431,3 +431,30 @@ CREATE OR REPLACE VIEW v_report_free_donations AS
      JOIN cielo_transaction c ON c.donation_id = d.donation_id
   WHERE c.payment_status = 6;
  
+ CREATE OR REPLACE VIEW v_users_permissions AS 
+ SELECT DISTINCT p.person_id,
+    p.fullname,
+    COALESCE(( SELECT 1
+           FROM person_user_type
+          WHERE person_user_type.person_id = p.person_id AND person_user_type.user_type = 1), 0) AS common_user,
+    COALESCE(( SELECT 1
+           FROM person_user_type
+          WHERE person_user_type.person_id = p.person_id AND person_user_type.user_type = 2), 0) AS system_admin,
+    COALESCE(( SELECT 1
+           FROM person_user_type
+          WHERE person_user_type.person_id = p.person_id AND person_user_type.user_type = 3), 0) AS director,
+    COALESCE(( SELECT 1
+           FROM person_user_type
+          WHERE person_user_type.person_id = p.person_id AND person_user_type.user_type = 4), 0) AS secretary,
+    COALESCE(( SELECT 1
+           FROM person_user_type
+          WHERE person_user_type.person_id = p.person_id AND person_user_type.user_type = 5), 0) AS coordinator,
+    COALESCE(( SELECT 1
+           FROM person_user_type
+          WHERE person_user_type.person_id = p.person_id AND person_user_type.user_type = 6), 0) AS doctor,
+    COALESCE(( SELECT 1
+           FROM person_user_type
+          WHERE person_user_type.person_id = p.person_id AND person_user_type.user_type = 7), 0) AS monitor_instructor
+   FROM person_user_type put
+     LEFT JOIN person p ON p.person_id = put.person_id
+  ORDER BY p.fullname;
