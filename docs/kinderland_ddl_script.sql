@@ -258,6 +258,11 @@ CREATE TABLE summer_camp_subscription (
     accepted_travel_terms boolean default false
 );
 
+ALTER TABLE ONLY summer_camp_subscription
+    ADD CONSTRAINT summer_camp_subscription_pkey PRIMARY KEY (summer_camp_id, colonist_id);
+
+
+
 CREATE TABLE camp_payment_period (
     camp_payment_period_id SERIAL,
     summer_camp_id INTEGER NOT NULL REFERENCES event,
@@ -267,6 +272,37 @@ CREATE TABLE camp_payment_period (
 
     PRIMARY KEY(camp_payment_period_id)
 );
+
+CREATE TABLE document_type (
+    document_type SERIAL NOT NULL PRIMARY KEY,
+    description character varying(100)
+);
+
+INSERT INTO document_type VALUES
+(1, 'teste');
+
+
+CREATE TABLE document (
+    document_id SERIAL NOT NULL PRIMARY KEY,
+    summer_camp_id integer,
+    colonist_id integer,
+    date_created timestamp without time zone DEFAULT now(),
+    filename character varying(100) NOT NULL,
+    extension character varying(100) NOT NULL,
+    document_type integer NOT NULL,
+    file bytea NOT NULL,
+    user_id integer NOT NULL
+);
+
+ALTER TABLE ONLY document
+    ADD CONSTRAINT "UK_document" UNIQUE (summer_camp_id, colonist_id, date_created);
+
+ALTER TABLE ONLY document
+    ADD CONSTRAINT document_summer_camp_id_fkey FOREIGN KEY (summer_camp_id, colonist_id) REFERENCES summer_camp_subscription(summer_camp_id, colonist_id);
+
+ALTER TABLE ONLY document
+    ADD CONSTRAINT document_user_id_fkey FOREIGN KEY (user_id) REFERENCES person_user(person_id);
+
 
 
 CREATE VIEW open_public_events as (SELECT * FROM event 
