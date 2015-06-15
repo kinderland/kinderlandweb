@@ -353,6 +353,18 @@ CREATE VIEW donation_detailed AS (
     
 );
 
+CREATE TABLE system_method
+(
+  system_method_id serial NOT NULL,
+  method_name character varying(50) NOT NULL,
+  controller_name character varying(20),
+  user_type integer NOT NULL,
+  date_inserted timestamp without time zone DEFAULT now(),
+  CONSTRAINT pk_system_methods PRIMARY KEY (system_method_id)
+);
+
+----------------------------------- Views Section -----------------------------------
+
 CREATE OR REPLACE VIEW donations_pending AS (
     SELECT 
         *
