@@ -6,8 +6,8 @@
 		private $personUserId;
 		private $situation;
 
-		public function __construct($personId, $fullname, $gender, $email, $address, $summerCampId,$personUserId, $situation, $documentType, $phone1, $phone2,$summerCampId,$personUserId,$situation){
-			parent::__construct($personId, $fullname, $gender, $email, $address, $summerCampId,$personUserId, $situation, $documentType, $phone1, $phone2);
+		public function __construct($personId, $fullname, $gender, $email, $address, $colonistId,$personUserId, $situation, $documentType, $phone1, $phone2,$summerCampId,$personUserId,$situation){
+			parent::__construct($personId, $fullname, $gender, $email, $address, $colonistId,$personUserId, $situation, $documentType, $phone1, $phone2);
 
 			$this->summerCampId = $summerCampId;
 			$this->personUserId = $personUserId;

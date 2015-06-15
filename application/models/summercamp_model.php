@@ -110,5 +110,57 @@ class summercamp_model extends CK_Model {
 		return FALSE;
 	}
 
+	public function addParentToSummerCampSubscripted($summerCampId, $colonistId, $parentId, $relation) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+
+		$sql = 'INSERT INTO parent_summer_camp_subscription (summer_camp_id,colonist_id,parent_id,relation) VALUES (?, ?, ?, ?,?)';
+		$returnId = $this -> execute($this -> db, $sql, array($summerCampId, $colonistId, $userId, $parentId,$relation));
+		if ($returnId)
+		{
+			$this -> Logger -> info("Parente do colonista $colonistId e summer_camp_id = $summerCampId inserido com sucesso");
+			return TRUE;
+		}	
+		$this -> Logger -> error("Problema ao inserir parente do colonista $colonistId e summer_camp_id = $summerCampId");
+		return FALSE;
+	}
+	
+	public function uploadDocument($summerCampId, $colonistId, $userId,$fileName, $file,$type){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		
+		$splitByDot = explode(".",$fileName);
+		$extension = $splitByDot[count($splitByDot)-1];
+
+		$sql = 'INSERT INTO document (summer_camp_id,colonist_id,user_id,filename,extension,document_type,file) VALUES (?, ?, ?, ?,?,?,?)';
+		$returnId = $this -> execute($this -> db, $sql, array($summerCampId, $colonistId, $userId, $fileName,$extension,$type,pg_escape_bytea($file)));
+		if ($returnId){
+			$this -> Logger -> info("Documento inserido com sucesso");			
+			return TRUE;
+		}
+		$this -> Logger -> error("Problema ao inserir documento");			
+		return FALSE;
+		
+	}
+	
+	public function getNewestDocument($camp_id, $colonist_id,$document_type){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		
+		$sql = 'Select * from document where summer_camp_id = ? and colonist_id = ? and document_type = ? order by date_created desc';
+		$resultSet = $this -> executeRows($this -> db, $sql, array($camp_id,$colonist_id,$document_type));
+
+		$document = FALSE;
+
+		if ($resultSet)
+			foreach ($resultSet as $row){
+				$this -> Logger -> info("Documento encontrado com sucesso, criando array");			
+				$document = array("data"=>$row->file,"name"=>$row->filename);
+				return $document;
+			}
+		$this -> Logger -> info("Nao achei o documento");			
+		return $document;
+		
+	}
+	
+
+
 }
 ?>

@@ -16,6 +16,48 @@
 		}
 	}
 
+	function toggleInputStatusIn(element, disable) {
+		if (disable == true)	 {
+			$(element).find(':input').prop('disabled', true);
+			$(element + ' a').click(function(e) {
+				e.preventDefault();
+			});
+		} else {
+			$(element).find(':input').prop('disabled', false);
+			$(element + ' a').unbind("click");
+		}
+	}
+
+	function responsableDadMotherFunction() {
+		var val = $('input:radio[name=responsableDadMother]:checked').val();
+		if (val == "not") {//dois habilitados
+			$(".dad").fadeIn();
+			$(".mother").fadeIn();
+			toggleInputStatusIn(".dad", false);
+			toggleInputStatusIn(".mother", false);
+		} else if (val == "dad") {//pai desabilitado
+			$(".dad").fadeOut();
+			$(".mother").fadeIn();
+			toggleInputStatusIn(".mother", false);
+			toggleInputStatusIn(".dad", true);
+		} else if (val == "mother") {//mae desabilitado
+			$(".mother").fadeOut();
+			$(".dad").fadeIn();
+			toggleInputStatusIn(".mother", true);
+			toggleInputStatusIn(".dad", false);
+		}
+	}
+
+	function hide_class(classn, hide) {
+		if (hide == 0) {
+			$("." + classn).fadeIn();
+			toggleInputStatusIn("." + classn, false);
+		} else {
+			$("." + classn).fadeOut();
+			toggleInputStatusIn("." + classn, true);
+		}
+	}
+
 
 	$(document).ready(function() {
 		var SPMaskBehavior = function(val) {
@@ -29,7 +71,10 @@
 
 		$(".phone").mask(SPMaskBehavior, spOptions);
 
-		$(".birthdate").mask("00/00/0000", {placeholder: "__/__/____"});;
+		$(".birthdate").mask("00/00/0000", {
+			placeholder : "__/__/____"
+		});
+		;
 		addressResponsable();
 	});
 
@@ -326,8 +371,148 @@
                 </div>
             </div>
             <br />
+            <br />
 
-            <br /><br /><br />
+
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-lg-10">
+                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="not" 
+                        <?php if ( empty($_POST['responsableDadMother']) || 
+                        (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "not")
+						)) echo "checked='checked'" ?>/> Preencher os dados de pai e mãe
+                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="dad"                         
+                        <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "dad")) echo "checked='checked'" ?>
+						/> Utilizar os dados do responsável como pai
+                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="mother"                         
+                        <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "mother")) echo "checked='checked'" ?>
+						/> Utilizar os dados do responsável como mãe
+                    </div>
+
+
+                </div>
+            </div>
+            <br class="dad" /><br class="dad" />
+            <div class="row dad">
+                <div class="form-group dad">
+                    <div class="col-lg-3">
+			             Dados do pai do(a) colonista:
+                    </div>
+                    <div class="col-lg-4">
+			             <input onchange="hide_class('dad-form',this.checked);" class="dad" name="dadDeclare" type="checkbox"> Não desejo preencher
+                    </div>
+                </div>
+            </div>
+            <br class="dad"/>
+            <div class="dad dad-form row">
+                <div class="form-group">
+                    <label for="fullname" class="col-lg-2 control-label"> Nome: </label>
+                    <div class="col-lg-6">
+                        <input type="text" class="dad dad-form form-control" placeholder="Nome"
+                               name="dadFullName" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
+                               oninput="setCustomValidity('')"
+                               value="<?php
+							if (!empty($_POST['dadFullName'])) {
+								echo $_POST['dadFullName'];
+							}
+					 ?>"/>
+	                </div>
+                </div>
+            </div>
+            <br class="dad dad-form"/>            
+            <br class="dad dad-form"/>
+            <div class="dad dad-form row">
+                <div class="form-group">
+                    <label for="dadphone" class="dad dad-form col-lg-1 control-label"> Telefone: </label>
+                    <div class="col-lg-3">
+                        <input type="text" class="dad dad-form form-control" placeholder="Telefone"
+                               name="dadPhone" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
+                               oninput="setCustomValidity('')"
+                               value="<?php
+							if (!empty($_POST['dadPhone'])) {
+								echo $_POST['dadPhone'];
+							}
+					 ?>"/>
+					 </div>
+                    <label for="fullname" class="dad dad-form col-lg-1 control-label"> E-mail: </label>
+                    <div class="col-lg-3">
+                        <input type="text" class="dad dad-form form-control" placeholder="E-mail"
+                               name="dadEmail" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
+                               oninput="setCustomValidity('')"
+                               value="<?php
+							if (!empty($_POST['dadEmail'])) {
+								echo $_POST['dadEmail'];
+							}
+					 ?>"/>                
+					</div>
+				 </div>
+            </div>
+            <br class="dad-form" />            
+            <br class="dad-form" />
+            <div class="row mother">
+                <div class="form-group mother">
+                    <div class="col-lg-3">
+			             Dados da mãe do(a) colonista:
+                    </div>
+                    <div class="col-lg-4">
+			             <input onchange="hide_class('mother-form',this.checked);" class="mother" name="motherDeclare" type="checkbox"> Não desejo preencher
+                    </div>
+                </div>
+            </div>
+            <br class = "mother-form"/>
+            <div class="mother mother-form row">
+                <div class="form-group">
+                    <label for="fullname" class="col-lg-2 control-label"> Nome: </label>
+                    <div class="col-lg-6">
+                        <input type="text" class="mother mother-form form-control" placeholder="Nome"
+                               name="motherFullName" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os motheros do pai por favor marque a caixa de não desejo preencher.')"
+                               oninput="setCustomValidity('')"
+                               value="<?php
+							if (!empty($_POST['motherFullName'])) {
+								echo $_POST['motherFullName'];
+							}
+					 ?>"/>
+	                </div>
+                </div>
+            </div>
+            <br class = "mother mother-form" />            
+            <br class = "mother mother-form"/>
+            <div class="mother mother-form row">
+                <div class="form-group">
+                    <label for="motherphone" class="mother mother-form col-lg-1 control-label"> Telefone: </label>
+                    <div class="col-lg-3">
+                        <input type="text" class="mother mother-form form-control" placeholder="Telefone"
+                               name="motherPhone" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
+                               oninput="setCustomValidity('')"
+                               value="<?php
+							if (!empty($_POST['motherPhone'])) {
+								echo $_POST['motherPhone'];
+							}
+					 ?>"/>
+					 </div>
+                    <label for="fullname" class="mother mother-form col-lg-1 control-label"> E-mail: </label>
+                    <div class="col-lg-3">
+                        <input type="text" class="mother mother-form form-control" placeholder="E-mail"
+                               name="motherEmail" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
+                               oninput="setCustomValidity('')"
+                               value="<?php
+							if (!empty($_POST['motherEmail'])) {
+								echo $_POST['motherEmail'];
+							}
+					 ?>"/>                
+					</div>
+				 </div>
+            </div>
+            <br class = "mother mother-form"/>            
+            <br class = "mother mother-form"/>
+
+            <br /><br />
 
             <div class="form-group">
                 <div class="col-lg-10">

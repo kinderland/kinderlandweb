@@ -17,6 +17,17 @@ class person_model extends CK_Model{
 		return false;
 	}
 
+	public function insertParent($fullname, $gender,$email){
+		$this->Logger->info("Running: " . __METHOD__);
+
+		$sql = 'INSERT INTO person (fullname, date_created, gender,email) VALUES (?, current_timestamp, ?,?)';
+		$returnId = $this->executeReturningId($this->db, $sql, array($fullname, $gender,$email));
+		if($returnId)
+			return $returnId;
+
+		return false;
+	}
+
 	public function insertPersonSimple($fullname, $gender){
 		$this->Logger->info("Running: " . __METHOD__);
 
@@ -27,6 +38,7 @@ class person_model extends CK_Model{
 
 		return false;
 	}
+
 
  	public function updatePerson($fullname, $gender, $email, $person_id, $address_id) {
  		$this->Logger->info("Running: " . __METHOD__);

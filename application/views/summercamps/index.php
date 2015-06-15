@@ -1,6 +1,7 @@
-<div class = "row">
 	<?php require_once APPPATH . 'views/include/common_user_left_menu.php'
 	?>
+
+<div class = "col-lg-10">
 	<h1>Inscrições de colonistas:</h1>
 	<?php if($summerCamps){
 	?>
@@ -14,7 +15,6 @@
 	<?php } else{ ?>
 		Não é possível fazer inscrições no momento.
 	<?php } ?>
-	<br><br><br>
 	<?php if($summerCampInscriptions){ ?>
 		Colonistas:
 		<table class="table-bordered table table-striped"><thead>
@@ -30,7 +30,12 @@
 			<td><?=$summerCampInscription->getFullname()?>
 				<br>
 				<?=$this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->getCampName()?></td>
-			<td><button class="button" disabled>Gerenciar documentos</button></td>
+			<td>
+				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+					<button class="button" >Enviar documentos</button> </a><br><br>	
+				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/verifyDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+					<button class="button" >Verificar documentos</button> </a>
+			</td>
 			<td><?=$summerCampInscription->getSituation()?></td>
 			<td><button class="button" disabled>Pagar</button></td>
 		</tr>
