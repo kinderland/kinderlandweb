@@ -303,7 +303,18 @@ ALTER TABLE ONLY document
 ALTER TABLE ONLY document
     ADD CONSTRAINT document_user_id_fkey FOREIGN KEY (user_id) REFERENCES person_user(person_id);
 
+CREATE TABLE parent_summer_camp_subscription (
+    summer_camp_id integer NOT NULL,
+    colonist_id integer NOT NULL,
+    parent_id integer NOT NULL,
+    relation character varying(10)
+);
 
+ALTER TABLE ONLY parent_summer_camp_subscription
+    ADD CONSTRAINT parent_summer_camp_subscription_pkey PRIMARY KEY (summer_camp_id, colonist_id, parent_id);
+
+ALTER TABLE ONLY parent_summer_camp_subscription
+    ADD CONSTRAINT "FK_parent_summer_camp_subscription_person" FOREIGN KEY (parent_id) REFERENCES person(person_id);
 
 CREATE VIEW open_public_events as (SELECT * FROM event 
                 WHERE current_timestamp BETWEEN date_start_show AND date_finish_show 
