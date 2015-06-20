@@ -75,7 +75,7 @@ function arrayToCSV($logger, $name, $data, $columname = array(),$separator = ","
 	$logger->info("CSV $name created with sucess, serving it now.");
 		
 	header("Content-type:text/csv; charset=utf-8");
-	header("Content-Disposition: attachment; filename=$name");
+	header("Content-Disposition: attachment; filename=\"$name\"");
 	echo $write;	
 }
 ?>
