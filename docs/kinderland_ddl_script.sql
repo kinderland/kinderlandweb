@@ -316,6 +316,20 @@ ALTER TABLE ONLY parent_summer_camp_subscription
 ALTER TABLE ONLY parent_summer_camp_subscription
     ADD CONSTRAINT "FK_parent_summer_camp_subscription_person" FOREIGN KEY (parent_id) REFERENCES person(person_id);
 
+    CREATE TABLE validation (
+    summer_camp_id integer not null references summer_camp,
+    colonist_id bigint not null references colonist,
+    colonist_data_ok boolean not null default false,
+    colonist_data_msg varchar(200),
+    colonist_picture_ok boolean not null default false,
+    colonist_picture_msg varchar(200),
+    colonist_identity_ok boolean not null default false,
+    colonist_identity_msg varchar(200),
+
+    PRIMARY KEY(summer_camp_id, colonist_id)
+);
+    
+
 CREATE VIEW open_public_events as (SELECT * FROM event 
                 WHERE current_timestamp BETWEEN date_start_show AND date_finish_show 
                 AND enabled = true);

@@ -7,6 +7,7 @@
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/manageCamps">Cadastro de colônias</option>
+                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/validateColonists">Validação</option>
                 </select>
             </div>
         </div>
