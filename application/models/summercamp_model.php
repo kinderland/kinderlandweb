@@ -64,6 +64,23 @@ class summercamp_model extends CK_Model {
 		return $summerCampSubscription;
 	}
 
+	public function getSummerCampSubscription($colonistId, $summerCampId) {
+		$sql = "Select * from summer_camp sc 
+		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id 
+		join colonist c on scs.colonist_id = c.colonist_id 
+		join person p on c.person_id = p.person_id
+		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status 
+		where scs.colonist_id = ? and scs.summer_camp_id = ?";
+		$resultSet = $this -> executeRow($this -> db, $sql, array($colonistId, $summerCampId));
+
+		$summerCampSubscription = FALSE;
+
+		if ($resultSet)
+			$summerCampSubscription = SummerCampSubscription::createSummerCampSubscriptionObject($resultSet);
+
+		return $summerCampSubscription;
+	}
+
 	public function insertNewCamp($camp) {
 		$sql = "INSERT INTO summer_camp (
                     camp_name, 
@@ -114,53 +131,50 @@ class summercamp_model extends CK_Model {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
 		$sql = 'INSERT INTO parent_summer_camp_subscription (summer_camp_id,colonist_id,parent_id,relation) VALUES (?, ?, ?, ?,?)';
-		$returnId = $this -> execute($this -> db, $sql, array($summerCampId, $colonistId, $userId, $parentId,$relation));
-		if ($returnId)
-		{
+		$returnId = $this -> execute($this -> db, $sql, array($summerCampId, $colonistId, $userId, $parentId, $relation));
+		if ($returnId) {
 			$this -> Logger -> info("Parente do colonista $colonistId e summer_camp_id = $summerCampId inserido com sucesso");
 			return TRUE;
-		}	
+		}
 		$this -> Logger -> error("Problema ao inserir parente do colonista $colonistId e summer_camp_id = $summerCampId");
 		return FALSE;
 	}
-	
-	public function uploadDocument($summerCampId, $colonistId, $userId,$fileName, $file,$type){
+
+	public function uploadDocument($summerCampId, $colonistId, $userId, $fileName, $file, $type) {
 		$this -> Logger -> info("Running: " . __METHOD__);
-		
-		$splitByDot = explode(".",$fileName);
-		$extension = $splitByDot[count($splitByDot)-1];
+
+		$splitByDot = explode(".", $fileName);
+		$extension = $splitByDot[count($splitByDot) - 1];
 
 		$sql = 'INSERT INTO document (summer_camp_id,colonist_id,user_id,filename,extension,document_type,file) VALUES (?, ?, ?, ?,?,?,?)';
-		$returnId = $this -> execute($this -> db, $sql, array($summerCampId, $colonistId, $userId, $fileName,$extension,$type,pg_escape_bytea($file)));
-		if ($returnId){
-			$this -> Logger -> info("Documento inserido com sucesso");			
+		$returnId = $this -> execute($this -> db, $sql, array($summerCampId, $colonistId, $userId, $fileName, $extension, $type, pg_escape_bytea($file)));
+		if ($returnId) {
+			$this -> Logger -> info("Documento inserido com sucesso");
 			return TRUE;
 		}
-		$this -> Logger -> error("Problema ao inserir documento");			
+		$this -> Logger -> error("Problema ao inserir documento");
 		return FALSE;
-		
+
 	}
-	
-	public function getNewestDocument($camp_id, $colonist_id,$document_type){
+
+	public function getNewestDocument($camp_id, $colonist_id, $document_type) {
 		$this -> Logger -> info("Running: " . __METHOD__);
-		
+
 		$sql = 'Select * from document where summer_camp_id = ? and colonist_id = ? and document_type = ? order by date_created desc';
-		$resultSet = $this -> executeRows($this -> db, $sql, array($camp_id,$colonist_id,$document_type));
+		$resultSet = $this -> executeRows($this -> db, $sql, array($camp_id, $colonist_id, $document_type));
 
 		$document = FALSE;
 
 		if ($resultSet)
-			foreach ($resultSet as $row){
-				$this -> Logger -> info("Documento encontrado com sucesso, criando array");			
-				$document = array("data"=>$row->file,"name"=>$row->filename);
+			foreach ($resultSet as $row) {
+				$this -> Logger -> info("Documento encontrado com sucesso, criando array");
+				$document = array("data" => $row -> file, "name" => $row -> filename);
 				return $document;
 			}
-		$this -> Logger -> info("Nao achei o documento");			
+		$this -> Logger -> info("Nao achei o documento");
 		return $document;
-		
-	}
-	
 
+	}
 
 }
 ?>

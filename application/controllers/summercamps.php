@@ -36,11 +36,35 @@ class SummerCamps extends CK_Controller {
 		$this -> loadView('summercamps/subscribeColonist', $data);
 	}
 
+	public function editSubscriptionColonist(){
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$colonistId = $this -> input -> get('colonistId', TRUE);
+		$summerCampId = $this -> input -> get('summerCampId', TRUE);
+		$camper = $this -> summercamp_model -> getSummerCampSubscription($colonistId,$summerCampId);
+		$data["summerCamp"] = $this -> summercamp_model -> getSummerCampById($summerCampId);
+		$data["id"] = $summerCampId;
+		$data["fullName"] = $camper->getFullName();
+		$data["Gender"] = $camper->getGender();
+		$data["birthdate"] = date("d-m-Y", strtotime($camper->getBirthDate()));
+		$data["school"] = $camper->getSchool();
+		$data["schoolYear"] = $camper->getSchoolYear();
+		$data["documentNumber"] = $camper->getDocumentNumber();
+		$data["documentType"] = $camper->getDocumentType();
+		$data["phone1"] = $camper->getDocumentType();
+		$data["phone2"] = $camper->getDocumentType();
+		$data["street"] = $camper->getDocumentType();
+		$data["number"] = $camper->getDocumentType();
+		$data["city"] = $camper->getDocumentType();
+		$data["cep"] = $camper->getDocumentType();
+				
+		$this -> loadView('summercamps/editSubscriptionColonist', $data);
+		
+	}
+
 	public function completeSubscription() {
 		$this -> Logger -> info("Starting " . __METHOD__);
 
 		$fullname = $this -> input -> post('fullname', TRUE);
-		;
 		$gender = $this -> input -> post('gender', TRUE);
 		$street = $this -> input -> post('street', TRUE);
 		$number = $this -> input -> post('number', TRUE);

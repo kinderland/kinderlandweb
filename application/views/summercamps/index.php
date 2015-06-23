@@ -27,7 +27,8 @@
 		foreach($summerCampInscriptions as $summerCampInscription){
 		?>
 		<tr>
-			<td><?=$summerCampInscription->getFullname()?>
+			<td>
+				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/editSubscriptionColonist?colonistId=<?=$summerCampInscription->getColonistId()?>&summerCampId=<?=$summerCampInscription -> getSummerCampId()?>"><?=$summerCampInscription->getFullname()?></a>
 				<br>
 				<?=$this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->getCampName()?></td>
 			<td>
