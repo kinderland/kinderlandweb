@@ -12,6 +12,7 @@
                     <option value="<?= $this->config->item('url_link'); ?>reports/user_donation_history">Histórico individual de doações</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/free_donations">Doações avulsas</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/associate_campaign_donations">Campanha de sócios</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/failed_transactions">Transações Cielo sem sucesso</option>
                 </select>
             </div>
         </div>

@@ -13,11 +13,13 @@ class Admin extends CK_Controller {
 		$this -> load -> model('summercamp_model');
 		$this -> load -> model('donation_model');
 		$this -> load -> model('generic_model');
+		$this -> load -> model('validation_model');
 		$this -> person_model -> setLogger($this -> Logger);
 		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
 		$this -> donation_model -> setLogger($this -> Logger);
 		$this -> generic_model -> setLogger($this -> Logger);
+		$this -> validation_model -> setLogger($this -> Logger);
 	}
 
 	public function camp() {
@@ -88,6 +90,29 @@ class Admin extends CK_Controller {
 			$this->generic_model->rollbackTransaction();
 			echo "false";
 		}
+	}
+
+	public function validateColonists() {
+		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCamp();
+		$this -> loadReportView("admin/camps/validate_colonists", $data);
+	}
+
+	public function updateColonistValidation() {
+		$colonistId = $_POST['colonist_id'];
+		$summerCampId = $_POST['summer_camp_id'];
+
+		$registerDataOk = (isset($_POST['register_data'])) ? true : false;
+		$pictureOk = (isset($_POST['colonist_picture'])) ? true : false;
+		$identityOk = (isset($_POST['identity'])) ? true : false;
+
+		$msgRegisterData = (!isset($_POST['register_data'])) ? $_POST['msg_register_data'] : "";
+		$msgPicture = (!isset($_POST['picture'])) ? $_POST['msg_picture'] : "";
+		$msgIdentity = (!isset($_POST['identity'])) ? $_POST['msg_identity'] : "";
+
+		$this->validation_model->updateColonistValidation($colonistId, $summerCampId, $registerDataOk, $pictureOk, $identityOk,
+			$msgRegisterData, $msgPicture, $msgIdentity);
+
+		$this->validateColonists();
 	}
 
 

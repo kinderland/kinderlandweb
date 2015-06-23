@@ -25,6 +25,10 @@ class Reports extends CK_Controller {
 		$this -> loadView("reports/finances/finance_reports_container");
 	}
 
+	public function camp_reports() {
+		$this -> loadView("reports/summercamps/summercamp_reports_container");
+	}
+
 	public function user_registered() {
 		$data['users'] = $this -> personuser_model -> getAllUserRegistered();
 		$this -> loadReportView("reports/users/user_registered", $data);
@@ -180,6 +184,29 @@ class Reports extends CK_Controller {
 		$data['month'] = $month;
 		$data['donations'] = $this -> donation_model -> getDonationsDetailed(DONATION_TYPE_FREEDONATION, $month, $year);
 		$this -> loadReportView("reports/finances/donations", $data);
+	}
+
+	public function failed_transactions() {
+		$years = array();
+		$start = 2015;
+		$end = date('Y');
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+
+		$month = null;
+		$year = null;
+		if (isset($_GET['mes']) && $_GET['mes'] != 0)
+			$month = $_GET['mes'];
+		if (isset($_GET['ano']) && $_GET['ano'] != 0)
+			$year = $_GET['ano'];
+
+		$data['year'] = $year;
+		$data['years'] = $years;
+		$data['month'] = $month;
+		$data['donations'] = $this -> donation_model -> getTransactionAttemptFails($month, $year);
+		$this -> loadReportView("reports/finances/failed_transactions", $data);
 	}
 
 }

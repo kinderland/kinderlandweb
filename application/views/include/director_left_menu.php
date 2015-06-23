@@ -47,10 +47,10 @@
         </div>
         <h3>Colônia</h3>
         <div>
-            <!--
             <a href="<?= $this->config->item('url_link'); ?>admin/camp">
                 Administração
             </a>
+            <!--
             <br />
             <a href="#">
                 Relatórios

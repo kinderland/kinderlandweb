@@ -159,5 +159,50 @@ class donation_model extends CK_Model {
 		return $resultSet;
 	}
 
+	public function getTransactionAttemptFails($month=null, $year=null) {
+		if($year == null){
+			$year  = date('Y');
+		}
+
+		$year  = intval($year);
+
+		$arrParam = array();
+		$sql = "
+			select d.donation_id, p.person_id, dt.description as donation_type, ps.description as payment_status, 
+			ct.date_created, p.fullname
+			from donation d
+			inner join cielo_transaction ct on ct.donation_id = d.donation_id
+			inner join person p on p.person_id = d.person_id
+			inner join donation_type dt on dt.donation_type = d.donation_type
+			inner join payment_status ps on ps.payment_status = ct.payment_status
+			where ct.payment_status <> 6
+			and to_char(ct.date_created, 'YYYY')::integer = ? 
+			";
+		$arrParam[] = $year;
+		if($month != null){
+			$sql .= " and to_char(ct.date_created, 'MM')::integer = ? ";
+			$arrParam[] = intval($month);
+		}
+		$sql .= " 
+			and (d.person_id, d.donation_type) not in (
+				select distinct person_id, donation_type
+				from donation d
+				inner join cielo_transaction ct on ct.donation_id = d.donation_id
+				where ct.payment_status = 6
+				and to_char(ct.date_created, 'YYYY')::integer = ? ";
+
+		$arrParam[] = $year;
+		if($month != null){
+			$sql .= " and to_char(ct.date_created, 'MM')::integer = ? ";
+			$arrParam[] = intval($month);
+		} 
+		$sql .= ")";
+
+
+		$resultSet = $this->executeRows($this->db, $sql, $arrParam);
+
+		return $resultSet;
+	}
+
 }
 ?>
