@@ -131,5 +131,17 @@ define("bcryptocost", 11);
 define('PAYMENT_REPORTBYCARD_QUANTITY', 1);
 define('PAYMENT_REPORTBYCARD_VALUES', 2);
 
+/*
+|--------------------------------------------------------------------------
+| Documents
+|--------------------------------------------------------------------------
+*/
+
+define('DOCUMENT_MEDICAL_FILE', 1);
+define('DOCUMENT_TRIP_AUTHORIZATION', 2);
+define('DOCUMENT_IDENTIFICATION_DOCUMENT', 3);
+define('DOCUMENT_GENERAL_RULES', 4); 
+define('DOCUMENT_PHOTO_3X4', 5);
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

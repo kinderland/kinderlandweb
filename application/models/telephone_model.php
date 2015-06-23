@@ -16,6 +16,18 @@ class telephone_model extends CK_Model{
 
 		return false;
 	}
+	
+	public function getTelephonesByPersonId($personId){
+		$sql = 'Select * from telephone where person_id = ?';
+		$result = $this->executeRows($this -> db,$sql, array(intval($personId)));
+		$telephone = array();
+		foreach($result as $row){
+			$telephone[] = $row->phone_number;
+		}
+		
+		return $telephone;
+		
+	}
 
 	public function updatePhone($person_id, $phone1, $phone2) {
         $sqlDel = "DELETE FROM telephone WHERE person_id=?";

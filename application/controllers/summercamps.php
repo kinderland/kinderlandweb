@@ -25,6 +25,7 @@ class SummerCamps extends CK_Controller {
 		$this -> Logger -> info("Starting " . __METHOD__);
 		$data["summerCamps"] = $this -> summercamp_model -> getAvailableSummerCamps();
 		$data["summerCampInscriptions"] = $this -> summercamp_model -> getSummerCampSubscriptionsOfUser($this -> session -> userdata("user_id"));
+		$data["summercamp_model"] = $this -> summercamp_model;
 		$this -> loadView('summercamps/index', $data);
 	}
 
@@ -36,33 +37,64 @@ class SummerCamps extends CK_Controller {
 		$this -> loadView('summercamps/subscribeColonist', $data);
 	}
 
-	public function editSubscriptionColonist(){
+	public function editSubscriptionColonist() {
 		$this -> Logger -> info("Starting " . __METHOD__);
 		$colonistId = $this -> input -> get('colonistId', TRUE);
 		$summerCampId = $this -> input -> get('summerCampId', TRUE);
-		$camper = $this -> summercamp_model -> getSummerCampSubscription($colonistId,$summerCampId);
+		$camper = $this -> summercamp_model -> getSummerCampSubscription($colonistId, $summerCampId);
+		$address = $this -> address_model -> getAddressByPersonId($camper -> getPersonId());
+		$responsableId = $this -> session -> userdata("user_id");
+		$responsableAddress = $this -> address_model -> getAddressByPersonId($responsableId);
+		$data["sameAddressResponsable"] = "n";
+		if($responsableAddress)
+			if($address->getAddressId() == $responsableAddress->getAddressId())
+				$data["sameAddressResponsable"] = "s";
 		$data["summerCamp"] = $this -> summercamp_model -> getSummerCampById($summerCampId);
 		$data["id"] = $summerCampId;
-		$data["fullName"] = $camper->getFullName();
-		$data["Gender"] = $camper->getGender();
-		$data["birthdate"] = date("d-m-Y", strtotime($camper->getBirthDate()));
-		$data["school"] = $camper->getSchool();
-		$data["schoolYear"] = $camper->getSchoolYear();
-		$data["documentNumber"] = $camper->getDocumentNumber();
-		$data["documentType"] = $camper->getDocumentType();
-		$data["phone1"] = $camper->getDocumentType();
-		$data["phone2"] = $camper->getDocumentType();
-		$data["street"] = $camper->getDocumentType();
-		$data["number"] = $camper->getDocumentType();
-		$data["city"] = $camper->getDocumentType();
-		$data["cep"] = $camper->getDocumentType();
-				
+		$data["fullName"] = $camper -> getFullName();
+		$data["Gender"] = $camper -> getGender();
+		$data["birthdate"] = date("d-m-Y", strtotime($camper -> getBirthDate()));
+		$data["school"] = $camper -> getSchool();
+		$data["schoolYear"] = $camper -> getSchoolYear();
+		$data["documentNumber"] = $camper -> getDocumentNumber();
+		$data["documentType"] = $camper -> getDocumentType();
+		$data["phone1"] = $camper -> getDocumentType();
+		$data["phone2"] = $camper -> getDocumentType();
+		$data["street"] = $address -> getStreet();
+		$data["number"] = $address -> getPlaceNumber();
+		$data["city"] = $address -> getCity();
+		$data["cep"] = $address -> getCEP();
+		$data["complement"] = $address -> getComplement();
+		$data["neighborhood"] = $address -> getNeighborhood();
+		$data["uf"] = $address -> getUf();
+		$telephones = $this -> telephone_model -> getTelephonesByPersonId($camper -> getPersonId());
+		$data["phone1"] = isset($telephones[0]) ? $telephones[0] : FALSE;
+		$data["phone2"] = isset($telephones[1]) ? $telephones[1] : FALSE;
+		$father = $this->summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+		$mother = $this->summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+		if($father){
+			if($father == $responsableId)
+				$data["responsableDadMother"] = "dad";
+			$father = $this->person_model -> getPersonFullById($father);  
+			$data["dadFullName"] = $father->fullname ;
+			$data["dadEmail"] = $father->email;
+			$data["dadPhone"] = $father->phone1;
+		}
+		if($mother){
+			if($mother == $responsableId)
+				$data["responsableDadMother"] = "mother";
+			$mother = $this->person_model -> getPersonFullById($mother);  
+			$data["motherFullName"] = $mother->fullname ;
+			$data["motherEmail"] = $mother->email;
+			$data["motherPhone"] = $mother->phone1;
+		}
 		$this -> loadView('summercamps/editSubscriptionColonist', $data);
-		
+
 	}
 
 	public function completeSubscription() {
 		$this -> Logger -> info("Starting " . __METHOD__);
+	#{/form}
 
 		$fullname = $this -> input -> post('fullname', TRUE);
 		$gender = $this -> input -> post('gender', TRUE);
@@ -92,7 +124,6 @@ class SummerCamps extends CK_Controller {
 		$motherFullName = $this -> input -> post('motherFullName', TRUE);
 		$motherPhone = $this -> input -> post('motherPhone', TRUE);
 		$motherEmail = $this -> input -> post('motherEmail', TRUE);
-
 		$responsableId = $this -> session -> userdata("user_id");
 
 		try {
@@ -164,7 +195,29 @@ class SummerCamps extends CK_Controller {
 		$this -> Logger -> info("Starting " . __METHOD__);
 		$data["camp_id"] = $this -> input -> get('camp_id', TRUE);
 		$data["colonist_id"] = $this -> input -> get('colonist_id', TRUE);
-		$this -> loadView('summercamps/uploadDocument', $data);
+		$data["document_type"] = $this -> input -> get('document_type', TRUE);
+		$data["document_name"] = FALSE;
+		if ($data["document_type"] == DOCUMENT_MEDICAL_FILE)
+			$data["document_name"] = "Ficha médica";
+		else if ($data["document_type"] == DOCUMENT_IDENTIFICATION_DOCUMENT)
+			$data["document_name"] = "Documento de identificação";
+		else if ($data["document_type"] == DOCUMENT_GENERAL_RULES)
+			$data["document_name"] = "Normas gerais";
+		else if ($data["document_type"] == DOCUMENT_PHOTO_3X4)
+			$data["document_name"] = "Foto 3x4";
+		else if ($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION)
+			$data["document_name"] = "Autorização de viagem";
+		$data["hasDocument"] = "";
+		if (!$this -> summercamp_model -> hasDocument($data["camp_id"], $data["colonist_id"], $data["document_type"]))
+			$data["hasDocument"] = "disabled";
+		if($data["document_type"] == DOCUMENT_MEDICAL_FILE)
+			$this -> loadView('summercamps/medicalFile', $data);
+		else if($data["document_type"] == DOCUMENT_GENERAL_RULES)
+			$this -> loadView('summercamps/generalRules', $data);
+		else if($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION)
+			$this -> loadView('summercamps/tripAuthorization', $data);
+		else
+			$this -> loadView('summercamps/uploadDocument', $data);
 	}
 
 	public function verifyDocument() {
@@ -172,15 +225,13 @@ class SummerCamps extends CK_Controller {
 		$camp_id = $this -> input -> get('camp_id', TRUE);
 		$colonist_id = $this -> input -> get('colonist_id', TRUE);
 		$document_type = $this -> input -> get('document_type', TRUE);
-		$document_type = "1";
 		$document = $this -> summercamp_model -> getNewestDocument($camp_id, $colonist_id, $document_type);
 		$this -> load -> helper('download');
 		if ($document)
 			force_download($document["name"], pg_unescape_bytea($document["data"]));
 		else {
-			//Adicionar tratamento de erro
-			echo "<script>alert('erro');</script>";
-			redirect("summercamps/index");
+			echo "<script>alert('Erro ao tentar fazer download do arquivo, verifique se o arquivo ja foi enviado e tente novamente mais tarde');
+			window.location.replace('" . $this -> config -> item('url_link') . "summercamps/uploadDocument?camp_id=$camp_id&colonist_id=$colonist_id&document_type=$document_type');</script>";
 		}
 	}
 
@@ -188,15 +239,17 @@ class SummerCamps extends CK_Controller {
 		$this -> Logger -> info("Starting " . __METHOD__);
 		$camp_id = $this -> input -> post('camp_id', TRUE);
 		$colonist_id = $this -> input -> post('colonist_id', TRUE);
-		var_dump($_FILES);
+		$document_type = $this -> input -> post('document_type', TRUE);
 		$fileName = $_FILES['uploadedfile']['name'];
-		$file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+		if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name']))
+			$file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
 		$userId = $this -> session -> userdata("user_id");
-		if (!$this -> summercamp_model -> uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, 1))
+		if ($_FILES['uploadedfile']['error'] > 0 || !$this -> summercamp_model -> uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, $document_type)) {
 			//Adicionar tratamento de erro
-			echo "<script>alert('erro');</script>";
-		redirect("summercamps/index");
-
+			echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/uploadDocument?camp_id=$camp_id&colonist_id=$colonist_id&document_type=$document_type');</script>";
+		} else {
+			echo "<script>alert('Documento enviado com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+		}
 	}
 
 }
