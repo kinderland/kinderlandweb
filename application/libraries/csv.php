@@ -56,7 +56,7 @@ function arrayToCSV($logger, $name, $data, $columname = array(),$separator = ","
 				$count = 0;
 				$last = count($line) - 1;
 				foreach ($line as $toPrint) {
-					$print = $toPrint;
+					$print = utf8_decode($toPrint);
 					if ($count++ < $last) {
 						$print .= $separator;
 					} else {
