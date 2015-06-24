@@ -93,7 +93,10 @@ class Admin extends CK_Controller {
 	}
 
 	public function validateColonists() {
-		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCamp();
+		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . 
+						SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . 
+						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED;
+		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCamp($shownStatus);
 		$this -> loadReportView("admin/camps/validate_colonists", $data);
 	}
 
@@ -102,17 +105,35 @@ class Admin extends CK_Controller {
 		$summerCampId = $_POST['summer_camp_id'];
 
 		$registerDataOk = (isset($_POST['register_data'])) ? true : false;
-		$pictureOk = (isset($_POST['colonist_picture'])) ? true : false;
+		$pictureOk = (isset($_POST['picture'])) ? true : false;
 		$identityOk = (isset($_POST['identity'])) ? true : false;
 
 		$msgRegisterData = (!isset($_POST['register_data'])) ? $_POST['msg_register_data'] : "";
 		$msgPicture = (!isset($_POST['picture'])) ? $_POST['msg_picture'] : "";
 		$msgIdentity = (!isset($_POST['identity'])) ? $_POST['msg_identity'] : "";
 
-		$this->validation_model->updateColonistValidation($colonistId, $summerCampId, $registerDataOk, $pictureOk, $identityOk,
+		$validationReturn = $this->validation_model->updateColonistValidation($colonistId, $summerCampId, $registerDataOk, $pictureOk, $identityOk,
 			$msgRegisterData, $msgPicture, $msgIdentity);
 
+		if($validationReturn && $registerDataOk && $pictureOk && $identityOk)
+			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED);
+		else
+			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN);
+	
 		$this->validateColonists();
+	}
+
+	public function invalidateColonist(){
+		$colonistId = $_POST['colonist_id'];
+		$summerCampId = $_POST['summer_camp_id'];
+
+		/*
+		Mudar o status para validação com erros.
+		if($this->validation_model->invalidate($colonistId, $summerCampId))
+			echo "true";
+
+		echo "false";
+		*/
 	}
 
 

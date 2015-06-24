@@ -30,6 +30,22 @@
     		function closeValidationTab(colonist_id, summer_camp_id) {
     			$("#validation_tab_"+colonist_id+"_"+summer_camp_id).fadeOut();
     		}
+    		function invalidate(colonist_id, colonist_name, summer_camp_id) {
+    			if(confirm("Deseja realmente invalidar o colonista "+colonist_name+"?")){
+    				$.post("<?= $this->config->item('url_link') ?>admin/invalidateColonist",
+    					{
+    						'colonist_id': colonist_id,
+    						'summer_camp_id': summer_camp_id
+    					},
+    					function (data) {
+			                if (data === "true") {
+			                    window.reload();
+			                } else {
+			                	alert("Ocorreu um erro ao invalidar o colonista");
+			                }
+			            });
+    			}
+    		}
     	</script>
 
         <div class="main-container-report">
@@ -56,12 +72,22 @@
                                     <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
                                     <td><?= $colonist -> situation_description ?></td>
                                     <td>
+                                    	<?php
+                                    		if($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN){
+                                    	?>
                                     	<button class="btn btn-primary" onClick="openValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Validar</button>
+                                    	<?php
+                                    		} else {
+                                    	?>
+                                    		<button class="btn btn-primary" onClick="invalidate(<?=$colonist->colonist_id?>, <?=$colonist->colonist_name?>, <?=$colonist->summer_camp_id?>)">Invalidar</button>
+                                    	<?php
+                                    		}
+                                    	?>
                                     </td>
                                 </tr>
                                 <tr id="validation_tab_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" style="display:none">
                                 	<td colspan="5">
-		                            	<form method='post' name="form_validation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" action="<?= $this->config->item('url_link') ?>admin/validateUser">
+		                            	<form method='post' name="form_validation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" action="<?= $this->config->item('url_link') ?>admin/updateColonistValidation">
 		                            		<input type="hidden" name="colonist_id" value="<?=$colonist->colonist_id?>" />
 		                            		<input type="hidden" name="summer_camp_id" value="<?=$colonist->summer_camp_id?>" />
 		                            		<table class="table table-bordered table-striped table-min-td-size">
@@ -69,7 +95,7 @@
 						                            <tr>
 						                                <th> Item de validação </th>
 						                                <th> Situação </th>
-						                                <th> Mensagem </th>
+						                                <th> Justificativa </th>
 						                            </tr>
 						                        </thead>
 						                        <tbody>
@@ -136,12 +162,12 @@
 						                        </tbody>
 		                            		</table>
 
-		                            		<input type="submit" class="btn btn-primary" onClick="closeValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)" value="Salvar" />
+		                            		<input type="submit" class="btn btn-primary" onClick="closeValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)" value="Salvar" <?= ($colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) ? " style='display:none'":"" ?>/>
 		                            	</form>
 		                            	<button class="btn btn-warning" onClick="closeValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Fechar</button>
 		                            </td>
 	                            </tr>
-                            <?php
+                            <?php 
 							}
                             ?>
                             

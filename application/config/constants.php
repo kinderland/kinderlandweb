@@ -131,5 +131,22 @@ define("bcryptocost", 11);
 define('PAYMENT_REPORTBYCARD_QUANTITY', 1);
 define('PAYMENT_REPORTBYCARD_VALUES', 2);
 
+
+/*
+|--------------------------------------------------------------------------
+| Summer camp subscriptions status
+|--------------------------------------------------------------------------
+*/
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED', -3);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED', -2);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP', -1);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN', 0);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION', 1);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED', 2);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE', 3);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT', 4);
+define('SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED', 5);
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
