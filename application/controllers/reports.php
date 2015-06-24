@@ -128,6 +128,10 @@ class Reports extends CK_Controller {
 		$data['years'] = $this -> cielotransaction_model -> getPaymentYears();
 		if ($ano)
 			$data['ano'] = $ano;
+		else{
+			$date = new DateTime('NOW');
+			$data['ano'] = $date->format("Y");
+		}
 		$this -> loadReportView("reports/finances/all_transactions", $data);
 	}
 

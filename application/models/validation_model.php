@@ -36,6 +36,7 @@ class validation_model extends CK_Model {
 		}
 
 	}
+
 }
 
 ?>

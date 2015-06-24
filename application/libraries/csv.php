@@ -56,7 +56,7 @@ function arrayToCSV($logger, $name, $data, $columname = array(),$separator = ","
 				$count = 0;
 				$last = count($line) - 1;
 				foreach ($line as $toPrint) {
-					$print = $toPrint;
+					$print = utf8_decode($toPrint);
 					if ($count++ < $last) {
 						$print .= $separator;
 					} else {
@@ -75,7 +75,7 @@ function arrayToCSV($logger, $name, $data, $columname = array(),$separator = ","
 	$logger->info("CSV $name created with sucess, serving it now.");
 		
 	header("Content-type:text/csv; charset=utf-8");
-	header("Content-Disposition: attachment; filename=$name");
+	header("Content-Disposition: attachment; filename=\"$name\"");
 	echo $write;	
 }
 ?>

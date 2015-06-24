@@ -234,15 +234,15 @@ CREATE TABLE summer_camp_subscription_status (
     description varchar(50)
 );
 INSERT INTO summer_camp_subscription_status VALUES
-(0, 'pre-inscricao em elaboracao'), 
-(1, 'pre-inscricao aguardando validação'), 
-(2, 'pre-inscrição validada'),
-(3, 'pre-inscricao na fila de espera'), 
-(4, 'pre-inscricao aguardando pagamento'), 
-(5, 'inscrito'), 
-(-1, 'desistente'), 
-(-2, 'excluido'),
-(-3, 'cancelado');
+(0, 'Pré-inscrição em elaboração'), 
+(1, 'Pré-inscrição aguardando validação'), 
+(2, 'Pré-inscrição validada'),
+(3, 'Pré-inscrição na fila de espera'), 
+(4, 'Pré-inscrição aguardando pagamento'), 
+(5, 'Inscrito'), 
+(-1, 'Desistente'), 
+(-2, 'Excluido'),
+(-3, 'Cancelado');
 
 
 CREATE TABLE summer_camp_subscription (
@@ -278,8 +278,11 @@ CREATE TABLE document_type (
     description character varying(100)
 );
 
-INSERT INTO document_type VALUES
-(1, 'teste');
+INSERT INTO document_type VALUES (1, 'Ficha Médica');
+INSERT INTO document_type VALUES (2, 'Autorização de viagem');
+INSERT INTO document_type VALUES (3, 'Documento de Identidade');
+INSERT INTO document_type VALUES (4, 'Normas Gerais');
+INSERT INTO document_type VALUES (5, 'Foto 3x4');
 
 
 CREATE TABLE document (
