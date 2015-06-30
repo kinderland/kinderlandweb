@@ -1,0 +1,4 @@
+NOTAS
+
+==== MÉTODO VALIDA O MÉTODO E CONTROLLER NO FRAMEWORK
+function _validate_request($segments) 
