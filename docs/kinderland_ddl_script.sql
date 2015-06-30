@@ -381,6 +381,8 @@ CREATE VIEW donation_detailed AS (
     
 );
 
+-- DROP TABLE system_method;
+
 CREATE TABLE system_method
 (
   system_method_id serial NOT NULL,
@@ -388,8 +390,15 @@ CREATE TABLE system_method
   controller_name character varying(20),
   user_type integer NOT NULL,
   date_inserted timestamp without time zone DEFAULT now(),
-  CONSTRAINT pk_system_methods PRIMARY KEY (system_method_id)
+  CONSTRAINT pk_system_methods PRIMARY KEY (system_method_id),
+  CONSTRAINT fk_user_type FOREIGN KEY (user_type)
+      REFERENCES user_type (user_type) MATCH Unknown
+      ON UPDATE CASCADE ON DELETE RESTRICT
+)
+WITH (
+  OIDS=FALSE
 );
+
 
 ----------------------------------- Views Section -----------------------------------
 
