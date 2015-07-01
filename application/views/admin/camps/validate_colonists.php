@@ -30,29 +30,53 @@
     		function closeValidationTab(colonist_id, summer_camp_id) {
     			$("#validation_tab_"+colonist_id+"_"+summer_camp_id).fadeOut();
     		}
-    		function invalidate(colonist_id, colonist_name, summer_camp_id) {
-    			if(confirm("Deseja realmente invalidar o colonista "+colonist_name+"?")){
-    				$.post("<?= $this->config->item('url_link') ?>admin/invalidateColonist",
-    					{
-    						'colonist_id': colonist_id,
-    						'summer_camp_id': summer_camp_id
-    					},
-    					function (data) {
-			                if (data === "true") {
-			                    window.reload();
-			                } else {
-			                	alert("Ocorreu um erro ao invalidar o colonista");
-			                }
-			            });
-    			}
-    		}
+
+            function confirmValidation(colonist_id, colonist_name, summer_camp_id) {
+                if(confirm("Deseja realmente confirmar o a validação do colonista "+colonist_name+"?")) {
+                    var formName = "#form_validation_"+colonist_id+"_"+summer_camp_id;
+                    var radioRegisterData = $(formName + ' input[name=register_data]:checked').val();
+                    if(radioRegisterData != "true" && radioRegisterData != "false"){
+                        alert("Validação de ficha cadastral não foi selecionada.");
+                        return;
+                    }
+
+                    var radioIdentity = $(formName + ' input[name=identity]:checked').val();
+                    if(radioIdentity != "true" && radioIdentity != "false"){
+                        alert("Validação de identidade não foi selecionada.");
+                        return;
+                    }
+
+                    var radioPicture = $(formName + ' input[name=picture]:checked').val();
+                    if(radioPicture != "true" && radioPicture != "false"){
+                        alert("Validação de foto não foi selecionada.");
+                        return;
+                    }
+
+                    $.post("<?= $this->config->item('url_link') ?>admin/confirmValidation",
+                        {
+                            'colonist_id': colonist_id,
+                            'summer_camp_id': summer_camp_id,
+                            'register_data': radioRegisterData,
+                            'picture': radioPicture,
+                            'identity': radioIdentity
+                        },
+                        function (data) {
+                            if (data == "true") {
+                                window.reload();
+                            } else {
+                                alert("Ocorreu um erro ao confirmar validação do colonista");
+                            }
+                        });
+                }
+            }
+
     	</script>
 
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
 					
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome do Colonista </th>
@@ -73,13 +97,14 @@
                                     <td><?= $colonist -> situation_description ?></td>
                                     <td>
                                     	<?php
-                                    		if($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN){
+                                    		if($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS){
                                     	?>
-                                    	<button class="btn btn-primary" onClick="openValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Validar</button>
+                                    	   <button class="btn btn-primary" onClick="openValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Checklist</button> <br />
+                                           <button class="btn btn-primary" onClick="confirmValidation(<?=$colonist->colonist_id?>, '<?=$colonist->colonist_name?>', <?=$colonist->summer_camp_id?>)">Confirmar validação</button>
                                     	<?php
                                     		} else {
                                     	?>
-                                    		<button class="btn btn-primary" onClick="invalidate(<?=$colonist->colonist_id?>, <?=$colonist->colonist_name?>, <?=$colonist->summer_camp_id?>)">Invalidar</button>
+                                    	   <button class="btn btn-primary" onClick="invalidate(<?=$colonist->colonist_id?>, <?=$colonist->colonist_name?>, <?=$colonist->summer_camp_id?>)">Invalidar</button>
                                     	<?php
                                     		}
                                     	?>
@@ -87,7 +112,7 @@
                                 </tr>
                                 <tr id="validation_tab_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" style="display:none">
                                 	<td colspan="5">
-		                            	<form method='post' name="form_validation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" action="<?= $this->config->item('url_link') ?>admin/updateColonistValidation">
+		                            	<form method='post' id="form_validation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" name="form_validation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" action="<?= $this->config->item('url_link') ?>admin/updateColonistValidation">
 		                            		<input type="hidden" name="colonist_id" value="<?=$colonist->colonist_id?>" />
 		                            		<input type="hidden" name="summer_camp_id" value="<?=$colonist->summer_camp_id?>" />
 		                            		<table class="table table-bordered table-striped table-min-td-size">
@@ -102,7 +127,8 @@
 						                        	<tr>
 						                        		<td> Ficha cadastral </td>
 						                        		<td> 
-						                        			<input type="checkbox" name="register_data" value="ok" <?= (isset($colonist->colonist_data_ok) && $colonist->colonist_data_ok == "t")?"checked":"" ?> /> Ok 
+						                        			<input type="radio" name="register_data" value="true" <?= (isset($colonist->colonist_data_ok) && $colonist->colonist_data_ok == "t")?"checked":"" ?> /> Sim 
+                                                            <input type="radio" name="register_data" value="false" <?= (isset($colonist->colonist_data_ok) && $colonist->colonist_data_ok == "f")?"checked":"" ?> /> Não 
 						                        		</td>
 						                        		<td>
 						                        			<input type="text" name="msg_register_data" class="form-control" value="<?= $colonist->colonist_data_msg ?>"/>
@@ -133,7 +159,8 @@
 						                        	<tr>
 						                        		<td> Identidade </td>
 						                        		<td> 
-						                        			<input type="checkbox" name="identity" value="ok" <?= (isset($colonist->colonist_identity_ok) && $colonist->colonist_identity_ok == "t")?"checked":"" ?>  /> Ok 
+						                        			<input type="radio" name="identity" value="true" <?= (isset($colonist->colonist_identity_ok) && $colonist->colonist_identity_ok == "t")?"checked":"" ?>  /> Sim 
+                                                            <input type="radio" name="identity" value="false" <?= (isset($colonist->colonist_identity_ok) && $colonist->colonist_identity_ok == "f")?"checked":"" ?>  /> Não 
 						                        		</td>
 						                        		<td>
 						                        			<input type="text" name="msg_identity" class="form-control" value="<?= $colonist->colonist_identity_msg ?>"/>
@@ -153,7 +180,8 @@
 						                        	<tr>
 						                        		<td> Foto 3x4 </td>
 						                        		<td> 
-						                        			<input type="checkbox" name="picture" value="ok" <?= (isset($colonist->colonist_picture_ok) && $colonist->colonist_picture_ok == "t")?"checked":"" ?> /> Ok 
+						                        			<input type="radio" name="picture" value="true" <?= (isset($colonist->colonist_picture_ok) && $colonist->colonist_picture_ok == "t")?"checked":"" ?> /> Sim 
+                                                            <input type="radio" name="picture" value="false" <?= (isset($colonist->colonist_picture_ok) && $colonist->colonist_picture_ok == "f")?"checked":"" ?> /> Não 
 						                        		</td>
 						                        		<td>
 						                        			<input type="text" name="msg_picture" class="form-control" value="<?= $colonist->colonist_picture_msg ?>"/>
@@ -162,7 +190,8 @@
 						                        </tbody>
 		                            		</table>
 
-		                            		<input type="submit" class="btn btn-primary" onClick="closeValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)" value="Salvar" <?= ($colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) ? " style='display:none'":"" ?>/>
+		                            		<input type="submit" class="btn btn-primary" onClick="closeValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)" value="Salvar" <?= ($colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION 
+                                             && $colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) ? " style='display:none'":"" ?>/>
 		                            	</form>
 		                            	<button class="btn btn-warning" onClick="closeValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Fechar</button>
 		                            </td>

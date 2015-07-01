@@ -196,7 +196,7 @@ class personuser_model extends CK_Model {
     public function checkPermission($class, $method, $userType) {
         $this->Logger->info("Running: " . __METHOD__);
         foreach ($userType as $typeUser) {
-            $sql = "select system_method_id from system_method where method_name = ? and controller_name = ? and user_type = ?;";
+            $sql = "select system_method_id from system_method where lower(method_name) = ? and lower(controller_name) = ? and user_type = ?;";
             $rows = $this->executeRows($this->db, $sql, array(strtolower($method), strtolower($class), intval($typeUser)));
             if (count($rows) > 0) {
                 return true;

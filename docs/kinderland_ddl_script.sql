@@ -240,6 +240,7 @@ INSERT INTO summer_camp_subscription_status VALUES
 (3, 'Pré-inscrição na fila de espera'), 
 (4, 'Pré-inscrição aguardando pagamento'), 
 (5, 'Inscrito'), 
+(6, 'Pré-inscrição não validada'),
 (-1, 'Desistente'), 
 (-2, 'Excluido'),
 (-3, 'Cancelado');

@@ -95,7 +95,8 @@ class Admin extends CK_Controller {
 	public function validateColonists() {
 		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . 
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . 
-						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED;
+						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
+						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
 		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCamp($shownStatus);
 		$this -> loadReportView("admin/camps/validate_colonists", $data);
 	}
@@ -104,36 +105,33 @@ class Admin extends CK_Controller {
 		$colonistId = $_POST['colonist_id'];
 		$summerCampId = $_POST['summer_camp_id'];
 
-		$registerDataOk = (isset($_POST['register_data'])) ? true : false;
-		$pictureOk = (isset($_POST['picture'])) ? true : false;
-		$identityOk = (isset($_POST['identity'])) ? true : false;
+		$registerDataOk = (isset($_POST['register_data'])) ? $_POST['register_data'] : null;
+		$pictureOk = (isset($_POST['picture'])) ? $_POST['picture'] : null;
+		$identityOk = (isset($_POST['identity'])) ? $_POST['identity'] : null;
 
-		$msgRegisterData = (!isset($_POST['register_data'])) ? $_POST['msg_register_data'] : "";
-		$msgPicture = (!isset($_POST['picture'])) ? $_POST['msg_picture'] : "";
-		$msgIdentity = (!isset($_POST['identity'])) ? $_POST['msg_identity'] : "";
+		$msgRegisterData = ($registerDataOk == "false") ? $_POST['msg_register_data'] : "";
+		$msgPicture = ($pictureOk == "false") ? $_POST['msg_picture'] : "";
+		$msgIdentity = ($identityOk == "false") ? $_POST['msg_identity'] : "";
 
 		$validationReturn = $this->validation_model->updateColonistValidation($colonistId, $summerCampId, $registerDataOk, $pictureOk, $identityOk,
 			$msgRegisterData, $msgPicture, $msgIdentity);
-
-		if($validationReturn && $registerDataOk && $pictureOk && $identityOk)
-			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED);
-		else
-			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN);
 	
 		$this->validateColonists();
 	}
 
-	public function invalidateColonist(){
+	public function confirmValidation(){
 		$colonistId = $_POST['colonist_id'];
 		$summerCampId = $_POST['summer_camp_id'];
+		$registerData = $_POST['register_data'];
+		$picture = $_POST['picture'];
+		$identity = $_POST['identity'];
 
-		/*
-		Mudar o status para validação com erros.
-		if($this->validation_model->invalidate($colonistId, $summerCampId))
-			echo "true";
+		if($registerData == "true" && $picture == "true" && $identity == "true")
+			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED);
+		else 
+			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS);
 
-		echo "false";
-		*/
+		echo "true";
 	}
 
 

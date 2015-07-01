@@ -17,6 +17,7 @@ class CK_Controller extends CI_Controller {
         $this->pid = getmypid();
         $this->setLogger();
         $this->load->model('personuser_model');
+        $this->personuser_model->setLogger($this->Logger);
     }
 
     public function __destruct() {
@@ -219,7 +220,14 @@ class CK_Controller extends CI_Controller {
     }
 
     public function checkPermission($class, $method) {
-        $permission = $this->personuser_model->checkPermission($class, $method, $this->session->userdata('user_types'));
+        $permission = false;
+        
+        if(!$this->session->userdata('user_types')){
+            $permission = $this->personuser_model->checkPermission($class, $method, array(0));
+        } else {
+            $permission = $this->personuser_model->checkPermission($class, $method, $this->session->userdata('user_types'));
+        }
+        
         if (!$permission) {
             $this->Logger->warn("Usuário com id =" . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
             return redirect("user/permissionNack");

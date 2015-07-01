@@ -18,9 +18,9 @@ class validation_model extends CK_Model {
 				colonist_identity_ok = ?, colonist_data_msg = ?, colonist_picture_msg = ?, colonist_identity_msg = ?
 				WHERE colonist_id = ? AND summer_camp_id = ?";
 
-			return $this->execute($this->db, $updateSql, array( ($registerDataOk)?"true":"false", 
-																($pictureOk)?"true":"false",
-																($identityOk)?"true":"false",
+			return $this->execute($this->db, $updateSql, array( $registerDataOk, 
+																$pictureOk,
+																$identityOk,
 																$msgRegisterData, $msgPicture, $msgIdentity,
 																intval($colonistId), intval($summerCampId)));
 		} else {
@@ -29,9 +29,9 @@ class validation_model extends CK_Model {
 				colonist_identity_msg) VALUES (?,?,?,?,?,?,?,?)";
 
 			return $this->execute($this->db, $insertSql, array( intval($colonistId), intval($summerCampId),
-																($registerDataOk)?"true":"false", 
-																($pictureOk)?"true":"false",
-																($identityOk)?"true":"false",
+																$registerDataOk, 
+																$pictureOk,
+																$identityOk,
 																$msgRegisterData, $msgPicture, $msgIdentity));
 		}
 
