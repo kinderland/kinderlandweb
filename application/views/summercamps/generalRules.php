@@ -1,6 +1,7 @@
 <div id="main">
 
 	<div style="text-align:left;">
+		<h1>Normas Gerais de: <?=$summercamp->getCampName()?></h1>
 		<span style="margin-left:5px"><b>1.</b> A inscrição na colônia de férias Kinderland só é considerada válida após:</span>
 		<br>
 		<br>
@@ -74,17 +75,14 @@
 			<br>
 			<br>
 	</div>
-	<div id='form' style="text-align: center">
-		<p class="buttons">
-			<input type="submit" value="Tomamos conhecimento destas normas e concordamos com os termos deste documento." id="upload">
-		</p>
+	<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/acceptGeneralRules" method="POST">
+		<form >		
+		<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
+		<input type="hidden" name="document_type" value="<?=$document_type?>" /> 
+		<input type="submit" class="button" value="Tomamos conhecimento destas normas e concordamos com os termos deste documento." id="upload">
+		</form>
 		<div id='form2'>
-			<p class="buttons">
-				<input type="submit" value="Não aceito estas normas." id="upload">
-			</p>
-			<p class="buttons" align="center">
-				<input type="submit" align="center" value="Sair do sistema" id="formulario" onclick="location.href='@{Secure.logout()}'">
-			</p>
-
+			<button class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
+			
 		</div>
 	</div>

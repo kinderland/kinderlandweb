@@ -12,11 +12,13 @@
             $this -> load -> model('eventsubscription_model');
             $this -> load -> model('event_model');
             $this -> load -> model('person_model');
+            $this -> load -> model('personuser_model');
 
             $this->cielotransaction_model->setLogger($this->Logger);
             $this->donation_model->setLogger($this->Logger);
             $this->eventsubscription_model->setLogger($this->Logger);
             $this->person_model->setLogger($this->Logger);
+            $this->personuser_model->setLogger($this->Logger);
             $this->event_model->setLogger($this->Logger);
         }
 

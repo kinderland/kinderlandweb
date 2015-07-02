@@ -11,19 +11,22 @@ class SummerCamps extends CK_Controller {
 		$this -> load -> model('colonist_model');
 		$this -> load -> model('generic_model');
 		$this -> load -> model('person_model');
+		$this -> load -> model('personuser_model');
 		$this -> load -> model('summercamp_model');
 		$this -> load -> model('telephone_model');
 		$this -> address_model -> setLogger($this -> Logger);
 		$this -> colonist_model -> setLogger($this -> Logger);
 		$this -> generic_model -> setLogger($this -> Logger);
 		$this -> person_model -> setLogger($this -> Logger);
+		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
 		$this -> telephone_model -> setLogger($this -> Logger);
 	}
 
 	public function index() {
 		$this -> Logger -> info("Starting " . __METHOD__);
-		$data["summerCamps"] = $this -> summercamp_model -> getAvailableSummerCamps();
+		$isAssociate = $this->personuser_model->isAssociate($this -> session -> userdata("user_id"));
+		$data["summerCamps"] = $this -> summercamp_model -> getAvailableSummerCamps($isAssociate);
 		$data["summerCampInscriptions"] = $this -> summercamp_model -> getSummerCampSubscriptionsOfUser($this -> session -> userdata("user_id"));
 		$data["summercamp_model"] = $this -> summercamp_model;
 		$this -> loadView('summercamps/index', $data);
@@ -212,8 +215,10 @@ class SummerCamps extends CK_Controller {
 			$data["hasDocument"] = "disabled";
 		if($data["document_type"] == DOCUMENT_MEDICAL_FILE)
 			$this -> loadView('summercamps/medicalFile', $data);
-		else if($data["document_type"] == DOCUMENT_GENERAL_RULES)
+		else if($data["document_type"] == DOCUMENT_GENERAL_RULES){
+			$data["summercamp"] = $this -> summercamp_model -> getSummerCampById($data["camp_id"]);
 			$this -> loadView('summercamps/generalRules', $data);
+		}
 		else if($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION)
 			$this -> loadView('summercamps/tripAuthorization', $data);
 		else
@@ -250,6 +255,13 @@ class SummerCamps extends CK_Controller {
 		} else {
 			echo "<script>alert('Documento enviado com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 		}
+	}
+
+	public function acceptGeneralRules(){
+		$camp_id = $this -> input -> post('camp_id', TRUE);
+		$colonist_id = $this -> input -> post('colonist_id', TRUE);
+		$this->summercamp_model->acceptGeneralRules($camp_id,$colonist_id);
+		$this->index();
 	}
 
 }
