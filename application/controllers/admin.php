@@ -105,16 +105,23 @@ class Admin extends CK_Controller {
 		$colonistId = $_POST['colonist_id'];
 		$summerCampId = $_POST['summer_camp_id'];
 
-		$registerDataOk = (isset($_POST['register_data'])) ? $_POST['register_data'] : null;
+		$genderOk = (isset($_POST['gender'])) ? $_POST['gender'] : null;
 		$pictureOk = (isset($_POST['picture'])) ? $_POST['picture'] : null;
 		$identityOk = (isset($_POST['identity'])) ? $_POST['identity'] : null;
+		$birthdayOk = (isset($_POST['birthday'])) ? $_POST['birthday'] : null;
+		$parentsNameOk = (isset($_POST['parents_name'])) ? $_POST['parents_name'] : null;
+		$colonistNameOk = (isset($_POST['colonist_name'])) ? $_POST['colonist_name'] : null;
 
-		$msgRegisterData = ($registerDataOk == "false") ? $_POST['msg_register_data'] : "";
+		$msgGender = ($genderOk == "false") ? $_POST['msg_gender'] : "";
 		$msgPicture = ($pictureOk == "false") ? $_POST['msg_picture'] : "";
 		$msgIdentity = ($identityOk == "false") ? $_POST['msg_identity'] : "";
+		$msgBirthdate = ($birthdayOk == "false") ? $_POST['msg_birthday'] : "";
+		$msgParentsName = ($parentsNameOk == "false") ? $_POST['msg_parents_name'] : "";
+		$msgColonistName = ($colonistNameOk == "false") ? $_POST['msg_colonist_name'] : "";
 
-		$validationReturn = $this->validation_model->updateColonistValidation($colonistId, $summerCampId, $registerDataOk, $pictureOk, $identityOk,
-			$msgRegisterData, $msgPicture, $msgIdentity);
+		$validationReturn = $this->validation_model->updateColonistValidation($colonistId, $summerCampId, 
+			$genderOk, $pictureOk, $identityOk, $birthdayOk, $parentsNameOk, $colonistNameOk,
+			$msgGender, $msgPicture, $msgIdentity, $msgBirthdate, $msgParentsName, $msgColonistName);
 	
 		$this->validateColonists();
 	}
@@ -122,11 +129,15 @@ class Admin extends CK_Controller {
 	public function confirmValidation(){
 		$colonistId = $_POST['colonist_id'];
 		$summerCampId = $_POST['summer_camp_id'];
-		$registerData = $_POST['register_data'];
+		$gender = $_POST['gender'];
 		$picture = $_POST['picture'];
 		$identity = $_POST['identity'];
+		$birthday = $_POST['birthday'];
+		$parentsName = $_POST['parents_name'];
+		$colonistName = $_POST['colonist_name'];
 
-		if($registerData == "true" && $picture == "true" && $identity == "true")
+
+		if($gender == "true" && $picture == "true" && $identity == "true" && $birthday == "true" && $parentsName == "true" && $colonistName == "true")
 			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED);
 		else 
 			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS);

@@ -34,9 +34,9 @@
             function confirmValidation(colonist_id, colonist_name, summer_camp_id) {
                 if(confirm("Deseja realmente confirmar o a validação do colonista "+colonist_name+"?")) {
                     var formName = "#form_validation_"+colonist_id+"_"+summer_camp_id;
-                    var radioRegisterData = $(formName + ' input[name=register_data]:checked').val();
-                    if(radioRegisterData != "true" && radioRegisterData != "false"){
-                        alert("Validação de ficha cadastral não foi selecionada.");
+                    var radioGender = $(formName + ' input[name=gender]:checked').val();
+                    if(radioGender != "true" && radioGender != "false"){
+                        alert("Validação de sexo não foi selecionada.");
                         return;
                     }
 
@@ -52,11 +52,32 @@
                         return;
                     }
 
+                    var radioBirthdate = $(formName + ' input[name=birthday]:checked').val();
+                    if(radioBirthdate != "true" && radioBirthdate != "false"){
+                        alert("Validação de data de nascimento não foi selecionada.");
+                        return;
+                    }
+
+                    var radioParentsName = $(formName + ' input[name=parents_name]:checked').val();
+                    if(radioParentsName != "true" && radioParentsName != "false"){
+                        alert("Validação de nome dos pais não foi selecionada.");
+                        return;
+                    }
+
+                    var radioName = $(formName + ' input[name=colonist_name]:checked').val();
+                    if(radioName != "true" && radioName != "false"){
+                        alert("Validação de nome completo do colonista não foi selecionada.");
+                        return;
+                    }
+
                     $.post("<?= $this->config->item('url_link') ?>admin/confirmValidation",
                         {
                             'colonist_id': colonist_id,
                             'summer_camp_id': summer_camp_id,
-                            'register_data': radioRegisterData,
+                            'gender': radioGender,
+                            'birthday': radioBirthdate,
+                            'parents_name': radioParentsName,
+                            'colonist_name': radioName,
                             'picture': radioPicture,
                             'identity': radioIdentity
                         },
@@ -125,39 +146,51 @@
 						                        </thead>
 						                        <tbody>
 						                        	<tr>
-						                        		<td> Ficha cadastral </td>
+						                        		<td> Sexo </td>
 						                        		<td> 
-						                        			<input type="radio" name="register_data" value="true" <?= (isset($colonist->colonist_data_ok) && $colonist->colonist_data_ok == "t")?"checked":"" ?> /> Sim 
-                                                            <input type="radio" name="register_data" value="false" <?= (isset($colonist->colonist_data_ok) && $colonist->colonist_data_ok == "f")?"checked":"" ?> /> Não 
+						                        			<input type="radio" name="gender" value="true" <?= (isset($colonist->colonist_gender_ok) && $colonist->colonist_gender_ok == "t")?"checked":"" ?> /> Sim 
+                                                            <input type="radio" name="gender" value="false" <?= (isset($colonist->colonist_gender_ok) && $colonist->colonist_gender_ok == "f")?"checked":"" ?> /> Não 
 						                        		</td>
 						                        		<td>
-						                        			<input type="text" name="msg_register_data" class="form-control" value="<?= $colonist->colonist_data_msg ?>"/>
+						                        			<input type="text" name="msg_gender" class="form-control" value="<?= $colonist->colonist_gender_msg ?>"/>
 						                        		</td>
 						                        	</tr>
-<!--
+
 						                        	<tr>
-						                        		<td> Ficha médica </td>
+                                                        <td> Nome completo do colonista </td>
+                                                        <td> 
+                                                            <input type="radio" name="colonist_name" value="true" <?= (isset($colonist->colonist_name_ok) && $colonist->colonist_name_ok == "t")?"checked":"" ?> /> Sim 
+                                                            <input type="radio" name="colonist_name" value="false" <?= (isset($colonist->colonist_name_ok) && $colonist->colonist_name_ok == "f")?"checked":"" ?> /> Não 
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="msg_colonist_name" class="form-control" value="<?= $colonist->colonist_name_msg ?>"/>
+                                                        </td>
+                                                    </tr>
+
+						                        	<tr>
+						                        		<td> Nome completo dos pais </td>
 						                        		<td> 
-						                        			<input type="checkbox" name="medical_report" value="ok" /> Ok 
-						                        		</td>
-						                        		<td>
-						                        			<input type="text" name="msg_medical_report" class="form-control"/>
-						                        		</td>
-						                        	</tr>
--->
-<!--
+                                                            <input type="radio" name="parents_name" value="true" <?= (isset($colonist->colonist_parents_name_ok) && $colonist->colonist_parents_name_ok == "t")?"checked":"" ?> /> Sim 
+                                                            <input type="radio" name="parents_name" value="false" <?= (isset($colonist->colonist_parents_name_ok) && $colonist->colonist_parents_name_ok == "f")?"checked":"" ?> /> Não 
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="msg_parents_name" class="form-control" value="<?= $colonist->colonist_parents_name_msg ?>"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> Data de nascimento </td>
+                                                        <td> 
+                                                            <input type="radio" name="birthday" value="true" <?= (isset($colonist->colonist_birthday_ok) && $colonist->colonist_birthday_ok == "t")?"checked":"" ?> /> Sim 
+                                                            <input type="radio" name="birthday" value="false" <?= (isset($colonist->colonist_birthday_ok) && $colonist->colonist_birthday_ok == "f")?"checked":"" ?> /> Não 
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="msg_birthday" class="form-control" value="<?= $colonist->colonist_birthday_msg ?>"/>
+                                                        </td>
+                                                    </tr>
+
 						                        	<tr>
-						                        		<td> Autorização de viagem </td>
-						                        		<td> 
-						                        			<input type="checkbox" name="travel_permission" value="ok" /> Ok 
-						                        		</td>
-						                        		<td>
-						                        			<input type="text" name="msg_travel_permission" class="form-control"/>
-						                        		</td>
-						                        	</tr>
--->
-						                        	<tr>
-						                        		<td> Identidade </td>
+						                        		<td> Documento de identificação </td>
 						                        		<td> 
 						                        			<input type="radio" name="identity" value="true" <?= (isset($colonist->colonist_identity_ok) && $colonist->colonist_identity_ok == "t")?"checked":"" ?>  /> Sim 
                                                             <input type="radio" name="identity" value="false" <?= (isset($colonist->colonist_identity_ok) && $colonist->colonist_identity_ok == "f")?"checked":"" ?>  /> Não 
@@ -166,17 +199,7 @@
 						                        			<input type="text" name="msg_identity" class="form-control" value="<?= $colonist->colonist_identity_msg ?>"/>
 						                        		</td>
 						                        	</tr>
-<!--
-						                        	<tr>
-						                        		<td> Termos gerais </td>
-						                        		<td> 
-						                        			<input type="checkbox" name="terms_and_conditions" value="ok" /> Ok 
-						                        		</td>
-						                        		<td>
-						                        			<input type="text" name="msg_terms_and_conditions" class="form-control"/>
-						                        		</td>
-						                        	</tr>
--->
+
 						                        	<tr>
 						                        		<td> Foto 3x4 </td>
 						                        		<td> 
