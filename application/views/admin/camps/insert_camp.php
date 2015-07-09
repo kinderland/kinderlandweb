@@ -7,7 +7,7 @@
                 $(function() {
                     $( ".datepicker" ).datepicker({
                         showOn: "button",
-                        dateFormat: "d/m/y",
+                        dateFormat: "Y-m-d",
                         buttonImage: "<?= $this->config->item('assets'); ?>images/calendar.gif",
                         buttonImageOnly: true,
                         buttonText: "Selecionar data"
