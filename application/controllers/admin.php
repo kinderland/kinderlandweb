@@ -2,6 +2,8 @@
 
 require_once APPPATH . 'core/CK_Controller.php';
 require_once APPPATH . 'core/summercamp.php';
+require_once APPPATH . 'core/summercampSubscription.php';
+require_once APPPATH . 'core/colonist.php';
 
 class Admin extends CK_Controller {
 
@@ -11,12 +13,16 @@ class Admin extends CK_Controller {
 		$this -> load -> model('person_model');
 		$this -> load -> model('personuser_model');
 		$this -> load -> model('summercamp_model');
+		$this -> load -> model('address_model');
+		$this -> load -> model('telephone_model');
 		$this -> load -> model('donation_model');
 		$this -> load -> model('generic_model');
 		$this -> load -> model('validation_model');
 		$this -> person_model -> setLogger($this -> Logger);
 		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
+		$this -> address_model -> setLogger($this -> Logger);
+		$this -> telephone_model -> setLogger($this -> Logger);
 		$this -> donation_model -> setLogger($this -> Logger);
 		$this -> generic_model -> setLogger($this -> Logger);
 		$this -> validation_model -> setLogger($this -> Logger);
@@ -123,7 +129,10 @@ class Admin extends CK_Controller {
 			$genderOk, $pictureOk, $identityOk, $birthdayOk, $parentsNameOk, $colonistNameOk,
 			$msgGender, $msgPicture, $msgIdentity, $msgBirthdate, $msgParentsName, $msgColonistName);
 	
-		$this->validateColonists();
+		if($validationReturn)
+			echo "true";
+		else
+			echo "false";
 	}
 
 	public function confirmValidation(){
@@ -136,15 +145,15 @@ class Admin extends CK_Controller {
 		$parentsName = $_POST['parents_name'];
 		$colonistName = $_POST['colonist_name'];
 
-
+		$status = 0;
 		if($gender == "true" && $picture == "true" && $identity == "true" && $birthday == "true" && $parentsName == "true" && $colonistName == "true")
-			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED);
-		else 
-			$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS);
+			$status = SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED;
+		else
+			$status = SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
 
-		echo "true";
+		$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, $status);
+		echo $this->summercamp_model->getStatusDescription($status);
 	}
-
 
 	public function users () {
 		$this->loadView("admin/users/user_admin_container");
@@ -186,5 +195,76 @@ class Admin extends CK_Controller {
 		}	
 
 		redirect("admin/userPermissions");
+	}
+
+	public function viewColonistInfo() {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$colonistId = $this -> input -> get('colonistId', TRUE);
+		$summerCampId = $this -> input -> get('summerCampId', TRUE);
+		$camper = $this -> summercamp_model -> getSummerCampSubscription($colonistId, $summerCampId);
+		$address = $this -> address_model -> getAddressByPersonId($camper -> getPersonId());
+		$responsableId = $camper -> getPersonUserId();
+		$responsableAddress = $this -> address_model -> getAddressByPersonId($responsableId);
+		$data["sameAddressResponsable"] = "n";
+		if($responsableAddress)
+			if($address->getAddressId() == $responsableAddress->getAddressId())
+				$data["sameAddressResponsable"] = "s";
+		$data["summerCamp"] = $this -> summercamp_model -> getSummerCampById($summerCampId);
+		$data["id"] = $summerCampId;
+		$data["fullName"] = $camper -> getFullName();
+		$data["Gender"] = $camper -> getGender();
+		$data["birthdate"] = date("d-m-Y", strtotime($camper -> getBirthDate()));
+		$data["school"] = $camper -> getSchool();
+		$data["schoolYear"] = $camper -> getSchoolYear();
+		$data["documentNumber"] = $camper -> getDocumentNumber();
+		$data["documentType"] = $camper -> getDocumentType();
+		$data["phone1"] = $camper -> getDocumentType();
+		$data["phone2"] = $camper -> getDocumentType();
+		$data["street"] = $address -> getStreet();
+		$data["number"] = $address -> getPlaceNumber();
+		$data["city"] = $address -> getCity();
+		$data["cep"] = $address -> getCEP();
+		$data["complement"] = $address -> getComplement();
+		$data["neighborhood"] = $address -> getNeighborhood();
+		$data["uf"] = $address -> getUf();
+		$telephones = $this -> telephone_model -> getTelephonesByPersonId($camper -> getPersonId());
+		$data["phone1"] = isset($telephones[0]) ? $telephones[0] : FALSE;
+		$data["phone2"] = isset($telephones[1]) ? $telephones[1] : FALSE;
+		$father = $this->summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+		$mother = $this->summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+		if($father){
+			if($father == $responsableId)
+				$data["responsableDadMother"] = "dad";
+			$father = $this->person_model -> getPersonFullById($father);  
+			$data["dadFullName"] = $father->fullname ;
+			$data["dadEmail"] = $father->email;
+			$data["dadPhone"] = $father->phone1;
+		}
+		if($mother){
+			if($mother == $responsableId)
+				$data["responsableDadMother"] = "mother";
+			$mother = $this->person_model -> getPersonFullById($mother);  
+			$data["motherFullName"] = $mother->fullname ;
+			$data["motherEmail"] = $mother->email;
+			$data["motherPhone"] = $mother->phone1;
+		}
+		$this -> loadView('summercamps/viewColonistInfo', $data);
+
+	}
+
+	public function verifyDocument() {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$camp_id = $this -> input -> get('camp_id', TRUE);
+		$colonist_id = $this -> input -> get('colonist_id', TRUE);
+		$document_type = $this -> input -> get('document_type', TRUE);
+		$document = $this -> summercamp_model -> getNewestDocument($camp_id, $colonist_id, $document_type);
+		if ($document){
+			header("Content-type: image/jpeg");
+			echo pg_unescape_bytea($document["data"]);
+		} else {
+			$this->loadView ("admin/users/documentNotFound");
+		}
+			
+		
 	}
 }

@@ -202,6 +202,38 @@ CREATE TABLE benemerits (
 CREATE TABLE school (
     school_name varchar(70) NOT NULL PRIMARY KEY
 );
+INSERT INTO school VALUES ('A. Liessin'),
+('Andino Arica (Chile)'),
+('Andrews'),
+('Bahiense'),
+('British School'),
+('CEAT'),
+('Centro Educ. Espaço Integrado (CEI)'),
+('Colégio Estilo (Madrid ES)'),
+('Colégio PH'),
+('Corcovado'),
+('EARJ'),
+('edem'),
+('Educativa'),
+('Eliezer Max'),
+('Escola Americana'),
+('Escola João de Barro Itaipava'),
+('Escola Nova'),
+('Escola Parque'),
+('Escola Vera Cruz (SP)'),
+('I.L. Peretz'),
+('King Alfred School'),
+('Lycee Moliere'),
+('Miguel de Cervantes (SP)'),
+('Miraflores'),
+('ORT'),
+('Oswald de Andrade'),
+('Pueri Domus'),
+('Santo Agostinho'),
+('Santo Inácio'),
+('Sá Pereira'),
+('TTH Bar''Ilan'),
+('Único Colégio de Gente Feliz');
 
 CREATE TABLE summer_camp (
     summer_camp_id SERIAL PRIMARY KEY NOT NULL,

@@ -265,12 +265,21 @@ class summercamp_model extends CK_Model {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
 		$sql = 'UPDATE summer_camp_subscription SET situation = ? WHERE summer_camp_id = ? AND colonist_id = ?';
-		$returnId = $this -> execute($this -> db, $sql, array($status, intval($summerCampId), intval($colonistId)));
-		if ($returnId)
+		$return = $this -> execute($this -> db, $sql, array($status, intval($summerCampId), intval($colonistId)));
+		if ($return)
 			return TRUE;
 
 		return FALSE;
 	}
 
+	public function getStatusDescription($status) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "SELECT description FROM summer_camp_subscription_status WHERE status = ?";
+		$resultSet = $this->executeRow($this->db, $sql, array($status));
+		if($resultSet)
+			return $resultSet->description;
+
+		return "";
+	}
 }
 ?>

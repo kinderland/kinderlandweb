@@ -145,6 +145,7 @@ class Logger {
         }
  
         $this->fileObj = fopen($filename, 'a');
+        chmod($filename, 0766);
     }
  
     /**
