@@ -232,7 +232,11 @@ class summercamp_model extends CK_Model {
 	}
 
 	public function getAllColonistsBySummerCamp($status=null) {
-		$sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*, v.*,
+		$sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*, 
+		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok, 
+		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
+		v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg, 
+		v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
 		p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id
 		from summer_camp sc 
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id 
