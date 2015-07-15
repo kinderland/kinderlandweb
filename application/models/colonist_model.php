@@ -1,5 +1,7 @@
 <?php
 require_once APPPATH . 'core/CK_Model.php';
+require_once APPPATH . 'core/colonist.php';
+require_once APPPATH . 'core/person.php';
 class colonist_model extends CK_Model{
 
 	public function __construct(){
@@ -30,6 +32,31 @@ class colonist_model extends CK_Model{
 		return false;
 	}
 
+	public function getColonist($colonistId){
+		$this->Logger->info("Running: " . __METHOD__);
+
+		$sql = "SELECT * FROM colonist c JOIN person p on p.person_id = c.person_id WHERE colonist_id = ?";
+		$resultRow = $this->executeRow($this->db, $sql, array($colonistId));
+
+		if($resultRow)
+			return Colonist::createColonistObject($resultRow);
+
+		return null;
+	}
+
+	public function getColonistPersonUser($colonistId, $summerCampId) {
+		$this->Logger->info("Running: " . __METHOD__);
+
+		$sql = "SELECT p.* FROM summer_camp_subscription c 
+				JOIN person p on c.person_user_id = p.person_id 
+				WHERE c.colonist_id = ? AND c.summer_camp_id = ?";
+		$resultRow = $this->executeRow($this->db, $sql, array($colonistId, $summerCampId));
+
+		if($resultRow)
+			return Person::createPersonObjectSimple($resultRow);
+
+		return null;
+	}
 
 }
 ?>

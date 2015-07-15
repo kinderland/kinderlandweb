@@ -37,6 +37,15 @@ class validation_model extends CK_Model {
 
 	}
 
+	public function getColonistValidationInfo($colonistId, $summerCampId){
+		$sql = "SELECT * FROM validation WHERE colonist_id = ? AND summer_camp_id = ?";
+		$resultRow = $this->executeRow($this->db, $sql, array($colonistId, $summerCampId));
+
+		if(!$resultRow)
+			return null;
+
+		return $resultRow;
+	}
 }
 
 ?>

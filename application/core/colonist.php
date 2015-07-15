@@ -27,8 +27,8 @@
 				$resultRow->birth_date,
 				$resultRow->document_number,
 				$resultRow->document_type,
-				$resultRow->phone1,
-				$resultRow->phone2
+				(isset($resultRow->phone1)) ? $resultRow->phone1 : "",
+				(isset($resultRow->phone2)) ? $resultRow->phone2 : ""
 			);
 			if($addressIncluded)
 				$colonist->setAddress(Address::createAddressObject($resultRow));

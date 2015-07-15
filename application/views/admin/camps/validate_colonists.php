@@ -31,6 +31,23 @@
     			$("#validation_tab_"+colonist_id+"_"+summer_camp_id).fadeOut();
     		}
 
+            function sendValidationErrorEmail(colonist_id, summer_camp_id) {
+                $.post("<?= $this->config->item('url_link') ?>admin/sendValidationEmail",
+                    {
+                        'colonist_id': colonist_id,
+                        'summer_camp_id': summer_camp_id
+                    },
+                    function (data) {
+                        if (data == "true") {
+                            alert("Email enviado!");
+                        } else {
+                            alert("Ocorreu um erro ao enviar o email");
+                        }
+                    }
+                );
+
+            }
+
             function confirmValidation(colonist_id, colonist_name, summer_camp_id) {
                 if(confirm("Deseja realmente confirmar o a validação do colonista "+colonist_name+"?")) {
                     var formName = "#form_validation_"+colonist_id+"_"+summer_camp_id;
@@ -178,11 +195,7 @@
                                     		if($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS){
                                     	?>
                                     	   <a onClick="openValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Checklist</a> <br />
-                                           <a onClick="confirmValidation(<?=$colonist->colonist_id?>, '<?=$colonist->colonist_name?>', <?=$colonist->summer_camp_id?>)">Submeter</a>
-                                    	<?php
-                                    		} else {
-                                    	?>
-                                    	   <button class="btn btn-primary" onClick="invalidate(<?=$colonist->colonist_id?>, <?=$colonist->colonist_name?>, <?=$colonist->summer_camp_id?>)">Invalidar</button>
+                                           <a onClick="confirmValidation(<?=$colonist->colonist_id?>, '<?=$colonist->colonist_name?>', <?=$colonist->summer_camp_id?>)">Submeter</a> <br />
                                     	<?php
                                     		}
                                     	?>

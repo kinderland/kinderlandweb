@@ -13,6 +13,7 @@ class Admin extends CK_Controller {
 		$this -> load -> model('person_model');
 		$this -> load -> model('personuser_model');
 		$this -> load -> model('summercamp_model');
+		$this -> load -> model('colonist_model');
 		$this -> load -> model('address_model');
 		$this -> load -> model('telephone_model');
 		$this -> load -> model('donation_model');
@@ -21,6 +22,7 @@ class Admin extends CK_Controller {
 		$this -> person_model -> setLogger($this -> Logger);
 		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
+		$this -> colonist_model -> setLogger($this -> Logger);
 		$this -> address_model -> setLogger($this -> Logger);
 		$this -> telephone_model -> setLogger($this -> Logger);
 		$this -> donation_model -> setLogger($this -> Logger);
@@ -42,6 +44,7 @@ class Admin extends CK_Controller {
 	}
 
 	public function insertNewCamp(){
+		$this->Logger->info("Running: ". __METHOD__);
 		$camp = new SummerCamp(null, 
 						$_POST['camp_name'],
 						null,
@@ -77,6 +80,7 @@ class Admin extends CK_Controller {
 	}
 
 	public function changeCampEnabledStatus(){
+		$this->Logger->info("Running: ". __METHOD__);
 		$campId = $_POST['camp_id'];
 		$enabled = ($_POST['status'] == "t") ? true : false;
 
@@ -99,6 +103,7 @@ class Admin extends CK_Controller {
 	}
 
 	public function validateColonists() {
+		$this->Logger->info("Running: ". __METHOD__);
 		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . 
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . 
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
@@ -108,6 +113,7 @@ class Admin extends CK_Controller {
 	}
 
 	public function updateColonistValidation() {
+		$this->Logger->info("Running: ". __METHOD__);
 		$colonistId = $_POST['colonist_id'];
 		$summerCampId = $_POST['summer_camp_id'];
 
@@ -136,6 +142,7 @@ class Admin extends CK_Controller {
 	}
 
 	public function confirmValidation(){
+		$this->Logger->info("Running: ". __METHOD__);
 		$colonistId = $_POST['colonist_id'];
 		$summerCampId = $_POST['summer_camp_id'];
 		$gender = $_POST['gender'];
@@ -152,14 +159,70 @@ class Admin extends CK_Controller {
 			$status = SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
 
 		$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, $status);
+		if($status == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED)
+			$this->sendValidatedEmail($colonistId, $summerCampId);
+		else
+			$this->sendNotValidatedEmail($colonistId, $summerCampId);
 		echo $this->summercamp_model->getStatusDescription($status);
 	}
 
+	public function sendNotValidatedEmail($colonistId, $summerCampId){
+		$this->Logger->info("Running: ". __METHOD__);
+
+		$validation = $this->validation_model->getColonistValidationInfo($colonistId, $summerCampId);
+		if(!$validation){
+			$this->Logger->error("Validation is empty, cannot send an email");
+			return;
+		}
+
+		$colonist = $this->colonist_model->getColonist($colonistId);
+		if(!$colonist){
+			$this->Logger->error("Colonist not found");
+			return;
+		}
+
+		$personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
+		if(!$personuser){
+			$this->Logger->error("PersonUser related to colonist not found");
+			return;
+		}
+
+		$this->Logger->info("Sending email");
+		$this->sendValidationWithErrorsEmail($personuser, $colonist, $validation);
+	}
+
+	public function sendValidatedEmail($colonistId, $summerCampId){
+		$this->Logger->info("Running: ". __METHOD__);
+
+		$validation = $this->validation_model->getColonistValidationInfo($colonistId, $summerCampId);
+		if(!$validation){
+			$this->Logger->error("Validation is empty, cannot send an email");
+			return;
+		}
+
+		$colonist = $this->colonist_model->getColonist($colonistId);
+		if(!$colonist){
+			$this->Logger->error("Colonist not found");
+			return;
+		}
+
+		$personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
+		if(!$personuser){
+			$this->Logger->error("PersonUser related to colonist not found");
+			return;
+		}
+
+		$this->Logger->info("Sending email");
+		$this->sendValidationOkEmail($personuser, $colonist, $validation);
+	}
+
 	public function users () {
+		$this->Logger->info("Running: ". __METHOD__);
 		$this->loadView("admin/users/user_admin_container");
 	}
 	
 	public function userPermissions() {
+		$this->Logger->info("Running: ". __METHOD__);
 		$data['users'] = $this -> person_model -> getUserPermissionsDetailed();
 		$this -> loadReportView("admin/users/user_permissions", $data);
 	}

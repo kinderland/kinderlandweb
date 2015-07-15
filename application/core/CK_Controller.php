@@ -97,12 +97,50 @@ class CK_Controller extends CI_Controller {
         return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
     }
 
-    protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
-//		$myMail = "testekinderland2015@gmail.com";
-//		$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
+    public function sendValidationWithErrorsEmail($person, $colonist, $validation){
+        $emailSubject = "[Kinderland] Pré-inscrição com erros";
+        $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" .
+                    "Verificamos que alguns dados da Pré-inscrição do colonista ". $colonist->getFullname() ." estão incorretos: <br><br>";
 
-        $myMail = "secretaria@kinderland.com.br";
-        $config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://br154.hostgator.com.br', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'Kinder155', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
+        if(isset($validation->colonist_name_ok) && $validation->colonist_name_ok == "f" ){
+            $emailString .= "Nome completo do colonista: " . $validation->colonist_name_msg . "<br><br>";
+        }
+        if(isset($validation->colonist_parents_name_ok) && $validation->colonist_parents_name_ok == "f" ){
+            $emailString .= "Nome completo dos pais: " . $validation->colonist_parents_name_msg . "<br><br>";
+        }
+        if(isset($validation->colonist_birthday_ok) && $validation->colonist_birthday_ok == "f" ){
+            $emailString .= "Data de nascimento do colonista: " . $validation->colonist_birthday_msg . "<br><br>";
+        }
+        if(isset($validation->colonist_gender_ok) && $validation->colonist_gender_ok == "f" ){
+            $emailString .= "Sexo do colonista: " . $validation->colonist_gender_msg . "<br><br>";
+        }
+        if(isset($validation->colonist_picture_ok) && $validation->colonist_picture_ok == "f" ){
+            $emailString .= "Foto 3x4 do colonista: " . $validation->colonist_picture_msg . "<br><br>";
+        }
+        if(isset($validation->colonist_identity_ok) && $validation->colonist_identity_ok == "f" ){
+            $emailString .= "Documento de identidade do colonista: " . $validation->colonist_identity_msg . "<br><br>";
+        }
+
+        $emailString .= "Por favor, reveja esses dados e reenvie o cadastro do colonista.<br><br>Diretoria da Associação Kinderland";
+
+        return $this->sendMail($emailSubject, $emailString, $person);//, array("secretaria@kinderland.com.br"));
+    }
+
+    public function sendValidationOkEmail($person, $colonist, $validation) {
+        $emailSubject = "[Kinderland] Pré-inscrição validada";
+        $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" .
+                    "A Pré-inscrição do(a) colonista ". $colonist->getFullname() ." foi validada com sucesso.<br><br>".
+                    "Aguarde as próximas etapas.<br><br>Diretoria da Associação Kinderland";
+
+        return $this->sendMail($emailSubject, $emailString, $person);//, array("secretaria@kinderland.com.br"));
+    }
+
+    protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
+		$myMail = "testekinderland2015@gmail.com";
+		$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
+
+        //$myMail = "secretaria@kinderland.com.br";
+        //$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://br154.hostgator.com.br', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'Kinder155', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
 
         $this->load->library('email', $config);
         $this->load->model('email_model');
@@ -114,15 +152,16 @@ class CK_Controller extends CI_Controller {
             $cc = array("secretaria@kinderland.com.br");
         }
 
-
         if (ENVIRONMENT != 'production') {
             $addToSubject = "[TESTE][to:$to][cc=";
             foreach ($cc as $carboncopy) {
                 $addToSubject.=$carboncopy;
             }
             $addToSubject.="][bcc=";
-            foreach ($bcc as $carboncopy) {
-                $addToSubject.=$carboncopy;
+            if($bcc != null){
+                foreach ($bcc as $carboncopy) {
+                    $addToSubject.=$carboncopy;
+                }
             }
             $addToSubject.="]";
             $to = "teste.kinderland@gmail.com";

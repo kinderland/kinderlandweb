@@ -322,5 +322,15 @@ class summercamp_model extends CK_Model {
 		return "";
 	}
 
+	public function getColonistStatus($colonistId, $summerCampId){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "SELECT situation FROM summer_camp_subscription WHERE colonist_id = ? AND summer_camp_id = ?" ;
+		$resultSet = $this -> executeRow($this -> db, $sql, array($colonistId, $summerCampId));
+		if ($resultSet)
+			return $resultSet -> situation;
+
+		return null;
+	}
+
 }
 ?>
