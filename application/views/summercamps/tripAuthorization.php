@@ -22,7 +22,7 @@
 		<br>
 		Rio de Janeiro, <b>
 		<script>
-			document.write(dia + " de " + x + " de " + ano);
+			document.write(<?=$day?> + "/" + <?=$month?> + "/" + <?=$year?>);
 		</script></b>.
 	</div>
 	<br>
@@ -41,20 +41,26 @@
 	<br>
 	<br>
 
-	<div id='form' >
+	<div id='form'>
 
-		<p class="buttons">
-			<input disabled #{if colonista.temAutorizacao()}checked="checked"#{/if} type="checkbox"id="upload">
-			Aceito autorização de viagem
-		</p>
+			<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/acceptTripAuthorization" method="post">
+				<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
+				<input type="hidden" name="document_type" value="<?=$document_type?>" /> 
+				<button class="button" type="submit">
+					Aceito autorização de viagem
+				</button>
+			</form>
 
 		<div id='form2'>
 
-			<p class="buttons">
-				<input disabled #{if !colonista.temAutorizacao()}checked="checked"#{/if} type="checkbox" id="upload">
-				Não aceito autorização de viagem
+			<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/rejectTripAuthorization" method="post">
+				<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
+				<input type="hidden" name="document_type" value="<?=$document_type?>" /> 
+				<button class="button" type="submit">
+					Não aceitar autorização de viagem
+				</button>
+			</form>
 			</p>
-			<p class="buttons">
 				<br/>
 				<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
 				<br/>

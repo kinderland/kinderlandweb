@@ -18,5 +18,18 @@ class colonist_model extends CK_Model{
 		return false;
 	}
 
+	public function updateColonist($personId, $birthdate,$documentNumber,$documentType,$colonistId){
+		$this->Logger->info("Running: " . __METHOD__);
+
+
+		$sql = 'UPDATE colonist SET person_id=?, birth_date=?, document_number=?, document_type=? where colonist_id = ?';
+		$returnId = $this->executeReturningId($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType,intval($colonistId)));
+		if($returnId)
+			return $returnId;
+
+		return false;
+	}
+
+
 }
 ?>

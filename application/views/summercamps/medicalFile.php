@@ -9,7 +9,7 @@
 		<INPUT TYPE="hidden" NAME="sequencial" VALUE="${sequencial}">
 		<tr>
 			<td width = "25%"><span class="required"><b>*Grupo Sanguíneo:</b></span>
-			<select name="ficha.grupo_sanguineo" value="Selecione" class="required">
+			<select name="blood_type" value="Selecione" class="required">
 				<option></option>
 				<option value="A">A</option>
 				<option value="B">B</option>
@@ -17,17 +17,17 @@
 				<option value="AB">AB</option>
 			</select></td>
 			<td width = "25%"><span class="required"><b>*Fator RH:</b></span>
-			<select name="ficha.fator_rh" value="Selecione" class="required">
+			<select name="rh" value="Selecione" class="required">
 				<option></option>
 				<option value="+">Positivo</option>
 				<option value="-">Negativo</option>
 			</select></td>
 
 			<td width = "25%"><span class="required"><b>*Peso:</b></span>
-			<input type="text" class="nome required" maxlength="3" name="ficha.peso" size="1px">
+			<input type="text" class="nome required" maxlength="3" name="weight" size="1px">
 			kg </td>
 			<td width = "25%"><span class="required"><b>*Altura:</b></span>
-			<input type="text" class="nome required" maxlength="4" name="ficha.altura" id="altura" size="1px">
+			<input type="text" class="nome required" maxlength="4" name="height" id="height" size="1px">
 			cm </td>
 		</tr>
 		<tr>
@@ -35,34 +35,34 @@
 			<p class="required">
 				<b>*Alguma restrição à atividade física (esportes, natação, caminhadas...)?</b>
 				<br>
-				<input type="radio" name="g0" value="Não se aplica" class="required">
+				<input type="radio" name="restriction" value="Não se aplica" class="required">
 				Não se aplica
 				<br>
-				<input type="radio" name="g0" id="sim1" value="Se aplica">
+				<input type="radio" name="restrinction" id="sim1" value="Se aplica">
 				Se aplica
 				<br>
-				<textarea id="t0" style="display:none;" rows="2" cols="50" class="nome required" name="ficha.restricoes_fisicas"></textarea>
+				<textarea id="t0" style="display:none;" rows="2" cols="50" class="nome required" name="physical_restrictions"></textarea>
 			</p></td>
 			<td colspan="2">
 			<p class="required">
 				<b>*Vacinas em dia?</b>
 				<br>
 				<span class="required"><b>*Anti-Tetânica:</b></span>
-				<select class="required" name="ficha.vacinaAntiTetanica">
+				<select class="required" name="antiTetanus">
 					<option></option>
 					<option value="Sim" >Sim</option>
 					<option value="Não" >Não</option>
 				</select>
 				<br>
 				<span class="required"><b>*MMR (Caxumba, Rubéola, Sarampo):</b></span>
-				<select class="required" name="ficha.vacinaMMR">
+				<select class="required" name="MMR">
 					<option></option>
 					<option value="Sim" >Sim</option>
 					<option value="Não" >Não</option>
 				</select>
 				<br>
 				<span class="required"><b>*Hepatite A:</b></span>
-				<select class="required" name="ficha.vacinaHepatite">
+				<select class="required" name="hepatitis">
 					<option></option>
 					<option value="Sim" >Sim</option>
 					<option value="Não" >Não</option>
@@ -75,13 +75,13 @@
 			<p>
 				<b>*Antecedentes Infecto-Contagiosos?</b>
 				<br>
-				<input type="radio" name="g1" value="Não se aplica" class="required">
+				<input type="radio" name="antecedent" value="Não se aplica" class="required">
 				Não se aplica
 				<br>
-				<input type="radio" name="g1" id="sim1" value="Se aplica">
+				<input type="radio" name="antecedent" id="sim1" value="Se aplica">
 				Se aplica
 				<br>
-				<textarea id="t1" style="display:none;" rows="2" cols="100" class="nome required" name="ficha.antecedentes_infecto_contagiosos"></textarea>
+				<textarea id="t1" style="display:none;" rows="2" cols="100" class="nome required" name="infecto-contagious_antecedents"></textarea>
 			</p></td>
 		</tr>
 		<tr>
@@ -91,25 +91,25 @@
 				<br>
 				(<u>anotar horários e dosagens</u>):</b>
 				<br>
-				<input type="radio" name="g2" value="Não se aplica" class="required">
+				<input type="radio" name="medicine" value="Não se aplica" class="required">
 				Não se aplica
 				<br>
-				<input type="radio" name="g2" id="sim1" value="Se aplica">
+				<input type="radio" name="medicine" id="sim1" value="Se aplica">
 				Se aplica
 				<br>
-				<textarea id="t2" style="display:none;"  rows="2" cols="50" name="ficha.medicamentos_habituais" class="required"></textarea>
+				<textarea id="t2" style="display:none;"  rows="2" cols="50" name="regular_use_medicine" class="required"></textarea>
 <br>			</p></td>
 			<td colspan="2">
 			<p>
 				<b>*Restrições Medicamentosas:</b>
 				<br>
-				<input type="radio" name="g3" value="Não se aplica" class="required">
+				<input type="radio" name="restrictions" value="Não se aplica" class="required">
 				Não se aplica
 				<br>
-				<input type="radio" name="g3" id="sim1" value="Se aplica">
+				<input type="radio" name="restrictions" id="sim1" value="Se aplica">
 				Se aplica
 				<br>
-				<textarea id="t3" style="display:none;" rows="3" cols="50" name="ficha.restricoes_medicamentosas" class="required"></textarea>
+				<textarea id="t3" style="display:none;" rows="3" cols="50" name="medicine_restrictions" class="required"></textarea>
 <br>			</p></td>
 		</tr>
 
@@ -118,13 +118,13 @@
 			<p>
 				<b>*Alergias (Alimentares/Respiratórias/De Contato):</b>
 				<br>
-				<input type="radio" name="g4" value="Não se aplica" class="required">
+				<input type="radio" name="hasAlergies" value="Não se aplica" class="required">
 				Não se aplica
 				<br>
-				<input type="radio" name="g4" id="sim1" value="Se aplica">
+				<input type="radio" name="hasAlergies" id="sim1" value="Se aplica">
 				Se aplica
 				<br>
-				<textarea id="t4" style="display:none;"  rows="2" cols="50" name="ficha.alergias" class="required"></textarea>
+				<textarea id="t4" style="display:none;"  rows="2" cols="50" name="alergies" class="required"></textarea>
 <br>			</p></td>
 			<td colspan="2">
 			<p>

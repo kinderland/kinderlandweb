@@ -14,7 +14,7 @@
 	
 <br><br><br><br>
 	<a href="<?= $this -> config -> item('url_link'); ?>summercamps/verifyDocument?camp_id=<?=$camp_id ?>&colonist_id=<?=$colonist_id ?>&document_type=<?=$document_type?>">
-		<button class="button" <?=$hasDocument?>>Verificar documento já enviado</button>
+		<button class="button" <?=$hasDocument?>>Ultimo documento enviado</button>
 	</a>
 
 

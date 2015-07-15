@@ -24,7 +24,7 @@ class summercamp_model extends CK_Model {
 
 	public function getAvailableSummerCamps($isAssociate) {
 		$associate = " ";
-		if($isAssociate)
+		if ($isAssociate)
 			$associate = " or 
 		(
 			date_start_pre_subscriptions_associate <= now() and date_finish_pre_subscriptions_associate > now() 		
@@ -62,7 +62,7 @@ class summercamp_model extends CK_Model {
 		join colonist c on scs.colonist_id = c.colonist_id 
 		join person p on c.person_id = p.person_id
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status 
-		where scs.person_user_id = ?";
+		where scs.person_user_id = ? order by p.fullname";
 		$resultSet = $this -> executeRows($this -> db, $sql, array($userId));
 
 		$summerCampSubscription = NULL;
@@ -136,6 +136,18 @@ class summercamp_model extends CK_Model {
 		return FALSE;
 	}
 
+	public function editColonistSubscription($summerCampId, $colonistId, $schoolName, $schoolYear) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+
+		$sql = 'UPDATE summer_camp_subscription SET school_name=?, school_year=? where summer_camp_id = ? and colonist_id = ? ';
+		$returnId = $this -> execute($this -> db, $sql, array($schoolName, $schoolYear,intval($summerCampId),intval($colonistId)));
+		if ($returnId)
+			return TRUE;
+
+		return FALSE;
+	}
+
+
 	public function addParentToSummerCampSubscripted($summerCampId, $colonistId, $parentId, $relation) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
@@ -149,13 +161,25 @@ class summercamp_model extends CK_Model {
 		return FALSE;
 	}
 
+	public function removeParentFromSummerCampSubscripted($summerCampId, $colonistId, $relation) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+
+		$sql = 'DELETE FROM parent_summer_camp_subscription where summer_camp_id = ? and colonist_id = ? and relation = ?';
+		$returnId = $this -> execute($this -> db, $sql, array($summerCampId, $colonistId, $relation));
+		if ($returnId) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+
 	public function getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, $relation) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
 		$sql = 'Select parent_id from parent_summer_camp_subscription where summer_camp_id = ? and colonist_id = ? and relation = ?';
 		$row = $this -> executeRow($this -> db, $sql, array($summerCampId, $colonistId, $relation));
 		if ($row) {
-			return $row -> parent_id;			
+			return $row -> parent_id;
 		} else {
 			$this -> Logger -> info("Não encontrei parente do colonista $colonistId e summer_camp_id = $summerCampId com relação = $relation");
 			return FALSE;
@@ -231,7 +255,7 @@ class summercamp_model extends CK_Model {
 		}
 	}
 
-	public function getAllColonistsBySummerCamp($status=null) {
+	public function getAllColonistsBySummerCamp($status = null) {
 		$sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*, 
 		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok, 
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
@@ -245,15 +269,15 @@ class summercamp_model extends CK_Model {
 		join person pr on pr.person_id = scs.person_user_id
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
 		left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id ";
-		if ($status !== null){
+		if ($status !== null) {
 			$sql = $sql . " WHERE scs.situation in (" . $status . ")";
 		}
-		$resultSet = $this -> executeRows($this->db, $sql);
+		$resultSet = $this -> executeRows($this -> db, $sql);
 
 		return $resultSet;
 	}
 
-	public function acceptGeneralRules($summerCampId,$colonistId){
+	public function acceptGeneralRules($summerCampId, $colonistId) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
 		$sql = 'UPDATE summer_camp_subscription SET accepted_terms = true WHERE summer_camp_id = ? AND colonist_id = ?';
@@ -262,7 +286,19 @@ class summercamp_model extends CK_Model {
 			return TRUE;
 
 		return FALSE;
-		
+
+	}
+
+	public function updateTripAuthorization($summerCampId, $colonistId,$value) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+
+		$sql = 'UPDATE summer_camp_subscription SET accepted_travel_terms = ? WHERE summer_camp_id = ? AND colonist_id = ?';
+		$returnId = $this -> execute($this -> db, $sql, array($value,intval($summerCampId), intval($colonistId)));
+		if ($returnId)
+			return TRUE;
+
+		return FALSE;
+
 	}
 
 	public function updateColonistStatus($colonistId, $summerCampId, $status) {
@@ -279,11 +315,12 @@ class summercamp_model extends CK_Model {
 	public function getStatusDescription($status) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "SELECT description FROM summer_camp_subscription_status WHERE status = ?";
-		$resultSet = $this->executeRow($this->db, $sql, array($status));
-		if($resultSet)
-			return $resultSet->description;
+		$resultSet = $this -> executeRow($this -> db, $sql, array($status));
+		if ($resultSet)
+			return $resultSet -> description;
 
 		return "";
 	}
+
 }
 ?>
