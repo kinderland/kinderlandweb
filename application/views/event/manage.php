@@ -35,7 +35,7 @@
         <td><?= date_format(date_create($event->getDateStart()), 'd/m/y');?> </td>
         <td><?= date_format(date_create($event->getDateFinish()), 'd/m/y')?> </td>
         <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$event->getEventId()?>" 
-        	<?php if(!$event->getIsValid()) echo " disabled "; if($event->isEnabled()) echo "checkedInDatabase='true'";?></td>
+        <?php if(!$event->getIsValid()) echo " disabled "; if($event->isEnabled()) echo "checkedInDatabase='true'";?> /> </td>
 		</tr>
 		<?php 
 				}
