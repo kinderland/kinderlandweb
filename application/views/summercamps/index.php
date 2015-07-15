@@ -19,7 +19,7 @@
 		<h4>Adicionar colonista na colônia:</h4>
 		<?php foreach($summerCamps as $summerCamp) {
 		?>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/editColonist?id=<?=$summerCamp -> getCampId() ?>">
+			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/subscribeColonist?id=<?=$summerCamp -> getCampId() ?>">
 			<input type="button" value="<?=$summerCamp -> getCampName() ?>" />
 			</a>
 		<?php } ?>

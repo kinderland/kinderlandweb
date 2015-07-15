@@ -23,7 +23,7 @@ class colonist_model extends CK_Model{
 
 
 		$sql = 'UPDATE colonist SET person_id=?, birth_date=?, document_number=?, document_type=? where colonist_id = ?';
-		$returnId = $this->executeReturningId($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType,intval($colonistId)));
+		$returnId = $this->execute($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType,intval($colonistId)));
 		if($returnId)
 			return $returnId;
 
