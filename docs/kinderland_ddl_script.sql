@@ -14,7 +14,8 @@ INSERT INTO user_type VALUES
 (4, 'secretary'), 
 (5, 'coordinator'),
 (6, 'doctor'),
-(7, 'monitor-instructor');
+(7, 'monitor-instructor'),
+(0, 'public');
 
 CREATE TABLE address (
     address_id serial PRIMARY KEY,
