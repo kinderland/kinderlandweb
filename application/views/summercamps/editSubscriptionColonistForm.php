@@ -173,7 +173,7 @@
 								echo ">".$__school_year__."</option>";								                            	
                             }?>
                         </select>
-                        <?php>
+                    
                     </div>
 
 
