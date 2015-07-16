@@ -100,7 +100,7 @@
 				<br>
 				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){?>
 				<button class="button" disabled>Pagar</button></td>
-				<?}?>
+				<?php } ?>
 		</tr>
 	<?php } ?>
 		
