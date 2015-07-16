@@ -13,9 +13,10 @@
 	</form>
 	
 <br><br><br><br>
-	<a href="<?= $this -> config -> item('url_link'); ?>summercamps/verifyDocument?camp_id=<?=$camp_id ?>&colonist_id=<?=$colonist_id ?>&document_type=<?=$document_type?>">
+	<a target="_blank" href="<?= $this -> config -> item('url_link'); ?>admin/verifyDocument?camp_id=<?=$camp_id ?>&colonist_id=<?=$colonist_id ?>&document_type=<?=$document_type?>">
 		<button class="button" <?=$hasDocument?>>Ultimo documento enviado</button>
 	</a>
-
+<br><br>
+	<input type="button" value="Voltar" onclick="history.back()" />
 
 </div>

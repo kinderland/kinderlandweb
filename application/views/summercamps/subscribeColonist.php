@@ -4,14 +4,17 @@
 
 <script>
 	function addressResponsable() {
+
 		var val = $('input:radio[name=sameAddressResponsable]:checked').val();
-		var changeTo = true;
-		if (val == "n") {
-			changeTo = false;
+    var changeTo = true;
+    if(val == "s"){
+      $("#addressRow").hide();
+    }else{
+      $("#addressRow").show();
+      changeTo = false;
 		}
 		var labels = $(".endereco");
-		for ( index = 0,
-		len = labels.length; index < len; ++index) {
+		for ( index = 0, len = labels.length; index < len; ++index) {
 			labels[index].disabled = changeTo;
 		}
 	}
@@ -138,8 +141,8 @@
 
                     </div>
 
-                    <label for="school" class="col-lg-2 control-label"> Nome da Escola*: </label>
-                    <div class="col-lg-2">
+                    <label for="school" class="col-lg-1 control-label"> Nome da Escola*: </label>
+                    <div class="col-lg-3">
                     	<?php $schools = $this -> summercamp_model -> getSchools(); ?>
                         <select  class="form-control" id="school" name="school" required                                
                         oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
@@ -155,8 +158,8 @@
                         </select>
                     </div>
 
-                    <label for="schoolYear" class="col-lg-2 control-label"> Ano escolar*: </label>
-                    <div class="col-lg-2">
+                    <label for="schoolYear" class="col-lg-1 control-label"> Ano escolar*: </label>
+                    <div class="col-lg-3">
                         <select  class="form-control" id="schoolYear" name="schoolYear" required                                
                         oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
                                onchange="setCustomValidity('')"
@@ -258,7 +261,7 @@
             <br />
             <br />
 
-
+            <div id="addressRow">
             <div class="row">
                 <div class="form-group">
                     <label for="street" class="col-lg-1 control-label"> Logradouro: </label>
@@ -357,7 +360,7 @@
                         <select  class="form-control endereco" id="uf" name="uf" required
                                  oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
                                  oninput="setCustomValidity('')">
-                            <option value="" selected> -- Selecione -- </option>
+                            <option value=""> -- Selecione -- </option>
                             <option value="RJ" <?php if (!empty($_POST['uf']) && ($_POST['uf'] == "RJ")) echo "selected" ?>>RJ</option>
                             <option value="AC" <?php if (!empty($_POST['uf']) && ($_POST['uf'] == "AC")) echo "selected" ?>>AC</option>
                             <option value="AL" <?php if (!empty($_POST['uf']) && ($_POST['uf'] == "AL")) echo "selected" ?>>AL</option>
@@ -389,6 +392,8 @@
                     </div>
                 </div>
             </div>
+
+          </div>
             <br />
             <br />
 
@@ -488,7 +493,7 @@
                     <div class="col-lg-6">
                         <input type="text" class="mother mother-form form-control" placeholder="Nome"
                                name="motherFullName" onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Se não deseja preencher os motheros do pai por favor marque a caixa de não desejo preencher.')"
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
                                value="<?php
 							if (!empty($_POST['motherFullName'])) {

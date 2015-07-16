@@ -9,15 +9,15 @@ class medical_file_model extends CK_Model{
 
 	public function insertNewMedicalFile($summerCampId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $date, $site){
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $site){
 		$this->Logger->info("Running: " . __METHOD__);
 
 		$sql = 'INSERT INTO medical_file (summer_camp_id, colonist_id, blood_type, rh, weight, height, physical_activity_restriction,
 		vacine_tetanus, vacine_mmr, vacine_hepatitis, infecto_contagious_antecedents, regular_use_medicine, 
-		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, date, site) VALUES (?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?,?)';
+		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, site) VALUES (?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?)';
 		$returnId = $this->executeReturningId($this->db, $sql, array(intval($summerCampId), intval($colonistId), intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $date, $site));
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $site));
 		if($returnId)
 			return $returnId;
 

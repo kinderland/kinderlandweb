@@ -100,8 +100,14 @@
                         },
                         function (data) {
                             if (data !== "") {
-                                alert(data);
-                                $("#colonist_situation_"+colonist_id+"_"+summer_camp_id).html(data);
+                                var color = "";
+                                if(data == "pre-inscrição validada")
+                                    color = "#017D50";
+                                else
+                                    color = "#FF0000";
+                                $("#colonist_situation_"+colonist_id+"_"+summer_camp_id).html('<font color="'+color+'">'+data+'</font>');
+                                $("#submit_btn_"+colonist_id+"_"+summer_camp_id).hide();
+                                $("#save_btn_"+colonist_id+"_"+summer_camp_id).hide();
                             } else {
                                 alert("Ocorreu um erro ao confirmar validação do colonista");
                             }
@@ -189,16 +195,37 @@
                                     <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
                                     <td><?= $colonist -> camp_name ?></td>
                                     <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
-                                    <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><?= $colonist -> situation_description ?></td>
+                                    <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><font color="
+                                <?php
+                                    switch ($colonist->situation) {
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION: echo "#061B91"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "#017D50"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN: echo "#555555"; break;
+                                    }
+                                ?>"><?= $colonist -> situation_description ?></td>
                                     <td>
                                     	<?php
                                     		if($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN || $colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS){
                                     	?>
                                     	   <a onClick="openValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Checklist</a> <br />
-                                           <a onClick="confirmValidation(<?=$colonist->colonist_id?>, '<?=$colonist->colonist_name?>', <?=$colonist->summer_camp_id?>)">Submeter</a> <br />
                                     	<?php
                                     		}
                                     	?>
+                                        <?php
+                                            if($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION){
+                                        ?>
+                                           <button class="btn btn-primary" id="submit_btn_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" onClick="confirmValidation(<?=$colonist->colonist_id?>, '<?=$colonist->colonist_name?>', <?=$colonist->summer_camp_id?>)">Submeter</button> <br />
+                                        <?php
+                                            }
+                                        ?>
+                                        <?php
+                                            if($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED){
+                                        ?>
+                                           <img src="<?= $this->config->item('assets')?>images/kinderland/confirma.png" width="30" height="30" />
+                                        <?php
+                                            }
+                                        ?>
                                     </td>
                                 </tr>
                                 <tr id="validation_tab_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" style="display:none">
@@ -283,9 +310,10 @@
 						                        </tbody>
 		                            		</table>
 		                            	</form>
-                                        <button class="btn btn-primary" onClick="saveValidation(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)"
+                                        <button id="save_btn_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>" class="btn btn-primary" onClick="saveValidation(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)"
                                                 <?= ($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) ? "":" style='display:none'" ?>>Salvar</button>
 		                            	<button class="btn btn-warning" onClick="closeValidationTab(<?=$colonist->colonist_id?>, <?=$colonist->summer_camp_id?>)">Fechar</button>
+                                        <br><br><br><br>
 		                            </td>
 	                            </tr>
                             <?php 

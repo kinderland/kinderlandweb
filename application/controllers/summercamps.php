@@ -507,7 +507,6 @@ class SummerCamps extends CK_Controller {
 		if ($doctorPhone2 && $doctorPhone2 !== "")
 			$this -> telephone_model -> insertNewTelephone($doctorPhone2, $doctorId);
 
-		$date = $this -> input -> post('date', TRUE);
 		$site = $this -> input -> post('site', TRUE);
 
 		$vacineTetanus = $this -> input -> post('antiTetanus', TRUE);
@@ -516,7 +515,7 @@ class SummerCamps extends CK_Controller {
 		
 		if($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $date, $site))
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $site))
 		
 		echo "<script>alert('Ficha medica enviada com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 		

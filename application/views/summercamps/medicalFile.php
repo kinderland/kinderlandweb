@@ -224,16 +224,10 @@
 			</tr>
 
 			<tr>
-				<td colspan="2">
+				<td colspan="4">
 				<p class="campo">
 					<b>Local:</b>
 					<input type="text" id="site" name="site" size="30px">
-				</p></td>
-
-				<td colspan="2">
-				<p class="campo">
-					<b>Data:</b>
-					<input type="text" name="date" id="date" size="15px">
 				</p></td>
 			</tr>
 

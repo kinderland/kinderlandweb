@@ -67,9 +67,6 @@
 				</h2>
 				<input type="button" value="Voltar" onclick="history.back()" />
 			</p>
-			<p class="buttons" align="center">
-				<input type="submit" align="center" value="Sair do sistema" id="formulario" onclick="location.href='@{Secure.logout()}'">
-			</p>
 
 		</div>
 	</div>

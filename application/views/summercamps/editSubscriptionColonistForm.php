@@ -142,8 +142,8 @@
 
                     </div>
 
-                    <label for="school" class="col-lg-2 control-label"> Nome da Escola*: </label>
-                    <div class="col-lg-2">
+                    <label for="school" class="col-lg-1 control-label"> Nome da Escola*: </label>
+                    <div class="col-lg-3">
                     	<?php $schools = $this -> summercamp_model -> getSchools(); ?>
                         <select  class="form-control" id="school" name="school" required                                
                         oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
@@ -160,8 +160,8 @@
 
                     </div>
 
-                    <label for="schoolYear" class="col-lg-2 control-label"> Ano escolar*: </label>
-                    <div class="col-lg-2">
+                    <label for="schoolYear" class="col-lg-1 control-label"> Ano escolar*: </label>
+                    <div class="col-lg-3">
                         <select  class="form-control" id="schoolYear" name="schoolYear" required                                
                         oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
                                onchange="setCustomValidity('')"
@@ -364,7 +364,7 @@
                         <select  class="form-control endereco" id="uf" name="uf" required
                                  oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
                                  oninput="setCustomValidity('')">
-                            <option value="" selected> -- Selecione -- </option>
+                            <option value=""> -- Selecione -- </option>
                             <option value="RJ" <?php if (!empty($uf) && ($uf == "RJ")) echo "selected" ?>>RJ</option>
                             <option value="AC" <?php if (!empty($uf) && ($uf == "AC")) echo "selected" ?>>AC</option>
                             <option value="AL" <?php if (!empty($uf) && ($uf == "AL")) echo "selected" ?>>AL</option>
@@ -497,7 +497,7 @@
                     <div class="col-lg-6">
                         <input type="text" class="mother mother-form form-control" placeholder="Nome"
                                name="motherFullName" onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Se não deseja preencher os motheros do pai por favor marque a caixa de não desejo preencher.')"
+                               oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
                                value="<?php
 							if (!empty($motherFullName)) {
