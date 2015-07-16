@@ -439,6 +439,40 @@ WITH (
   OIDS=FALSE
 );
 
+CREATE TABLE blood_type (
+    blood_type_id SERIAL NOT NULL PRIMARY KEY,
+    description character(2) NOT NULL
+);
+
+Insert into blood_type(blood_type_id,description) values
+(1,'A'),
+(2,'B'),
+(3,'O'),
+(4,'AB');
+
+CREATE TABLE medical_file (
+    summer_camp_id integer NOT NULL,
+    colonist_id integer NOT NULL,
+    blood_type integer NOT NULL,
+    rh boolean NOT NULL,
+    weight numeric NOT NULL,
+    height numeric NOT NULL,
+    physical_activity_restriction character varying(200),
+    vacine_tetanus boolean NOT NULL,
+    vacine_mmr boolean NOT NULL,
+    vacine_hepatitis boolean NOT NULL,
+    infecto_contagious_antecedents character varying(200),
+    regular_use_medicine character varying(200),
+    medicine_restrictions character varying(200),
+    allergies character varying(200),
+    analgesic_antipyretic character varying(200),
+    doctor_id integer NOT NULL,
+    date timestamp without time zone,
+    site character varying(200),
+    PRIMARY KEY (summer_camp_id, colonist_id),
+    FOREIGN KEY (blood_type) REFERENCES blood_type(blood_type_id) ON UPDATE       CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (doctor_id) REFERENCES person(person_id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
 
 ----------------------------------- Views Section -----------------------------------
 

@@ -144,29 +144,36 @@
 
                     <label for="school" class="col-lg-2 control-label"> Nome da Escola*: </label>
                     <div class="col-lg-2">
-                        <input type="text" class="form-control" placeholder="Nome da Escola"
-                               name="school" onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-                               oninput="setCustomValidity('')"
-                               value="<?php
-							if (!empty($school)) {
-								echo $school;
-							}
- ?>"/>
+                    	<?php $schools = $this -> summercamp_model -> getSchools(); ?>
+                        <select  class="form-control" id="school" name="school" required                                
+                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
+                               onchange="setCustomValidity('')"
+						 >
+						<option value="" selected>-- Selecione --</option>
+                        <?php foreach($schools as $actual_school){
+							echo "<option value='".$actual_school."' ";
+							if (!empty($school) && ($school == $actual_school)) echo "selected"; 
+								echo ">".$actual_school."</option>";								                            	
+                        }?>
+                        <option value="outra">Outra</option>
+                        </select>
 
                     </div>
 
-                    <label for="gender" class="col-lg-2 control-label"> Ano escolar*: </label>
+                    <label for="schoolYear" class="col-lg-2 control-label"> Ano escolar*: </label>
                     <div class="col-lg-2">
-                        <input type="text" class="form-control" placeholder="Ano escolar "
-                               name="schoolYear" onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-                               oninput="setCustomValidity('')"
-                               value="<?php
-							if (!empty($schoolYear)) {
-								echo $schoolYear;
-							}
-					 ?>"/>
+                        <select  class="form-control" id="schoolYear" name="schoolYear" required                                
+                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
+                               onchange="setCustomValidity('')"
+						 >
+                            <option value="" selected>-- Selecione --</option>
+                            <?php for($__school_year__=1;$__school_year__<=9;$__school_year__++){
+								echo "<option value='".$__school_year__."' ";
+								if (!empty($school) && ($schoolYear == $__school_year__)) echo "selected"; 
+								echo ">".$__school_year__."</option>";								                            	
+                            }?>
+                        </select>
+                        <?php>
                     </div>
 
 
@@ -209,7 +216,35 @@
                 </div>
             </div>
             <br />
+            
+            <div class="row">
+                <div class="form-group">
+                    <label for="phone1" class="col-lg-2 control-label "> Telefone: </label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control phone phone1" placeholder="(ddd) Telefone de contato"
+                               name="phone1" id="phone1" maxlength="25" 
+                               value="<?php
+							if (!empty($phone1)) {
+								echo $phone1;
+							}
+						 ?>"/>
+                    </div>
+
+                    <label for="phone2" class="col-lg-3 control-label"> Telefone Secundário: </label>
+                    <div class="col-lg-3">
+                        <input type="text" class="form-control phone" placeholder="(ddd) Telefone secundário"
+                               name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
+                               value="<?php
+							if (!empty($phone2)) {
+								echo $phone2;
+							}
+					?>"/>
+                    </div>
+                </div>
+            </div>
             <br />
+            <br />
+
 
             <div class="row">
                 <div class="form-group">
@@ -234,7 +269,7 @@
             <div class="row">
                 <div class="form-group">
                     <label for="street" class="col-lg-1 control-label"> Logradouro: </label>
-                    <div class="col-lg-3">
+                    <div class="col-lg-11">
                         <input type="text" class="form-control endereco" placeholder="Logradouro"
                                name="street" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
@@ -245,7 +280,11 @@
 							}
  ?>"/>
                     </div>
-
+                </div>
+            </div>
+            <br />
+			<div class="row">
+                <div class="form-group">
                     <label for="number" class="col-lg-1 control-label "> Número: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control endereco" placeholder="Número"
@@ -260,7 +299,7 @@
                     </div>
 
                     <label for="complement" class="col-lg-2 control-label " > Complemento: </label>
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <input type="text" class="form-control endereco" placeholder="Complemento" 
                                name="complement"
                                value="<?php
@@ -274,20 +313,20 @@
             <br />
             <div class="row">
                 <div class="form-group">
-                    <label for="city" class="col-lg-1 control-label "> Cidade: </label>
+
+                    <label for="neighborhood" class="col-lg-1 control-label "> Bairro: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Cidade" 
-                               name="city" onkeypress="return validateLetterInput(event);" 
-                               oninvalid="this.setCustomValidity('Este$this -> input -> post('neighborhood', TRUE) campo não pode ficar vazio.')"
-                               oninput="setCustomValidity('')"
+                        <input type="text" class="form-control endereco" placeholder="Bairro" 
+                               name="neighborhood" onkeypress="return validateLetterInput(event);"
                                value="<?php
-							if (!empty($city)) {
-								echo $city;
+							if (!empty($neighborhood)) {
+								echo $neighborhood;
 							}
  ?>"/>
                     </div>
 
-                    <label for="cep" class="col-lg-1 control-label"> CEP: </label>
+
+                    <label for="cep" class="col-lg-2 control-label"> CEP: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control endereco" placeholder="CEP" 
                                name="cep" maxlength="8" onkeypress="return validateNumberInput(event);"
@@ -300,44 +339,27 @@
 							}
  ?>"/>
                     </div>
-                    <label for="neighborhood" class="col-lg-1 control-label "> Bairro: </label>
-                    <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Bairro" 
-                               name="neighborhood" onkeypress="return validateLetterInput(event);"
-                               value="<?php
-							if (!empty($neighborhood)) {
-								echo $neighborhood;
-							}
- ?>"/>
-                    </div>
                 </div>
             </div>
             <br />
             <div class="row">
                 <div class="form-group">
-                    <label for="phone1" class="col-lg-1 control-label "> Telefone: </label>
+                	
+                	<label for="city" class="col-lg-1 control-label "> Cidade: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control phone phone1" placeholder="(ddd) Telefone de contato"
-                               name="phone1" id="phone1" maxlength="25" 
+                        <input type="text" class="form-control endereco" placeholder="Cidade" 
+                               name="city" onkeypress="return validateLetterInput(event);" 
+                               oninvalid="this.setCustomValidity('Este$this -> input -> post('neighborhood', TRUE) campo não pode ficar vazio.')"
+                               oninput="setCustomValidity('')"
                                value="<?php
-							if (!empty($phone1)) {
-								echo $phone1;
+							if (!empty($city)) {
+								echo $city;
 							}
-						 ?>"/>
+ ?>"/>
                     </div>
 
-                    <label for="phone2" class="col-lg-1 control-label"> Telefone Secundário: </label>
-                    <div class="col-lg-3">
-                        <input type="text" class="form-control phone" placeholder="(ddd) Telefone secundário"
-                               name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
-                               value="<?php
-							if (!empty($phone2)) {
-								echo $phone2;
-							}
-					?>"/>
-                    </div>
-
-                    <label for="uf" class="col-lg-1 control-label"> Estado*: </label>
+                	
+                    <label for="uf" class="col-lg-2 control-label"> Estado*: </label>
                     <div class="col-lg-3">
                         <select  class="form-control endereco" id="uf" name="uf" required
                                  oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"

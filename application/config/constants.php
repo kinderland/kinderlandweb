@@ -160,6 +160,16 @@ define('DOCUMENT_IDENTIFICATION_DOCUMENT', 3);
 define('DOCUMENT_GENERAL_RULES', 4); 
 define('DOCUMENT_PHOTO_3X4', 5);
 
+/*
+|--------------------------------------------------------------------------
+| Blood Types
+|--------------------------------------------------------------------------
+*/
+
+define('BLOOD_TYPE_A', 1);
+define('BLOOD_TYPE_B', 2);
+define('BLOOD_TYPE_O', 3);
+define('BLOOD_TYPE_AB', 4); 
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

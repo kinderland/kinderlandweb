@@ -49,53 +49,58 @@
 				<?php if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || 
 				$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN){?>
 					<a href="<?= $this -> config -> item('url_link'); ?>summercamps/editSubscriptionColonistForm?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>"><?=$summerCampInscription -> getFullname() ?></a>
-				<?php } else {?>
-					<a href="<?= $this -> config -> item('url_link'); ?>summercamps/viewSubscriptionColonist?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>"><?=$summerCampInscription -> getFullname() ?></a>
+				<?php } else { ?>
+					<a href="<?= $this -> config -> item('url_link'); ?>summercamps/viewColonistInfo?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>"><?=$summerCampInscription -> getFullname() ?></a>
 				<?php } ?>
 				<br>				<?=$this -> summercamp_model -> getSummerCampById($summerCampInscription -> getSummerCampId()) -> getCampName() ?></td>
 				
 			<td>
 				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_MEDICAL_FILE ?>">
 					Ficha Médica </a>      
-					<?php $documents +=insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_MEDICAL_FILE); ?>                   
+					<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_MEDICAL_FILE); ?>                   
 <br><br>	
 				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_TRIP_AUTHORIZATION ?>">
 					Autorização de viagem </a>                         
-					<?php $documents +=insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_TRIP_AUTHORIZATION); ?>                   
+					<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_TRIP_AUTHORIZATION); ?>                   
 <br><br>	
 				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_IDENTIFICATION_DOCUMENT ?>">
 					Documento de identificação </a>                         
-					<?php $documents +=insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_IDENTIFICATION_DOCUMENT); ?>                   
+					<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_IDENTIFICATION_DOCUMENT); ?>                   
 <br><br>	
 				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_GENERAL_RULES ?>">
 					Normas gerais </a>                         
-					<?php $documents +=insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_GENERAL_RULES); ?>                   
+					<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_GENERAL_RULES); ?>                   
 <br><br>	
 				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_PHOTO_3X4 ?>">
 					Photo 3x4 </a>                         
-					<?php $documents +=insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_PHOTO_3X4); ?>                   
+					<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_PHOTO_3X4); ?>                   
 <br><br>	
 			</td>
 			<td>
-				<?php 
-					echo $summerCampInscription -> getSituation();
-					if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS){
-						echo "<br><br>";
-						echo "Atualize as informações como solicitado por e-mail e envie novamente a pré-inscrição";
-					}
+				<?php
+				echo $summerCampInscription -> getSituation();
+				if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) {
+					echo "<br><br>";
+					echo "Atualize as informações como solicitado por e-mail e envie novamente a pré-inscrição";
+				}
 				?>
 			</td>
 			<td>
 				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/sendPreSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
-					<?php if($documents == 5)
-							$sendPreSubscription = "";
-						  else
-						  	$sendPreSubscription = "disabled"; 
+					<?php
+					if ($documents == 5 && 
+					($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS 
+					|| $summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN))
+						$sendPreSubscription = "";
+					else
+						$sendPreSubscription = "disabled";
 					?>					
-					<button class="button" <?=$sendPreSubscription?> >Enviar pré-inscrição</button>
+					<button class="button" <?=$sendPreSubscription ?> >Enviar pré-inscrição</button>
 				</a>
 				<br>
+				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){?>
 				<button class="button" disabled>Pagar</button></td>
+				<?}?>
 		</tr>
 	<?php } ?>
 		

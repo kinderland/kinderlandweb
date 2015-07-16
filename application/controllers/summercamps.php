@@ -10,6 +10,7 @@ class SummerCamps extends CK_Controller {
 		$this -> load -> model('address_model');
 		$this -> load -> model('colonist_model');
 		$this -> load -> model('generic_model');
+		$this -> load -> model('medical_file_model');
 		$this -> load -> model('person_model');
 		$this -> load -> model('personuser_model');
 		$this -> load -> model('summercamp_model');
@@ -17,6 +18,7 @@ class SummerCamps extends CK_Controller {
 		$this -> address_model -> setLogger($this -> Logger);
 		$this -> colonist_model -> setLogger($this -> Logger);
 		$this -> generic_model -> setLogger($this -> Logger);
+		$this -> medical_file_model -> setLogger($this -> Logger);
 		$this -> person_model -> setLogger($this -> Logger);
 		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
@@ -25,7 +27,7 @@ class SummerCamps extends CK_Controller {
 
 	public function index() {
 		$this -> Logger -> info("Starting " . __METHOD__);
-		$isAssociate = $this->personuser_model->isAssociate($this -> session -> userdata("user_id"));
+		$isAssociate = $this -> personuser_model -> isAssociate($this -> session -> userdata("user_id"));
 		$data["summerCamps"] = $this -> summercamp_model -> getAvailableSummerCamps($isAssociate);
 		$data["summerCampInscriptions"] = $this -> summercamp_model -> getSummerCampSubscriptionsOfUser($this -> session -> userdata("user_id"));
 		$data["summercamp_model"] = $this -> summercamp_model;
@@ -49,8 +51,8 @@ class SummerCamps extends CK_Controller {
 		$responsableId = $this -> session -> userdata("user_id");
 		$responsableAddress = $this -> address_model -> getAddressByPersonId($responsableId);
 		$data["sameAddressResponsable"] = "n";
-		if($responsableAddress)
-			if($address->getAddressId() == $responsableAddress->getAddressId())
+		if ($responsableAddress)
+			if ($address -> getAddressId() == $responsableAddress -> getAddressId())
 				$data["sameAddressResponsable"] = "s";
 		$data["summerCamp"] = $this -> summercamp_model -> getSummerCampById($summerCampId);
 		$data["summerCampId"] = $summerCampId;
@@ -75,35 +77,35 @@ class SummerCamps extends CK_Controller {
 		$telephones = $this -> telephone_model -> getTelephonesByPersonId($camper -> getPersonId());
 		$data["phone1"] = isset($telephones[0]) ? $telephones[0] : FALSE;
 		$data["phone2"] = isset($telephones[1]) ? $telephones[1] : FALSE;
-		$father = $this->summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
-		$mother = $this->summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+		$father = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+		$mother = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
 		$data["dad"] = "";
-		if($father){
+		if ($father) {
 			$data["dad"] = $father;
-			if($father == $responsableId)
+			if ($father == $responsableId)
 				$data["responsableDadMother"] = "dad";
-			$father = $this->person_model -> getPersonFullById($father);  
-			$data["dadFullName"] = $father->fullname ;
-			$data["dadEmail"] = $father->email;
-			$data["dadPhone"] = $father->phone1;
+			$father = $this -> person_model -> getPersonFullById($father);
+			$data["dadFullName"] = $father -> fullname;
+			$data["dadEmail"] = $father -> email;
+			$data["dadPhone"] = $father -> phone1;
 		}
 		$data["mother"] = "";
-		if($mother){
+		if ($mother) {
 			$data["mother"] = $mother;
-			if($mother == $responsableId)
+			if ($mother == $responsableId)
 				$data["responsableDadMother"] = "mother";
-			$mother = $this->person_model -> getPersonFullById($mother);  
-			$data["motherFullName"] = $mother->fullname ;
-			$data["motherEmail"] = $mother->email;
-			$data["motherPhone"] = $mother->phone1;
+			$mother = $this -> person_model -> getPersonFullById($mother);
+			$data["motherFullName"] = $mother -> fullname;
+			$data["motherEmail"] = $mother -> email;
+			$data["motherPhone"] = $mother -> phone1;
 		}
 		$this -> loadView('summercamps/editSubscriptionColonistForm', $data);
 
 	}
 
-		public function editSubscriptionColonist() {
+	public function editSubscriptionColonist() {
 		$this -> Logger -> info("Starting " . __METHOD__);
-		
+
 		$colonistId = $this -> input -> post('colonistId', TRUE);
 		$summerCampId = $this -> input -> post('summerCampId', TRUE);
 		$personId = $this -> input -> post('personId', TRUE);
@@ -150,11 +152,11 @@ class SummerCamps extends CK_Controller {
 			} else
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$this -> person_model -> updatePerson($fullname, $gender, NULL, $personId, $addressId);
-			$this -> colonist_model -> updateColonist($personId, $birthdate, $documentNumber, $documentType,$colonistId);
+			$this -> colonist_model -> updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId);
 			$this -> summercamp_model -> editColonistSubscription($summerCampId, $colonistId, $school, $schoolYear);
 
 			if ($phone1 || $phone2)
-				$this -> telephone_model -> updatePhone($personId,$phone1, $personId);
+				$this -> telephone_model -> updatePhone($personId, $phone1, $personId);
 
 			$dadId = 0;
 			$motherId = 0;
@@ -165,19 +167,18 @@ class SummerCamps extends CK_Controller {
 				$motherId = $responsableId;
 			}
 
-			$this -> summercamp_model -> removeParentFromSummerCampSubscripted($summerCampId, $colonistId, "Pai");					
-			$this -> summercamp_model -> removeParentFromSummerCampSubscripted($summerCampId, $colonistId, "Mãe");					
-
+			$this -> summercamp_model -> removeParentFromSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+			$this -> summercamp_model -> removeParentFromSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
 
 			if ($dadId == 0 && !$dadDeclare && $dadFullName && $dadEmail && $dadPhone) {
 				$this -> Logger -> info("Inserting dad for colonist $colonistId in summercamp $summerCampId");
-				$dadId = $this -> person_model -> insertParent($dadFullName, "M", $dadEmail);
+				$dadId = $this -> person_model -> insertPersonWithoutAddress($dadFullName, "M", $dadEmail);
 				$this -> telephone_model -> insertNewTelephone($dadPhone, $dadId);
 			}
 
 			if ($motherId == 0 && !$motherDeclare && $motherFullName && $motherEmail && $motherPhone) {
 				$this -> Logger -> info("Inserting Mom for colonist $colonistId in summercamp $summerCampId");
-				$motherId = $this -> person_model -> insertParent($motherFullName, "F", $motherEmail);
+				$motherId = $this -> person_model -> insertPersonWithoutAddress($motherFullName, "F", $motherEmail);
 				$this -> telephone_model -> insertNewTelephone($motherPhone, $motherId);
 			}
 
@@ -192,7 +193,7 @@ class SummerCamps extends CK_Controller {
 			//Caso tenha ocorrido tudo bem, salva as mudanças
 			$this -> generic_model -> commitTransaction();
 
-			$this->Logger->info("Colonist sucessfully edited");
+			$this -> Logger -> info("Colonist sucessfully edited");
 
 			redirect("summercamps/index");
 		} catch (Exception $ex) {
@@ -202,11 +203,10 @@ class SummerCamps extends CK_Controller {
 			redirect("summercamps/editSubscriptionColonistForm?colonistId=$colonistId&summerCampId=$summerCampId");
 		}
 	}
-	
-	
+
 	public function completeSubscription() {
 		$this -> Logger -> info("Starting " . __METHOD__);
-		
+
 		$fullname = $this -> input -> post('fullname', TRUE);
 		$gender = $this -> input -> post('gender', TRUE);
 		$street = $this -> input -> post('street', TRUE);
@@ -263,17 +263,17 @@ class SummerCamps extends CK_Controller {
 				$dadId = $responsableId;
 			} else if ($responsableDadMother === "mother") {
 				$motherId = $responsableId;
-			}			
+			}
 
 			if ($dadId == 0 && !$dadDeclare && $dadFullName && $dadEmail && $dadPhone) {
 				$this -> Logger -> info("Inserting dad for colonist $colonistId in summercamp $summerCampId");
-				$dadId = $this -> person_model -> insertParent($dadFullName, "M", $dadEmail);
+				$dadId = $this -> person_model -> insertPersonWithoutAddress($dadFullName, "M", $dadEmail);
 				$this -> telephone_model -> insertNewTelephone($dadPhone, $dadId);
 			}
 
 			if ($motherId == 0 && !$motherDeclare && $motherFullName && $motherEmail && $motherPhone) {
 				$this -> Logger -> info("Inserting Mom for colonist $colonistId in summercamp $summerCampId");
-				$motherId = $this -> person_model -> insertParent($motherFullName, "F", $motherEmail);
+				$motherId = $this -> person_model -> insertPersonWithoutAddress($motherFullName, "F", $motherEmail);
 				$this -> telephone_model -> insertNewTelephone($motherPhone, $motherId);
 			}
 
@@ -288,8 +288,7 @@ class SummerCamps extends CK_Controller {
 			//Caso tenha ocorrido tudo bem, salva as mudanças
 			$this -> generic_model -> commitTransaction();
 
-			$this->Logger->info("New colonist successfully inserted");
-
+			$this -> Logger -> info("New colonist successfully inserted");
 
 			redirect("summercamps/index");
 		} catch (Exception $ex) {
@@ -319,21 +318,18 @@ class SummerCamps extends CK_Controller {
 		$data["hasDocument"] = "";
 		if (!$this -> summercamp_model -> hasDocument($data["camp_id"], $data["colonist_id"], $data["document_type"]))
 			$data["hasDocument"] = "disabled";
-		if($data["document_type"] == DOCUMENT_MEDICAL_FILE)
+		if ($data["document_type"] == DOCUMENT_MEDICAL_FILE)
 			$this -> loadView('summercamps/medicalFile', $data);
-		else if($data["document_type"] == DOCUMENT_GENERAL_RULES){
+		else if ($data["document_type"] == DOCUMENT_GENERAL_RULES) {
 			$data["summercamp"] = $this -> summercamp_model -> getSummerCampById($data["camp_id"]);
 			$this -> loadView('summercamps/generalRules', $data);
-		}
-		else if($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION){
+		} else if ($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION) {
 			$data["day"] = date('d');
 			$data["month"] = date('m');
 			$data["year"] = date('Y');
-			
-			
+
 			$this -> loadView('summercamps/tripAuthorization', $data);
-		}
-		else
+		} else
 			$this -> loadView('summercamps/uploadDocument', $data);
 	}
 
@@ -369,34 +365,164 @@ class SummerCamps extends CK_Controller {
 		}
 	}
 
-	public function sendPreSubscription(){
+	public function sendPreSubscription() {
+		$this -> Logger -> info("Starting " . __METHOD__);
 		$camp_id = $this -> input -> get('camp_id', TRUE);
 		$colonist_id = $this -> input -> get('colonist_id', TRUE);
-		$this->summercamp_model->updateColonistStatus($colonist_id,$camp_id,SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION);
-		$this->index();
+		$this -> summercamp_model -> updateColonistStatus($colonist_id, $camp_id, SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION);
+		$this -> index();
 	}
 
-	public function acceptGeneralRules(){
+	public function acceptGeneralRules() {
+		$this -> Logger -> info("Starting " . __METHOD__);
 		$camp_id = $this -> input -> post('camp_id', TRUE);
 		$colonist_id = $this -> input -> post('colonist_id', TRUE);
-		$this->summercamp_model->acceptGeneralRules($camp_id,$colonist_id);
-		$this->index();
-	}
-	
-	public function acceptTripAuthorization(){
-		$camp_id = $this -> input -> post('camp_id', TRUE);
-		$colonist_id = $this -> input -> post('colonist_id', TRUE);
-		$this->summercamp_model->updateTripAuthorization($camp_id,$colonist_id,'t');
-		$this->index();
+		$this -> summercamp_model -> acceptGeneralRules($camp_id, $colonist_id);
+		$this -> index();
 	}
 
-	public function rejectTripAuthorization(){
+	public function acceptTripAuthorization() {
+		$this -> Logger -> info("Starting " . __METHOD__);
 		$camp_id = $this -> input -> post('camp_id', TRUE);
 		$colonist_id = $this -> input -> post('colonist_id', TRUE);
-		$this->summercamp_model->updateTripAuthorization($camp_id,$colonist_id,'f');
-		$this->index();
+		$this -> summercamp_model -> updateTripAuthorization($camp_id, $colonist_id, 't');
+		$this -> index();
 	}
 
+	public function rejectTripAuthorization() {
+		$camp_id = $this -> input -> post('camp_id', TRUE);
+		$colonist_id = $this -> input -> post('colonist_id', TRUE);
+		$this -> summercamp_model -> updateTripAuthorization($camp_id, $colonist_id, 'f');
+		$this -> index();
+	}
+
+	public function viewColonistInfo() {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$colonistId = $this -> input -> get('colonistId', TRUE);
+		$summerCampId = $this -> input -> get('summerCampId', TRUE);
+		$camper = $this -> summercamp_model -> getSummerCampSubscription($colonistId, $summerCampId);
+		$address = $this -> address_model -> getAddressByPersonId($camper -> getPersonId());
+		$responsableId = $camper -> getPersonUserId();
+		$responsableAddress = $this -> address_model -> getAddressByPersonId($responsableId);
+		$data["sameAddressResponsable"] = "n";
+		if ($responsableAddress)
+			if ($address -> getAddressId() == $responsableAddress -> getAddressId())
+				$data["sameAddressResponsable"] = "s";
+		$data["summerCamp"] = $this -> summercamp_model -> getSummerCampById($summerCampId);
+		$data["id"] = $summerCampId;
+		$data["fullName"] = $camper -> getFullName();
+		$data["Gender"] = $camper -> getGender();
+		$data["birthdate"] = date("d-m-Y", strtotime($camper -> getBirthDate()));
+		$data["school"] = $camper -> getSchool();
+		$data["schoolYear"] = $camper -> getSchoolYear();
+		$data["documentNumber"] = $camper -> getDocumentNumber();
+		$data["documentType"] = $camper -> getDocumentType();
+		$data["phone1"] = $camper -> getDocumentType();
+		$data["phone2"] = $camper -> getDocumentType();
+		$data["street"] = $address -> getStreet();
+		$data["number"] = $address -> getPlaceNumber();
+		$data["city"] = $address -> getCity();
+		$data["cep"] = $address -> getCEP();
+		$data["complement"] = $address -> getComplement();
+		$data["neighborhood"] = $address -> getNeighborhood();
+		$data["uf"] = $address -> getUf();
+		$telephones = $this -> telephone_model -> getTelephonesByPersonId($camper -> getPersonId());
+		$data["phone1"] = isset($telephones[0]) ? $telephones[0] : FALSE;
+		$data["phone2"] = isset($telephones[1]) ? $telephones[1] : FALSE;
+		$father = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+		$mother = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+		if ($father) {
+			if ($father == $responsableId)
+				$data["responsableDadMother"] = "dad";
+			$father = $this -> person_model -> getPersonFullById($father);
+			$data["dadFullName"] = $father -> fullname;
+			$data["dadEmail"] = $father -> email;
+			$data["dadPhone"] = $father -> phone1;
+		}
+		if ($mother) {
+			if ($mother == $responsableId)
+				$data["responsableDadMother"] = "mother";
+			$mother = $this -> person_model -> getPersonFullById($mother);
+			$data["motherFullName"] = $mother -> fullname;
+			$data["motherEmail"] = $mother -> email;
+			$data["motherPhone"] = $mother -> phone1;
+		}
+		$this -> loadView('summercamps/viewColonistInfo', $data);
+
+	}
+
+	public function submitMedicalFile() {
+		$responsability = $this->input->post('responsability',TRUE);
+		if(!$responsability){
+			echo "<script>alert('Por favor valide a veracidade dos dados.');history.go(-1);</script>";
+			return;
+		}
+		$campId = $this -> input -> post('camp_id', TRUE);
+		$colonistId = $this -> input -> post('colonist_id', TRUE);
+		$bloodType = $this -> input -> post('bloodType', TRUE);
+		$rh = $this -> input -> post('rh', TRUE);
+		$weight = $this -> input -> post('weight', TRUE);
+		$height = $this -> input -> post('height', TRUE);
+
+		if ($this -> input -> post('physicalrestrictions_radio', TRUE))
+			$physicalActivityRestriction = $this -> input -> post('physicalrestrictions_text', TRUE);
+		else
+			$physicalActivityRestriction = NULL;
+
+		if ($this -> input -> post('antecedents_radio', TRUE))
+			$infectoContagiousAntecedents = $this -> input -> post('antecedents_text', TRUE);
+		else
+			$infectoContagiousAntecedents = NULL;
+
+		if ($this -> input -> post('habitualmedicine_radio', TRUE))
+			$regularUseMedicine = $this -> input -> post('habitualmedicine_text', TRUE);
+		else
+			$regularUseMedicine = NULL;
+
+		if ($this -> input -> post('medicinerestrictions_radio', TRUE))
+			$medicineRestrictions = $this -> input -> post('medicinerestrictions_text', TRUE);
+		else
+			$medicineRestrictions = NULL;
+
+		if ($this -> input -> post('allergies_radio', TRUE))
+			$allergies = $this -> input -> post('allergies_text', TRUE);
+		else
+			$allergies = NULL;
+
+		if ($this -> input -> post('analgesicantipyretic_radio', TRUE))
+			$analgesicAntipyretic = $this -> input -> post('analgesicantipyretic_text', TRUE);
+		else
+			$analgesicAntipyretic = NULL;
+
+		$doctorName = $this -> input -> post('doctor_name', TRUE);
+		$doctorMail = $this -> input -> post('doctor_email', TRUE);
+		$doctorPhone1 = $this -> input -> post('doctor_phone1', TRUE);
+		$doctorPhone2 = $this -> input -> post('doctor_phone2', TRUE);
+		if ($doctorMail && $doctorMail === "")
+			$doctorMail = NULL;
+
+		$doctorId = $this -> person_model -> insertPersonWithoutAddress($doctorName, NULL, $doctorMail);
+		$this -> telephone_model -> insertNewTelephone($doctorPhone1, $doctorId);
+
+		if ($doctorPhone2 && $doctorPhone2 !== "")
+			$this -> telephone_model -> insertNewTelephone($doctorPhone2, $doctorId);
+
+		$date = $this -> input -> post('date', TRUE);
+		$site = $this -> input -> post('site', TRUE);
+
+		$vacineTetanus = $this -> input -> post('antiTetanus', TRUE);
+		$vacineMMR = $this -> input -> post('MMR', TRUE);
+		$vacineHepatitis = $this -> input -> post('vacineHepatitis', TRUE);
+		
+		if($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
+		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $date, $site))
+		
+		echo "<script>alert('Ficha medica enviada com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+		
+		
+		
+	}
 
 }
 ?>

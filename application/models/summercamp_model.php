@@ -225,7 +225,7 @@ class summercamp_model extends CK_Model {
 	public function hasDocument($camp_id, $colonist_id, $document_type) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
-		if ($document_type != DOCUMENT_TRIP_AUTHORIZATION && $document_type != DOCUMENT_GENERAL_RULES) {
+		if ($document_type != DOCUMENT_MEDICAL_FILE && $document_type != DOCUMENT_TRIP_AUTHORIZATION && $document_type != DOCUMENT_GENERAL_RULES) {
 
 			$sql = 'Select * from document where summer_camp_id = ? and colonist_id = ? and document_type = ? order by date_created desc';
 			$resultSet = $this -> executeRows($this -> db, $sql, array($camp_id, $colonist_id, $document_type));
@@ -235,6 +235,13 @@ class summercamp_model extends CK_Model {
 					return TRUE;
 				}
 			return FALSE;
+		} else if($document_type == DOCUMENT_MEDICAL_FILE) {
+			$sql = "Select colonist_id from medical_file where summer_camp_id = ? and colonist_id = ?";
+			$resultSet = $this -> executeRow($this -> db, $sql, array($camp_id, $colonist_id));
+			if ($resultSet) 
+				return TRUE;
+			else
+				return FALSE;
 		} else {
 			$column = "";
 			if ($document_type == DOCUMENT_TRIP_AUTHORIZATION) {
@@ -331,6 +338,21 @@ class summercamp_model extends CK_Model {
 
 		return null;
 	}
+
+	public function getSchools(){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "SELECT * FROM school" ;
+		$resultSet = $this -> executeRows($this -> db, $sql);
+		if ($resultSet){
+			$schools = array();
+			foreach ($resultSet as $row) {
+				$schools[] = $row->school_name;
+			}
+			return $schools;
+		}
+		return null;
+	}
+
 
 }
 ?>

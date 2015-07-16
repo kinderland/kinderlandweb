@@ -17,7 +17,7 @@ class person_model extends CK_Model{
 		return false;
 	}
 
-	public function insertParent($fullname, $gender,$email){
+	public function insertPersonWithoutAddress($fullname, $gender,$email){
 		$this->Logger->info("Running: " . __METHOD__);
 
 		$sql = 'INSERT INTO person (fullname, date_created, gender,email) VALUES (?, current_timestamp, ?,?)';
