@@ -8,10 +8,12 @@ class Reports extends CK_Controller {
 		parent::__construct();
 		$this -> load -> helper('url');
 		$this -> load -> model('personuser_model');
+		$this -> load -> model('summercamp_model');
 		$this -> load -> model('cielotransaction_model');
 		$this -> load -> model('donation_model');
 		$this -> load -> model('campaign_model');
 		$this -> personuser_model -> setLogger($this -> Logger);
+		$this -> summercamp_model -> setLogger($this -> Logger);
 		$this -> cielotransaction_model -> setLogger($this -> Logger);
 		$this -> donation_model -> setLogger($this -> Logger);
 		$this -> campaign_model -> setLogger($this -> Logger);
@@ -138,6 +140,91 @@ class Reports extends CK_Controller {
 	public function user_donation_history() {
 		$data['users'] = $this -> personuser_model -> getAllUsersDetailed();
 		$this -> loadReportView("reports/finances/donation_history", $data);
+	}
+	
+	public function colonist_registered() {
+		$years = array();
+		$start = 2015;
+		$end = date('Y');
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		if (isset($_GET['ano']) && $_GET['ano'] != 0)
+			$year = $_GET['ano'];
+		
+		$data['year'] = $year;
+		$data['years'] = $years;
+		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
+		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCamp($shownStatus);
+		$this -> loadReportView("reports/summercamps/colonist_registered", $data);
+	}
+	
+	public function all_registrations() {
+		$years = array();
+		$start = 2015;
+		$end = date('Y');
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		if (isset($_GET['ano']) && $_GET['ano'] != 0)
+			$year = $_GET['ano'];
+		
+		$data['year'] = $year;
+		$data['years'] = $years;
+		
+		$colonistStatus3N = array();
+		$colonistStatus3N = $this -> summercamp_model -> getAllColonistsBySummerCamp(-3);
+		$data['colonist3NCount'] = count($colonistStatus3N);
+		
+		$colonistStatus2N = array();
+		$colonistStatus2N = $this -> summercamp_model -> getAllColonistsBySummerCamp(-2);
+		$data['colonist2NCount'] = count($colonistStatus2N);
+		
+		$colonistStatus1N = array();
+		$colonistStatus1N = $this -> summercamp_model -> getAllColonistsBySummerCamp(-1);
+		$data['colonist1NCount'] = count($colonistStatus1N);
+		
+		$colonistStatus0 = array();
+		$colonistStatus0 = $this -> summercamp_model -> getAllColonistsBySummerCamp(0);
+		$data['colonist0Count'] = count($colonistStatus0);
+		
+		$colonistStatus1 = array();
+		$colonistStatus1 = $this -> summercamp_model -> getAllColonistsBySummerCamp(1);
+		$data['colonist1Count'] = count($colonistStatus1);
+		
+		$colonistStatus2 = array();
+		$colonistStatus2 = $this -> summercamp_model -> getAllColonistsBySummerCamp(2);
+		$data['colonist2Count'] = count($colonistStatus2);
+		
+		$colonistStatus3 = array();
+		$colonistStatus3 = $this -> summercamp_model -> getAllColonistsBySummerCamp(3);
+		$data['colonist3Count'] = count($colonistStatus3);
+		
+		$colonistStatus4 = array();
+		$colonistStatus4 = $this -> summercamp_model -> getAllColonistsBySummerCamp(4);
+		$data['colonist4Count'] = count($colonistStatus4);
+		
+		$colonistStatus5 = array();
+		$colonistStatus5 = $this -> summercamp_model -> getAllColonistsBySummerCamp(5);
+		$data['colonist5Count'] = count($colonistStatus5);
+		
+		$colonistStatus6 = array();
+		$colonistStatus6 = $this -> summercamp_model -> getAllColonistsBySummerCamp(6);
+		$data['colonist6Count'] = count($colonistStatus6);
+		
+		$colonistStatusT = array();
+		$colonistStatusT = $colonistStatus3N + $colonistStatus2N + $colonistStatus1N + $colonistStatus0 + $colonistStatus1 + $colonistStatus2 + $colonistStatus3 + $colonistStatus4 + $colonistStatus5 + $colonistStatus6;
+		$data['colonistTCount'] = count($colonistStatusT);
+		
+		
+		$this -> loadReportView("reports/summercamps/all_registrations", $data);
 	}
 
 	public function associate_campaign_donations() {
