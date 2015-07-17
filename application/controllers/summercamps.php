@@ -153,6 +153,14 @@ class SummerCamps extends CK_Controller {
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$this -> person_model -> updatePerson($fullname, $gender, NULL, $personId, $addressId);
 			$this -> colonist_model -> updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId);
+			if($school[0] == -1){
+				if($school[1] != -1){ //So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
+					$school = $school[1];
+					$this -> summercamp_model ->insertSchool($school);
+				}
+			} else{
+				$school = $school[0];
+			}
 			$this -> summercamp_model -> editColonistSubscription($summerCampId, $colonistId, $school, $schoolYear);
 
 			if ($phone1 || $phone2)
@@ -249,6 +257,14 @@ class SummerCamps extends CK_Controller {
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$personId = $this -> person_model -> insertNewPerson($fullname, $gender, NULL, $addressId);
 			$colonistId = $this -> colonist_model -> insertColonist($personId, $birthdate, $documentNumber, $documentType);
+			if($school[0] == -1){
+				if($school[1] != -1){ //So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
+					$school = $school[1];
+					$this -> summercamp_model ->insertSchool($school);
+				}
+			} else{
+				$school = $school[0];
+			}
 			$this -> summercamp_model -> subscribeColonist($summerCampId, $colonistId, $responsableId, SUBSCRIPTION_STATUS_PRE_SUBSCRIPTION_INCOMPLETE, $school, $schoolYear);
 
 			if ($phone1)

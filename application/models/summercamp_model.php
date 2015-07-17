@@ -352,6 +352,16 @@ class summercamp_model extends CK_Model {
 		}
 		return null;
 	}
+	
+	public function insertSchool($school){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "insert into school values (?)" ;
+		$resultSet = $this -> execute($this -> db, $sql,array($school));
+		if ($resultSet){
+			return TRUE;
+		}
+		return FALSE;
+	}
 
 
 }
