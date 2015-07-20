@@ -1,5 +1,6 @@
 <?php
 require_once APPPATH . 'core/CK_Model.php';
+require_once APPPATH . 'core/validation.php';
 
 class validation_model extends CK_Model {
 
@@ -45,6 +46,16 @@ class validation_model extends CK_Model {
 			return null;
 
 		return $resultRow;
+	}
+	
+		public function getColonistValidationInfoObject($colonistId, $summerCampId){
+		$sql = "SELECT * FROM validation WHERE colonist_id = ? AND summer_camp_id = ?";
+		$resultRow = $this->executeRow($this->db, $sql, array($colonistId, $summerCampId));
+
+		if(!$resultRow)
+			return null;
+
+		return Validation::createValidationObject($resultRow);
 	}
 }
 

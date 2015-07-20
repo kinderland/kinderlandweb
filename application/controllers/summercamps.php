@@ -15,6 +15,7 @@ class SummerCamps extends CK_Controller {
 		$this -> load -> model('personuser_model');
 		$this -> load -> model('summercamp_model');
 		$this -> load -> model('telephone_model');
+		$this -> load -> model('validation_model');
 		$this -> address_model -> setLogger($this -> Logger);
 		$this -> colonist_model -> setLogger($this -> Logger);
 		$this -> generic_model -> setLogger($this -> Logger);
@@ -23,6 +24,7 @@ class SummerCamps extends CK_Controller {
 		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
 		$this -> telephone_model -> setLogger($this -> Logger);
+		$this -> validation_model -> setLogger($this -> Logger);
 	}
 
 	public function index() {
@@ -31,6 +33,30 @@ class SummerCamps extends CK_Controller {
 		$data["summerCamps"] = $this -> summercamp_model -> getAvailableSummerCamps($isAssociate);
 		$data["summerCampInscriptions"] = $this -> summercamp_model -> getSummerCampSubscriptionsOfUser($this -> session -> userdata("user_id"));
 		$data["summercamp_model"] = $this -> summercamp_model;
+		$rawStatusArray = $this->summercamp_model->getStatusArray();
+		$statusArray = array();
+		foreach($rawStatusArray as $status){
+			switch($status["database_id"]){
+				case 0:
+				case 1:
+					$statusArray[$status["database_id"]] = $status;
+					break;
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+					$statusArray[$status["database_id"]+1] = $status;
+					break;
+				case 6:
+					$statusArray[2] = $status;
+				case -1:
+				case -2:
+				case -3:
+					$statusArray[6-$status["database_id"]] = $status;
+				break;
+			}
+		}
+		$data["statusArray"] = $statusArray;
 		$this -> loadView('summercamps/index', $data);
 	}
 
@@ -153,6 +179,14 @@ class SummerCamps extends CK_Controller {
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$this -> person_model -> updatePerson($fullname, $gender, NULL, $personId, $addressId);
 			$this -> colonist_model -> updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId);
+			if($school[0] == -1){
+				if($school[1] != -1){ //So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
+					$school = $school[1];
+					$this -> summercamp_model ->insertSchool($school);
+				}
+			} else{
+				$school = $school[0];
+			}
 			$this -> summercamp_model -> editColonistSubscription($summerCampId, $colonistId, $school, $schoolYear);
 
 			if ($phone1 || $phone2)
@@ -249,6 +283,14 @@ class SummerCamps extends CK_Controller {
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$personId = $this -> person_model -> insertNewPerson($fullname, $gender, NULL, $addressId);
 			$colonistId = $this -> colonist_model -> insertColonist($personId, $birthdate, $documentNumber, $documentType);
+			if($school[0] == -1){
+				if($school[1] != -1){ //So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
+					$school = $school[1];
+					$this -> summercamp_model ->insertSchool($school);
+				}
+			} else{
+				$school = $school[0];
+			}
 			$this -> summercamp_model -> subscribeColonist($summerCampId, $colonistId, $responsableId, SUBSCRIPTION_STATUS_PRE_SUBSCRIPTION_INCOMPLETE, $school, $schoolYear);
 
 			if ($phone1)
@@ -507,15 +549,13 @@ class SummerCamps extends CK_Controller {
 		if ($doctorPhone2 && $doctorPhone2 !== "")
 			$this -> telephone_model -> insertNewTelephone($doctorPhone2, $doctorId);
 
-		$site = $this -> input -> post('site', TRUE);
-
 		$vacineTetanus = $this -> input -> post('antiTetanus', TRUE);
 		$vacineMMR = $this -> input -> post('MMR', TRUE);
 		$vacineHepatitis = $this -> input -> post('vacineHepatitis', TRUE);
 		
 		if($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $site))
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
 		
 		echo "<script>alert('Ficha medica enviada com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 		

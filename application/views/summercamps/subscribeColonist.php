@@ -3,6 +3,19 @@
 
 
 <script>
+	function verifyOtherSchool(){
+		var val = $("#school_select").val();
+		if(val == -1){
+			$("#school_text").fadeIn();
+			$("#school_text").prop('disabled', false);			
+		}
+		else{
+			$("#school_text").fadeOut();
+			$("#school_text").prop('disabled', true);			
+		}
+	}
+	
+
 	function addressResponsable() {
 
 		var val = $('input:radio[name=sameAddressResponsable]:checked').val();
@@ -141,48 +154,8 @@
 
                     </div>
 
-                    <label for="school" class="col-lg-1 control-label"> Nome da Escola*: </label>
-                    <div class="col-lg-3">
-                    	<?php $schools = $this -> summercamp_model -> getSchools(); ?>
-                        <select  class="form-control" id="school" name="school" required                                
-                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
-                               onchange="setCustomValidity('')"
-						 >
-						<option value="" selected>-- Selecione --</option>
-                        <?php foreach($schools as $actual_school){
-							echo "<option value='".$actual_school."' ";
-							if (!empty($_POST['school']) && ($_POST['school'] == $actual_school)) echo "selected"; 
-								echo ">".$actual_school."</option>";								                            	
-                        }?>
-                        <option value="outra">Outra</option>
-                        </select>
-                    </div>
-
-                    <label for="schoolYear" class="col-lg-1 control-label"> Ano escolar*: </label>
-                    <div class="col-lg-3">
-                        <select  class="form-control" id="schoolYear" name="schoolYear" required                                
-                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
-                               onchange="setCustomValidity('')"
-						 >
-                            <option value="" selected>-- Selecione --</option>
-                            <?php for($__school_year__=1;$__school_year__<=9;$__school_year__++){
-								echo "<option value='".$__school_year__."' ";
-								if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__)) echo "selected"; 
-								echo ">".$__school_year__."</option>";								                            	
-                            }?>
-                        </select>
-                    </div>
-
-
-                </div>
-            </div>
-            <br />
-            <br />
-
-            <div class="row">
-                <div class="form-group">
                     <label for="gender" class="col-lg-2 control-label"> Tipo de Documento*: </label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-2">
                         <select  class="form-control" id="documentType" name="documentType" required 
                         oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
                                onchange="setCustomValidity('')"
@@ -190,24 +163,70 @@
                             <option value="" selected>-- Selecione --</option>
                             <option value="RG"
 <?php if (!empty($_POST['documentType']) && ($_POST['gender'] == "RG")) echo "selected" ?> >RG</option>
-                            <option value="CPF"
-<?php if (!empty($_POST['documentType']) && ($_POST['documentType'] == "CPF")) echo "selected" ?>>CPF</option>
+                            <option value="Passaporte"
+<?php if (!empty($_POST['documentType']) && ($_POST['documentType'] == "Passaporte")) echo "selected" ?>>Passaporte</option>
                             <option value="Certidao"
 <?php if (!empty($_POST['documentType']) && ($_POST['documentType'] == "Certidao")) echo "selected" ?>>Certidão de Nascimento</option>
                         </select>
                     </div>
-                    <label for="documentNumber" class="col-lg-3 control-label"> Numero do documento*: </label>
+                    <label for="documentNumber" class="col-lg-1 control-label"> Numero do documento*: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Numero do documento"
-                               name="documentNumber" onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-                               oninput="setCustomValidity('')"
+                               name="documentNumber" id="documentNumber" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Este campo está ou vazio ou contém um CPF inválido')"
+                               oninput="setCustomValidity('');" onblur="verifyCPF();"
                                value="<?php
 							if (!empty($_POST['documentNumber'])) {
 								echo $_POST['documentNumber'];
 							}
 					?>"/>
 
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="school" class="col-lg-2 control-label"> Nome da Escola*: </label>
+                    <div class="col-lg-4">
+                    	<?php $schools = $this -> summercamp_model -> getSchools(); ?>
+                        <select  class="form-control" id="school_select" name="school[]" required                                
+                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
+                               onchange="setCustomValidity('');verifyOtherSchool();"
+						 >
+						<option value="" selected>-- Selecione --</option>
+                        <?php foreach($schools as $actual_school){
+							echo "<option value='".$actual_school."' ";
+							if (!empty($_POST['school']) && ($_POST['school'] == $actual_school)) echo "selected"; 
+								echo ">".$actual_school."</option>";								                            	
+                        }?>
+                        <option value="-1">Outra</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" placeholder="Nome da escola"
+                               name="school[]" id="school_text" disabled style="display: none;" onkeypress="return validateLetterInput(event);" required
+                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+                               oninput="setCustomValidity('')"
+                               />
+                     </div>
+                    
+
+                    <label for="schoolYear" class="col-lg-3 control-label"> Ano escolar (Fundamental)*: </label>
+                    <div class="col-lg-3">
+                        <select  class="form-control" id="schoolYear" name="schoolYear" required                                
+                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
+                               onchange="setCustomValidity('')"
+						 >
+                            <option value="" selected>-- Selecione --</option>
+                            <?php for($__school_year__=2;$__school_year__<=9;$__school_year__++){
+								echo "<option value='".$__school_year__."' ";
+								if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__)) echo "selected"; 
+								echo ">".$__school_year__."</option>";								                            	
+                            }?>
+                        </select>
                     </div>
 
                 </div>

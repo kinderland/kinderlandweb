@@ -329,6 +329,20 @@ class summercamp_model extends CK_Model {
 		return "";
 	}
 
+	public function getStatusArray() {
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "SELECT * FROM summer_camp_subscription_status order by status desc";
+		$resultSet = $this -> executeRows($this -> db, $sql, array());
+		$array = array();
+		if ($resultSet){
+			foreach($resultSet as $row){
+				$array[] = array("database_id" => $row->status, "text" => $row->description);	
+			}
+			return $array;
+		}
+		return "";
+	}		
+
 	public function getColonistStatus($colonistId, $summerCampId){
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "SELECT situation FROM summer_camp_subscription WHERE colonist_id = ? AND summer_camp_id = ?" ;
@@ -351,6 +365,16 @@ class summercamp_model extends CK_Model {
 			return $schools;
 		}
 		return null;
+	}
+	
+	public function insertSchool($school){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "insert into school values (?)" ;
+		$resultSet = $this -> execute($this -> db, $sql,array($school));
+		if ($resultSet){
+			return TRUE;
+		}
+		return FALSE;
 	}
 
 

@@ -467,8 +467,7 @@ CREATE TABLE medical_file (
     allergies character varying(200),
     analgesic_antipyretic character varying(200),
     doctor_id integer NOT NULL,
-    date timestamp without time zone default current_timestamp,
-    site character varying(200),
+    date timestamp without time zone NOT NULL default current_timestamp,
     PRIMARY KEY (summer_camp_id, colonist_id),
     FOREIGN KEY (blood_type) REFERENCES blood_type(blood_type_id) ON UPDATE       CASCADE ON DELETE RESTRICT,
     FOREIGN KEY (doctor_id) REFERENCES person(person_id) ON UPDATE CASCADE ON DELETE RESTRICT
