@@ -225,14 +225,6 @@
 
 			<tr>
 				<td colspan="4">
-				<p class="campo">
-					<b>Local:</b>
-					<input type="text" id="site" name="site" size="30px">
-				</p></td>
-			</tr>
-
-			<tr>
-				<td colspan="4">
 				<p class="required">
 					<input type="checkbox" class="required" name="responsability" value="Ok">
 					<span style="font-size:20px; color:red">Assumo a veracidade das informações.</span>

@@ -4,50 +4,6 @@
 
 <script>
 
-	function verifyCPF(){
-		var val = $("#documentType").val();
-		if(val == "CPF"){
-			var cpf = $("#documentNumber").val();
-			if(!TestaCPF(cpf)){
-				alert("CPF do colonista é inválido");
-				$("#documentNumber").each(function() {
-				    this.setCustomValidity("Este campo está ou vazio ou contém um CPF inválido");
-				});
-			}
-		}
-	}
-
-    function TestaCPF(strCPF) {
-        var cpf = strCPF.replace(".", "");
-        cpf = cpf.replace(".","");
-        cpf = cpf.replace("-","");
-        var Soma;
-        var Resto;
-        Soma = 0;
-        //strCPF  = RetiraCaracteresInvalidos(strCPF,11);
-        //pequena modificaçao para verificar todos os cpfs com todos os digitos iguais, antes so era verificado o primeiro caso
-        if (cpf == "00000000000" || cpf == "11111111111" || cpf == "22222222222" || cpf == "33333333333" ||
-                cpf == "44444444444" || cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" ||
-                cpf == "88888888888" || cpf == "99999999999")
-            return false;
-        for (i = 1; i <= 9; i++)
-            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);cpf
-        Resto = (Soma * 10) % 11;
-        if ((Resto == 10) || (Resto == 11))
-            Resto = 0;
-        if (Resto != parseInt(cpf.substring(9, 10)))
-            return false;
-        Soma = 0;
-        for (i = 1; i <= 10; i++)
-            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-        Resto = (Soma * 10) % 11;
-        if ((Resto == 10) || (Resto == 11))
-            Resto = 0;
-        if (Resto != parseInt(cpf.substring(10, 11)))
-            return false;
-        return true;
-    }
-
 
 	function verifyOtherSchool(){
 		var val = $("#school_select").val();
@@ -210,8 +166,8 @@
                             <option value="" selected>-- Selecione --</option>
                             <option value="RG"
 <?php if (!empty($documentType) && ($documentType == "RG")) echo "selected" ?> >RG</option>
-                            <option value="CPF"
-<?php if (!empty($documentType) && ($documentType == "CPF")) echo "selected" ?>>CPF</option>
+                            <option value="Passaporte"
+<?php if (!empty($documentType) && ($documentType == "Passaporte")) echo "selected" ?>>Passaporte</option>
                             <option value="Certidao"
 <?php if (!empty($documentType) && ($documentType == "Certidao")) echo "selected" ?>>Certidão de Nascimento</option>
                         </select>
@@ -220,8 +176,8 @@
                     <div class="col-lg-3">
                         <input type="text" id="documentNumber" class="form-control" placeholder="Numero do documento"
                                name="documentNumber" onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Este campo está ou vazio ou contém um CPF inválido.')"
-                               oninput="setCustomValidity('');" onblur="verifyCPF();"
+                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+                               oninput="setCustomValidity('');"
                                value="<?php
 							if (!empty($documentNumber)) {
 								echo $documentNumber;
@@ -237,7 +193,7 @@
             <div class="row">
                 <div class="form-group">
                     <label for="school" class="col-lg-2 control-label"> Nome da Escola*: </label>
-                    <div class="col-lg-2">
+                    <div class="col-lg-4">
                     	<?php $schools = $this -> summercamp_model -> getSchools(); ?>
                         <select  class="form-control" id="school_select" name="school[]" required                                
                         oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
@@ -253,6 +209,23 @@
                         </select>
 
                     </div>
+
+                    <label for="schoolYear" class="col-lg-3 control-label"> Ano escolar (fundamental)*: </label>
+                    <div class="col-lg-3">
+                        <select  class="form-control" id="schoolYear" name="schoolYear" required                                
+                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
+                               onchange="setCustomValidity('')"
+						 >
+                            <option value="" selected>-- Selecione --</option>
+                            <?php for($__school_year__=2;$__school_year__<=9;$__school_year__++){
+								echo "<option value='".$__school_year__."' ";
+								if (!empty($school) && ($schoolYear == $__school_year__)) echo "selected"; 
+								echo ">".$__school_year__."</option>";								                            	
+                            }?>
+                        </select>
+                        
+                    </div>
+
                     
                     <div class="col-lg-4">
                         <input type="text" class="form-control" placeholder="Nome da escola"
@@ -262,21 +235,6 @@
                                />
                      </div>
 
-                    <label for="schoolYear" class="col-lg-1 control-label"> Ano escolar*: </label>
-                    <div class="col-lg-3">
-                        <select  class="form-control" id="schoolYear" name="schoolYear" required                                
-                        oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
-                               onchange="setCustomValidity('')"
-						 >
-                            <option value="" selected>-- Selecione --</option>
-                            <?php for($__school_year__=1;$__school_year__<=9;$__school_year__++){
-								echo "<option value='".$__school_year__."' ";
-								if (!empty($school) && ($schoolYear == $__school_year__)) echo "selected"; 
-								echo ">".$__school_year__."</option>";								                            	
-                            }?>
-                        </select>
-                        
-                    </div>
 
                 </div>
             </div>

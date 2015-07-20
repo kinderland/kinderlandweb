@@ -17,7 +17,6 @@
 		private $analgesicAntipyretic;
 		private $doctorId;
 		private $date;
-		private $site;
 
 
 		public function __construct($campId, $colonistId, $bloodType, $rh, 
@@ -63,8 +62,7 @@
 				$resultRow->allergies,
 				$resultRow->analgesic_antipyretic,
 				$resultRow->doctor_id,
-				$resultRow->date,
-				$resultRow->site				
+				$resultRow->date			
 			);
 		}
 
@@ -188,14 +186,6 @@
 		public function getDate(){
 			return $this->date;
 		}
-
-		public function setSite($site){
-			$this->site = $site;
-		}
-		public function getSite(){
-			return $this->site;
-		}
-
 
 
 	}
