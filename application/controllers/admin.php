@@ -169,9 +169,9 @@ class Admin extends CK_Controller {
 	public function sendNotValidatedEmail($colonistId, $summerCampId){
 		$this->Logger->info("Running: ". __METHOD__);
 
-		$validation = $this->validation_model->getColonistValidationInfo($colonistId, $summerCampId);
-		if(!$validation){
-			$this->Logger->error("Validation is empty, cannot send an email");
+		$summercamp = $this->summercamp_model->getSummerCampById($summerCampId);
+		if(!$summercamp){
+			$this->Logger->error("Camp not found, cannot send an email");
 			return;
 		}
 
@@ -188,15 +188,15 @@ class Admin extends CK_Controller {
 		}
 
 		$this->Logger->info("Sending email");
-		$this->sendValidationWithErrorsEmail($personuser, $colonist, $validation);
+		$this->sendValidationWithErrorsEmail($personuser, $colonist, $summercamp->getCampName());
 	}
 
 	public function sendValidatedEmail($colonistId, $summerCampId){
 		$this->Logger->info("Running: ". __METHOD__);
 
-		$validation = $this->validation_model->getColonistValidationInfo($colonistId, $summerCampId);
-		if(!$validation){
-			$this->Logger->error("Validation is empty, cannot send an email");
+		$summercamp = $this->summercamp_model->getSummerCampById($summerCampId);
+		if(!$summercamp){
+			$this->Logger->error("Camp not found, cannot send an email");
 			return;
 		}
 
@@ -213,7 +213,7 @@ class Admin extends CK_Controller {
 		}
 
 		$this->Logger->info("Sending email");
-		$this->sendValidationOkEmail($personuser, $colonist, $validation);
+		$this->sendValidationOkEmail($personuser, $colonist, $summercamp->getCampName());
 	}
 
 	public function users () {

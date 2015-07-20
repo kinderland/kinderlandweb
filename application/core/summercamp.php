@@ -13,11 +13,12 @@
 		private $preEnabled;
 		private $capacityMale;
 		private $capacityFemale;
+		private $miniCamp;
 
 		public function __construct($campId, $campName, $dateCreated, $dateStart, 
 			$dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, 
 			$description, $preEnabled,
-			$capacityMale, $capacityFemale){
+			$capacityMale, $capacityFemale, $miniCamp = false){
 			$this->campId = $campId;
 			$this->campName = $campName;
 			$this->dateCreated = $dateCreated;
@@ -31,6 +32,7 @@
 			$this->preEnabled = $preEnabled;
 			$this->capacityMale = $capacityMale;
 			$this->capacityFemale = $capacityFemale;
+			$this->miniCamp = $miniCamp;
 		}
 
 		public static function createCampObject($resultRow){
@@ -48,7 +50,8 @@
 				$resultRow->description,
 				$resultRow->pre_subscriptions_enabled,
 				$resultRow->capacity_male,
-				$resultRow->capacity_female
+				$resultRow->capacity_female,
+				$resultRow->miniCamp
 			);
 		}
 
@@ -144,6 +147,13 @@
 		}
 		public function getCapacityFemale(){
 			return $this->capacityFemale;
+		}
+
+		public function setMiniCamp($miniCamp){
+			$this->miniCamp = $miniCamp;
+		}
+		public function isMiniCamp(){
+			return $this->miniCamp;
 		}
 
 	}

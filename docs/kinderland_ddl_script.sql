@@ -249,7 +249,8 @@ CREATE TABLE summer_camp (
     date_finish_pre_subscriptions_associate timestamp without time zone,
     pre_subscriptions_enabled boolean default false,
     capacity_male integer not null default 0,
-    capacity_female integer not null default 0
+    capacity_female integer not null default 0,
+    mini_camp boolean not null default false
 );
 
 CREATE TABLE colonist (
@@ -295,7 +296,23 @@ CREATE TABLE summer_camp_subscription (
 ALTER TABLE ONLY summer_camp_subscription
     ADD CONSTRAINT summer_camp_subscription_pkey PRIMARY KEY (summer_camp_id, colonist_id);
 
+CREATE TABLE mini_colonist_observations (
+    summer_camp_id integer not null references summer_camp,
+    colonist_id integer not null references colonist,
+    sleep_out boolean not null,
+    wake_up_early boolean not null,
+    food_restriction character varying(300),
+    eat_by_oneself boolean not null,
+    bathroom_freedom boolean not null,
+    sleep_routine boolean not null,
+    bunk_restriction boolean not null,
+    wake_up_at_night boolean not null,
+    sleep_enuresis boolean not null,
+    sleepwalk boolean not null,
+    observation character varying(300),
 
+    primary key(summer_camp_id, colonist_id)
+);
 
 CREATE TABLE camp_payment_period (
     camp_payment_period_id SERIAL,

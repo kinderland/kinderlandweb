@@ -121,10 +121,6 @@ class Reports extends CK_Controller {
 	public function all_transactions() {
 		$this -> Logger -> info("Starting " . __METHOD__);
 
-		if (!$this -> checkPermition(array(SYSTEM_ADMIN))) {
-			$this -> denyAcess(___METHOD___);
-		}
-
 		$ano = $this -> input -> get('ano', TRUE);
 		$data['payments'] = $this -> cielotransaction_model -> getPaymentsDetailed($ano);
 		$data['years'] = $this -> cielotransaction_model -> getPaymentYears();
