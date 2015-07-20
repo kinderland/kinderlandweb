@@ -143,6 +143,7 @@ class Reports extends CK_Controller {
 	}
 	
 	public function colonist_registered() {
+		$data = array();
 		$years = array();
 		$start = 2015;
 		$end = date('Y');
@@ -151,11 +152,13 @@ class Reports extends CK_Controller {
 			$start++;
 		}
 		$year = null;
-		if (isset($_GET['ano']) && $_GET['ano'] != 0)
-			$year = $_GET['ano'];
 		
-		$data['year'] = $year;
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		
+		$data['ano_escolhido'] = $year;
 		$data['years'] = $years;
+		
 		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
@@ -165,6 +168,7 @@ class Reports extends CK_Controller {
 	}
 	
 	public function all_registrations() {
+		$data = array();
 		$years = array();
 		$start = 2015;
 		$end = date('Y');
@@ -173,57 +177,38 @@ class Reports extends CK_Controller {
 			$start++;
 		}
 		$year = null;
-		if (isset($_GET['ano']) && $_GET['ano'] != 0)
-			$year = $_GET['ano'];
 		
-		$data['year'] = $year;
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		
+		$data['ano_escolhido'] = $year;
 		$data['years'] = $years;
 		
-		$colonistStatus3N = array();
-		$colonistStatus3N = $this -> summercamp_model -> getAllColonistsBySummerCamp(-3);
-		$data['colonist3NCount'] = count($colonistStatus3N);
+		$allCamps = $this -> summercamp_model -> getAllSummerCamps();
+		$campsQtd = count($allCamps);
+		$camps = array();
+		$start = $campsQtd;
+		$end = 1;
 		
-		$colonistStatus2N = array();
-		$colonistStatus2N = $this -> summercamp_model -> getAllColonistsBySummerCamp(-2);
-		$data['colonist2NCount'] = count($colonistStatus2N);
+		$campChosen = null;
 		
-		$colonistStatus1N = array();
-		$colonistStatus1N = $this -> summercamp_model -> getAllColonistsBySummerCamp(-1);
-		$data['colonist1NCount'] = count($colonistStatus1N);
+		if (isset($_GET['colonia_f']))
+			$campChosen = $_GET['colonia_f'];
 		
-		$colonistStatus0 = array();
-		$colonistStatus0 = $this -> summercamp_model -> getAllColonistsBySummerCamp(0);
-		$data['colonist0Count'] = count($colonistStatus0);
+		$campChosenId = null;
+		foreach ($allCamps as $camp){
+			$camps[] = $camp->getCampName();
+			if($camp->getCampName() == $campChosen)
+				$campChosenId = $camp->getCampId();
+		}
 		
-		$colonistStatus1 = array();
-		$colonistStatus1 = $this -> summercamp_model -> getAllColonistsBySummerCamp(1);
-		$data['colonist1Count'] = count($colonistStatus1);
+		$data['colonia_escolhida'] = $campChosen;
+		$data['camps'] = $camps; 
 		
-		$colonistStatus2 = array();
-		$colonistStatus2 = $this -> summercamp_model -> getAllColonistsBySummerCamp(2);
-		$data['colonist2Count'] = count($colonistStatus2);
+		$counts = $this->summercamp_model->getCountStatusColonistBySummerCamp($campChosenId);
 		
-		$colonistStatus3 = array();
-		$colonistStatus3 = $this -> summercamp_model -> getAllColonistsBySummerCamp(3);
-		$data['colonist3Count'] = count($colonistStatus3);
-		
-		$colonistStatus4 = array();
-		$colonistStatus4 = $this -> summercamp_model -> getAllColonistsBySummerCamp(4);
-		$data['colonist4Count'] = count($colonistStatus4);
-		
-		$colonistStatus5 = array();
-		$colonistStatus5 = $this -> summercamp_model -> getAllColonistsBySummerCamp(5);
-		$data['colonist5Count'] = count($colonistStatus5);
-		
-		$colonistStatus6 = array();
-		$colonistStatus6 = $this -> summercamp_model -> getAllColonistsBySummerCamp(6);
-		$data['colonist6Count'] = count($colonistStatus6);
-		
-		$colonistStatusT = array();
-		$colonistStatusT = $colonistStatus3N + $colonistStatus2N + $colonistStatus1N + $colonistStatus0 + $colonistStatus1 + $colonistStatus2 + $colonistStatus3 + $colonistStatus4 + $colonistStatus5 + $colonistStatus6;
-		$data['colonistTCount'] = count($colonistStatusT);
-		
-		
+		$data['counts'] = $counts;
+			
 		$this -> loadReportView("reports/summercamps/all_registrations", $data);
 	}
 

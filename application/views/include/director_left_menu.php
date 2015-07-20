@@ -50,12 +50,9 @@
             <a href="<?= $this->config->item('url_link'); ?>admin/camp">
                 Administração
             </a>
-            <!--
             <br />
-            <a href="#">
-                Relatórios
+            <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports"> Relatórios
             </a>
-            -->
         </div>
         <h3>Eventos</h3>
         <div>

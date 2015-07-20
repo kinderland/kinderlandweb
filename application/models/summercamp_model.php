@@ -279,9 +279,63 @@ class summercamp_model extends CK_Model {
 		if ($status !== null) {
 			$sql = $sql . " WHERE scs.situation in (" . $status . ")";
 		}
+		
 		$resultSet = $this -> executeRows($this -> db, $sql);
 
 		return $resultSet;
+	}
+	
+	public function getCountStatusColonistBySummerCamp($summerCampId = null) {
+		$sql = "select (
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation 
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 0
+		) as elaboracao, (
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 1
+		) as aguardando_validacao,(
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 2
+		) as validada,(
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 3
+		) as fila_espera,(
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 4
+		) as aguardando_pagamento,(
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 5
+		) as inscrito, (
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 6
+		) as nao_validada,(
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -1
+		) as desistente,(
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -2
+		) as excluido,(
+			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
+			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -3
+		) as cancelado;";
+		if($summerCampId != null){
+			$resultSet = $this -> executeRow($this -> db, $sql, array(intval($summerCampId),intval($summerCampId),intval($summerCampId), 
+		    intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId)));
+			
+			return $resultSet;
+		} else {
+			$resultSet = $this -> executeRow($this -> db, $sql);
+			return $resultSet;
+		}
 	}
 
 	public function acceptGeneralRules($summerCampId, $colonistId) {

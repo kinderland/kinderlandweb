@@ -65,13 +65,14 @@
             <div class = "row">
                 <div class="col-lg-12">
                 	<form method="GET">
-						<select name="ano" onchange="this.form.submit()" id="anos">
+						<select name="ano_f" onchange="this.form.submit()" id="anos">
+					
 							<?php
-							foreach ($years as $year) {
+							foreach ( $years as $year ) {
 								$selected = "";
-								if ($ano == $year)
+								if ($ano_escolhido == $year)
 									$selected = "selected";
-								echo "<option $selected id='$year'>$year</option>";
+								echo "<option $selected value='$year'>$year</option>";
 							}
 							?>
 						</select>
@@ -91,7 +92,7 @@
                             foreach ($colonists as $colonist) {
                                 ?>
                                 <tr>
-                                    <td><a id="<?= $colonist->fullname ?>" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?colonistId<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
+                                    <td><a id="<?= $colonist->fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
                                     <td><?= $colonist->camp_name ?></td>
                                     <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
                                     <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><font color="

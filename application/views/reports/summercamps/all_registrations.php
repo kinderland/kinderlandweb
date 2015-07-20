@@ -34,117 +34,108 @@
 <script type="text/javascript"
 	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 
-<script>
-
-	var selectTodas = {
-			element : null,
-			values : "auto",
-			empty : "Todas",
-			multiple : false,
-			noColumn : false,
-		}
-
-
-	</script>
 
 </head>
 <body>
-	<script>
-		$(document).ready(function() {
-		$('#sortable-table').datatable({
-		pageSize : Number.MAX_VALUE,
-		sort : [true],
-		filters : [selectTodas],
-		filterText : 'Escreva para filtrar... '
-		});
-	});
-	</script>
 	
 	<div class="main-container-report">
 		<div class="row">
 			<div class="col-lg-10" bgcolor="red">
 				<form method="GET">
-					<select name="ano" onchange="this.form.submit()" id="anos">
+					<select name="ano_f" onchange="this.form.submit()" id="anos">
+					
 							<?php
 							foreach ( $years as $year ) {
 								$selected = "";
-								if ($anos == $year)
+								if ($ano_escolhido == $year)
 									$selected = "selected";
-								echo "<option $selected id='$year'>$year</option>";
+								echo "<option $selected value='$year'>$year</option>";
+							}
+							?>
+						</select>
+						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
+							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todos</option>
+							<?php
+							foreach ( $camps as $camp ) {
+								$selected = "";
+								if ($colonia_escolhida == $camp)
+									$selected = "selected";
+								echo "<option $selected value='$camp'>$camp</option>";
 							}
 							?>
 						</select>
 				</form>
-				<div id="sortable-table"></div>
 				<table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 600px;">
-					<tr>
-						<th align="right">Inscritos</th>
-						<td align='right'>
-                                <?php echo $colonist5Count; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right">Pré-inscrições em elaboração</th>
-						<td align='right'>
-                                <?php echo $colonist0Count; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right">Pré-inscrições aguardando validação</th>
-						<td align='right'>
-                                <?php echo $colonist1Count; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Pré-inscrições não validadas</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonist6Count; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Pré-inscrições validadas</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonist2Count; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Pré-inscrições na fila de espera</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonist3Count; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Pré-inscrições aguardando
-							pagamento</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonist4Count; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Cancelados</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonist3NCount; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Desistentes</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonist1NCount; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Excluidos</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonist2NCount; ?>
-                            </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Total</th>
-						<td width="60px" align='right'>
-                                <?php echo $colonistTCount; ?>
-                            </td>
-					</tr>
+					    <tr>
+							<th align="right">Inscritos</th>
+							<td align='right'>
+	                                <?php echo $counts->inscrito; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right">Pré-inscrições em elaboração</th>
+							<td align='right'>
+	                                <?php echo $counts->elaboracao; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right">Pré-inscrições aguardando validação</th>
+							<td align='right'>
+	                                <?php echo $counts->aguardando_validacao; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Pré-inscrições não validadas</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->nao_validada; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Pré-inscrições validadas</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->validada; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Pré-inscrições na fila de espera</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->fila_espera; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Pré-inscrições aguardando
+								pagamento</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->aguardando_pagamento; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Cancelados</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->cancelado; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Desistentes</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->desistente; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Excluidos</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->excluido; ?>
+	                            </td>
+						</tr>
+						<tr>
+							<th align="right" width='200px'>Total</th>
+							<td width="60px" align='right'>
+	                                <?php echo $counts->inscrito + $counts->excluido + $counts->desistente 
+	                                + $counts->cancelado + $counts->aguardando_pagamento + $counts->fila_espera + $counts->validada
+	                                + $counts->nao_validada + $counts->aguardando_validacao + $counts->elaboracao; ?>
+	                            </td>
+						</tr>	
 				</table>
 			</div>
 		</div>
