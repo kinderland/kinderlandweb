@@ -54,7 +54,7 @@
 							?>
 						</select>
 						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
-							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todos</option>
+							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
 							<?php
 							foreach ( $camps as $camp ) {
 								$selected = "";

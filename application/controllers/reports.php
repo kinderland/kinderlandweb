@@ -142,7 +142,14 @@ class Reports extends CK_Controller {
 		$data = array();
 		$years = array();
 		$start = 2015;
-		$end = date('Y');
+		$date=intval(date('Y'));
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+				{
+					$end = $date;
+					$date++;
+					$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+				}
 		while ($start <= $end) {
 			$years[] = $start;
 			$start++;
@@ -151,6 +158,9 @@ class Reports extends CK_Controller {
 		
 		if (isset($_GET['ano_f']))
 			$year = $_GET['ano_f'];
+		else {
+			$year = 2015;
+		}
 		
 		$data['ano_escolhido'] = $year;
 		$data['years'] = $years;
@@ -159,15 +169,22 @@ class Reports extends CK_Controller {
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCamp($shownStatus);
+		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($shownStatus,$year);
 		$this -> loadReportView("reports/summercamps/colonist_registered", $data);
 	}
 	
 	public function all_registrations() {
-		$data = array();
+	$data = array();
 		$years = array();
 		$start = 2015;
-		$end = date('Y');
+		$date=date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+				{
+					$end = $date;
+					$date++;
+					$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+				}
 		while ($start <= $end) {
 			$years[] = $start;
 			$start++;
@@ -176,11 +193,14 @@ class Reports extends CK_Controller {
 		
 		if (isset($_GET['ano_f']))
 			$year = $_GET['ano_f'];
+		else {
+			$year = 2015;
+		}
 		
 		$data['ano_escolhido'] = $year;
 		$data['years'] = $years;
 		
-		$allCamps = $this -> summercamp_model -> getAllSummerCamps();
+		$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
 		$campsQtd = count($allCamps);
 		$camps = array();
 		$start = $campsQtd;
@@ -201,7 +221,7 @@ class Reports extends CK_Controller {
 		$data['colonia_escolhida'] = $campChosen;
 		$data['camps'] = $camps; 
 		
-		$counts = $this->summercamp_model->getCountStatusColonistBySummerCamp($campChosenId);
+		$counts = $this->summercamp_model->getCountStatusColonistBySummerCampAndYear($campChosenId,$year);
 		
 		$data['counts'] = $counts;
 			

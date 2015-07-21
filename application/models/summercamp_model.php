@@ -21,6 +21,28 @@ class summercamp_model extends CK_Model {
 
 		return $campArray;
 	}
+	
+	public function getAllSummerCampsByYear($year) {
+		$sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_start) = ? ORDER BY date_created DESC";
+		$resultSet = $this -> executeRows($this -> db, $sql,array($year));
+	
+		$campArray = array();
+	
+		if ($resultSet)
+			foreach ($resultSet as $row)
+				$campArray[] = SummerCamp::createCampObject($row);
+	
+			return $campArray;
+	}
+	
+	public function getYearsOfSummerCamps() {
+		$sql = "SELECT DISTINCT DATE_PART('YEAR',date_start) as year FROM summer_camp ORDER BY year DESC";
+				
+		$rows = $this -> executeRows($this -> db, $sql);
+		
+		return $rows;
+	}
+		
 
 	public function getAvailableSummerCamps($isAssociate) {
 		$associate = " ";
@@ -262,7 +284,7 @@ class summercamp_model extends CK_Model {
 		}
 	}
 
-	public function getAllColonistsBySummerCamp($status = null) {
+	public function getAllColonistsBySummerCampAndYear($status = null,$year) {
 		$sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*, 
 		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok, 
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
@@ -277,63 +299,66 @@ class summercamp_model extends CK_Model {
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
 		left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id ";
 		if ($status !== null) {
-			$sql = $sql . " WHERE scs.situation in (" . $status . ")";
+			$sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',date_start) = ?";
+		}
+		else {
+			$sql = $sql . " WHERE DATE_PART('YEAR',date_start) = ?";
 		}
 		
-		$resultSet = $this -> executeRows($this -> db, $sql);
+		$resultSet = $this -> executeRows($this -> db, $sql,array($year));
 
 		return $resultSet;
 	}
 	
-	public function getCountStatusColonistBySummerCamp($summerCampId = null) {
+	public function getCountStatusColonistBySummerCampAndYear($summerCampId = null,$year) {
 		$sql = "select (
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation 
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 0
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation 
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 0 AND DATE_PART('YEAR',date_start) = ?
 		) as elaboracao, (
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 1
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 1 AND DATE_PART('YEAR',date_start) = ?
 		) as aguardando_validacao,(
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 2
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 2 AND DATE_PART('YEAR',date_start) = ?
 		) as validada,(
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 3
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 3 AND DATE_PART('YEAR',date_start) = ?
 		) as fila_espera,(
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 4
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 4 AND DATE_PART('YEAR',date_start) = ?
 		) as aguardando_pagamento,(
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 5
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 5 AND DATE_PART('YEAR',date_start) = ?
 		) as inscrito, (
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 6
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = 6 AND DATE_PART('YEAR',date_start) = ?
 		) as nao_validada,(
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -1
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -1 AND DATE_PART('YEAR',date_start) = ?
 		) as desistente,(
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -2
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -2 AND DATE_PART('YEAR',date_start) = ?
 		) as excluido,(
-			SELECT count(s.status) as elaboracao FROM summer_camp_subscription sc
-			INNER JOIN summer_camp_subscription_status s on s.status = sc.situation
-			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -3
+			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+			WHERE ". (($summerCampId != null) ? " sc.summer_camp_id = ? AND":"") ." status = -3 AND DATE_PART('YEAR',date_start) = ?
 		) as cancelado;";
 		if($summerCampId != null){
-			$resultSet = $this -> executeRow($this -> db, $sql, array(intval($summerCampId),intval($summerCampId),intval($summerCampId), 
-		    intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId),intval($summerCampId)));
+			$resultSet = $this -> executeRow($this -> db, $sql, array(intval($summerCampId),$year,intval($summerCampId),$year,intval($summerCampId),$year, 
+		    intval($summerCampId),$year,intval($summerCampId),$year,intval($summerCampId),$year,intval($summerCampId),$year,intval($summerCampId),$year,intval($summerCampId),$year,intval($summerCampId),$year));
 			
 			return $resultSet;
 		} else {
-			$resultSet = $this -> executeRow($this -> db, $sql);
+			$resultSet = $this -> executeRow($this -> db, $sql,array($year,$year,$year,$year,$year,$year,$year,$year,$year,$year));
 			return $resultSet;
 		}
 	}
