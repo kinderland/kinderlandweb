@@ -310,6 +310,8 @@ CREATE TABLE mini_colonist_observations (
     sleep_enuresis boolean not null,
     sleepwalk boolean not null,
     observation character varying(300),
+    responsible_name character varying(100) NOT NULL,
+    responsible_number character varying(25) NOT NULL,
 
     primary key(summer_camp_id, colonist_id)
 );
