@@ -68,7 +68,7 @@
                             ?>
 
                             <tr>
-                                <td><?= $camp->getCampName() ?></td>
+                                <td><?= $camp->getCampName() . ( ($camp->isMiniCamp())? " (Mini)":"" ) ?></td>
                                 <td><?= date_format(date_create($camp->getDateStart()), 'd/m/y');?></td>
                                 <td><?= date_format(date_create($camp->getDateFinish()), 'd/m/y');?></td>
                                 <td>

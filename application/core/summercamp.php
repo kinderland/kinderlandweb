@@ -51,7 +51,7 @@
 				$resultRow->pre_subscriptions_enabled,
 				$resultRow->capacity_male,
 				$resultRow->capacity_female,
-				$resultRow->miniCamp
+				$resultRow->mini_camp
 			);
 		}
 
@@ -153,7 +153,9 @@
 			$this->miniCamp = $miniCamp;
 		}
 		public function isMiniCamp(){
-			return $this->miniCamp;
+			if($this->miniCamp == "t" || $this->miniCamp == "true")
+				return TRUE;
+			return FALSE;
 		}
 
 	}

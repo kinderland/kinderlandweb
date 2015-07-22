@@ -124,9 +124,10 @@ class summercamp_model extends CK_Model {
                     description, 
                     pre_subscriptions_enabled, 
                     capacity_male, 
-                    capacity_female
+                    capacity_female,
+                    mini_camp
                 ) VALUES (
-                    ?,?,?,?,?,?,?,?," . (($camp -> isEnabled()) ? "true" : "false") . ",?,?
+                    ?,?,?,?,?,?,?,?," . (($camp -> isEnabled()) ? "true" : "false") . ",?,?," . (($camp->isMiniCamp()) ? "true" : "false") . "
                 )";
 
 		$paramArray = array($camp -> getCampName(), $camp -> getDateStart(), $camp -> getDateFinish(), $camp -> getDateStartPre(), $camp -> getDateFinishPre(), $camp -> getDateStartPreAssociate(), $camp -> getDateFinishPreAssociate(), $camp -> getDescription(), intval($camp -> getCapacityMale()), intval($camp -> getCapacityFemale()));
@@ -284,7 +285,7 @@ class summercamp_model extends CK_Model {
 		}
 	}
 
-	public function getAllColonistsBySummerCampAndYear($status = null,$year) {
+	public function getAllColonistsBySummerCampAndYear($year, $status = null) {
 		$sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*, 
 		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok, 
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
@@ -310,7 +311,7 @@ class summercamp_model extends CK_Model {
 		return $resultSet;
 	}
 	
-	public function getCountStatusColonistBySummerCampYearAndGender($summerCampId = null,$gender=null,$year) {
+	public function getCountStatusColonistBySummerCampYearAndGender($year, $summerCampId = null, $gender=null) {
 		$sql = "select (
 			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id

@@ -102,24 +102,37 @@
                     <div class="col-lg-4 form-group">
                         Número máximo de colonistas:
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 form-group">
-                        <label for="capacity_male" class="col-lg-2 control-label"> Masculino: </label>
-                        <div class="col-lg-2">
-                            <input type="text" class="form-control" name="capacity_male" id="capacity_male" />
-                        </div>
+                    <div class="col-lg-4 col-lg-offset-3 form-group">
+                        Tipo de colônia:
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-12 form-group">
-                        <label for="capacity_female" class="col-lg-2 control-label"> Feminino: </label>
-                        <div class="col-lg-2">
-                            <input type="text" class="form-control" name="capacity_female" id="capacity_female" />
-                        </div>
-                    </div>
-                </div>
+                        <div class="row">
+                            <label for="capacity_male" class="col-lg-3 control-label"> Masculino: </label>
+                            <div class="col-lg-3">
+                                <input type="text" class="form-control" name="capacity_male" id="capacity_male" />
+                            </div>
 
+                            <div class="col-lg-4 col-lg-offset-1">
+                                <label for="mini_camp" class="control-label"> Kinderland comum: </label>
+                                <input type="radio" name="mini_camp" value="false" checked />
+                            </div>
+                        </div>
+                        <div class="row">
+                           
+                            <label for="capacity_female" class="col-lg-3 control-label"> Feminino: </label>
+                            <div class="col-lg-3">
+                                <input type="text" class="form-control" name="capacity_female" id="capacity_female" />
+                            </div>
+
+                            <div class="col-lg-4 col-lg-offset-1">
+                                <label for="mini_camp" class="control-label"> Mini Kinderland: </label>
+                                <input type="radio" name="mini_camp" value="true" />
+                            </div> 
+                        </div> 
+                    </div>
+                </div>
                 <div class="row">
                     &nbsp;
                 </div>

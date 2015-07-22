@@ -169,7 +169,7 @@ class Reports extends CK_Controller {
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($shownStatus,$year);
+		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
 		$this -> loadReportView("reports/summercamps/colonist_registered", $data);
 	}
 	
@@ -224,9 +224,9 @@ class Reports extends CK_Controller {
 		$genderM = chr(77);
 		$genderF = chr(70);
 		
-		$countsM = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($campChosenId,$genderM,$year);
-		$countsF = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($campChosenId,$genderF,$year);
-		$countsT = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($campChosenId,null,$year);
+		$countsM = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year,$campChosenId,$genderM);
+		$countsF = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year,$campChosenId,$genderF);
+		$countsT = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year,$campChosenId);
 		
 		$data['countsM'] = $countsM;
 		$data['countsF'] = $countsF;

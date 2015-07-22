@@ -57,7 +57,8 @@ class Admin extends CK_Controller {
 						null, //description
 						true, //preEnabled
 						$_POST['capacity_male'],
-						$_POST['capacity_female']
+						$_POST['capacity_female'],
+						$_POST['mini_camp']
 					);
 
 		try{
@@ -108,7 +109,7 @@ class Admin extends CK_Controller {
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . 
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCamp($shownStatus);
+		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear(date("Y"), $shownStatus);
 		$this -> loadReportView("admin/camps/validate_colonists", $data);
 	}
 
