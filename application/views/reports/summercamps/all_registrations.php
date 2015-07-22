@@ -67,73 +67,90 @@
 				</form>
 				<table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 600px;">
+					
+						<tr>
+							<th align="right"></th>
+							<th align="right">Feminino</th>
+							<th align="right">Masculino</th>
+							<th align="right">Total</th>
 					    <tr>
 							<th align="right">Inscritos</th>
-							<td align='right'>
-	                                <?php echo $counts->inscrito; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->inscrito; ?> </td>
+							<td align='right'> <?php echo $countsM->inscrito; ?> </td>
+							<td align='right'> <?php echo $countsT->inscrito; ?> </td>
 						</tr>
 						<tr>
 							<th align="right">Pré-inscrições em elaboração</th>
-							<td align='right'>
-	                                <?php echo $counts->elaboracao; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->elaboracao; ?> </td>
+							<td align='right'> <?php echo $countsM->elaboracao; ?> </td>
+							<td align='right'> <?php echo $countsT->elaboracao; ?> </td>
 						</tr>
 						<tr>
 							<th align="right">Pré-inscrições aguardando validação</th>
-							<td align='right'>
-	                                <?php echo $counts->aguardando_validacao; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->aguardando_validacao; ?> </td>
+							<td align='right'> <?php echo $countsM->aguardando_validacao; ?> </td>
+							<td align='right'> <?php echo $countsT->aguardando_validacao; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições não validadas</th>
-							<td width="60px" align='right'>
-	                                <?php echo $counts->nao_validada; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->nao_validada; ?> </td>
+							<td align='right'> <?php echo $countsM->nao_validada; ?> </td>
+							<td align='right'> <?php echo $countsT->nao_validada; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições validadas</th>
-							<td width="60px" align='right'>
-	                                <?php echo $counts->validada; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->validada; ?> </td>
+							<td align='right'> <?php echo $countsM->validada; ?> </td>
+							<td align='right'> <?php echo $countsT->validada; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições na fila de espera</th>
-							<td width="60px" align='right'>
-	                                <?php echo $counts->fila_espera; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->fila_espera; ?> </td>
+							<td align='right'> <?php echo $countsM->fila_espera; ?> </td>
+							<td align='right'> <?php echo $countsT->fila_espera; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições aguardando
 								pagamento</th>
-							<td width="60px" align='right'>
-	                                <?php echo $counts->aguardando_pagamento; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->aguardando_pagamento; ?> </td>
+							<td align='right'> <?php echo $countsM->aguardando_pagamento; ?> </td>
+							<td align='right'> <?php echo $countsT->aguardando_pagamento; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Cancelados</th>
-							<td width="60px" align='right'>
-	                                <?php echo $counts->cancelado; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->cancelado; ?> </td>
+							<td align='right'> <?php echo $countsM->cancelado; ?> </td>
+							<td align='right'> <?php echo $countsT->cancelado; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Desistentes</th>
-							<td width="60px" align='right'>
-	                                <?php echo $counts->desistente; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->desistente; ?> </td>
+							<td align='right'> <?php echo $countsM->desistente; ?> </td>
+							<td align='right'> <?php echo $countsT->desistente; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Excluidos</th>
-							<td width="60px" align='right'>
-	                                <?php echo $counts->excluido; ?>
-	                            </td>
+							<td align='right'> <?php echo $countsF->excluido; ?> </td>
+							<td align='right'> <?php echo $countsM->excluido; ?> </td>
+							<td align='right'> <?php echo $countsT->excluido; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Total</th>
+							<td align='right'> <?php echo $countsF->inscrito + $countsF->excluido + $countsF->desistente 
+	                                + $countsF->cancelado + $countsF->aguardando_pagamento + $countsF->fila_espera 
+	                                + $countsF->validada + $countsF->nao_validada + $countsF->aguardando_validacao 
+	                                + $countsF->elaboracao; ?> 
+	                                </td>
+							<td align='right'> <?php echo $countsM->inscrito + $countsM->excluido + $countsM->desistente 
+	                                + $countsM->cancelado + $countsM->aguardando_pagamento + $countsM->fila_espera 
+	                                + $countsM->validada + $countsM->nao_validada + $countsM->aguardando_validacao 
+	                                + $countsM->elaboracao; ?> 
+	                                </td>
 							<td width="60px" align='right'>
-	                                <?php echo $counts->inscrito + $counts->excluido + $counts->desistente 
-	                                + $counts->cancelado + $counts->aguardando_pagamento + $counts->fila_espera + $counts->validada
-	                                + $counts->nao_validada + $counts->aguardando_validacao + $counts->elaboracao; ?>
+	                                <?php echo $countsT->inscrito + $countsT->excluido + $countsT->desistente 
+	                                + $countsT->cancelado + $countsT->aguardando_pagamento + $countsT->fila_espera 
+	                                + $countsT->validada + $countsT->nao_validada + $countsT->aguardando_validacao 
+	                                + $countsT->elaboracao; ?>
 	                            </td>
 						</tr>	
 				</table>

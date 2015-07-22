@@ -219,11 +219,18 @@ class Reports extends CK_Controller {
 		}
 		
 		$data['colonia_escolhida'] = $campChosen;
-		$data['camps'] = $camps; 
+		$data['camps'] = $camps;
 		
-		$counts = $this->summercamp_model->getCountStatusColonistBySummerCampAndYear($campChosenId,$year);
+		$genderM = chr(77);
+		$genderF = chr(70);
 		
-		$data['counts'] = $counts;
+		$countsM = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($campChosenId,$genderM,$year);
+		$countsF = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($campChosenId,$genderF,$year);
+		$countsT = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($campChosenId,null,$year);
+		
+		$data['countsM'] = $countsM;
+		$data['countsF'] = $countsF;
+		$data['countsT'] = $countsT;
 			
 		$this -> loadReportView("reports/summercamps/all_registrations", $data);
 	}
