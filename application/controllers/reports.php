@@ -159,7 +159,7 @@ class Reports extends CK_Controller {
 		if (isset($_GET['ano_f']))
 			$year = $_GET['ano_f'];
 		else {
-			$year = 2015;
+			$year = date('Y');
 		}
 		
 		$data['ano_escolhido'] = $year;
@@ -194,7 +194,7 @@ class Reports extends CK_Controller {
 		if (isset($_GET['ano_f']))
 			$year = $_GET['ano_f'];
 		else {
-			$year = 2015;
+			$year = date('Y');
 		}
 		
 		$data['ano_escolhido'] = $year;
