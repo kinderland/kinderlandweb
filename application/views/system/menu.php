@@ -38,31 +38,11 @@ function hasPermission($permissions, $permissionRequested) {
 
             <?php } ?>
 
-            <?php if (hasPermission($permissions, SYSTEM_ADMIN)) { ?>
-                <div class="row">
-                    <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/administrador">
-                            <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Administrador</button>
-                        </a>
-                    </div>
-                </div>
-            <?php } ?>
-
-            <?php if (hasPermission($permissions, DIRECTOR)) { ?>
+            <?php if (hasPermission($permissions, SYSTEM_ADMIN) || hasPermission($permissions, DIRECTOR) || hasPermission($permissions, SECRETARY)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
                         <a href="<?= $this->config->item('url_link'); ?>user/director">
-                            <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Diretor</button>
-                        </a>
-                    </div>
-                </div>
-            <?php } ?>
-
-            <?php if (hasPermission($permissions, SECRETARY)) { ?>
-                <div class="row">
-                    <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/secretaria">
-                            <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Secretária</button>
+                            <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Painel Administrativo</button>
                         </a>
                     </div>
                 </div>

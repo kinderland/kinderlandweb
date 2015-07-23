@@ -1,6 +1,9 @@
 <div class = "row">
     <?php $actual_screen = "FINANCEIRO"; ?>
-    <?php require_once APPPATH . 'views/include/director_left_menu.php' ?>
+    <?php 
+        require_once APPPATH . 'core/menu_helper.php';
+        require_once renderMenu($permissions); 
+    ?>
     <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/select.box.iframe.js"></script>
     <div class="col-lg-9">
         <div class="row">

@@ -98,8 +98,8 @@ class CK_Controller extends CI_Controller {
     }
 
     public function sendValidationWithErrorsEmail($person, $colonist, $summerCampName){
-        $emailSubject = "[Kinderland] Pré-inscrição de ". $colonist->fullname() ." não validada";
-        $emailString = "A pré-inscrição de ". $colonist->fullname() ." na colonia ". $summerCampName ." contém problemas e ainda não foi validada.<br />
+        $emailSubject = "[Kinderland] Pré-inscrição de ". $colonist->getFullname() ." não validada";
+        $emailString = "A pré-inscrição de ". $colonist->getFullname() ." na colonia ". $summerCampName ." contém problemas e ainda não foi validada.<br />
                 Pedimos por gentileza que acesse o Sistema Kinderland onde você poderá visualizar os motivos e resolver as pendências.<br />
                 Não se esqueça de, após as correções, reenviar a pré-inscrição para que a mesma possa passar novamente pelo processo de validação.<br /><br />
                 Associação Kinderland";
@@ -108,8 +108,8 @@ class CK_Controller extends CI_Controller {
     }
 
     public function sendValidationOkEmail($person, $colonist, $summerCampName) {
-        $emailSubject = "[Kinderland] Pré-inscrição de ". $colonist->fullname() ." validada";
-        $emailString = "A pré-inscrição de ". $colonist->fullname() ." na colonia ". $summerCampName ." foi validada, 
+        $emailSubject = "[Kinderland] Pré-inscrição de ". $colonist->getFullname() ." validada";
+        $emailString = "A pré-inscrição de ". $colonist->getFullname() ." na colonia ". $summerCampName ." foi validada, 
             todos os dados e documentos estão corretos. <br />
             Aguarde nova comunicação por email sobre os próximos passos, 
             incluindo sorteio e posterior confirmação da inscrição se for o caso. <br />
