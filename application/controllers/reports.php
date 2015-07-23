@@ -88,11 +88,18 @@ class Reports extends CK_Controller {
 		$creditos[4] = 0;
 		$creditos[5] = 0;
 		$creditos[6] = 0;
-		foreach ($results["credito"] as $credito) {
-			for ($i = 1; $i <= 6; $i++)
-				if (isset($credito[$i]))
-					$creditos[$i] += $credito[$i];
+		
+		if(isset($credito)) {
+			if($results["credito"] !== null) {
+			
+				foreach ($results["credito"] as $credito) {
+					for ($i = 1; $i <= 6; $i++)
+						if (isset($credito[$i]))
+							$creditos[$i] += $credito[$i];
+				}
+			}
 		}
+		
 		$debito = 0;
 		if (isset($results["debito"])) {
 			foreach ($results["debito"] as $result) {
