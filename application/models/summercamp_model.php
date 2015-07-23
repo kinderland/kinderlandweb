@@ -34,14 +34,6 @@ class summercamp_model extends CK_Model {
 	
 			return $campArray;
 	}
-	
-	public function getYearsOfSummerCamps() {
-		$sql = "SELECT DISTINCT DATE_PART('YEAR',date_start) as year FROM summer_camp ORDER BY year DESC";
-				
-		$rows = $this -> executeRows($this -> db, $sql);
-		
-		return $rows;
-	}
 		
 
 	public function getAvailableSummerCamps($isAssociate) {
@@ -408,8 +400,67 @@ class summercamp_model extends CK_Model {
 		}
 	}
 	
+	public function getCountStatusSchoolBySchoolName($schoolName) {
+		$sql = "select school_name, 
+		(SELECT count(status) as elaboracao 
+		FROM summer_camp sc 
+		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id 
+		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status 
+		WHERE status = 2 AND school_name = ?) as validada,
+		(SELECT count(status) as elaboracao 
+		FROM summer_camp sc 
+		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id 
+		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status 
+		WHERE status = 3 AND school_name = ?) as fila_espera,
+		(SELECT count(status) as elaboracao 
+		FROM summer_camp sc 
+		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id 
+		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status 
+		WHERE status = 4 AND school_name = ?) as aguardando_pagamento,
+		(SELECT count(status) as elaboracao 
+		FROM summer_camp sc 
+		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id 
+		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status 
+		WHERE status = 5 AND school_name = ?) as inscrito
+		FROM summer_camp sc 
+		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id 
+		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status
+		WHERE school_name = ?";
+		
 	
-
+		$resultSet = $this -> executeRow($this -> db, $sql, array($schoolName,$schoolName,
+				$schoolName,$schoolName,$schoolName));
+				
+		return $resultSet;
+		
+	}
+	
+	public function getSchoolNamesByStatusSummerCampAndYear($year,$summercampId = null){
+		
+		$sql = "SELECT scs.school_name 
+				FROM summer_camp_subscription scs 
+				INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
+				WHERE situation in (2,3,4,5)
+				AND DATE_PART('YEAR',sc.date_start) = ?";
+		
+		if($summercampId !== null) {	
+			$sql = $sql . "AND sc.summer_camp_id = ?";
+			$resultSet = $this -> executeRows($this -> db, $sql,array($year,intval($summercampId)));
+		}
+		else {
+			$resultSet = $this -> executeRows($this -> db,$sql,array($year));
+		}
+		
+		if ($resultSet){
+			$schools = array();
+			foreach ($resultSet as $row) {
+				$schools[] = $row->school_name;
+			}
+			return $schools;
+		}
+		return null;		
+	}
+	
 	public function acceptGeneralRules($summerCampId, $colonistId) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
