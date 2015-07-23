@@ -88,11 +88,18 @@ class Reports extends CK_Controller {
 		$creditos[4] = 0;
 		$creditos[5] = 0;
 		$creditos[6] = 0;
-		foreach ($results["credito"] as $credito) {
-			for ($i = 1; $i <= 6; $i++)
-				if (isset($credito[$i]))
-					$creditos[$i] += $credito[$i];
+		
+		if(isset($credito)) {
+			if($results["credito"] !== null) {
+			
+				foreach ($results["credito"] as $credito) {
+					for ($i = 1; $i <= 6; $i++)
+						if (isset($credito[$i]))
+							$creditos[$i] += $credito[$i];
+				}
+			}
 		}
+		
 		$debito = 0;
 		if (isset($results["debito"])) {
 			foreach ($results["debito"] as $result) {
@@ -174,7 +181,7 @@ class Reports extends CK_Controller {
 	}
 	
 	public function all_registrations() {
-	$data = array();
+		$data = array();
 		$years = array();
 		$start = 2015;
 		$date=date('Y');
@@ -221,8 +228,8 @@ class Reports extends CK_Controller {
 		$data['colonia_escolhida'] = $campChosen;
 		$data['camps'] = $camps;
 		
-		$genderM = chr(77);
-		$genderF = chr(70);
+		$genderM = 'M';
+		$genderF = 'F';
 		
 		$countsM = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year,$campChosenId,$genderM);
 		$countsF = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year,$campChosenId,$genderF);
@@ -233,6 +240,76 @@ class Reports extends CK_Controller {
 		$data['countsT'] = $countsT;
 			
 		$this -> loadReportView("reports/summercamps/all_registrations", $data);
+	}
+	
+	public function colonists_byschool() {
+		
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date=date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+		{
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+		
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+		
+		$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+		$campsQtd = count($allCamps);
+		$camps = array();
+		$start = $campsQtd;
+		$end = 1;
+		
+		$campChosen = null;
+		
+		if (isset($_GET['colonia_f']))
+			$campChosen = $_GET['colonia_f'];
+		
+		$campChosenId = null;
+		foreach ($allCamps as $camp){
+			$camps[] = $camp->getCampName();
+			if($camp->getCampName() == $campChosen)
+				$campChosenId = $camp->getCampId();
+		}
+		
+		$data['colonia_escolhida'] = $campChosen;
+		$data['camps'] = $camps;
+		
+		$schoolNames = $this -> summercamp_model -> getSchoolNamesByStatusSummerCampAndYear($year,$campChosenId);
+		$countSchools = count($schoolNames);
+		$start=0;
+			
+		$schools = array();
+			
+		while($start<$countSchools) {
+	
+			$school = $this -> summercamp_model -> getCountStatusSchoolBySchoolName($schoolNames[$start]);
+				
+			if($school!=null) {
+				$schools[] = $school;
+			}
+				
+			$start++;
+		}			
+		
+		$data['schools'] = $schools;
+		$this -> loadReportView("reports/summercamps/colonists_byschool", $data);
 	}
 
 	public function associate_campaign_donations() {
