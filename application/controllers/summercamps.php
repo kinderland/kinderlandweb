@@ -343,6 +343,23 @@ class SummerCamps extends CK_Controller {
 		}
 	}
 
+	public function deleteColonist() {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$campId = $this -> input -> get('camp_id', TRUE);
+		$colonistId = $this -> input -> get('colonist_id', TRUE);
+		$camper = $this -> summercamp_model -> getSummerCampSubscription($colonistId, $campId);
+		$personUserId = $camper -> getPersonUserId();
+		$responsableId = $this -> session -> userdata("user_id");
+
+		if ($personUserId !== $responsableId) {
+			$this -> Logger -> error("Responsavel de id $responsableId tentou deletar o colonista $colonistId da campanha $campId que pertence ao responsavel $personUserId");
+			$this -> index();
+		} else {
+			$this -> summercamp_model -> updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP);
+			$this -> index();
+		}
+	}
+
 	public function uploadDocument() {
 		$this -> Logger -> info("Starting " . __METHOD__);
 		$data["camp_id"] = $this -> input -> get('camp_id', TRUE);
