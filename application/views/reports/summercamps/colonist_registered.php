@@ -22,6 +22,122 @@
 		
 		<script>
 
+		function post(path, params, method) {
+			method = method || "post"; // Set method to post by default if not specified.
+
+	    	// The rest of this code assumes you are not using a library.
+			// It can be made less wordy if you use one.
+		    var form = document.createElement("form");
+		    form.setAttribute("method", method);
+		    form.setAttribute("action", path);
+
+		    for(var key in params) {
+		        if(params.hasOwnProperty(key)) {
+		            var hiddenField = document.createElement("input");
+		            hiddenField.setAttribute("type", "hidden");
+		            hiddenField.setAttribute("name", key);
+		            hiddenField.setAttribute("value", params[key]);
+		            form.appendChild(hiddenField);
+		         }
+		    }
+		
+		    document.body.appendChild(form);
+		    form.submit();
+		}
+
+		function getCSVName(){
+			var filtros = $(".datatable-filter");
+			var filtroNomeColonista = filtros[0].value;
+			var filtroColonia = filtros[1].value;
+			var filtroNomeResponsavel = filtros[2].value;
+			var filtroEmail = filtros[3].value;
+			var filtroStatus = filtros[4].value;
+			var nomePadrao = "inscricoes";
+			
+			
+			if(filtroNomeColonista == "" && filtroNomeResponsavel == ""){
+				
+					if(filtroColonia == false) {
+
+						nomePadrao = nomePadrao.concat("_todas_colonias");
+					}
+					
+					else {
+						nomePadrao = nomePadrao.concat("_".concat(filtroColonia));
+					}
+					
+					
+					if(filtroStatus == false) {
+						return nomePadrao.concat("_todos_status");
+					}
+					else {
+
+						if(filtroStatus == "Cancelado") {
+							return nomePadrao.concat("_cancelados");
+						}
+						else if(filtroStatus == "Excluido") {
+							return nomePadrao.concat("_excluidos");
+						}
+						else if(filtroStatus == "Desistente") {
+							return nomePadrao.concat("_desistentes");
+						}
+						else if(filtroStatus == "Pré-inscrição em elaboração") {
+							return nomePadrao.concat("_em_elaboração");
+						}
+						else if(filtroStatus == "Pré-inscrição aguardando validação") {
+							return nomePadrao.concat("_aguardando_validação");
+						}
+						else if(filtroStatus == "Pré-inscrição validada") {
+							return nomePadrao.concat("_validados");
+						}
+						else if(filtroStatus == "Pré-inscrição na fila de espera") {
+							return nomePadrao.concat("_em_fila_espera");
+						}
+						else if(filtroStatus == "Pré-inscrição aguardando pagamento") {
+							return nomePadrao.concat("_aguardando_pagamento");
+						}
+						else if(filtroStatus == "Pré-inscrição não validada") {
+							return nomePadrao.concat("_não_validados");
+						}
+						else if(filtroStatus == "Inscrito") {
+							return nomePadrao.concat("_inscritos");
+						}						
+					}
+			}
+			else{
+				if(filtroNomeResponsavel == "") {
+					return nomePadrao.concat("_filtrado_por_".concat(filtroNomeColonista));
+				}				
+				else {
+					return nomePadrao.concat("_filtrado_por_".concat(filtroNomeResponsavel));
+				}
+			}
+		}			
+		
+
+        function sendTableToCSV(){
+    		var data = [];
+    		var table = document.getElementById("tablebody");
+    		var name = getCSVName();
+    		var tablehead = document.getElementsByTagName("thead")[0];
+    		for (var i = 0, row; row = table.rows[i]; i++) {
+    			var data2 = []
+            	//Nome, retira pega o que esta entre um <> e outro <>
+				data2.push(row.cells[3].innerHTML);
+            	data2.push(row.cells[2].innerHTML.split("<")[1].split(">")[1]);
+            	data.push(data2)
+	        } 
+	        if(i==0){
+   				alert('Não há dados para geração da planilha');
+   				return;
+	        }
+	        var dataToSend = JSON.stringify(data);
+	        var columName = ["Email","Nome"];
+	        var columnNameToSend = JSON.stringify(columName);
+	        
+	        post('<?= $this -> config -> item('url_link'); ?>reports/toCSV', {data: dataToSend,name: name,columName: columnNameToSend});
+		}
+
 		var selectTodas = {
 				element : null,
 				values : "auto",
@@ -54,8 +170,8 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, true, sortLowerCase, true],
-				filters : [true, selectTodas, true, selectTodos],
+				sort : [sortLowerCase, true, sortLowerCase, sortLowerCase, true],
+				filters : [true, selectTodas, true, true, selectTodos],
 				filterText : 'Escreva para filtrar... ',
 				counterText	: showCounter
 			});
@@ -77,17 +193,19 @@
 							?>
 						</select>
 					</form>
-					<div class="counter"></div>
+					<div class="counter"></div> <br>
+					<button class="button" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button> <br></br>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome do Colonista </th>
                                 <th> Colônia </th>
                                 <th> Responsável </th>
+                                <th> E-mail do Responsável </th>
                                 <th> Status da Inscrição </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tablebody">
                             <?php
                             foreach ($colonists as $colonist) {
                                 ?>
@@ -95,6 +213,7 @@
                                     <td><a id="<?= $colonist->fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
                                     <td><?= $colonist->camp_name ?></td>
                                     <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
+                                    <td><?= $colonist->email ?></td>
                                     <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><font color="
                                 <?php
                                     switch ($colonist->situation) {
@@ -102,6 +221,12 @@
                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "#017D50"; break;
                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS: echo "#FF0000"; break;
                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN: echo "#555555"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE: echo "#555555"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "#061B91"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50"; break;
                                     }
                                 ?>"><?= $colonist -> situation_description ?></td>
                                 </tr>

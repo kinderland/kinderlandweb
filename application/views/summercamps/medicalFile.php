@@ -7,12 +7,10 @@
 			value = $('input:radio[name=' + name + ']:checked').val();
 			if (value == 0) {
 				$('#' + name_textArea).hide();
-				$('#' + name_textArea).val("Não se aplica");
 				$('#' + name_textArea).prop('disabled', true);			
 
 			} else {
 				$('#' + name_textArea).show();
-				$('#' + name_textArea).val("");
 				$('#' + name_textArea).prop('disabled', false);			
 			}
 		})
@@ -55,7 +53,7 @@
 				</select></td>
 
 				<td width = "25%"><span><b>*Peso:</b></span>
-				<input type="text" class="nome" required maxlength="3" name="weight" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+				<input type="text" class="nome" required maxlength="3" name="weight" size="1px" oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')"
 >
 				kg </td>
@@ -75,8 +73,7 @@
 >
 					Não se aplica
 					<br>
-					<input type="radio" name="physicalrestrictions_radio" value="1" required                         oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
-                               onclick="setCustomValidity('')"
+					<input type="radio" name="physicalrestrictions_radio" value="1" required
 >
 					Se aplica
 					<br>
@@ -159,9 +156,7 @@
 				<p>
 					<b>*Restrições Medicamentosas:</b>
 					<br>
-					<input type="radio" name="medicinerestrictions_radio" value="0" required 
-
->
+					<input type="radio" name="medicinerestrictions_radio" value="0" required >
 					Não se aplica
 					<br>
 					<input type="radio" name="medicinerestrictions_radio" value="1">
@@ -197,9 +192,7 @@
 				<p>
 					<b>*Antitérmico/Analgésico Habitual (<u>Indicar dose</u>):</b>
 					<br>
-					<input type="radio" name="analgesicantipyretic_radio" value="0" required 
-
->
+					<input type="radio" name="analgesicantipyretic_radio" value="0" required >
 					Não se aplica
 					<br>
 					<input type="radio" name="analgesicantipyretic_radio" id="sim1" value="1">

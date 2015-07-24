@@ -41,11 +41,11 @@ class summercamp_model extends CK_Model {
 		if ($isAssociate)
 			$associate = " or 
 		(
-			date_start_pre_subscriptions_associate <= now() and date_finish_pre_subscriptions_associate > now() 		
+			date_start_pre_subscriptions_associate <= now() and date_finish_pre_subscriptions_associate >= now() 		
 		)";
 		$sql = "SELECT * FROM summer_camp where pre_subscriptions_enabled and 
 		(
-			date_start_pre_subscriptions <= now() and date_finish_pre_subscriptions > now() 
+			date_start_pre_subscriptions <= now() and date_finish_pre_subscriptions >= now() 
 		) $associate ORDER BY date_start_pre_subscriptions ASC";
 		$resultSet = $this -> executeRows($this -> db, $sql);
 
