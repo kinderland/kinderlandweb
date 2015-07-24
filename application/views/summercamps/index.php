@@ -14,6 +14,7 @@
 
 </script>
 
+<div class="row">
 <?php require_once APPPATH . 'views/include/common_user_left_menu.php'
 ?>
 
@@ -69,6 +70,8 @@ function insertFigureRegister($object, $validation) {
 	<?php } ?>
 	<?php if($summerCampInscriptions){
 	?>
+	<br />
+	<br />
 	Colonistas:
 	<table class="table-bordered table table-striped">
 		<thead>
@@ -89,14 +92,14 @@ $summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_GI
 continue;
 		?>
 		<tr>
-			<td> Cadastro: <?php if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+			<td><?php if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
 ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS &&  !$validation->verifySubscription())){
 			?>
 			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/editSubscriptionColonistForm?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>">Cadastro:</a><?php } else { ?>
 			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/viewColonistInfo?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>">Cadastro:</a><?php } ?>
 			<?=$summerCampInscription -> getFullname() ?>
 			<br>
-			<?=$this -> summercamp_model -> getSummerCampById($summerCampInscription -> getSummerCampId()) -> getCampName() ?>
+			Colônia: <?=$this -> summercamp_model -> getSummerCampById($summerCampInscription -> getSummerCampId()) -> getCampName() ?>
 			<hr>
 			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_MEDICAL_FILE ?>"> Ficha Médica </a>
 			<br>
@@ -110,7 +113,7 @@ continue;
 			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_GENERAL_RULES ?>"> Normas gerais </a>
 			<br>
 			<br>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_PHOTO_3X4 ?>"> Photo 3x4 </a></td>
+			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_PHOTO_3X4 ?>"> Foto 3x4 </a></td>
 			<td><?php $documents += insertFigureRegister($this, $validation); ?>
 
 			<br>
@@ -161,10 +164,15 @@ $color = "style='color:blue'";
 				echo $validation -> describeValidation();
 			}
 			?></td>
-			<td><a href="<?= $this -> config -> item('url_link'); ?>summercamps/sendPreSubscription?documents=<?=$documents ?>&camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
-			<button class="btn">
+			<td>
+			<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || 
+				$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ){
+			?>
+			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/sendPreSubscription?documents=<?=$documents ?>&camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+			<button class="btn btn-primary">
 				Enviar pré-inscrição
 			</button> </a>
+			<?php } ?>
 			<br>
 			<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){
 			?>
@@ -176,7 +184,7 @@ $color = "style='color:blue'";
 			<br>
 			<br>
 			<br>
-			<button onclick='excluir(<?=$summerCampInscription -> getSummerCampId() ?>,<?=$summerCampInscription -> getColonistId() ?>,"<?=$summerCampInscription -> getFullname() ?>",<?=$subscribed?>)' class="btn">
+			<button class="btn btn-warning" onclick='excluir(<?=$summerCampInscription -> getSummerCampId() ?>,<?=$summerCampInscription -> getColonistId() ?>,"<?=$summerCampInscription -> getFullname() ?>",<?=$subscribed?>)' class="btn">
 				Excluir
 			</button>
 
@@ -184,4 +192,6 @@ $color = "style='color:blue'";
 		<?php } ?>
 	</table>
 	<?php } ?>
+</div>
+
 </div>

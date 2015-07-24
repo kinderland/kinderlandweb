@@ -445,9 +445,9 @@ class SummerCamps extends CK_Controller {
 				$this -> summercamp_model -> updateColonistStatus($colonist_id, $camp_id, SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION);
 				echo "<script>alert('Envio realizado com sucesso'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 			} else
-				echo "<script>alert('O cadastro e os anexos devem ter o símbolo OK para poder enviar enviada'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+				echo "<script>alert('O cadastro e os anexos devem ter o OK para poder enviar.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 		} else {
-			echo "<script>alert('o status " . utf8_decode($summerCampSubscription -> getSituation()) . utf8_decode(" não") . "  permite envio'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+			echo "<script>alert('O status " . utf8_decode($summerCampSubscription -> getSituation()) . utf8_decode(" não") . " permite envio'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 		}
 	}
 
