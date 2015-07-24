@@ -1,11 +1,12 @@
-<?php 
-	
-	$colonist = $this->summercamp_model->getSummerCampSubscription($colonist_id, $camp_id);
-	$summerCamp = $this->summercamp_model->getSummerCampById($camp_id);
-	$start = $summerCamp->getDateStart();
-	$start = date("d/m/Y", strtotime($start));
-	$end = $summerCamp->getDateFinish();
-	$end = date("d/m/Y", strtotime($end));
+<?php
+
+$colonist = $this -> summercamp_model -> getSummerCampSubscription($colonist_id, $camp_id);
+$summerCamp = $this -> summercamp_model -> getSummerCampById($camp_id);
+$start = $summerCamp -> getDateStart();
+$start = date("d/m/Y", strtotime($start));
+$birthdate = date("d/m/Y", strtotime($colonist->getBirthDate()));
+$end = $summerCamp -> getDateFinish();
+$end = date("d/m/Y", strtotime($end));
 ?>
 
 <div id="main">
@@ -15,14 +16,16 @@
 
 	<div style="font-size:18px">
 		<br>
-		Autorizo o(a) menor <b><?=$colonist->getFullname()?></b> qualificado(a) a viajar para a Colônia de Férias Kinderland, situada
+		Autorizo o(a) menor <b><?=$colonist -> getFullname() ?></b> nascido em <b><?=$birthdate?></b> portador do(a) <b><?=$colonist->getDocumentType()?></b> de número <b><?=$colonist->getDocumentNumber()?></b> qualificado(a) a viajar para a Colônia de Férias Kinderland, situada
 		na Estrada Velha de Morro Azul, s/nº, em Sacra Família do Tinguá / Paulo de Frontin (RJ)
-		no período <b><?=$start?> à <?=$end?></b>, acompanhado(a) pelos respectivos coordenadores.
+		no período <b><?=$start ?> à <?=$end ?></b>, acompanhado(a) pelos respectivos coordenadores.
 		<br>
+		<br> ______________________________
 		<br>
 		Rio de Janeiro, <b>
 		<script>
-			document.write(<?=$day?> + "/" + <?=$month?> + "/" + <?=$year?>);
+			document.write(<?=$day ?> + "/" + <?=$month ?> + "/" + <?=$year ?>
+				);
 		</script></b>.
 	</div>
 	<br>
@@ -41,11 +44,13 @@
 	<br>
 	<br>
 
+	<?php if($editable) { ?>
+
 	<div id='form'>
 
 			<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/acceptTripAuthorization" method="post">
-				<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
-				<input type="hidden" name="document_type" value="<?=$document_type?>" /> 
+				<input type="hidden" name="camp_id" value="<?=$camp_id ?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" /> 
+				<input type="hidden" name="document_type" value="<?=$document_type ?>" /> 
 				<button class="button" type="submit">
 					Aceito autorização de viagem
 				</button>
@@ -54,12 +59,13 @@
 		<div id='form2'>
 
 			<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/rejectTripAuthorization" method="post">
-				<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
-				<input type="hidden" name="document_type" value="<?=$document_type?>" /> 
+				<input type="hidden" name="camp_id" value="<?=$camp_id ?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" /> 
+				<input type="hidden" name="document_type" value="<?=$document_type ?>" /> 
 				<button class="button" type="submit">
 					Não aceitar autorização de viagem
 				</button>
 			</form>
+	<?php } ?>
 			</p>
 				<br/>
 				<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
