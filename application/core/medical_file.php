@@ -23,7 +23,7 @@
 			$weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, 
 			$vacineHepatitis, $infectoContagiousAntecedents,
 			$regularUseMedicine, $medicineRestrictions,
-			$allergies, $analgesicAntipyretic,$doctorId, $date, $site){
+			$allergies, $analgesicAntipyretic,$doctorId, $date){
 			$this->campId = $campId;
 			$this->colonistId = $colonistId;
 			$this->bloodType = $bloodType;
@@ -41,7 +41,6 @@
 			$this->analgesicAntipyretic = $analgesicAntipyretic;
 			$this->doctorId = $doctorId;
 			$this->date = $date;
-			$this->site = $site;
 		}
 
 		public static function createMedicalFileObject($resultRow){

@@ -24,16 +24,24 @@ class medical_file_model extends CK_Model{
 		return false;
 	}
 
-/*
- 	public function updateMedicalFile($fullname, $gender, $email, $person_id, $address_id) {
+
+	public function updateMedicalFile($summerCampId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
+		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId){
  		$this->Logger->info("Running: " . __METHOD__);
  		
-        $sql = "UPDATE person SET fullname=?, gender=?, email=?, address_id=? WHERE person_id=?";
-        if ($this->execute($this->db, $sql, array($fullname, $gender, $email, $address_id, intval($person_id))))
+		$sql = 'UPDATE medical_file SET blood_type = ?, rh = ?, weight = ?, height = ?, physical_activity_restriction = ?,
+		vacine_tetanus = ?, vacine_mmr = ?, vacine_hepatitis = ?, infecto_contagious_antecedents = ?, regular_use_medicine = ?, 
+		medicine_restrictions = ?, allergies = ?, analgesic_antipyretic = ?, doctor_id =? where summer_camp_id = ? and colonist_id = ?';
+		$result = $this->execute($this->db, $sql, array(intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
+		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId),intval($summerCampId), intval($colonistId)));
+
+        if ($result)
             return true;
         return false;
     } 
-*/
+
 
 
     public function getMedicalFile($campId, $colonistId){

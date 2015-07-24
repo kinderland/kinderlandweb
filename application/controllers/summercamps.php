@@ -360,6 +360,44 @@ class SummerCamps extends CK_Controller {
 		}
 	}
 
+	public function medicalFile($data) {
+		if ($this -> summercamp_model -> hasDocument($data["camp_id"], $data["colonist_id"], DOCUMENT_MEDICAL_FILE)) {
+			$medical_file = $this -> medical_file_model -> getMedicalFile($data["camp_id"], $data["colonist_id"]);
+			$data["bloodType"] = $medical_file -> getBloodType();
+			$data["rh"] = $medical_file -> getRH();
+			$data["weight"] = $medical_file -> getWeight();
+			$data["height"] = $medical_file -> getHeight();
+			$data["physicalActivityRestriction"] = $medical_file -> getPhysicalActivityRestriction();
+			$data["vacineTetanus"] = $medical_file -> getVacineTetanus();
+			$data["vacineMMR"] = $medical_file -> getVacineMMR();
+			$data["vacineTetanus"] = $medical_file -> getVacineTetanus();
+			$data["vacineHepatitis"] = $medical_file -> getVacineHepatitis();
+			$data["antecedents"] = $medical_file -> getInfectoContagiousAntecedents();
+			$data["regularUseMedicine"] = $medical_file -> getRegularUseMedicine();
+			$data["medicineRestrictions"] = $medical_file -> getMedicineRestrictions();
+			$data["allergies"] = $medical_file -> getAllergies();
+			$data["analgesicAntipyretic"] = $medical_file -> getAnalgesicAntipyretic();
+			$doctorId = $medical_file -> getDoctorId();
+			$doctor = $this -> person_model -> getPersonById($doctorId);
+			$data["doctorName"] = $doctor -> getFullName();
+			$data["doctorEmail"] = $doctor -> getEmail();
+			$tels = $this -> telephone_model -> getTelephonesByPersonId($doctorId);
+			if (isset($tels[0]))
+				$data["doctorPhone1"] = $tels[0];
+			else
+				$data["doctorPhone1"] = "";
+			if (isset($tels[1]))
+				$data["doctorPhone2"] = $tels[1];
+			else
+				$data["doctorPhone2"] = "";
+			$this -> loadView('summercamps/editMedicalFileForm', $data);
+
+		} else {
+			$this -> loadView('summercamps/medicalFile', $data);
+
+		}
+	}
+
 	public function uploadDocument() {
 		$this -> Logger -> info("Starting " . __METHOD__);
 		$data["camp_id"] = $this -> input -> get('camp_id', TRUE);
@@ -387,9 +425,9 @@ class SummerCamps extends CK_Controller {
 		$data["hasDocument"] = "";
 		if (!$this -> summercamp_model -> hasDocument($data["camp_id"], $data["colonist_id"], $data["document_type"]))
 			$data["hasDocument"] = "disabled";
-		if ($data["document_type"] == DOCUMENT_MEDICAL_FILE)
-			$this -> loadView('summercamps/medicalFile', $data);
-		else if ($data["document_type"] == DOCUMENT_GENERAL_RULES) {
+		if ($data["document_type"] == DOCUMENT_MEDICAL_FILE) {
+			$this -> medicalFile($data);
+		} else if ($data["document_type"] == DOCUMENT_GENERAL_RULES) {
 			$data["summercamp"] = $this -> summercamp_model -> getSummerCampById($data["camp_id"]);
 			$this -> loadView('summercamps/generalRules', $data);
 		} else if ($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION) {
@@ -594,6 +632,73 @@ class SummerCamps extends CK_Controller {
 			echo "<script>alert('Ficha medica enviada com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 
 	}
+
+	public function editMedicalFile() {
+		$responsability = $this -> input -> post('responsability', TRUE);
+		if (!$responsability) {
+			echo "<script>alert('Por favor valide a veracidade dos dados.');history.go(-1);</script>";
+			return;
+		}
+		$campId = $this -> input -> post('camp_id', TRUE);
+		$colonistId = $this -> input -> post('colonist_id', TRUE);
+		$bloodType = $this -> input -> post('bloodType', TRUE);
+		$rh = $this -> input -> post('rh', TRUE);
+		$weight = $this -> input -> post('weight', TRUE);
+		$height = $this -> input -> post('height', TRUE);
+
+		if ($this -> input -> post('physicalrestrictions_radio', TRUE))
+			$physicalActivityRestriction = $this -> input -> post('physicalrestrictions_text', TRUE);
+		else
+			$physicalActivityRestriction = NULL;
+
+		if ($this -> input -> post('antecedents_radio', TRUE))
+			$infectoContagiousAntecedents = $this -> input -> post('antecedents_text', TRUE);
+		else
+			$infectoContagiousAntecedents = NULL;
+
+		if ($this -> input -> post('habitualmedicine_radio', TRUE))
+			$regularUseMedicine = $this -> input -> post('habitualmedicine_text', TRUE);
+		else
+			$regularUseMedicine = NULL;
+
+		if ($this -> input -> post('medicinerestrictions_radio', TRUE))
+			$medicineRestrictions = $this -> input -> post('medicinerestrictions_text', TRUE);
+		else
+			$medicineRestrictions = NULL;
+
+		if ($this -> input -> post('allergies_radio', TRUE))
+			$allergies = $this -> input -> post('allergies_text', TRUE);
+		else
+			$allergies = NULL;
+
+		if ($this -> input -> post('analgesicantipyretic_radio', TRUE))
+			$analgesicAntipyretic = $this -> input -> post('analgesicantipyretic_text', TRUE);
+		else
+			$analgesicAntipyretic = NULL;
+
+		$doctorName = $this -> input -> post('doctor_name', TRUE);
+		$doctorMail = $this -> input -> post('doctor_email', TRUE);
+		$doctorPhone1 = $this -> input -> post('doctor_phone1', TRUE);
+		$doctorPhone2 = $this -> input -> post('doctor_phone2', TRUE);
+		if ($doctorMail && $doctorMail === "")
+			$doctorMail = NULL;
+
+		$doctorId = $this -> person_model -> insertPersonWithoutAddress($doctorName, NULL, $doctorMail);
+		$this -> telephone_model -> insertNewTelephone($doctorPhone1, $doctorId);
+
+		if ($doctorPhone2 && $doctorPhone2 !== "")
+			$this -> telephone_model -> insertNewTelephone($doctorPhone2, $doctorId);
+
+		$vacineTetanus = $this -> input -> post('antiTetanus', TRUE);
+		$vacineMMR = $this -> input -> post('MMR', TRUE);
+		$vacineHepatitis = $this -> input -> post('vacineHepatitis', TRUE);
+
+		if ($this -> medical_file_model -> updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
+
+			echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+
+	}
+
 
 }
 ?>
