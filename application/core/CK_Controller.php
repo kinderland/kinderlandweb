@@ -243,6 +243,14 @@ class CK_Controller extends CI_Controller {
         return false;
     }
 
+    public static function toYYYYMMDD($date) {
+        if ($date !== "" && $date !== FALSE && $date !== NULL) {
+            $date = explode("/", $date);
+            return $date[2] . "-" . $date[1] . "-" . $date[0];
+        }
+    }
+
+
     public function checkPermission($class, $method) {
         $permission = false;
         

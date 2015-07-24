@@ -10,7 +10,7 @@ class colonist_model extends CK_Model{
 
 	public function insertColonist($personId, $birthdate,$documentNumber,$documentType){
 		$this->Logger->info("Running: " . __METHOD__);
-
+		$birthdate = CK_CONTROLLER::toYYYYMMDD($birthdate);
 
 		$sql = 'INSERT INTO colonist (person_id, birth_date, document_number, document_type) VALUES (?, ?, ?, ?)';
 		$returnId = $this->executeReturningId($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType));
@@ -22,7 +22,7 @@ class colonist_model extends CK_Model{
 
 	public function updateColonist($personId, $birthdate,$documentNumber,$documentType,$colonistId){
 		$this->Logger->info("Running: " . __METHOD__);
-
+		$birthdate = CK_CONTROLLER::toYYYYMMDD($birthdate);
 
 		$sql = 'UPDATE colonist SET person_id=?, birth_date=?, document_number=?, document_type=? where colonist_id = ?';
 		$returnId = $this->execute($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType,intval($colonistId)));
