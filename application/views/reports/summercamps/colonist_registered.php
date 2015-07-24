@@ -123,8 +123,8 @@
     		for (var i = 0, row; row = table.rows[i]; i++) {
     			var data2 = []
             	//Nome, retira pega o que esta entre um <> e outro <>
-				data2.push(row.cells[2].innerHTML.split("<")[1].split(">")[1]);
-            	data2.push(row.cells[3].innerHTML);
+				data2.push(row.cells[3].innerHTML);
+            	data2.push(row.cells[2].innerHTML.split("<")[1].split(">")[1]);
             	data.push(data2)
 	        } 
 	        if(i==0){
@@ -132,7 +132,7 @@
    				return;
 	        }
 	        var dataToSend = JSON.stringify(data);
-	        var columName = ["Nome","Email"];
+	        var columName = ["Email","Nome"];
 	        var columnNameToSend = JSON.stringify(columName);
 	        
 	        post('<?= $this -> config -> item('url_link'); ?>reports/toCSV', {data: dataToSend,name: name,columName: columnNameToSend});
