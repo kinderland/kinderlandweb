@@ -33,27 +33,27 @@ class SummerCamps extends CK_Controller {
 		$data["summerCamps"] = $this -> summercamp_model -> getAvailableSummerCamps($isAssociate);
 		$data["summerCampInscriptions"] = $this -> summercamp_model -> getSummerCampSubscriptionsOfUser($this -> session -> userdata("user_id"));
 		$data["summercamp_model"] = $this -> summercamp_model;
-		$rawStatusArray = $this->summercamp_model->getStatusArray();
+		$rawStatusArray = $this -> summercamp_model -> getStatusArray();
 		$statusArray = array();
-		foreach($rawStatusArray as $status){
-			switch($status["database_id"]){
-				case 0:
-				case 1:
+		foreach ($rawStatusArray as $status) {
+			switch($status["database_id"]) {
+				case 0 :
+				case 1 :
 					$statusArray[$status["database_id"]] = $status;
 					break;
-				case 2:
-				case 3:
-				case 4:
-				case 5:
-					$statusArray[$status["database_id"]+1] = $status;
+				case 2 :
+				case 3 :
+				case 4 :
+				case 5 :
+					$statusArray[$status["database_id"] + 1] = $status;
 					break;
-				case 6:
+				case 6 :
 					$statusArray[2] = $status;
-				case -1:
-				case -2:
-				case -3:
-					$statusArray[6-$status["database_id"]] = $status;
-				break;
+				case -1 :
+				case -2 :
+				case -3 :
+					$statusArray[6 - $status["database_id"]] = $status;
+					break;
 			}
 		}
 		$data["statusArray"] = $statusArray;
@@ -179,12 +179,12 @@ class SummerCamps extends CK_Controller {
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$this -> person_model -> updatePerson($fullname, $gender, NULL, $personId, $addressId);
 			$this -> colonist_model -> updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId);
-			if($school[0] == -1){
-				if($school[1] != -1){ //So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
+			if ($school[0] == -1) {
+				if ($school[1] != -1) {//So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
 					$school = $school[1];
-					$this -> summercamp_model ->insertSchool($school);
+					$this -> summercamp_model -> insertSchool($school);
 				}
-			} else{
+			} else {
 				$school = $school[0];
 			}
 			$this -> summercamp_model -> editColonistSubscription($summerCampId, $colonistId, $school, $schoolYear);
@@ -223,6 +223,8 @@ class SummerCamps extends CK_Controller {
 			if ($motherId != 0) {
 				$this -> summercamp_model -> addParentToSummerCampSubscripted($summerCampId, $colonistId, $motherId, "Mãe");
 			}
+
+			$this -> validation_model -> sentNewSubscription($colonistId, $summerCampId);
 
 			//Caso tenha ocorrido tudo bem, salva as mudanças
 			$this -> generic_model -> commitTransaction();
@@ -283,12 +285,12 @@ class SummerCamps extends CK_Controller {
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 			$personId = $this -> person_model -> insertNewPerson($fullname, $gender, NULL, $addressId);
 			$colonistId = $this -> colonist_model -> insertColonist($personId, $birthdate, $documentNumber, $documentType);
-			if($school[0] == -1){
-				if($school[1] != -1){ //So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
+			if ($school[0] == -1) {
+				if ($school[1] != -1) {//So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
 					$school = $school[1];
-					$this -> summercamp_model ->insertSchool($school);
+					$this -> summercamp_model -> insertSchool($school);
 				}
-			} else{
+			} else {
 				$school = $school[0];
 			}
 			$this -> summercamp_model -> subscribeColonist($summerCampId, $colonistId, $responsableId, SUBSCRIPTION_STATUS_PRE_SUBSCRIPTION_INCOMPLETE, $school, $schoolYear);
@@ -346,6 +348,14 @@ class SummerCamps extends CK_Controller {
 		$data["camp_id"] = $this -> input -> get('camp_id', TRUE);
 		$data["colonist_id"] = $this -> input -> get('colonist_id', TRUE);
 		$data["document_type"] = $this -> input -> get('document_type', TRUE);
+		$camper = $this -> summercamp_model -> getSummerCampSubscription($data["colonist_id"], $data["camp_id"]);
+		$validation = $this -> validation_model -> getColonistValidationInfoObject($data["colonist_id"], $data["camp_id"]);
+		if ($camper -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN || ($camper -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && $validation && !$validation -> verifyDocument($data["document_type"]))) {
+			$data["editable"] = TRUE;
+			if ($validation && !$validation -> verifyDocument($data["document_type"]))
+				$data["extra"] = $validation -> getDocumentData($data["document_type"]);
+		} else
+			$data["editable"] = FALSE;
 		$data["document_name"] = FALSE;
 		if ($data["document_type"] == DOCUMENT_MEDICAL_FILE)
 			$data["document_name"] = "Ficha médica";
@@ -400,9 +410,9 @@ class SummerCamps extends CK_Controller {
 			$file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
 		$userId = $this -> session -> userdata("user_id");
 		if ($_FILES['uploadedfile']['error'] > 0 || !$this -> summercamp_model -> uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, $document_type)) {
-			//Adicionar tratamento de erro
 			echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/uploadDocument?camp_id=$camp_id&colonist_id=$colonist_id&document_type=$document_type');</script>";
 		} else {
+			$this -> validation_model -> sentNewDocument($colonist_id, $camp_id, $document_type);
 			echo "<script>alert('Documento enviado com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
 		}
 	}
@@ -411,8 +421,17 @@ class SummerCamps extends CK_Controller {
 		$this -> Logger -> info("Starting " . __METHOD__);
 		$camp_id = $this -> input -> get('camp_id', TRUE);
 		$colonist_id = $this -> input -> get('colonist_id', TRUE);
-		$this -> summercamp_model -> updateColonistStatus($colonist_id, $camp_id, SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION);
-		$this -> index();
+		$documents = $this -> input -> get('documents', TRUE);
+		$summerCampSubscription = $this -> summercamp_model -> getSummerCampSubscription($colonist_id, $camp_id);
+		if ($summerCampSubscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || $summerCampSubscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) {
+			if ($documents == 6) {
+				$this -> summercamp_model -> updateColonistStatus($colonist_id, $camp_id, SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION);
+				echo "<script>alert('Envio realizado com sucesso'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+			} else
+				echo "<script>alert('O cadastro e os anexos devem ter o símbolo OK para poder enviar enviada'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+		} else {
+			echo "<script>alert('o status " . utf8_decode($summerCampSubscription -> getSituation()) . utf8_decode(" não") . "  permite envio'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+		}
 	}
 
 	public function acceptGeneralRules() {
@@ -494,8 +513,8 @@ class SummerCamps extends CK_Controller {
 	}
 
 	public function submitMedicalFile() {
-		$responsability = $this->input->post('responsability',TRUE);
-		if(!$responsability){
+		$responsability = $this -> input -> post('responsability', TRUE);
+		if (!$responsability) {
 			echo "<script>alert('Por favor valide a veracidade dos dados.');history.go(-1);</script>";
 			return;
 		}
@@ -552,15 +571,11 @@ class SummerCamps extends CK_Controller {
 		$vacineTetanus = $this -> input -> post('antiTetanus', TRUE);
 		$vacineMMR = $this -> input -> post('MMR', TRUE);
 		$vacineHepatitis = $this -> input -> post('vacineHepatitis', TRUE);
-		
-		if($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
-		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
-		
-		echo "<script>alert('Ficha medica enviada com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
-		
-		
-		
+
+		if ($this -> medical_file_model -> insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
+
+			echo "<script>alert('Ficha medica enviada com sucesso.'); window.location.replace('" . $this -> config -> item('url_link') . "summercamps/index');</script>";
+
 	}
 
 }

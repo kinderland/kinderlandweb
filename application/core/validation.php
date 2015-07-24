@@ -33,11 +33,7 @@ class Validation {
 	}
 
 	public static function createValidationObject($resultRow) {
-		return new Validation($resultRow -> summer_camp_id, $resultRow -> colonist_id, $resultRow -> colonist_gender_ok, 
-		$resultRow -> colonist_picture_ok, $resultRow -> colonist_identity_ok, $resultRow -> colonist_birthday_ok, 
-		$resultRow -> colonist_parents_name_ok, $resultRow -> colonist_name_ok, $resultRow -> colonist_gender_msg, 
-		$resultRow -> colonist_picture_msg, $resultRow -> colonist_identity_msg, $resultRow -> colonist_birthday_msg,
-		$resultRow -> colonist_parents_name_msg, $resultRow -> colonist_name_msg);
+		return new Validation($resultRow -> summer_camp_id, $resultRow -> colonist_id, $resultRow -> colonist_gender_ok, $resultRow -> colonist_picture_ok, $resultRow -> colonist_identity_ok, $resultRow -> colonist_birthday_ok, $resultRow -> colonist_parents_name_ok, $resultRow -> colonist_name_ok, $resultRow -> colonist_gender_msg, $resultRow -> colonist_picture_msg, $resultRow -> colonist_identity_msg, $resultRow -> colonist_birthday_msg, $resultRow -> colonist_parents_name_msg, $resultRow -> colonist_name_msg);
 	}
 
 	public function setCampId($campId) {
@@ -103,8 +99,8 @@ class Validation {
 	public function getColonistNameOk() {
 		return $this -> colonistNameOk;
 	}
-	
-		public function setColonistGenderMsg($colonistGenderMsg) {
+
+	public function setColonistGenderMsg($colonistGenderMsg) {
 		$this -> colonistGenderMsg = $colonistGenderMsg;
 	}
 
@@ -151,22 +147,72 @@ class Validation {
 	public function getColonistNameMsg() {
 		return $this -> colonistNameMsg;
 	}
-	
+
 	public function describeValidation() {
 		$text = "Motivos:";
-		if($this->colonistBirthdayOk === "f")
-			$text .= "<br>Data de nascimento: ".$this->colonistBirthdayMsg;
-		if($this->colonistGenderOk === "f")
-			$text .= "<br>Genero: ".$this->colonistGenderMsg;
-		if($this->colonistNameOk === "f")
-			$text .= "<br>: Nome completo do colonista".$this->colonistNameMsg;
-		if($this->colonistParentsNameOk === "f")
-			$text .= "<br>Nome completo dos pais: ".$this->colonistParentsNameMsg;
-		if($this->colonistIdentityOk === "f")
-			$text .= "<br>Documento de identificação: ".$this->colonistIdentityMsg;
-		if($this->colonistPictureOk === "f")
-			$text .= "<br>Foto 3x4: ".$this->colonistPictureMsg;
+		if ($this -> colonistBirthdayOk === "f")
+			$text .= "<br>Data de nascimento: " . $this -> colonistBirthdayMsg;
+		if ($this -> colonistGenderOk === "f")
+			$text .= "<br>Genero: " . $this -> colonistGenderMsg;
+		if ($this -> colonistNameOk === "f")
+			$text .= "<br>: Nome completo do colonista" . $this -> colonistNameMsg;
+		if ($this -> colonistParentsNameOk === "f")
+			$text .= "<br>Nome completo dos pais: " . $this -> colonistParentsNameMsg;
+		if ($this -> colonistIdentityOk === "f")
+			$text .= "<br>Documento de identificação: " . $this -> colonistIdentityMsg;
+		if ($this -> colonistPictureOk === "f")
+			$text .= "<br>Foto 3x4: " . $this -> colonistPictureMsg;
 		return $text;
 	}
+	
+	public function verifySubscription(){
+		return $this -> colonistBirthdayOk === "t" && $this -> colonistGenderOk === "t" && $this -> colonistNameOk === "t" && $this -> colonistParentsNameOk === "t";
+	}
+
+	public function verifyDocument($documentId) {
+		switch ($documentId) {
+			case DOCUMENT_GENERAL_RULES :
+			case DOCUMENT_TRIP_AUTHORIZATION :
+			case DOCUMENT_MEDICAL_FILE :
+				return true;
+				break;
+
+			case DOCUMENT_IDENTIFICATION_DOCUMENT :
+				return $this -> colonistIdentityOk === "t";
+				break;
+
+			case DOCUMENT_PHOTO_3X4 :
+				return $this -> colonistPictureOk === "t";
+				break;
+
+			default :
+				return false;
+				break;
+		}
+	}
+
+	public function getDocumentData($documentId) {
+		switch ($documentId) {
+			case DOCUMENT_GENERAL_RULES :
+			case DOCUMENT_TRIP_AUTHORIZATION :
+			case DOCUMENT_MEDICAL_FILE :
+				return true;
+				break;
+
+			case DOCUMENT_IDENTIFICATION_DOCUMENT :
+				return $this -> colonistIdentityMsg;
+				break;
+
+			case DOCUMENT_PHOTO_3X4 :
+				return $this -> colonistPictureMsg;
+				break;
+
+			default :
+				return false;
+				break;
+		}
+	}
+
+
 }
 ?>
