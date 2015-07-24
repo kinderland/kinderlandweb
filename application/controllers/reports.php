@@ -175,6 +175,12 @@ class Reports extends CK_Controller {
 		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," .
+				SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," .
 				SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
 		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
 		$this -> loadReportView("reports/summercamps/colonist_registered", $data);
