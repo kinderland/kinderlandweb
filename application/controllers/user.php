@@ -110,7 +110,7 @@ class User extends CK_Controller {
 		$this -> loadView("user/menu", $data);
 	}
 
-	public function director() {
+	public function admin() {
 		/*switch ($type) {
 		 case "user":
 		 $data['fullname'] = $this->session->userdata("fullname");
@@ -118,7 +118,7 @@ class User extends CK_Controller {
 		 break;
 		 default: */
 		$data['fullname'] = $this -> session -> userdata("fullname");
-		$this -> loadView("user/menu_director", $data);
+		$this -> loadView("user/menu_admin", $data);
 		//break;
 		//}
 	}

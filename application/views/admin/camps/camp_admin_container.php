@@ -10,9 +10,9 @@
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
-                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/manageCamps">Cadastro de colônias</option>
+                        <option value="<?= $this->config->item('url_link'); ?>admin/manageCamps">Cadastro de colônias</option>
                     <?php } ?>
-                    <?php if (in_array(SECRETARY, $permissions)){ ?>
+                    <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
                         <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/validateColonists">Validação</option>
                     <?php } ?>
                     
@@ -22,7 +22,7 @@
         <hr class="footer-hr" />
 
         <div class="row">
-            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>admin/manageCamps" />
+            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>admin/validateColonists" />
         </div>
     </div>
 

@@ -41,7 +41,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, SYSTEM_ADMIN) || hasPermission($permissions, DIRECTOR) || hasPermission($permissions, SECRETARY)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/director">
+                        <a href="<?= $this->config->item('url_link'); ?>user/admin">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Painel Administrativo</button>
                         </a>
                     </div>
