@@ -492,6 +492,17 @@ CREATE TABLE medical_file (
     FOREIGN KEY (doctor_id) REFERENCES person(person_id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
+CREATE TABLE summer_camp_payment_period
+(
+  payment_period_id serial NOT NULL,
+  summer_camp_id integer NOT NULL REFERENCES summer_camp,
+  date_start timestamp without time zone NOT NULL,
+  date_finish timestamp without time zone NOT NULL,
+  price numeric(9,2) NOT NULL,
+  portions integer NOT NULL DEFAULT 1,
+  CONSTRAINT summer_camp_payment_period_pkey PRIMARY KEY (payment_period_id)
+);
+
 ----------------------------------- Views Section -----------------------------------
 
 CREATE OR REPLACE VIEW donations_pending AS (
