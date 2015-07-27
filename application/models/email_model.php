@@ -57,5 +57,24 @@ class email_model extends CK_Model {
 
 	}
 
+	public function getEmailsSentToUserById($userId) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+
+		$sql = "SELECT c.communication_id, c.content, to_char(c.date_sent, 'YYYY-MM-DD HH:mm') as date_sent, 
+				c.successfully_sent, c.type FROM communication c 
+				INNER JOIN communication_recipient cr on cr.communication_id = c.communication_id
+				INNER JOIN person p on p.email = cr.recipient
+				WHERE p.person_id = ?
+				AND cr.recipient_type = 'recipient'
+				ORDER BY date_sent DESC
+				LIMIT 30";
+		$emails = $this->executeRows($this->db, $sql, array(intval($userId)));
+
+		if(!$emails)
+			return array();
+
+		return $emails;
+	}
+
 }
 ?>

@@ -19,6 +19,7 @@ class Admin extends CK_Controller {
 		$this -> load -> model('donation_model');
 		$this -> load -> model('generic_model');
 		$this -> load -> model('validation_model');
+		$this -> load -> model('email_model');
 		$this -> person_model -> setLogger($this -> Logger);
 		$this -> personuser_model -> setLogger($this -> Logger);
 		$this -> summercamp_model -> setLogger($this -> Logger);
@@ -28,6 +29,7 @@ class Admin extends CK_Controller {
 		$this -> donation_model -> setLogger($this -> Logger);
 		$this -> generic_model -> setLogger($this -> Logger);
 		$this -> validation_model -> setLogger($this -> Logger);
+		$this -> email_model -> setLogger($this -> Logger);
 	}
 
 	public function camp() {
@@ -330,5 +332,42 @@ class Admin extends CK_Controller {
 		}
 			
 		
+	}
+
+	public function viewEmails($userId) {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$person = $this -> person_model -> getPersonById($userId);
+		$emails = $this -> email_model -> getEmailsSentToUserById($userId);
+
+		$data['emails'] = $emails;
+		$data['person'] = $person;
+
+		$this->loadView("admin/users/emailsSent", $data);
+	}
+
+	public function writeEmail($userId) {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$person = $this -> person_model -> getPersonById($userId);
+
+		$data['person'] = $person;
+
+		$this->loadView("admin/users/writeEmail", $data);
+	}
+
+	public function sendEmail() {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$userId = $this -> input -> post('user_id', TRUE);
+		$userEmail = $this -> input -> post('user_email', TRUE);
+		$subject = $this -> input -> post('subject', TRUE);
+		$message = $this -> input -> post('message', TRUE);
+
+		$person = $this -> person_model -> getPersonById($userId);
+
+		if($this -> sendMail($subject, $message, $person)){
+			echo "<script>alert('Envio realizado com sucesso'); window.location.replace('" . $this->config->item('url_link') . "admin/viewEmails/".$userId."');</script>";
+		} else {
+			echo "<script>alert('Houve um problema ao enviar o email. Por favor, tente novamente.'); window.history.back(-1);</script>";
+		}
+
 	}
 }
