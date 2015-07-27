@@ -19,7 +19,7 @@ include_once APPPATH . 'libraries/logger.php';
   }
 */
 
-function arrayToCSV($logger, $name, $data, $columname = array(),$separator = ",") {
+function arrayToCSV($logger, $name, $data, $columname = array(),$separator = ";") {
 	$logger -> info("Starting " . __METHOD__);
 
 	$date = date('Y-n-j H:i:s', time());

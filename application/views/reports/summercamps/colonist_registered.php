@@ -106,10 +106,14 @@
 			}
 			else{
 				if(filtroNomeResponsavel == "") {
-					return nomePadrao.concat("_filtrado_por_".concat(filtroNomeColonista));
+					return nomePadrao.concat("_filtrado_por_colonista_".concat(filtroNomeColonista));
 				}				
+				else if (filtroNomeColonista == "") {
+					return nomePadrao.concat("_filtrado_por_resposavel_".concat(filtroNomeResponsavel));
+				}
 				else {
-					return nomePadrao.concat("_filtrado_por_".concat(filtroNomeResponsavel));
+					nomePadrao = nomePadrao.concat("_filtrado_por_resposavel_".concat(filtroNomeResponsavel));
+					return nomePadrao.concat("_e_por_colonista_".concat(filtroNomeColonista));
 				}
 			}
 		}			

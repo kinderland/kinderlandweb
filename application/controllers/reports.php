@@ -317,6 +317,40 @@ class Reports extends CK_Controller {
 		$data['schools'] = $schools;
 		$this -> loadReportView("reports/summercamps/colonists_byschool", $data);
 	}
+	
+	public function colonists_byassociated() {
+	
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date=date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+		{
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+	
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+	
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+	
+		$subscriptions = $this -> summercamp_model -> getCountSubscriptionsbyAssociated($year);
+			
+		$data['subscriptions'] = $subscriptions;
+		$this -> loadReportView("reports/summercamps/colonists_byassociated", $data);
+	}
 
 	public function associate_campaign_donations() {
 		$years = array();

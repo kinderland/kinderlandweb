@@ -12,6 +12,7 @@
                     <option selected="selected" value="<?= $this->config->item('url_link');?>reports/all_registrations">Painel de Inscrições</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonist_registered">Inscrições</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byschool">Colonistas por Escola</option>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byassociated">Inscrições por Sócio</option>
                 </select>
             </div>
         </div>
@@ -23,3 +24,6 @@
     </div>
 
 </div>
+
+
+  
