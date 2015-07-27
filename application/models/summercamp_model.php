@@ -541,6 +541,23 @@ class summercamp_model extends CK_Model {
         return FALSE;
     }
 
+    public function saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $observationMini, $nameResponsible, $phoneResponsible) {
+        $sql = "INSERT INTO mini_colonist_observations(
+            summer_camp_id, colonist_id, sleep_out, wake_up_early, food_restriction,
+            eat_by_oneself, bathroom_freedom, sleep_routine, bunk_restriction,
+            wake_up_at_night, sleep_enuresis, sleepwalk, observation, responsible_name,
+            responsible_number)
+            VALUES (?, ?, ?, ?, ?,
+                    ?, ?, ?, ?,
+                    ?, ?, ?, ?, ?,
+                    ?);";
+        $paramArray = array($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $observationMini, $nameResponsible, $phoneResponsible);
+        $campId = $this->executeReturningId($this->db, $sql, $paramArray);
+        if ($campId)
+            return $campId;
+        throw new ModelException("Insert object in the database");
+    }
+
 }
 
 ?>
