@@ -290,7 +290,10 @@ CREATE TABLE summer_camp_subscription (
     school_name varchar(70),
     school_year integer not null,
     accepted_terms boolean default false,
-    accepted_travel_terms boolean default false
+    accepted_travel_terms boolean default false,
+    roommate1 character varying(200),
+    roommate2 character varying(200),
+    roommate3 character varying(200)
 );
 
 ALTER TABLE ONLY summer_camp_subscription
@@ -447,15 +450,9 @@ CREATE TABLE system_method
   system_method_id serial NOT NULL,
   method_name character varying(50) NOT NULL,
   controller_name character varying(20),
-  user_type integer NOT NULL,
+  user_type integer NOT NULL REFERENCES user_type,
   date_inserted timestamp without time zone DEFAULT now(),
-  CONSTRAINT pk_system_methods PRIMARY KEY (system_method_id),
-  CONSTRAINT fk_user_type FOREIGN KEY (user_type)
-      REFERENCES user_type (user_type) MATCH Unknown
-      ON UPDATE CASCADE ON DELETE RESTRICT
-)
-WITH (
-  OIDS=FALSE
+  CONSTRAINT pk_system_methods PRIMARY KEY (system_method_id)
 );
 
 CREATE TABLE blood_type (
@@ -655,4 +652,11 @@ ALTER TABLE summer_camp_subscription
 
 ALTER TABLE summer_camp_subscription
    ADD COLUMN roommate3 character varying(200);
+
+CREATE VIEW v_socios_count_inscricoes as (
+select p.*, count(scs.colonist_id) total_inscritos from associates a join person p on p.person_id = a.person_id
+left outer join summer_camp_subscription scs on scs.person_user_id = a.person_id and summer_camp_id in (
+        select summer_camp_id from summer_camp where to_char(date_created, 'YYYY') = to_char(current_timestamp, 'YYYY')
+    )
+group by p.person_id);
 
