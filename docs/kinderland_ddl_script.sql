@@ -646,3 +646,13 @@ CREATE OR REPLACE VIEW v_report_free_donations AS
    FROM person_user_type put
      LEFT JOIN person p ON p.person_id = put.person_id
   ORDER BY p.fullname;
+
+ ALTER TABLE summer_camp_subscription
+   ADD COLUMN roommate1 character varying(200);
+
+ALTER TABLE summer_camp_subscription
+   ADD COLUMN roommate2 character varying(200);
+
+ALTER TABLE summer_camp_subscription
+   ADD COLUMN roommate3 character varying(200);
+
