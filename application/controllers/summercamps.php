@@ -276,6 +276,9 @@ class SummerCamps extends CK_Controller {
         $roommate1 = $this->input->post('roommate1', TRUE);
         $roommate2 = $this->input->post('roommate2', TRUE);
         $roommate3 = $this->input->post('roommate3', TRUE);
+        $summerCampMini = $this->input->post('summerCampMini', TRUE);
+
+
 
         try {
             $this->Logger->info("Inserting new colony subscription");
@@ -331,6 +334,24 @@ class SummerCamps extends CK_Controller {
 
             if ($motherId != 0) {
                 $this->summercamp_model->addParentToSummerCampSubscripted($summerCampId, $colonistId, $motherId, "Mãe");
+            }
+
+            if ($summerCampMini) {
+                $sleepOut = $this->input->post('sleepOut', TRUE);
+                $wakeUpEarly = $this->input->post('wakeUpEarly', TRUE);
+                $foodRestriction = $this->input->post('foodRestriction', TRUE);
+                $feedsIndependently = $this->input->post('feedsIndependently', TRUE);
+                $wcIndependent = $this->input->post('wcIndependent', TRUE);
+                $routineToFallAsleep = $this->input->post('routineToFallAsleep', TRUE);
+                $bunkBed = $this->input->post('bunkBed', TRUE);
+                $awakeAtNight = $this->input->post('awakeAtNight', TRUE);
+                $outOfBed = $this->input->post('outOfBed', TRUE);
+                $sleepwalk = $this->input->post('sleepwalk', TRUE);
+                $nameResponsible = $this->input->post('nameResponsible', TRUE);
+                $phoneResponsible = $this->input->post('phoneResponsible', TRUE);
+                $observationMini = $this->input->post('phoneResponsible', TRUE);
+                $sleepEnuresis = $this->input->post('sleepEnuresis', TRUE);
+                $this->summercamp_model->saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $observationMini, $nameResponsible, $phoneResponsible);
             }
 
             //Caso tenha ocorrido tudo bem, salva as mudanças
@@ -436,7 +457,6 @@ class SummerCamps extends CK_Controller {
             $data["day"] = date('d');
             $data["month"] = date('m');
             $data["year"] = date('Y');
-
             $this->loadView('summercamps/tripAuthorization', $data);
         } else
             $this->loadView('summercamps/uploadDocument', $data);
