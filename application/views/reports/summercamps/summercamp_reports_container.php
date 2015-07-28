@@ -13,6 +13,7 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonist_registered">Inscrições</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byschool">Colonistas por Escola</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byassociated">Inscrições por Sócio</option>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/subscriptions_bycamp">Pré-inscrições por Colônia</option>
                 </select>
             </div>
         </div>
