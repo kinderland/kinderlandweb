@@ -351,7 +351,8 @@ class SummerCamps extends CK_Controller {
                 $phoneResponsible = $this->input->post('phoneResponsible', TRUE);
                 $observationMini = $this->input->post('phoneResponsible', TRUE);
                 $sleepEnuresis = $this->input->post('sleepEnuresis', TRUE);
-                $this->summercamp_model->saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $observationMini, $nameResponsible, $phoneResponsible);
+
+                $this->summercamp_model->saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
             }
 
             //Caso tenha ocorrido tudo bem, salva as mudanças

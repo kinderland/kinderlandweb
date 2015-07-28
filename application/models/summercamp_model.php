@@ -22,16 +22,15 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
-    
+
     public function getCountSubscriptionsbyAssociated($year) {
-    	
-    	$sql = "SELECT * FROM v_socios_count_inscricoes
+
+        $sql = "SELECT * FROM v_socios_count_inscricoes
     			WHERE DATE_PART('YEAR',date_created) = ?";
-    	
-    	$rows = $this->executeRows($this->db, $sql,array($year));
-    	return $rows;
+
+        $rows = $this->executeRows($this->db, $sql, array($year));
+        return $rows;
     }
-   
 
     public function getAllSummerCampsByYear($year) {
         $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_start) = ? ORDER BY date_created DESC";
@@ -551,7 +550,7 @@ class summercamp_model extends CK_Model {
         return FALSE;
     }
 
-    public function saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $observationMini, $nameResponsible, $phoneResponsible) {
+    public function saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible) {
         $sql = "INSERT INTO mini_colonist_observations(
             summer_camp_id, colonist_id, sleep_out, wake_up_early, food_restriction,
             eat_by_oneself, bathroom_freedom, sleep_routine, bunk_restriction,
@@ -561,7 +560,7 @@ class summercamp_model extends CK_Model {
                     ?, ?, ?, ?,
                     ?, ?, ?, ?, ?,
                     ?);";
-        $paramArray = array($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $observationMini, $nameResponsible, $phoneResponsible);
+        $paramArray = array($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
         $campId = $this->executeReturningId($this->db, $sql, $paramArray);
         if ($campId)
             return $campId;
