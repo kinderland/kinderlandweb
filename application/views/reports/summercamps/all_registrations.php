@@ -192,12 +192,12 @@
 					style="max-width: 600px;">
 					<tr>
 						<th align="right">Potencial de Inscritos por Colônia</th>
-						<td width="60px" align='right'> <?php echo $countsT->validada + $countsT->aguardando_pagamento 
+						<td width="60px" align='right'> <?php echo $potInscritos = $countsT->validada + $countsT->aguardando_pagamento 
 						+ $countsT->fila_espera + $countsT->inscrito; ?></td>
 						<th align="right">Porcentagem de Inscritos por Colônia</th>
 						<td width="60px" align='right'><?php 
-						if($countTotalT)
-							echo number_format(($countsT->inscrito/$countTotalT)*100,1);
+						if($potInscritos)
+							echo number_format(($countsT->inscrito/$potInscritos)*100,1);
 						 else echo "0.0";
 						 echo "%"; ?>  </td>				
 					</tr>
