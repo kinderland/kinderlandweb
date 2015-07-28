@@ -115,7 +115,7 @@
                             </div>
 
                             <div class="col-lg-4 col-lg-offset-1">
-                                <label for="mini_camp" class="control-label"> Kinderland comum: </label>
+                                <label for="mini_camp" class="control-label"> Kinderland Verão: </label>
                                 <input type="radio" name="mini_camp" value="false" checked />
                             </div>
                         </div>
