@@ -78,7 +78,7 @@
                                 <th> Responsável </th>
                                 <th> E-mail </th>
                                 <th> Número de Pré-inscrições </th>
-                                <th></th>
+                                <th> Tem Pré-inscrição? </th>
                                 <th> Ações </th>
                             </tr>
                         </thead>

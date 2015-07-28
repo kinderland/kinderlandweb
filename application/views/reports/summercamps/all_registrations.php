@@ -152,7 +152,54 @@
 	                                + $countsT->validada + $countsT->nao_validada + $countsT->aguardando_validacao 
 	                                + $countsT->elaboracao; ?>
 	                            </td>
-						</tr>	
+						</tr>
+						<tr>
+							<th	align="right" width='200px'>Porcentagem de Inscritos</th>
+							<td align='right'> <?php 
+									$countTotalF = $countsF->inscrito + $countsF->excluido + $countsF->desistente 
+	                                + $countsF->cancelado + $countsF->aguardando_pagamento + $countsF->fila_espera 
+	                                + $countsF->validada + $countsF->nao_validada + $countsF->aguardando_validacao 
+	                                + $countsF->elaboracao;
+									
+									if($countTotalF) echo number_format(($countsF->inscrito/$countTotalF)*100,1); 
+									else echo "0.0";
+									echo "%"; ?> 
+	                                </td>
+							<td align='right'> <?php 
+									$countTotalM = $countsM->inscrito + $countsM->excluido + $countsM->desistente 
+	                                + $countsM->cancelado + $countsM->aguardando_pagamento + $countsM->fila_espera 
+	                                + $countsM->validada + $countsM->nao_validada + $countsM->aguardando_validacao 
+	                                + $countsM->elaboracao;
+							
+									if($countTotalM) echo number_format(($countsM->inscrito/$countTotalM)*100,1);
+									else echo "0.0";
+									echo "%"; ?> 
+	                                </td>
+							<td width="60px" align='right'>
+	                                <?php 
+	                                $countTotalT = $countsT->inscrito + $countsT->excluido + $countsT->desistente 
+	                                + $countsT->cancelado + $countsT->aguardando_pagamento + $countsT->fila_espera 
+	                                + $countsT->validada + $countsT->nao_validada + $countsT->aguardando_validacao 
+	                                + $countsT->elaboracao;
+	                                
+	                                if($countTotalT) echo number_format(($countsT->inscrito/$countTotalT)*100,1);
+	                                else echo "0.0";
+									echo "%"; ?>
+	                            </td>
+	                    </tr>
+				</table>
+				<table class="table table-bordered table-striped table-min-td-size"
+					style="max-width: 600px;">
+					<tr>
+						<th align="right">Potencial de Inscritos por Colônia</th>
+						<td width="60px" align='right'> <?php echo $capacitiesTotal = $capacities -> male + $capacities -> female; ?></td>
+						<th align="right">Porcentagem de Inscritos por Colônia</th>
+						<td width="60px" align='right'><?php 
+						if($capacitiesTotal)
+							echo number_format(($countsT->inscrito/$capacitiesTotal)*100,1);
+						 else echo "0.0";
+						 echo "%"; ?>  </td>				
+					</tr>
 				</table>
 			</div>
 		</div>

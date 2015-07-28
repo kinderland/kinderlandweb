@@ -45,7 +45,21 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
+    
+    public function getSumCapacitiesByYearAndSummerCamp($year,$summercampId=null) {
+    	$sql = "SELECT sum(capacity_male) as male, sum(capacity_female) as female FROM summer_camp 
+    			WHERE DATE_PART('YEAR',date_start) = ?";
+    	
+    	if ($summercampId !== null) {
+    		$sql = $sql . " AND summer_camp_id = ?";
+    		$resultSet = $this->executeRow($this->db, $sql, array($year,$summercampId));
+    	} else {
+    		$resultSet = $this->executeRow($this->db, $sql, array($year));
+    	}
+    	
+    	return $resultSet;
 
+    }
     public function getAvailableSummerCamps($isAssociate) {
         $associate = " ";
         if ($isAssociate)

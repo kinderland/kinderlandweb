@@ -234,6 +234,9 @@ class Reports extends CK_Controller {
 		$data['colonia_escolhida'] = $campChosen;
 		$data['camps'] = $camps;
 		
+		$capacities = $this -> summercamp_model -> getSumCapacitiesByYearAndSummerCamp($year,$campChosenId);
+		$data['capacities'] = $capacities;		
+		
 		$genderM = 'M';
 		$genderF = 'F';
 		
