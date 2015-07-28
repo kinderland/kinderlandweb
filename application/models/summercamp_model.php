@@ -420,7 +420,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = 0
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -431,7 +431,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = 1
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -442,7 +442,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = 2
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -453,7 +453,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = 3
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -464,7 +464,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = 4
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -475,7 +475,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = 5
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -486,7 +486,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = 6
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -497,7 +497,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = -1
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -508,7 +508,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = -2
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "
@@ -519,7 +519,7 @@ class summercamp_model extends CK_Model {
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
 			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = p.person_id
+			INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = scs.person_user_id
 			WHERE status = -3
 			AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
     		" . (($summerCampId != null) ? "AND sc.summer_camp_id = ?" : "") . "

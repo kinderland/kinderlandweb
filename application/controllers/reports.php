@@ -428,9 +428,9 @@ class Reports extends CK_Controller {
 					$associated = 1;
 				}
 				
-			$countsF = $this -> summercamp_model -> getCountStatusColonistBySummerCampYearAndGender($year,$associated, $campChosenId,'F');
-			$countsM = $this -> summercamp_model -> getCountStatusColonistBySummerCampYearAndGender($year,$associated, $campChosenId,'M');
-			$countsT = $this -> summercamp_model -> getCountStatusColonistBySummerCampYearAndGender($year,$associated, $campChosenId,null);
+			$countsF = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,$associated, $campChosenId,'F');
+			$countsM = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,$associated, $campChosenId,'M');
+			$countsT = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,$associated, $campChosenId,null);
 		}
 	
 		$data['countsF'] = $countsF;
