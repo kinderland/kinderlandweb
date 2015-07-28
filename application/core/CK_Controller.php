@@ -234,7 +234,6 @@ class CK_Controller extends CI_Controller {
 
     public function checkPermition($permitions = array()) {
         foreach ($permitions as $permition) {
-            print_r($this->session->userdata('user_types'));
             foreach ($this->session->userdata('user_types') as $permitionUser) {
                 if ($permition == $permitionUser)
                     return true;
@@ -261,7 +260,7 @@ class CK_Controller extends CI_Controller {
 
         if (!$permission) {
             $this->Logger->warn("Usuário com id =" . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
-//            return redirect("user/permissionNack");
+            return redirect("user/permissionNack");
         }
     }
 

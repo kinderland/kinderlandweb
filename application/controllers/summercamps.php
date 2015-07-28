@@ -136,7 +136,6 @@ class SummerCamps extends CK_Controller {
 
     public function editSubscriptionColonist() {
         $this->Logger->info("Starting " . __METHOD__);
-
         $colonistId = $this->input->post('colonistId', TRUE);
         $summerCampId = $this->input->post('summerCampId', TRUE);
         $personId = $this->input->post('personId', TRUE);
@@ -173,13 +172,9 @@ class SummerCamps extends CK_Controller {
         $responsableId = $this->session->userdata("user_id");
         $summerCampMini = $this->input->post('summerCampMini', TRUE);
 
-
         try {
             $this->Logger->info("Editing colonist $summerCampId");
-            //Inicia transação no banco
             $this->generic_model->startTransaction();
-
-            //Faz todo o processo que tem que ser feito no banco
             if ($sameAddressResponsable === "s") {
                 $addressId = $this->address_model->getAddressByPersonId($responsableId)->getAddressId();
             } else
@@ -187,7 +182,7 @@ class SummerCamps extends CK_Controller {
             $this->person_model->updatePerson($fullname, $gender, NULL, $personId, $addressId);
             $this->colonist_model->updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId);
             if ($school[0] == -1) {
-                if ($school[1] != -1) {//So evitando que alguem tente inserir uma escola com nome -1 o que poderia quebrar o nosso sistema...
+                if ($school[1] != -1) {
                     $school = $school[1];
                     $this->summercamp_model->insertSchool($school);
                 }
