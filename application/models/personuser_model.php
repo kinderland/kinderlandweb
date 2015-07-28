@@ -204,19 +204,18 @@ class personuser_model extends CK_Model {
         }
         return false;
     }
-	
-	public function isAssociate($person_id) {
-		$this -> Logger -> info("Running: " . __METHOD__);
-		$sql = "Select associate from v_report_all_users where person_id = ?";
-		$row = $this -> executeRow($this -> db, $sql, array(intval($person_id)));
-		if (isset($row)) {
-			if ($row -> associate === "t")
-				return TRUE;
-		}
-		return FALSE;
 
-	}
-	
+    public function isAssociate($person_id) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "Select associate from v_report_all_users where person_id = ?";
+        $row = $this->executeRow($this->db, $sql, array(intval($person_id)));
+        if (isset($row)) {
+            print_r($row);
+            if ($row->associate === "t")
+                return TRUE;
+        }
+        return FALSE;
+    }
 
 }
 

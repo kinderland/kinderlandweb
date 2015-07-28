@@ -97,9 +97,9 @@ class CK_Controller extends CI_Controller {
         return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
     }
 
-    public function sendValidationWithErrorsEmail($person, $colonist, $summerCampName){
-        $emailSubject = "[Kinderland] Pré-inscrição de ". $colonist->getFullname() ." não validada";
-        $emailString = "A pré-inscrição de ". $colonist->getFullname() ." na colonia ". $summerCampName ." contém problemas e ainda não foi validada.<br />
+    public function sendValidationWithErrorsEmail($person, $colonist, $summerCampName) {
+        $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " não validada";
+        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " contém problemas e ainda não foi validada.<br />
                 Pedimos por gentileza que acesse o Sistema Kinderland onde você poderá visualizar os motivos e resolver as pendências.<br />
                 Não se esqueça de, após as correções, reenviar a pré-inscrição para que a mesma possa passar novamente pelo processo de validação.<br /><br />
                 Associação Kinderland";
@@ -108,10 +108,10 @@ class CK_Controller extends CI_Controller {
     }
 
     public function sendValidationOkEmail($person, $colonist, $summerCampName) {
-        $emailSubject = "[Kinderland] Pré-inscrição de ". $colonist->getFullname() ." validada";
-        $emailString = "A pré-inscrição de ". $colonist->getFullname() ." na colonia ". $summerCampName ." foi validada, 
+        $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " validada";
+        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " foi validada,
             todos os dados e documentos estão corretos. <br />
-            Aguarde nova comunicação por email sobre os próximos passos, 
+            Aguarde nova comunicação por email sobre os próximos passos,
             incluindo sorteio e posterior confirmação da inscrição se for o caso. <br />
             Acompanhe sempre as novidades em nosso site e no Sistema Kinderland. <br />
             Em caso de dúvidas, entrar em contato por telefone (21-2266-1980) ou, preferencialmente, por email.<br /><br />
@@ -121,8 +121,8 @@ class CK_Controller extends CI_Controller {
     }
 
     protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
-		//$myMail = "testekinderland2015@gmail.com";
-		//$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
+        //$myMail = "testekinderland2015@gmail.com";
+        //$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
 
         $myMail = "secretaria@kinderland.com.br";
         $config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://br154.hostgator.com.br', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'Kinder155', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
@@ -143,7 +143,7 @@ class CK_Controller extends CI_Controller {
                 $addToSubject.=$carboncopy;
             }
             $addToSubject.="][bcc=";
-            if($bcc != null){
+            if ($bcc != null) {
                 foreach ($bcc as $carboncopy) {
                     $addToSubject.=$carboncopy;
                 }
@@ -250,19 +250,18 @@ class CK_Controller extends CI_Controller {
         }
     }
 
-
     public function checkPermission($class, $method) {
         $permission = false;
-        
-        if(!$this->session->userdata('user_types')){
+
+        if (!$this->session->userdata('user_types')) {
             $permission = $this->personuser_model->checkPermission($class, $method, array(0));
         } else {
             $permission = $this->personuser_model->checkPermission($class, $method, $this->session->userdata('user_types'));
         }
-        
+
         if (!$permission) {
             $this->Logger->warn("Usuário com id =" . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
-            return redirect("user/permissionNack");
+//            return redirect("user/permissionNack");
         }
     }
 

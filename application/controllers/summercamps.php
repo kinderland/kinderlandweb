@@ -127,6 +127,10 @@ class SummerCamps extends CK_Controller {
             $data["motherEmail"] = $mother->email;
             $data["motherPhone"] = $mother->phone1;
         }
+        if ($data["summerCamp"]->isMiniCamp()) {
+            $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
+            $data['miniCamp'] = $miniCamp;
+        }
         $this->loadView('summercamps/editSubscriptionColonistForm', $data);
     }
 
@@ -167,6 +171,8 @@ class SummerCamps extends CK_Controller {
         $motherPhone = $this->input->post('motherPhone', TRUE);
         $motherEmail = $this->input->post('motherEmail', TRUE);
         $responsableId = $this->session->userdata("user_id");
+        $summerCampMini = $this->input->post('summerCampMini', TRUE);
+
 
         try {
             $this->Logger->info("Editing colonist $summerCampId");
@@ -229,6 +235,23 @@ class SummerCamps extends CK_Controller {
 
             //Caso tenha ocorrido tudo bem, salva as mudanças
             $this->generic_model->commitTransaction();
+
+            if ($summerCampMini) {
+                $sleepOut = $this->input->post('sleepOut', TRUE);
+                $wakeUpEarly = $this->input->post('wakeUpEarly', TRUE);
+                $foodRestriction = $this->input->post('foodRestriction', TRUE);
+                $feedsIndependently = $this->input->post('feedsIndependently', TRUE);
+                $wcIndependent = $this->input->post('wcIndependent', TRUE);
+                $routineToFallAsleep = $this->input->post('routineToFallAsleep', TRUE);
+                $bunkBed = $this->input->post('bunkBed', TRUE);
+                $awakeAtNight = $this->input->post('awakeAtNight', TRUE);
+                $sleepwalk = $this->input->post('sleepwalk', TRUE);
+                $nameResponsible = $this->input->post('nameResponsible', TRUE);
+                $phoneResponsible = $this->input->post('phoneResponsible', TRUE);
+                $observationMini = $this->input->post('observationMini', TRUE);
+                $sleepEnuresis = $this->input->post('sleepEnuresis', TRUE);
+                $this->summercamp_model->updateSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
+            }
 
             $this->Logger->info("Colonist sucessfully edited");
 
@@ -345,17 +368,16 @@ class SummerCamps extends CK_Controller {
                 $routineToFallAsleep = $this->input->post('routineToFallAsleep', TRUE);
                 $bunkBed = $this->input->post('bunkBed', TRUE);
                 $awakeAtNight = $this->input->post('awakeAtNight', TRUE);
-                $outOfBed = $this->input->post('outOfBed', TRUE);
                 $sleepwalk = $this->input->post('sleepwalk', TRUE);
                 $nameResponsible = $this->input->post('nameResponsible', TRUE);
                 $phoneResponsible = $this->input->post('phoneResponsible', TRUE);
-                $observationMini = $this->input->post('phoneResponsible', TRUE);
+                $observationMini = $this->input->post('observationMini', TRUE);
                 $sleepEnuresis = $this->input->post('sleepEnuresis', TRUE);
-
                 $this->summercamp_model->saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
             }
 
-            //Caso tenha ocorrido tudo bem, salva as mudanças
+
+
             $this->generic_model->commitTransaction();
 
             $this->Logger->info("New colonist successfully inserted");
@@ -487,7 +509,7 @@ class SummerCamps extends CK_Controller {
         if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name']))
             $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
         $userId = $this->session->userdata("user_id");
-        if ($_FILES['uploadedfile']['error'] > 0 || !$this->summercamp_model->uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, $document_type)) {
+        if ($_FILES['uploadedfile'] ['error'] > 0 || !$this->summercamp_model->uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, $document_type)) {
             echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente'); window.location.replace('" . $this->config->item('url_link') . "summercamps/uploadDocument?camp_id=$camp_id&colonist_id=$colonist_id&document_type=$document_type');</script>";
         } else {
             $this->validation_model->sentNewDocument($colonist_id, $camp_id, $document_type);
@@ -593,6 +615,7 @@ class SummerCamps extends CK_Controller {
         $responsability = $this->input->post('responsability', TRUE);
         if (!$responsability) {
             echo "<script>alert('Por favor valide a veracidade dos dados.');history.go(-1);</script>";
+
             return;
         }
         $campId = $this->input->post('camp_id', TRUE);
@@ -657,6 +680,7 @@ class SummerCamps extends CK_Controller {
         $responsability = $this->input->post('responsability', TRUE);
         if (!$responsability) {
             echo "<script>alert('Por favor valide a veracidade dos dados.');history.go(-1);</script>";
+
             return;
         }
         $campId = $this->input->post('camp_id', TRUE);

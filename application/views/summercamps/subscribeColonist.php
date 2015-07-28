@@ -753,22 +753,6 @@
 
                 <div class="row">
                     <div class="form-group">
-                        <label for="outOfBed" class="col-lg-6 control-label">Sai da cama quando acorda?* </label>
-                        <div class="col-lg-6">
-                            <input type="radio" name="outOfBed" value="1"
-                            <?php
-                            if ((!empty($_POST['outOfBed']) && ($_POST['outOfBed'] == "1")))
-                                echo "checked='checked'"
-                                ?>/> Sim
-                            <input type="radio" name="outOfBed" value="0"
-                            <?php if (!empty($_POST['outOfBed']) && ($_POST['outOfBed'] == "0")) echo "checked='checked'" ?>
-                                   /> Não
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="form-group">
                         <label for="sleepwalk" class="col-lg-6 control-label">Apresenta sonambulismo?* </label>
                         <div class="col-lg-6">
                             <input type="radio" name="sleepwalk" value="1"

@@ -44,21 +44,21 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
-    
-    public function getSumCapacitiesByYearAndSummerCamp($year,$summercampId=null) {
-    	$sql = "SELECT sum(capacity_male) as male, sum(capacity_female) as female FROM summer_camp 
-    			WHERE DATE_PART('YEAR',date_start) = ?";
-    	
-    	if ($summercampId !== null) {
-    		$sql = $sql . " AND summer_camp_id = ?";
-    		$resultSet = $this->executeRow($this->db, $sql, array($year,$summercampId));
-    	} else {
-    		$resultSet = $this->executeRow($this->db, $sql, array($year));
-    	}
-    	
-    	return $resultSet;
 
+    public function getSumCapacitiesByYearAndSummerCamp($year, $summercampId = null) {
+        $sql = "SELECT sum(capacity_male) as male, sum(capacity_female) as female FROM summer_camp
+    			WHERE DATE_PART('YEAR',date_start) = ?";
+
+        if ($summercampId !== null) {
+            $sql = $sql . " AND summer_camp_id = ?";
+            $resultSet = $this->executeRow($this->db, $sql, array($year, $summercampId));
+        } else {
+            $resultSet = $this->executeRow($this->db, $sql, array($year));
+        }
+
+        return $resultSet;
     }
+
     public function getAvailableSummerCamps($isAssociate) {
         $associate = " ";
         if ($isAssociate)
@@ -579,6 +579,29 @@ class summercamp_model extends CK_Model {
         if ($campId)
             return $campId;
         throw new ModelException("Insert object in the database");
+    }
+
+    public function updateSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible) {
+        $sql = "UPDATE mini_colonist_observations
+                SET sleep_out=?, wake_up_early=?,
+                    food_restriction=?, eat_by_oneself=?, bathroom_freedom=?, sleep_routine=?,
+                    bunk_restriction=?, wake_up_at_night=?, sleep_enuresis=?, sleepwalk=?,
+                    observation=?, responsible_name=?, responsible_number=?
+                WHERE summer_camp_id=? and colonist_id=?;";
+        $paramArray = array($sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible, $summerCampId, $colonistId);
+        if ($this->execute($this->db, $sql, $paramArray)) {
+            return true;
+        }
+        throw new ModelException("UPDATE object in the database");
+    }
+
+    public function getMiniCampObs($summerCampId, $colonistId) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT * FROM  mini_colonist_observations WHERE colonist_id = ? AND summer_camp_id = ?";
+        $resultSet = $this->executeRow($this->db, $sql, array($colonistId, $summerCampId));
+        if ($resultSet)
+            return $resultSet;
+        return null;
     }
 
 }
