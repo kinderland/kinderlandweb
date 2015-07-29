@@ -437,6 +437,100 @@ class Reports extends CK_Controller {
 		
 		$this -> loadReportView("reports/summercamps/subscriptions_bycamp", $data);		
 	}
+	
+	public function queue() {
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date=date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+		{
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+		
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+		
+		$campChosen = "Colônia Verão";
+		$camps = array(0 => "Colônia Verão", 1 => "Mini Kinderland");
+		
+		if (isset($_GET['colonia_f']))
+			$campChosen = $_GET['colonia_f'];
+		
+		$data['colonia_escolhida'] = $campChosen;
+		$data['camps'] = $camps;
+		
+		$miniCamp = null;
+		
+		if($campChosen == "Mini Kinderland") {
+			
+			$miniCamp = 1;
+		}
+		
+		$statusCamps = $this -> summercamp_model -> getMiniCampsOrNotByYear($year,$miniCamp);
+		
+		$campsId = array();
+		
+		if($statusCamps!=null) {
+			foreach($statusCamps as $statusCamp) {
+				
+					$campsId[] = $statusCamp -> getCampId();
+			}
+		}
+		
+		$selected = "Sócios";
+		$opcoes = array(0 => "Sócios", 1 => "Não Sócios");
+			
+		if (isset($_GET['opcao_f']))
+			$selected = $_GET['opcao_f'];
+		
+		$data['selecionado'] = $selected;
+		$data['opcoes'] = $opcoes;
+		
+		$associated = null;
+		
+		if($selected == "Sócios") {
+			
+			$associated = 1;
+		}
+		
+		$people = array();
+		$peopleId = array();
+		$peopleFinal = array();
+		
+		foreach($campsId as $id) {
+		
+			$people[] = $this -> summercamp_model -> getAssociatedOrNotByStatusAndSummerCamp($id,$associated);
+			
+			foreach($people as $person) {
+				$peopleId[] = $person -> person_id;				
+			}
+		}
+		
+		$peopleId = array_unique($peopleId);
+		
+		foreach($peopleId as $personId) {
+			
+			$peopleFinal[] = $this -> personuser_model -> getUserById($personId);
+		}
+		
+		$data['people'] = $peopleFinal;
+		$this -> loadReportView("reports/summercamps/queue", $data);		
+	}
 
 	public function associate_campaign_donations() {
 		$years = array();

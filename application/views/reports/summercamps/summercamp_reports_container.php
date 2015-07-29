@@ -14,6 +14,7 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byschool">Colonistas por Escola</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byassociated">Inscrições por Sócio</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/subscriptions_bycamp">Pré-inscrições por Colônia</option>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/queue">Fila de Espera</option>
                 </select>
             </div>
         </div>

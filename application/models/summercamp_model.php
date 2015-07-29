@@ -44,6 +44,39 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
+    
+    public function getMiniCampsOrNotByYear($year,$minicamp) {
+    	$sql = "SELECT * FROM summer_camp 
+    			WHERE mini_camp ". (($minicamp!=null) ? "!" : "") . "= 'FALSE' 
+    			AND DATE_PART('YEAR',date_start) = ?";
+    	
+    	$resultSet = $this->executeRows($this->db, $sql, array($year));
+    	
+    	$campArray = array();
+    	
+    	if ($resultSet)
+    		foreach ($resultSet as $row)
+    			$campArray[] = SummerCamp::createCampObject($row);
+    	
+    		return $campArray;
+    }
+    
+    public function getAssociatedOrNotByStatusAndSummerCamp($summercampId,$associate) {
+    	$sql = "SELECT * FROM v_report_all_users_association_detailed vrauad 
+				INNER JOIN summer_camp_subscription scs on scs.person_user_id = person_id
+				WHERE scs.situation in ('2','3','4','5')
+				AND scs.summer_camp_id = ?
+				AND vrauad.associate ". (($associate) ? "!" : "") ."= 'não sócio'";
+    	
+    	$resultSet = $this -> executeRows($this->db,$sql,array($summercampId));
+    	
+    	if($resultSet) {
+    		return $resultSet;
+    	}
+    	
+    	return null;
+    	
+    }
 
     public function getAvailableSummerCamps($isAssociate) {
         $associate = " ";
