@@ -389,11 +389,11 @@ class Admin extends CK_Controller {
 			}
 			$this->Logger->debug("Summer Camp Ids: ". $campsIdStr);
 			if(strlen($campsIdStr) == 0)
-				throw new Exception("Nenhuma colônia encontrada com os parâmetros dados.");
+				throw new Exception("Nenhuma colonia encontrada com os parametros dados.");
 			
 			$this->Logger->info("Checking if the given position is already occupied by another person");
 			if(!$this->summercamp_model->checkQueueNumberAvailability($userId, $campsIdStr, $position))
-				throw new Exception("Falha ao atualizar fila de espera, verifique se a ". utf8_decode("posição já não"). " pertence a outra pessoa");
+				throw new Exception("Falha ao atualizar fila de espera, verifique se outra pessoa possui o mesmo valor");
 
 			$this->Logger->info("Updating queue number in database");
 			$this->generic_model->startTransaction();
@@ -405,7 +405,7 @@ class Admin extends CK_Controller {
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to insert new user");
             $this->generic_model->rollbackTransaction();
-			echo $ex->getMessage();
+			echo utf8_decode($ex->getMessage());
 		}
 	}
 }
