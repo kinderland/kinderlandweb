@@ -131,7 +131,8 @@ function saveQueuePosition(personId, userName){
 						<tr>
 							<th align="right">Responsável</th>
 							<th align="right">Sequencial</th>
-							<th align="right">Posição na Lista de Espera</th>
+							<th align="right">Posição</th>
+							<th align="right">Ações</th>
 						</tr>	
 					 </thead>
 					 <tbody> 
@@ -144,8 +145,8 @@ function saveQueuePosition(personId, userName){
 							<td><?= $person -> person_id ?></td>
                             <td>
                             	<input type="text" class="form-control" id="queue_number_<?= $person -> person_id ?>" value="<?= $person -> queue_number ?>" />
-                            	<button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= $person -> fullname ?>')">Cadastrar</button>
                             </td>
+                            <td> <button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= $person -> fullname ?>')">Cadastrar</button> </td>
                            
 						</tr>
 						<?php

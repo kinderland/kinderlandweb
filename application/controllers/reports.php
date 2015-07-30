@@ -498,11 +498,12 @@ class Reports extends CK_Controller {
 		$people = array();
 		$peopleId = array();
 		$peopleFinal = array();
-		
-		$campsIdStr = $campsId[0];
-		for($i = 1; $i < count($campsId); $i++)
-			$campsIdStr .= "," . $campsId[$i];
-		
+		$campsIdStr = "";
+		if($campsId != null && count($campsId) > 0){
+			$campsIdStr = $campsId[0];
+			for($i = 1; $i < count($campsId); $i++)
+				$campsIdStr .= "," . $campsId[$i];
+		}
 		$people = $this -> summercamp_model -> getAssociatedOrNotByStatusAndSummerCamp($campsIdStr, $selected);
 			
 		$data['people'] = $people;
