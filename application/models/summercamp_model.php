@@ -34,7 +34,7 @@ class summercamp_model extends CK_Model {
 
     public function getAllSummerCampsByYear($year) {
         $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_start) = ? ORDER BY date_created DESC";
-        $resultSet = $this->executeRows($this->db, $sql, array($year));
+        $resultSet = $this->executeRows($this->db, $sql, array(intval($year)));
 
         $campArray = array();
 
@@ -339,6 +339,21 @@ class summercamp_model extends CK_Model {
         $resultSet = $this->executeRows($this->db, $sql, array($year));
 
         return $resultSet;
+    }
+    
+    public function getColonistRelationDetailedBySummerCamp($summercampId) {
+    	$sql = "SELECT *, 
+	COALESCE((SELECT 1 FROM parent_summer_camp_subscription pscs WHERE relation = 'Pai' and pscs.colonist_id = scs.colonist_id), 0) as pai,
+	COALESCE((SELECT 1 FROM parent_summer_camp_subscription pscs WHERE relation = 'Mãe' and pscs.colonist_id = scs.colonist_id), 0) as mae
+	FROM
+	summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id 
+	INNER JOIN colonist c on c.colonist_id = scs.colonist_id
+	INNER JOIN person p on p.person_id = c.person_id
+	WHERE scs.colonist_id in(SELECT colonist_id FROM summer_camp_subscription WHERE summer_camp_id in(".$summercampId."));";
+    	
+    	$resultSet = $this->executeRows($this->db, $sql);
+    	
+    	return $resultSet;    	
     }
 
     public function getCountStatusColonistBySummerCampYearAndGender($year, $summerCampId = null, $gender = null) {

@@ -15,6 +15,7 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byassociated">Inscrições por Sócio</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/subscriptions_bycamp">Pré-inscrições por Colônia</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/queue">Fila de Espera</option>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/parents_notregistered">Parentes Cadastrados por Colonista</option>
                 </select>
             </div>
         </div>

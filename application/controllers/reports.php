@@ -509,6 +509,50 @@ class Reports extends CK_Controller {
 		$data['people'] = $people;
 		$this -> loadReportView("reports/summercamps/queue", $data);		
 	}
+	
+	public function parents_notregistered() {
+		
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date=date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+		{
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+		
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+		
+		$camps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+		
+		$campsIdStr = "";
+		if($camps != null && count($camps) > 0){
+			$campsIdStr = $camps[0] -> getCampId();
+			for( $i = 1; $i < count($camps); $i++ )
+				$campsIdStr .= "," . $camps[$i] -> getCampId();
+		}
+		
+		$colonists = $this -> summercamp_model -> getColonistRelationDetailedBySummerCamp($campsIdStr);
+		
+		
+		$data['colonists'] = $colonists;
+		$this -> loadReportView("reports/summercamps/parents_notregistered", $data);		
+	}
 
 	public function associate_campaign_donations() {
 		$years = array();
