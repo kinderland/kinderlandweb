@@ -50,20 +50,24 @@ function getCSVName(){
 	var colonia_escolhida = document.getElementById('colonia').value;
 	var selecionado = document.getElementById('opcao').value;
 	
-	if(colonia_escolhida == "Colônia Verão") {
+	if(colonia_escolhida == "0") {
 		nomePadrao = nomePadrao.concat("_colonia_verao");
 	}
-	else if(colonia_escolhida == "Mini Kinderland") {
+	else if(colonia_escolhida == "1") {
 		nomePadrao = nomePadrao.concat("_mini_kinderland");
 	}
 
-	if(selecionado == "Sócios") {
+	if(selecionado == "0") {
 		nomePadrao = nomePadrao.concat("_socios");
 	}
 
-	else if(selecionado == "Não Sócios") {
+	else if(selecionado == "1") {
 		nomePadrao = nomePadrao.concat("_nao_socios");
 	}	
+
+	else if(selecionado == "2") {
+		nomePadrao = nomePadrao.concat("_todos");
+	}
 
 	return nomePadrao;
 }			
@@ -79,7 +83,7 @@ function sendTableToCSV(){
     	//Nome, retira pega o que esta entre um <> e outro <>
     	data2.push(row.cells[0].innerHTML.split("<")[1].split(">")[1]);
     	data2.push(row.cells[1].innerHTML);
-    	data2.push(row.cells[2].innerHTML);
+    	data2.push(document.getElementById('queue_number_'+row.cells[1].innerHTML).value);
     	data.push(data2)
     } 
     if(i==0){
