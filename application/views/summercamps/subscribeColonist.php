@@ -482,7 +482,7 @@
                 <div class="form-group">
                     <label for="dadphone" class="dad dad-form col-lg-1 control-label"> Telefone: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="dad dad-form form-control" placeholder="Telefone"
+                        <input type="text" class="dad dad-form form-control phone" placeholder="Telefone"
                                name="dadPhone" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -541,7 +541,7 @@
                 <div class="form-group">
                     <label for="motherphone" class="mother mother-form col-lg-1 control-label"> Telefone: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="mother mother-form form-control" placeholder="Telefone"
+                        <input type="text" class="mother mother-form form-control phone" placeholder="Telefone"
                                name="motherPhone" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -805,8 +805,9 @@
                 <br />
             <?php } ?>
             <div class="form-group">
-                <div class="col-lg-10">
+                <div class="col-lg-6">
                     <button class="btn btn-primary" style="margin-right:40px" onClick="validateForm(event)">Confirmar</button>
+                    <input class="btn btn-warning" type="button" value="Voltar" onclick="history.back()" />
                 </div>
             </div>
 

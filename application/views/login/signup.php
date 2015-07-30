@@ -237,7 +237,10 @@
         spOptions = {
           onKeyPress: function(val, e, field, options) {
               field.mask(SPMaskBehavior.apply({}, arguments), options);
-            }
+            },
+          onChange: function(val, e, field, options) {
+              field.mask(SPMaskBehavior.apply({}, arguments), options);
+          }
         };
         $(".phone").mask(SPMaskBehavior, spOptions);
         $("#cep").mask("00000-000");

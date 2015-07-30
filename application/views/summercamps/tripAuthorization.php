@@ -51,17 +51,17 @@ $end = date("d/m/Y", strtotime($end));
 			<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/acceptTripAuthorization" method="post">
 				<input type="hidden" name="camp_id" value="<?=$camp_id ?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" /> 
 				<input type="hidden" name="document_type" value="<?=$document_type ?>" /> 
-				<button class="button" type="submit">
+				<button class="button btn btn-primary" type="submit">
 					Aceito autorização de viagem
 				</button>
 			</form>
-
+			<br />
 		<div id='form2'>
 
 			<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/rejectTripAuthorization" method="post">
 				<input type="hidden" name="camp_id" value="<?=$camp_id ?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" /> 
 				<input type="hidden" name="document_type" value="<?=$document_type ?>" /> 
-				<button class="button" type="submit">
+				<button class="button btn btn-danger" type="submit">
 					Não aceitar autorização de viagem
 				</button>
 			</form>
