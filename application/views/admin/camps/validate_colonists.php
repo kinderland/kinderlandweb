@@ -99,13 +99,8 @@
                             'identity': radioIdentity
                         },
                         function (data) {
-                            if (data !== "") {
-                                var color = "";
-                                if(data == "pre-inscrição validada")
-                                    color = "#017D50";
-                                else
-                                    color = "#FF0000";
-                                $("#colonist_situation_"+colonist_id+"_"+summer_camp_id).html('<font color="'+color+'">'+data+'</font>');
+                            if (data !== "") {            
+                                $("#colonist_situation_"+colonist_id+"_"+summer_camp_id).html(data);
                                 $("#submit_btn_"+colonist_id+"_"+summer_camp_id).hide();
                                 $("#save_btn_"+colonist_id+"_"+summer_camp_id).hide();
                             } else {
