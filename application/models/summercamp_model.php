@@ -121,7 +121,7 @@ class summercamp_model extends CK_Model {
 		join person p on c.person_id = p.person_id
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
 		where scs.person_user_id = ? order by p.fullname";
-        $resultSet = $this->executeRows($this->db, $sql, array($userId));
+        $resultSet = $this->executeRowsNoLog($this->db, $sql, array($userId));
 
         $summerCampSubscription = NULL;
 
@@ -269,7 +269,7 @@ class summercamp_model extends CK_Model {
         if ($resultSet)
             foreach ($resultSet as $row) {
                 $this->Logger->info("Documento encontrado com sucesso, criando array");
-                $document = array("data" => $row->file, "name" => $row->filename);
+                $document = array("data" => $row->file, "name" => $row->filename, "extension" => $row->extension);
                 return $document;
             }
         $this->Logger->info("Nao achei o documento");

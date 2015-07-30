@@ -71,7 +71,8 @@
 			<span style="margin-left:5px"><b>12.</b> Ao inscrever a criança na Colônia, o responsável está cedendo o direito de imagem para a divulgação nos meios de comunicação da Associação Kinderland.</span>
 			<br>
 			<br>
-			<span style="margin-left:5px"><b>Casos excepcionais não previstos nestas Normas Gerais serão resolvidos pela diretoria da Associação Kinderland.</b></span>
+			<span style="margin-left:5px"><b>Casos excepcionais não previstos nestas Normas Gerais serão resolvidos pela diretoria da Associação Kinderland.</b></span><br />
+			<span style="margin-left:5px"><b>Tomamos conhecimento destas normas e concordamos com os termos deste documento.</b></span>
 			<br>
 			<br>
 	</div>
@@ -79,10 +80,11 @@
 		<form >		
 		<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
 		<input type="hidden" name="document_type" value="<?=$document_type?>" /> 
-		<input type="submit" class="button" value="Tomamos conhecimento destas normas e concordamos com os termos deste documento." id="upload">
+		<input class="btn btn-primary" type="submit" class="button" value="De acordo" id="upload">
+		<br /><br />
 		</form>
 		<div id='form2'>
-			<button class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
+			<button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
 			
 		</div>
 	</div>

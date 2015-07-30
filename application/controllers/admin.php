@@ -325,7 +325,10 @@ class Admin extends CK_Controller {
 		$document_type = $this -> input -> get('document_type', TRUE);
 		$document = $this -> summercamp_model -> getNewestDocument($camp_id, $colonist_id, $document_type);
 		if ($document){
-			header("Content-type: image/jpeg");
+			if($document["extension"] == "pdf")
+				header("Content-type: application/pdf");
+			else 
+				header("Content-type: image/jpeg");
 			echo pg_unescape_bytea($document["data"]);
 		} else {
 			$this->loadView ("admin/users/documentNotFound");

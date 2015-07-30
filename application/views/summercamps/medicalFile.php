@@ -18,8 +18,13 @@
 </script>
 
 <div id="cabecalho">
-	<p style="font-size: x-large; color:red">
+	<p align="right" style="color:red">
 		O símbolo * indica preenchimento obrigatório!
+	</p>
+	<p>
+		Atenção: cabe ao responsável pela pré-inscrição garantir que as informações 
+		abaixo são corretas e verídicas. Recomendamos fortemente que, em caso de dúvidas, 
+		um médico seja consultado antes da confirmação do envio desta ficha médica.
 	</p>
 </div>
 
@@ -222,10 +227,6 @@
 						<li>
 							Os medicamentos prescritos e aplicados na colônia serão registrados no livro de ocorrências.
 						</li>
-						<li>
-							Sugerimos que as informações aqui presentes sejam avalizadas pelo médico do colonista. Entretanto, apenas o responsável pela
-							inscrição responde pelas informações aqui constantes.
-						</li>
 					</ol>
 				</p></td>
 			</tr>
@@ -233,7 +234,7 @@
 			<tr>
 				<td colspan="4">
 				<p class="divisoria">
-					<b>CONTATO DO MÉDICO RESPONSÁVEL PELOS DADOS NESTA FICHA</b>
+					<b>CONTATO DO MÉDICO ou PEDIATRA</b>
 				</p></td>
 			</tr>
 
@@ -273,9 +274,14 @@
 
 			<tr>
 				<td colspan="4">
+				<p>
+					Atenção: cabe ao responsável pela pré-inscrição garantir que as informações abaixo são corretas 
+					e verídicas. Recomendamos fortemente que, em caso de dúvidas, um médico seja consultado 
+					antes da confirmação do envio desta ficha médica.
+				</p>
 				<p class="required">
 					<input type="checkbox" required name="responsability" value="Ok">
-					<span style="font-size:20px; color:red">Assumo a veracidade das informações.</span>
+					<span style="font-size:20px; color:red">Assumo a correção e veracidade das informações</span>
 					<br>
 				</p></td>
 			</tr>
