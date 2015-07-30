@@ -269,7 +269,7 @@ class summercamp_model extends CK_Model {
         if ($resultSet)
             foreach ($resultSet as $row) {
                 $this->Logger->info("Documento encontrado com sucesso, criando array");
-                $document = array("data" => $row->file, "name" => $row->filename);
+                $document = array("data" => $row->file, "name" => $row->filename, "extension" => $row->extension);
                 return $document;
             }
         $this->Logger->info("Nao achei o documento");
