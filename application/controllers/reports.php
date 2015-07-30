@@ -465,7 +465,7 @@ class Reports extends CK_Controller {
 		$data['ano_escolhido'] = $year;
 		$data['years'] = $years;
 		
-		$campChosen = "Colônia Verão";
+		$campChosen = 0;
 		$camps = array(0 => "Colônia Verão", 1 => "Mini Kinderland");
 		
 		if (isset($_GET['colonia_f']))
@@ -474,12 +474,7 @@ class Reports extends CK_Controller {
 		$data['colonia_escolhida'] = $campChosen;
 		$data['camps'] = $camps;
 		
-		$miniCamp = null;
-		
-		if($campChosen == "Mini Kinderland") {
-			
-			$miniCamp = 1;
-		}
+		$miniCamp = $campChosen;
 		
 		$statusCamps = $this -> summercamp_model -> getMiniCampsOrNotByYear($year,$miniCamp);
 		
@@ -487,13 +482,12 @@ class Reports extends CK_Controller {
 		
 		if($statusCamps!=null) {
 			foreach($statusCamps as $statusCamp) {
-				
-					$campsId[] = $statusCamp -> getCampId();
+				$campsId[] = $statusCamp -> getCampId();
 			}
 		}
 		
-		$selected = "Sócios";
-		$opcoes = array(0 => "Sócios", 1 => "Não Sócios");
+		$selected = 0;
+		$opcoes = array(0 => "Sócios", 1 => "Não Sócios", 2 => "Todos");
 			
 		if (isset($_GET['opcao_f']))
 			$selected = $_GET['opcao_f'];
@@ -501,34 +495,17 @@ class Reports extends CK_Controller {
 		$data['selecionado'] = $selected;
 		$data['opcoes'] = $opcoes;
 		
-		$associated = null;
-		
-		if($selected == "Sócios") {
-			
-			$associated = 1;
-		}
-		
 		$people = array();
 		$peopleId = array();
 		$peopleFinal = array();
 		
-		foreach($campsId as $id) {
+		$campsIdStr = $campsId[0];
+		for($i = 1; $i < count($campsId); $i++)
+			$campsIdStr .= "," . $campsId[$i];
 		
-			$people = $this -> summercamp_model -> getAssociatedOrNotByStatusAndSummerCamp($id,$associated);
+		$people = $this -> summercamp_model -> getAssociatedOrNotByStatusAndSummerCamp($campsIdStr, $selected);
 			
-			foreach($people as $person) {
-				$peopleId[] = $person -> person_id;				
-			}
-		}
-		
-		$peopleId = array_unique($peopleId);
-		
-		foreach($peopleId as $personId) {
-			
-			$peopleFinal[] = $this -> personuser_model -> getUserById($personId);
-		}
-		
-		$data['people'] = $peopleFinal;
+		$data['people'] = $people;
 		$this -> loadReportView("reports/summercamps/queue", $data);		
 	}
 	

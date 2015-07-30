@@ -135,59 +135,63 @@ continue;
 			<br>
 			<br>
 			</td>
-			<td><?php
-for($i=0;$i<=6;$i++){
-$color = "style='color:grey'";
-if($statusArray[$i]["database_id"] === $summerCampInscription -> getSituationId())
-$color = "style='color:blue'";
-			?>
-			<p <?=$color ?> >
-				<?= $statusArray[$i]["text"] ?>
-			</p><?php
-			}
 			
-			if($summerCampInscription -> getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
-				$subscribed = "true";
-			else
-				$subscribed = "false";
-							
-			if($summerCampInscription -> getSituationId() < 0)
-			$color = "style='color:blue'";
-			else
-			$color = "style='color:grey'";
-			echo "<p $color>";
-			echo $statusArray[7]["text"]."/".$statusArray[8]["text"]."/".$statusArray[9]["text"];
-			echo "</p>"
-			?>
-			<?php
-			if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) {
-				echo $validation -> describeValidation();
-			}
-			?></td>
 			<td>
-			<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || 
-				$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ){
-			?>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/sendPreSubscription?documents=<?=$documents ?>&camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
-			<button class="btn btn-primary">
-				Enviar pré-inscrição
-			</button> </a>
-			<?php } ?>
-			<br>
-			<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){
-			?>
-			<button class="btn" disabled>
-				Pagar
-			</button></td>
-			<?php } ?>
-			<br>
-			<br>
-			<br>
-			<br>
-			<button class="btn btn-warning" onclick='excluir(<?=$summerCampInscription -> getSummerCampId() ?>,<?=$summerCampInscription -> getColonistId() ?>,"<?=$summerCampInscription -> getFullname() ?>",<?=$subscribed?>)' class="btn">
-				Excluir
-			</button>
+				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || 
+					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ){
+				?>
+				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/sendPreSubscription?documents=<?=$documents ?>&camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+				<button class="btn btn-primary">
+					Enviar pré-inscrição
+				</button> </a>
+				<?php } ?>
+				<br>
+				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){
+				?>
+				<button class="btn" disabled>
+					Pagar
+				</button>
+				<?php } ?>
+				<br>
+				<br>
+				<br>
+				<br>
+				<button class="btn btn-warning" onclick='excluir(<?=$summerCampInscription -> getSummerCampId() ?>,<?=$summerCampInscription -> getColonistId() ?>,"<?=$summerCampInscription -> getFullname() ?>",<?=$subscribed?>)' class="btn">
+					Excluir
+				</button>
+			</td>
 
+			<td>
+				<?php
+					for($i=0;$i<=6;$i++){
+						$color = "style='color:grey'";
+						if($statusArray[$i]["database_id"] === $summerCampInscription -> getSituationId())
+							$color = "style='color:blue'";
+				?>
+				<p <?=$color ?> >
+					<?= $statusArray[$i]["text"] ?>
+				</p><?php
+				}
+				
+					if($summerCampInscription -> getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
+						$subscribed = "true";
+					else
+						$subscribed = "false";
+									
+					if($summerCampInscription -> getSituationId() < 0)
+					$color = "style='color:blue'";
+					else
+					$color = "style='color:grey'";
+					echo "<p $color>";
+					echo $statusArray[7]["text"]."/".$statusArray[8]["text"]."/".$statusArray[9]["text"];
+					echo "</p>"
+					?>
+				<?php
+				if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) {
+					echo $validation -> describeValidation();
+				}
+				?>
+			</td>
 		</tr>
 		<?php } ?>
 	</table>

@@ -436,13 +436,13 @@
                                 (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "not")
                                 ))
                             echo "checked='checked'"
-                            ?>/> Preencher os dados de pai e mãe
+                            ?>/> Preencher os dados de responsáveis legais <br />
                         <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="dad"
                         <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "dad")) echo "checked='checked'" ?>
-                               /> Utilizar os dados do responsável como pai
+                               /> Utilizar os dados do usuário como pai / primeiro responsável legal<br />
                         <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="mother"
                         <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "mother")) echo "checked='checked'" ?>
-                               /> Utilizar os dados do responsável como mãe
+                               /> Utilizar os dados do usuário como mãe / segundo responsável legal
                     </div>
 
 
@@ -451,8 +451,8 @@
             <br class="dad" /><br class="dad" />
             <div class="row dad">
                 <div class="form-group dad">
-                    <div class="col-lg-3">
-                        Dados do pai do(a) colonista:
+                    <div class="col-lg-5">
+                        Dados do pai / primeiro responsável legal do(a) colonista:
                     </div>
                     <div class="col-lg-4">
                         <input onchange="hide_class('dad-form', this.checked);" class="dad" name="dadDeclare" type="checkbox"> Não desejo preencher
@@ -493,7 +493,7 @@
                                ?>"/>
                     </div>
                     <label for="fullname" class="dad dad-form col-lg-1 control-label"> E-mail: </label>
-                    <div class="col-lg-3">
+                    <div class="col-lg-5">
                         <input type="text" class="dad dad-form form-control" placeholder="E-mail"
                                name="dadEmail" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
@@ -510,8 +510,8 @@
             <br class="dad-form" />
             <div class="row mother">
                 <div class="form-group mother">
-                    <div class="col-lg-3">
-                        Dados da mãe do(a) colonista:
+                    <div class="col-lg-5">
+                        Dados da mãe / segundo responsável legal do(a) colonista:
                     </div>
                     <div class="col-lg-4">
                         <input onchange="hide_class('mother-form', this.checked);" class="mother" name="motherDeclare" type="checkbox"> Não desejo preencher
@@ -552,7 +552,7 @@
                                ?>"/>
                     </div>
                     <label for="fullname" class="mother mother-form col-lg-1 control-label"> E-mail: </label>
-                    <div class="col-lg-3">
+                    <div class="col-lg-5">
                         <input type="text" class="mother mother-form form-control" placeholder="E-mail"
                                name="motherEmail" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"

@@ -8,12 +8,13 @@ class SummerCampSubscription extends Colonist {
 	private $situationId;
 	private $school;
 	private $schoolYear;
+	private $queueNumber;
 
 	public function __construct($personId, $fullname, $gender, $email,$address,
 	$colonistId, $birthDate, $documentNumber, $documentType,$personUserId, 
 	$phone1,
 	$phone2, 
-	$summerCampId, $personUserId, $situation, $school, $schoolYear,$situationId) {
+	$summerCampId, $personUserId, $situation, $school, $schoolYear,$situationId, $queueNumber=null) {
 		parent::__construct($personId, $fullname, $gender, $email, $address, $colonistId, $birthDate, $documentNumber, $documentType, $phone1, $phone2);
 		$this -> summerCampId = $summerCampId;
 		$this -> personUserId = $personUserId;
@@ -21,6 +22,7 @@ class SummerCampSubscription extends Colonist {
 		$this -> school = $school;
 		$this -> schoolYear = $schoolYear;
 		$this -> situationId = $situationId;
+		$this -> queueNumber = $queueNumber;
 	}
 
 	public static function createSummerCampSubscriptionObject($resultRow, $addressIncluded = false) {
@@ -29,7 +31,8 @@ class SummerCampSubscription extends Colonist {
 		$resultRow -> colonist_id, $resultRow -> birth_date, $resultRow -> document_number, $resultRow -> document_type, $resultRow->person_user_id,
 		null, //phone1
 		null, //phone2
-		$resultRow -> summer_camp_id, $resultRow -> person_user_id, $resultRow -> situation_description, $resultRow -> school_name, $resultRow -> school_year,$resultRow -> situation);
+		$resultRow -> summer_camp_id, $resultRow -> person_user_id, $resultRow -> situation_description, $resultRow -> school_name, $resultRow -> school_year,$resultRow -> situation,
+		$resultRow -> queue_number);
 		if ($addressIncluded)
 			$summerCampSubscription -> setAddress(Address::createAddressObject($resultRow));
 
@@ -84,6 +87,12 @@ class SummerCampSubscription extends Colonist {
 		return $this -> situationId;
 	}
 
+	public function setQueueNumber($queueNumber) {
+		$this -> queueNumber = $queueNumber;
+	}
 
+	public function getQueueNumber() {
+		return $this -> queueNumber;
+	}
 }
 ?>
