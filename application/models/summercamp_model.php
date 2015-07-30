@@ -47,7 +47,7 @@ class summercamp_model extends CK_Model {
     
     public function getMiniCampsOrNotByYear($year,$minicamp) {
     	$sql = "SELECT * FROM summer_camp 
-    			WHERE mini_camp ". (($minicamp!=null) ? "!" : "") . "= 'FALSE' 
+    			WHERE mini_camp ". (($minicamp!=0) ? "!" : "") . "= FALSE
     			AND DATE_PART('YEAR',date_start) = ?";
     	
     	$resultSet = $this->executeRows($this->db, $sql, array($year));
@@ -61,21 +61,23 @@ class summercamp_model extends CK_Model {
     		return $campArray;
     }
     
-    public function getAssociatedOrNotByStatusAndSummerCamp($summercampId,$associate) {
-    	$sql = "SELECT * FROM v_report_all_users_association_detailed vrauad 
+    /*
+     * $associateType: 0 = Sócio; 1 = Não sócio; 2 = Todos
+     */
+    public function getAssociatedOrNotByStatusAndSummerCamp($summercampId,$associateType) {
+    	$sql = "SELECT distinct(vrauad.person_id), vrauad.fullname, scs.queue_number FROM v_report_all_users_association_detailed vrauad 
 				INNER JOIN summer_camp_subscription scs on scs.person_user_id = person_id
 				WHERE scs.situation in ('2','3','4','5')
-				AND scs.summer_camp_id = ?
-				AND vrauad.associate ". (($associate) ? "!" : "") ."= 'não sócio'";
+				AND scs.summer_camp_id in (" .$summercampId. ") ";
+        if($associateType != 2)
+			$sql .= " AND vrauad.associate ". (($associateType==0) ? "!" : "") ."= 'não sócio'";
     	
-    	$resultSet = $this -> executeRows($this->db,$sql,array($summercampId));
+    	$resultSet = $this -> executeRows($this->db,$sql);
     	
-    	if($resultSet) {
+    	if($resultSet)
     		return $resultSet;
-    	}
-    	
+
     	return array();
-    	
     }
 
     public function getAvailableSummerCamps($isAssociate) {
@@ -756,6 +758,30 @@ class summercamp_model extends CK_Model {
         if ($resultSet)
             return $resultSet;
         return null;
+    }
+
+    public function checkQueueNumberAvailability($userId, $summerCamps, $position){
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT *
+                FROM summer_camp_subscription scs
+                WHERE
+                    person_user_id != ?
+                    AND summer_camp_id in (".$summerCamps.")
+                    AND queue_number = ?";
+        $resultSet = $this->executeRow($this->db, $sql, array(intval($userId), intval($position)));
+        if ($resultSet)
+            return false;
+        return true;
+    }
+
+    public function updateQueueNumber($userId, $summerCamps, $position) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "UPDATE summer_camp_subscription
+                SET queue_number = ?
+                WHERE
+                    person_user_id = ?
+                    AND summer_camp_id in (".$summerCamps.")";
+        return $this->execute($this->db, $sql, array(intval($position), intval($userId)));
     }
 
 }

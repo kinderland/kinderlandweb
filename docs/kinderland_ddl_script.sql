@@ -293,7 +293,8 @@ CREATE TABLE summer_camp_subscription (
     accepted_travel_terms boolean default false,
     roommate1 character varying(200),
     roommate2 character varying(200),
-    roommate3 character varying(200)
+    roommate3 character varying(200),
+    queue_number integer
 );
 
 ALTER TABLE ONLY summer_camp_subscription
@@ -644,14 +645,18 @@ CREATE OR REPLACE VIEW v_report_free_donations AS
      LEFT JOIN person p ON p.person_id = put.person_id
   ORDER BY p.fullname;
 
- ALTER TABLE summer_camp_subscription
-   ADD COLUMN roommate1 character varying(200);
+-- Additional fields that are already included in the summer_camp_subscription CREATE TABLE sql query;
+--ALTER TABLE summer_camp_subscription
+--   ADD COLUMN roommate1 character varying(200);
 
-ALTER TABLE summer_camp_subscription
-   ADD COLUMN roommate2 character varying(200);
+--ALTER TABLE summer_camp_subscription
+--   ADD COLUMN roommate2 character varying(200);
 
-ALTER TABLE summer_camp_subscription
-   ADD COLUMN roommate3 character varying(200);
+--ALTER TABLE summer_camp_subscription
+--   ADD COLUMN roommate3 character varying(200);
+
+--ALTER TABLE summer_camp_subscription
+--   ADD COLUMN queue_number integer;
 
 CREATE VIEW v_socios_count_inscricoes as (
 select p.*, count(scs.colonist_id) total_inscritos from associates a join person p on p.person_id = a.person_id

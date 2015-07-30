@@ -43,6 +43,31 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
 	return '';
 }
 
+function saveQueuePosition(personId, userName){
+	var summerCampType = $("#colonia").val();
+	var yearSelected = $("#anos").val();
+	var position = $("#queue_number_"+personId).val();
+
+	if(confirm("Deseja atribuir a posição " + position + " ao responsável " + userName + "?")){
+		$.post("<?= $this->config->item('url_link') ?>admin/updateQueueNumber",
+	        {
+	            'user_id': personId,
+	            'summer_camp_type': summerCampType,
+	            'year': yearSelected,
+	            'position': position
+	        },
+	        function (data) {
+	            if (data == "true") {
+	                alert("Posição de fila de espera cadastrada!");
+	            } else {
+	                alert(data);
+	            }
+	        }
+	    );
+	}
+	
+}
+
 </script>
 
 </head>
@@ -62,7 +87,7 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
 	
 	<div class="main-container-report">
 		<div class="row">
-			<div class="col-lg-10" bgcolor="red">
+			<div class="col-lg-10">
 				<form method="GET">
 					<select name="ano_f" onchange="this.form.submit()" id="anos">
 					
@@ -77,27 +102,31 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
 						</select>
 						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
 							<?php
+							$index = 0;
 							foreach ( $camps as $camp ) {
 								$selected = "";
-								if ($colonia_escolhida == $camp)
+								if ($colonia_escolhida == $index)
 									$selected = "selected";
-								echo "<option $selected value='$camp'>$camp</option>";
+								echo "<option $selected value='$index'>$camp</option>";
+								$index++;
 							}
 							?>
 						</select>
 						<select name="opcao_f" onchange="this.form.submit()" id="opcao">
 							<?php
+							$index = 0;
 							foreach ( $opcoes as $opcao ) {
 								$selected = "";
-								if ($selecionado == $opcao)
+								if ($selecionado == $index)
 									$selected = "selected";
-								echo "<option $selected value='$opcao'>$opcao</option>";
+								echo "<option $selected value='$index'>$opcao</option>";
+								$index++;
 							}
 							?>
 						</select>
 				</form>
 				<table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 800px; font-size:15px" id="sortable-table">
+					style="max-width: 600px; font-size:15px" id="sortable-table">
 					<thead>
 						<tr>
 							<th align="right">Responsável</th>
@@ -111,9 +140,12 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
                              foreach ($people as $person) {
                           ?>  
 						<tr>
-							<td><a id="<?= $person -> getfullname() ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $person -> getPersonId() ?>"><?= $person -> getfullname() ?></a></td>
-							<td><?= $person -> getPersonId() ?></td>
-                            <td></td>
+							<td><a id="<?= $person -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $person -> person_id ?>"><?= $person -> fullname ?></a></td>
+							<td><?= $person -> person_id ?></td>
+                            <td>
+                            	<input type="text" class="form-control" id="queue_number_<?= $person -> person_id ?>" value="<?= $person -> queue_number ?>" />
+                            	<button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= $person -> fullname ?>')">Cadastrar</button>
+                            </td>
                            
 						</tr>
 						<?php
