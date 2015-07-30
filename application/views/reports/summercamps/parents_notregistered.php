@@ -46,7 +46,7 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, true],
+				sort : [sortLowerCase, true,true,true],
 				filters : [true, selectTodas],
 				filterText : 'Escreva para filtrar... ',
 				counterText	: showCounter
