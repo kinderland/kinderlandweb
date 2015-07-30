@@ -32,7 +32,7 @@ function arrayToCSV($logger, $name, $data, $columname = array(),$separator = ";"
 		$count = 0;
 		$last = count($columname) - 1;
 		foreach ($columname as $toPrint) {
-			$print = $toPrint;
+			$print = utf8_decode($toPrint);
 			if ($count++ < $last) {
 				$print .= $separator;
 			} else {
