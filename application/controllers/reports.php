@@ -514,7 +514,7 @@ class Reports extends CK_Controller {
 		
 		foreach($campsId as $id) {
 		
-			$people[] = $this -> summercamp_model -> getAssociatedOrNotByStatusAndSummerCamp($id,$associated);
+			$people = $this -> summercamp_model -> getAssociatedOrNotByStatusAndSummerCamp($id,$associated);
 			
 			foreach($people as $person) {
 				$peopleId[] = $person -> person_id;				

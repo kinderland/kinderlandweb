@@ -74,7 +74,7 @@ class summercamp_model extends CK_Model {
     		return $resultSet;
     	}
     	
-    	return null;
+    	return array();
     	
     }
 
