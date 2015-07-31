@@ -355,6 +355,16 @@ class summercamp_model extends CK_Model {
     	
     	return $resultSet;    	
     }
+    public function getColonistsResponsableNotParentsByYear($year) {
+    	
+    	$sql = "SELECT * FROM v_colonists_with_responsables_not_parents
+    			WHERE ano = ?";
+    	
+    	$resultSet = $this->executeRows($this->db, $sql,array($year));
+    	
+    	return $resultSet;
+    	
+    }
 
     public function getCountStatusColonistBySummerCampYearAndGender($year, $summerCampId = null, $gender = null) {
         $sql = "select (
