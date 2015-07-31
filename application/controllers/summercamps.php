@@ -521,12 +521,38 @@ class SummerCamps extends CK_Controller {
         if ($summerCampSubscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || $summerCampSubscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) {
             if ($documents == 6) {
                 $this->summercamp_model->updateColonistStatus($colonist_id, $camp_id, SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION);
+                $this->sendPreSubscriptionEmail($colonist_id, $camp_id);
                 echo "<script>alert('Envio realizado com sucesso'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
             } else
                 echo "<script>alert('O cadastro e os anexos devem ter o OK para poder enviar.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         } else {
             echo "<script>alert('O status " . utf8_decode($summerCampSubscription->getSituation()) . utf8_decode(" não") . " permite envio'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         }
+    }
+
+    public function sendPreSubscriptionEmail($colonistId, $summerCampId){
+        $this->Logger->info("Running: ". __METHOD__);
+
+        $summercamp = $this->summercamp_model->getSummerCampById($summerCampId);
+        if(!$summercamp){
+            $this->Logger->error("Camp not found, cannot send an email");
+            return;
+        }
+
+        $colonist = $this->colonist_model->getColonist($colonistId);
+        if(!$colonist){
+            $this->Logger->error("Colonist not found");
+            return;
+        }
+
+        $personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
+        if(!$personuser){
+            $this->Logger->error("PersonUser related to colonist not found");
+            return;
+        }
+
+        $this->Logger->info("Sending email");
+        $this->sendEmailSubmittedPreSubscription($personuser, $colonist, $summercamp->getCampName());
     }
 
     public function acceptGeneralRules() {

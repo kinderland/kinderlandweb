@@ -120,6 +120,20 @@ class CK_Controller extends CI_Controller {
         return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
     }
 
+    public function sendEmailSubmittedPreSubscription($person, $colonist, $summerCampName) {
+        $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " na colônia " . $summerCampName . " recebida";
+        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " foi recebida pela Associação 
+            Kinderland. Aguarde nova comunicação por email validando (ou não) os dados preenchidos e documentos 
+            enviados.<br /><br />
+            Acompanhe sempre as novidades em nosso site e a situação da pré-inscrição no Sistema 
+            Kinderland. Em caso de dúvidas, entrar em contato por telefone (21-2266-1980) ou, 
+            preferencialmente, por email.<br /><br />
+            Muito obrigado pelo interesse em participar das nossas colônias!<br />
+            Associação Kinderland";
+
+        return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
+    }
+
     protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
         //$myMail = "testekinderland2015@gmail.com";
         //$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
@@ -138,7 +152,7 @@ class CK_Controller extends CI_Controller {
         }
 
         if (ENVIRONMENT != 'production') {
-            $addToSubject = "[TESTE][to:$to][cc=";
+            $addToSubject = "[TESTE]";/*[to:$to][cc=";
             foreach ($cc as $carboncopy) {
                 $addToSubject.=$carboncopy;
             }
@@ -151,7 +165,7 @@ class CK_Controller extends CI_Controller {
             $addToSubject.="]";
             $to = "teste.kinderland@gmail.com";
             $cc = NULL;
-            $bcc = NULL;
+            $bcc = NULL;*/
             $subject = $addToSubject . $subject;
         }
 
