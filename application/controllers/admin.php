@@ -111,7 +111,7 @@ class Admin extends CK_Controller {
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . 
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear(date("Y"), $shownStatus);
+		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYearForValidation(date("Y"), $shownStatus);
 		$this -> loadReportView("admin/camps/validate_colonists", $data);
 	}
 
