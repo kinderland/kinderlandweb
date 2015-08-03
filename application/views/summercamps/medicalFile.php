@@ -58,12 +58,12 @@
 				</select></td>
 
 				<td width = "25%"><span><b>*Peso:</b></span>
-				<input type="text" class="nome" required maxlength="3" name="weight" size="1px" oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+				<input type="text" class="nome" required maxlength="3" name="weight" size="10px" onkeypress='return event.charCode >= 48 && event.charCode <= 57' oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')"
 >
 				kg </td>
 				<td width = "25%"><span><b>*Altura:</b></span>
-				<input type="text" class="nome" required maxlength="4" onkeypress="return validateNumberInput(event);" name="height" id="height" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+				<input type="text" class="nome" required maxlength="4" onkeypress='return event.charCode >= 48 && event.charCode <= 57' name="height" id="height" size="10px" oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')"
 >
 				cm </td>
