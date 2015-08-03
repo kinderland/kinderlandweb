@@ -19,7 +19,7 @@ class address_model extends CK_Model{
 	}
 
 	public function getAddressByPersonId($person_id){
-        $sql = "SELECT * FROM person NATURAL JOIN address WHERE person_id=?";
+        $sql = "SELECT * FROM person p LEFT JOIN address a on a.address_id = p.address_id WHERE p.person_id=?";
         $row = $this->executeRow($this->db, $sql, array(intval($person_id)));
     
         if($row) {
