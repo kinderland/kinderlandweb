@@ -25,8 +25,7 @@ class summercamp_model extends CK_Model {
 
     public function getCountSubscriptionsbyAssociated($year) {
 
-        $sql = "SELECT * FROM v_socios_count_inscricoes
-    			WHERE DATE_PART('YEAR',date_created) = ?";
+        $sql = "SELECT * FROM v_socios_count_inscricoes";
 
         $rows = $this->executeRows($this->db, $sql, array($year));
         return $rows;
