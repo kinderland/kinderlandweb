@@ -61,6 +61,33 @@ class summercamp_model extends CK_Model {
     		return $campArray;
     }
     
+    public function getColonistDetailedSameParentsByYearAndSummerCamp($year) {
+    	$sql = "SELECT DISTINCT c.colonist_id as colonist_id, pc.fullname as colonist_name, p.fullname as responsable, p.person_id as responsable_id, 
+				sc.summer_camp_id as camp_id, sc.camp_name as camp_name, DATE_PART('YEAR',sc.date_start) as year, 
+    			scss.description as situation_description, scs.situation as situation
+				FROM summer_camp sc 
+				INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+    			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+				INNER JOIN colonist c on c.colonist_id = scs.colonist_id
+				INNER JOIN person p on p.person_id = scs.person_user_id
+				INNER JOIN parent_summer_camp_subscription pscs on pscs.parent_id = p.person_id
+				INNER JOIN person pc on c.person_id = pc.person_id
+				WHERE c.colonist_id in (SELECT p1.colonist_id 
+							FROM parent_summer_camp_subscription p1 
+							INNER JOIN summer_camp sc1 on sc1.summer_camp_id = p1.summer_camp_id 
+							INNER JOIN parent_summer_camp_subscription p2 on p2.parent_id = p1.parent_id 
+							INNER JOIN summer_camp sc2 on sc2.summer_camp_id = p2.summer_camp_id   
+							WHERE p1.colonist_id != p2.colonist_id 
+							AND DATE_PART('YEAR', sc1.date_start) = ?
+							AND DATE_PART('YEAR', sc2.date_start) = ?)";
+    	
+    	
+    	$resultSet = $this -> executeRows($this->db,$sql,array($year,$year));
+    	
+    	
+    	return $resultSet;
+    }
+    
     /*
      * $associateType: 0 = Sócio; 1 = Não sócio; 2 = Todos
      */
