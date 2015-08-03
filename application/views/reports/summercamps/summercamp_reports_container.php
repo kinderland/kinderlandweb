@@ -17,7 +17,7 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/queue">Fila de Espera</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/parents_notregistered">Parentes Cadastrados por Colonista</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/responsables_notparents">Responsáveis que não são os Pais</option>
-                	<option value="<?= $this->config->item('url_link'); ?>reports/same_parents">Colonistas com Pais Iguais</option>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/same_parents">Responsáveis com mais de um Colonista</option>
                 </select>
             </div>
         </div>
