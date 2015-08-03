@@ -81,8 +81,8 @@ function insertFigureRegister($object, $validation) {
 		<thead>
 			<th>Inscrição</th>
 			<th></th>
-			<th>Situação</th>
 			<th>Ação</th>
+			<th>Situação</th>
 		</thead>
 		<?php
 foreach($summerCampInscriptions as $summerCampInscription){
@@ -170,7 +170,7 @@ continue;
 					for($i=0;$i<=6;$i++){
 						$color = "style='color:grey'";
 						if($statusArray[$i]["database_id"] === $summerCampInscription -> getSituationId())
-							$color = "style='color:blue'";
+							$color = "style='color:green'";
 				?>
 				<p <?=$color ?> >
 					<?= $statusArray[$i]["text"] ?>
@@ -183,7 +183,7 @@ continue;
 						$subscribed = "false";
 									
 					if($summerCampInscription -> getSituationId() < 0)
-					$color = "style='color:blue'";
+					$color = "style='color:green'";
 					else
 					$color = "style='color:grey'";
 					echo "<p $color>";
