@@ -56,6 +56,7 @@
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
+                Pré-inscrições com cadastro e anexos prontos para submissão, porém não enviados pelo responsável. <br></br>
                 	<form method="GET">
 						<select name="ano_f" onchange="this.form.submit()" id="anos">
 					

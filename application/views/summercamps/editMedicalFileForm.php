@@ -1,6 +1,11 @@
 <div id="cabecalho">
-	<p style="font-size: x-large; color:red">
+	<p align="right" style="color:red">
 		O símbolo * indica preenchimento obrigatório!
+	</p>
+	<p>
+		Atenção: cabe ao responsável pela pré-inscrição garantir que as informações 
+		abaixo são corretas e verídicas. Recomendamos fortemente que, em caso de dúvidas, 
+		um médico seja consultado antes da confirmação do envio desta ficha médica.
 	</p>
 </div>
 
@@ -30,6 +35,21 @@
 				$('#' + name_textArea).prop('disabled', true);			
 			}
 		})
+		
+		var SPMaskBehavior = function (val) {
+          return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+        },
+        spOptions = {
+          onKeyPress: function(val, e, field, options) {
+              field.mask(SPMaskBehavior.apply({}, arguments), options);
+            },
+          onChange: function(val, e, field, options) {
+              field.mask(SPMaskBehavior.apply({}, arguments), options);
+          }
+        };
+        $(".phone").mask(SPMaskBehavior, spOptions);
+        $("#cep").mask("00000-000");
+        $("#cpf").mask("000.000.000-00");
 
 
 		$(('input:radio')).click(function() {
@@ -277,7 +297,7 @@
 				<td>
 				<p class="campo">
 					<b>*Telefone 1:</b>
-					<input type="text" name="doctor_phone1" id="doctor_phone1" required <?=$disabled?>
+					<input type="text" class="form-control phone phone1" name="doctor_phone1" placeholder="(ddd) Telefone de contato" required onkeypress="return validateNumberInput(event);" id="doctor_phone1" required <?=$disabled?>
 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')" value="<?=$doctorPhone1?>"
 					size="15px">
@@ -294,15 +314,20 @@
 				<td>
 				<p class="campo">
 					<b>Telefone 2:</b>
-					<input type="text" name="doctor_phone2" id="doctor_phone2" size="15px" value="<?=$doctorPhone2?> <?=$disabled?>">
+					<input type="text" class="form-control phone" name="doctor_phone2" placeholder="(ddd) Telefone secundário" required onkeypress="return validateNumberInput(event);" id="doctor_phone2" size="15px" value="<?=$doctorPhone2?> <?=$disabled?>">
 				</p></td>
 			</tr>
 
 			<tr>
 				<td colspan="4">
+				<p>
+					Atenção: cabe ao responsável pela pré-inscrição garantir que as informações abaixo são corretas 
+					e verídicas. Recomendamos fortemente que, em caso de dúvidas, um médico seja consultado 
+					antes da confirmação do envio desta ficha médica.
+				</p>
 				<p class="required">
 					<input type="checkbox" required name="responsability" value="Ok" <?=$disabled?>>
-					<span style="font-size:20px; color:red">Assumo a veracidade das informações.</span>
+					<span style="font-size:20px; color:red">Assumo a correção e veracidade das informações</span>
 					<br>
 				</p></td>
 			</tr>

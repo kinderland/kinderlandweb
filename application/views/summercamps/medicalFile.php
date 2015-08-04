@@ -14,6 +14,21 @@
 				$('#' + name_textArea).prop('disabled', false);			
 			}
 		})
+
+		var SPMaskBehavior = function (val) {
+	          return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+	        },
+	        spOptions = {
+	          onKeyPress: function(val, e, field, options) {
+	              field.mask(SPMaskBehavior.apply({}, arguments), options);
+	            },
+	          onChange: function(val, e, field, options) {
+	              field.mask(SPMaskBehavior.apply({}, arguments), options);
+	          }
+	        };
+	        $(".phone").mask(SPMaskBehavior, spOptions);
+	        $("#cep").mask("00000-000");
+	        $("#cpf").mask("000.000.000-00");
 	}); 
 </script>
 
@@ -251,7 +266,7 @@
 				<td>
 				<p class="campo">
 					<b>*Telefone 1:</b>
-					<input type="text" name="doctor_phone1" id="doctor_phone1" required
+					<input type="text" name="doctor_phone1"  class="form-control phone phone1"  placeholder="(ddd) Telefone de contato" required onkeypress="return validateNumberInput(event);" id="doctor_phone1" required
 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')"
 					size="15px">
@@ -268,7 +283,7 @@
 				<td>
 				<p class="campo">
 					<b>Telefone 2:</b>
-					<input type="text" name="doctor_phone2" id="doctor_phone2" size="15px">
+					<input type="text" name="doctor_phone2"  class="form-control phone" placeholder="(ddd) Telefone secundário" required onkeypress="return validateNumberInput(event);" id="doctor_phone2" size="15px">
 				</p></td>
 			</tr>
 
