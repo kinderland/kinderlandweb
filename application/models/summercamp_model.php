@@ -391,14 +391,13 @@ class summercamp_model extends CK_Model {
 				INNER JOIN person p on p.person_id = scs.person_user_id
 				INNER JOIN parent_summer_camp_subscription pscs on pscs.parent_id = p.person_id
 				INNER JOIN person pc on c.person_id = pc.person_id
-				WHERE c.colonist_id in (SELECT p1.colonist_id
-							FROM parent_summer_camp_subscription p1
-							INNER JOIN summer_camp sc1 on sc1.summer_camp_id = p1.summer_camp_id
-							INNER JOIN parent_summer_camp_subscription p2 on p2.parent_id = p1.parent_id
-							INNER JOIN summer_camp sc2 on sc2.summer_camp_id = p2.summer_camp_id
-							WHERE p1.colonist_id != p2.colonist_id
-							AND DATE_PART('YEAR', sc1.date_start) = ?
-							AND DATE_PART('YEAR', sc2.date_start) = ?)";
+				WHERE c.colonist_id in (SELECT DISTINCT scs1.colonist_id FROM summer_camp sc1, summer_camp sc2, summer_camp_subscription scs1, summer_camp_subscription scs2 
+							WHERE scs1.person_user_id = scs2.person_user_id
+							AND scs1.colonist_id != scs2.colonist_id
+							AND sc1.summer_camp_id = scs1.summer_camp_id
+							AND sc2.summer_camp_id = scs2.summer_camp_id
+							AND DATE_PART('YEAR',sc1.date_start)=?
+							AND DATE_PART('YEAR',sc2.date_start)=?)";
     	
     	
     	    	$resultSet = $this -> executeRows($this->db,$sql,array($year,$year));

@@ -49,7 +49,7 @@
             }
 
             function confirmValidation(colonist_id, colonist_name, summer_camp_id) {
-                if(confirm("Deseja realmente confirmar o a validação do colonista "+colonist_name+"?")) {
+                if(confirm("Deseja realmente confirmar a validação do colonista "+colonist_name+"?")) {
                     var formName = "#form_validation_"+colonist_id+"_"+summer_camp_id;
                     var radioGender = $(formName + ' input[name=gender]:checked').val();
                     if(radioGender != "true" && radioGender != "false"){
