@@ -570,7 +570,8 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->acceptGeneralRules($camp_id, $colonist_id);
-        $this->index();
+        //$this->index();
+        redirect("summercamps/index");
     }
 
     public function acceptTripAuthorization() {
@@ -578,14 +579,16 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateTripAuthorization($camp_id, $colonist_id, 't');
-        $this->index();
+        //$this->index();
+        redirect("summercamps/index");
     }
 
     public function rejectTripAuthorization() {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateTripAuthorization($camp_id, $colonist_id, 'f');
-        $this->index();
+        //this->index();
+        redirect("summercamps/index");
     }
 
     public function viewColonistInfo() {

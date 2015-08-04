@@ -537,6 +537,54 @@
             <br class = "mother mother-form"/>            
             <br class = "mother mother-form"/>
 
+          <br/>
+            <br/>
+            <label class="control-label">Opcional: indique até 3 amigos(as) que gostaria que fizessem parte do quarto do(a) colonista: </label>
+            <br/>
+            <br/>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 1: </label>
+                    <div class="col-lg-6">
+                        <input type="text" disabled class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
+                        value="<?php
+                               if (!empty($roommate1)) {
+                                   echo $roommate1;
+                               }
+                               ?>"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 2: </label>
+                    <div class="col-lg-6">
+                        <input type="text" disabled class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
+                        value="<?php
+                               if (!empty($roommate2)) {
+                                   echo $roommate2;
+                               }
+                               ?>"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 3: </label>
+                    <div class="col-lg-6">
+                        <input type="text" disabled class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
+                        value="<?php
+                               if (!empty($roommate3)) {
+                                   echo $roommate3;
+                               }
+                               ?>"/>
+                    </div>
+                </div>
+            </div>
+
         </form>
     </div>
 </div>
