@@ -149,19 +149,19 @@ class Validation {
 	}
 
 	public function describeValidation() {
-		$text = "Motivos:";
+		$text = "<b>Motivos:</b>";
 		if ($this -> colonistBirthdayOk === "f")
-			$text .= "<br>Data de nascimento: " . $this -> colonistBirthdayMsg;
+			$text .= "<br><b>Data de nascimento:</b> " . $this -> colonistBirthdayMsg;
 		if ($this -> colonistGenderOk === "f")
-			$text .= "<br>Genero: " . $this -> colonistGenderMsg;
+			$text .= "<br><b>Genero:</b> " . $this -> colonistGenderMsg;
 		if ($this -> colonistNameOk === "f")
-			$text .= "<br>: Nome completo do colonista" . $this -> colonistNameMsg;
+			$text .= "<br><b>Nome completo do colonista:</b> " . $this -> colonistNameMsg;
 		if ($this -> colonistParentsNameOk === "f")
-			$text .= "<br>Nome completo dos pais: " . $this -> colonistParentsNameMsg;
+			$text .= "<br><b>Nome completo dos pais:</b> " . $this -> colonistParentsNameMsg;
 		if ($this -> colonistIdentityOk === "f")
-			$text .= "<br>Documento de identificação: " . $this -> colonistIdentityMsg;
+			$text .= "<br><b>Documento de identificação:</b> " . $this -> colonistIdentityMsg;
 		if ($this -> colonistPictureOk === "f")
-			$text .= "<br>Foto 3x4: " . $this -> colonistPictureMsg;
+			$text .= "<br><b>Foto 3x4:</b> " . $this -> colonistPictureMsg;
 		return $text;
 	}
 	
