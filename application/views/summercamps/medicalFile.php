@@ -266,8 +266,8 @@
 				<td>
 				<p class="campo">
 					<b>*Telefone 1:</b>
-					<input type="text" name="doctor_phone1"  class="form-control phone phone1"  placeholder="(ddd) Telefone de contato" required onkeypress="return validateNumberInput(event);" id="doctor_phone1" required
-					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+					<input type="text" name="doctor_phone1"  class="form-control phone phone1"  placeholder="(ddd) Telefone de contato" onkeypress="return validateNumberInput(event);" id="doctor_phone1"
+					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')" required
 					oninput="setCustomValidity('')"
 					size="15px">
 				</p></td>
@@ -283,7 +283,7 @@
 				<td>
 				<p class="campo">
 					<b>Telefone 2:</b>
-					<input type="text" name="doctor_phone2"  class="form-control phone" placeholder="(ddd) Telefone secundário" required onkeypress="return validateNumberInput(event);" id="doctor_phone2" size="15px">
+					<input type="text" name="doctor_phone2"  class="form-control phone" placeholder="(ddd) Telefone secundário" onkeypress="return validateNumberInput(event);" id="doctor_phone2" size="15px">
 				</p></td>
 			</tr>
 
