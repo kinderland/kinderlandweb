@@ -406,11 +406,13 @@ class SummerCamps extends CK_Controller {
 
         if ($personUserId !== $responsableId) {
             $this->Logger->error("Responsavel de id $responsableId tentou deletar o colonista $colonistId da campanha $campId que pertence ao responsavel $personUserId");
-            $this->index();
+            //$this->index();
         } else {
             $this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP);
-            $this->index();
+            //$this->index();
         }
+
+        redirect("summercamps/index");
     }
 
     public function medicalFile($data) {
