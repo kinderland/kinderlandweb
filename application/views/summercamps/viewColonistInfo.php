@@ -83,8 +83,14 @@
 <div class="row">
     <div class="col-lg-12 middle-content">
         <div class="row">
-            <div class="col-lg-8"><h4>Edição de pré-inscrição de colonista na colonia: <?=$summerCamp -> getCampName() ?></h4></div>
+            <div class="col-lg-8"><h4>Visualização de pré-inscrição de colonista na colonia: <?=$summerCamp -> getCampName() ?></h4></div>
             <div class="col-lg-4"><h6><span class="red_letters">Campos com * são de preenchimento obrigatório.</span></h6></div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4"><a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonistId ?>&camp_id=<?= $id ?>&document_type=3"> <button class="btn btn-primary">Ver documento de identificação</button> </a> </div>
+            <div class="col-lg-4"><a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonistId ?>&camp_id=<?= $id ?>&document_type=5"> <button class="btn btn-primary">Ver foto 3x4</button> </a></div>
+            <div class="col-lg-4">&nbsp; <!-- Incluir boto para visualizar a ficha medica aqui --></div>
         </div>
         <hr />
 

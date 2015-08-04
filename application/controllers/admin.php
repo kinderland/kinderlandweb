@@ -180,7 +180,6 @@ class Admin extends CK_Controller {
 	public function validateColonists() {
 		$this->Logger->info("Running: ". __METHOD__);
 		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . 
-						SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . 
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
 		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYearForValidation(date("Y"), $shownStatus);
@@ -226,6 +225,8 @@ class Admin extends CK_Controller {
 		$birthday = $_POST['birthday'];
 		$parentsName = $_POST['parents_name'];
 		$colonistName = $_POST['colonist_name'];
+
+		$this->Logger->info("User validating this colonist: " . $this->session->userdata("fullname") . "[" . $this->session->userdata("user_id") . "]");
 
 		$status = 0;
 		if($gender == "true" && $picture == "true" && $identity == "true" && $birthday == "true" && $parentsName == "true" && $colonistName == "true")
@@ -347,6 +348,7 @@ class Admin extends CK_Controller {
 		if($responsableAddress)
 			if($address->getAddressId() == $responsableAddress->getAddressId())
 				$data["sameAddressResponsable"] = "s";
+		$data["colonistId"] = $colonistId;
 		$data["summerCamp"] = $this -> summercamp_model -> getSummerCampById($summerCampId);
 		$data["id"] = $summerCampId;
 		$data["fullName"] = $camper -> getFullName();

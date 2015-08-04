@@ -439,10 +439,10 @@
                             ?>/> Preencher os dados de responsáveis legais <br />
                         <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="dad"
                         <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "dad")) echo "checked='checked'" ?>
-                               /> Utilizar os dados do usuário como pai / primeiro responsável legal<br />
+                               /> Utilizar os dados do responsável pela inscrição como pai / primeiro responsável legal<br />
                         <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="mother"
                         <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "mother")) echo "checked='checked'" ?>
-                               /> Utilizar os dados do usuário como mãe / segundo responsável legal
+                               /> Utilizar os dados do responsável pela inscrição como mãe / segundo responsável legal
                     </div>
 
 

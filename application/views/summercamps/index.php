@@ -157,11 +157,8 @@ continue;
 				</button>
 				<?php } ?>
 				<br>
-				<br>
-				<br>
-				<br>
 				<button class="btn btn-warning" onclick='excluir(<?=$summerCampInscription -> getSummerCampId() ?>,<?=$summerCampInscription -> getColonistId() ?>,"<?=$summerCampInscription -> getFullname() ?>",<?=$subscribed?>)' class="btn">
-					Excluir
+					Excluir pré inscrição
 				</button>
 			</td>
 
