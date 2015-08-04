@@ -17,6 +17,7 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/parents_notregistered">Parentes Cadastrados por Colonista</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/responsables_notparents">Responsáveis que não são os Pais</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/same_parents">Responsáveis com mais de um Colonista</option>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/subscriptions_notsubmitted">Pré-inscrições não Enviadas</option>
                 </select>
             </div>
         </div>
