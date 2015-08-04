@@ -131,6 +131,13 @@ class SummerCamps extends CK_Controller {
             $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
             $data['miniCamp'] = $miniCamp;
         }
+
+        if($camper -> getRoommate1())
+            $data['roommate1'] = $camper -> getRoommate1();
+        if($camper -> getRoommate2())
+            $data['roommate2'] = $camper -> getRoommate2();
+        if($camper -> getRoommate3())
+            $data['roommate3'] = $camper -> getRoommate3();
         $this->loadView('summercamps/editSubscriptionColonistForm', $data);
     }
 
@@ -171,6 +178,9 @@ class SummerCamps extends CK_Controller {
         $motherEmail = $this->input->post('motherEmail', TRUE);
         $responsableId = $this->session->userdata("user_id");
         $summerCampMini = $this->input->post('summerCampMini', TRUE);
+        $roommate1 = $this->input->post('roommate1', TRUE);
+        $roommate2 = $this->input->post('roommate2', TRUE);
+        $roommate3 = $this->input->post('roommate3', TRUE);
 
         try {
             $this->Logger->info("Editing colonist $summerCampId");
@@ -189,7 +199,7 @@ class SummerCamps extends CK_Controller {
             } else {
                 $school = $school[0];
             }
-            $this->summercamp_model->editColonistSubscription($summerCampId, $colonistId, $school, $schoolYear);
+            $this->summercamp_model->editColonistSubscription($summerCampId, $colonistId, $school, $schoolYear, $roommate1, $roommate2, $roommate3);
 
             if ($phone1 || $phone2)
                 $this->telephone_model->updatePhone($personId, $phone1, $personId);
@@ -296,8 +306,6 @@ class SummerCamps extends CK_Controller {
         $roommate3 = $this->input->post('roommate3', TRUE);
         $summerCampMini = $this->input->post('summerCampMini', TRUE);
 
-
-
         try {
             $this->Logger->info("Inserting new colony subscription");
             //Inicia transação no banco
@@ -308,6 +316,10 @@ class SummerCamps extends CK_Controller {
                 $addressId = $this->address_model->getAddressByPersonId($responsableId)->getAddressId();
             } else
                 $addressId = $this->address_model->insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
+
+            if($addressId == 0) // If necessario para evitar propagacao de erros em query resultando em colonista nao inscrito
+                $addressId = NULL;
+
             $personId = $this->person_model->insertNewPerson($fullname, $gender, NULL, $addressId);
             $colonistId = $this->colonist_model->insertColonist($personId, $birthdate, $documentNumber, $documentType);
             if ($school[0] == -1) {
@@ -370,8 +382,6 @@ class SummerCamps extends CK_Controller {
                 $sleepEnuresis = $this->input->post('sleepEnuresis', TRUE);
                 $this->summercamp_model->saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
             }
-
-
 
             $this->generic_model->commitTransaction();
 
@@ -629,6 +639,14 @@ class SummerCamps extends CK_Controller {
             $data["motherEmail"] = $mother->email;
             $data["motherPhone"] = $mother->phone1;
         }
+
+        if($camper -> getRoommate1())
+            $data['roommate1'] = $camper -> getRoommate1();
+        if($camper -> getRoommate2())
+            $data['roommate2'] = $camper -> getRoommate2();
+        if($camper -> getRoommate3())
+            $data['roommate3'] = $camper -> getRoommate3();
+
         $this->loadView('summercamps/viewColonistInfo', $data);
     }
 

@@ -192,11 +192,11 @@ class summercamp_model extends CK_Model {
         return FALSE;
     }
 
-    public function editColonistSubscription($summerCampId, $colonistId, $schoolName, $schoolYear) {
+    public function editColonistSubscription($summerCampId, $colonistId, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3) {
         $this->Logger->info("Running: " . __METHOD__);
 
-        $sql = 'UPDATE summer_camp_subscription SET school_name=?, school_year=? where summer_camp_id = ? and colonist_id = ? ';
-        $returnId = $this->execute($this->db, $sql, array($schoolName, $schoolYear, intval($summerCampId), intval($colonistId)));
+        $sql = 'UPDATE summer_camp_subscription SET school_name=?, school_year=?, roommate1=?, roommate2=?, roommate3=? where summer_camp_id = ? and colonist_id = ? ';
+        $returnId = $this->execute($this->db, $sql, array($schoolName, $schoolYear, $roommate1, $roommate2, $roommate3, intval($summerCampId), intval($colonistId)));
         if ($returnId)
             return TRUE;
 
@@ -789,6 +789,12 @@ class summercamp_model extends CK_Model {
 
     public function insertSchool($school) {
         $this->Logger->info("Running: " . __METHOD__);
+        $sql = "Select * from school where school_name = ?";
+        $resultSet = $this->executeRow($this->db, $sql, array($school));
+        if ($resultSet) {
+            return TRUE;
+        }
+       
         $sql = "insert into school values (?)";
         $resultSet = $this->execute($this->db, $sql, array($school));
         if ($resultSet) {

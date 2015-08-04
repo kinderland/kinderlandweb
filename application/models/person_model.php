@@ -10,7 +10,7 @@ class person_model extends CK_Model{
 		$this->Logger->info("Running: " . __METHOD__);
 
 		$sql = 'INSERT INTO person (fullname, date_created, gender, email, address_id) VALUES (?, current_timestamp, ?, ?, ?)';
-		$returnId = $this->executeReturningId($this->db, $sql, array($fullname, $gender, $email, intval($addressId)));
+		$returnId = $this->executeReturningId($this->db, $sql, array($fullname, $gender, $email, $addressId));
 		if($returnId)
 			return $returnId;
 
