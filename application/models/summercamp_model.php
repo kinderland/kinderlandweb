@@ -261,7 +261,7 @@ class summercamp_model extends CK_Model {
         $this->Logger->info("Running: " . __METHOD__);
 
         $sql = 'Select * from document where summer_camp_id = ? and colonist_id = ? and document_type = ? order by date_created desc';
-        $resultSet = $this->executeRows($this->db, $sql, array($camp_id, $colonist_id, $document_type));
+        $resultSet = $this->executeRowsNoLog($this->db, $sql, array($camp_id, $colonist_id, $document_type));
 
         $document = FALSE;
 
@@ -281,7 +281,7 @@ class summercamp_model extends CK_Model {
         if ($document_type != DOCUMENT_MEDICAL_FILE && $document_type != DOCUMENT_TRIP_AUTHORIZATION && $document_type != DOCUMENT_GENERAL_RULES) {
 
             $sql = 'Select * from document where summer_camp_id = ? and colonist_id = ? and document_type = ? order by date_created desc';
-            $resultSet = $this->executeRows($this->db, $sql, array($camp_id, $colonist_id, $document_type));
+            $resultSet = $this->executeRowsNoLog($this->db, $sql, array($camp_id, $colonist_id, $document_type));
 
             if ($resultSet)
                 foreach ($resultSet as $row) {
