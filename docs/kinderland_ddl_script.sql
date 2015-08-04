@@ -673,3 +673,18 @@ CREATE OR REPLACE VIEW v_colonists_with_responsables_not_parents AS
 		INNER JOIN person p1 on p1.person_id = scs.person_user_id
 		WHERE c.colonist_id not in (SELECT colonist_id FROM parent_summer_camp_subscription));
 
+CREATE OR REPLACE VIEW v_subscriptions_not_submitted as
+	(SELECT c.colonist_id as colonist_id, p.fullname as colonist_name, p1.person_id as responsable_id, p1.fullname as responsable_name, scs.situation as situation, 
+	scss.description as situation_description, sc.summer_camp_id as camp_id, sc.camp_name as camp_name, DATE_PART('YEAR',date_start) as year FROM person p
+	INNER JOIN colonist c on c.person_id = p.person_id
+	INNER JOIN summer_camp_subscription scs on c.colonist_id = scs.colonist_id
+	INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
+	INNER JOIN person p1 on p1.person_id = scs.person_user_id
+	INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+	WHERE scs.situation in ('0','6')
+	AND c.colonist_id in (SELECT colonist_id FROM medical_file)
+	AND c.colonist_id in (SELECT colonist_id FROM summer_camp_subscription WHERE accepted_travel_terms = 'TRUE')
+	AND c.colonist_id in (SELECT colonist_id FROM document WHERE document_type = 3)
+	AND c.colonist_id in (SELECT colonist_id FROM summer_camp_subscription WHERE accepted_terms = 'TRUE')
+	AND c.colonist_id in (SELECT colonist_id FROM document WHERE document_type = 5));
+

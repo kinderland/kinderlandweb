@@ -406,6 +406,22 @@ class summercamp_model extends CK_Model {
     	
     	    	return $resultSet;
     }
+    
+    public function getColonistsDatailedSubscriptionsNotSubmitted($year,$summercampId = null) {
+    	
+    	$sql = "SELECT * FROM v_subscriptions_not_submitted WHERE year = ?";
+    	
+    	if($summercampId != null) {
+    		$sql = $sql . "AND camp_id = ?";
+    		$resultSet = $this -> executeRows($this->db,$sql,array($year,$summercampId));
+    	}
+    	else {
+    		$resultSet = $this -> executeRows($this->db,$sql, array($year));
+    	}
+    	
+    	return $resultSet;
+    
+    }
     	
     public function getColonistsResponsableNotParentsByYear($year) {
     	
