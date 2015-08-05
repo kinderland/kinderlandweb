@@ -9,13 +9,14 @@
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
-                    <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
+                     <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
                         <option value="<?= $this->config->item('url_link'); ?>admin/manageCamps">Cadastro de colônias</option>
+                        <option value="<?= $this->config->item('url_link'); ?>admin/queue">Fila de Espera</option>
                     <?php } ?>
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
                         <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/validateColonists">Validação</option>
                     <?php } ?>
-                    
+                   
                 </select>
             </div>
         </div>

@@ -32,7 +32,7 @@
 			}
 
 		function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
-			return '';
+			return 'Apresentando ' + totalRow + ' sócios, de um total de ' + totalRowUnfiltered+ ' sócios';
 		}
 
 		function sortLowerCase(l, r) {

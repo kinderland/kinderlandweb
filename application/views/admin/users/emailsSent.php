@@ -55,7 +55,7 @@
 					} else {
 						echo '<img src="' . $this -> config -> item('assets') . 'images/payment/redicon.png" width="20px" height="20px"/>';
 					} ?></td>
-					<td><button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="showEmailMessage('<?=$email->date_sent ?>', '<?= $subject ?>', '<?=$emailBody?>');"> Ler mensagem </button></td>
+					<td><button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="showEmailMessage('<?=$email->date_sent ?>', '<?= $subject ?>', '<?=str_replace("\n", "", $emailBody);?>');"> Ler mensagem </button></td>
 				</tr>
 				<?php
 				}

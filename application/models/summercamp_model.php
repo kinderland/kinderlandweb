@@ -192,11 +192,11 @@ class summercamp_model extends CK_Model {
         return FALSE;
     }
 
-    public function editColonistSubscription($summerCampId, $colonistId, $schoolName, $schoolYear) {
+    public function editColonistSubscription($summerCampId, $colonistId, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3) {
         $this->Logger->info("Running: " . __METHOD__);
 
-        $sql = 'UPDATE summer_camp_subscription SET school_name=?, school_year=? where summer_camp_id = ? and colonist_id = ? ';
-        $returnId = $this->execute($this->db, $sql, array($schoolName, $schoolYear, intval($summerCampId), intval($colonistId)));
+        $sql = 'UPDATE summer_camp_subscription SET school_name=?, school_year=?, roommate1=?, roommate2=?, roommate3=? where summer_camp_id = ? and colonist_id = ? ';
+        $returnId = $this->execute($this->db, $sql, array($schoolName, $schoolYear, $roommate1, $roommate2, $roommate3, intval($summerCampId), intval($colonistId)));
         if ($returnId)
             return TRUE;
 
@@ -261,7 +261,7 @@ class summercamp_model extends CK_Model {
         $this->Logger->info("Running: " . __METHOD__);
 
         $sql = 'Select * from document where summer_camp_id = ? and colonist_id = ? and document_type = ? order by date_created desc';
-        $resultSet = $this->executeRows($this->db, $sql, array($camp_id, $colonist_id, $document_type));
+        $resultSet = $this->executeRowsNoLog($this->db, $sql, array($camp_id, $colonist_id, $document_type));
 
         $document = FALSE;
 
@@ -281,7 +281,7 @@ class summercamp_model extends CK_Model {
         if ($document_type != DOCUMENT_MEDICAL_FILE && $document_type != DOCUMENT_TRIP_AUTHORIZATION && $document_type != DOCUMENT_GENERAL_RULES) {
 
             $sql = 'Select * from document where summer_camp_id = ? and colonist_id = ? and document_type = ? order by date_created desc';
-            $resultSet = $this->executeRows($this->db, $sql, array($camp_id, $colonist_id, $document_type));
+            $resultSet = $this->executeRowsNoLog($this->db, $sql, array($camp_id, $colonist_id, $document_type));
 
             if ($resultSet)
                 foreach ($resultSet as $row) {
@@ -379,6 +379,49 @@ class summercamp_model extends CK_Model {
     	
     	return $resultSet;    	
     }
+    
+    public function getColonistDetailedSameParentsByYearAndSummerCamp($year) {
+    	    	$sql = "SELECT DISTINCT c.colonist_id as colonist_id, pc.fullname as colonist_name, p.fullname as responsable, p.person_id as responsable_id,
+				sc.summer_camp_id as camp_id, sc.camp_name as camp_name, DATE_PART('YEAR',sc.date_start) as year,
+    			scss.description as situation_description, scs.situation as situation
+				FROM summer_camp sc
+				INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+    			INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+				INNER JOIN colonist c on c.colonist_id = scs.colonist_id
+				INNER JOIN person p on p.person_id = scs.person_user_id
+				INNER JOIN parent_summer_camp_subscription pscs on pscs.parent_id = p.person_id
+				INNER JOIN person pc on c.person_id = pc.person_id
+				WHERE c.colonist_id in (SELECT DISTINCT scs1.colonist_id FROM summer_camp sc1, summer_camp sc2, summer_camp_subscription scs1, summer_camp_subscription scs2 
+							WHERE scs1.person_user_id = scs2.person_user_id
+							AND scs1.colonist_id != scs2.colonist_id
+							AND sc1.summer_camp_id = scs1.summer_camp_id
+							AND sc2.summer_camp_id = scs2.summer_camp_id
+							AND DATE_PART('YEAR',sc1.date_start)=?
+							AND DATE_PART('YEAR',sc2.date_start)=?)";
+    	
+    	
+    	    	$resultSet = $this -> executeRows($this->db,$sql,array($year,$year));
+    	
+    	
+    	    	return $resultSet;
+    }
+    
+    public function getColonistsDatailedSubscriptionsNotSubmitted($year,$summercampId = null) {
+    	
+    	$sql = "SELECT * FROM v_subscriptions_not_submitted WHERE year = ?";
+    	
+    	if($summercampId != null) {
+    		$sql = $sql . "AND camp_id = ?";
+    		$resultSet = $this -> executeRows($this->db,$sql,array($year,$summercampId));
+    	}
+    	else {
+    		$resultSet = $this -> executeRows($this->db,$sql, array($year));
+    	}
+    	
+    	return $resultSet;
+    
+    }
+    	
     public function getColonistsResponsableNotParentsByYear($year) {
     	
     	$sql = "SELECT * FROM v_colonists_with_responsables_not_parents
@@ -761,6 +804,12 @@ class summercamp_model extends CK_Model {
 
     public function insertSchool($school) {
         $this->Logger->info("Running: " . __METHOD__);
+        $sql = "Select * from school where school_name = ?";
+        $resultSet = $this->executeRow($this->db, $sql, array($school));
+        if ($resultSet) {
+            return TRUE;
+        }
+       
         $sql = "insert into school values (?)";
         $resultSet = $this->execute($this->db, $sql, array($school));
         if ($resultSet) {

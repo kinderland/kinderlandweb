@@ -49,7 +49,7 @@
             }
 
             function confirmValidation(colonist_id, colonist_name, summer_camp_id) {
-                if(confirm("Deseja realmente confirmar o a validação do colonista "+colonist_name+"?")) {
+                if(confirm("Deseja realmente confirmar a validação do colonista "+colonist_name+"?")) {
                     var formName = "#form_validation_"+colonist_id+"_"+summer_camp_id;
                     var radioGender = $(formName + ' input[name=gender]:checked').val();
                     if(radioGender != "true" && radioGender != "false"){
@@ -238,7 +238,8 @@
 						                        </thead>
 						                        <tbody>
 						                        	<tr>
-						                        		<td> Sexo </td>
+						                        		<td> Sexo <img src="<?= $this->config->item('assets')?>images/kinderland/help.png" width="15" height="15"
+                                                            title="Certificar que o sexo informado para o(a) colonista confere com o documento de identificação. Caso não seja possível identificar pelo documento ou nome do(a) colonista, contactar o responsável pela inscrição antes de validar."/></td>
 						                        		<td> 
 						                        			<input type="radio" name="gender" value="true" <?= (isset($colonist->colonist_gender_ok) && $colonist->colonist_gender_ok == "t")?"checked":"" ?> /> Sim 
                                                             <input type="radio" name="gender" value="false" <?= (isset($colonist->colonist_gender_ok) && $colonist->colonist_gender_ok == "f")?"checked":"" ?> /> Não 
@@ -249,7 +250,8 @@
 						                        	</tr>
 
 						                        	<tr>
-                                                        <td> Nome completo do colonista </td>
+                                                        <td> Nome completo do colonista <img src="<?= $this->config->item('assets')?>images/kinderland/help.png" width="15" height="15"
+                                                            title="Verificar se o nome informado para o(a) colonista confere com o documento de identificação, incluindo todos nomes intermediários e sobrenomes. Validar somente caso pelo menos o primeiro nome e um dos sobrenomes estejam corretos e digitados exatamente como no documento."/> </td>
                                                         <td> 
                                                             <input type="radio" name="colonist_name" value="true" <?= (isset($colonist->colonist_name_ok) && $colonist->colonist_name_ok == "t")?"checked":"" ?> /> Sim 
                                                             <input type="radio" name="colonist_name" value="false" <?= (isset($colonist->colonist_name_ok) && $colonist->colonist_name_ok == "f")?"checked":"" ?> /> Não 
@@ -260,7 +262,9 @@
                                                     </tr>
 
 						                        	<tr>
-						                        		<td> Nome completo dos pais </td>
+						                        		<td> Nome completo dos pais <img src="<?= $this->config->item('assets')?>images/kinderland/help.png" width="15" height="15"
+                                                            title="Verificar se os nomes informados para os(as) responsáveis pelo colonista conferem com o documento de identificação. Validar somente caso pelo menos o primeiro nome e um dos sobrenomes estejam corretos e digitados exatamente como no documento. Este dado é opcional e assim, pode-se validar caso não conste no cadastro do(a) colonista."/>
+                                                        </td>
 						                        		<td> 
                                                             <input type="radio" name="parents_name" value="true" <?= (isset($colonist->colonist_parents_name_ok) && $colonist->colonist_parents_name_ok == "t")?"checked":"" ?> /> Sim 
                                                             <input type="radio" name="parents_name" value="false" <?= (isset($colonist->colonist_parents_name_ok) && $colonist->colonist_parents_name_ok == "f")?"checked":"" ?> /> Não 
@@ -271,7 +275,9 @@
                                                     </tr>
 
                                                     <tr>
-                                                        <td> Data de nascimento </td>
+                                                        <td> Data de nascimento / Ano Escolar <img src="<?= $this->config->item('assets')?>images/kinderland/help.png" width="15" height="15"
+                                                            title="Verificar se a data de nascimento informada no cadastro do(a) colonista confere com o documento de identificação. Além disso, é necessário atentar para colonista(s) com idade consistente com o ano escolar. Também checar se o ano escolar/idade correspondem à temporada de colônia escolhida. Validar apenas se a inscrição estiver de acordo com todos estes casos."/>
+                                                        </td>
                                                         <td> 
                                                             <input type="radio" name="birthday" value="true" <?= (isset($colonist->colonist_birthday_ok) && $colonist->colonist_birthday_ok == "t")?"checked":"" ?> /> Sim 
                                                             <input type="radio" name="birthday" value="false" <?= (isset($colonist->colonist_birthday_ok) && $colonist->colonist_birthday_ok == "f")?"checked":"" ?> /> Não 
@@ -282,7 +288,10 @@
                                                     </tr>
 
 						                        	<tr>
-						                        		<td> <a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonist -> colonist_id ?>&camp_id=<?= $colonist -> summer_camp_id ?>&document_type=3">Documento de identificação</a> </td>
+						                        		<td> <a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonist -> colonist_id ?>&camp_id=<?= $colonist -> summer_camp_id ?>&document_type=3">Documento de identificação</a> 
+                                                            <img src="<?= $this->config->item('assets')?>images/kinderland/help.png" width="15" height="15"
+                                                            title="Verificar se o documento de identificação está legível. É necessário também checar se o tipo de documento é o mesmo informado no cadastro. O arquivo só pode conter um único documento do(a) colonista em processo de inscrição."/>
+                                                        </td>
 						                        		<td> 
 						                        			<input type="radio" name="identity" value="true" <?= (isset($colonist->colonist_identity_ok) && $colonist->colonist_identity_ok == "t")?"checked":"" ?>  /> Sim 
                                                             <input type="radio" name="identity" value="false" <?= (isset($colonist->colonist_identity_ok) && $colonist->colonist_identity_ok == "f")?"checked":"" ?>  /> Não 
@@ -291,9 +300,12 @@
 						                        			<input type="text" name="msg_identity" class="form-control" value="<?= $colonist->colonist_identity_msg ?>"/>
 						                        		</td>
 						                        	</tr>
-
+15
 						                        	<tr>
-						                        		<td> <a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonist -> colonist_id ?>&camp_id=<?= $colonist -> summer_camp_id ?>&document_type=5"> Foto 3x4 </a> </td>
+						                        		<td> <a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonist -> colonist_id ?>&camp_id=<?= $colonist -> summer_camp_id ?>&document_type=5"> Foto 3x4 </a> 
+                                                            <img src="<?= $this->config->item('assets')?>images/kinderland/help.png" width="15" height="15"
+                                                            title="Verificar se a foto do(a) colonista está legível e exibe apenas o rosto. O arquivo só pode conter uma única foto do(a) colonista em processo de inscrição."/>
+                                                        </td>
 						                        		<td> 
 						                        			<input type="radio" name="picture" value="true" <?= (isset($colonist->colonist_picture_ok) && $colonist->colonist_picture_ok == "t")?"checked":"" ?> /> Sim 
                                                             <input type="radio" name="picture" value="false" <?= (isset($colonist->colonist_picture_ok) && $colonist->colonist_picture_ok == "f")?"checked":"" ?> /> Não 

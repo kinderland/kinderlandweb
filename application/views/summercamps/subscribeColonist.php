@@ -440,10 +440,10 @@
                             ?>/> Preencher os dados de responsáveis legais <br />
                         <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="dad"
                         <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "dad")) echo "checked='checked'" ?>
-                               /> Utilizar os dados do usuário como pai / primeiro responsável legal<br />
+                               /> Utilizar os dados do responsável pela inscrição como pai / primeiro responsável legal<br />
                         <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="mother"
                         <?php if (!empty($_POST['responsableDadMother']) && ($_POST['responsableDadMother'] == "mother")) echo "checked='checked'" ?>
-                               /> Utilizar os dados do usuário como mãe / segundo responsável legal
+                               /> Utilizar os dados do responsável pela inscrição como mãe / segundo responsável legal
                     </div>
 
 
@@ -612,7 +612,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="nameResponsible" class="col-lg-6 control-label">Nome do responsável para comunicação imediata em caso de emergência*: </label>
-                        <input Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php
+                        <input required name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php
                         if (!empty($_POST['nameResponsible'])) {
                             echo $_POST['nameResponsible'];
                         }
@@ -624,12 +624,12 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="phoneResponsible" class="col-lg-6 control-label">Telefone do responsável para comunicação em caso de emergência*: </label>
-                        <input Name="phoneResponsible" class="col-lg-3 phone" placeholder="(ddd) Telefone de emergência"
+                        <input name="phoneResponsible" class="col-lg-3 phone" placeholder="(ddd) Telefone de emergência"
                                maxlength="25" value="<?php
                                if (!empty($_POST['phoneResponsible'])) {
                                    echo $_POST['phoneResponsible'];
                                }
-                               ?>"/>
+                               ?>" required />
 
                     </div>
                 </div>
@@ -640,7 +640,7 @@
                     <div class="form-group">
                         <label for="sleepOut" class="col-lg-6 control-label"> Já dormiu fora de casa?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="sleepOut" value="1"
+                            <input required type="radio" name="sleepOut" value="1"
                             <?php
                             if ((!empty($_POST['sleepOut']) && ($_POST['sleepOut'] == "1")))
                                 echo "checked='checked'"
@@ -657,7 +657,7 @@
                     <div class="form-group">
                         <label for="wakeUpEarly" class="col-lg-6 control-label">O colonista costuma acordar cedo?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="wakeUpEarly" value="1"
+                            <input required type="radio" name="wakeUpEarly" value="1"
                             <?php
                             if ((!empty($_POST['wakeUpEarly']) && ($_POST['wakeUpEarly'] == "1")))
                                 echo "checked='checked'"
@@ -674,7 +674,7 @@
                     <div class="form-group">
                         <label for="feedsIndependently" class="col-lg-6 control-label">Alimenta-se com independência?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="feedsIndependently" value="1"
+                            <input required type="radio" name="feedsIndependently" value="1"
                             <?php
                             if ((!empty($_POST['feedsIndependently']) && ($_POST['feedsIndependently'] == "1")))
                                 echo "checked='checked'"
@@ -691,7 +691,7 @@
                     <div class="form-group">
                         <label for="wcIndependent" class="col-lg-6 control-label">Tem autonomia em relação ao uso do banheiro?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="wcIndependent" value="1"
+                            <input required type="radio" name="wcIndependent" value="1"
                             <?php
                             if ((!empty($_POST['wcIndependent']) && ($_POST['wcIndependent'] == "1")))
                                 echo "checked='checked'"
@@ -708,7 +708,7 @@
                     <div class="form-group">
                         <label for="routineToFallAsleep" class="col-lg-6 control-label">O colonista tem algum tipo de rotina, ou ritual para adormecer?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="routineToFallAsleep" value="1"
+                            <input required type="radio" name="routineToFallAsleep" value="1"
                             <?php
                             if ((!empty($_POST['routineToFallAsleep']) && ($_POST['routineToFallAsleep'] == "1")))
                                 echo "checked='checked'"
@@ -724,7 +724,7 @@
                     <div class="form-group">
                         <label for="bunkBed" class="col-lg-6 control-label">Possui alguma restrição quanto ao uso das camas de cima de um beliche?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="bunkBed" value="1"
+                            <input required type="radio" name="bunkBed" value="1"
                             <?php
                             if ((!empty($_POST['bunkBed']) && ($_POST['bunkBed'] == "1")))
                                 echo "checked='checked'"
@@ -740,7 +740,7 @@
                     <div class="form-group">
                         <label for="awakeAtNight" class="col-lg-6 control-label">Costuma acordar a noite?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="awakeAtNight" value="1"
+                            <input required type="radio" name="awakeAtNight" value="1"
                             <?php
                             if ((!empty($_POST['awakeAtNight']) && ($_POST['awakeAtNight'] == "1")))
                                 echo "checked='checked'"
@@ -756,7 +756,7 @@
                     <div class="form-group">
                         <label for="sleepwalk" class="col-lg-6 control-label">Apresenta sonambulismo?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="sleepwalk" value="1"
+                            <input required type="radio" name="sleepwalk" value="1"
                             <?php
                             if ((!empty($_POST['sleepwalk']) && ($_POST['sleepwalk'] == "1")))
                                 echo "checked='checked'"
@@ -772,7 +772,7 @@
                     <div class="form-group">
                         <label for="sleepEnuresis" class="col-lg-6 control-label">Apresenta enurese noturna?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="sleepEnuresis" value="1"
+                            <input required type="radio" name="sleepEnuresis" value="1"
                             <?php
                             if (!empty($_POST['sleepEnuresis']) && ($_POST['sleepEnuresis'] == "1"))
                                 echo "checked='checked'"

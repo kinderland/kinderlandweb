@@ -44,6 +44,78 @@ class Admin extends CK_Controller {
 	public function createCamp() {
 		$this -> loadView("admin/camps/insert_camp");
 	}
+	
+	public function queue() {
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date=date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+		{
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+	
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+	
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+	
+		$campChosen = 0;
+		$camps = array(0 => "Colônia Verão", 1 => "Mini Kinderland");
+	
+		if (isset($_GET['colonia_f']))
+			$campChosen = $_GET['colonia_f'];
+	
+		$data['colonia_escolhida'] = $campChosen;
+		$data['camps'] = $camps;
+	
+		$miniCamp = $campChosen;
+	
+		$statusCamps = $this -> summercamp_model -> getMiniCampsOrNotByYear($year,$miniCamp);
+	
+		$campsId = array();
+	
+		if($statusCamps!=null) {
+			foreach($statusCamps as $statusCamp) {
+				$campsId[] = $statusCamp -> getCampId();
+			}
+		}
+	
+		$selected = 0;
+		$opcoes = array(0 => "Sócios", 1 => "Não Sócios", 2 => "Todos");
+			
+		if (isset($_GET['opcao_f']))
+			$selected = $_GET['opcao_f'];
+	
+		$data['selecionado'] = $selected;
+		$data['opcoes'] = $opcoes;
+	
+		$people = array();
+		$peopleId = array();
+		$peopleFinal = array();
+		$campsIdStr = "";
+		if($campsId != null && count($campsId) > 0){
+			$campsIdStr = $campsId[0];
+			for($i = 1; $i < count($campsId); $i++)
+				$campsIdStr .= "," . $campsId[$i];
+		}
+		$people = $this -> summercamp_model -> getAssociatedOrNotByStatusAndSummerCamp($campsIdStr, $selected);
+			
+		$data['people'] = $people;
+		$this -> loadReportView("admin/camps/queue", $data);
+	}
 
 	public function insertNewCamp(){
 		$this->Logger->info("Running: ". __METHOD__);
@@ -108,7 +180,6 @@ class Admin extends CK_Controller {
 	public function validateColonists() {
 		$this->Logger->info("Running: ". __METHOD__);
 		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . 
-						SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . 
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
 						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
 		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYearForValidation(date("Y"), $shownStatus);
@@ -154,6 +225,8 @@ class Admin extends CK_Controller {
 		$birthday = $_POST['birthday'];
 		$parentsName = $_POST['parents_name'];
 		$colonistName = $_POST['colonist_name'];
+
+		$this->Logger->info("User validating this colonist: " . $this->session->userdata("fullname") . "[" . $this->session->userdata("user_id") . "]");
 
 		$status = 0;
 		if($gender == "true" && $picture == "true" && $identity == "true" && $birthday == "true" && $parentsName == "true" && $colonistName == "true")
@@ -275,6 +348,7 @@ class Admin extends CK_Controller {
 		if($responsableAddress)
 			if($address->getAddressId() == $responsableAddress->getAddressId())
 				$data["sameAddressResponsable"] = "s";
+		$data["colonistId"] = $colonistId;
 		$data["summerCamp"] = $this -> summercamp_model -> getSummerCampById($summerCampId);
 		$data["id"] = $summerCampId;
 		$data["fullName"] = $camper -> getFullName();
