@@ -3,6 +3,7 @@
 
 
 <script>
+
     function verifyOtherSchool() {
         var val = $("#school_select").val();
         if (val == -1) {

@@ -14,11 +14,12 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/polyfiller.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.widgets.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
 
     </head>
     <body>

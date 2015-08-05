@@ -64,3 +64,5 @@ function confirmPassword(password, confPassword) {
 
     return ok;
 }
+
+jQuery.webshims.polyfill('forms');
