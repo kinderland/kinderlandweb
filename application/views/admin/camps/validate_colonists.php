@@ -300,7 +300,7 @@
 						                        			<input type="text" name="msg_identity" class="form-control" value="<?= $colonist->colonist_identity_msg ?>"/>
 						                        		</td>
 						                        	</tr>
-15
+
 						                        	<tr>
 						                        		<td> <a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonist -> colonist_id ?>&camp_id=<?= $colonist -> summer_camp_id ?>&document_type=5"> Foto 3x4 </a> 
                                                             <img src="<?= $this->config->item('assets')?>images/kinderland/help.png" width="15" height="15"
