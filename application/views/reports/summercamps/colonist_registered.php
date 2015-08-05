@@ -47,11 +47,11 @@
 
 		function getCSVName(){
 			var filtros = $(".datatable-filter");
-			var filtroNomeColonista = filtros[0].value;
-			var filtroColonia = filtros[1].value;
-			var filtroNomeResponsavel = filtros[2].value;
-			var filtroEmail = filtros[3].value;
-			var filtroStatus = filtros[4].value;
+			var filtroNomeColonista = filtros[1].value;
+			var filtroColonia = filtros[2].value;
+			var filtroNomeResponsavel = filtros[3].value;
+			var filtroEmail = filtros[4].value;
+			var filtroStatus = filtros[0].value;
 			var nomePadrao = "inscricoes";
 			
 			
@@ -109,10 +109,10 @@
 					return nomePadrao.concat("_filtrado_por_colonista_".concat(filtroNomeColonista));
 				}				
 				else if (filtroNomeColonista == "") {
-					return nomePadrao.concat("_filtrado_por_resposavel_".concat(filtroNomeResponsavel));
+					return nomePadrao.concat("_filtrado_por_responsavel_".concat(filtroNomeResponsavel));
 				}
 				else {
-					nomePadrao = nomePadrao.concat("_filtrado_por_resposavel_".concat(filtroNomeResponsavel));
+					nomePadrao = nomePadrao.concat("_filtrado_por_responsavel_".concat(filtroNomeResponsavel));
 					return nomePadrao.concat("_e_por_colonista_".concat(filtroNomeColonista));
 				}
 			}
@@ -127,8 +127,8 @@
     		for (var i = 0, row; row = table.rows[i]; i++) {
     			var data2 = []
             	//Nome, retira pega o que esta entre um <> e outro <>
-				data2.push(row.cells[3].innerHTML);
-            	data2.push(row.cells[2].innerHTML.split("<")[1].split(">")[1]);
+				data2.push(row.cells[4].innerHTML);
+            	data2.push(row.cells[3].innerHTML.split("<")[1].split(">")[1]);
             	data.push(data2)
 	        } 
 	        if(i==0){
@@ -174,8 +174,8 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, true, sortLowerCase, sortLowerCase, true],
-				filters : [true, selectTodas, true, true, selectTodos],
+				sort : [true, sortLowerCase, true, sortLowerCase, sortLowerCase],
+				filters : [selectTodos, true, selectTodas, true, true],
 				filterText : 'Escreva para filtrar... ',
 				counterText	: showCounter
 			});
@@ -202,11 +202,12 @@
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
+                                <th> Status da Inscrição </th>
                                 <th> Nome do Colonista </th>
                                 <th> Colônia </th>
                                 <th> Responsável </th>
                                 <th> E-mail do Responsável </th>
-                                <th> Status da Inscrição </th>
+                                
                             </tr>
                         </thead>
                         <tbody id="tablebody">
@@ -214,29 +215,30 @@
                             foreach ($colonists as $colonist) {
                                 ?>
                                 <tr>
+	                                <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><font color="
+	                                <?php
+	                                    switch ($colonist->situation) {
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION: echo "#061B91"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "#017D50"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS: echo "#FF0000"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN: echo "#555555"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED: echo "#FF0000"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED: echo "#FF0000"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP: echo "#FF0000"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE: echo "#555555"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "#061B91"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50"; break;
+	                                    }
+	                                ?>"><?= $colonist -> situation_description ?></td>
+	                               
                                     <td><a id="<?= $colonist->fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
                                     <td><?= $colonist->camp_name ?></td>
                                     <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
                                     <td><?= $colonist->email ?></td>
-                                    <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><font color="
-                                <?php
-                                    switch ($colonist->situation) {
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION: echo "#061B91"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "#017D50"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN: echo "#555555"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE: echo "#555555"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "#061B91"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50"; break;
-                                    }
-                                ?>"><?= $colonist -> situation_description ?></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
+                                 </tr>
+	                                <?php
+	                            }
+	                            ?>    
                         </tbody>
                     </table>
                 </div>

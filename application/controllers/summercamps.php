@@ -463,7 +463,7 @@ class SummerCamps extends CK_Controller {
             if ($validation && !$validation->verifyDocument($data["document_type"]))
                 $data["extra"] = $validation->getDocumentData($data["document_type"]);
         } else
-            $data["editable"] = FALSE;
+            $data["editable"] = TRUE;
         $data["document_name"] = FALSE;
         if ($data["document_type"] == DOCUMENT_MEDICAL_FILE)
             $data["document_name"] = "Ficha médica";
