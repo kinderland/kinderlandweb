@@ -77,7 +77,7 @@ CREATE TABLE donation_type(
     description character varying(30) NOT NULL,
     minimum_price numeric(7,2) DEFAULT 0.0
 );
-INSERT INTO donation_type VALUES (1, 'avulsa', 20.00), (2, 'associação', 720.00), (3, 'inscrição', 0.00);
+INSERT INTO donation_type VALUES (1, 'avulsa', 20.00), (2, 'associação', 720.00), (3, 'inscrição', 0.00), (4, 'inscrição colonia', 0.00);
   
 CREATE TABLE donation_status(
     donation_status integer PRIMARY KEY NOT NULL,
@@ -295,6 +295,8 @@ CREATE TABLE summer_camp_subscription (
     roommate2 character varying(200),
     roommate3 character varying(200),
     queue_number integer
+    discount integer not null default '0',
+    CHECK (discount >= 0 and discount <= 100)
 );
 
 ALTER TABLE ONLY summer_camp_subscription
