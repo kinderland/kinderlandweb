@@ -630,9 +630,18 @@ class SummerCamps extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
-        $this->summercamp_model->acceptGeneralRules($camp_id, $colonist_id);
+        $this->summercamp_model->updateGeneralRules($camp_id, $colonist_id, 't');
         //$this->index();
         redirect("summercamps/index");
+    }
+    
+    public function rejectGeneralRules() {
+    	$this->Logger->info("Starting " . __METHOD__);
+    	$camp_id = $this->input->post('camp_id', TRUE);
+    	$colonist_id = $this->input->post('colonist_id', TRUE);
+    	$this->summercamp_model->updateGeneralRules($camp_id, $colonist_id, 'f');
+    	//$this->index();
+    	redirect("summercamps/index");
     }
 
     public function acceptTripAuthorization() {
@@ -776,7 +785,7 @@ class SummerCamps extends CK_Controller {
         $vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
 
         if ($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
-            echo "<script>alert('Ficha medica enviada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+            echo "<script>alert('Ficha medica salva com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
     }
 
     public function editMedicalFile() {

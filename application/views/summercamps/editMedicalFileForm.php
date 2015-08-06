@@ -333,8 +333,8 @@
 			</tr>
 
 		</table>
-		<input type="submit" class="btn" value="Enviar ficha médica" id="upload">
+		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">
 	</form>
-	<input type="submit" class="btn" value="Voltar" id="upload" onClick="history.go(-1);return true;">
+	<input type="submit" class="btn btn-warning" value="Voltar" id="upload" onClick="history.go(-1);return true;">
 
 </div>

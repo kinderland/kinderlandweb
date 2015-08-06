@@ -744,11 +744,11 @@ class summercamp_model extends CK_Model {
         return null;
     }
 
-    public function acceptGeneralRules($summerCampId, $colonistId) {
+    public function updateGeneralRules($summerCampId, $colonistId, $value) {
         $this->Logger->info("Running: " . __METHOD__);
 
-        $sql = 'UPDATE summer_camp_subscription SET accepted_terms = true WHERE summer_camp_id = ? AND colonist_id = ?';
-        $returnId = $this->execute($this->db, $sql, array(intval($summerCampId), intval($colonistId)));
+        $sql = 'UPDATE summer_camp_subscription SET accepted_terms = ? WHERE summer_camp_id = ? AND colonist_id = ?';
+        $returnId = $this->execute($this->db, $sql, array($value, intval($summerCampId), intval($colonistId)));
         if ($returnId)
             return TRUE;
 

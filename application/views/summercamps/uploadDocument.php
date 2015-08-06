@@ -35,8 +35,8 @@
 	<?php } ?>
 
 	<a target="_blank" href="<?= $this -> config -> item('url_link'); ?>admin/verifyDocument?camp_id=<?=$camp_id ?>&colonist_id=<?=$colonist_id ?>&document_type=<?=$document_type ?>">
-	<button class="btn btn-default" <?=$hasDocument ?>>
-		Ultimo documento enviado
+	<button class="btn btn-primary" <?=$hasDocument ?>>
+		Visualizar último documento enviado
 	</button> </a>
 	<br>
 	<br>

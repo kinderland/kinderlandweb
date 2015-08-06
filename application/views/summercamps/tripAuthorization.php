@@ -52,7 +52,7 @@ $end = date("d/m/Y", strtotime($end));
 				<input type="hidden" name="camp_id" value="<?=$camp_id ?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" /> 
 				<input type="hidden" name="document_type" value="<?=$document_type ?>" /> 
 				<button class="button btn btn-primary" type="submit">
-					Aceito autorização de viagem
+					Autorizo
 				</button>
 			</form>
 			<br />
@@ -62,7 +62,7 @@ $end = date("d/m/Y", strtotime($end));
 				<input type="hidden" name="camp_id" value="<?=$camp_id ?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" /> 
 				<input type="hidden" name="document_type" value="<?=$document_type ?>" /> 
 				<button class="button btn btn-danger" type="submit">
-					Não aceitar autorização de viagem
+					Não Autorizo
 				</button>
 			</form>
 	<?php } ?>
@@ -71,7 +71,7 @@ $end = date("d/m/Y", strtotime($end));
 				<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
 				<br/>
 				</h2>
-				<input type="button" value="Voltar" onclick="history.back()" />
+				<input type="button" class="btn btn-warning" value="Voltar" onclick="history.back()" />
 			</p>
 
 		</div>

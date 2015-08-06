@@ -83,6 +83,14 @@
 		<input class="btn btn-primary" type="submit" class="button" value="De acordo" id="upload">
 		<br /><br />
 		</form>
+		
+		<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/rejectGeneralRules" method="POST">
+		<form >		
+		<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
+		<input type="hidden" name="document_type" value="<?=$document_type?>" /> 
+		<input class="button btn btn-danger" type="submit" class="button" value="Não concordo" id="upload">
+		<br /><br />
+		</form>
 		<div id='form2'>
 			<button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
 			

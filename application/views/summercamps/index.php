@@ -82,7 +82,7 @@ function insertFigureRegister($object, $validation) {
 			<th>Inscrição</th>
 			<th></th>
 			<th>Ação</th>
-			<th>Situação</th>
+			<th>Status</th>
 		</thead>
 		<?php
 foreach($summerCampInscriptions as $summerCampInscription){
