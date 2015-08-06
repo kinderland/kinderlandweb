@@ -607,7 +607,23 @@ class SummerCamps extends CK_Controller {
         }
 
         $this->Logger->info("Sending email");
-        $this->sendEmailSubmittedPreSubscription($personuser, $colonist, $summercamp->getCampName());
+		
+		$responsableId = $personuser->getPersonId();
+		
+		$father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+        $mother = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+		
+		$emailArray = array();
+		if($father && $responsableId != $father){
+			$father = $this->person_model->getPersonFullById($father);
+			$emailArray[] = $father->email;		
+		}
+		if($mother && $mother != $responsableId){
+			$mother = $this->person_model->getPersonFullById($mother);
+			$emailArray[] = $mother->email;
+		}
+					
+        $this->sendEmailSubmittedPreSubscription($personuser, $colonist, $summercamp->getCampName(),$emailArray);
     }
 
     public function acceptGeneralRules() {

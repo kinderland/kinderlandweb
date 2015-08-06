@@ -109,17 +109,29 @@ class CK_Controller extends CI_Controller {
         return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
     }
 
-    public function sendValidationWithErrorsEmail($person, $colonist, $summerCampName) {
+    public function sendValidationWithErrorsEmail($person, $colonist, $summerCampName, $parentsMailArray = array()) {
+        $cc = array();
+		$cc[] = "secretaria@kinderland.com.br";
+		foreach ($parentsMailArray as $mail) {
+			if($mail != $person->getEmail())
+				$cc[] = $mail;
+		}
         $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " não validada";
         $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " contém problemas e ainda não foi validada.<br />
                 Pedimos por gentileza que acesse o Sistema Kinderland onde você poderá visualizar os motivos e resolver as pendências.<br />
                 Não se esqueça de, após as correções, reenviar a pré-inscrição para que a mesma possa passar novamente pelo processo de validação.<br /><br />
                 Associação Kinderland";
-
-        return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
+		
+        return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
 
-    public function sendValidationOkEmail($person, $colonist, $summerCampName) {
+    public function sendValidationOkEmail($person, $colonist, $summerCampName,$parentsMailArray = array()) {
+        $cc = array();
+		$cc[] = "secretaria@kinderland.com.br";
+		foreach ($parentsMailArray as $mail) {
+			if($mail != $person->getEmail())
+				$cc[] = $mail;
+		}
         $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " validada";
         $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " foi validada,
             todos os dados e documentos estão corretos. <br />
@@ -129,10 +141,16 @@ class CK_Controller extends CI_Controller {
             Em caso de dúvidas, entrar em contato por telefone (21-2266-1980) ou, preferencialmente, por email.<br /><br />
             Associação Kinderland";
 
-        return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
+        return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
 
-    public function sendEmailSubmittedPreSubscription($person, $colonist, $summerCampName) {
+    public function sendEmailSubmittedPreSubscription($person, $colonist, $summerCampName,$parentsMailArray = array()) {
+    	$cc = array();
+		$cc[] = "secretaria@kinderland.com.br";
+		foreach ($parentsMailArray as $mail) {
+			if($mail != $person->getEmail())
+				$cc[] = $mail;
+		}
         $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " na colônia " . $summerCampName . " recebida";
         $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " foi recebida pela Associação 
             Kinderland. Aguarde nova comunicação por email validando (ou não) os dados preenchidos e documentos 
@@ -143,7 +161,7 @@ class CK_Controller extends CI_Controller {
             Muito obrigado pelo interesse em participar das nossas colônias!<br />
             Associação Kinderland";
 
-        return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
+        return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
 
     protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
