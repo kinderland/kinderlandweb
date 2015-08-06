@@ -3,6 +3,7 @@
 require_once APPPATH . 'core/CK_Model.php';
 require_once APPPATH . 'core/summercamp.php';
 require_once APPPATH . 'core/summercampSubscription.php';
+require_once APPPATH . 'core/summerCampPaymentPeriod.php';
 
 class summercamp_model extends CK_Model {
 
@@ -881,6 +882,54 @@ class summercamp_model extends CK_Model {
                     AND summer_camp_id in (".$summerCamps.")";
         return $this->execute($this->db, $sql, array(intval($position), intval($userId)));
     }
+	
+	public function getSummerCampPaymentPeriod($campId) {
+        $this->Logger->info("Running: " . __METHOD__);
+		$sql = "Select * from summer_camp_payment_period where now() >= date_start and now() <= date_finish and summer_camp_id = ?";
+		
+		$resultSet = $this->executeRow($this->db, $sql, array($campId));
+		
+		$paymentPeriod = false;
+		
+		if ($resultSet)
+			$paymentPeriod = SummerCampPaymentPeriod::createSummerCampPaymentPeriodObject($resultSet);
+		
+		return $paymentPeriod;
+    }
+
+    public function associateDonation($campId,$colonistId,$donationId) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "UPDATE summer_camp_subscription
+                SET donation_id = ?
+                WHERE colonist_id = ? AND summer_camp_id = ?";
+        return $this->execute($this->db, $sql, array(intval($donationId), intval($colonistId), intval($campId)));
+    }
+    
+    public function paidDonation($donation_id) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "UPDATE summer_camp_subscription SET situation = ? WHERE donation_id = ?";
+        return $this->execute($this->db, $sql, array(intval(SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED), intval($donation_id)));
+    }
+    
+	public function getSubscriptionByDonation($donationId) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "Select * from summer_camp sc
+		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+		join colonist c on scs.colonist_id = c.colonist_id
+		join person p on c.person_id = p.person_id
+		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
+		where donation_id = ?";
+		
+        $resultSet = $this->executeRow($this->db, $sql, array($donationId));
+        $summerCampSubscription = FALSE;
+
+        if ($resultSet)
+            $summerCampSubscription = SummerCampSubscription::createSummerCampSubscriptionObject($resultSet);
+
+        return $summerCampSubscription;
+    }
+        
+	
 
 }
 

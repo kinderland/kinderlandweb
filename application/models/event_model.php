@@ -109,7 +109,7 @@ class event_model extends CK_Model {
 		$retorno = array();
 		
 		foreach ($payment_periods as $payment_period) {
-			$retorno[] = Payment_period::createAddressObject($payment_period);
+			$retorno[] = Payment_period::createPaymentPeriodObject($payment_period);
 		}
 		
 		return $retorno;

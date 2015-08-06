@@ -20,17 +20,29 @@ class donation_model extends CK_Model {
 	}
 
 	public function getDonationPortionsMax($donation) {
-		$sql = "select * from payment_period where event_id in (select event_id from event_subscription where donation_id = ?)
+		
+		if($donation -> getDonationType() == DONATION_TYPE_SUBSCRIPTION){
+			$sql = "select * from summer_camp_payment_period where summer_camp_id in (select summer_camp_id from summer_camp_subscription where donation_id = ?)
                 and date_start <= ? and date_finish >= ?";
-		$result = $this -> executeRow($this -> db, $sql, array($donation -> getDonationId(), $donation -> getDateCreated(), $donation -> getDateCreated()));
-
-		if ($result)
-			return $result -> portions;
-		else {
-			if ($donation -> getDonationType() == 1) {
-				return 6;
-			} else {
+			$result = $this -> executeRow($this -> db, $sql, array($donation -> getDonationId(), $donation -> getDateCreated(), $donation -> getDateCreated()));
+			if ($result)
+				return $result -> portions;
+			else 
 				return 1;
+		} else{
+
+			$sql = "select * from payment_period where event_id in (select event_id from event_subscription where donation_id = ?)
+                and date_start <= ? and date_finish >= ?";
+			$result = $this -> executeRow($this -> db, $sql, array($donation -> getDonationId(), $donation -> getDateCreated(), $donation -> getDateCreated()));
+			
+			if ($result)
+				return $result -> portions;
+			else {
+				if ($donation -> getDonationType() == 1) {
+					return 6;
+				} else {
+					return 1;
+				}
 			}
 		}
 	}
@@ -38,8 +50,8 @@ class donation_model extends CK_Model {
 	public function createDonation($userId, $totalPrice, $donationType) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "INSERT INTO donation(person_id, donated_value, donation_type, donation_status)
-                VALUES ($userId, $totalPrice, $donationType, 1)";
-        $result = $this->executeReturningId($this->db, $sql);
+                VALUES (?,?,?, 1)";
+        $result = $this->executeReturningId($this->db, $sql,array($userId,$totalPrice,$donationType));
 
 		if ($result) {
 			return $result;

@@ -11,6 +11,7 @@ class SummerCamps extends CK_Controller {
         $this->load->helper('url');
         $this->load->model('address_model');
         $this->load->model('colonist_model');
+        $this->load->model('donation_model');
         $this->load->model('generic_model');
         $this->load->model('medical_file_model');
         $this->load->model('person_model');
@@ -20,6 +21,7 @@ class SummerCamps extends CK_Controller {
         $this->load->model('validation_model');
         $this->address_model->setLogger($this->Logger);
         $this->colonist_model->setLogger($this->Logger);
+        $this->donation_model->setLogger($this->Logger);
         $this->generic_model->setLogger($this->Logger);
         $this->medical_file_model->setLogger($this->Logger);
         $this->person_model->setLogger($this->Logger);
@@ -523,6 +525,47 @@ class SummerCamps extends CK_Controller {
             echo "<script>alert('Documento enviado com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         }
     }
+
+    public function paySummerCampSubscription() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $campId = $this->input->get('camp_id', TRUE);
+        $colonistId = $this->input->get('colonist_id', TRUE);
+
+		if(!$this->checkSession())
+			redirect("login/index");
+
+		$userId = $this->session->userdata("user_id");
+		try{
+	    	$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($campId);
+			$summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId,$campId);
+			$discount = 1 - ($summerCampSubscription->getDiscount()/100);
+	    	if($summerCampPayment){
+	    		$this->generic_model->startTransaction();
+				$donationId = $this->donation_model->createDonation($userId,$summerCampPayment->getPrice()*$discount, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION,$summerCampPayment->getPortions());
+				$this->Logger->info("Created donation with id: ". $donationId);
+				$this->summercamp_model->associateDonation($campId,$colonistId,$donationId);
+				$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id and campId" .$colonistIdo." ".$campId);
+				if($discount == 0){
+					$this->Logger->info("Discount is 100%, subscribing colonist with id and campId" .$colonistIdo." ".$campId );
+					$this->summercamp_model->paidDonation($donationId);							
+					$this->generic_model->commitTransaction();
+					redirect("summercamps/index");
+					return;
+				} else{			
+					$this->generic_model->commitTransaction();
+					redirect("payments/checkout/".$donationId);
+				}
+			} 
+			else{
+				redirect("summercamps/index");
+			}
+		} catch (Exception $ex) {
+			$this->generic_model->rollbackTransaction();
+			$this->Logger->error("Failed to create payment");
+			redirect("summercamps/index");
+		}
+	}
+
 
     public function sendPreSubscription() {
         $this->Logger->info("Starting " . __METHOD__);

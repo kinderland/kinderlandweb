@@ -22,7 +22,7 @@ class Payment_period {
 		$this -> portions = $portions;
 	}
 
-	public static function createAddressObject($resultRow) {
+	public static function createPaymentPeriodObject($resultRow) {
 		return new Payment_period($resultRow -> payment_period_id, $resultRow -> event_id, $resultRow -> date_start, $resultRow -> date_finish, $resultRow -> full_price, $resultRow -> middle_price, $resultRow -> children_price, $resultRow -> associate_discount, $resultRow -> portions);
 	}
 

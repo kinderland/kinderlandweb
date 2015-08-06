@@ -171,6 +171,7 @@
                     $this->donation_model->updateDonationStatus($payment->getDonation_id(), DONATION_STATUS_PAID);
 					$this->sendPaymentConfirmationMail($donation,$payment);
                     $this->eventsubscription_model->updateSubscriptionsStatusByDonationId($payment->getDonation_id(), SUBSCRIPTION_STATUS_SUBSCRIBED);					
+                    $this->summercamp_model->paidDonation($payment->getDonation_id());					
 					return $xml;
                 } else if($status == CieloTransaction::TRANSACAO_CANCELADA){
                     if($donation->getDonationStatus() == DONATION_STATUS_PAID)

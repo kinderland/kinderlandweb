@@ -17,7 +17,9 @@ class CK_Controller extends CI_Controller {
         $this->pid = getmypid();
         $this->setLogger();
         $this->load->model('personuser_model');
+        $this->load->model('summercamp_model');
         $this->personuser_model->setLogger($this->Logger);
+        $this->summercamp_model->setLogger($this->Logger);
     }
 
     public function __destruct() {
@@ -85,6 +87,16 @@ class CK_Controller extends CI_Controller {
 
             return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"), array("diretoria@kinderland.com.br"));
         }
+		else if ($donation->getDonationType() == DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION) {
+            $person = $this->person_model->getPersonById($donation->getPersonId());
+            $summerCampSubscription = $this->summercamp_model->getSubscriptionByDonation($donation->getDonationId());
+            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o colonista de nome " . $summerCampSubscription->getFullname() . " foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para
+			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
+            $emailSubject = "[Kinderland] Inscricao " . $summerCampSubscription->getFullname() . " confirmada";
+
+            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"), array("diretoria@kinderland.com.br"));
+        }
+		
     }
 
     public function sendNewPasswordEmail($person, $randomString) {

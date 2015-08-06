@@ -151,11 +151,27 @@ continue;
 				<?php } ?>
 				<br>
 				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){
+						if($summerCampInscription->getDiscount() < 100) {
+							$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($summerCampInscription -> getSummerCampId());
+							$discount = 1-($summerCampInscription->getDiscount()/100);
 				?>
-				<button class="btn" disabled>
-					Pagar
-				</button>
-				<?php } ?>
+							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+							<button class="btn btn-primary">
+							Pagar R$ <?=number_format($summerCampPayment->getPrice()*$discount,2)?> 
+							</button> </a>	
+				<?php		
+						} 
+				else 
+				{ 
+				?>
+							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+							<button class="btn btn-primary">
+							Inscrever 
+							</button> </a>	
+
+				
+				<?php 	} 
+					  } ?>
 				<br>
 				<button class="btn btn-warning" onclick='excluir(<?=$summerCampInscription -> getSummerCampId() ?>,<?=$summerCampInscription -> getColonistId() ?>,"<?=$summerCampInscription -> getFullname() ?>",<?=$subscribed?>)' class="btn">
 					Excluir pré inscrição
