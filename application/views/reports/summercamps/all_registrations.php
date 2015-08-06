@@ -34,7 +34,6 @@
 <script type="text/javascript"
 	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 
-
 </head>
 <body>
 	
@@ -74,7 +73,7 @@
 							<th align="right">Masculino</th>
 							<th align="right">Total</th>
 					    <tr>
-							<th align="right">Inscritos</th>
+							<th align="right"><form method="GET"><button onClick="this.form.submit()" name="action" class="btn btn-primary" data-toggle="modal" data-target="#myModal" value='Inscritos'>Inscritos</button></form></th>
 							<td align='right'> <?php echo $countsF->inscrito; ?> </td>
 							<td align='right'> <?php echo $countsM->inscrito; ?> </td>
 							<td align='right'> <?php echo $countsT->inscrito; ?> </td>
@@ -202,6 +201,61 @@
 						 echo "%"; ?>  </td>				
 					</tr>
 				</table>
+				
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="modal_title">Detalhes das Inscrições</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-lg-12 middle-content">			
+								<div class="row">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<?php
+                            foreach ($colonists as $colonist) {
+                                ?>
+                                <tr>
+                                    <td><a id="<?= $colonist->fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
+                                    <td><?= $colonist->camp_name ?></td>
+                                    <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
+                                    <td><?= $colonist->email ?></td>
+                                    <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><font color="
+                                <?php
+                                    switch ($colonist->situation) {
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION: echo "#061B91"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "#017D50"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN: echo "#555555"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP: echo "#FF0000"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE: echo "#555555"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "#061B91"; break;
+                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50"; break;
+                                    }
+                                ?>"><?= $colonist -> situation_description ?></td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
 			</div>
 		</div>
 	</div>

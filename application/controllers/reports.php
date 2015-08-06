@@ -234,6 +234,19 @@ class Reports extends CK_Controller {
 		$data['colonia_escolhida'] = $campChosen;
 		$data['camps'] = $camps;
 		
+		$action = null;
+		
+		if(isset($_GET['action']))
+			$action = $_GET['action'];
+		
+		if($action == 'Inscritos')
+		{
+			$colonists = $this -> summercamp_model -> getAllColonistsBySummerCampAndYear($year,6,$campChosenId);
+			$data['colonists'] = $colonists;
+		}
+		
+		
+		
 		$genderM = 'M';
 		$genderF = 'F';
 		
