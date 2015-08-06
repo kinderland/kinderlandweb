@@ -61,6 +61,15 @@ class summercamp_model extends CK_Model {
     		return $campArray;
     }
     
+    public function getColonistsDetailedMultiplesSubscriptions($year) {
+    	
+    	$sql = "SELECT * FROM v_multiples_subscriptions WHERE year = ?";
+    	
+    	$resultSet = $this -> executeRows($this->db,$sql,array($year));
+    	
+    	return $resultSet;
+    }
+    
     /*
      * $associateType: 0 = Sócio; 1 = Não sócio; 2 = Todos
      */

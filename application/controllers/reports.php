@@ -233,7 +233,6 @@ class Reports extends CK_Controller {
 		
 		$data['colonia_escolhida'] = $campChosen;
 		$data['camps'] = $camps;
-			
 		
 		$genderM = 'M';
 		$genderF = 'F';
@@ -600,6 +599,39 @@ class Reports extends CK_Controller {
 		
 		$data['colonists'] = $colonists;
 		$this -> loadReportView("reports/summercamps/subscriptions_notsubmitted", $data);
+	}
+	
+	public function multiples_subscriptions() {
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date=date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while($campsByYear!=null)
+		{
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+		
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+		
+		$colonists = $this -> summercamp_model -> getColonistsDetailedMultiplesSubscriptions($year);
+		
+		$data['colonists'] = $colonists;
+		$this -> loadReportView("reports/summercamps/multiples_subscriptions", $data);
 	}
 
 	public function associate_campaign_donations() {
