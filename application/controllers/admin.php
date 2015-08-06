@@ -264,7 +264,24 @@ class Admin extends CK_Controller {
 		}
 
 		$this->Logger->info("Sending email");
-		$this->sendValidationWithErrorsEmail($personuser, $colonist, $summercamp->getCampName());
+		
+		$responsableId = $personuser->getPersonId();
+		
+		$father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+        $mother = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+		
+		$emailArray = array();
+		if($father && $responsableId != $father){
+			$father = $this->person_model->getPersonFullById($father);
+			$emailArray[] = $father->email;		
+		}
+		if($mother && $mother != $responsableId){
+			$mother = $this->person_model->getPersonFullById($mother);
+			$emailArray[] = $mother->email;
+		}
+		
+		
+		$this->sendValidationWithErrorsEmail($personuser, $colonist, $summercamp->getCampName(),$emailArray);
 	}
 
 	public function sendValidatedEmail($colonistId, $summerCampId){
@@ -289,7 +306,24 @@ class Admin extends CK_Controller {
 		}
 
 		$this->Logger->info("Sending email");
-		$this->sendValidationOkEmail($personuser, $colonist, $summercamp->getCampName());
+		
+		$responsableId = $personuser->getPersonId();
+
+		$father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+        $mother = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+		
+		$emailArray = array();
+		if($father && $responsableId != $father){
+			$father = $this->person_model->getPersonFullById($father);
+			$emailArray[] = $father->email;		
+		}
+		if($mother && $mother != $responsableId){
+			$mother = $this->person_model->getPersonFullById($mother);
+			$emailArray[] = $mother->email;
+		}
+		
+		
+		$this->sendValidationOkEmail($personuser, $colonist, $summercamp->getCampName(),$emailArray);
 	}
 
 	public function users () {
