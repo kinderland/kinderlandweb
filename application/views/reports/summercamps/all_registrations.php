@@ -73,7 +73,7 @@
 							<th align="right">Masculino</th>
 							<th align="right">Total</th>
 					    <tr>
-							<th align="right"><form method="GET"><button onClick="this.form.submit()" name="action" class="btn btn-primary" data-toggle="modal" data-target="#myModal" value='Inscritos'>Inscritos</button></form></th>
+							<th align="right">Inscritos</th>
 							<td align='right'> <?php echo $countsF->inscrito; ?> </td>
 							<td align='right'> <?php echo $countsM->inscrito; ?> </td>
 							<td align='right'> <?php echo $countsT->inscrito; ?> </td>

@@ -12,6 +12,12 @@
 		}
 	}
 
+	function returnToEditSubscription(camp_id, colonist_id){
+		if (confirm("Ao voltar para a elaboração, você poderá editar todas as informações da inscrição. Ao final da edição, não se esqueça de 'enviar pré-inscrição' para que seja realizado o processo de validação. Confirma o retorno para elaboração?")) {
+			window.location.replace("<?= $this -> config -> item('url_link'); ?>summercamps/invalidateSubscription?camp_id="+camp_id+"&colonist_id="+colonist_id);
+		}
+	}
+
 </script>
 
 <div class="row">
@@ -85,15 +91,20 @@ function insertFigureRegister($object, $validation) {
 			<th>Status</th>
 		</thead>
 		<?php
-foreach($summerCampInscriptions as $summerCampInscription){
-$documents = 0;
-$validation = $this->validation_model->getColonistValidationInfoObject($summerCampInscription->getColonistId(),$summerCampInscription->getSummerCampId());
-if(
-$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED ||
-$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED ||
-$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP
-)
-continue;
+			foreach($summerCampInscriptions as $summerCampInscription){
+				if($summerCampInscription -> getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
+					$subscribed = "true";
+				else
+					$subscribed = "false";
+
+				$documents = 0;
+				$validation = $this->validation_model->getColonistValidationInfoObject($summerCampInscription->getColonistId(),$summerCampInscription->getSummerCampId());
+				if(
+					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED ||
+					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED ||
+					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP
+				)
+				continue;
 		?>
 		<tr>
 			<td><?php if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
@@ -150,6 +161,15 @@ continue;
 				</button> </a>
 				<?php } ?>
 				<br>
+
+				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION ){
+				?>
+				<button class="btn btn-warning" onclick="returnToEditSubscription(<?=$summerCampInscription -> getSummerCampId() ?>, <?=$summerCampInscription -> getColonistId() ?>)">
+					Voltar para elaboração
+				</button>
+				<?php } ?>
+				<br>
+
 				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){
 						if($summerCampInscription->getDiscount() < 100) {
 							$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($summerCampInscription -> getSummerCampId());
@@ -189,12 +209,7 @@ continue;
 					<?= $statusArray[$i]["text"] ?>
 				</p><?php
 				}
-				
-					if($summerCampInscription -> getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
-						$subscribed = "true";
-					else
-						$subscribed = "false";
-									
+						
 					if($summerCampInscription -> getSituationId() < 0)
 					$color = "style='color:green'";
 					else

@@ -85,5 +85,11 @@ class validation_model extends CK_Model {
 		return Validation::createValidationObject($resultRow);
 	}
 
+	public function deleteValidation($colonistId, $summerCampId) {
+		$this->Logger->info("Running: ". __METHOD__);
+		$deleteSql = "DELETE FROM validation WHERE colonist_id = ? AND summer_camp_id = ?";
+		return $this->execute($this->db, $deleteSql, array($colonistId, $summerCampId));
+	}
+
 }
 ?>

@@ -226,7 +226,12 @@ class Admin extends CK_Controller {
 		$parentsName = $_POST['parents_name'];
 		$colonistName = $_POST['colonist_name'];
 
-		$this->Logger->info("User validating this colonist: " . $this->session->userdata("fullname") . "[" . $this->session->userdata("user_id") . "]");
+		$this->Logger->info("User validating this colonist[id: ". $colonistId ."] -> User: " . $this->session->userdata("fullname") . "[user id: " . $this->session->userdata("user_id") . "]");
+		$summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId, $summerCampId);
+        if ($summerCampSubscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) {
+        	$this->Logger->error("Cannot validate because the colonist returned to filling in status");
+        	return;
+        }
 
 		$status = 0;
 		if($gender == "true" && $picture == "true" && $identity == "true" && $birthday == "true" && $parentsName == "true" && $colonistName == "true")

@@ -566,6 +566,20 @@ class SummerCamps extends CK_Controller {
 		}
 	}
 
+    public function invalidateSubscription() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $camp_id = $this->input->get('camp_id', TRUE);
+        $colonist_id = $this->input->get('colonist_id', TRUE);
+        $summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonist_id, $camp_id);
+        if ($summerCampSubscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) {
+            $this->summercamp_model->updateColonistStatus($colonist_id, $camp_id, SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN);
+            $this->validation_model->deleteValidation($colonist_id, $camp_id);
+            echo "<script>alert('Retorno realizado com sucesso'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+        } else {
+            echo "<script>alert('O status " . utf8_decode($summerCampSubscription->getSituation()) . utf8_decode(" não") . " permite retorno.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+        }
+    }
+
 
     public function sendPreSubscription() {
         $this->Logger->info("Starting " . __METHOD__);
