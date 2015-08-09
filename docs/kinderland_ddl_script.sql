@@ -279,6 +279,17 @@ INSERT INTO summer_camp_subscription_status VALUES
 (-2, 'Excluido'),
 (-3, 'Cancelado');
 
+-- criar tabela de razões de desconto
+
+create table discount_reason(
+discount_reason_id SERIAL PRIMARY KEY,
+discount_reason CHARACTER VARYING(200) UNIQUE NOT NULL
+);
+
+INSERT INTO discount_reason VALUES (1, 'Desconto igual ao da escola');
+INSERT INTO discount_reason VALUES (2, 'Segundo irmão');
+INSERT INTO discount_reason VALUES (3, 'Terceiro irmão');
+INSERT INTO discount_reason VALUES (4, 'Lar da criança');
 
 CREATE TABLE summer_camp_subscription (
     summer_camp_id INTEGER NOT NULL REFERENCES summer_camp,
@@ -294,9 +305,11 @@ CREATE TABLE summer_camp_subscription (
     roommate1 character varying(200),
     roommate2 character varying(200),
     roommate3 character varying(200),
-    queue_number integer
+    queue_number integer,
     discount integer not null default '0',
-    CHECK (discount >= 0 and discount <= 100)
+    discount_reason_id integer,
+    CHECK (discount >= 0 and discount <= 100),
+    FOREIGN KEY (discount_reason_id) REFERENCES discount_reason(discount_reason_id) ON DELETE RESTRICT
 );
 
 ALTER TABLE ONLY summer_camp_subscription

@@ -23,6 +23,22 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
+	
+	public function getAllColonistsForDiscount() {
+        $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
+        p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id, dr.*
+        from summer_camp sc
+        join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+        left join discount_reason dr on scs.discount_reason_id = dr.discount_reason_id
+        join colonist c on scs.colonist_id = c.colonist_id
+        join person p on c.person_id = p.person_id
+        join person pr on pr.person_id = scs.person_user_id
+        join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status order by pr.fullname";
+        $resultSet = $this->executeRows($this->db, $sql);
+
+        return $resultSet;
+    }
+	
 
     public function getCountSubscriptionsbyAssociated($year) {
 
@@ -824,6 +840,14 @@ class summercamp_model extends CK_Model {
         }
         return null;
     }
+	
+	public function getDiscountReasons() {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT * FROM discount_reason";
+        $resultSet = $this->executeRows($this->db, $sql);
+        return $resultSet;
+    }
+	
 
     public function insertSchool($school) {
         $this->Logger->info("Running: " . __METHOD__);
@@ -951,7 +975,11 @@ class summercamp_model extends CK_Model {
         return $summerCampSubscription;
     }
         
-	
+	public function updateDiscount($colonistId,$summerCampId,$discount_value,$discount_reason_id){
+		$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "UPDATE summer_camp_subscription SET discount = ?, discount_reason_id=? WHERE colonist_id = ? and summer_camp_id = ?";
+        return $this->execute($this->db, $sql, array(intval($discount_value), intval($discount_reason_id),intval($colonistId), intval($summerCampId)));		
+	}
 
 }
 

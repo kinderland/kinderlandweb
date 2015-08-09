@@ -33,7 +33,18 @@ class Admin extends CK_Controller {
 	}
 
 	public function camp() {
-		$this->loadView("admin/camps/camp_admin_container");
+		$type = $this->input->get('type', TRUE);
+		$data["validation"] = "";
+		$data["discount"] = "";		
+		if($type){
+			if($type == "validation")
+				$data["validation"] = "selected";
+			else if($type == "discount")
+				$data["discount"] = "selected";
+		} 
+		else		
+			$data["validation"] = "selected";
+		$this->loadView("admin/camps/camp_admin_container",$data);
 	}
 
 	public function manageCamps() {
@@ -185,6 +196,25 @@ class Admin extends CK_Controller {
 		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYearForValidation(date("Y"), $shownStatus);
 		$this -> loadReportView("admin/camps/validate_colonists", $data);
 	}
+
+	public function setDiscount() {
+		$this->Logger->info("Running: ". __METHOD__);
+		$data['colonists'] = $this->summercamp_model->getAllColonistsForDiscount();
+		$data['discountReasons'] = $this->summercamp_model->getDiscountReasons();
+		$this -> loadReportView("admin/camps/set_discount", $data);
+	}
+
+	public function setDiscountValue() {
+		$this->Logger->info("Running: ". __METHOD__);
+        $colonistId = $this->input->get('colonist_id', TRUE);
+        $summerCampId = $this->input->get('summer_camp_id', TRUE);
+        $discount_value = $this->input->get('discount_value', TRUE);
+        $discount_reason_id = $this->input->get('discount_reason_id', TRUE);
+		$this->summercamp_model->updateDiscount($colonistId,$summerCampId,$discount_value,$discount_reason_id);
+		redirect("admin/setDiscount?type=discount");
+	}
+
+
 
 	public function updateColonistValidation() {
 		$this->Logger->info("Running: ". __METHOD__);

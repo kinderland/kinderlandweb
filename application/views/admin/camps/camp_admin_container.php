@@ -12,9 +12,10 @@
                      <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
                         <option value="<?= $this->config->item('url_link'); ?>admin/manageCamps">Cadastro de colônias</option>
                         <option value="<?= $this->config->item('url_link'); ?>admin/queue">Fila de Espera</option>
+                        <option <?=$discount?> value="<?= $this->config->item('url_link'); ?>admin/setDiscount">Conceder Desconto</option>
                     <?php } ?>
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
-                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/validateColonists">Validação</option>
+                        <option <?=$validation?> value="<?= $this->config->item('url_link'); ?>admin/validateColonists">Validação</option>
                     <?php } ?>
                    
                 </select>
