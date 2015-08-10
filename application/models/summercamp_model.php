@@ -922,9 +922,10 @@ class summercamp_model extends CK_Model {
     public function updateQueueNumber($userId, $summerCamps, $position) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "UPDATE summer_camp_subscription
-                SET queue_number = ?
+                SET queue_number = ?, situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE ."
                 WHERE
                     person_user_id = ?
+                    AND situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED ."
                     AND summer_camp_id in (".$summerCamps.")";
         return $this->execute($this->db, $sql, array(intval($position), intval($userId)));
     }
@@ -981,6 +982,43 @@ class summercamp_model extends CK_Model {
         return $this->execute($this->db, $sql, array(intval($discount_value), intval($discount_reason_id),intval($colonistId), intval($summerCampId)));		
 	}
 
+
+    public function getSummerCampSubscriptionsByStatusAndGender($summerCampId, $status = null, $gender = null) {
+        $paramArray = array($summerCampId);
+        $sql = "SELECT
+                    scs.situation,
+                    p.gender
+                FROM summer_camp_subscription scs
+                INNER JOIN colonist c on c.colonist_id = scs.colonist_id
+                INNER JOIN person p on p.person_id = c.person_id
+                WHERE scs.summer_camp_id = ? ";
+        if($status != null) {
+            $sql .= " AND scs.situation = ? ";
+            $paramArray[] = $status;
+        }
+        if($gender != null) {
+            $sql .= " AND p.gender = ? ";
+            $paramArray[] = $gender;
+        }
+
+        $resultSet = $this->executeRows($this->db, $sql, $paramArray);
+        $countDetail = array(   
+                -3 => array('M' => 0, 'F' => 0),
+                -2 => array('M' => 0, 'F' => 0),
+                -1 => array('M' => 0, 'F' => 0),
+                0 => array('M' => 0, 'F' => 0),
+                1 => array('M' => 0, 'F' => 0),
+                2 => array('M' => 0, 'F' => 0),
+                3 => array('M' => 0, 'F' => 0),
+                4 => array('M' => 0, 'F' => 0),
+                5 => array('M' => 0, 'F' => 0),
+                6 => array('M' => 0, 'F' => 0)
+            );
+        foreach ($resultSet as $row) 
+            $countDetail[$row->situation][$row->gender] += 1;
+        
+        return $countDetail;
+    }
 }
 
 ?>

@@ -214,7 +214,48 @@ class Admin extends CK_Controller {
 		redirect("admin/setDiscount?type=discount");
 	}
 
+	public function paymentLiberation() {
+		$data = array();
 
+		$years = array();
+		$start = 2015;
+		$date = intval(date('Y'));
+		$campsByYear = null;
+		do {
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		} while($campsByYear!=null);
+
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$data["years"] = $years;
+
+		if(isset($_POST['year'])){
+			$yearChosen = $_POST['year'];
+			$data["year_selected"] = $yearChosen;
+			if(isset($_POST['camp_id'])){
+				$selectedCamp = $this -> summercamp_model -> getSummerCampById($_POST['camp_id']);
+				$data["camp_selected_id"] = $selectedCamp->getCampId();
+				$data["camp_selected_name"] = $selectedCamp->getCampName();
+				$data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
+				$data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
+
+				$campSubscriptions = $this -> summercamp_model -> getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
+				$data["camp_details"] = $campSubscriptions;
+			}
+
+			$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($yearChosen);
+			$data["camps"] = $allCamps;
+		} else {
+			$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear(intval(date('Y')));
+			$data["camps"] = $allCamps;
+		}
+
+		$this -> loadReportView("admin/camps/payment_liberation", $data);
+	}
 
 	public function updateColonistValidation() {
 		$this->Logger->info("Running: ". __METHOD__);
