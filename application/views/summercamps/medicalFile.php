@@ -304,6 +304,7 @@
 		</table>
 		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">
 	</form>
+	<br />
 	<input type="submit" class="btn btn-warning" value="Voltar" id="upload" onClick="history.go(-1);return true;">
 
 </div>

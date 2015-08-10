@@ -489,7 +489,7 @@
                 <div class="form-group">
                     <label for="dadphone" class="dad dad-form col-lg-1 control-label"> Telefone: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="dad dad-form form-control" placeholder="Telefone"
+                        <input type="text" class="dad dad-form form-control phone" placeholder="Telefone"
                                name="dadPhone" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -549,7 +549,7 @@
                 <div class="form-group">
                     <label for="motherphone" class="mother mother-form col-lg-1 control-label"> Telefone: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="mother mother-form form-control" placeholder="Telefone"
+                        <input type="text" class="mother mother-form form-control phone" placeholder="Telefone"
                                name="motherPhone" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
