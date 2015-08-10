@@ -1019,6 +1019,17 @@ class summercamp_model extends CK_Model {
         
         return $countDetail;
     }
+
+    public function getAllColonistsWithQueueNumberBySummerCamp($summerCampId){
+        $this->Logger->info("Running: ". __METHOD__);
+        $sql = "SELECT * FROM v_colonists_with_queue_number WHERE summer_camp_id = ?";
+        $resultSet = $this->executeRowsNoLog($this->db, $sql, array($summerCampId));
+
+        if($resultSet)
+            return $resultSet;
+
+        return null;
+    }
 }
 
 ?>

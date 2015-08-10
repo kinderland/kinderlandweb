@@ -245,6 +245,10 @@ class Admin extends CK_Controller {
 
 				$campSubscriptions = $this -> summercamp_model -> getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
 				$data["camp_details"] = $campSubscriptions;
+
+				$subscriptions = $this -> summercamp_model -> getAllColonistsWithQueueNumberBySummerCamp($selectedCamp->getCampId());
+				if($subscriptions != null)
+					$data["subscriptions"] = $subscriptions;
 			}
 
 			$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($yearChosen);
@@ -255,6 +259,12 @@ class Admin extends CK_Controller {
 		}
 
 		$this -> loadReportView("admin/camps/payment_liberation", $data);
+	}
+
+	public function liberatePayments(){
+		$this->Logger->info("Running: ". __METHOD__);
+
+		echo "<script>alert('A fazer'); window.location.replace('" . $this->config->item('url_link') . "admin/paymentLiberation');</script>";
 	}
 
 	public function updateColonistValidation() {
