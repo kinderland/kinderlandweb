@@ -484,11 +484,13 @@ class SummerCamps extends CK_Controller {
             $this->medicalFile($data);
         } else if ($data["document_type"] == DOCUMENT_GENERAL_RULES) {
             $data["summercamp"] = $this->summercamp_model->getSummerCampById($data["camp_id"]);
+            $data["colonist_status"] = $camper->getSituationId();
             $this->loadView('summercamps/generalRules', $data);
         } else if ($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION) {
             $data["day"] = date('d');
             $data["month"] = date('m');
             $data["year"] = date('Y');
+            $data["colonist_status"] = $camper->getSituationId();
             $this->loadView('summercamps/tripAuthorization', $data);
         } else
             $this->loadView('summercamps/uploadDocument', $data);
@@ -683,6 +685,7 @@ class SummerCamps extends CK_Controller {
         $address = $this->address_model->getAddressByPersonId($camper->getPersonId());
         $responsableId = $camper->getPersonUserId();
         $responsableAddress = $this->address_model->getAddressByPersonId($responsableId);
+        $data["colonistId"] = $colonistId;
         $data["sameAddressResponsable"] = "n";
         if ($responsableAddress)
             if ($address->getAddressId() == $responsableAddress->getAddressId())

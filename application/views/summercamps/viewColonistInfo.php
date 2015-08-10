@@ -591,6 +591,9 @@
                 </div>
             </div>
 
+
         </form>
+        <br />
+        <button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
     </div>
 </div>

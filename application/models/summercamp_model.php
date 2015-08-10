@@ -93,7 +93,7 @@ class summercamp_model extends CK_Model {
     	$sql = "SELECT distinct(vrauad.person_id), vrauad.fullname, scs.queue_number FROM v_report_all_users_association_detailed vrauad 
 				INNER JOIN summer_camp_subscription scs on scs.person_user_id = person_id
 				WHERE scs.situation in ('2','3','4','5')
-				AND scs.summer_camp_id in (" .$summercampId. ") ";
+				AND scs.summer_camp_id in (" .$summercampId. ") AND situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED;
         if($associateType != 2)
 			$sql .= " AND vrauad.associate ". (($associateType==0) ? "!" : "") ."= 'não sócio'";
     	

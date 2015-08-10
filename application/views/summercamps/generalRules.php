@@ -76,6 +76,7 @@
 			<br>
 			<br>
 	</div>
+	<?php if($colonist_status == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) {?>
 	<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/acceptGeneralRules" method="POST">
 		<form >		
 		<input type="hidden" name="camp_id" value="<?=$camp_id?>" /><input type="hidden" name="colonist_id" value="<?=$colonist_id?>" /> 
@@ -91,8 +92,10 @@
 		<input class="button btn btn-danger" type="submit" class="button" value="Não concordo" id="upload">
 		<br /><br />
 		</form>
+	<?php } ?>
 		<div id='form2'>
 			<button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
 			
 		</div>
 	</div>
+	

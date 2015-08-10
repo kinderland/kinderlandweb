@@ -10,9 +10,9 @@ $end = date("d/m/Y", strtotime($end));
 ?>
 
 <div id="main">
-	<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
+	<!--<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
 	<br/>
-	</h2>
+	</h2>-->
 
 	<div style="font-size:18px">
 		<br>
@@ -44,7 +44,7 @@ $end = date("d/m/Y", strtotime($end));
 	<br>
 	<br>
 
-	<?php if($editable) { ?>
+	<?php if($colonist_status == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) { ?>
 
 	<div id='form'>
 
@@ -68,9 +68,9 @@ $end = date("d/m/Y", strtotime($end));
 	<?php } ?>
 			</p>
 				<br/>
-				<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
+				<!--<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
 				<br/>
-				</h2>
+				</h2>-->
 				<input type="button" class="btn btn-warning" value="Voltar" onclick="history.back()" />
 			</p>
 
