@@ -21,6 +21,9 @@
                 case "FINANCEIRO":
                     $("#accordion").accordion('option', 'active', 4);
                     break;
+                case "LOGS":
+                    $("#accordion").accordion('option', 'active', 5);
+                    break;
             }
 
 <?php } ?>
@@ -61,6 +64,10 @@
         <h3>Financeiro</h3>
         <div>
             <a href="<?= $this->config->item('url_link'); ?>reports/finance_reports">Relatórios</a>
+        </div>
+        <h3>Sistema</h3>
+        <div>
+            <a href="<?= $this->config->item('url_link'); ?>reports/logs">Logs</a>
         </div>
     </div>
 </div>
