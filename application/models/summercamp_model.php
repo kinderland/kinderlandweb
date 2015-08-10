@@ -471,6 +471,19 @@ class summercamp_model extends CK_Model {
     	return $resultSet;
     	
     }
+    
+    public function getCountDiscountsBySummerCamp($summercampId,$status=null) {
+    	$sql = "SELECT COALESCE(same_school,0) as same_school, COALESCE(second_brother,0) as second_brother, COALESCE (third_brother,0) as third_brother, COALESCE (child_home,0) as child_home 
+				FROM( SELECT sum(discount) as same_school FROM summer_camp_subscription WHERE discount_reason_id=1 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") same_school,
+				( SELECT sum(discount) as second_brother FROM summer_camp_subscription WHERE discount_reason_id=2 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") second_brother,
+				( SELECT sum(discount) as third_brother FROM summer_camp_subscription WHERE discount_reason_id=3 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") third_brother,
+				( SELECT sum(discount) as child_home FROM summer_camp_subscription WHERE discount_reason_id=4 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") child_home";
+    	
+    	$resultSet = $this->executeRow($this->db, $sql,array($summercampId,$summercampId,$summercampId,$summercampId));
+    	
+    	return $resultSet;
+    	
+    }
 
     public function getCountStatusColonistBySummerCampYearAndGender($year, $summerCampId = null, $gender = null) {
         $sql = "select (
@@ -737,7 +750,7 @@ class summercamp_model extends CK_Model {
 
     public function getSchoolNamesByStatusSummerCampAndYear($year, $summercampId = null) {
 
-        $sql = "SELECT scs.school_name
+        $sql = "SELECT DISTINCT scs.school_name
 				FROM summer_camp_subscription scs
 				INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
 				WHERE situation in (2,3,4,5)
