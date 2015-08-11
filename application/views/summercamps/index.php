@@ -82,7 +82,7 @@ function insertFigureRegister($object, $validation) {
 	<img src="<?= $this -> config -> item('assets') ?>images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/> 
 , não esquecer de <b>ENVIAR</b> a pré-inscrição </p>
 	
-	Colonistas:
+	
 	<table class="table-bordered table table-striped">
 		<thead>
 			<th>Inscrição</th>

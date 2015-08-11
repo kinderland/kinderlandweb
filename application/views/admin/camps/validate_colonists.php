@@ -189,8 +189,8 @@
 					<thead>
 						<tr>
 							<th>Colônia</th>
-							<th>Validados</th>
-							<th>Não Validados</th>
+							<th>Validadas</th>
+							<th>Não Validadas</th>
 							<th>Aguardando Validação</th>	
 					    </tr>
 					</thead>
