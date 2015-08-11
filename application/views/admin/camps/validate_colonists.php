@@ -171,7 +171,70 @@
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
+					<form method="GET">
+					<select name="ano_f" onchange="this.form.submit()" id="anos">
 					
+							<?php
+							foreach ( $years as $year ) {
+								$selected = "";
+								if ($ano_escolhido == $year)
+									$selected = "selected";
+								echo "<option $selected value='$year'>$year</option>";
+							}
+							?>
+						</select>
+					<br> </br>
+					<table class="table table-bordered table-striped table-min-td-size"
+					style="max-width: 600px;">
+					<thead>
+						<tr>
+							<th>Colônia</th>
+							<th>Validados</th>
+							<th>Não Validados</th>
+							<th>Aguardando Validação</th>	
+					    </tr>
+					</thead>
+					<tbody>
+						<?php
+                            foreach ($campCount as $count) {
+                            ?>
+                       <tr>
+                       		<td style="text-align:left"><?php echo $count -> camp_name?></td>
+                       		<td><?=$count -> validated?></td>
+                       		<td><?=$count -> validated_with_errors?></td>
+                       		<td><?=$count -> waiting_validation?></td>
+                       	</tr>	
+                       		<?php
+                                }
+                        ?>           					
+					</tbody>
+				</table>
+				<b>Colônia:</b>
+					<select name="colonia_f" onchange="this.form.submit()" id="colonia">
+							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
+							<?php
+							foreach ( $camps as $camp ) {
+								$selected = "";
+								if ($colonia_escolhida == $camp)
+									$selected = "selected";
+								echo "<option $selected value='$camp'>$camp</option>";
+							}
+							?>
+						</select>
+						<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status:</b>
+						<select name="status_f" onchange="this.form.submit()" id="status">
+							
+							<?php
+							foreach ( $status as $situation ) {
+								$selected = "";
+								if ($status_escolhido == $situation)
+									$selected = "selected";
+								echo "<option $selected value='$situation'>$situation</option>";
+							}
+							?>
+						</select>
+						
+				</form>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>

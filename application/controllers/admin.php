@@ -190,10 +190,87 @@ class Admin extends CK_Controller {
 
 	public function validateColonists() {
 		$this->Logger->info("Running: ". __METHOD__);
-		$shownStatus =  SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . 
-						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
-						SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYearForValidation(date("Y"), $shownStatus);
+		
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date = date('Y');
+		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+		while ($campsByYear != null) {
+			$end = $date;
+			$date++;
+			$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+		
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+		
+		$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+		$campsQtd = count($allCamps);
+		$camps = array();
+		$start = $campsQtd;
+		$end = 1;
+		
+		$campChosen = null;
+		
+		if (isset($_GET['colonia_f']))
+			$campChosen = $_GET['colonia_f'];
+		
+		$campCount = array();
+		$count = null;
+		
+		$campChosenId = null;
+		foreach ($allCamps as $camp) {
+			$count = $this -> summercamp_model -> getCountStatusBySummerCamp($camp -> getCampId());
+			
+			if($count != null) {
+				$campCount[] = $count;
+				$camps[] = $camp->getCampName();
+			}
+			
+			if ($camp->getCampName() == $campChosen)
+				$campChosenId = $camp->getCampId();
+		}
+		
+		$data['colonia_escolhida'] = $campChosen;
+		$data['camps'] = $camps;
+		$data['campCount'] = $campCount;
+		
+		$statusChosen = 'Aguardando Validação';
+		
+		if (isset($_GET['status_f']))
+			$statusChosen = $_GET['status_f'];
+		
+		$status = array('Aguardando Validação', 'Não Validada', 'Validada','Todos');
+		
+		$data['status_escolhido'] = $statusChosen;
+		$data['status'] = $status;
+		
+		if($statusChosen == 'Aguardando Validação') {
+			$data['colonists'] = $this -> summercamp_model -> getAllColonistsByYearSummerCampAndStatus($year,$campChosenId,1);
+		}
+		else if($statusChosen == 'Não Validada') {
+			$data['colonists'] = $this -> summercamp_model -> getAllColonistsByYearSummerCampAndStatus($year,$campChosenId,6);
+		}
+		else if($statusChosen == 'Validada') {
+			$data['colonists'] = $this -> summercamp_model -> getAllColonistsByYearSummerCampAndStatus($year,$campChosenId,2);
+		}
+		
+		else if($statusChosen == 'Todos') {
+			$data['colonists'] = $this -> summercamp_model -> getAllColonistsByYearSummerCampAndStatus($year,$campChosenId,null);
+		}
+		
 		$this -> loadReportView("admin/camps/validate_colonists", $data);
 	}
 

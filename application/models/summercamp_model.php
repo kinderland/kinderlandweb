@@ -365,6 +365,42 @@ class summercamp_model extends CK_Model {
 
         return $resultSet;
     }
+    
+    public function getAllColonistsByYearSummerCampAndStatus($year,$summercampId = null, $status = null) {
+    	$sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
+        v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
+        v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
+        v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
+        v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
+        p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id
+        from summer_camp sc
+        join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+        join colonist c on scs.colonist_id = c.colonist_id
+        join person p on c.person_id = p.person_id
+        join person pr on pr.person_id = scs.person_user_id
+        join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
+        left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id ";
+    		
+    		
+    		if ($summercampId !== null && $status !== null) {
+    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND sc.summer_camp_id = ? AND scs.situation in (". $status .")";
+    			$resultSet = $this->executeRows($this->db, $sql, array($year,$summercampId));
+    		}
+    		else if ($summercampId !== null && $status === null) {
+    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND sc.summer_camp_id = ? AND scs.situation in ('1','2','6')";
+    			$resultSet = $this->executeRows($this->db, $sql, array($year,$summercampId));
+    		}
+    		else if($summercampId === null && $status !== null) {
+    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND scs.situation in (". $status .")";
+    			$resultSet = $this->executeRows($this->db, $sql,array($year));
+    		}
+    		else{
+    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND scs.situation in ('1','2','6')";
+    			$resultSet = $this->executeRows($this->db, $sql,array($year));
+    		}
+    	
+    		return $resultSet;
+    }
 
     public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
@@ -746,6 +782,18 @@ class summercamp_model extends CK_Model {
             $schoolName, $schoolName, $schoolName));
 
         return $resultSet;
+    }
+    
+    public function getCountStatusBySummerCamp($summercampId) {
+    	$sql = "SELECT DISTINCT sc.camp_name, (SELECT count(situation) as waiting_validation FROM summer_camp_subscription WHERE situation = 1 AND summer_camp_id = ?) as waiting_validation,
+				(SELECT count(situation) as validated FROM summer_camp_subscription WHERE situation = 2 AND summer_camp_id = ?) as validated,
+				(SELECT count(situation) as validated_with_errors FROM summer_camp_subscription WHERE situation = 6 AND summer_camp_id = ?) as validated_with_errors
+				FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
+				WHERE sc.summer_camp_id = ?";
+    	
+    	$resultSet = $this -> executeRow($this->db, $sql,array($summercampId, $summercampId, $summercampId, $summercampId));
+    	
+    	return $resultSet;    	
     }
 
     public function getSchoolNamesByStatusSummerCampAndYear($year, $summercampId = null) {
