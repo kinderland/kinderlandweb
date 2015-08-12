@@ -986,7 +986,8 @@ class summercamp_model extends CK_Model {
                 SET queue_number = ?, situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE ."
                 WHERE
                     person_user_id = ?
-                    AND situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED ."
+                    AND (situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED ." 
+                        OR situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE .") 
                     AND summer_camp_id in (".$summerCamps.")";
         return $this->execute($this->db, $sql, array(intval($position), intval($userId)));
     }
