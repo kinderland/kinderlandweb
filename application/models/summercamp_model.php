@@ -1092,6 +1092,7 @@ class summercamp_model extends CK_Model {
 
         return null;
     }
+
 }
 
 ?>

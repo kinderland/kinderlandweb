@@ -37,6 +37,23 @@
 				$("#form_liberate_payments").submit();
 			}
 
+			function liberatePayment(colonist_id, summer_camp_id){
+				$.post("<?= $this->config->item('url_link') ?>admin/updateToWaitingPaymentIndividual",
+		        {
+		            'colonist_id': colonist_id,
+		            'summer_camp_id': summer_camp_id
+		        },
+		        function (data) {
+		            if (data == "true") {
+		                alert("Liberado para pagamento!");
+		                window.location.reload();
+		            } else {
+		                alert(data);
+		            }
+		        });
+
+			}
+
 
 			var selectTodos = {
 				element : null,
@@ -61,9 +78,12 @@
 					}, //Evita problemas com caps-lock
 					function(l, r) {
 						return l.toLowerCase().localeCompare(r.toLowerCase());
+					}, //Evita problemas com caps-lock
+					function(l, r) {
+						return l.toLowerCase().localeCompare(r.toLowerCase());
 					}
 					],
-					filters : [true,selectTodos,true,selectTodos]
+					filters : [true,selectTodos,selectTodos,true,selectTodos]
 				});
 			});
         </script>
@@ -149,13 +169,15 @@
 							<hr />
 							<br />
 							<table class="table table-bordered table-striped table-min-td-size"
-								style="max-width: 700px; font-size:15px" id="sortable-table">
+								style="max-width: 500px; font-size:15px" id="sortable-table">
 								<thead>
 									<tr>
 										<th align="right">Colonista</th>
+										<th align="right">Sexo</th>
 										<th align="right">Posição</th>
 										<th align="right">Responsável</th>
 										<th align="right">Status</th>
+										<th align="right">Ações</th>
 									</tr>	
 								</thead>
 								<tbody id="tablebody"> 
@@ -163,9 +185,15 @@
 			                            foreach ($subscriptions as $sub) { ?>  
 									<tr>
 										<td><a id="<?= $sub -> colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $sub -> colonist_id ?>&summerCampId=<?= $sub->summer_camp_id ?>"><?= $sub -> colonist_name ?></a></td>
+			                            <td><?= $sub->gender ?></td>
 			                            <td><?= $sub->queue_number ?></td>
 			                            <td><a id="<?= $sub -> responsible_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $sub -> person_user_id ?>"><?= $sub -> responsible_name ?></a></td>
 			                            <td><?= $sub->description ?></td>
+			                            <td>
+			                            	<?php if($sub->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE){ ?>
+			                            		<button class="btn btn-primary" onclick="liberatePayment(<?= $sub -> colonist_id ?>, <?= $sub -> summer_camp_id ?>)">Liberar pagamento</button> 
+			                            	<?php } ?>
+			                            </td>
 									</tr>
 								<?php } ?>
 								</tbody>

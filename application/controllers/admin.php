@@ -682,4 +682,24 @@ class Admin extends CK_Controller {
 			echo utf8_decode($ex->getMessage());
 		}
 	}
+
+	public function updateToWaitingPaymentIndividual() {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$colonistId = $this -> input -> post('colonist_id', TRUE);
+		$summerCampId = $this -> input -> post('summer_camp_id', TRUE);
+
+		try{
+			$this->generic_model->startTransaction();
+			if(!$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT))
+				throw new Exception("Falha ao mudar status de colonista.");
+			$this->generic_model->commitTransaction();
+			echo "true";
+		} catch (Exception $ex) {
+			$this->Logger->error("Failed to insert new user");
+            $this->generic_model->rollbackTransaction();
+			echo utf8_decode($ex->getMessage());
+		}
+		
+
+	}
 }
