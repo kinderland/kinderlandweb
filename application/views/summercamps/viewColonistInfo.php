@@ -191,8 +191,8 @@
                             <option value="" selected>-- Selecione --</option>
                             <option value="RG"
 <?php if (!empty($documentType) && ($documentType == "RG")) echo "selected" ?> >RG</option>
-                            <option value="CPF"
-<?php if (!empty($documentType) && ($documentType == "CPF")) echo "selected" ?>>CPF</option>
+                            <option value="Passaporte"
+<?php if (!empty($documentType) && ($documentType == "Passaporte")) echo "selected" ?>>Passaporte</option>
                             <option value="Certidao"
 <?php if (!empty($documentType) && ($documentType == "Certidao")) echo "selected" ?>>Certidão de Nascimento</option>
                         </select>
