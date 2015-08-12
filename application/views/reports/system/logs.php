@@ -10,7 +10,7 @@
                 <?php
                 for ($i = count($files) - 1; $i > 0; $i--) {
                     if ($files[$i] != "..") {
-                        echo "<a href='openlog/" . $files[$i] . "'>" . $files[$i] . "</a><br>";
+                        echo "<a href='openlog/" . $files[$i] . "' target='_blank'>" . $files[$i] . "</a><br>";
                     }
                 }
                 ?>

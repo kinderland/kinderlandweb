@@ -105,10 +105,10 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
 	return '';
 }
 
-function saveQueuePosition(personId, userName){
+function saveQueuePosition(personId, userName, index){
 	var summerCampType = $("#colonia").val();
 	var yearSelected = $("#anos").val();
-	var position = $("#queue_number_"+personId).val();
+	var position = $("#queue_number_"+index).val();
 
 	if(confirm("Deseja atribuir a posição " + position + " ao responsável " + userName + "?")){
 		$.post("<?= $this->config->item('url_link') ?>admin/updateQueueNumber",
@@ -200,20 +200,23 @@ function saveQueuePosition(personId, userName){
 					 </thead>
 					 <tbody id="tablebody"> 
 					 <?php
-                          	if(is_array($people))
-                             foreach ($people as $person) {
+                          	if(is_array($people)){
+                          		$i = 0;
+                             	foreach ($people as $person) {
                           ?>  
 						<tr>
 							<td><a id="<?= $person -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $person -> person_id ?>"><?= $person -> fullname ?></a></td>
 							<td><?= $person -> person_id ?></td>
                             <td>
-                            	<input type="text" class="form-control" id="queue_number_<?= $person -> person_id ?>" value="<?= $person -> queue_number ?>" />
+                            	<input type="text" class="form-control" id="queue_number_<?= $i ?>" value="<?= $person -> queue_number ?>" />
                             </td>
-                            <td> <button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= $person -> fullname ?>')">Cadastrar</button> </td>
+                            <td> <button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= $person -> fullname ?>', <?= $i ?>)">Cadastrar</button> </td>
                            
 						</tr>
 						<?php
-                            }
+									$i++;
+	                            }
+	                        }
                             ?>
 					</tbody>
 				</table>

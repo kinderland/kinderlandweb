@@ -295,7 +295,7 @@
 		                            			<thead>
 						                            <tr>
 						                                <th> Item de validação </th>
-						                                <th> Situação </th>
+						                                <th> Validar </th>
 						                                <th> Justificativa </th>
 						                            </tr>
 						                        </thead>
