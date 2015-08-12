@@ -57,9 +57,10 @@ class User extends CK_Controller {
 			$address = $this -> address_model -> getAddressByPersonId($person_id);
 			$this -> generic_model -> startTransaction();
 
-			if ($address)
+			if ($address != null && intval($address->getAddressId()) != 0) {
 				$this -> address_model -> updateAddress($street, $number, $complement, $city, $cep, $uf, $neighborhood, $address -> getAddressId());
-			else
+				$addressId = $address -> getAddressId();
+			} else
 				$addressId = $this -> address_model -> insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 
 			$this -> person_model -> updatePerson($fullname, $gender, $email, $person_id, $addressId);
