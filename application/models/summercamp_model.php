@@ -38,7 +38,37 @@ class summercamp_model extends CK_Model {
 
         return $resultSet;
     }
+    
+    public function getAllSummerCampsWithDiscountsByYear($year) {
+    	$sql = "SELECT * FROM summer_camp
+				WHERE summer_camp_id in (SELECT summer_camp_id FROM summer_camp_subscription WHERE discount > 0) 
+				AND DATE_PART('YEAR',date_start) = ?";
+    	
+    	$resultSet = $this -> executeRows($this->db,$sql,array($year));
+    	
+    	$campArray = array();
+    	
+    	if ($resultSet)
+    		foreach ($resultSet as $row)
+    			$campArray[] = SummerCamp::createCampObject($row);
+    	
+    		return $campArray;
+    }
 	
+    public function getColonistsInformationWithDiscounts($year,$summercampId = null) {
+    	
+    	$sql = "SELECT * FROM v_discount WHERE year = ?";
+    	
+    	if($summercampId != null) {
+    		$sql = $sql . " AND camp_id = ?";
+    		$resultSet = $this -> executeRows($this->db,$sql,array($year,$summercampId));
+    	}
+    	else {
+    		$resultSet = $this -> executeRows($this->db,$sql,array($year));
+    	}
+    	
+    	return $resultSet;
+    }
 
     public function getCountSubscriptionsbyAssociated($year) {
 
@@ -508,14 +538,19 @@ class summercamp_model extends CK_Model {
     	
     }
     
-    public function getCountDiscountsBySummerCamp($summercampId,$status=null) {
-    	$sql = "SELECT COALESCE(same_school,0) as same_school, COALESCE(second_brother,0) as second_brother, COALESCE (third_brother,0) as third_brother, COALESCE (child_home,0) as child_home 
-				FROM( SELECT sum(discount) as same_school FROM summer_camp_subscription WHERE discount_reason_id=1 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") same_school,
-				( SELECT sum(discount) as second_brother FROM summer_camp_subscription WHERE discount_reason_id=2 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") second_brother,
-				( SELECT sum(discount) as third_brother FROM summer_camp_subscription WHERE discount_reason_id=3 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") third_brother,
-				( SELECT sum(discount) as child_home FROM summer_camp_subscription WHERE discount_reason_id=4 AND summer_camp_id = ? " . (($status!=null) ? "AND situation = 5" : "") .") child_home";
-    	
-    	$resultSet = $this->executeRow($this->db, $sql,array($summercampId,$summercampId,$summercampId,$summercampId));
+    public function getCountDiscountsBySummerCamp($year,$summercampId = null,$status=null) {
+    	$sql = "SELECT DISTINCT COALESCE(same_school,0) as same_school, COALESCE(second_brother,0) as second_brother, COALESCE (third_brother,0) as third_brother, COALESCE (child_home,0) as child_home 
+				FROM( SELECT sum(discount) as same_school FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=1 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") same_school,
+				( SELECT sum(discount) as second_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=2 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") second_brother,
+				( SELECT sum(discount) as third_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=3 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") third_brother,
+				( SELECT sum(discount) as child_home FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") child_home, summer_camp
+				WHERE " . (($summercampId!=null) ? "summer_camp_id = ? AND" : "") . " DATE_PART('YEAR',date_start) = ?";
+    	if($summercampId!=null) {
+    		$resultSet = $this->executeRow($this->db, $sql,array($year,$summercampId,$year,$summercampId,$year,$summercampId,$year,$summercampId,$summercampId,$year));
+    	}
+    	else {
+    		$resultSet = $this->executeRow($this->db, $sql,array($year,$year,$year,$year,$year));
+    	}
     	
     	return $resultSet;
     	

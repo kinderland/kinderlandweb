@@ -721,4 +721,17 @@ CREATE OR REPLACE VIEW v_multiples_subscriptions as (
 				AND scs1.summer_camp_id != scs2.summer_camp_id
 				AND (UPPER(p1.fullname) = UPPER(p2.fullname) OR c1.document_number = c2.document_number)
 				AND c1.colonist_id != c2.colonist_id));
+				
+CREATE OR REPLACE VIEW v_discount as (
+		SELECT c.colonist_id as colonist_id, p.fullname as colonist_name, pr.person_id as responsable_id, pr.fullname as responsable_name, 
+		scs.summer_camp_id as camp_id, scs.discount as discount, dr.discount_reason as discount_reason, scs.situation as situation, 
+		scss.description as situation_description, DATE_PART('YEAR',sc.date_start) as year
+		FROM colonist c 
+		INNER JOIN person p on p.person_id = c.person_id
+		INNER JOIN summer_camp_subscription scs on scs.colonist_id = c.colonist_id
+		INNER JOIN person pr on pr.person_id = scs.person_user_id
+		INNER JOIN discount_reason dr on dr.discount_reason_id = scs.discount_reason_id
+		INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+		INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id);
+
 

@@ -743,13 +743,13 @@ class Reports extends CK_Controller {
     	$data['ano_escolhido'] = $year;
     	$data['years'] = $years;
     
-    	$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+    	$allCamps = $this -> summercamp_model -> getAllSummerCampsWithDiscountsByYear($year);
     	$campsQtd = count($allCamps);
     	$camps = array();
     	$start = $campsQtd;
     	$end = 1;
     
-    	$campChosen = "-- Selecionar --";
+    	$campChosen = null;
     
     	if (isset($_GET['colonia_f']))
     		$campChosen = $_GET['colonia_f'];
@@ -763,14 +763,26 @@ class Reports extends CK_Controller {
     
     	$data['colonia_escolhida'] = $campChosen;
     	$data['camps'] = $camps;
-    
-    	if($campChosen != "-- Selecionar --") {
-    		$discountsT = $this -> summercamp_model -> getCountDiscountsBySummerCamp($campChosenId);
-    		$discountsI = $this -> summercamp_model -> getCountDiscountsBySummerCamp($campChosenId,"TRUE");
-    	}
-    
+    	
+    	$discountsT=null;
+    	$discountsI=null;
+   		$colonists = $this -> summercamp_model -> getColonistsInformationWithDiscounts($year,$campChosenId);
+   		
+    	if($campChosen != null || $campChosen == "Todas") {
+    		if($campChosen == "Todas") {
+    			$discountsT = $this -> summercamp_model -> getCountDiscountsBySummerCamp($year);
+    			$discountsI = $this -> summercamp_model -> getCountDiscountsBySummerCamp($year,null,"TRUE");
+    		}
+    		else {
+    			$discountsT = $this -> summercamp_model -> getCountDiscountsBySummerCamp($year,$campChosenId);
+    			$discountsI = $this -> summercamp_model -> getCountDiscountsBySummerCamp($year,$campChosenId,"TRUE");
+    		}
+    	
     	$data['discountsT'] = $discountsT;
     	$data['discountsI'] = $discountsI;
+    	}
+    	
+    	$data['colonists'] = $colonists;
     	$this -> loadReportView("reports/summercamps/discounts", $data);
     }
 
