@@ -204,7 +204,7 @@ class SummerCamps extends CK_Controller {
             $this->summercamp_model->editColonistSubscription($summerCampId, $colonistId, $school, $schoolYear, $roommate1, $roommate2, $roommate3);
 
             if ($phone1 || $phone2)
-                $this->telephone_model->updatePhone($personId, $phone1, $personId);
+                $this->telephone_model->updatePhone($personId, $phone1, $phone2); //era pra ser $phone2
 
             $dadId = 0;
             $motherId = 0;
