@@ -203,7 +203,7 @@ function insertFigureRegister($object, $validation) {
 					for($i=0;$i<=6;$i++){
 						$color = "style='color:grey'";
 						if($statusArray[$i]["database_id"] === $summerCampInscription -> getSituationId())
-							$color = "style='color:green'";
+							$color = "style='color:green; font-weight:bold'";
 				?>
 				<p <?=$color ?> >
 					<?= $statusArray[$i]["text"] ?>
