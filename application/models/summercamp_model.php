@@ -33,7 +33,7 @@ class summercamp_model extends CK_Model {
         join colonist c on scs.colonist_id = c.colonist_id
         join person p on c.person_id = p.person_id
         join person pr on pr.person_id = scs.person_user_id
-        join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status order by pr.fullname";
+        join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status order by pr.fullname,colonist_name";
         $resultSet = $this->executeRows($this->db, $sql);
 
         return $resultSet;
@@ -943,6 +943,19 @@ class summercamp_model extends CK_Model {
         $resultSet = $this->executeRows($this->db, $sql);
         return $resultSet;
     }
+
+    public function insertDiscountReason($discountReason) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "Select * from discount_reason where discount_reason = ?";
+        $resultSet = $this->executeRow($this->db, $sql, array($discountReason));
+        if ($resultSet) {
+            return $resultSet->discount_reason_id;
+        }
+       
+        $sql = "insert into discount_reason(discount_reason) values (?)";
+        $resultSet = $this->executeReturningId($this->db, $sql, array($discountReason));
+		return $resultSet;
+    }
 	
 
     public function insertSchool($school) {
@@ -1075,8 +1088,15 @@ class summercamp_model extends CK_Model {
         
 	public function updateDiscount($colonistId,$summerCampId,$discount_value,$discount_reason_id){
 		$this->Logger->info("Running: " . __METHOD__);
+		if($discount_reason_id < -1){
+			$this->Logger->error("Tentativa de inserir desconto com razão inválida");
+			return;
+		}
+		$insertDiscountReasonId = intval($discount_reason_id);
+		if($discount_reason_id == -1)
+			$insertDiscountReasonId = null;
     	$sql = "UPDATE summer_camp_subscription SET discount = ?, discount_reason_id=? WHERE colonist_id = ? and summer_camp_id = ?";
-        return $this->execute($this->db, $sql, array(intval($discount_value), intval($discount_reason_id),intval($colonistId), intval($summerCampId)));		
+        return $this->execute($this->db, $sql, array(intval($discount_value), $insertDiscountReasonId,intval($colonistId), intval($summerCampId)));		
 	}
 
 

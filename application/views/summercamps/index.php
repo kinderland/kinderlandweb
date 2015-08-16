@@ -170,14 +170,16 @@ function insertFigureRegister($object, $validation) {
 				<?php } ?>
 				<br>
 
-				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT ){
+				<?php 
+				$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($summerCampInscription -> getSummerCampId());
+				 
+					if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT && $summerCampPayment ){
 						if($summerCampInscription->getDiscount() < 100) {
-							$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($summerCampInscription -> getSummerCampId());
 							$discount = 1-($summerCampInscription->getDiscount()/100);
 				?>
 							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
 							<button class="btn btn-primary">
-							Pagar R$ <?=number_format($summerCampPayment->getPrice()*$discount,2)?> 
+							Pagar R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00 
 							</button> </a>	
 				<?php		
 						} 

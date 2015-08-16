@@ -542,18 +542,18 @@ class SummerCamps extends CK_Controller {
 			$summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId,$campId);
 			$discount = 1 - ($summerCampSubscription->getDiscount()/100);
 	    	if($summerCampPayment){
-	    		$this->generic_model->startTransaction();
-				$donationId = $this->donation_model->createDonation($userId,$summerCampPayment->getPrice()*$discount, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION,$summerCampPayment->getPortions());
-				$this->Logger->info("Created donation with id: ". $donationId);
-				$this->summercamp_model->associateDonation($campId,$colonistId,$donationId);
-				$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id and campId" .$colonistIdo." ".$campId);
 				if($discount == 0){
-					$this->Logger->info("Discount is 100%, subscribing colonist with id and campId" .$colonistIdo." ".$campId );
-					$this->summercamp_model->paidDonation($donationId);							
+					$this->Logger->info("Discount is 100%, subscribing colonist with id and campId" .$colonistId." ".$campId );
+					$this->summercamp_model->updateColonistStatus($colonistId,$campId,SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED);							
 					$this->generic_model->commitTransaction();
 					redirect("summercamps/index");
 					return;
 				} else{			
+	    		$this->generic_model->startTransaction();
+					$donationId = $this->donation_model->createDonation($userId,$summerCampPayment->getPrice()*$discount, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION,$summerCampPayment->getPortions());
+					$this->Logger->info("Created donation with id: ". $donationId);
+					$this->summercamp_model->associateDonation($campId,$colonistId,$donationId);
+					$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id and campId" .$colonistId." ".$campId);
 					$this->generic_model->commitTransaction();
 					redirect("payments/checkout/".$donationId);
 				}

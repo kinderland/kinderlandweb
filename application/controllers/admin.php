@@ -287,7 +287,12 @@ class Admin extends CK_Controller {
         $summerCampId = $this->input->get('summer_camp_id', TRUE);
         $discount_value = $this->input->get('discount_value', TRUE);
         $discount_reason_id = $this->input->get('discount_reason_id', TRUE);
-		$this->summercamp_model->updateDiscount($colonistId,$summerCampId,$discount_value,$discount_reason_id);
+		if($discount_reason_id == -2){
+			$discount_reason_other = $this->input->get('discount_reason_other', TRUE);
+			$discount_reason_id = $this->summercamp_model->insertDiscountReason($discount_reason_other);
+		}
+		if($this->summercamp_model->updateDiscount($colonistId,$summerCampId,$discount_value,$discount_reason_id))
+			echo "alert('Problema ao modificar o desconto, tente novamente')";
 		redirect("admin/setDiscount?type=discount");
 	}
 
