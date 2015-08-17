@@ -14,6 +14,7 @@
                         <option value="<?= $this->config->item('url_link'); ?>admin/queue">Fila de Espera</option>
                         <option <?=$discount?> value="<?= $this->config->item('url_link'); ?>admin/setDiscount">Conceder Desconto</option>
                         <option value="<?= $this->config->item('url_link'); ?>admin/paymentLiberation">Liberação para pagamento</option>
+                        <option value="<?= $this->config->item('url_link'); ?>admin/managePaymentLiberation">Gerência de pagamentos pendentes</option>
                     <?php } ?>
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
                         <option <?=$validation?> value="<?= $this->config->item('url_link'); ?>admin/validateColonists">Validação</option>

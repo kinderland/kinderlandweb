@@ -735,3 +735,20 @@ CREATE OR REPLACE VIEW v_discount as (
 		INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id);
 
 
+CREATE OR REPLACE VIEW v_colonists_waiting_payment AS 
+ SELECT scs.summer_camp_id,
+    scs.colonist_id,
+    scs.person_user_id,
+    pr.fullname AS responsible_name,
+    p.fullname AS colonist_name,
+    s.description,
+    scs.queue_number,
+    scs.situation,
+    p.gender
+   FROM summer_camp_subscription scs
+     JOIN summer_camp_subscription_status s ON s.status = scs.situation
+     JOIN colonist c ON c.colonist_id = scs.colonist_id
+     JOIN person p ON p.person_id = c.person_id
+     JOIN person pr ON pr.person_id = scs.person_user_id
+  WHERE scs.situation = 4;
+

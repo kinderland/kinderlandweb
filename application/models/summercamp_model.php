@@ -1148,6 +1148,33 @@ class summercamp_model extends CK_Model {
         return null;
     }
 
+    public function getAllColonistsWaitingPaymentBySummerCamp($summerCampId){
+        $this->Logger->info("Running: ". __METHOD__);
+        $sql = "SELECT * FROM v_colonists_waiting_payment WHERE summer_camp_id = ?";
+        $resultSet = $this->executeRowsNoLog($this->db, $sql, array($summerCampId));
+
+        if($resultSet)
+            return $resultSet;
+
+        return null;
+    }
+
+    public function getCountSubscriptionsBySummerCampAndStatus($summerCampId, $status) {
+        $sql = "SELECT count(scs.colonist_id), gender, summer_camp_id 
+                FROM summer_camp_subscription scs
+                INNER JOIN colonist c on c.colonist_id = scs.colonist_id
+                INNER JOIN person p on p.person_id = c.person_id
+                WHERE summer_camp_id = ? AND situation in (".$status.")
+                GROUP BY gender, summer_camp_id";
+        $resultSet = $this->executeRows($this->db, $sql, array($summerCampId));
+
+        if($resultSet){
+            return $resultSet;
+        }
+
+        return array();
+    }
+
 }
 
 ?>

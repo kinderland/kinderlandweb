@@ -345,8 +345,56 @@ class Admin extends CK_Controller {
 
 	public function liberatePayments(){
 		$this->Logger->info("Running: ". __METHOD__);
+		echo "<script>alert('Ainda nao funcional(Em desenvolvimento).'); window.location.replace('" . $this->config->item('url_link') . "admin/paymentLiberation');</script>";
+	}
 
-		echo "<script>alert('A fazer'); window.location.replace('" . $this->config->item('url_link') . "admin/paymentLiberation');</script>";
+	public function managePaymentLiberation() {
+		$this->Logger->info("Running: ". __METHOD__);
+
+		$data = array();
+
+		$years = array();
+		$start = 2015;
+		$date = intval(date('Y'));
+		$campsByYear = null;
+		do {
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		} while($campsByYear!=null);
+
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$data["years"] = $years;
+
+		if(isset($_POST['year'])){
+			$yearChosen = $_POST['year'];
+			$data["year_selected"] = $yearChosen;
+			if(isset($_POST['camp_id'])){
+				$selectedCamp = $this -> summercamp_model -> getSummerCampById($_POST['camp_id']);
+				$data["camp_selected_id"] = $selectedCamp->getCampId();
+				$data["camp_selected_name"] = $selectedCamp->getCampName();
+				$data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
+				$data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
+
+				$campSubscriptions = $this -> summercamp_model -> getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
+				$data["camp_details"] = $campSubscriptions;
+
+				$subscriptions = $this -> summercamp_model -> getAllColonistsWaitingPaymentBySummerCamp($selectedCamp->getCampId());
+				if($subscriptions != null)
+					$data["subscriptions"] = $subscriptions;
+			}
+
+			$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($yearChosen);
+			$data["camps"] = $allCamps;
+		} else {
+			$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear(intval(date('Y')));
+			$data["camps"] = $allCamps;
+		}
+
+		$this -> loadReportView("admin/camps/manage_payment_liberation", $data);
 	}
 
 	public function updateColonistValidation() {
@@ -695,16 +743,62 @@ class Admin extends CK_Controller {
 
 		try{
 			$this->generic_model->startTransaction();
+			$summerCamp = $this->summercamp_model->getSummerCampById($summerCampId);
+
+			$status = SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT. ", ". SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED;
+			$countSubs = $this->summercamp_model->getCountSubscriptionsBySummerCampAndStatus($summerCamp->getCampId(), $status);
+
+			$colonist = $this->colonist_model->getColonist($colonistId);
+
+			foreach($countSubs as $countGender) {
+				if($countGender->gender == $colonist->getGender()){
+					if($colonist->getGender() == "M"){
+						if($summerCamp->getCapacityMale() >= $countGender->count){
+							echo "Sem vagas para liberar pagamento no masculino.";
+							return;
+						}
+					} else {
+						if($summerCamp->getCapacityFemale() >= $countGender->count){
+							echo "Sem vagas para liberar pagamento no feminino.";
+							return;
+						}	
+					}
+				}
+			}
+
 			if(!$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT))
 				throw new Exception("Falha ao mudar status de colonista.");
 			$this->generic_model->commitTransaction();
+
+			// Enviar email?
+
 			echo "true";
 		} catch (Exception $ex) {
-			$this->Logger->error("Failed to insert new user");
+			$this->Logger->error("Failed to update user status to waiting payment");
             $this->generic_model->rollbackTransaction();
 			echo utf8_decode($ex->getMessage());
 		}
-		
-
 	}
+
+	public function cancelSubscriptionIndividual(){
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$colonistId = $this -> input -> post('colonist_id', TRUE);
+		$summerCampId = $this -> input -> post('summer_camp_id', TRUE);
+
+		try{
+			$this->generic_model->startTransaction();
+			if(!$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED))
+				throw new Exception("Falha ao mudar status de colonista.");
+			$this->generic_model->commitTransaction();
+
+			// Enviar email?
+
+			echo "true";
+		} catch (Exception $ex) {
+			$this->Logger->error("Failed to update user status to waiting payment");
+            $this->generic_model->rollbackTransaction();
+			echo utf8_decode($ex->getMessage());
+		}
+	}
+
 }
