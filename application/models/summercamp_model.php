@@ -156,16 +156,18 @@ class summercamp_model extends CK_Model {
     }
 
     public function getAvailableSummerCamps($isAssociate) {
-        $associate = " ";
-        if ($isAssociate)
-            $associate = " or
-		(
-			date_start_pre_subscriptions_associate <= now() and date_finish_pre_subscriptions_associate >= now()
-		)";
-        $sql = "SELECT * FROM summer_camp where pre_subscriptions_enabled and
-		(
-			date_start_pre_subscriptions <= now() and date_finish_pre_subscriptions >= now()
-		) $associate ORDER BY date_start_pre_subscriptions ASC";
+        $sql = "";
+        if($isAssociate){
+            $sql = "SELECT * FROM summer_camp where pre_subscriptions_enabled and
+            (date_start_pre_subscriptions_associate <= now() 
+                and date_finish_pre_subscriptions_associate >= now())
+            ORDER BY date_start_pre_subscriptions ASC";
+        } else {
+            $sql = "SELECT * FROM summer_camp where pre_subscriptions_enabled and
+            (date_start_pre_subscriptions <= now() and date_finish_pre_subscriptions >= now())
+            ORDER BY date_start_pre_subscriptions ASC";
+        }
+
         $resultSet = $this->executeRows($this->db, $sql);
 
         $campArray = array();

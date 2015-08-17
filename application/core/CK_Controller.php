@@ -116,11 +116,12 @@ class CK_Controller extends CI_Controller {
 			if($mail != $person->getEmail())
 				$cc[] = $mail;
 		}
-        $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " não validada";
-        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " contém problemas e ainda não foi validada.<br />
-                Pedimos por gentileza que acesse o Sistema Kinderland onde você poderá visualizar os motivos e resolver as pendências.<br />
-                Não se esqueça de, após as correções, reenviar a pré-inscrição para que a mesma possa passar novamente pelo processo de validação.<br /><br />
-                Associação Kinderland";
+        $emailSubject = "[Kinderland] ". $colonist->getFullname() . "colônia [". $summerCampName ."]: correções necessárias na pré-inscrição";
+        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colônia " . $summerCampName . " ainda não foi validada pois são necessárias correções e complementos. 
+        Pode ter sido algum dado não corretamente preenchido ou algum problema relacionados com a foto ou documento de identificação do colonista.<br /><br /><br />
+        Mas não se preocupe: pedimos por gentileza que acesse o Sistema Kinderland onde você poderá visualizar os motivos e resolver as pendências facilmente. 
+        Não se esqueça de, após as correções, reenviar a pré-inscrição para que a mesma possa passar novamente pelo processo de validação.<br /><br /><br />
+        Associação Kinderland";
 		
         return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
@@ -132,13 +133,9 @@ class CK_Controller extends CI_Controller {
 			if($mail != $person->getEmail())
 				$cc[] = $mail;
 		}
-        $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " validada";
-        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " foi validada,
-            todos os dados e documentos estão corretos. <br />
-            Aguarde nova comunicação por email sobre os próximos passos,
-            incluindo sorteio e posterior confirmação da inscrição se for o caso. <br />
-            Acompanhe sempre as novidades em nosso site e no Sistema Kinderland. <br />
-            Em caso de dúvidas, entrar em contato por telefone (21-2266-1980) ou, preferencialmente, por email.<br /><br />
+        $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " na colônia ". $summerCampName ." validada";
+        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colônia " . $summerCampName . " já foi validada pois todos os dados foram corretamente preenchidos.<br /><br /><br />
+            Pedimos por gentileza que aguardem o chamado para a próxima etapa de confirmação da inscrição.  Em função da ordem definida em sorteio - se houver necessidade, convidaremos seguindo a posição na fila de espera.<br /><br /><br />
             Associação Kinderland";
 
         return $this->sendMail($emailSubject, $emailString, $person, $cc);

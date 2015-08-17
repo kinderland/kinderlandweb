@@ -179,7 +179,7 @@ function insertFigureRegister($object, $validation) {
 				?>
 							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
 							<button class="btn btn-primary">
-							Pagar R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00 
+							Doar R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00 
 							</button> </a>	
 				<?php		
 						} 
