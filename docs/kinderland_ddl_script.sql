@@ -702,25 +702,7 @@ CREATE OR REPLACE VIEW v_subscriptions_not_submitted as
 	AND c.colonist_id in (SELECT colonist_id FROM document WHERE document_type = 3)
 	AND c.colonist_id in (SELECT colonist_id FROM summer_camp_subscription WHERE accepted_terms = 'TRUE')
 	AND c.colonist_id in (SELECT colonist_id FROM document WHERE document_type = 5));
-	
-CREATE OR REPLACE VIEW v_multiples_subscriptions as (
-		SELECT c1.colonist_id as colonist_id, p1.fullname as colonist_name, sc1.summer_camp_id as camp_id, sc1.camp_name as camp_name,
-		pr.person_id as responsable_id, pr.fullname as responsable_name, scs1.situation as situation, scss1.description as situation_description, DATE_PART('YEAR',sc1.date_start) as year
-		FROM person p1
-		INNER JOIN colonist c1 on c1.person_id = p1.person_id
-		INNER JOIN summer_camp_subscription scs1 on scs1.colonist_id = c1.colonist_id
-		INNER JOIN summer_camp sc1 on sc1.summer_camp_id = scs1.summer_camp_id
-		INNER JOIN summer_camp_subscription_status scss1 on scss1.status = scs1.situation
-		INNER JOIN person pr on pr.person_id = scs1.person_user_id
-		WHERE c1.colonist_id in (
-				SELECT DISTINCT scs1.colonist_id FROM summer_camp_subscription scs1, summer_camp_subscription scs2, person p1, person p2, colonist c1, colonist c2
-				WHERE c1.person_id= p1.person_id
-				AND c2.person_id = p2.person_id
-				AND c1.colonist_id = scs1.colonist_id
-				AND c2.colonist_id = scs2.colonist_id
-				AND scs1.summer_camp_id != scs2.summer_camp_id
-				AND (UPPER(p1.fullname) = UPPER(p2.fullname) OR c1.document_number = c2.document_number)
-				AND c1.colonist_id != c2.colonist_id));
+
 				
 CREATE OR REPLACE VIEW v_discount as (
 		SELECT c.colonist_id as colonist_id, p.fullname as colonist_name, pr.person_id as responsable_id, pr.fullname as responsable_name, 

@@ -115,39 +115,19 @@
 							<td align='right'> <?php echo $countsM->aguardando_pagamento; ?> </td>
 							<td align='right'> <?php echo $countsT->aguardando_pagamento; ?> </td>
 						</tr>
-						<tr>
-							<th align="right" width='200px'>Cancelados</th>
-							<td align='right'> <?php echo $countsF->cancelado; ?> </td>
-							<td align='right'> <?php echo $countsM->cancelado; ?> </td>
-							<td align='right'> <?php echo $countsT->cancelado; ?> </td>
-						</tr>
-						<tr>
-							<th align="right" width='200px'>Desistentes</th>
-							<td align='right'> <?php echo $countsF->desistente; ?> </td>
-							<td align='right'> <?php echo $countsM->desistente; ?> </td>
-							<td align='right'> <?php echo $countsT->desistente; ?> </td>
-						</tr>
-						<tr>
-							<th align="right" width='200px'>Excluidos</th>
-							<td align='right'> <?php echo $countsF->excluido; ?> </td>
-							<td align='right'> <?php echo $countsM->excluido; ?> </td>
-							<td align='right'> <?php echo $countsT->excluido; ?> </td>
-						</tr>
+						
 						<tr>
 							<th align="right" width='200px'>Total</th>
-							<td align='right'> <?php echo $countsF->inscrito + $countsF->excluido + $countsF->desistente 
-	                                + $countsF->cancelado + $countsF->aguardando_pagamento + $countsF->fila_espera 
+							<td align='right'> <?php echo $countsF->inscrito + $countsF->aguardando_pagamento + $countsF->fila_espera 
 	                                + $countsF->validada + $countsF->nao_validada + $countsF->aguardando_validacao 
 	                                + $countsF->elaboracao; ?> 
 	                                </td>
-							<td align='right'> <?php echo $countsM->inscrito + $countsM->excluido + $countsM->desistente 
-	                                + $countsM->cancelado + $countsM->aguardando_pagamento + $countsM->fila_espera 
+							<td align='right'> <?php echo $countsM->inscrito + $countsM->aguardando_pagamento + $countsM->fila_espera 
 	                                + $countsM->validada + $countsM->nao_validada + $countsM->aguardando_validacao 
 	                                + $countsM->elaboracao; ?> 
 	                                </td>
 							<td width="60px" align='right'>
-	                                <?php echo $countsT->inscrito + $countsT->excluido + $countsT->desistente 
-	                                + $countsT->cancelado + $countsT->aguardando_pagamento + $countsT->fila_espera 
+	                                <?php echo $countsT->inscrito + $countsT->aguardando_pagamento + $countsT->fila_espera 
 	                                + $countsT->validada + $countsT->nao_validada + $countsT->aguardando_validacao 
 	                                + $countsT->elaboracao; ?>
 	                            </td>
@@ -155,8 +135,7 @@
 						<tr>
 							<th	align="right" width='200px'>Porcentagem de Inscritos</th>
 							<td align='right'> <?php 
-									$countTotalF = $countsF->inscrito + $countsF->excluido + $countsF->desistente 
-	                                + $countsF->cancelado + $countsF->aguardando_pagamento + $countsF->fila_espera 
+									$countTotalF = $countsF->inscrito + $countsF->aguardando_pagamento + $countsF->fila_espera 
 	                                + $countsF->validada + $countsF->nao_validada + $countsF->aguardando_validacao 
 	                                + $countsF->elaboracao;
 									
@@ -165,8 +144,7 @@
 									echo "%"; ?> 
 	                                </td>
 							<td align='right'> <?php 
-									$countTotalM = $countsM->inscrito + $countsM->excluido + $countsM->desistente 
-	                                + $countsM->cancelado + $countsM->aguardando_pagamento + $countsM->fila_espera 
+									$countTotalM = $countsM->inscrito + $countsM->aguardando_pagamento + $countsM->fila_espera 
 	                                + $countsM->validada + $countsM->nao_validada + $countsM->aguardando_validacao 
 	                                + $countsM->elaboracao;
 							
@@ -176,8 +154,7 @@
 	                                </td>
 							<td width="60px" align='right'>
 	                                <?php 
-	                                $countTotalT = $countsT->inscrito + $countsT->excluido + $countsT->desistente 
-	                                + $countsT->cancelado + $countsT->aguardando_pagamento + $countsT->fila_espera 
+	                                $countTotalT = $countsT->inscrito + $countsT->aguardando_pagamento + $countsT->fila_espera 
 	                                + $countsT->validada + $countsT->nao_validada + $countsT->aguardando_validacao 
 	                                + $countsT->elaboracao;
 	                                
@@ -191,8 +168,8 @@
 					style="max-width: 600px;">
 					<tr>
 						<th align="right">Potencial de Inscritos por Colônia</th>
-						<td width="60px" align='right'> <?php echo $potInscritos = $countsT->validada + $countsT->aguardando_pagamento 
-						+ $countsT->fila_espera + $countsT->inscrito; ?></td>
+						<td width="60px" align='right'> <?php echo $potInscritos = $countsT->aguardando_pagamento 
+						+ $countsT->inscrito; ?></td>
 						<th align="right">Porcentagem de Inscritos por Colônia</th>
 						<td width="60px" align='right'><?php 
 						if($potInscritos)
@@ -200,6 +177,43 @@
 						 else echo "0.0";
 						 echo "%"; ?>  </td>				
 					</tr>
+				</table>
+				<table class="table table-bordered table-striped table-min-td-size"
+					style="max-width: 600px;">
+					<tr>
+							<th align="right"></th>
+							<th align="right">Feminino</th>
+							<th align="right">Masculino</th>
+							<th align="right">Total</th>
+					    <tr>
+						<tr>
+								<th align="right" width='200px'>Cancelados</th>
+								<td align='right'> <?php echo $countsF->cancelado; ?> </td>
+								<td align='right'> <?php echo $countsM->cancelado; ?> </td>
+								<td align='right'> <?php echo $countsT->cancelado; ?> </td>
+							</tr>
+							<tr>
+								<th align="right" width='200px'>Desistentes</th>
+								<td align='right'> <?php echo $countsF->desistente; ?> </td>
+								<td align='right'> <?php echo $countsM->desistente; ?> </td>
+								<td align='right'> <?php echo $countsT->desistente; ?> </td>
+							</tr>
+							<tr>
+								<th align="right" width='200px'>Excluidos</th>
+								<td align='right'> <?php echo $countsF->excluido; ?> </td>
+								<td align='right'> <?php echo $countsM->excluido; ?> </td>
+								<td align='right'> <?php echo $countsT->excluido; ?> </td>
+							</tr>
+						<tr>
+							<th align="right" width='200px'>Total</th>
+							<td align='right'> <?php echo $countsF->excluido + $countsF->desistente + $countsF->cancelado; ?> 
+	                                </td>
+							<td align='right'> <?php echo $countsM->excluido + $countsM->desistente + $countsM->cancelado; ?> 
+	                                </td>
+							<td width="60px" align='right'>
+	                                <?php echo $countsT->excluido + $countsT->desistente + $countsT->cancelado; ?>
+	                            </td>
+						</tr>
 				</table>
 				
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">

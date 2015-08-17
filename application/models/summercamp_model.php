@@ -109,9 +109,29 @@ class summercamp_model extends CK_Model {
     
     public function getColonistsDetailedMultiplesSubscriptions($year) {
     	
-    	$sql = "SELECT * FROM v_multiples_subscriptions WHERE year = ?";
+    	$sql = "SELECT c1.colonist_id as colonist_id, p1.fullname as colonist_name, sc1.summer_camp_id as camp_id, sc1.camp_name as camp_name,
+				pr.person_id as responsable_id, pr.fullname as responsable_name, scs1.situation as situation, scss1.description as situation_description, DATE_PART('YEAR',sc1.date_start) as year
+				FROM person p1
+				INNER JOIN colonist c1 on c1.person_id = p1.person_id
+				INNER JOIN summer_camp_subscription scs1 on scs1.colonist_id = c1.colonist_id
+				INNER JOIN summer_camp sc1 on sc1.summer_camp_id = scs1.summer_camp_id
+				INNER JOIN summer_camp_subscription_status scss1 on scss1.status = scs1.situation
+				INNER JOIN person pr on pr.person_id = scs1.person_user_id
+				WHERE c1.colonist_id in (
+						SELECT DISTINCT scs1.colonist_id FROM summer_camp sc1, summer_camp sc2, summer_camp_subscription scs1, summer_camp_subscription scs2, person p1, person p2, colonist c1, colonist c2
+						WHERE c1.person_id= p1.person_id
+						AND c2.person_id = p2.person_id
+						AND c1.colonist_id = scs1.colonist_id
+						AND c2.colonist_id = scs2.colonist_id
+						AND scs1.summer_camp_id != scs2.summer_camp_id
+						AND sc1.summer_camp_id = scs1.summer_camp_id
+						AND sc2.summer_camp_id = scs2.summer_camp_id
+						AND (UPPER(p1.fullname) = UPPER(p2.fullname) OR c1.document_number = c2.document_number)
+						AND c1.colonist_id != c2.colonist_id
+						AND DATE_PART('YEAR',sc1.date_start) = ?
+						AND DATE_PART('YEAR',sc2.date_start) = ?)";
     	
-    	$resultSet = $this -> executeRows($this->db,$sql,array($year));
+    	$resultSet = $this -> executeRows($this->db,$sql,array($year,$year));
     	
     	return $resultSet;
     }
@@ -785,36 +805,41 @@ class summercamp_model extends CK_Model {
     }
     
 
-    public function getCountStatusSchoolBySchoolName($schoolName) {
-        $sql = "select school_name,
+    public function getCountStatusSchoolBySchoolName($schoolName,$year,$summercampId = null) {
+        $sql = "select DISTINCT school_name,
 		(SELECT count(status) as elaboracao
 		FROM summer_camp sc
 		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status
-		WHERE status = 2 AND school_name = ?) as validada,
+		WHERE status = 2 AND school_name = ? AND DATE_PART('YEAR',sc.date_start) = ?" . (($summercampId != null) ? "AND sc.summer_camp_id = ?" : "") . ") as validada,
 		(SELECT count(status) as elaboracao
 		FROM summer_camp sc
 		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status
-		WHERE status = 3 AND school_name = ?) as fila_espera,
+		WHERE status = 3 AND school_name = ? AND DATE_PART('YEAR',sc.date_start) = ?" . (($summercampId != null) ? "AND sc.summer_camp_id = ?" : "") . ") as fila_espera,
 		(SELECT count(status) as elaboracao
 		FROM summer_camp sc
 		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status
-		WHERE status = 4 AND school_name = ?) as aguardando_pagamento,
+		WHERE status = 4 AND school_name = ? AND DATE_PART('YEAR',sc.date_start) = ?" . (($summercampId != null) ? "AND sc.summer_camp_id = ?" : "") . ") as aguardando_pagamento,
 		(SELECT count(status) as elaboracao
 		FROM summer_camp sc
 		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status
-		WHERE status = 5 AND school_name = ?) as inscrito
+		WHERE status = 5 AND school_name = ? AND DATE_PART('YEAR',sc.date_start) = ?" . (($summercampId != null) ? "AND sc.summer_camp_id = ?" : "") . ") as inscrito
 		FROM summer_camp sc
 		INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status
 		WHERE school_name = ?";
 
-
-        $resultSet = $this->executeRow($this->db, $sql, array($schoolName, $schoolName,
-            $schoolName, $schoolName, $schoolName));
+		if($summercampId != null) {
+			$resultSet = $this->executeRow($this->db, $sql, array($schoolName,$year,$summercampId, $schoolName,$year,$summercampId,
+					$schoolName,$year,$summercampId, $schoolName,$year,$summercampId, $schoolName));
+		}
+		else {
+        $resultSet = $this->executeRow($this->db, $sql, array($schoolName,$year, $schoolName,$year,
+            $schoolName,$year, $schoolName,$year, $schoolName));
+		}
 
         return $resultSet;
     }

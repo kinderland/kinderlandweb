@@ -314,7 +314,7 @@ class Reports extends CK_Controller {
 
         while ($start < $countSchools) {
 
-            $school = $this->summercamp_model->getCountStatusSchoolBySchoolName($schoolNames[$start]);
+            $school = $this->summercamp_model->getCountStatusSchoolBySchoolName($schoolNames[$start],$year,$campChosenId);
 
             if ($school != null) {
                 $schools[] = $school;
