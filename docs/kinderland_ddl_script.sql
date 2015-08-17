@@ -250,7 +250,8 @@ CREATE TABLE summer_camp (
     pre_subscriptions_enabled boolean default false,
     capacity_male integer not null default 0,
     capacity_female integer not null default 0,
-    mini_camp boolean not null default false
+    mini_camp boolean not null default false,
+    days_to_pay integer not null default 5
 );
 
 CREATE TABLE colonist (
@@ -308,6 +309,7 @@ CREATE TABLE summer_camp_subscription (
     queue_number integer,
     discount integer not null default '0',
     discount_reason_id integer,
+    date_payment_limit timestamp without time zone,
     CHECK (discount >= 0 and discount <= 100),
     FOREIGN KEY (discount_reason_id) REFERENCES discount_reason(discount_reason_id) ON DELETE RESTRICT
 );

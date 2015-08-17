@@ -1200,6 +1200,23 @@ class summercamp_model extends CK_Model {
         return array();
     }
 
+    public function updateColonistToWaitingPayment($colonistId, $summerCampId) {
+        $sql = "SELECT * FROM set_colonist_subscription_waiting_payment(?,?)";
+        $result = $this->executeRow($this->db, $sql, array(intval($colonistId), intval($summerCampId)));
+
+        if($result && $result->set_colonist_subscription_waiting_payment == 't')
+            return true;
+
+        return false;
+    }
+
+    public function updateDatePaymentLimit($colonistId, $summerCampId, $dateLimit) {
+        $sql = "UPDATE summer_camp_subscription SET date_payment_limit = ? WHERE summer_camp_id = ? AND colonist_id = ?";
+        $result = $this->execute($this->db, $sql, array($dateLimit, intval($summerCampId), intval($colonistId)));
+
+        return $result;
+    }
+
 }
 
 ?>

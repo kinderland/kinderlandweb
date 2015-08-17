@@ -753,12 +753,12 @@ class Admin extends CK_Controller {
 			foreach($countSubs as $countGender) {
 				if($countGender->gender == $colonist->getGender()){
 					if($colonist->getGender() == "M"){
-						if($summerCamp->getCapacityMale() >= $countGender->count){
+						if($summerCamp->getCapacityMale() <= $countGender->count){
 							echo "Sem vagas para liberar pagamento no masculino.";
 							return;
 						}
 					} else {
-						if($summerCamp->getCapacityFemale() >= $countGender->count){
+						if($summerCamp->getCapacityFemale() <= $countGender->count){
 							echo "Sem vagas para liberar pagamento no feminino.";
 							return;
 						}	
@@ -766,8 +766,9 @@ class Admin extends CK_Controller {
 				}
 			}
 
-			if(!$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT))
+			if(!$this->summercamp_model->updateColonistToWaitingPayment($colonistId, $summerCampId))
 				throw new Exception("Falha ao mudar status de colonista.");
+
 			$this->generic_model->commitTransaction();
 
 			// Enviar email?
@@ -789,6 +790,30 @@ class Admin extends CK_Controller {
 			$this->generic_model->startTransaction();
 			if(!$this->summercamp_model->updateColonistStatus($colonistId, $summerCampId, SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED))
 				throw new Exception("Falha ao mudar status de colonista.");
+
+			$this->generic_model->commitTransaction();
+
+			// Enviar email?
+
+			echo "true";
+		} catch (Exception $ex) {
+			$this->Logger->error("Failed to update user status to waiting payment");
+            $this->generic_model->rollbackTransaction();
+			echo utf8_decode($ex->getMessage());
+		}
+	}
+
+	public function updateDatePaymentLimit() {
+		$this -> Logger -> info("Starting " . __METHOD__);
+		$colonistId = $this -> input -> post('colonist_id', TRUE);
+		$summerCampId = $this -> input -> post('summer_camp_id', TRUE);
+		$dateLimit = $this -> input -> post('date_limit', TRUE);
+
+		try{
+			$this->generic_model->startTransaction();
+			if(!$this->summercamp_model->updateDatePaymentLimit($colonistId, $summerCampId, $dateLimit))
+				throw new Exception("Falha ao mudar data de prazo.");
+
 			$this->generic_model->commitTransaction();
 
 			// Enviar email?

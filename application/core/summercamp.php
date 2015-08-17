@@ -16,8 +16,9 @@ class SummerCamp {
     private $capacityMale;
     private $capacityFemale;
     private $miniCamp;
+    private $daysToPay;
 
-    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false) {
+    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false, $daysToPay = 5) {
         $this->campId = $campId;
         $this->campName = $campName;
         $this->dateCreated = $dateCreated;
@@ -32,11 +33,26 @@ class SummerCamp {
         $this->capacityMale = $capacityMale;
         $this->capacityFemale = $capacityFemale;
         $this->miniCamp = $miniCamp;
+        $this->daysToPay = $daysToPay;
     }
 
     public static function createCampObject($resultRow) {
         return new SummerCamp(
-                $resultRow->summer_camp_id, $resultRow->camp_name, $resultRow->date_created, $resultRow->date_start, $resultRow->date_finish, $resultRow->date_start_pre_subscriptions, $resultRow->date_finish_pre_subscriptions, $resultRow->date_start_pre_subscriptions_associate, $resultRow->date_finish_pre_subscriptions_associate, $resultRow->description, $resultRow->pre_subscriptions_enabled, $resultRow->capacity_male, $resultRow->capacity_female, $resultRow->mini_camp
+                $resultRow->summer_camp_id, 
+                $resultRow->camp_name, 
+                $resultRow->date_created, 
+                $resultRow->date_start, 
+                $resultRow->date_finish, 
+                $resultRow->date_start_pre_subscriptions, 
+                $resultRow->date_finish_pre_subscriptions, 
+                $resultRow->date_start_pre_subscriptions_associate, 
+                $resultRow->date_finish_pre_subscriptions_associate, 
+                $resultRow->description, 
+                $resultRow->pre_subscriptions_enabled, 
+                $resultRow->capacity_male, 
+                $resultRow->capacity_female, 
+                $resultRow->mini_camp, 
+                $resultRow->days_to_pay
         );
     }
 
@@ -156,6 +172,13 @@ class SummerCamp {
         return FALSE;
     }
 
+    public function setDaysToPay($daysToPay) {
+        $this->daysToPay = $daysToPay;
+    }
+
+    public function getDaysToPay() {
+        return $this->daysToPay;
+    }
 }
 
 ?>

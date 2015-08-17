@@ -38,20 +38,21 @@
 			}
 
 			function liberatePayment(colonist_id, summer_camp_id){
-				$.post("<?= $this->config->item('url_link') ?>admin/updateToWaitingPaymentIndividual",
-		        {
-		            'colonist_id': colonist_id,
-		            'summer_camp_id': summer_camp_id
-		        },
-		        function (data) {
-		            if (data == "true") {
-		                alert("Liberado para pagamento!");
-		                window.location.reload();
-		            } else {
-		                alert(data);
-		            }
-		        });
-
+				if(confirm("Deseja liberar esse colonista para pagar sua inscrição?")){
+					$.post("<?= $this->config->item('url_link') ?>admin/updateToWaitingPaymentIndividual",
+			        {
+			            'colonist_id': colonist_id,
+			            'summer_camp_id': summer_camp_id
+			        },
+			        function (data) {
+			            if (data == "true") {
+			                alert("Liberado para pagamento!");
+			                window.location.reload();
+			            } else {
+			                alert(data);
+			            }
+			        });
+				}
 			}
 
 

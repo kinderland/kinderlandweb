@@ -22,8 +22,13 @@
 	</head>
 	<body>
 		<script>
-			function cancelSubscription(colonist_id, summer_camp_id, colonist_name){
-				if(confirm("Deseja realmente cancelar a inscrição do(a) colonista " + colonist_name + "?")){
+			$(document).ready(function () {
+				$(".birthdate").mask("00/00/0000", {
+	            	placeholder: "__/__/____"
+	        	});	
+	        });
+			function cancelSubscription(colonist_id, summer_camp_id){
+				if(confirm("Deseja realmente cancelar a inscrição deste colonista ?")){
 					$.post("<?= $this->config->item('url_link') ?>admin/cancelSubscriptionIndividual",
 			        {
 			            'colonist_id': colonist_id,
@@ -32,6 +37,35 @@
 			        function (data) {
 			            if (data == "true") {
 			                alert("Inscrição cancelada com sucesso");
+			                window.location.reload();
+			            } else {
+			                alert(data);
+			            }
+			        });
+				}
+			}
+
+			function updatePaymentLimit(colonist_id, summer_camp_id){
+				var date_limit = $("#subscription_payment_"+colonist_id+"_"+summer_camp_id).val();
+
+				if(date_limit == ""){
+					alert("O preenchimento da data é obrigatório");
+					return;
+				}
+
+				var datePieces = date_limit.split("/");
+				date_limit = datePieces[2] + "-" + datePieces[1] + "-" + datePieces[0];
+
+				if(confirm("Deseja realmente alterar esta data de prazo para pagamento?")){
+					$.post("<?= $this->config->item('url_link') ?>admin/updateDatePaymentLimit",
+			        {
+			            'colonist_id': colonist_id,
+			            'summer_camp_id': summer_camp_id,
+			            'date_limit': date_limit
+			        },
+			        function (data) {
+			            if (data == "true") {
+			                alert("Data de prazo alterada com sucesso.");
 			                window.location.reload();
 			            } else {
 			                alert(data);
@@ -154,14 +188,28 @@
 								<?php if(is_array($subscriptions))
 			                            foreach ($subscriptions as $sub) { ?>  
 									<tr>
-										<td><a id="<?= $sub -> colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $sub -> colonist_id ?>&summerCampId=<?= $sub->summer_camp_id ?>"><?= $sub -> colonist_name ?></a></td>
+										<td>
+											<a id="<?= $sub -> colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $sub -> colonist_id ?>&summerCampId=<?= $sub->summer_camp_id ?>"><?= $sub -> colonist_name ?></a>
+										</td>
+
 			                            <td><?= $sub->gender ?></td>
-			                            <td>(Dia da liberação)</td>
-			                            <td><a id="<?= $sub -> responsible_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $sub -> person_user_id ?>"><?= $sub -> responsible_name ?></a></td>
-			                            <td><?= $sub->description ?></td>
+
 			                            <td>
+			                            	<input type="text" class="form-control datepicker" style="width:120px !important" id="subscription_payment_<?= $sub -> colonist_id ?>_<?= $sub -> summer_camp_id ?>" value="<?= date('d/m/Y', strtotime(substr($sub->date_payment_limit, 0, 10))) ?>" /> 
+			                            	<img src="<?= $this->config->item('assets'); ?>images/save.png" onclick="updatePaymentLimit(<?= $sub -> colonist_id ?>, <?= $sub -> summer_camp_id ?>)" width="24px" height="24px" /> 
+			                            </td>
+
+			                            <td>
+			                            	<a id="<?= $sub -> responsible_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $sub -> person_user_id ?>"><?= $sub -> responsible_name ?></a>
+			                            </td>
+
+			                            <td><?= $sub->description ?></td>
+
+			                            <td>
+			                            	<a target='blank' href="<?= $this -> config -> item('url_link');?>admin/viewEmails/<?= $sub->person_user_id ?>">Ver e-mails</a>
 			                            	<?php if($sub->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT){ ?>
-			                            		<button class="btn btn-primary" onclick="cancelSubscription(<?= $sub -> colonist_id ?>, <?= $sub -> summer_camp_id ?>, '<?= $sub -> colonist_name ?>')">Cancelar inscrição</button> 
+			                            		<br />
+			                            		<button class="btn btn-primary" onclick="cancelSubscription(<?= $sub -> colonist_id ?>, <?= $sub -> summer_camp_id ?>)">Cancelar inscrição</button> 
 			                            	<?php } ?>
 			                            </td>
 									</tr>

@@ -13,13 +13,14 @@ class SummerCampSubscription extends Colonist {
 	private $roommate3;
 	private $queueNumber;
 	private $discount;
+	private $datePaymentLimit;
 	
 
 	public function __construct($personId, $fullname, $gender, $email,$address,
 	$colonistId, $birthDate, $documentNumber, $documentType,$personUserId, 
 	$phone1,
 	$phone2, 
-	$summerCampId, $personUserId, $situation, $school, $schoolYear,$situationId,$roommate1,$roommate2,$roommate3, $queueNumber=null, $discount=null) {
+	$summerCampId, $personUserId, $situation, $school, $schoolYear,$situationId,$roommate1,$roommate2,$roommate3, $queueNumber=null, $discount=null, $datePaymentLimit=null) {
 		parent::__construct($personId, $fullname, $gender, $email, $address, $colonistId, $birthDate, $documentNumber, $documentType, $phone1, $phone2);
 		$this -> summerCampId = $summerCampId;
 		$this -> personUserId = $personUserId;
@@ -32,6 +33,7 @@ class SummerCampSubscription extends Colonist {
 		$this -> roommate3 = $roommate3;
 		$this -> queueNumber = $queueNumber;
 		$this -> discount = $discount;
+		$this -> datePaymentLimit = $datePaymentLimit;
 		
 	}
 
@@ -43,7 +45,7 @@ class SummerCampSubscription extends Colonist {
 		null, //phone2
 		$resultRow -> summer_camp_id, $resultRow -> person_user_id, $resultRow -> situation_description, $resultRow -> school_name, $resultRow -> school_year,$resultRow -> situation,
 		$resultRow -> roommate1, $resultRow -> roommate2, $resultRow -> roommate3,
-		$resultRow -> queue_number,$resultRow -> discount);
+		$resultRow -> queue_number,$resultRow -> discount, $resultRow -> date_payment_limit);
 		if ($addressIncluded)
 			$summerCampSubscription -> setAddress(Address::createAddressObject($resultRow));
 
@@ -138,5 +140,12 @@ class SummerCampSubscription extends Colonist {
 		return $this -> discount;
 	}
 
+	public function setDatePaymentLimit($datePaymentLimit) {
+		$this -> datePaymentLimit = $datePaymentLimit;
+	}
+
+	public function getDatePaymentLimit() {
+		return $this -> datePaymentLimit;
+	}
 }
 ?>

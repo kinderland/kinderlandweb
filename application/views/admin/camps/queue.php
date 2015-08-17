@@ -83,7 +83,7 @@ function sendTableToCSV(){
     	//Nome, retira pega o que esta entre um <> e outro <>
     	data2.push(row.cells[0].innerHTML.split("<")[1].split(">")[1]);
     	data2.push(row.cells[1].innerHTML);
-    	data2.push(document.getElementById('queue_number_'+row.cells[1].innerHTML).value);
+    	data2.push(document.getElementById('queue_number_'+i).value);
     	data.push(data2)
     } 
     if(i==0){
