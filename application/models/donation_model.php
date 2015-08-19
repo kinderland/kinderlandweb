@@ -21,7 +21,7 @@ class donation_model extends CK_Model {
 
 	public function getDonationPortionsMax($donation) {
 		
-		if($donation -> getDonationType() == DONATION_TYPE_SUBSCRIPTION){
+		if($donation -> getDonationType() == DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION){
 			$sql = "select * from summer_camp_payment_period where summer_camp_id in (select summer_camp_id from summer_camp_subscription where donation_id = ?)
                 and date_start <= ? and date_finish >= ?";
 			$result = $this -> executeRow($this -> db, $sql, array($donation -> getDonationId(), $donation -> getDateCreated(), $donation -> getDateCreated()));
