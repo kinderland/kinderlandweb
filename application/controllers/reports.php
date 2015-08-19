@@ -246,13 +246,22 @@ class Reports extends CK_Controller {
 
         $genderM = 'M';
         $genderF = 'F';
-
-        $countsM = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year, $campChosenId, $genderM);
-        $countsF = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year, $campChosenId, $genderF);
+        
+        $countsAssociatedM = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,'TRUE',$campChosenId,$genderM);
+        $countsNotAssociatedM = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId,$genderM);
+        $countsAssociatedF = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,'TRUE',$campChosenId,$genderF);
+        $countsNotAssociatedF = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId,$genderF);
+        $countsAssociatedT = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,'TRUE',$campChosenId);
+        $countsNotAssociatedT = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId);
+        
         $countsT = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year, $campChosenId);
 
-        $data['countsM'] = $countsM;
-        $data['countsF'] = $countsF;
+        $data['countsAssociatedM'] = $countsAssociatedM;
+        $data['countsNotAssociatedM'] = $countsNotAssociatedM;
+        $data['countsAssociatedF'] = $countsAssociatedF;
+        $data['countsNotAssociatedF'] = $countsNotAssociatedF;
+        $data['countsAssociatedT'] = $countsAssociatedT;
+        $data['countsNotAssociatedT'] = $countsNotAssociatedT;
         $data['countsT'] = $countsT;
 
         $this->loadReportView("reports/summercamps/all_registrations", $data);
