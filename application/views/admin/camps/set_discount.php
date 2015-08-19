@@ -71,8 +71,20 @@
 		</script>
 
 		<style>
+
+			#discount_other, #discount_reason, #discount_value{
+				max-width: 160px;
+				width: 160px;
+				word-wrap: break-word;
+			}
+
+			input {
+				max-width: 120px;
+				word-wrap: break-word;
+			}
+
 			select {
-				max-width: 140px;
+				max-width: 110px;
 				word-wrap: break-word;
 			}
 			option {
@@ -166,15 +178,16 @@
 
                     var discountValue = $(discountValueId).val();
 
-                    if(discountValue < 0){
-                        alert("Desconto inválido");
-                        return;
+                    {
                     }
                     
                     var discountReason = $(discountReasonId).val();
-                    if(discountReason == -1){
-                        if(!confirm("Você está colocando um desconto sem motivo, deseja continuar?"))                       	
-	                        return;
+                    if(discountReason == -1 && discountValue != 0){
+                        alert("Você está colocando um desconto sem motivo, por favor selecione um motivo")                       	
+                        return;
+                    } else if(discountReason != -1 && discountValue == 0){
+                        alert("Você está colocando um motivo sem desconto, por favor selecione um desconto");
+                        return;                    	
                     } else if (discountReason == -2){
 	                    var discountReasonOther = "#discount_other";
 	                    discountReasonOther = $(discountReasonOther).val();
@@ -187,7 +200,6 @@
 						window.location.href = url;
 						return;                	
                     }
-                    
                     var url = "<?= $this -> config -> item('url_link') ?>
 						admin/setDiscountValue?colonist_id="+colonist_id+"&summer_camp_id="+summer_camp_id+"&discount_value="+discountValue+"&discount_reason_id="+discountReason
 						window.location.href = url;
@@ -217,7 +229,7 @@
                             foreach ($colonists as $colonist) {
                             ?>
                                 <tr>
-                                    <td ><a name="<?= $colonist -> fullname ?>" id="colonistName_<?=$colonist -> colonist_id ?>_<?=$colonist -> summer_camp_id ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
+                                    <td ><a name="<?= $colonist -> colonist_name ?>" id="colonistName_<?=$colonist -> colonist_id ?>_<?=$colonist -> summer_camp_id ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
                                     <td ><?= $colonist -> camp_name ?></td>
                                     <td ><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
                                     <td id="colonist_situation_<?=$colonist -> colonist_id ?>_<?=$colonist -> summer_camp_id ?>"><?= $colonist -> situation_description ?></td>

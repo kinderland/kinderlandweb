@@ -147,5 +147,15 @@ class SummerCampSubscription extends Colonist {
 	public function getDatePaymentLimit() {
 		return $this -> datePaymentLimit;
 	}
+	
+	public function duringPaymentLimit() {
+		$dateLimit = strtotime($this -> datePaymentLimit);
+		$diffTime = time() - $dateLimit;
+		return $diffTime < 0;
+	}
+	
+	public function getDatePaymentLimitFormatted(){
+		return date("d/m/Y",strtotime($this->getDatePaymentLimit()));
+	}
 }
 ?>

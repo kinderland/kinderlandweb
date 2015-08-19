@@ -33,7 +33,7 @@ class summercamp_model extends CK_Model {
         join colonist c on scs.colonist_id = c.colonist_id
         join person p on c.person_id = p.person_id
         join person pr on pr.person_id = scs.person_user_id
-        join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status order by pr.fullname,colonist_name";
+        join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status where scss.status >= 0 order by pr.fullname,colonist_name";
         $resultSet = $this->executeRows($this->db, $sql);
 
         return $resultSet;

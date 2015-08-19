@@ -173,14 +173,17 @@ function insertFigureRegister($object, $validation) {
 				<?php 
 				$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($summerCampInscription -> getSummerCampId());
 				 
-					if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT && $summerCampPayment ){
+					if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT && $summerCampPayment && $summerCampInscription->duringPaymentLimit()){
 						if($summerCampInscription->getDiscount() < 100) {
 							$discount = 1-($summerCampInscription->getDiscount()/100);
 				?>
 							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
 							<button class="btn btn-primary">
 							Doar R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00 
-							</button> </a>	
+							<br>
+							Prazo: <?=$summerCampInscription -> getDatePaymentLimitFormatted()?>	
+							</button> </a>
+							<br>
 				<?php		
 						} 
 				else 
@@ -188,7 +191,8 @@ function insertFigureRegister($object, $validation) {
 				?>
 							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
 							<button class="btn btn-primary">
-							Inscrever 
+							Inscrever,<br>
+							Prazo: <?=$summerCampInscription -> getDatePaymentLimitFormatted()?>
 							</button> </a>	
 
 				
@@ -209,7 +213,17 @@ function insertFigureRegister($object, $validation) {
 				?>
 				<p <?=$color ?> >
 					<?= $statusArray[$i]["text"] ?>
-				</p><?php
+				</p>
+				<?php
+					if($statusArray[$i]["database_id"] === $summerCampInscription -> getSituationId() && 
+					!$summerCampInscription->duringPaymentLimit() && 
+					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT){
+				?>
+						<p style='color:red; font-weight:bold' >
+							&nbsp; &nbsp; &nbsp;Prazo expirado
+						</p>
+				<?php
+					}
 				}
 						
 					if($summerCampInscription -> getSituationId() < 0)
