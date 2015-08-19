@@ -323,7 +323,9 @@ class summercamp_model extends CK_Model {
 
         $splitByDot = explode(".", $fileName);
         $extension = $splitByDot[count($splitByDot) - 1];
-        if (!strcasecmp("jpg",$extension) && !strcasecmp("jpeg",$extension) && !strcasecmp("png",$extension) && !strcasecmp("pdf",$extension))
+        if ( !
+        	(strcasecmp("jpg",$extension) == 0 || strcasecmp("jpeg",$extension) == 0 || strcasecmp("png",$extension) == 0 || strcasecmp("pdf",$extension) == 0)
+		   )
             return FALSE;
         $sql = 'INSERT INTO document (summer_camp_id,colonist_id,user_id,filename,extension,document_type,file) VALUES (?, ?, ?, ?,?,?,?)';
         $returnId = $this->execute($this->db, $sql, array($summerCampId, $colonistId, $userId, $fileName, $extension, $type, pg_escape_bytea($file)));
