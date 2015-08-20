@@ -189,7 +189,7 @@
 	                    var discountReasonOther = "#discount_other";
 	                    discountReasonOther = $(discountReasonOther).val();
 	                    if(discountReasonOther == ""){
-	                    	alert("Por favor insira a razão do desconto");
+	                    	alert("Por favor insira um motivo para o desconto");
 	                    	return;
 	                    }
 	                    var url = "<?= $this -> config -> item('url_link') ?>
@@ -278,7 +278,7 @@
 					</tr>
 					<tr>
 						<td >
-							Razão do desconto:
+							Motivo do desconto:
 	                    </td>
 
 						<td >
@@ -291,7 +291,7 @@
 								<option value="-2">Outra</option>
 	                    	</select>
 	                    	<br>
-	                        <input type="text" class="form-control" placeholder="Razão do desconto"
+	                        <input type="text" class="form-control" placeholder="Motivo do desconto"
                                name="discount_other" id="discount_other" disabled style="display: none;" />
 	                    </td>
 					</tr>

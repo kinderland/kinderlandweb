@@ -154,15 +154,15 @@
 							<input type="hidden" name="camp_id" id="camp_id" value="<? $camp_selected_id ?>" />
 
 							Pavilhão: <select name="gender" id="gender">
-								<option value=""> Selecione um sexo </option>
+								<option value=""> Selecione um pavilhão </option>
 								<option value="M"> Masculino </option>
 								<option value="F"> Feminino </option>
 							</select>
 							<br /><br />
 
-							Quantidade a liberar: <input type="text" name="qtd_liberate" id="qtd_liberate" />
+							Quantidade a liberar: <input type="text" disabled name="qtd_liberate" id="qtd_liberate" />
 
-							<button class="btn btn-primary" onclick="submitLiberation(event)" style="margin-left:50px;">Liberar para pagamento</button>
+							<button class="btn btn-primary" disabled onclick="submitLiberation(event)" style="margin-left:50px;">Liberar para pagamento</button>
 						</form>
 
 						<?php if(isset($subscriptions)) { ?>

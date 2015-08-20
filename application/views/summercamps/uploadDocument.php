@@ -14,6 +14,9 @@
 		<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
 		Escolha um arquivo para enviar, aceitamos apenas arquivos .pdf, jpg, .jpeg e .png de até 2MB.
 		<br>
+		<p style="color:red; font-weight: bold;">
+		Atenção para os documentos que tenham frente e verso. Ambos são necessários.
+		</p>
 		<input type="hidden" name="document_type" value="<?=$document_type ?>" />
 		<br>
 		<input class="btn btn-primary" name="uploadedfile" type="file" />
