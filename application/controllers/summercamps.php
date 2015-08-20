@@ -767,6 +767,8 @@ class SummerCamps extends CK_Controller {
             $data["dadFullName"] = $father->fullname;
             $data["dadEmail"] = $father->email;
             $data["dadPhone"] = $father->phone1;
+        } else{
+        	$data["noFather"] = TRUE;
         }
         if ($mother) {
             if ($mother == $responsableId)
@@ -775,6 +777,8 @@ class SummerCamps extends CK_Controller {
             $data["motherFullName"] = $mother->fullname;
             $data["motherEmail"] = $mother->email;
             $data["motherPhone"] = $mother->phone1;
+        } else{
+           	$data["noMother"] = TRUE;	
         }
 
         if($camper -> getRoommate1())

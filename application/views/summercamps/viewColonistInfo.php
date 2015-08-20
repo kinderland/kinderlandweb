@@ -62,6 +62,20 @@
 
 
 	$(document).ready(function() {
+		<?php if(isset($noFather)){ ?>
+			
+			$("input:checkbox[name='dadDeclare']").prop('checked', true);
+			hide_class('dad-form',this.checked);
+			
+		<?php } ?>
+
+		<?php if(isset($noMother)){ ?>
+			
+			$("input:checkbox[name='motherDeclare']").prop('checked', true);
+			hide_class('mother-form',this.checked);
+			
+		<?php } ?>
+
 		var SPMaskBehavior = function(val) {
 			return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
 		},
@@ -77,6 +91,7 @@
 		});
 		;
 		addressResponsable();
+		
 	});
 
 </script>

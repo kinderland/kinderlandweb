@@ -629,7 +629,9 @@ class Admin extends CK_Controller {
 			$data["dadFullName"] = $father->fullname ;
 			$data["dadEmail"] = $father->email;
 			$data["dadPhone"] = $father->phone1;
-		}
+		} else{
+        	$data["noFather"] = TRUE;
+        }
 		if($mother){
 			if($mother == $responsableId)
 				$data["responsableDadMother"] = "mother";
@@ -637,7 +639,18 @@ class Admin extends CK_Controller {
 			$data["motherFullName"] = $mother->fullname ;
 			$data["motherEmail"] = $mother->email;
 			$data["motherPhone"] = $mother->phone1;
-		}
+		} else{
+           	$data["noMother"] = TRUE;	
+        }
+		
+		
+		if($camper -> getRoommate1())
+            $data['roommate1'] = $camper -> getRoommate1();
+        if($camper -> getRoommate2())
+            $data['roommate2'] = $camper -> getRoommate2();
+        if($camper -> getRoommate3())
+            $data['roommate3'] = $camper -> getRoommate3();
+		
 		$this -> loadView('summercamps/viewColonistInfo', $data);
 
 	}
