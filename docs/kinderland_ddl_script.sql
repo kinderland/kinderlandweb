@@ -273,7 +273,7 @@ INSERT INTO summer_camp_subscription_status VALUES
 (1, 'Pré-inscrição aguardando validação'), 
 (2, 'Pré-inscrição validada'),
 (3, 'Pré-inscrição na fila de espera'), 
-(4, 'Pré-inscrição aguardando pagamento'), 
+(4, 'Pré-inscrição aguardando doação'), 
 (5, 'Inscrito'), 
 (6, 'Pré-inscrição não validada'),
 (-1, 'Desistente'), 
@@ -291,6 +291,8 @@ INSERT INTO discount_reason VALUES (1, 'Desconto igual ao da escola');
 INSERT INTO discount_reason VALUES (2, 'Segundo irmão');
 INSERT INTO discount_reason VALUES (3, 'Terceiro irmão');
 INSERT INTO discount_reason VALUES (4, 'Lar da criança');
+
+SELECT pg_catalog.setval('discount_reason_discount_reason_id_seq', 6, true);
 
 CREATE TABLE summer_camp_subscription (
     summer_camp_id INTEGER NOT NULL REFERENCES summer_camp,
