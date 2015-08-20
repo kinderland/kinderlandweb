@@ -115,8 +115,8 @@ class CK_Controller extends CI_Controller {
 		}
 				
 				
-		$emailString = "Prezad" . (($person->gender == 'F') ? 'a' : 'o') . " " . $person->fullname . ", <br><br>" . "O processo de inscrição do(a) colonista " . $colonist->getFullname() . " está agora completo 
-		e a inscrição para a colônia " . $summerCampName . " está confirmada. <br><br>" . "Por favor, aguarde novas mensagens e comunicados, 
+		$emailString = "Prezad" . (($person->gender == 'F') ? 'a' : 'o') . " " . $person->fullname . ", <br><br>" . "O processo de inscrição do(a) colonista " . $summerCampSubscription->getFullname() . " está agora completo 
+		e a inscrição para a colônia " . $this -> summercamp_model -> getSummerCampById($summerCampSubscription -> summer_camp_id) -> camp_name . " está confirmada. <br><br>" . "Por favor, aguarde novas mensagens e comunicados, 
 		referentes às próximas etapas: reunião de pais e responsáveis, reunião de quartos, entre outros. <br><br> Muito obrigado por sua doação e interesse na(s) colônia(s) Kinderland! <br><br><br><br>" . "Diretoria da Associação Kinderland";
         $emailSubject = "[Kinderland] Inscricao " . $summerCampSubscription->getFullname() . " confirmada";
 		if(!$this->sendMail($emailSubject, $emailString, $person, $cc)){
