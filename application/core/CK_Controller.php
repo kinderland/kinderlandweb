@@ -60,7 +60,7 @@ class CK_Controller extends CI_Controller {
  			Mais uma vez, nosso MUITO OBRIGADO!<br><br>Diretoria da Associação Kinderland";
             $emailSubject = "[Kinderland] Doacao campanha associados";
 
-            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br", array("diretoria@kinderland.com.br")));
+            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
         } else if ($donation->getDonationType() == DONATION_TYPE_FREEDONATION) {
             $person = $this->person_model->getPersonById($donation->getPersonId());
             $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua doação para a Kinderland
@@ -77,7 +77,7 @@ class CK_Controller extends CI_Controller {
 			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
             $emailSubject = "[Kinderland] Doacao avulsa";
 
-            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"), array("diretoria@kinderland.com.br"));
+            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
         } else if ($donation->getDonationType() == DONATION_TYPE_SUBSCRIPTION) {
             $person = $this->person_model->getPersonById($donation->getPersonId());
             $event = $this->event_model->getDonationEvent($donation->getDonationId());
@@ -85,7 +85,7 @@ class CK_Controller extends CI_Controller {
 			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
             $emailSubject = "[Kinderland] Inscricao " . $event->getEventName() . " confirmada";
 
-            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"), array("diretoria@kinderland.com.br"));
+            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
         }
 		else if ($donation->getDonationType() == DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION) {
 			$responsableId = $donation->getPersonId();
@@ -115,10 +115,11 @@ class CK_Controller extends CI_Controller {
 		}
 				
 				
-		$emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o colonista de nome " . $summerCampSubscription->getFullname() . " foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para
+		$emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o 
+		colonista de nome " . $summerCampSubscription->getFullname() . " foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para
 		nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
         $emailSubject = "[Kinderland] Inscricao " . $summerCampSubscription->getFullname() . " confirmada";
-		if(!$this->sendMail($emailSubject, $emailString, $person, $cc, array("diretoria@kinderland.com.br"))){
+		if(!$this->sendMail($emailSubject, $emailString, $person, $cc)){
 			$this->Logger->error("Error sending mail to $person to confirm subscription of colonist with campId/colonistId : ".$summerCampSubscription->getSummerCampId()."/".getColonistId());
 			return FALSE;
 		}            	
@@ -175,14 +176,9 @@ class CK_Controller extends CI_Controller {
 				$cc[] = $mail;
 		}
         $emailSubject = "[Kinderland] Pré-inscrição de " . $colonist->getFullname() . " na colônia " . $summerCampName . " recebida";
-        $emailString = "A pré-inscrição de " . $colonist->getFullname() . " na colonia " . $summerCampName . " foi recebida pela Associação 
-            Kinderland. Aguarde nova comunicação por email validando (ou não) os dados preenchidos e documentos 
-            enviados.<br /><br />
-            Acompanhe sempre as novidades em nosso site e a situação da pré-inscrição no Sistema 
-            Kinderland. Em caso de dúvidas, entrar em contato por telefone (21-2266-1980) ou, 
-            preferencialmente, por email.<br /><br />
-            Muito obrigado pelo interesse em participar das nossas colônias!<br />
-            Associação Kinderland";
+        $emailString = $emailString = "Prezad" . (($person->gender == 'F') ? 'a' : 'o') . " " . $person->fullname . ", <br><br>" . "O processo de inscrição do(a) colonista " . $colonist->getFullname() . " está agora completo 
+		e a inscrição para a colônia " . $summerCampName . " está confirmada. <br><br>" . "Por favor, aguarde novas mensagens e comunicados, 
+		referentes às próximas etapas: reunião de pais e responsáveis, reunião de quartos, entre outros. <br><br> Muito obrigado por sua doação e interesse na(s) colônia(s) Kinderland! <br><br><br><br>" . "Diretoria da Associação Kinderland";
 
         return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
