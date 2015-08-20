@@ -966,9 +966,9 @@ class summercamp_model extends CK_Model {
         return null;
     }
 	
-	public function getDiscountReasons() {
+	public function getDefaultDiscountReasons() {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * FROM discount_reason";
+        $sql = "SELECT * FROM discount_reason where discount_reason_id < 5";
         $resultSet = $this->executeRows($this->db, $sql);
         return $resultSet;
     }
@@ -1097,7 +1097,7 @@ class summercamp_model extends CK_Model {
         return $this->execute($this->db, $sql, array(intval(SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED), intval($donation_id)));
     }
     
-	public function getSubscriptionByDonation($donationId) {
+	public function getSubscriptionsByDonation($donationId) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "Select * from summer_camp sc
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
@@ -1106,11 +1106,11 @@ class summercamp_model extends CK_Model {
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
 		where donation_id = ?";
 		
-        $resultSet = $this->executeRow($this->db, $sql, array($donationId));
-        $summerCampSubscription = FALSE;
+        $resultSet = $this->executeRows($this->db, $sql, array($donationId));
+        $summerCampSubscription = array();
 
-        if ($resultSet)
-            $summerCampSubscription = SummerCampSubscription::createSummerCampSubscriptionObject($resultSet);
+        foreach($resultSet as $resultSetIteration)
+            $summerCampSubscription[] = SummerCampSubscription::createSummerCampSubscriptionObject($resultSetIteration);
 
         return $summerCampSubscription;
     }

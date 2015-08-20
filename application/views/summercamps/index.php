@@ -1,4 +1,38 @@
 <script>
+
+	function toggle(div_id) {
+		var el = document.getElementById(div_id);
+		if (el.style.display == 'none') {
+			el.style.display = 'block';
+		} else {
+			el.style.display = 'none';
+		}
+	}	
+	
+	function popup(windowname,colonistId,summerCampId) {
+		toggle(windowname);	
+		toggle('all');	
+		$(this).scrollTop(0);
+	}
+	
+	var colonistsToDonate = 0;
+	
+	function donation(colonistId,summerCampId,colonistName){
+		var url = "<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id="+summerCampId+"&colonist_id="+colonistId
+		if(colonistsToDonate > 1){
+			$("#buttonOneDonation").attr("onclick", "window.location = '"+url+"'")
+			$("#buttonOneDonation").text("Doar e inscrever somente o colonista: "+colonistName)
+			popup('popUpDiv',colonistId,summerCampId);
+			
+		} else {
+			window.location = url
+		}
+	}
+	
+</script>
+	
+
+<script>
 	function excluir(camp_id, colonist_id, name,subscribed) {
 		
 		if (confirm("Tem certeza que deseja excluir o colonista "+name+" ?")) {
@@ -60,7 +94,58 @@ function insertFigureRegister($object, $validation) {
 	}
 }
 	?>
-<div class = "col-lg-10">
+
+<div class="col-lg-10" id="popUpDiv" style="display:none;">
+	<form action="<?= $this -> config -> item('url_link'); ?>summercamps/donateMultipleColonists/" method="post" id="formMultipleDonations">
+		
+	</form>
+
+	<table class="table table-bordered table-striped" style="max-width=550px; min-width=550px; table-layout: fixed;"  id="tableDonations">
+		<thead>
+				<tr>
+					<td colspan="3">
+						Você tem os seguintes colonistas no prazo para doaçao:
+						<input name="colonist_id[]" type="hidden" value="">
+						<input name="summer_camp_id[]" type="hidden" value="">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Nome
+					</td>
+					<td>
+						Valor
+					</td>
+					<td>
+						Prazo
+					</td>
+				</tr>
+			</thead>
+			<tbody id="bodyPopup">
+				<tr>
+					
+				</tr>
+			</tbody>
+			<tend>
+				<tr>
+					<td colspan="3">Você deseja:</td>
+				</tr>
+				<tr>
+					<td colspan="3"><button class="btn btn-primary" id="" onClick="$('#formMultipleDonations').submit()">Doar e inscrever todos os colonistas acima</button></td>
+				</tr>
+				<tr>
+					<td colspan="3"><button class="btn btn-primary" id="buttonOneDonation">Doar e inscrever somente o colonista X</button></td>
+				</tr>
+				<tr>
+					<td colspan="3"><button class="btn btn-primary" id="" onClick="popup('popUpDiv')">Cancelar</button></td>					
+				</tr>
+			</tend>
+
+		</table>
+</div>
+
+
+<div id="all" class = "col-lg-10">
 	<h1>Inscrições de colonistas:</h1>
 	<?php if($summerCamps){
 	?>
@@ -91,6 +176,7 @@ function insertFigureRegister($object, $validation) {
 			<th>Status</th>
 		</thead>
 		<?php
+			$total = 0;
 			foreach($summerCampInscriptions as $summerCampInscription){
 				if($summerCampInscription -> getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
 					$subscribed = "true";
@@ -114,7 +200,11 @@ function insertFigureRegister($object, $validation) {
 			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/viewColonistInfo?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>">Cadastro:</a><?php } ?>
 			<?=$summerCampInscription -> getFullname() ?>
 			<br>
-			Colônia: <?=$this -> summercamp_model -> getSummerCampById($summerCampInscription -> getSummerCampId()) -> getCampName() ?>
+			<?php 
+			$campName = $this -> summercamp_model -> getSummerCampById($summerCampInscription -> getSummerCampId()) -> getCampName();
+			
+			?>
+			Colônia: <?=$campName ?>
 			<hr>
 			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_MEDICAL_FILE ?>"> Ficha Médica </a>
 			<br>
@@ -176,8 +266,15 @@ function insertFigureRegister($object, $validation) {
 					if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT && $summerCampPayment && $summerCampInscription->duringPaymentLimit()){
 						if($summerCampInscription->getDiscount() < 100) {
 							$discount = 1-($summerCampInscription->getDiscount()/100);
+							$total += floor($summerCampPayment->getPrice()*$discount);
 				?>
-							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+							<script>
+								colonistsToDonate++;
+								$('#bodyPopup').append("<tr><td><?=$summerCampInscription -> getFullname()?></td><td>R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00</td><td><?=$summerCampInscription -> getDatePaymentLimitFormatted()?></td></tr>");
+								$('#formMultipleDonations').append("<input type='hidden' name='camp_id[]' value='<?=$summerCampInscription -> getSummerCampId() ?>' /> <input type='hidden' name='colonist_id[]' value='<?=$summerCampInscription -> getColonistId() ?>' />");
+							</script>
+
+							<a onclick="donation(<?=$summerCampInscription -> getColonistId() ?>, <?=$summerCampInscription -> getSummerCampId() ?>, '<?=$summerCampInscription -> getFullname()?>')">
 							<button class="btn btn-primary">
 							Doar R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00 
 							<br>
@@ -189,9 +286,9 @@ function insertFigureRegister($object, $validation) {
 				else 
 				{ 
 				?>
-							<a href="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
+							<a onclick='if(confirm("Confirma a inscrição de <?=$summerCampInscription -> getFullname()?> na colonia <?=$campName?>?")) window.location="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>";' >
 							<button class="btn btn-primary">
-							Inscrever,<br>
+							Inscrever<br>
 							Prazo: <?=$summerCampInscription -> getDatePaymentLimitFormatted()?>
 							</button> </a>	
 
@@ -243,7 +340,13 @@ function insertFigureRegister($object, $validation) {
 		</tr>
 		<?php } ?>
 	</table>
+	<script>
+	$('#bodyPopup').append("<tr><td>Total:</td><td colspan='2'>R$ <?=$total?>,00</td></tr>");
+	</script>
 	<?php } ?>
+	
 </div>
+
+
 
 </div>

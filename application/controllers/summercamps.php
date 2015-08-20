@@ -528,6 +528,51 @@ class SummerCamps extends CK_Controller {
         }
     }
 
+    public function donateMultipleColonists() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $campId = $this->input->post('camp_id', TRUE);
+        $colonistId = $this->input->post('colonist_id', TRUE);
+		$userId = $this->session->userdata("user_id");
+		$donationValue = 0;
+		try{
+	    	if(count($campId) == count($colonistId)){
+				for($i=0;$i<count($campId);$i++){
+	    			$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($campId[$i]);
+					if($summerCampPayment){
+						$summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId[$i],$campId[$i]);
+						if($summerCampSubscription && $summerCampSubscription->duringPaymentLimit()){
+							$discount = 1 - ($summerCampSubscription->getDiscount()/100);	
+							$donationValue += floor($summerCampPayment->getPrice()*$discount);								
+						} else {
+							$this->Logger->error("Trying 1 donation for multiple colonists: Colonist with id and campId" .$colonistId[$i]." ".$campId[$i]." does not exist or is not during its payment limit");			
+							redirect("summercamps/index");
+						}
+					}
+					else{
+						$this->Logger->error("Trying 1 donation for multiple colonists: Did not find payment period for colonist with id and campId" .$colonistId[$i]." ".$campId[$i]);			
+						redirect("summercamps/index");
+					}	    		
+				}
+				$this->generic_model->startTransaction();
+				$donationId = $this->donation_model->createDonation($userId,$donationValue, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
+				$this->Logger->info("Created donation with id: ". $donationId);
+				for($i=0;$i<count($campId);$i++){
+					$this->summercamp_model->associateDonation($campId[$i],$colonistId[$i],$donationId);
+					$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id/campId " .$colonistId[$i]."/".$campId[$i]);		
+				}
+				$this->generic_model->commitTransaction();
+				redirect("payments/checkout/".$donationId);
+			} 
+			else{
+				redirect("summercamps/index");
+			}
+		} catch (Exception $ex) {
+			$this->generic_model->rollbackTransaction();
+			$this->Logger->error("Failed to create donation for multiple colonists");
+			redirect("summercamps/index");
+		}
+	}
+    	
     public function paySummerCampSubscription() {
         $this->Logger->info("Starting " . __METHOD__);
         $campId = $this->input->get('camp_id', TRUE);
@@ -541,19 +586,20 @@ class SummerCamps extends CK_Controller {
 	    	$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($campId);
 			$summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId,$campId);
 			$discount = 1 - ($summerCampSubscription->getDiscount()/100);
-	    	if($summerCampPayment){
+	    	if($summerCampPayment && $summerCampSubscription->duringPaymentLimit()){
 				if($discount == 0){
+		    		$this->generic_model->startTransaction();
 					$this->Logger->info("Discount is 100%, subscribing colonist with id and campId" .$colonistId." ".$campId );
 					$this->summercamp_model->updateColonistStatus($colonistId,$campId,SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED);							
 					$this->generic_model->commitTransaction();
+					$this->sendSubscriptionFinalMail($userId,$summerCampSubscription);
 					redirect("summercamps/index");
 					return;
 				} else{			
-	    		$this->generic_model->startTransaction();
-					$donationId = $this->donation_model->createDonation($userId,$summerCampPayment->getPrice()*$discount, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION,$summerCampPayment->getPortions());
+					$donationId = $this->donation_model->createDonation($userId,floor($summerCampPayment->getPrice()*$discount), DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
 					$this->Logger->info("Created donation with id: ". $donationId);
 					$this->summercamp_model->associateDonation($campId,$colonistId,$donationId);
-					$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id and campId" .$colonistId." ".$campId);
+					$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id/campId" .$colonistId."/".$campId);
 					$this->generic_model->commitTransaction();
 					redirect("payments/checkout/".$donationId);
 				}

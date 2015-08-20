@@ -88,16 +88,42 @@ class CK_Controller extends CI_Controller {
             return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"), array("diretoria@kinderland.com.br"));
         }
 		else if ($donation->getDonationType() == DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION) {
-            $person = $this->person_model->getPersonById($donation->getPersonId());
-            $summerCampSubscription = $this->summercamp_model->getSubscriptionByDonation($donation->getDonationId());
-            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o colonista de nome " . $summerCampSubscription->getFullname() . " foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para
-			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
-            $emailSubject = "[Kinderland] Inscricao " . $summerCampSubscription->getFullname() . " confirmada";
-
-            return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"), array("diretoria@kinderland.com.br"));
-        }
+			$responsableId = $donation->getPersonId();
+            $summerCampSubscriptionArray = $this->summercamp_model->getSubscriptionsByDonation($donation->getDonationId());
+            foreach($summerCampSubscriptionArray as $summerCampSubscription){
+				if(!$this->sendSubscriptionFinalMail($responsableId,$summerCampSubscription))
+					return FALSE;				
+        	}
+			return TRUE;
+    	}
 		
-    }
+	}
+
+	public function sendSubscriptionFinalMail($responsableId,$summerCampSubscription){
+		$person = $this->person_model->getPersonById($responsableId);
+		$cc = array("secretaria@kinderland.com.br");
+		$father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampSubscription->getSummerCampId(), $summerCampSubscription->getColonistId(), "Pai");
+		$mother = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampSubscription->getSummerCampId(), $summerCampSubscription->getColonistId(), "Mãe");
+		
+		if($father && $responsableId != $father){
+			$father = $this->person_model->getPersonFullById($father);
+			$cc[] = $father->email;		
+		}
+		if($mother && $mother != $responsableId){
+			$mother = $this->person_model->getPersonFullById($mother);
+			$cc[] = $mother->email;
+		}
+				
+				
+		$emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o colonista de nome " . $summerCampSubscription->getFullname() . " foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para
+		nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
+        $emailSubject = "[Kinderland] Inscricao " . $summerCampSubscription->getFullname() . " confirmada";
+		if(!$this->sendMail($emailSubject, $emailString, $person, $cc, array("diretoria@kinderland.com.br"))){
+			$this->Logger->error("Error sending mail to $person to confirm subscription of colonist with campId/colonistId : ".$summerCampSubscription->getSummerCampId()."/".getColonistId());
+			return FALSE;
+		}            	
+        return TRUE;
+	}
 
     public function sendNewPasswordEmail($person, $randomString) {
         $emailSubject = "[Kinderland] Nova senha";
@@ -164,7 +190,7 @@ class CK_Controller extends CI_Controller {
     protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
         //$myMail = "testekinderland2015@gmail.com";
         //$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
-
+        
         $myMail = "secretaria@kinderland.com.br";
         $config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://br154.hostgator.com.br', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'Kinder155', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);
 

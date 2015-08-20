@@ -177,10 +177,7 @@
                     var discountValueId = "#discount_value";
 
                     var discountValue = $(discountValueId).val();
-
-                    {
-                    }
-                    
+                
                     var discountReason = $(discountReasonId).val();
                     if(discountReason == -1 && discountValue != 0){
                         alert("Você está colocando um desconto sem motivo, por favor selecione um motivo")                       	
@@ -212,7 +209,7 @@
             <div class = "row">
                 <div class="col-lg-12">
 					
-                    <table class="table table-bordered table-striped" style="max-width: 800px; font-size:12px;" id="sortable-table">
+                    <table class="table table-bordered table-striped" style="max-width: 800px; font-size:12px; display:block;" id="sortable-table">
                         <thead>
                             <tr>
                                 <th style="min-width: 100px; max-width: 100px"> Nome do Colonista </th>
@@ -287,9 +284,9 @@
 						<td >
 							<select id="discount_reason" onchange="verifyOtherDiscountReason();" class="select" name="discount_reason" class="form-control">
 								<option value="-1"></option>
-        	                	<?php $a = $this->summercamp_model->getDiscountReasons(); foreach($a as $b){
+        	                	<?php $discountReasons; foreach($discountReasons as $discountReason){
 		                    	?>
-                    			<option value="<?=$b -> discount_reason_id ?>" ><?=$b -> discount_reason ?></option>
+                    			<option value="<?=$discountReason -> discount_reason_id ?>" ><?=$discountReason -> discount_reason ?></option>
     	                		<?php } ?>
 								<option value="-2">Outra</option>
 	                    	</select>
