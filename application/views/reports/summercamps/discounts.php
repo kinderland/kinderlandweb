@@ -89,7 +89,7 @@
 						<thead>	
 							<tr>
 								<th></th>
-								<th style="text-align: center" colspan = 2>% Valor Cheio</th>
+								<th style="text-align: center" colspan = 2>Quantidade de bolsas cheias</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -119,11 +119,16 @@
 								<td align='right'> <?php echo number_format($discountsI -> child_home/100,2);?> </td>
 							</tr>
 							<tr>
+								<td style="text-align: left">Outros</td>
+								<td align='right'><?php echo number_format($discountsT -> others/100,2);?> </td>
+								<td align='right'> <?php echo number_format($discountsI -> others/100,2);?> </td>
+							</tr>
+							<tr>
 								<td style="text-align: left">Total</td>
 								<td align='right'><?php echo number_format(($discountsT -> same_school + $discountsT -> second_brother + 
-												$discountsT -> third_brother + $discountsT -> child_home)/100,2); ?> </td>
+												$discountsT -> third_brother + $discountsT -> child_home + $discountsT -> others)/100,2); ?> </td>
 								<td align='right'> <?php echo number_format(($discountsI -> same_school + $discountsI -> second_brother + 
-												$discountsI -> third_brother + $discountsI -> child_home)/100,2); ?> </td>
+												$discountsI -> third_brother + $discountsI -> child_home + $discountsT -> others)/100,2); ?> </td>
 							</tr>
 						</tbody>
 					</table>

@@ -115,7 +115,7 @@ function saveQueuePosition(personId, userName, index){
 	var yearSelected = $("#anos").val();
 	var position = $("#queue_number_"+index).val();
 
-	if(confirm("Deseja atribuir a posição " + position + " ao responsável " + userName + "?")){
+	//if(confirm("Deseja atribuir a posição " + position + " ao responsável " + userName + "?")){
 		$.post("<?= $this->config->item('url_link') ?>admin/updateQueueNumber",
 	        {
 	            'user_id': personId,
@@ -131,7 +131,7 @@ function saveQueuePosition(personId, userName, index){
 	            }
 	        }
 	    );
-	}
+	//}
 	
 }
 
@@ -144,7 +144,7 @@ function saveQueuePosition(personId, userName, index){
 	$(document).ready(function() {
 		$('#sortable-table').datatable({
 			pageSize : Number.MAX_VALUE,
-			sort : [sortLowerCase,true,true],
+			sort : [sortLowerCase,true],
 			filters : [true],
 			filterText : 'Escreva para filtrar... ',
 			counterText	: showCounter
