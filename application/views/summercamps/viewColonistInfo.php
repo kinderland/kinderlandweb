@@ -16,8 +16,6 @@
 		}
 	}
 	
-	
-
 	function toggleInputStatusIn(element, disable) {
 		if (disable == true)	 {
 			$(element).find(':input').prop('disabled', true);
@@ -605,6 +603,228 @@
                     </div>
                 </div>
             </div>
+		
+            <?php if ($summerCamp->isMiniCamp()) { ?>
+                <input type="hidden" name="summerCampMini" value="1"/>
+                <label class="control-label"><h4>MINI-KINDERLAND: </h4></label>
+                <br />
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="nameResponsible" class="col-lg-6 control-label">Nome do responsável para comunicação imediata em caso de emergência*: </label>
+                        <input disabled Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php echo $miniCamp->responsible_name; ?>"/>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="phoneResponsible" class="col-lg-6 control-label">Telefone do responsável para comunicação em caso de emergência*: </label>
+                        <input disabled Name="phoneResponsible" class="col-lg-3 phone" placeholder="(ddd) Telefone de emergência"
+                               maxlength="25" value="<?php echo $miniCamp->responsible_number; ?>"/>
+
+                    </div>
+                </div>
+                <br>
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="sleepOut" class="col-lg-6 control-label"> Já dormiu fora de casa?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="sleepOut" value="1"
+                            <?php
+                            if ($miniCamp->sleep_out == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="sleepOut" value="0"
+                            <?php
+                            if ($miniCamp->sleep_out == 'f')
+                                echo "checked='checked'"
+                                ?>/> Não
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="wakeUpEarly" class="col-lg-6 control-label">O colonista costuma acordar cedo?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="wakeUpEarly" value="1"
+                            <?php
+                            if ($miniCamp->wake_up_early == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="wakeUpEarly" value="0"
+                            <?php
+                            if ($miniCamp->wake_up_early == 'f')
+                                echo "checked='checked'"
+                                ?>
+                                   /> Não
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="feedsIndependently" class="col-lg-6 control-label">Alimenta-se com independência?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="feedsIndependently" value="1"
+                            <?php
+                            if ($miniCamp->eat_by_oneself == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="feedsIndependently" value="0"
+                            <?php
+                            if ($miniCamp->eat_by_oneself == 'f')
+                                echo "checked='checked'"
+                                ?>
+                                   /> Não
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="wcIndependent" class="col-lg-6 control-label">Tem autonomia em relação ao uso do banheiro?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="wcIndependent" value="1"
+                            <?php
+                            if ($miniCamp->bathroom_freedom == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="wcIndependent" value="0"
+                            <?php
+                            if ($miniCamp->bathroom_freedom == 'f')
+                                echo "checked='checked'"
+                                ?>
+                                   /> Não
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="routineToFallAsleep" class="col-lg-6 control-label">O colonista tem algum tipo de rotina, ou ritual para adormecer?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="routineToFallAsleep" value="1"
+                            <?php
+                            if ($miniCamp->sleep_routine == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="routineToFallAsleep" value="0"
+                            <?php
+                            if ($miniCamp->sleep_routine == 'f')
+                                echo "checked='checked'"
+                                ?>
+                                   /> Não
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="bunkBed" class="col-lg-6 control-label">Possui alguma restrição quanto ao uso das camas de cima de um beliche?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="bunkBed" value="1"
+                            <?php
+                            if ($miniCamp->bunk_restriction == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="bunkBed" value="0"
+                            <?php
+                            if ($miniCamp->bunk_restriction == 'f')
+                                echo "checked='checked'"
+                                ?>/> Não
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="awakeAtNight" class="col-lg-6 control-label">Costuma acordar a noite?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="awakeAtNight" value="1"
+                            <?php
+                            if ($miniCamp->wake_up_at_night == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="awakeAtNight" value="0"
+                            <?php
+                            if ($miniCamp->wake_up_at_night == 'f')
+                                echo "checked='checked'"
+                                ?>
+                                   /> Não
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="sleepwalk" class="col-lg-6 control-label">Apresenta sonambulismo?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="sleepwalk" value="1"
+                            <?php
+                            if ($miniCamp->sleepwalk == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input disabled type="radio" name="sleepwalk" value="0"
+                            <?php
+                            if ($miniCamp->sleepwalk == 'f')
+                                echo "checked='checked'"
+                                ?>
+                                   /> Não
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="sleepEnuresis" class="col-lg-6 control-label">Apresenta enurese noturna?* </label>
+                        <div class="col-lg-6">
+                            <input disabled type="radio" name="sleepEnuresis" value="1"
+                            <?php
+                            if ($miniCamp->sleep_enuresis == 't')
+                                echo "checked='checked'"
+                                ?>/> Sim
+
+                            <input disabled type="radio" name="sleepEnuresis" value="0"
+                            <?php
+                            if ($miniCamp->sleep_enuresis == 'f')
+                                echo "checked='checked'"
+                                ?>
+                                   /> Não
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="foodRestriction" class="col-lg-6 control-label">Possui restrição alimentar? Qual? </label>
+                        <textarea disabled Name="foodRestriction" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->food_restriction; ?></textarea>
+                    </div>
+                </div>
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="observationMini" class="col-lg-6 control-label">Há algo mais que seja relevante para a adaptação do colonista que você queira registrar? </label>
+                        <textarea disabled Name="observationMini" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->observation; ?></textarea>
+                    </div>
+                </div>
+
+                <br />
+                <br />
+            <?php } ?>
 
 
         </form>

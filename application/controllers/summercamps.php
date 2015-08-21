@@ -787,6 +787,12 @@ class SummerCamps extends CK_Controller {
             $data['roommate2'] = $camper -> getRoommate2();
         if($camper -> getRoommate3())
             $data['roommate3'] = $camper -> getRoommate3();
+            
+		if ($data["summerCamp"]->isMiniCamp()) {
+            $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
+            $data['miniCamp'] = $miniCamp;
+        }
+			
 
         $this->loadView('summercamps/viewColonistInfo', $data);
     }

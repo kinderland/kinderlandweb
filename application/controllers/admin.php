@@ -651,6 +651,11 @@ class Admin extends CK_Controller {
         if($camper -> getRoommate3())
             $data['roommate3'] = $camper -> getRoommate3();
 		
+		if ($data["summerCamp"]->isMiniCamp()) {
+            $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
+            $data['miniCamp'] = $miniCamp;
+        }
+		
 		$this -> loadView('summercamps/viewColonistInfo', $data);
 
 	}

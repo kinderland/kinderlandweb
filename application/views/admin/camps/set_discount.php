@@ -233,7 +233,9 @@
                                     <td ><p id="colonistDiscount_<?=$colonist -> colonist_id ?>_<?=$colonist -> summer_camp_id ?>"><?=$colonist -> discount ?></p></td>
                                     <td ><p id="colonistDiscountReason_<?=$colonist -> colonist_id ?>_<?=$colonist -> summer_camp_id ?>" valueid="<?=$colonist -> discount_reason_id ?>"><?=$colonist -> discount_reason ?></p></td>
                                     <td style="max-width:80px">
-					                    <button class="btn btn-primary" id="submit_btn_<?=$colonist -> colonist_id ?>_<?=$colonist -> summer_camp_id ?>" onClick="popup('popUpDiv','<?=$colonist -> colonist_id ?>', '<?=$colonist -> summer_camp_id ?>')">Editar</button>
+                                    	<?php if($colonist -> situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED) { ?>
+					                    	<button class="btn btn-primary" id="submit_btn_<?=$colonist -> colonist_id ?>_<?=$colonist -> summer_camp_id ?>" onClick="popup('popUpDiv','<?=$colonist -> colonist_id ?>', '<?=$colonist -> summer_camp_id ?>')">Editar</button>
+					                    <?php } ?>
                                     </td>
                                 </tr>
                             	</form>

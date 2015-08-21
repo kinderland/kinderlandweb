@@ -47,7 +47,12 @@
                                 ?>
                                 <tr>
                                     <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
-                                    <td><?= $donation->donation_type ?></td>
+                                    <td><?= $donation->donation_type ?>
+                                    	<?php foreach($donation->extra as $extra){
+                                    		echo $extra;
+                                    	}
+										?>
+                                    </td>
                                     <td><?= $donation->donated_value ?></td>
                                     <td><?= $donation->donation_status ?></td>
                                 </tr>
