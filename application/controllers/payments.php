@@ -215,10 +215,9 @@
 					$summerCampSubscriptions = $this->summercamp_model->getSubscriptionsByDonation($donation->donation_id);
 					if($summerCampSubscriptions){
 						$donation->extra = array();
-						$donation->extra[] = ", detalhes:";
 						foreach($summerCampSubscriptions as $summerCampSubscription){
 							$campName = $this -> summercamp_model -> getSummerCampById($summerCampSubscription -> getSummerCampId()) -> getCampName();
-							$donation->extra[] = "<br><br>Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName;
+							$donation->extra[] = "<br>Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName;
 						}
 					}
 				}
@@ -231,10 +230,9 @@
 					$summerCampSubscriptions = $this->summercamp_model->getSubscriptionsByDonation($donation->donation_id);
 					if($summerCampSubscriptions){
 						$donation->extra = array();
-						$donation->extra[] = ", detalhes:";
 						foreach($summerCampSubscriptions as $summerCampSubscription){
 							$campName = $this -> summercamp_model -> getSummerCampById($summerCampSubscription -> getSummerCampId()) -> getCampName();
-							$donation->extra[] = "<br><br>Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName;
+							$donation->extra[] = "<br>Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName;
 						}
 					}
 				}
