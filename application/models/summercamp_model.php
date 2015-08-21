@@ -568,10 +568,10 @@ class summercamp_model extends CK_Model {
 				( SELECT sum(discount) as second_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=2 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") second_brother,
 				( SELECT sum(discount) as third_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=3 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") third_brother,
 				( SELECT sum(discount) as child_home FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") child_home,
-                ( SELECT sum(discount) as child_home FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id>4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") others, summer_camp
+                ( SELECT sum(discount) as others FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id>4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") others, summer_camp
 				WHERE " . (($summercampId!=null) ? "summer_camp_id = ? AND" : "") . " DATE_PART('YEAR',date_start) = ?";
     	if($summercampId!=null) {
-    		$resultSet = $this->executeRow($this->db, $sql,array($year,$summercampId,$year,$summercampId,$year,$summercampId,$year,$summercampId,$summercampId,$year));
+    		$resultSet = $this->executeRow($this->db, $sql,array($year,$summercampId,$year,$summercampId,$year,$summercampId,$year,$summercampId,$year,$summercampId,$summercampId,$year));
     	}
     	else {
     		$resultSet = $this->executeRow($this->db, $sql,array($year,$year,$year,$year,$year));
