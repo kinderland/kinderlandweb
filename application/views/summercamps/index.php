@@ -1,351 +1,362 @@
 <script>
 
-	function toggle(div_id) {
-		var el = document.getElementById(div_id);
-		if (el.style.display == 'none') {
-			el.style.display = 'block';
-		} else {
-			el.style.display = 'none';
-		}
-	}	
-	
-	function popup(windowname,colonistId,summerCampId) {
-		toggle(windowname);	
-		toggle('all');	
-		$(this).scrollTop(0);
-	}
-	
-	var colonistsToDonate = 0;
-	
-	function donation(colonistId,summerCampId,colonistName){
-		var url = "<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id="+summerCampId+"&colonist_id="+colonistId
-		if(colonistsToDonate > 1){
-			$("#buttonOneDonation").attr("onclick", "window.location = '"+url+"'")
-			$("#buttonOneDonation").text("Doar e inscrever somente o colonista: "+colonistName)
-			popup('popUpDiv',colonistId,summerCampId);
-			
-		} else {
-			window.location = url
-		}
-	}
-	
+    function toggle(div_id) {
+        var el = document.getElementById(div_id);
+        if (el.style.display == 'none') {
+            el.style.display = 'block';
+        } else {
+            el.style.display = 'none';
+        }
+    }
+
+    function popup(windowname, colonistId, summerCampId) {
+        toggle(windowname);
+        toggle('all');
+        $(this).scrollTop(0);
+    }
+
+    var colonistsToDonate = 0;
+
+    function donation(colonistId, summerCampId, colonistName) {
+        var url = "<?= $this->config->item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=" + summerCampId + "&colonist_id=" + colonistId
+        if (colonistsToDonate > 1) {
+            $("#buttonOneDonation").attr("onclick", "window.location = '" + url + "'")
+            $("#buttonOneDonation").text("Doar e inscrever somente o colonista: " + colonistName)
+            popup('popUpDiv', colonistId, summerCampId);
+
+        } else {
+            window.location = url
+        }
+    }
+
 </script>
-	
+
 
 <script>
-	function excluir(camp_id, colonist_id, name,subscribed) {
-		
-		if (confirm("Tem certeza que deseja excluir o colonista "+name+" ?")) {
-			if(subscribed){
-				if(confirm("Eventuais devoluções de valores devem ser tratados diretamente com a secretaria da Associação Kinderland.")){
-					window.location.replace("<?= $this -> config -> item('url_link'); ?>summercamps/deleteColonist?camp_id="+camp_id+"&colonist_id="+colonist_id);
-				}
-			} else{
-				window.location.replace("<?= $this -> config -> item('url_link'); ?>summercamps/deleteColonist?camp_id="+camp_id+"&colonist_id="+colonist_id);		
-			}
-		}
-	}
+    function excluir(camp_id, colonist_id, name, subscribed) {
 
-	function returnToEditSubscription(camp_id, colonist_id){
-		if (confirm("Ao voltar para a elaboração, você poderá editar todas as informações da inscrição. Ao final da edição, não se esqueça de 'enviar pré-inscrição' para que seja realizado o processo de validação. Confirma o retorno para elaboração?")) {
-			window.location.replace("<?= $this -> config -> item('url_link'); ?>summercamps/invalidateSubscription?camp_id="+camp_id+"&colonist_id="+colonist_id);
-		}
-	}
+        if (confirm("Tem certeza que deseja excluir o colonista " + name + " ?")) {
+            if (subscribed) {
+                if (confirm("Eventuais devoluções de valores devem ser tratados diretamente com a secretaria da Associação Kinderland.")) {
+                    window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/deleteColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
+                }
+            } else {
+                window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/deleteColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
+            }
+        }
+    }
+
+    function returnToEditSubscription(camp_id, colonist_id) {
+        if (confirm("Ao voltar para a elaboração, você poderá editar todas as informações da inscrição. Ao final da edição, não se esqueça de 'enviar pré-inscrição' para que seja realizado o processo de validação. Confirma o retorno para elaboração?")) {
+            window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/invalidateSubscription?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
+        }
+    }
 
 </script>
 
 <div class="row">
-<?php require_once APPPATH . 'views/include/common_user_left_menu.php'
-?>
+    <?php require_once APPPATH . 'views/include/common_user_left_menu.php'
+    ?>
 
-<?php
-function insertFigure($object, $summer_camp_id, $colonist_id, $document_id, $validation) {
-	if ($object -> summercamp_model -> hasDocument($summer_camp_id, $colonist_id, $document_id)) {
-		if ($validation) {
-			if ($validation -> verifyDocument($document_id)) {
-				echo '<img src="' . $object -> config -> item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
-				return 1;
-			} else {
-				echo '<img src="' . $object -> config -> item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
-				return 0;
-			}
-		} else {
-			echo '<img src="' . $object -> config -> item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
-			return 1;
-		}
-	} else {
-		echo '<img src="' . $object -> config -> item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
-		return 0;
-	}
-}
+    <?php
 
-function insertFigureRegister($object, $validation) {
-	if ($validation) {
-		if ($validation -> verifySubscription()) {
-			echo '<img src="' . $object -> config -> item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
-			return 1;
-		} else {
-			echo '<img src="' . $object -> config -> item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
-			return 0;
-		}
-	} else {
-		echo '<img src="' . $object -> config -> item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
-		return 1;
-	}
-}
-	?>
+    function insertFigure($object, $summer_camp_id, $colonist_id, $document_id, $validation) {
+        if ($object->summercamp_model->hasDocument($summer_camp_id, $colonist_id, $document_id)) {
+            if ($validation) {
+                if ($validation->verifyDocument($document_id)) {
+                    echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+                    return 1;
+                } else {
+                    echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+                    return 0;
+                }
+            } else {
+                echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+                return 1;
+            }
+        } else {
+            echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            return 0;
+        }
+    }
 
-<div class="col-lg-10" id="popUpDiv" style="display:none;">
-	<form action="<?= $this -> config -> item('url_link'); ?>summercamps/donateMultipleColonists/" method="post" id="formMultipleDonations">
-		
-	</form>
+    function insertFigureRegister($object, $validation) {
+        if ($validation) {
+            if ($validation->verifySubscription()) {
+                echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+                return 1;
+            } else {
+                echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+                return 0;
+            }
+        } else {
+            echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            return 1;
+        }
+    }
+    ?>
 
-	<table class="table table-bordered table-striped" style="max-width=550px; min-width=550px; table-layout: fixed;"  id="tableDonations">
-		<thead>
-				<tr>
-					<td colspan="3">
-						Você tem os seguintes colonistas no prazo para doaçao:
-						<input name="colonist_id[]" type="hidden" value="">
-						<input name="summer_camp_id[]" type="hidden" value="">
-					</td>
-				</tr>
-				<tr>
-					<td>
-						Nome
-					</td>
-					<td>
-						Valor
-					</td>
-					<td>
-						Prazo
-					</td>
-				</tr>
-			</thead>
-			<tbody id="bodyPopup">
-				<tr>
-					
-				</tr>
-			</tbody>
-			<tend>
-				<tr>
-					<td colspan="3">Você deseja:</td>
-				</tr>
-				<tr>
-					<td colspan="3"><button class="btn btn-primary" id="" onClick="$('#formMultipleDonations').submit()">Doar e inscrever todos os colonistas acima</button></td>
-				</tr>
-				<tr>
-					<td colspan="3"><button class="btn btn-primary" id="buttonOneDonation">Doar e inscrever somente o colonista X</button></td>
-				</tr>
-				<tr>
-					<td colspan="3"><button class="btn btn-primary" id="" onClick="popup('popUpDiv')">Cancelar</button></td>					
-				</tr>
-			</tend>
+    <div class="col-lg-10" id="popUpDiv" style="display:none;">
+        <form action="<?= $this->config->item('url_link'); ?>summercamps/donateMultipleColonists/" method="post" id="formMultipleDonations">
 
-		</table>
-</div>
+        </form>
+
+        <table class="table table-bordered table-striped" style="max-width=550px; min-width=550px; table-layout: fixed;"  id="tableDonations">
+            <thead>
+                <tr>
+                    <td colspan="3">
+                        Você tem os seguintes colonistas no prazo para doaçao:
+                        <input name="colonist_id[]" type="hidden" value="">
+                        <input name="summer_camp_id[]" type="hidden" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Nome
+                    </td>
+                    <td>
+                        Valor
+                    </td>
+                    <td>
+                        Prazo
+                    </td>
+                </tr>
+            </thead>
+            <tbody id="bodyPopup">
+                <tr>
+
+                </tr>
+            </tbody>
+            <tend>
+                <tr>
+                    <td colspan="3">Você deseja:</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button class="btn btn-primary" id="" onClick="$('#formMultipleDonations').submit()">Doar e inscrever todos os colonistas acima</button></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button class="btn btn-primary" id="buttonOneDonation">Doar e inscrever somente o colonista X</button></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button class="btn btn-primary" id="" onClick="popup('popUpDiv')">Cancelar</button></td>
+                </tr>
+            </tend>
+
+        </table>
+    </div>
 
 
-<div id="all" class = "col-lg-10">
-	<h1>Inscrições de colonistas:</h1>
-	<?php if($summerCamps){
-	?>
-	<h4>Adicionar colonista na colônia:</h4>
-	<?php foreach($summerCamps as $summerCamp) {
-	?>
-	<a href="<?= $this -> config -> item('url_link'); ?>summercamps/subscribeColonist?id=<?=$summerCamp -> getCampId() ?>">
-	<input class=" btn btn-primary" type="button" value="<?=$summerCamp -> getCampName() ?>" />
-	</a>
-	<?php } ?>
-	<?php } else{ ?>
-	Não é possível fazer inscrições no momento.
-	<?php } ?>
-	<?php if($summerCampInscriptions){
-	?>
-	<br />
-	<br />
-	<p>Ao final do preenchimento dos dados da pré-inscrição, quando todos os ítens estiverem marcados com um
-	<img src="<?= $this -> config -> item('assets') ?>images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/> 
-, não esquecer de <b>ENVIAR</b> a pré-inscrição </p>
-	
-	
-	<table class="table-bordered table table-striped">
-		<thead>
-			<th>Inscrição</th>
-			<th></th>
-			<th>Ação</th>
-			<th>Status</th>
-		</thead>
-		<?php
-			$total = 0;
-			foreach($summerCampInscriptions as $summerCampInscription){
-				if($summerCampInscription -> getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
-					$subscribed = "true";
-				else
-					$subscribed = "false";
+    <div id="all" class = "col-lg-10">
+        <h1>Inscrições de colonistas:</h1>
+        <?php if ($summerCamps) {
+            ?>
+            <h4>Adicionar colonista na colônia:</h4>
+            <?php foreach ($summerCamps as $summerCamp) {
+                ?>
+                <a href="<?= $this->config->item('url_link'); ?>summercamps/subscribeColonist?id=<?= $summerCamp->getCampId() ?>">
+                    <input class=" btn btn-primary" type="button" value="<?= $summerCamp->getCampName() ?>" />
+                </a>
+            <?php } ?>
+        <?php } else { ?>
+            Não é possível fazer inscrições no momento.
+        <?php } ?>
+        <?php if ($summerCampInscriptions) {
+            ?>
+            <br />
+            <br />
+            <p>Ao final do preenchimento dos dados da pré-inscrição, quando todos os ítens estiverem marcados com um
+                <img src="<?= $this->config->item('assets') ?>images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>
+                , não esquecer de <b>ENVIAR</b> a pré-inscrição </p>
 
-				$documents = 0;
-				$validation = $this->validation_model->getColonistValidationInfoObject($summerCampInscription->getColonistId(),$summerCampInscription->getSummerCampId());
-				if(
-					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED ||
-					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED ||
-					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP
-				)
-				continue;
-		?>
-		<tr>
-			<td><?php if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
-($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS &&  !$validation->verifySubscription())){
-			?>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/editSubscriptionColonistForm?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>">Cadastro:</a><?php } else { ?>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/viewColonistInfo?colonistId=<?=$summerCampInscription -> getColonistId() ?>&summerCampId=<?=$summerCampInscription -> getSummerCampId() ?>">Cadastro:</a><?php } ?>
-			<?=$summerCampInscription -> getFullname() ?>
-			<br>
-			<?php 
-			$campName = $this -> summercamp_model -> getSummerCampById($summerCampInscription -> getSummerCampId()) -> getCampName();
-			
-			?>
-			Colônia: <?=$campName ?>
-			<hr>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_MEDICAL_FILE ?>"> Ficha Médica </a>
-			<br>
-			<br>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_TRIP_AUTHORIZATION ?>"> Autorização de viagem </a>
-			<br>
-			<br>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_GENERAL_RULES ?>"> Normas gerais </a>
-			<br>
-			<br>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_IDENTIFICATION_DOCUMENT ?>"> Documento de identificação </a>
-			<br>
-			<br>
-			<a href="<?= $this -> config -> item('url_link'); ?>summercamps/uploadDocument?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>&document_type=<?=DOCUMENT_PHOTO_3X4 ?>"> Foto 3x4 </a></td>
-			<td><?php $documents += insertFigureRegister($this, $validation); ?>
 
-			<br>
-			<br>
-			<hr>
-			<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_MEDICAL_FILE, $validation); ?>
-			<br>
-			<br>
-			<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_TRIP_AUTHORIZATION, $validation); ?>
-			<br>
-			<br>
-			<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_GENERAL_RULES, $validation); ?>
-			<br>
-			<br>
-			<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_IDENTIFICATION_DOCUMENT, $validation); ?>
-			<br>
-			<br>
-			<?php $documents += insertFigure($this, $summerCampInscription -> getSummerCampId(), $summerCampInscription -> getColonistId(), DOCUMENT_PHOTO_3X4, $validation); ?>
-			<br>
-			<br>
-			</td>
-			
-			<td>
-				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || 
-					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ){
-				?>
-				<a href="<?= $this -> config -> item('url_link'); ?>summercamps/sendPreSubscription?documents=<?=$documents ?>&camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>">
-				<button class="btn btn-primary">
-					Enviar pré-inscrição
-				</button> </a>
-				<?php } ?>
-				<br>
+            <table class="table-bordered table table-striped">
+                <thead>
+                <th>Inscrição</th>
+                <th></th>
+                <th>Ação</th>
+                <th>Status</th>
+                </thead>
+                <?php
+                $total = 0;
+                foreach ($summerCampInscriptions as $summerCampInscription) {
+                    if ($summerCampInscription->getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
+                        $subscribed = "true";
+                    else
+                        $subscribed = "false";
 
-				<?php if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION ){
-				?>
-				<button class="btn btn-warning" onclick="returnToEditSubscription(<?=$summerCampInscription -> getSummerCampId() ?>, <?=$summerCampInscription -> getColonistId() ?>)">
-					Voltar para elaboração
-				</button>
-				<?php } ?>
-				<br>
+                    $documents = 0;
+                    $validation = $this->validation_model->getColonistValidationInfoObject($summerCampInscription->getColonistId(), $summerCampInscription->getSummerCampId());
+                    if (
+                            $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED ||
+                            $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED ||
+                            $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP
+                    )
+                        continue;
+                    ?>
+                    <tr>
+                        <td><?php
+                            if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifySubscription())) {
+                                ?>
+                                <a href="<?= $this->config->item('url_link'); ?>summercamps/editSubscriptionColonistForm?colonistId=<?= $summerCampInscription->getColonistId() ?>&summerCampId=<?= $summerCampInscription->getSummerCampId() ?>">Cadastro:</a><?php } else { ?>
+                                <a href="<?= $this->config->item('url_link'); ?>summercamps/viewColonistInfo?colonistId=<?= $summerCampInscription->getColonistId() ?>&summerCampId=<?= $summerCampInscription->getSummerCampId() ?>">Cadastro:</a><?php } ?>
+                            <?= $summerCampInscription->getFullname() ?>
+                            <br>
+                            <?php
+                            $campName = $this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->getCampName();
+                            ?>
+                            Colônia: <?= $campName ?>
+                            <hr>
+                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_MEDICAL_FILE ?>"> Ficha Médica </a>
+                            <br>
+                            <br>
+                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_TRIP_AUTHORIZATION ?>"> Autorização de viagem </a>
+                            <br>
+                            <br>
+                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_GENERAL_RULES ?>"> Normas gerais </a>
+                            <br>
+                            <br>
+                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_IDENTIFICATION_DOCUMENT ?>"> Documento de identificação </a>
+                            <br>
+                            <br>
+                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_PHOTO_3X4 ?>"> Foto 3x4 </a></td>
+                        <td><?php $documents += insertFigureRegister($this, $validation); ?>
 
-				<?php 
-				$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($summerCampInscription -> getSummerCampId());
-				 
-					if($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT && $summerCampPayment && $summerCampInscription->duringPaymentLimit()){
-						if($summerCampInscription->getDiscount() < 100) {
-							$discount = 1-($summerCampInscription->getDiscount()/100);
-							$total += floor($summerCampPayment->getPrice()*$discount);
-				?>
-							<script>
-								colonistsToDonate++;
-								$('#bodyPopup').append("<tr><td><?=$summerCampInscription -> getFullname()?></td><td>R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00</td><td><?=$summerCampInscription -> getDatePaymentLimitFormatted()?></td></tr>");
-								$('#formMultipleDonations').append("<input type='hidden' name='camp_id[]' value='<?=$summerCampInscription -> getSummerCampId() ?>' /> <input type='hidden' name='colonist_id[]' value='<?=$summerCampInscription -> getColonistId() ?>' />");
-							</script>
+                            <br>
+                            <br>
+                            <hr>
+                            <?php $documents += insertFigure($this, $summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_MEDICAL_FILE, $validation); ?>
+                            <br>
+                            <br>
+                            <?php $documents += insertFigure($this, $summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_TRIP_AUTHORIZATION, $validation); ?>
+                            <br>
+                            <br>
+                            <?php $documents += insertFigure($this, $summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_GENERAL_RULES, $validation); ?>
+                            <br>
+                            <br>
+                            <?php $documents += insertFigure($this, $summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_IDENTIFICATION_DOCUMENT, $validation); ?>
+                            <br>
+                            <br>
+                            <?php $documents += insertFigure($this, $summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_PHOTO_3X4, $validation); ?>
+                            <br>
+                            <br>
+                        </td>
 
-							<a onclick="donation(<?=$summerCampInscription -> getColonistId() ?>, <?=$summerCampInscription -> getSummerCampId() ?>, '<?=$summerCampInscription -> getFullname()?>')">
-							<button class="btn btn-primary">
-							Doar R$ <?=floor($summerCampPayment->getPrice()*$discount)?>,00 
-							<br>
-							Prazo: <?=$summerCampInscription -> getDatePaymentLimitFormatted()?>	
-							</button> </a>
-							<br>
-				<?php		
-						} 
-				else 
-				{ 
-				?>
-							<a onclick='if(confirm("Confirma a inscrição de <?=$summerCampInscription -> getFullname()?> na colonia <?=$campName?>?")) window.location="<?= $this -> config -> item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?=$summerCampInscription -> getSummerCampId() ?>&colonist_id=<?=$summerCampInscription -> getColonistId() ?>";' >
-							<button class="btn btn-primary">
-							Inscrever<br>
-							Prazo: <?=$summerCampInscription -> getDatePaymentLimitFormatted()?>
-							</button> </a>	
+                        <td>
+                            <?php
+                            if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS ||
+                                    $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) {
+                                ?>
+                                <a href="<?= $this->config->item('url_link'); ?>summercamps/sendPreSubscription?documents=<?= $documents ?>&camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>">
+                                    <button class="btn btn-primary">
+                                        Enviar pré-inscrição
+                                    </button> </a>
+                                <br>
+                            <?php } ?>
+                            <?php if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) { ?>
+                                <br>
+                                <a href="<?= $this->config->item('url_link'); ?>summercamps/editSubscriptionColonistForm?colonistId=<?= $summerCampInscription->getColonistId() ?>&summerCampId=<?= $summerCampInscription->getSummerCampId() ?>">
+                                    <button class="btn btn-primary">
+                                        Editar cadastro
+                                    </button>
+                                </a>
+                            <?php } ?>
 
-				
-				<?php 	} 
-					  } ?>
-				<br>
-				<button class="btn btn-warning" onclick='excluir(<?=$summerCampInscription -> getSummerCampId() ?>,<?=$summerCampInscription -> getColonistId() ?>,"<?=$summerCampInscription -> getFullname() ?>",<?=$subscribed?>)' class="btn">
-					Excluir pré inscrição
-				</button>
-			</td>
+                            <?php if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) { ?>
+                                <br>
+                                <button class="btn btn-warning" onclick="returnToEditSubscription(<?= $summerCampInscription->getSummerCampId() ?>, <?= $summerCampInscription->getColonistId() ?>)">
+                                    Voltar para elaboração
+                                </button>
+                            <?php } ?>
+                            <br>
 
-			<td>
-				<?php
-					for($i=0;$i<=6;$i++){
-						$color = "style='color:grey'";
-						if($statusArray[$i]["database_id"] === $summerCampInscription -> getSituationId())
-							$color = "style='color:green; font-weight:bold'";
-				?>
-				<p <?=$color ?> >
-					<?= $statusArray[$i]["text"] ?>
-				</p>
-				<?php
-					if($statusArray[$i]["database_id"] === $summerCampInscription -> getSituationId() && 
-					!$summerCampInscription->duringPaymentLimit() && 
-					$summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT){
-				?>
-						<p style='color:red; font-weight:bold' >
-							&nbsp; &nbsp; &nbsp;Prazo expirado
-						</p>
-				<?php
-					}
-				}
-						
-					if($summerCampInscription -> getSituationId() < 0)
-					$color = "style='color:green'";
-					else
-					$color = "style='color:grey'";
-					echo "<p $color>";
-					echo $statusArray[7]["text"]."/".$statusArray[8]["text"]."/".$statusArray[9]["text"];
-					echo "</p>"
-					?>
-				<?php
-				if ($summerCampInscription -> getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) {
-					echo $validation -> describeValidation();
-				}
-				?>
-			</td>
-		</tr>
-		<?php } ?>
-	</table>
-	<script>
-	$('#bodyPopup').append("<tr><td>Total:</td><td colspan='2'>R$ <?=$total?>,00</td></tr>");
-	</script>
-	<?php } ?>
-	
-</div>
+                            <?php
+                            $summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($summerCampInscription->getSummerCampId());
+
+                            if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT && $summerCampPayment && $summerCampInscription->duringPaymentLimit()) {
+                                if ($summerCampInscription->getDiscount() < 100) {
+                                    $discount = 1 - ($summerCampInscription->getDiscount() / 100);
+                                    $total += floor($summerCampPayment->getPrice() * $discount);
+                                    ?>
+                                    <script>
+                                        colonistsToDonate++;
+                                        $('#bodyPopup').append("<tr><td><?= $summerCampInscription->getFullname() ?></td><td>R$ <?= floor($summerCampPayment->getPrice() * $discount) ?>,00</td><td><?= $summerCampInscription->getDatePaymentLimitFormatted() ?></td></tr>");
+                                        $('#formMultipleDonations').append("<input type='hidden' name='camp_id[]' value='<?= $summerCampInscription->getSummerCampId() ?>' /> <input type='hidden' name='colonist_id[]' value='<?= $summerCampInscription->getColonistId() ?>' />");
+                                    </script>
+
+                                    <a onclick="donation(<?= $summerCampInscription->getColonistId() ?>, <?= $summerCampInscription->getSummerCampId() ?>, '<?= $summerCampInscription->getFullname() ?>')">
+                                        <button class="btn btn-primary">
+                                            Doar R$ <?= floor($summerCampPayment->getPrice() * $discount) ?>,00
+                                            <br>
+                                            Prazo: <?= $summerCampInscription->getDatePaymentLimitFormatted() ?>
+                                        </button> </a>
+                                    <br>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <a onclick='if (confirm("Confirma a inscrição de <?= $summerCampInscription->getFullname() ?> na colonia <?= $campName ?>?"))
+                                                window.location = "<?= $this->config->item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>";' >
+                                        <button class="btn btn-primary">
+                                            Inscrever<br>
+                                            Prazo: <?= $summerCampInscription->getDatePaymentLimitFormatted() ?>
+                                        </button> </a>
+
+
+                                    <?php
+                                }
+                            }
+                            ?>
+                            <br>
+                            <button class="btn btn-warning" onclick='excluir(<?= $summerCampInscription->getSummerCampId() ?>,<?= $summerCampInscription->getColonistId() ?>, "<?= $summerCampInscription->getFullname() ?>",<?= $subscribed ?>)' class="btn">
+                                Excluir pré inscrição
+                            </button>
+                        </td>
+
+                        <td>
+                            <?php
+                            for ($i = 0; $i <= 6; $i++) {
+                                $color = "style='color:grey'";
+                                if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId())
+                                    $color = "style='color:green; font-weight:bold'";
+                                ?>
+                                <p <?= $color ?> >
+                                    <?= $statusArray[$i]["text"] ?>
+                                </p>
+                                <?php
+                                if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId() &&
+                                        !$summerCampInscription->duringPaymentLimit() &&
+                                        $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT) {
+                                    ?>
+                                    <p style='color:red; font-weight:bold' >
+                                        &nbsp; &nbsp; &nbsp;Prazo expirado
+                                    </p>
+                                    <?php
+                                }
+                            }
+
+                            if ($summerCampInscription->getSituationId() < 0)
+                                $color = "style='color:green'";
+                            else
+                                $color = "style='color:grey'";
+                            echo "<p $color>";
+                            echo $statusArray[7]["text"] . "/" . $statusArray[8]["text"] . "/" . $statusArray[9]["text"];
+                            echo "</p>"
+                            ?>
+                            <?php
+                            if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) {
+                                echo $validation->describeValidation();
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+            <script>
+                $('#bodyPopup').append("<tr><td>Total:</td><td colspan='2'>R$ <?= $total ?>,00</td></tr>");
+            </script>
+        <?php } ?>
+
+    </div>
 
 
 

@@ -134,12 +134,15 @@ class SummerCamps extends CK_Controller {
             $data['miniCamp'] = $miniCamp;
         }
 
-        if($camper -> getRoommate1())
-            $data['roommate1'] = $camper -> getRoommate1();
-        if($camper -> getRoommate2())
-            $data['roommate2'] = $camper -> getRoommate2();
-        if($camper -> getRoommate3())
-            $data['roommate3'] = $camper -> getRoommate3();
+        if ($camper->getRoommate1())
+            $data['roommate1'] = $camper->getRoommate1();
+        if ($camper->getRoommate2())
+            $data['roommate2'] = $camper->getRoommate2();
+        if ($camper->getRoommate3())
+            $data['roommate3'] = $camper->getRoommate3();
+        $data['editComplete'] = "able";
+        if ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION)
+            $data['editComplete'] = "disabled";
         $this->loadView('summercamps/editSubscriptionColonistForm', $data);
     }
 
@@ -184,13 +187,15 @@ class SummerCamps extends CK_Controller {
         $roommate2 = $this->input->post('roommate2', TRUE);
         $roommate3 = $this->input->post('roommate3', TRUE);
 
+
         try {
             $this->Logger->info("Editing colonist $summerCampId");
             $this->generic_model->startTransaction();
             if ($sameAddressResponsable === "s") {
                 $addressId = $this->address_model->getAddressByPersonId($responsableId)->getAddressId();
-            } else
+            } else {
                 $addressId = $this->address_model->insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
+            }
             $this->person_model->updatePerson($fullname, $gender, NULL, $personId, $addressId);
             $this->colonist_model->updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId);
             if ($school[0] == -1) {
@@ -264,6 +269,8 @@ class SummerCamps extends CK_Controller {
 
             redirect("summercamps/index");
         } catch (Exception $ex) {
+            echo "erro " . $ex;
+            exit();
             $this->Logger->error("Failed to edit colonist subscription");
             $this->generic_model->rollbackTransaction();
             $data['error'] = true;
@@ -319,7 +326,7 @@ class SummerCamps extends CK_Controller {
             } else
                 $addressId = $this->address_model->insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
 
-            if($addressId == 0) // If necessario para evitar propagacao de erros em query resultando em colonista nao inscrito
+            if ($addressId == 0) // If necessario para evitar propagacao de erros em query resultando em colonista nao inscrito
                 $addressId = NULL;
 
             $personId = $this->person_model->insertNewPerson($fullname, $gender, NULL, $addressId);
@@ -521,7 +528,7 @@ class SummerCamps extends CK_Controller {
             $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
         $userId = $this->session->userdata("user_id");
         if ($_FILES['uploadedfile'] ['error'] > 0 || !$this->summercamp_model->uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, $document_type)) {
-            echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que só são aceitos arquivos até 2MB.'); 
+            echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que só são aceitos arquivos até 2MB.');
             window.location.replace('" . $this->config->item('url_link') . "summercamps/uploadDocument?camp_id=$camp_id&colonist_id=$colonist_id&document_type=$document_type');</script>";
         } else {
             $this->validation_model->sentNewDocument($colonist_id, $camp_id, $document_type);
@@ -533,87 +540,84 @@ class SummerCamps extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
         $campId = $this->input->post('camp_id', TRUE);
         $colonistId = $this->input->post('colonist_id', TRUE);
-		$userId = $this->session->userdata("user_id");
-		$donationValue = 0;
-		try{
-	    	if(count($campId) == count($colonistId)){
-				for($i=0;$i<count($campId);$i++){
-	    			$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($campId[$i]);
-					if($summerCampPayment){
-						$summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId[$i],$campId[$i]);
-						if($summerCampSubscription && $summerCampSubscription->duringPaymentLimit()){
-							$discount = 1 - ($summerCampSubscription->getDiscount()/100);	
-							$donationValue += floor($summerCampPayment->getPrice()*$discount);								
-						} else {
-							$this->Logger->error("Trying 1 donation for multiple colonists: Colonist with id and campId" .$colonistId[$i]." ".$campId[$i]." does not exist or is not during its payment limit");			
-							redirect("summercamps/index");
-						}
-					}
-					else{
-						$this->Logger->error("Trying 1 donation for multiple colonists: Did not find payment period for colonist with id and campId" .$colonistId[$i]." ".$campId[$i]);			
-						redirect("summercamps/index");
-					}	    		
-				}
-				$this->generic_model->startTransaction();
-				$donationId = $this->donation_model->createDonation($userId,$donationValue, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
-				$this->Logger->info("Created donation with id: ". $donationId);
-				for($i=0;$i<count($campId);$i++){
-					$this->summercamp_model->associateDonation($campId[$i],$colonistId[$i],$donationId);
-					$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id/campId " .$colonistId[$i]."/".$campId[$i]);		
-				}
-				$this->generic_model->commitTransaction();
-				redirect("payments/checkout/".$donationId);
-			} 
-			else{
-				redirect("summercamps/index");
-			}
-		} catch (Exception $ex) {
-			$this->generic_model->rollbackTransaction();
-			$this->Logger->error("Failed to create donation for multiple colonists");
-			redirect("summercamps/index");
-		}
-	}
-    	
+        $userId = $this->session->userdata("user_id");
+        $donationValue = 0;
+        try {
+            if (count($campId) == count($colonistId)) {
+                for ($i = 0; $i < count($campId); $i++) {
+                    $summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($campId[$i]);
+                    if ($summerCampPayment) {
+                        $summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId[$i], $campId[$i]);
+                        if ($summerCampSubscription && $summerCampSubscription->duringPaymentLimit()) {
+                            $discount = 1 - ($summerCampSubscription->getDiscount() / 100);
+                            $donationValue += floor($summerCampPayment->getPrice() * $discount);
+                        } else {
+                            $this->Logger->error("Trying 1 donation for multiple colonists: Colonist with id and campId" . $colonistId[$i] . " " . $campId[$i] . " does not exist or is not during its payment limit");
+                            redirect("summercamps/index");
+                        }
+                    } else {
+                        $this->Logger->error("Trying 1 donation for multiple colonists: Did not find payment period for colonist with id and campId" . $colonistId[$i] . " " . $campId[$i]);
+                        redirect("summercamps/index");
+                    }
+                }
+                $this->generic_model->startTransaction();
+                $donationId = $this->donation_model->createDonation($userId, $donationValue, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
+                $this->Logger->info("Created donation with id: " . $donationId);
+                for ($i = 0; $i < count($campId); $i++) {
+                    $this->summercamp_model->associateDonation($campId[$i], $colonistId[$i], $donationId);
+                    $this->Logger->info("Associated donation with id: " . $donationId . " to colonist with id/campId " . $colonistId[$i] . "/" . $campId[$i]);
+                }
+                $this->generic_model->commitTransaction();
+                redirect("payments/checkout/" . $donationId);
+            } else {
+                redirect("summercamps/index");
+            }
+        } catch (Exception $ex) {
+            $this->generic_model->rollbackTransaction();
+            $this->Logger->error("Failed to create donation for multiple colonists");
+            redirect("summercamps/index");
+        }
+    }
+
     public function paySummerCampSubscription() {
         $this->Logger->info("Starting " . __METHOD__);
         $campId = $this->input->get('camp_id', TRUE);
         $colonistId = $this->input->get('colonist_id', TRUE);
 
-		if(!$this->checkSession())
-			redirect("login/index");
+        if (!$this->checkSession())
+            redirect("login/index");
 
-		$userId = $this->session->userdata("user_id");
-		try{
-	    	$summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($campId);
-			$summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId,$campId);
-			$discount = 1 - ($summerCampSubscription->getDiscount()/100);
-	    	if($summerCampPayment && $summerCampSubscription->duringPaymentLimit()){
-				if($discount == 0){
-		    		$this->generic_model->startTransaction();
-					$this->Logger->info("Discount is 100%, subscribing colonist with id and campId" .$colonistId." ".$campId );
-					$this->summercamp_model->updateColonistStatus($colonistId,$campId,SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED);							
-					$this->generic_model->commitTransaction();
-					$this->sendSubscriptionFinalMail($userId,$summerCampSubscription);
-					redirect("summercamps/index");
-					return;
-				} else{			
-					$donationId = $this->donation_model->createDonation($userId,floor($summerCampPayment->getPrice()*$discount), DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
-					$this->Logger->info("Created donation with id: ". $donationId);
-					$this->summercamp_model->associateDonation($campId,$colonistId,$donationId);
-					$this->Logger->info("Associated donation with id: ". $donationId ." to colonist with id/campId" .$colonistId."/".$campId);
-					$this->generic_model->commitTransaction();
-					redirect("payments/checkout/".$donationId);
-				}
-			} 
-			else{
-				redirect("summercamps/index");
-			}
-		} catch (Exception $ex) {
-			$this->generic_model->rollbackTransaction();
-			$this->Logger->error("Failed to create payment");
-			redirect("summercamps/index");
-		}
-	}
+        $userId = $this->session->userdata("user_id");
+        try {
+            $summerCampPayment = $this->summercamp_model->getSummerCampPaymentPeriod($campId);
+            $summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonistId, $campId);
+            $discount = 1 - ($summerCampSubscription->getDiscount() / 100);
+            if ($summerCampPayment && $summerCampSubscription->duringPaymentLimit()) {
+                if ($discount == 0) {
+                    $this->generic_model->startTransaction();
+                    $this->Logger->info("Discount is 100%, subscribing colonist with id and campId" . $colonistId . " " . $campId);
+                    $this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED);
+                    $this->generic_model->commitTransaction();
+                    $this->sendSubscriptionFinalMail($userId, $summerCampSubscription);
+                    redirect("summercamps/index");
+                    return;
+                } else {
+                    $donationId = $this->donation_model->createDonation($userId, floor($summerCampPayment->getPrice() * $discount), DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
+                    $this->Logger->info("Created donation with id: " . $donationId);
+                    $this->summercamp_model->associateDonation($campId, $colonistId, $donationId);
+                    $this->Logger->info("Associated donation with id: " . $donationId . " to colonist with id/campId" . $colonistId . "/" . $campId);
+                    $this->generic_model->commitTransaction();
+                    redirect("payments/checkout/" . $donationId);
+                }
+            } else {
+                redirect("summercamps/index");
+            }
+        } catch (Exception $ex) {
+            $this->generic_model->rollbackTransaction();
+            $this->Logger->error("Failed to create payment");
+            redirect("summercamps/index");
+        }
+    }
 
     public function invalidateSubscription() {
         $this->Logger->info("Starting " . __METHOD__);
@@ -625,10 +629,9 @@ class SummerCamps extends CK_Controller {
             $this->validation_model->deleteValidation($colonist_id, $camp_id);
             echo "<script>alert('Retorno realizado com sucesso'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         } else {
-            echo "<script>alert('O status " . utf8_decode($summerCampSubscription->getSituation()) . utf8_decode(" não") . " permite retorno.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+            echo "<script>alert('O status " . $summerCampSubscription->getSituation() . " não" . " permite retorno.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         }
     }
-
 
     public function sendPreSubscription() {
         $this->Logger->info("Starting " . __METHOD__);
@@ -648,45 +651,45 @@ class SummerCamps extends CK_Controller {
         }
     }
 
-    public function sendPreSubscriptionEmail($colonistId, $summerCampId){
-        $this->Logger->info("Running: ". __METHOD__);
+    public function sendPreSubscriptionEmail($colonistId, $summerCampId) {
+        $this->Logger->info("Running: " . __METHOD__);
 
         $summercamp = $this->summercamp_model->getSummerCampById($summerCampId);
-        if(!$summercamp){
+        if (!$summercamp) {
             $this->Logger->error("Camp not found, cannot send an email");
             return;
         }
 
         $colonist = $this->colonist_model->getColonist($colonistId);
-        if(!$colonist){
+        if (!$colonist) {
             $this->Logger->error("Colonist not found");
             return;
         }
 
         $personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
-        if(!$personuser){
+        if (!$personuser) {
             $this->Logger->error("PersonUser related to colonist not found");
             return;
         }
 
         $this->Logger->info("Sending email");
-		
-		$responsableId = $personuser->getPersonId();
-		
-		$father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+
+        $responsableId = $personuser->getPersonId();
+
+        $father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
         $mother = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
-		
-		$emailArray = array();
-		if($father && $responsableId != $father){
-			$father = $this->person_model->getPersonFullById($father);
-			$emailArray[] = $father->email;		
-		}
-		if($mother && $mother != $responsableId){
-			$mother = $this->person_model->getPersonFullById($mother);
-			$emailArray[] = $mother->email;
-		}
-					
-        $this->sendEmailSubmittedPreSubscription($personuser, $colonist, $summercamp->getCampName(),$emailArray);
+
+        $emailArray = array();
+        if ($father && $responsableId != $father) {
+            $father = $this->person_model->getPersonFullById($father);
+            $emailArray[] = $father->email;
+        }
+        if ($mother && $mother != $responsableId) {
+            $mother = $this->person_model->getPersonFullById($mother);
+            $emailArray[] = $mother->email;
+        }
+
+        $this->sendEmailSubmittedPreSubscription($personuser, $colonist, $summercamp->getCampName(), $emailArray);
     }
 
     public function acceptGeneralRules() {
@@ -694,17 +697,17 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateGeneralRules($camp_id, $colonist_id, 't');
-        //$this->index();
+//$this->index();
         redirect("summercamps/index");
     }
-    
+
     public function rejectGeneralRules() {
-    	$this->Logger->info("Starting " . __METHOD__);
-    	$camp_id = $this->input->post('camp_id', TRUE);
-    	$colonist_id = $this->input->post('colonist_id', TRUE);
-    	$this->summercamp_model->updateGeneralRules($camp_id, $colonist_id, 'f');
-    	//$this->index();
-    	redirect("summercamps/index");
+        $this->Logger->info("Starting " . __METHOD__);
+        $camp_id = $this->input->post('camp_id', TRUE);
+        $colonist_id = $this->input->post('colonist_id', TRUE);
+        $this->summercamp_model->updateGeneralRules($camp_id, $colonist_id, 'f');
+//$this->index();
+        redirect("summercamps/index");
     }
 
     public function acceptTripAuthorization() {
@@ -712,7 +715,7 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateTripAuthorization($camp_id, $colonist_id, 't');
-        //$this->index();
+//$this->index();
         redirect("summercamps/index");
     }
 
@@ -720,7 +723,7 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateTripAuthorization($camp_id, $colonist_id, 'f');
-        //this->index();
+//this->index();
         redirect("summercamps/index");
     }
 
@@ -767,8 +770,8 @@ class SummerCamps extends CK_Controller {
             $data["dadFullName"] = $father->fullname;
             $data["dadEmail"] = $father->email;
             $data["dadPhone"] = $father->phone1;
-        } else{
-        	$data["noFather"] = TRUE;
+        } else {
+            $data["noFather"] = TRUE;
         }
         if ($mother) {
             if ($mother == $responsableId)
@@ -777,22 +780,22 @@ class SummerCamps extends CK_Controller {
             $data["motherFullName"] = $mother->fullname;
             $data["motherEmail"] = $mother->email;
             $data["motherPhone"] = $mother->phone1;
-        } else{
-           	$data["noMother"] = TRUE;	
+        } else {
+            $data["noMother"] = TRUE;
         }
 
-        if($camper -> getRoommate1())
-            $data['roommate1'] = $camper -> getRoommate1();
-        if($camper -> getRoommate2())
-            $data['roommate2'] = $camper -> getRoommate2();
-        if($camper -> getRoommate3())
-            $data['roommate3'] = $camper -> getRoommate3();
-            
-		if ($data["summerCamp"]->isMiniCamp()) {
+        if ($camper->getRoommate1())
+            $data['roommate1'] = $camper->getRoommate1();
+        if ($camper->getRoommate2())
+            $data['roommate2'] = $camper->getRoommate2();
+        if ($camper->getRoommate3())
+            $data['roommate3'] = $camper->getRoommate3();
+
+        if ($data["summerCamp"]->isMiniCamp()) {
             $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
             $data['miniCamp'] = $miniCamp;
         }
-			
+
 
         $this->loadView('summercamps/viewColonistInfo', $data);
     }

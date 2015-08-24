@@ -1,62 +1,65 @@
 <?php
+
 require_once APPPATH . 'core/CK_Model.php';
 require_once APPPATH . 'core/colonist.php';
 require_once APPPATH . 'core/person.php';
-class colonist_model extends CK_Model{
 
-	public function __construct(){
-		parent::__construct();
-	}
+class colonist_model extends CK_Model {
 
-	public function insertColonist($personId, $birthdate,$documentNumber,$documentType){
-		$this->Logger->info("Running: " . __METHOD__);
-		$birthdate = CK_CONTROLLER::toYYYYMMDD($birthdate);
+    public function __construct() {
+        parent::__construct();
+    }
 
-		$sql = 'INSERT INTO colonist (person_id, birth_date, document_number, document_type) VALUES (?, ?, ?, ?)';
-		$returnId = $this->executeReturningId($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType));
-		if($returnId)
-			return $returnId;
+    public function insertColonist($personId, $birthdate, $documentNumber, $documentType) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $birthdate = CK_CONTROLLER::toYYYYMMDD($birthdate);
 
-		return false;
-	}
+        $sql = 'INSERT INTO colonist (person_id, birth_date, document_number, document_type) VALUES (?, ?, ?, ?)';
+        $returnId = $this->executeReturningId($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType));
+        if ($returnId)
+            return $returnId;
 
-	public function updateColonist($personId, $birthdate,$documentNumber,$documentType,$colonistId){
-		$this->Logger->info("Running: " . __METHOD__);
-		$birthdate = CK_CONTROLLER::toYYYYMMDD($birthdate);
+        return false;
+    }
 
-		$sql = 'UPDATE colonist SET person_id=?, birth_date=?, document_number=?, document_type=? where colonist_id = ?';
-		$returnId = $this->execute($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType,intval($colonistId)));
-		if($returnId)
-			return $returnId;
+    public function updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $birthdate = CK_CONTROLLER::toYYYYMMDD($birthdate);
 
-		return false;
-	}
+        $sql = 'UPDATE colonist SET person_id=?, birth_date=?, document_number=?, document_type=? where colonist_id = ?';
+        $returnId = $this->execute($this->db, $sql, array($personId, $birthdate, $documentNumber, $documentType, intval($colonistId)));
+        if ($returnId)
+            return $returnId;
 
-	public function getColonist($colonistId){
-		$this->Logger->info("Running: " . __METHOD__);
+        return false;
+    }
 
-		$sql = "SELECT * FROM colonist c JOIN person p on p.person_id = c.person_id WHERE colonist_id = ?";
-		$resultRow = $this->executeRow($this->db, $sql, array($colonistId));
+    public function getColonist($colonistId) {
+        $this->Logger->info("Running: " . __METHOD__);
 
-		if($resultRow)
-			return Colonist::createColonistObject($resultRow);
+        $sql = "SELECT * FROM colonist c JOIN person p on p.person_id = c.person_id WHERE colonist_id = ?";
+        $resultRow = $this->executeRow($this->db, $sql, array($colonistId));
 
-		return null;
-	}
+        if ($resultRow)
+            return Colonist::createColonistObject($resultRow);
 
-	public function getColonistPersonUser($colonistId, $summerCampId) {
-		$this->Logger->info("Running: " . __METHOD__);
+        return null;
+    }
 
-		$sql = "SELECT p.* FROM summer_camp_subscription c 
-				JOIN person p on c.person_user_id = p.person_id 
+    public function getColonistPersonUser($colonistId, $summerCampId) {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $sql = "SELECT p.* FROM summer_camp_subscription c
+				JOIN person p on c.person_user_id = p.person_id
 				WHERE c.colonist_id = ? AND c.summer_camp_id = ?";
-		$resultRow = $this->executeRow($this->db, $sql, array($colonistId, $summerCampId));
+        $resultRow = $this->executeRow($this->db, $sql, array($colonistId, $summerCampId));
 
-		if($resultRow)
-			return Person::createPersonObjectSimple($resultRow);
+        if ($resultRow)
+            return Person::createPersonObjectSimple($resultRow);
 
-		return null;
-	}
+        return null;
+    }
 
 }
+
 ?>
