@@ -116,7 +116,7 @@
                 $retorno = $xml;                
             }
             $this->Logger->info("Transaction status returned by Cielo: ". $retorno->status);             
-            $data["transactions"] = CieloTransaction::getTransactionStatusText($retorno->status);
+            $data["transactions"] = array(CieloTransaction::getTransactionStatusText($retorno->status));
             
             $this -> loadView("payments/result", $data);                        
         }
