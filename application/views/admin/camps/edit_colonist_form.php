@@ -174,10 +174,14 @@
             <div class="form-group">
                 <div class="col-lg-10">
                     <button class="btn btn-primary" onClick="validateForm(event)" style="margin-right:40px">Salvar</button> <br></br>
-                    <button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
                 </div>
             </div>
 
         </form>
+        <div class="form-group">
+            <div class="col-lg-10">
+                <button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
+            </div>
+        </div>
     </div>
 </div>
