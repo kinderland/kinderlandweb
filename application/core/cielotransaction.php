@@ -107,22 +107,22 @@
         public static function getTransactionStatusText($status){
             $retString = "";
             switch ($status) {
-                case TRANSACAO_CAPTURADA:
+                case CieloTransaction::TRANSACAO_CAPTURADA:
                     $retString = "Doação realizada com sucesso! <br /><br />Acompanhe suas doações pelo histórico no menu principal do sistema.";
                     break;
                     
-                case TRANSACAO_CANCELADA:
-                case TRANSACAO_NAO_AUTENTICADA:
-                case TRANSACAO_NAO_AUTORIZADA:
+                case CieloTransaction::TRANSACAO_CANCELADA:
+                case CieloTransaction::TRANSACAO_NAO_AUTENTICADA:
+                case CieloTransaction::TRANSACAO_NAO_AUTORIZADA:
                     $retString = "Doação não realizada, tente novamente. <br /><br />Se o problema persistir, entre em contato com a sua operadora de cartão.";
                     break;
 
-                case TRANSACAO_CRIADA:
-                case TRANSACAO_EM_ANDAMENTO:
-                case TRANSACAO_AUTENTICADA:
-                case TRANSACAO_AUTORIZADA:
-                case TRANSACAO_EM_AUTENTICACAO:
-                case TRANSACAO_EM_CANCELAMENTO:
+                case CieloTransaction::TRANSACAO_CRIADA:
+                case CieloTransaction::TRANSACAO_EM_ANDAMENTO:
+                case CieloTransaction::TRANSACAO_AUTENTICADA:
+                case CieloTransaction::TRANSACAO_AUTORIZADA:
+                case CieloTransaction::TRANSACAO_EM_AUTENTICACAO:
+                case CieloTransaction::TRANSACAO_EM_CANCELAMENTO:
                     $retString = "Doação sendo processada. <br /><br />Favor acompanhar pelo histórico de doações a efetivação ou não da mesma. <br />
                     É possível que a confirmação do pagamento leve até 2h para chegar até nós. <br /><br />Qualquer dúvida entre em contato com a secretaria.";
                     break;
