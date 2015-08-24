@@ -104,6 +104,37 @@
             return new CieloTransaction(NULL, $payment_type, $payment_portions, $cardflag, $donation_id, NULL, NULL, NULL, $transaction_value);
         }
 
+        public static function getTransactionStatusText($status){
+            $retString = "";
+            switch ($status) {
+                case CieloTransaction::TRANSACAO_CAPTURADA:
+                    $retString = "Doação realizada com sucesso! <br /><br />Acompanhe suas doações pelo histórico no menu principal do sistema.";
+                    break;
+                    
+                case CieloTransaction::TRANSACAO_CANCELADA:
+                case CieloTransaction::TRANSACAO_NAO_AUTENTICADA:
+                case CieloTransaction::TRANSACAO_NAO_AUTORIZADA:
+                    $retString = "Doação não realizada, tente novamente. <br /><br />Se o problema persistir, entre em contato com a sua operadora de cartão.";
+                    break;
+
+                case CieloTransaction::TRANSACAO_CRIADA:
+                case CieloTransaction::TRANSACAO_EM_ANDAMENTO:
+                case CieloTransaction::TRANSACAO_AUTENTICADA:
+                case CieloTransaction::TRANSACAO_AUTORIZADA:
+                case CieloTransaction::TRANSACAO_EM_AUTENTICACAO:
+                case CieloTransaction::TRANSACAO_EM_CANCELAMENTO:
+                    $retString = "Doação sendo processada. <br /><br />Favor acompanhar pelo histórico de doações a efetivação ou não da mesma. <br />
+                    É possível que a confirmação do pagamento leve até 2h para chegar até nós. <br /><br />Qualquer dúvida entre em contato com a secretaria.";
+                    break;
+                
+                default:
+                    $retString = "Transação com Cielo não identificada.";
+                    break;
+            }
+
+            return $retString;
+        }
+
         function requestTransactionResult() {
 
             $xml = " <requisicao-consulta id=\"6fcf758e-bc60-4d6a-acf4-496593a40441\" versao=\"1.3.0\"> ";

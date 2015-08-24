@@ -103,7 +103,9 @@
         }
 
         public function retornoPagamento(){
+            $this->Logger->info("Running: ". __METHOD__);
             $donation_id = $this -> input -> get('donation_id', TRUE);
+            $this->Logger->info("Payment result from cielo for donation_id: ". $donation_id);
             
             $payments = $this->cielotransaction_model -> getAllPaymentsByDonationId($donation_id);
                  
@@ -113,9 +115,9 @@
                 $xml = $this->updatePaymentStatus($payment);                
                 $retorno = $xml;                
             }
-                                        
-            $data["transactions"] = $retorno->captura->mensagem;
-           
+            $this->Logger->info("Transaction status returned by Cielo: ". $retorno->status);             
+            $data["transactions"] = array(CieloTransaction::getTransactionStatusText($retorno->status));
+            
             $this -> loadView("payments/result", $data);                        
         }
 		
