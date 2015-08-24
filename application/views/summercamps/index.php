@@ -255,15 +255,6 @@
                             <?php } ?>
                             <?php if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) { ?>
                                 <br>
-                                <a href="<?= $this->config->item('url_link'); ?>summercamps/editSubscriptionColonistForm?colonistId=<?= $summerCampInscription->getColonistId() ?>&summerCampId=<?= $summerCampInscription->getSummerCampId() ?>">
-                                    <button class="btn btn-primary">
-                                        Editar cadastro
-                                    </button>
-                                </a>
-                            <?php } ?>
-
-                            <?php if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) { ?>
-                                <br>
                                 <button class="btn btn-warning" onclick="returnToEditSubscription(<?= $summerCampInscription->getSummerCampId() ?>, <?= $summerCampInscription->getColonistId() ?>)">
                                     Voltar para elaboração
                                 </button>
@@ -295,7 +286,7 @@
                                 } else {
                                     ?>
                                     <a onclick='if (confirm("Confirma a inscrição de <?= $summerCampInscription->getFullname() ?> na colonia <?= $campName ?>?"))
-                                                window.location = "<?= $this->config->item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>";' >
+                                                                window.location = "<?= $this->config->item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>";' >
                                         <button class="btn btn-primary">
                                             Inscrever<br>
                                             Prazo: <?= $summerCampInscription->getDatePaymentLimitFormatted() ?>

@@ -114,7 +114,7 @@
                     <div class="col-lg-6">
                         <input type="text" class="form-control" placeholder="Nome Completo"
                                name="fullname" onkeypress="return validateLetterInput(event);" required
-                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')" <?php echo $editComplete; ?>
+                               oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
                                value="<?php
                                if ($fullName) {
@@ -128,7 +128,7 @@
                     <div class="col-lg-3">
                         <select  class="form-control" id="gender" name="gender" required
                                  oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
-                                 onchange="setCustomValidity('')" <?php echo $editComplete; ?>
+                                 onchange="setCustomValidity('')"
                                  >
                             <option value="" selected>-- Selecione --</option>
                             <option value="M"
@@ -196,7 +196,7 @@
                     <div class="col-lg-4">
                         <?php $schools = $this->summercamp_model->getSchools(); ?>
                         <select  class="form-control" id="school_select" name="school[]" required
-                                 oninvalid="this.setCustomValidity('Por favor selecione uma opção.')" <?php echo $editComplete; ?>
+                                 oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
                                  onchange="setCustomValidity('');
                                          verifyOtherSchool();"
                                  >
@@ -216,7 +216,7 @@
 
                     <label for="schoolYear" class="col-lg-3 control-label"> Ano escolar (fundamental)*: </label>
                     <div class="col-lg-3">
-                        <select  class="form-control" id="schoolYear" name="schoolYear" required <?php echo $editComplete; ?>
+                        <select  class="form-control" id="schoolYear" name="schoolYear" required
                                  oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
                                  onchange="setCustomValidity('')"
                                  >
@@ -235,7 +235,7 @@
 
 
                     <div class="col-lg-4">
-                        <input type="text" class="form-control" placeholder="Nome da escola" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control" placeholder="Nome da escola"
                                name="school[]" id="school_text" disabled style="display: none;" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
@@ -251,7 +251,7 @@
                 <div class="form-group">
                     <label for="phone1" class="col-lg-2 control-label "> Telefone: </label>
                     <div class="col-lg-4">
-                        <input type="text" class="form-control phone phone1" placeholder="(ddd) Telefone de contato" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control phone phone1" placeholder="(ddd) Telefone de contato"
                                name="phone1" id="phone1" maxlength="25"
                                value="<?php
                                if (!empty($phone1)) {
@@ -262,7 +262,7 @@
 
                     <label for="phone2" class="col-lg-3 control-label"> Telefone Secundário: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control phone" placeholder="(ddd) Telefone secundário" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control phone" placeholder="(ddd) Telefone secundário"
                                name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
                                value="<?php
                                if (!empty($phone2)) {
@@ -280,14 +280,14 @@
                 <div class="form-group">
                     <label for="school" class="col-lg-6 control-label"> Endereço do(a) colonista é o mesmo do(a) responsável?*: </label>
                     <div class="col-lg-6">
-                        <input type="radio" onchange="addressResponsable();" name="sameAddressResponsable" value="s" <?php echo $editComplete; ?>
+                        <input type="radio" onchange="addressResponsable();" name="sameAddressResponsable" value="s"
                         <?php
                         if (empty($sameAddressResponsable) ||
                                 (!empty($sameAddressResponsable) && ($sameAddressResponsable == "s")
                                 ))
                             echo "checked='checked'"
                             ?>/> Sim
-                        <input type="radio" onchange="addressResponsable();" name="sameAddressResponsable" value="n" <?php echo $editComplete; ?>
+                        <input type="radio" onchange="addressResponsable();" name="sameAddressResponsable" value="n"
                         <?php if (!empty($sameAddressResponsable) && ($sameAddressResponsable == "n")) echo "checked='checked'" ?>
                                /> Não
                     </div>
@@ -304,7 +304,7 @@
                     <label for="street" class="col-lg-1 control-label"> Logradouro: </label>
                     <div class="col-lg-11">
                         <input type="text" class="form-control endereco" placeholder="Logradouro"
-                               name="street" onkeypress="return validateLetterInput(event);" <?php echo $editComplete; ?>
+                               name="street" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
                                value="<?php
@@ -321,7 +321,7 @@
                     <label for="number" class="col-lg-1 control-label "> Número: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control endereco" placeholder="Número"
-                               name="number" onkeypress="return validateLetterAndNumberInput(event);" <?php echo $editComplete; ?>
+                               name="number" onkeypress="return validateLetterAndNumberInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
                                value="<?php
@@ -333,7 +333,7 @@
 
                     <label for="complement" class="col-lg-2 control-label " > Complemento: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Complemento" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control endereco" placeholder="Complemento"
                                name="complement"
                                value="<?php
                                if (!empty($complement)) {
@@ -349,7 +349,7 @@
 
                     <label for="neighborhood" class="col-lg-1 control-label "> Bairro: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Bairro" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control endereco" placeholder="Bairro"
                                name="neighborhood" onkeypress="return validateLetterInput(event);"
                                value="<?php
                                if (!empty($neighborhood)) {
@@ -361,7 +361,7 @@
 
                     <label for="cep" class="col-lg-2 control-label"> CEP: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="CEP" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control endereco" placeholder="CEP"
                                name="cep" maxlength="8" onkeypress="return validateNumberInput(event);"
                                pattern=".{8,}" id="cep"
                                oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
@@ -380,7 +380,7 @@
 
                     <label for="city" class="col-lg-1 control-label "> Cidade: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Cidade" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control endereco" placeholder="Cidade"
                                name="city" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este$this -> input -> post('neighborhood', TRUE) campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
@@ -394,7 +394,7 @@
 
                     <label for="uf" class="col-lg-2 control-label"> Estado*: </label>
                     <div class="col-lg-3">
-                        <select  class="form-control endereco" id="uf" name="uf" required <?php echo $editComplete; ?>
+                        <select  class="form-control endereco" id="uf" name="uf" required
                                  oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
                                  oninput="setCustomValidity('')">
                             <option value=""> -- Selecione -- </option>
@@ -436,17 +436,17 @@
             <div class="row">
                 <div class="form-group">
                     <div class="col-lg-10">
-                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="not" <?php echo $editComplete; ?>
+                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="not"
                         <?php
                         if (empty($responsableDadMother) ||
                                 (!empty($responsableDadMother) && ($responsableDadMother == "not")
                                 ))
                             echo "checked='checked'"
                             ?>/> Preencher os dados de pai e mãe
-                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="dad" <?php echo $editComplete; ?>
+                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="dad"
                         <?php if (!empty($responsableDadMother) && ($responsableDadMother == "dad")) echo "checked='checked'" ?>
                                /> Utilizar os dados do responsável como pai
-                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="mother" <?php echo $editComplete; ?>
+                        <input type="radio" onchange="responsableDadMotherFunction();" name="responsableDadMother" value="mother"
                         <?php if (!empty($responsableDadMother) && ($responsableDadMother == "mother")) echo "checked='checked'" ?>
                                /> Utilizar os dados do responsável como mãe
                     </div>
@@ -471,7 +471,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Nome: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="dad dad-form form-control" placeholder="Nome" <?php echo $editComplete; ?>
+                        <input type="text" class="dad dad-form form-control" placeholder="Nome"
                                name="dadFullName" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -489,7 +489,7 @@
                 <div class="form-group">
                     <label for="dadphone" class="dad dad-form col-lg-1 control-label"> Telefone: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="dad dad-form form-control phone" placeholder="Telefone" <?php echo $editComplete; ?>
+                        <input type="text" class="dad dad-form form-control phone" placeholder="Telefone"
                                name="dadPhone" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -501,7 +501,7 @@
                     </div>
                     <label for="fullname" class="dad dad-form col-lg-1 control-label"> E-mail: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="dad dad-form form-control" placeholder="E-mail" <?php echo $editComplete; ?>
+                        <input type="text" class="dad dad-form form-control" placeholder="E-mail"
                                name="dadEmail" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -531,7 +531,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Nome: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="mother mother-form form-control" placeholder="Nome" <?php echo $editComplete; ?>
+                        <input type="text" class="mother mother-form form-control" placeholder="Nome"
                                name="motherFullName" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -549,7 +549,7 @@
                 <div class="form-group">
                     <label for="motherphone" class="mother mother-form col-lg-1 control-label"> Telefone: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="mother mother-form form-control phone" placeholder="Telefone" <?php echo $editComplete; ?>
+                        <input type="text" class="mother mother-form form-control phone" placeholder="Telefone"
                                name="motherPhone" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -586,7 +586,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 1: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
                                value="<?php
                                if (!empty($roommate1)) {
                                    echo $roommate1;
@@ -600,7 +600,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 2: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
                                value="<?php
                                if (!empty($roommate2)) {
                                    echo $roommate2;
@@ -614,7 +614,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 3: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3" <?php echo $editComplete; ?>
+                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
                                value="<?php
                                if (!empty($roommate3)) {
                                    echo $roommate3;
@@ -627,14 +627,14 @@
             <br /><br />
 
             <?php if ($summerCamp->isMiniCamp()) { ?>
-                <input type="hidden" name="summerCampMini" value="1" <?php echo $editComplete; ?>/>
+                <input type="hidden" name="summerCampMini" value="1"/>
                 <label class="control-label"><h4>MINI-KINDERLAND: </h4></label>
                 <br />
 
                 <div class="row">
                     <div class="form-group">
                         <label for="nameResponsible" class="col-lg-6 control-label">Nome do responsável para comunicação imediata em caso de emergência*: </label>
-                        <input Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php echo $miniCamp->responsible_name; ?>" <?php echo $editComplete; ?>/>
+                        <input Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php echo $miniCamp->responsible_name; ?>"/>
                     </div>
                 </div>
 
@@ -643,7 +643,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="phoneResponsible" class="col-lg-6 control-label">Telefone do responsável para comunicação em caso de emergência*: </label>
-                        <input Name="phoneResponsible" class="col-lg-3 phone" placeholder="(ddd) Telefone de emergência" <?php echo $editComplete; ?>
+                        <input Name="phoneResponsible" class="col-lg-3 phone" placeholder="(ddd) Telefone de emergência"
                                maxlength="25" value="<?php echo $miniCamp->responsible_number; ?>"/>
 
                     </div>
@@ -655,12 +655,12 @@
                     <div class="form-group">
                         <label for="sleepOut" class="col-lg-6 control-label"> Já dormiu fora de casa?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="sleepOut" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="sleepOut" value="1"
                             <?php
                             if ($miniCamp->sleep_out == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="sleepOut" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="sleepOut" value="0"
                             <?php
                             if ($miniCamp->sleep_out == 'f')
                                 echo "checked='checked'"
@@ -674,12 +674,12 @@
                     <div class="form-group">
                         <label for="wakeUpEarly" class="col-lg-6 control-label">O colonista costuma acordar cedo?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="wakeUpEarly" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="wakeUpEarly" value="1"
                             <?php
                             if ($miniCamp->wake_up_early == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="wakeUpEarly" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="wakeUpEarly" value="0"
                             <?php
                             if ($miniCamp->wake_up_early == 'f')
                                 echo "checked='checked'"
@@ -694,12 +694,12 @@
                     <div class="form-group">
                         <label for="feedsIndependently" class="col-lg-6 control-label">Alimenta-se com independência?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="feedsIndependently" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="feedsIndependently" value="1"
                             <?php
                             if ($miniCamp->eat_by_oneself == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="feedsIndependently" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="feedsIndependently" value="0"
                             <?php
                             if ($miniCamp->eat_by_oneself == 'f')
                                 echo "checked='checked'"
@@ -714,12 +714,12 @@
                     <div class="form-group">
                         <label for="wcIndependent" class="col-lg-6 control-label">Tem autonomia em relação ao uso do banheiro?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="wcIndependent" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="wcIndependent" value="1"
                             <?php
                             if ($miniCamp->bathroom_freedom == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="wcIndependent" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="wcIndependent" value="0"
                             <?php
                             if ($miniCamp->bathroom_freedom == 'f')
                                 echo "checked='checked'"
@@ -734,12 +734,12 @@
                     <div class="form-group">
                         <label for="routineToFallAsleep" class="col-lg-6 control-label">O colonista tem algum tipo de rotina, ou ritual para adormecer?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="routineToFallAsleep" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="routineToFallAsleep" value="1"
                             <?php
                             if ($miniCamp->sleep_routine == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="routineToFallAsleep" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="routineToFallAsleep" value="0"
                             <?php
                             if ($miniCamp->sleep_routine == 'f')
                                 echo "checked='checked'"
@@ -753,12 +753,12 @@
                     <div class="form-group">
                         <label for="bunkBed" class="col-lg-6 control-label">Possui alguma restrição quanto ao uso das camas de cima de um beliche?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="bunkBed" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="bunkBed" value="1"
                             <?php
                             if ($miniCamp->bunk_restriction == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="bunkBed" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="bunkBed" value="0"
                             <?php
                             if ($miniCamp->bunk_restriction == 'f')
                                 echo "checked='checked'"
@@ -771,12 +771,12 @@
                     <div class="form-group">
                         <label for="awakeAtNight" class="col-lg-6 control-label">Costuma acordar a noite?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="awakeAtNight" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="awakeAtNight" value="1"
                             <?php
                             if ($miniCamp->wake_up_at_night == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="awakeAtNight" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="awakeAtNight" value="0"
                             <?php
                             if ($miniCamp->wake_up_at_night == 'f')
                                 echo "checked='checked'"
@@ -790,12 +790,12 @@
                     <div class="form-group">
                         <label for="sleepwalk" class="col-lg-6 control-label">Apresenta sonambulismo?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="sleepwalk" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="sleepwalk" value="1"
                             <?php
                             if ($miniCamp->sleepwalk == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
-                            <input type="radio" name="sleepwalk" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="sleepwalk" value="0"
                             <?php
                             if ($miniCamp->sleepwalk == 'f')
                                 echo "checked='checked'"
@@ -810,13 +810,13 @@
                     <div class="form-group">
                         <label for="sleepEnuresis" class="col-lg-6 control-label">Apresenta enurese noturna?* </label>
                         <div class="col-lg-6">
-                            <input type="radio" name="sleepEnuresis" value="1" <?php echo $editComplete; ?>
+                            <input type="radio" name="sleepEnuresis" value="1"
                             <?php
                             if ($miniCamp->sleep_enuresis == 't')
                                 echo "checked='checked'"
                                 ?>/> Sim
 
-                            <input type="radio" name="sleepEnuresis" value="0" <?php echo $editComplete; ?>
+                            <input type="radio" name="sleepEnuresis" value="0"
                             <?php
                             if ($miniCamp->sleep_enuresis == 'f')
                                 echo "checked='checked'"

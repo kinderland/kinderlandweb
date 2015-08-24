@@ -140,9 +140,6 @@ class SummerCamps extends CK_Controller {
             $data['roommate2'] = $camper->getRoommate2();
         if ($camper->getRoommate3())
             $data['roommate3'] = $camper->getRoommate3();
-        $data['editComplete'] = "able";
-        if ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION)
-            $data['editComplete'] = "disabled";
         $this->loadView('summercamps/editSubscriptionColonistForm', $data);
     }
 
@@ -187,15 +184,13 @@ class SummerCamps extends CK_Controller {
         $roommate2 = $this->input->post('roommate2', TRUE);
         $roommate3 = $this->input->post('roommate3', TRUE);
 
-
         try {
             $this->Logger->info("Editing colonist $summerCampId");
             $this->generic_model->startTransaction();
             if ($sameAddressResponsable === "s") {
                 $addressId = $this->address_model->getAddressByPersonId($responsableId)->getAddressId();
-            } else {
+            } else
                 $addressId = $this->address_model->insertNewAddress($street, $number, $complement, $cep, $neighborhood, $city, $uf);
-            }
             $this->person_model->updatePerson($fullname, $gender, NULL, $personId, $addressId);
             $this->colonist_model->updateColonist($personId, $birthdate, $documentNumber, $documentType, $colonistId);
             if ($school[0] == -1) {
@@ -269,8 +264,6 @@ class SummerCamps extends CK_Controller {
 
             redirect("summercamps/index");
         } catch (Exception $ex) {
-            echo "erro " . $ex;
-            exit();
             $this->Logger->error("Failed to edit colonist subscription");
             $this->generic_model->rollbackTransaction();
             $data['error'] = true;
@@ -629,7 +622,7 @@ class SummerCamps extends CK_Controller {
             $this->validation_model->deleteValidation($colonist_id, $camp_id);
             echo "<script>alert('Retorno realizado com sucesso'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         } else {
-            echo "<script>alert('O status " . $summerCampSubscription->getSituation() . " não" . " permite retorno.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+            echo "<script>alert('O status " . utf8_decode($summerCampSubscription->getSituation()) . utf8_decode(" não") . " permite retorno.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         }
     }
 
@@ -697,7 +690,7 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateGeneralRules($camp_id, $colonist_id, 't');
-//$this->index();
+        //$this->index();
         redirect("summercamps/index");
     }
 
@@ -706,7 +699,7 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateGeneralRules($camp_id, $colonist_id, 'f');
-//$this->index();
+        //$this->index();
         redirect("summercamps/index");
     }
 
@@ -715,7 +708,7 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateTripAuthorization($camp_id, $colonist_id, 't');
-//$this->index();
+        //$this->index();
         redirect("summercamps/index");
     }
 
@@ -723,7 +716,7 @@ class SummerCamps extends CK_Controller {
         $camp_id = $this->input->post('camp_id', TRUE);
         $colonist_id = $this->input->post('colonist_id', TRUE);
         $this->summercamp_model->updateTripAuthorization($camp_id, $colonist_id, 'f');
-//this->index();
+        //this->index();
         redirect("summercamps/index");
     }
 

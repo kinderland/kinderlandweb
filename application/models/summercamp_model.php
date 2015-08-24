@@ -23,8 +23,8 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
-	
-	public function getAllColonistsForDiscount() {
+
+    public function getAllColonistsForDiscount() {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
         p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id, dr.*
         from summer_camp sc
@@ -38,36 +38,35 @@ class summercamp_model extends CK_Model {
 
         return $resultSet;
     }
-    
+
     public function getAllSummerCampsWithDiscountsByYear($year) {
-    	$sql = "SELECT * FROM summer_camp
-				WHERE summer_camp_id in (SELECT summer_camp_id FROM summer_camp_subscription WHERE discount > 0) 
+        $sql = "SELECT * FROM summer_camp
+				WHERE summer_camp_id in (SELECT summer_camp_id FROM summer_camp_subscription WHERE discount > 0)
 				AND DATE_PART('YEAR',date_start) = ?";
-    	
-    	$resultSet = $this -> executeRows($this->db,$sql,array($year));
-    	
-    	$campArray = array();
-    	
-    	if ($resultSet)
-    		foreach ($resultSet as $row)
-    			$campArray[] = SummerCamp::createCampObject($row);
-    	
-    		return $campArray;
+
+        $resultSet = $this->executeRows($this->db, $sql, array($year));
+
+        $campArray = array();
+
+        if ($resultSet)
+            foreach ($resultSet as $row)
+                $campArray[] = SummerCamp::createCampObject($row);
+
+        return $campArray;
     }
-	
-    public function getColonistsInformationWithDiscounts($year,$summercampId = null) {
-    	
-    	$sql = "SELECT * FROM v_discount WHERE year = ?";
-    	
-    	if($summercampId != null) {
-    		$sql = $sql . " AND camp_id = ?";
-    		$resultSet = $this -> executeRows($this->db,$sql,array($year,$summercampId));
-    	}
-    	else {
-    		$resultSet = $this -> executeRows($this->db,$sql,array($year));
-    	}
-    	
-    	return $resultSet;
+
+    public function getColonistsInformationWithDiscounts($year, $summercampId = null) {
+
+        $sql = "SELECT * FROM v_discount WHERE year = ?";
+
+        if ($summercampId != null) {
+            $sql = $sql . " AND camp_id = ?";
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
+        } else {
+            $resultSet = $this->executeRows($this->db, $sql, array($year));
+        }
+
+        return $resultSet;
     }
 
     public function getCountSubscriptionsbyAssociated($year) {
@@ -90,26 +89,26 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
-    
-    public function getMiniCampsOrNotByYear($year,$minicamp) {
-    	$sql = "SELECT * FROM summer_camp 
-    			WHERE mini_camp ". (($minicamp!=0) ? "!" : "") . "= FALSE
+
+    public function getMiniCampsOrNotByYear($year, $minicamp) {
+        $sql = "SELECT * FROM summer_camp
+    			WHERE mini_camp " . (($minicamp != 0) ? "!" : "") . "= FALSE
     			AND DATE_PART('YEAR',date_start) = ?";
-    	
-    	$resultSet = $this->executeRows($this->db, $sql, array($year));
-    	
-    	$campArray = array();
-    	
-    	if ($resultSet)
-    		foreach ($resultSet as $row)
-    			$campArray[] = SummerCamp::createCampObject($row);
-    	
-    		return $campArray;
+
+        $resultSet = $this->executeRows($this->db, $sql, array($year));
+
+        $campArray = array();
+
+        if ($resultSet)
+            foreach ($resultSet as $row)
+                $campArray[] = SummerCamp::createCampObject($row);
+
+        return $campArray;
     }
-    
+
     public function getColonistsDetailedMultiplesSubscriptions($year) {
-    	
-    	$sql = "SELECT c1.colonist_id as colonist_id, p1.fullname as colonist_name, sc1.summer_camp_id as camp_id, sc1.camp_name as camp_name,
+
+        $sql = "SELECT c1.colonist_id as colonist_id, p1.fullname as colonist_name, sc1.summer_camp_id as camp_id, sc1.camp_name as camp_name,
 				pr.person_id as responsable_id, pr.fullname as responsable_name, scs1.situation as situation, scss1.description as situation_description, DATE_PART('YEAR',sc1.date_start) as year
 				FROM person p1
 				INNER JOIN colonist c1 on c1.person_id = p1.person_id
@@ -130,36 +129,37 @@ class summercamp_model extends CK_Model {
 						AND c1.colonist_id != c2.colonist_id
 						AND DATE_PART('YEAR',sc1.date_start) = ?
 						AND DATE_PART('YEAR',sc2.date_start) = ?)";
-    	
-    	$resultSet = $this -> executeRows($this->db,$sql,array($year,$year));
-    	
-    	return $resultSet;
+
+        $resultSet = $this->executeRows($this->db, $sql, array($year, $year));
+
+        return $resultSet;
     }
-    
+
     /*
      * $associateType: 0 = Sócio; 1 = Não sócio; 2 = Todos
      */
-    public function getAssociatedOrNotByStatusAndSummerCamp($summercampId,$associateType) {
-    	$sql = "SELECT distinct(vrauad.person_id), vrauad.fullname, scs.queue_number FROM v_report_all_users_association_detailed vrauad 
+
+    public function getAssociatedOrNotByStatusAndSummerCamp($summercampId, $associateType) {
+        $sql = "SELECT distinct(vrauad.person_id), vrauad.fullname, scs.queue_number FROM v_report_all_users_association_detailed vrauad
 				INNER JOIN summer_camp_subscription scs on scs.person_user_id = person_id
 				WHERE scs.situation in ('2','3','4','5')
-				AND scs.summer_camp_id in (" .$summercampId. ")";
-        if($associateType != 2)
-			$sql .= " AND vrauad.associate ". (($associateType==0) ? "!" : "") ."= 'não sócio'";
-    	
-    	$resultSet = $this -> executeRows($this->db,$sql);
-    	
-    	if($resultSet)
-    		return $resultSet;
+				AND scs.summer_camp_id in (" . $summercampId . ")";
+        if ($associateType != 2)
+            $sql .= " AND vrauad.associate " . (($associateType == 0) ? "!" : "") . "= 'não sócio'";
 
-    	return array();
+        $resultSet = $this->executeRows($this->db, $sql);
+
+        if ($resultSet)
+            return $resultSet;
+
+        return array();
     }
 
     public function getAvailableSummerCamps($isAssociate) {
         $sql = "";
-        if($isAssociate){
+        if ($isAssociate) {
             $sql = "SELECT * FROM summer_camp where pre_subscriptions_enabled and
-            (date_start_pre_subscriptions_associate <= now() 
+            (date_start_pre_subscriptions_associate <= now()
                 and date_finish_pre_subscriptions_associate >= now())
             ORDER BY date_start_pre_subscriptions ASC";
         } else {
@@ -323,9 +323,9 @@ class summercamp_model extends CK_Model {
 
         $splitByDot = explode(".", $fileName);
         $extension = $splitByDot[count($splitByDot) - 1];
-        if ( !
-        	(strcasecmp("jpg",$extension) == 0 || strcasecmp("jpeg",$extension) == 0 || strcasecmp("png",$extension) == 0 || strcasecmp("pdf",$extension) == 0)
-		   )
+        if (!
+                (strcasecmp("jpg", $extension) == 0 || strcasecmp("jpeg", $extension) == 0 || strcasecmp("png", $extension) == 0 || strcasecmp("pdf", $extension) == 0)
+        )
             return FALSE;
         $sql = 'INSERT INTO document (summer_camp_id,colonist_id,user_id,filename,extension,document_type,file) VALUES (?, ?, ?, ?,?,?,?)';
         $returnId = $this->execute($this->db, $sql, array($summerCampId, $colonistId, $userId, $fileName, $extension, $type, pg_escape_bytea($file)));
@@ -419,9 +419,9 @@ class summercamp_model extends CK_Model {
 
         return $resultSet;
     }
-    
-    public function getAllColonistsByYearSummerCampAndStatus($year,$summercampId = null, $status = null) {
-    	$sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
+
+    public function getAllColonistsByYearSummerCampAndStatus($year, $summercampId = null, $status = null) {
+        $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
         v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
         v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
         v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
@@ -434,26 +434,23 @@ class summercamp_model extends CK_Model {
         join person pr on pr.person_id = scs.person_user_id
         join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
         left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id ";
-    		
-    		
-    		if ($summercampId !== null && $status !== null) {
-    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND sc.summer_camp_id = ? AND scs.situation in (". $status .")";
-    			$resultSet = $this->executeRows($this->db, $sql, array($year,$summercampId));
-    		}
-    		else if ($summercampId !== null && $status === null) {
-    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND sc.summer_camp_id = ? AND scs.situation in ('1','2','6')";
-    			$resultSet = $this->executeRows($this->db, $sql, array($year,$summercampId));
-    		}
-    		else if($summercampId === null && $status !== null) {
-    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND scs.situation in (". $status .")";
-    			$resultSet = $this->executeRows($this->db, $sql,array($year));
-    		}
-    		else{
-    			$sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND scs.situation in ('1','2','6')";
-    			$resultSet = $this->executeRows($this->db, $sql,array($year));
-    		}
-    	
-    		return $resultSet;
+
+
+        if ($summercampId !== null && $status !== null) {
+            $sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND sc.summer_camp_id = ? AND scs.situation in (" . $status . ") order by p.fullname";
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
+        } else if ($summercampId !== null && $status === null) {
+            $sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND sc.summer_camp_id = ? AND scs.situation in ('1','2','6') order by p.fullname";
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
+        } else if ($summercampId === null && $status !== null) {
+            $sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND scs.situation in (" . $status . ")  order by p.fullname";
+            $resultSet = $this->executeRows($this->db, $sql, array($year));
+        } else {
+            $sql = $sql . " WHERE DATE_PART('YEAR',sc.date_start) = ? AND scs.situation in ('1','2','6') order by p.fullname";
+            $resultSet = $this->executeRows($this->db, $sql, array($year));
+        }
+
+        return $resultSet;
     }
 
     public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null) {
@@ -473,42 +470,39 @@ class summercamp_model extends CK_Model {
         if ($status !== null && $summercampId === null) {
             $sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',date_start) = ?";
             $resultSet = $this->executeRows($this->db, $sql, array($year));
-        } 
-        else if($status !== null && $summercampId !== null) {
-        	$sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',date_start) = ?
+        } else if ($status !== null && $summercampId !== null) {
+            $sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',date_start) = ?
         			AND sc.summer_camp_id =?";
-        	$resultSet = $this->executeRows($this->db, $sql, array($year,$summercampId));
-        }
-        else if($status === null && $summercampId !== null) {
-        	$sql = $sql . " WHERE DATE_PART('YEAR',date_start) = ?
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
+        } else if ($status === null && $summercampId !== null) {
+            $sql = $sql . " WHERE DATE_PART('YEAR',date_start) = ?
         			AND sc.summer_camp_id =?";
-        	$resultSet = $this->executeRows($this->db, $sql, array($year,$summercampId));
-        }
-        else {
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
+        } else {
             $sql = $sql . " WHERE DATE_PART('YEAR',date_start) = ?";
             $resultSet = $this->executeRows($this->db, $sql, array($year));
         }
 
         return $resultSet;
     }
-    
+
     public function getColonistRelationDetailedBySummerCamp($summercampId) {
-    	$sql = "SELECT *, 
+        $sql = "SELECT *,
 	COALESCE((SELECT 1 FROM parent_summer_camp_subscription pscs WHERE relation = 'Pai' and pscs.colonist_id = scs.colonist_id), 0) as pai,
 	COALESCE((SELECT 1 FROM parent_summer_camp_subscription pscs WHERE relation = 'Mãe' and pscs.colonist_id = scs.colonist_id), 0) as mae
 	FROM
-	summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id 
+	summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
 	INNER JOIN colonist c on c.colonist_id = scs.colonist_id
 	INNER JOIN person p on p.person_id = c.person_id
-	WHERE scs.colonist_id in(SELECT colonist_id FROM summer_camp_subscription WHERE summer_camp_id in(".$summercampId."));";
-    	
-    	$resultSet = $this->executeRows($this->db, $sql);
-    	
-    	return $resultSet;    	
+	WHERE scs.colonist_id in(SELECT colonist_id FROM summer_camp_subscription WHERE summer_camp_id in(" . $summercampId . "));";
+
+        $resultSet = $this->executeRows($this->db, $sql);
+
+        return $resultSet;
     }
-    
+
     public function getColonistDetailedSameParentsByYearAndSummerCamp($year) {
-    	    	$sql = "SELECT DISTINCT c.colonist_id as colonist_id, pc.fullname as colonist_name, p.fullname as responsable, p.person_id as responsable_id,
+        $sql = "SELECT DISTINCT c.colonist_id as colonist_id, pc.fullname as colonist_name, p.fullname as responsable, p.person_id as responsable_id,
 				sc.summer_camp_id as camp_id, sc.camp_name as camp_name, DATE_PART('YEAR',sc.date_start) as year,
     			scss.description as situation_description, scs.situation as situation
 				FROM summer_camp sc
@@ -518,7 +512,7 @@ class summercamp_model extends CK_Model {
 				INNER JOIN person p on p.person_id = scs.person_user_id
 				INNER JOIN parent_summer_camp_subscription pscs on pscs.parent_id = p.person_id
 				INNER JOIN person pc on c.person_id = pc.person_id
-				WHERE scs.person_user_id in (SELECT DISTINCT scs1.person_user_id FROM summer_camp sc1, summer_camp sc2, summer_camp_subscription scs1, summer_camp_subscription scs2, colonist c1, colonist c2 
+				WHERE scs.person_user_id in (SELECT DISTINCT scs1.person_user_id FROM summer_camp sc1, summer_camp sc2, summer_camp_subscription scs1, summer_camp_subscription scs2, colonist c1, colonist c2
 							WHERE c1.colonist_id = scs1.colonist_id
 							AND c2.colonist_id = scs2.colonist_id
 							AND scs1.colonist_id != scs2.colonist_id
@@ -527,58 +521,53 @@ class summercamp_model extends CK_Model {
 							AND scs1.person_user_id = scs2.person_user_id
 							AND DATE_PART('YEAR',sc1.date_start)=?
 							AND DATE_PART('YEAR',sc2.date_start)=?)";
-    	
-    	
-    	    	$resultSet = $this -> executeRows($this->db,$sql,array($year,$year));
-    	
-    	
-    	    	return $resultSet;
+
+
+        $resultSet = $this->executeRows($this->db, $sql, array($year, $year));
+
+
+        return $resultSet;
     }
-    
-    public function getColonistsDatailedSubscriptionsNotSubmitted($year,$summercampId = null) {
-    	
-    	$sql = "SELECT * FROM v_subscriptions_not_submitted WHERE year = ?";
-    	
-    	if($summercampId != null) {
-    		$sql = $sql . "AND camp_id = ?";
-    		$resultSet = $this -> executeRows($this->db,$sql,array($year,$summercampId));
-    	}
-    	else {
-    		$resultSet = $this -> executeRows($this->db,$sql, array($year));
-    	}
-    	
-    	return $resultSet;
-    
+
+    public function getColonistsDatailedSubscriptionsNotSubmitted($year, $summercampId = null) {
+
+        $sql = "SELECT * FROM v_subscriptions_not_submitted WHERE year = ?";
+
+        if ($summercampId != null) {
+            $sql = $sql . "AND camp_id = ?";
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
+        } else {
+            $resultSet = $this->executeRows($this->db, $sql, array($year));
+        }
+
+        return $resultSet;
     }
-    	
+
     public function getColonistsResponsableNotParentsByYear($year) {
-    	
-    	$sql = "SELECT * FROM v_colonists_with_responsables_not_parents
+
+        $sql = "SELECT * FROM v_colonists_with_responsables_not_parents
     			WHERE ano = ?";
-    	
-    	$resultSet = $this->executeRows($this->db, $sql,array($year));
-    	
-    	return $resultSet;
-    	
+
+        $resultSet = $this->executeRows($this->db, $sql, array($year));
+
+        return $resultSet;
     }
-    
-    public function getCountDiscountsBySummerCamp($year,$summercampId = null,$status=null) {
-    	$sql = "SELECT DISTINCT COALESCE(same_school,0) as same_school, COALESCE(second_brother,0) as second_brother, COALESCE (third_brother,0) as third_brother, COALESCE (child_home,0) as child_home, COALESCE (others,0) as others
-				FROM( SELECT sum(discount) as same_school FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=1 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") same_school,
-				( SELECT sum(discount) as second_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=2 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") second_brother,
-				( SELECT sum(discount) as third_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=3 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") third_brother,
-				( SELECT sum(discount) as child_home FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") child_home,
-                ( SELECT sum(discount) as others FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id>4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId!=null) ? " AND sc.summer_camp_id = ? " : "") ." " . (($status!=null) ? "AND scs.situation = 5" : "") .") others, summer_camp
-				WHERE " . (($summercampId!=null) ? "summer_camp_id = ? AND" : "") . " DATE_PART('YEAR',date_start) = ?";
-    	if($summercampId!=null) {
-    		$resultSet = $this->executeRow($this->db, $sql,array($year,$summercampId,$year,$summercampId,$year,$summercampId,$year,$summercampId,$year,$summercampId,$summercampId,$year));
-    	}
-    	else {
-    		$resultSet = $this->executeRow($this->db, $sql,array($year,$year,$year,$year,$year,$year));
-    	}
-    	
-    	return $resultSet;
-    	
+
+    public function getCountDiscountsBySummerCamp($year, $summercampId = null, $status = null) {
+        $sql = "SELECT DISTINCT COALESCE(same_school,0) as same_school, COALESCE(second_brother,0) as second_brother, COALESCE (third_brother,0) as third_brother, COALESCE (child_home,0) as child_home, COALESCE (others,0) as others
+				FROM( SELECT sum(discount) as same_school FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=1 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId != null) ? " AND sc.summer_camp_id = ? " : "") . " " . (($status != null) ? "AND scs.situation = 5" : "") . ") same_school,
+				( SELECT sum(discount) as second_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=2 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId != null) ? " AND sc.summer_camp_id = ? " : "") . " " . (($status != null) ? "AND scs.situation = 5" : "") . ") second_brother,
+				( SELECT sum(discount) as third_brother FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=3 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId != null) ? " AND sc.summer_camp_id = ? " : "") . " " . (($status != null) ? "AND scs.situation = 5" : "") . ") third_brother,
+				( SELECT sum(discount) as child_home FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id=4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId != null) ? " AND sc.summer_camp_id = ? " : "") . " " . (($status != null) ? "AND scs.situation = 5" : "") . ") child_home,
+                ( SELECT sum(discount) as others FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id WHERE scs.discount_reason_id>4 AND DATE_PART('YEAR',sc.date_start) = ? " . (($summercampId != null) ? " AND sc.summer_camp_id = ? " : "") . " " . (($status != null) ? "AND scs.situation = 5" : "") . ") others, summer_camp
+				WHERE " . (($summercampId != null) ? "summer_camp_id = ? AND" : "") . " DATE_PART('YEAR',date_start) = ?";
+        if ($summercampId != null) {
+            $resultSet = $this->executeRow($this->db, $sql, array($year, $summercampId, $year, $summercampId, $year, $summercampId, $year, $summercampId, $year, $summercampId, $summercampId, $year));
+        } else {
+            $resultSet = $this->executeRow($this->db, $sql, array($year, $year, $year, $year, $year, $year));
+        }
+
+        return $resultSet;
     }
 
     public function getCountStatusColonistBySummerCampYearAndGender($year, $summerCampId = null, $gender = null) {
@@ -674,9 +663,9 @@ class summercamp_model extends CK_Model {
             return $resultSet;
         }
     }
-    
+
     public function getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year, $associated, $summerCampId = null, $gender = null) {
-    	$sql = "select (
+        $sql = "select (
 			SELECT count(scss.status) as elaboracao FROM summer_camp sc INNER JOIN summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 			INNER JOIN colonist c on scs.colonist_id = c.colonist_id
 			INNER JOIN person p on c.person_id = p.person_id
@@ -787,30 +776,29 @@ class summercamp_model extends CK_Model {
 			AND DATE_PART('YEAR',date_start) = ?
     		" . (($gender != null) ? " AND gender = ?" : "") . "
 		) as cancelado;";
-    	if ($summerCampId !== null && $gender === null) {
-    		$resultSet = $this->executeRow($this->db, $sql, array(intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year,
-    				intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year));
-    
-    		return $resultSet;
-    	} else if ($summerCampId === null && $gender !== null) {
-    		$resultSet = $this->executeRow($this->db, $sql, array($year, $gender, $year, $gender, $year,
-    				$gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender));
-    
-    		return $resultSet;
-    	} else if ($summerCampId !== null && $gender !== null) {
-    		$resultSet = $this->executeRow($this->db, $sql, array(intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender,
-    				intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender,
-    				intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender));
-    
-    		return $resultSet;
-    	} else {
-    		$resultSet = $this->executeRow($this->db, $sql, array($year, $year, $year, $year, $year, $year, $year, $year, $year, $year));
-    		return $resultSet;
-    	}
-    }
-    
+        if ($summerCampId !== null && $gender === null) {
+            $resultSet = $this->executeRow($this->db, $sql, array(intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year,
+                intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year, intval($summerCampId), $year));
 
-    public function getCountStatusSchoolBySchoolName($schoolName,$year,$summercampId = null) {
+            return $resultSet;
+        } else if ($summerCampId === null && $gender !== null) {
+            $resultSet = $this->executeRow($this->db, $sql, array($year, $gender, $year, $gender, $year,
+                $gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender, $year, $gender));
+
+            return $resultSet;
+        } else if ($summerCampId !== null && $gender !== null) {
+            $resultSet = $this->executeRow($this->db, $sql, array(intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender,
+                intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender,
+                intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender, intval($summerCampId), $year, $gender));
+
+            return $resultSet;
+        } else {
+            $resultSet = $this->executeRow($this->db, $sql, array($year, $year, $year, $year, $year, $year, $year, $year, $year, $year));
+            return $resultSet;
+        }
+    }
+
+    public function getCountStatusSchoolBySchoolName($schoolName, $year, $summercampId = null) {
         $sql = "select DISTINCT school_name,
 		(SELECT count(status) as elaboracao
 		FROM summer_camp sc
@@ -837,28 +825,27 @@ class summercamp_model extends CK_Model {
 		INNER JOIN summer_camp_subscription_status scss on scs.situation=scss.status
 		WHERE school_name = ?";
 
-		if($summercampId != null) {
-			$resultSet = $this->executeRow($this->db, $sql, array($schoolName,$year,$summercampId, $schoolName,$year,$summercampId,
-					$schoolName,$year,$summercampId, $schoolName,$year,$summercampId, $schoolName));
-		}
-		else {
-        $resultSet = $this->executeRow($this->db, $sql, array($schoolName,$year, $schoolName,$year,
-            $schoolName,$year, $schoolName,$year, $schoolName));
-		}
+        if ($summercampId != null) {
+            $resultSet = $this->executeRow($this->db, $sql, array($schoolName, $year, $summercampId, $schoolName, $year, $summercampId,
+                $schoolName, $year, $summercampId, $schoolName, $year, $summercampId, $schoolName));
+        } else {
+            $resultSet = $this->executeRow($this->db, $sql, array($schoolName, $year, $schoolName, $year,
+                $schoolName, $year, $schoolName, $year, $schoolName));
+        }
 
         return $resultSet;
     }
-    
+
     public function getCountStatusBySummerCamp($summercampId) {
-    	$sql = "SELECT DISTINCT sc.camp_name, (SELECT count(situation) as waiting_validation FROM summer_camp_subscription WHERE situation = 1 AND summer_camp_id = ?) as waiting_validation,
+        $sql = "SELECT DISTINCT sc.camp_name, (SELECT count(situation) as waiting_validation FROM summer_camp_subscription WHERE situation = 1 AND summer_camp_id = ?) as waiting_validation,
 				(SELECT count(situation) as validated FROM summer_camp_subscription WHERE situation = 2 AND summer_camp_id = ?) as validated,
 				(SELECT count(situation) as validated_with_errors FROM summer_camp_subscription WHERE situation = 6 AND summer_camp_id = ?) as validated_with_errors
 				FROM summer_camp_subscription scs INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
 				WHERE sc.summer_camp_id = ?";
-    	
-    	$resultSet = $this -> executeRow($this->db, $sql,array($summercampId, $summercampId, $summercampId, $summercampId));
-    	
-    	return $resultSet;    	
+
+        $resultSet = $this->executeRow($this->db, $sql, array($summercampId, $summercampId, $summercampId, $summercampId));
+
+        return $resultSet;
     }
 
     public function getSchoolNamesByStatusSummerCampAndYear($year, $summercampId = null) {
@@ -966,8 +953,8 @@ class summercamp_model extends CK_Model {
         }
         return null;
     }
-	
-	public function getDefaultDiscountReasons() {
+
+    public function getDefaultDiscountReasons() {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "SELECT * FROM discount_reason where discount_reason_id < 5";
         $resultSet = $this->executeRows($this->db, $sql);
@@ -981,12 +968,11 @@ class summercamp_model extends CK_Model {
         if ($resultSet) {
             return $resultSet->discount_reason_id;
         }
-       
+
         $sql = "insert into discount_reason(discount_reason) values (?)";
         $resultSet = $this->executeReturningId($this->db, $sql, array($discountReason));
-		return $resultSet;
+        return $resultSet;
     }
-	
 
     public function insertSchool($school) {
         $this->Logger->info("Running: " . __METHOD__);
@@ -995,7 +981,7 @@ class summercamp_model extends CK_Model {
         if ($resultSet) {
             return TRUE;
         }
-       
+
         $sql = "insert into school values (?)";
         $resultSet = $this->execute($this->db, $sql, array($school));
         if ($resultSet) {
@@ -1044,13 +1030,13 @@ class summercamp_model extends CK_Model {
         return null;
     }
 
-    public function checkQueueNumberAvailability($userId, $summerCamps, $position){
+    public function checkQueueNumberAvailability($userId, $summerCamps, $position) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "SELECT *
                 FROM summer_camp_subscription scs
                 WHERE
                     person_user_id != ?
-                    AND summer_camp_id in (".$summerCamps.")
+                    AND summer_camp_id in (" . $summerCamps . ")
                     AND queue_number = ?";
         $resultSet = $this->executeRow($this->db, $sql, array(intval($userId), intval($position)));
         if ($resultSet)
@@ -1061,44 +1047,44 @@ class summercamp_model extends CK_Model {
     public function updateQueueNumber($userId, $summerCamps, $position) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "UPDATE summer_camp_subscription
-                SET queue_number = ?, situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE ."
+                SET queue_number = ?, situation = " . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "
                 WHERE
                     person_user_id = ?
-                    AND (situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED ." 
-                        OR situation = ". SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE .") 
-                    AND summer_camp_id in (".$summerCamps.")";
+                    AND (situation = " . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "
+                        OR situation = " . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . ")
+                    AND summer_camp_id in (" . $summerCamps . ")";
         return $this->execute($this->db, $sql, array(intval($position), intval($userId)));
     }
-	
-	public function getSummerCampPaymentPeriod($campId) {
+
+    public function getSummerCampPaymentPeriod($campId) {
         $this->Logger->info("Running: " . __METHOD__);
-		$sql = "Select * from summer_camp_payment_period where now() >= date_start and now() <= date_finish and summer_camp_id = ?";
-		
-		$resultSet = $this->executeRow($this->db, $sql, array($campId));
-		
-		$paymentPeriod = false;
-		
-		if ($resultSet)
-			$paymentPeriod = SummerCampPaymentPeriod::createSummerCampPaymentPeriodObject($resultSet);
-		
-		return $paymentPeriod;
+        $sql = "Select * from summer_camp_payment_period where now() >= date_start and now() <= date_finish and summer_camp_id = ?";
+
+        $resultSet = $this->executeRow($this->db, $sql, array($campId));
+
+        $paymentPeriod = false;
+
+        if ($resultSet)
+            $paymentPeriod = SummerCampPaymentPeriod::createSummerCampPaymentPeriodObject($resultSet);
+
+        return $paymentPeriod;
     }
 
-    public function associateDonation($campId,$colonistId,$donationId) {
+    public function associateDonation($campId, $colonistId, $donationId) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "UPDATE summer_camp_subscription
                 SET donation_id = ?
                 WHERE colonist_id = ? AND summer_camp_id = ?";
         return $this->execute($this->db, $sql, array(intval($donationId), intval($colonistId), intval($campId)));
     }
-    
+
     public function paidDonation($donation_id) {
-    	$this->Logger->info("Running: " . __METHOD__);
-    	$sql = "UPDATE summer_camp_subscription SET situation = ? WHERE donation_id = ?";
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "UPDATE summer_camp_subscription SET situation = ? WHERE donation_id = ?";
         return $this->execute($this->db, $sql, array(intval(SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED), intval($donation_id)));
     }
-    
-	public function getSubscriptionsByDonation($donationId) {
+
+    public function getSubscriptionsByDonation($donationId) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "Select * from summer_camp sc
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
@@ -1106,29 +1092,28 @@ class summercamp_model extends CK_Model {
 		join person p on c.person_id = p.person_id
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
 		where donation_id = ?";
-		
+
         $resultSet = $this->executeRows($this->db, $sql, array($donationId));
         $summerCampSubscription = array();
 
-        foreach($resultSet as $resultSetIteration)
+        foreach ($resultSet as $resultSetIteration)
             $summerCampSubscription[] = SummerCampSubscription::createSummerCampSubscriptionObject($resultSetIteration);
 
         return $summerCampSubscription;
     }
-        
-	public function updateDiscount($colonistId,$summerCampId,$discount_value,$discount_reason_id){
-		$this->Logger->info("Running: " . __METHOD__);
-		if($discount_reason_id < -1){
-			$this->Logger->error("Tentativa de inserir desconto com razão inválida");
-			return;
-		}
-		$insertDiscountReasonId = intval($discount_reason_id);
-		if($discount_reason_id == -1)
-			$insertDiscountReasonId = null;
-    	$sql = "UPDATE summer_camp_subscription SET discount = ?, discount_reason_id=? WHERE colonist_id = ? and summer_camp_id = ?";
-        return $this->execute($this->db, $sql, array(intval($discount_value), $insertDiscountReasonId,intval($colonistId), intval($summerCampId)));		
-	}
 
+    public function updateDiscount($colonistId, $summerCampId, $discount_value, $discount_reason_id) {
+        $this->Logger->info("Running: " . __METHOD__);
+        if ($discount_reason_id < -1) {
+            $this->Logger->error("Tentativa de inserir desconto com razão inválida");
+            return;
+        }
+        $insertDiscountReasonId = intval($discount_reason_id);
+        if ($discount_reason_id == -1)
+            $insertDiscountReasonId = null;
+        $sql = "UPDATE summer_camp_subscription SET discount = ?, discount_reason_id=? WHERE colonist_id = ? and summer_camp_id = ?";
+        return $this->execute($this->db, $sql, array(intval($discount_value), $insertDiscountReasonId, intval($colonistId), intval($summerCampId)));
+    }
 
     public function getSummerCampSubscriptionsByStatusAndGender($summerCampId, $status = null, $gender = null) {
         $paramArray = array($summerCampId);
@@ -1139,66 +1124,66 @@ class summercamp_model extends CK_Model {
                 INNER JOIN colonist c on c.colonist_id = scs.colonist_id
                 INNER JOIN person p on p.person_id = c.person_id
                 WHERE scs.summer_camp_id = ? ";
-        if($status != null) {
+        if ($status != null) {
             $sql .= " AND scs.situation = ? ";
             $paramArray[] = $status;
         }
-        if($gender != null) {
+        if ($gender != null) {
             $sql .= " AND p.gender = ? ";
             $paramArray[] = $gender;
         }
 
         $resultSet = $this->executeRows($this->db, $sql, $paramArray);
-        $countDetail = array(   
-                -3 => array('M' => 0, 'F' => 0),
-                -2 => array('M' => 0, 'F' => 0),
-                -1 => array('M' => 0, 'F' => 0),
-                0 => array('M' => 0, 'F' => 0),
-                1 => array('M' => 0, 'F' => 0),
-                2 => array('M' => 0, 'F' => 0),
-                3 => array('M' => 0, 'F' => 0),
-                4 => array('M' => 0, 'F' => 0),
-                5 => array('M' => 0, 'F' => 0),
-                6 => array('M' => 0, 'F' => 0)
-            );
-        foreach ($resultSet as $row) 
+        $countDetail = array(
+            -3 => array('M' => 0, 'F' => 0),
+            -2 => array('M' => 0, 'F' => 0),
+            -1 => array('M' => 0, 'F' => 0),
+            0 => array('M' => 0, 'F' => 0),
+            1 => array('M' => 0, 'F' => 0),
+            2 => array('M' => 0, 'F' => 0),
+            3 => array('M' => 0, 'F' => 0),
+            4 => array('M' => 0, 'F' => 0),
+            5 => array('M' => 0, 'F' => 0),
+            6 => array('M' => 0, 'F' => 0)
+        );
+        foreach ($resultSet as $row)
             $countDetail[$row->situation][$row->gender] += 1;
-        
+
         return $countDetail;
     }
 
-    public function getAllColonistsWithQueueNumberBySummerCamp($summerCampId){
-        $this->Logger->info("Running: ". __METHOD__);
+    public function getAllColonistsWithQueueNumberBySummerCamp($summerCampId) {
+        $this->Logger->info("Running: " . __METHOD__);
         $sql = "SELECT * FROM v_colonists_with_queue_number WHERE summer_camp_id = ?";
         $resultSet = $this->executeRowsNoLog($this->db, $sql, array($summerCampId));
 
-        if($resultSet)
+        if ($resultSet)
             return $resultSet;
 
         return null;
     }
 
-    public function getAllColonistsWaitingPaymentBySummerCamp($summerCampId){
-        $this->Logger->info("Running: ". __METHOD__);
+    public function getAllColonistsWaitingPaymentBySummerCamp($summerCampId) {
+        $this->Logger->info("Running: " . __METHOD__);
         $sql = "SELECT * FROM v_colonists_waiting_payment WHERE summer_camp_id = ?";
         $resultSet = $this->executeRowsNoLog($this->db, $sql, array($summerCampId));
 
-        if($resultSet)
+        if ($resultSet)
             return $resultSet;
 
         return null;
     }
 
     public function getCountSubscriptionsBySummerCampAndStatus($summerCampId, $status) {
-        $sql = "SELECT count(scs.colonist_id), gender, summer_camp_id 
+        $sql = "SELECT count(scs.colonist_id), gender, summer_camp_id
                 FROM summer_camp_subscription scs
                 INNER JOIN colonist c on c.colonist_id = scs.colonist_id
                 INNER JOIN person p on p.person_id = c.person_id
-                WHERE summer_camp_id = ? AND situation in (".$status.")
+                WHERE summer_camp_id = ? AND situation in (" . $status . ")
                 GROUP BY gender, summer_camp_id";
         $resultSet = $this->executeRows($this->db, $sql, array($summerCampId));
 
-        if($resultSet){
+        if ($resultSet) {
             return $resultSet;
         }
 
@@ -1209,7 +1194,7 @@ class summercamp_model extends CK_Model {
         $sql = "SELECT * FROM set_colonist_subscription_waiting_payment(?,?)";
         $result = $this->executeRow($this->db, $sql, array(intval($colonistId), intval($summerCampId)));
 
-        if($result && $result->set_colonist_subscription_waiting_payment == 't')
+        if ($result && $result->set_colonist_subscription_waiting_payment == 't')
             return true;
 
         return false;
