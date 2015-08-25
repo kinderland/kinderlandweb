@@ -52,6 +52,10 @@
         }
     }
 
+   function showReasonsMessage(info) {
+	   $("#msg_body").html(info);
+   }
+
 </script>
 
 <div class="row">
@@ -311,7 +315,13 @@
                                     $color = "style='color:green; font-weight:bold'";
                                 ?>
                                 <p <?= $color ?> >
-                                    <?= $statusArray[$i]["text"] ?>
+                                    <?= $statusArray[$i]["text"];
+                            if (($i == 2) && ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS)) {  ?>
+                            <p><button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="showReasonsMessage('<?=$validation->describeValidation()?>');"> Visualizar Motivos </button>
+                            	</p>
+                            <?php  }
+                            //echo $validation->describeValidation();
+                            ?>
                                 </p>
                                 <?php
                                 if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId() &&
@@ -333,11 +343,7 @@
                             echo $statusArray[7]["text"] . "/" . $statusArray[8]["text"] . "/" . $statusArray[9]["text"];
                             echo "</p>"
                             ?>
-                            <?php
-                            if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) {
-                                echo $validation->describeValidation();
-                            }
-                            ?>
+                           
                         </td>
                     </tr>
                 <?php } ?>
@@ -347,8 +353,35 @@
             </script>
         <?php } ?>
 
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-lg-12 middle-content">			
+								<div class="row">
+									<div class="form-group">
+										<div class="col-lg-12">
+											<p> 
+												<span id="msg_body"></span>
+											</p>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
     </div>
-
-
-
 </div>
