@@ -122,6 +122,12 @@ class Admin extends CK_Controller {
         }
         $people = $this->summercamp_model->getAssociatedOrNotByStatusAndSummerCamp($campsIdStr, $selected);
 
+        $nextPosition = 1;
+        foreach($people as $person) 
+            if($person->queue_number >= $nextPosition)
+                $nextPosition = $person->queue_number + 1;
+        
+        $data['nextPosition'] = $nextPosition;
         $data['people'] = $people;
         $this->loadReportView("admin/camps/queue", $data);
     }

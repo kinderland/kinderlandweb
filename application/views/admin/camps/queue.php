@@ -193,6 +193,7 @@ function saveQueuePosition(personId, userName, index){
 						</select>
 				</form>
 				<button class="button" onclick="sendTableToCSV()" value="">Gerar Planilha Para Sorteio</button> <br></br>
+				<span>Próximo número disponível: <?= $nextPosition; ?></span>
 				<table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 600px; font-size:15px" id="sortable-table">
 					<thead>
@@ -215,7 +216,7 @@ function saveQueuePosition(personId, userName, index){
                             <td>
                             	<input type="text" class="form-control" id="queue_number_<?= $i ?>" value="<?= $person -> queue_number ?>" />
                             </td>
-                            <td> <button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= $person -> fullname ?>', <?= $i ?>)">Cadastrar</button> </td>
+                            <td> <button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= addslashes($person -> fullname) ?>', <?= $i ?>)">Cadastrar</button> </td>
                            
 						</tr>
 						<?php

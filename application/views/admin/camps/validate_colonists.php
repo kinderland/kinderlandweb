@@ -286,7 +286,7 @@
                                         <?php
                                         if ($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) {
                                             ?>
-                                            <button class="btn btn-primary" id="submit_btn_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>" onClick="confirmValidation(<?= $colonist->colonist_id ?>, '<?= $colonist->colonist_name ?>', <?= $colonist->summer_camp_id ?>)">Submeter</button> <br />
+                                            <button class="btn btn-primary" id="submit_btn_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>" onClick="confirmValidation(<?= $colonist->colonist_id ?>, '<?= addslashes($colonist->colonist_name) ?>', <?= $colonist->summer_camp_id ?>)">Submeter</button> <br />
                                             <?php
                                         }
                                         ?>

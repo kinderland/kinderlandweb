@@ -37,7 +37,7 @@
 
         if (confirm("Tem certeza que deseja excluir o colonista " + name + " ?")) {
             if (subscribed) {
-                if (confirm("Eventuais devoluções de valores devem ser tratados diretamente com a secretaria da Associação Kinderland.")) {
+                if (confirm("Ao excluir esta inscrição, o responsável deve entrar em contato com a secretaria para tratar do eventual reembolso da doação, seguindo os critérios estabelecidos pela Associação Kinderland. Ao optar por excluir, não haverá possibilidade desta inscrição ser retomada. Confirmar exclusão?")) {
                     window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/deleteColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
                 }
             } else {
@@ -170,7 +170,7 @@
             <br />
             <p>Ao final do preenchimento dos dados da pré-inscrição, quando todos os ítens estiverem marcados com um
                 <img src="<?= $this->config->item('assets') ?>images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>
-                , não esquecer de <b>ENVIAR</b> a pré-inscrição </p>
+                ,<br /> <span style="font-size:18px">não esquecer de <b>ENVIAR</b> a pré-inscrição</span> </p>
 
 
             <table class="table-bordered table table-striped">
@@ -183,7 +183,7 @@
                 <?php
                 $total = 0;
                 foreach ($summerCampInscriptions as $summerCampInscription) {
-                    if ($summerCampInscription->getSituationId() === SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
+                    if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)
                         $subscribed = "true";
                     else
                         $subscribed = "false";
@@ -279,7 +279,7 @@
                                         $('#formMultipleDonations').append("<input type='hidden' name='camp_id[]' value='<?= $summerCampInscription->getSummerCampId() ?>' /> <input type='hidden' name='colonist_id[]' value='<?= $summerCampInscription->getColonistId() ?>' />");
                                     </script>
 
-                                    <a onclick="donation(<?= $summerCampInscription->getColonistId() ?>, <?= $summerCampInscription->getSummerCampId() ?>, '<?= $summerCampInscription->getFullname() ?>')">
+                                    <a onclick="donation(<?= $summerCampInscription->getColonistId() ?>, <?= $summerCampInscription->getSummerCampId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>')">
                                         <button class="btn btn-primary">
                                             Doar R$ <?= floor($summerCampPayment->getPrice() * $discount) ?>,00
                                             <br>
@@ -302,8 +302,18 @@
                             }
                             ?>
                             <br>
-                            <button class="btn btn-warning" onclick='excluir(<?= $summerCampInscription->getSummerCampId() ?>,<?= $summerCampInscription->getColonistId() ?>, "<?= $summerCampInscription->getFullname() ?>",<?= $subscribed ?>)' class="btn">
-                                Excluir pré inscrição
+                            
+                            <?php
+                            if (($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)) {  ?>
+                                <button class="btn btn-danger" onclick="excluir(<?= $summerCampInscription->getSummerCampId() ?>,<?= $summerCampInscription->getColonistId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>',<?= $subscribed ?>)" class="btn">
+                                    Excluir inscrição
+                                </button>
+                            <?php  } else { ?>
+                                <button class="btn btn-warning" onclick="excluir(<?= $summerCampInscription->getSummerCampId() ?>,<?= $summerCampInscription->getColonistId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>',<?= $subscribed ?>)" class="btn">
+                                    Excluir pré-inscrição
+                                </button>
+                            
+                            <?php } ?>
                             </button>
                             <?php
                             if (($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS)) {  ?>
@@ -318,7 +328,7 @@
                             for ($i = 0; $i <= 6; $i++) {
                                 $color = "style='color:grey'";
                                 if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId())
-                                    $color = "style='color:green; font-weight:bold'";
+                                    $color = "style='background-color:lightgreen; padding: 5px 5px; font-weight:bold'";
                                 ?>
                                 <p <?= $color ?> >
                                     <?= $statusArray[$i]["text"];?>
