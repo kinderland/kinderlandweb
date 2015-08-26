@@ -305,6 +305,12 @@
                             <button class="btn btn-warning" onclick='excluir(<?= $summerCampInscription->getSummerCampId() ?>,<?= $summerCampInscription->getColonistId() ?>, "<?= $summerCampInscription->getFullname() ?>",<?= $subscribed ?>)' class="btn">
                                 Excluir pré inscrição
                             </button>
+                            <?php
+                            if (($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS)) {  ?>
+                            <p><p><button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="showReasonsMessage('<?=$validation->describeValidation()?>');">Motivos da não validação</button>
+                            	</p></p>
+                            <?php  }
+                            ?>
                         </td>
 
                         <td>
@@ -315,13 +321,7 @@
                                     $color = "style='color:green; font-weight:bold'";
                                 ?>
                                 <p <?= $color ?> >
-                                    <?= $statusArray[$i]["text"];
-                            if (($i == 2) && ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS)) {  ?>
-                            <p><button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="showReasonsMessage('<?=$validation->describeValidation()?>');"> Visualizar Motivos </button>
-                            	</p>
-                            <?php  }
-                            //echo $validation->describeValidation();
-                            ?>
+                                    <?= $statusArray[$i]["text"];?>
                                 </p>
                                 <?php
                                 if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId() &&
