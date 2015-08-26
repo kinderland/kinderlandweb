@@ -1207,6 +1207,16 @@ class summercamp_model extends CK_Model {
         return $result;
     }
 
+    public function getNextAvailablePosition($campsIdStr){
+        $sql = "SELECT MAX(queue_number) as lastposition FROM summer_camp_subscription WHERE summer_camp_id in (" . $campsIdStr .");";
+        $result = $this->executeRow($this->db, $sql);
+
+        if($result)
+            return $result->lastposition + 1;
+        else
+            return 1;
+    }
+
 }
 
 ?>

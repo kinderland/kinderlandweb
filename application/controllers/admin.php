@@ -121,11 +121,7 @@ class Admin extends CK_Controller {
                 $campsIdStr .= "," . $campsId[$i];
         }
         $people = $this->summercamp_model->getAssociatedOrNotByStatusAndSummerCamp($campsIdStr, $selected);
-
-        $nextPosition = 1;
-        foreach($people as $person) 
-            if($person->queue_number >= $nextPosition)
-                $nextPosition = $person->queue_number + 1;
+        $nextPosition = $this->summercamp_model->getNextAvailablePosition($campsIdStr);
         
         $data['nextPosition'] = $nextPosition;
         $data['people'] = $people;
