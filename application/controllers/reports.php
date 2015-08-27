@@ -643,6 +643,68 @@ class Reports extends CK_Controller {
         $data['colonists'] = $colonists;
         $this->loadReportView("reports/summercamps/multiples_subscriptions", $data);
     }
+    
+    public function statistics_bycamp() {
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = date('Y');
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    	
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    	else {
+    		$year = date('Y');
+    	}
+    	
+    	$data['ano_escolhido'] = $year;
+    	$data['years'] = $years;
+    	
+    	$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+    	$campsQtd = count($allCamps);
+    	$campsNames = array();
+    	
+    	$countsAssociatedM = array();
+    	$countsNotAssociatedM = array();
+    	
+    	$countsAssociatedF = array();
+    	$countsNotAssociatedF = array();
+    	
+    	$campChosenId = null;
+    	foreach ($allCamps as $camp) {
+    		$campChosenId = $camp->getCampId();
+    	
+	    	$genderM = 'M';
+	    	$genderF = 'F';
+	    	
+	    	$countsAssociatedM[] = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,'TRUE',$campChosenId,$genderM);
+	    	$countsNotAssociatedM[] = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId,$genderM);
+	    	
+	    	$countsAssociatedF[] = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,'TRUE',$campChosenId,$genderF);
+	    	$countsNotAssociatedF[] = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId,$genderF);
+	    	
+	    	$campsNames[] = $camp->getCampName();
+    	}
+    	
+    	$data['countsAssociatedM'] = $countsAssociatedM;
+    	$data['countsNotAssociatedM'] = $countsNotAssociatedM;
+    	$data['countsAssociatedF'] = $countsAssociatedF;
+    	$data['countsNotAssociatedF'] = $countsNotAssociatedF;
+    	$data['campsNames'] = $campsNames;
+    	$data['campsQtd'] = $campsQtd;
+    	
+    	$this->loadReportView("reports/summercamps/statistics_bycamp", $data);
+    }
 
     public function associate_campaign_donations() {
         $years = array();
