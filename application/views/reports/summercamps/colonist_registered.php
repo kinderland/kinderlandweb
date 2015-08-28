@@ -48,9 +48,9 @@
 		function getCSVName(){
 			var filtros = $(".datatable-filter");
 			var filtroNomeColonista = filtros[1].value;
-			var filtroColonia = filtros[2].value;
-			var filtroNomeResponsavel = filtros[3].value;
-			var filtroEmail = filtros[4].value;
+			var e = document.getElementById("colonia");
+			var filtroColonia = e.options[e.selectedIndex].text;
+			var filtroNomeResponsavel = filtros[2].value;
 			var filtroStatus = filtros[0].value;
 			var nomePadrao = "inscricoes";
 			
@@ -123,12 +123,15 @@
     		var data = [];
     		var table = document.getElementById("tablebody");
     		var name = getCSVName();
+    		var elements = document.getElementsByName('responsavel');
     		var tablehead = document.getElementsByTagName("thead")[0];
     		for (var i = 0, row; row = table.rows[i]; i++) {
     			var data2 = []
             	//Nome, retira pega o que esta entre um <> e outro <>
-				data2.push(row.cells[4].innerHTML);
-            	data2.push(row.cells[3].innerHTML.split("<")[1].split(">")[1]);
+				var email = elements[i].getAttribute( 'id' );
+				
+				data2.push(email);
+            	data2.push(row.cells[2].innerHTML.split("<")[1].split(">")[1]);
             	data.push(data2)
 	        } 
 	        if(i==0){
@@ -174,8 +177,8 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [true, sortLowerCase, true, sortLowerCase, sortLowerCase],
-				filters : [selectTodos, true, selectTodas, true, true],
+				sort : [true, sortLowerCase, sortLowerCase],
+				filters : [selectTodos, true, true],
 				filterText : 'Escreva para filtrar... ',
 				counterText	: showCounter
 			});
@@ -196,18 +199,26 @@
 							}
 							?>
 						</select>
+						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
+							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
+							<?php
+							foreach ( $camps as $camp ) {
+								$selected = "";
+								if ($colonia_escolhida == $camp)
+									$selected = "selected";
+								echo "<option $selected value='$camp'>$camp</option>";
+							}
+							?>
+						</select>
 					</form>
 					<div class="counter"></div> <br>
 					<button class="button" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button> <br></br>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Status da Inscrição </th>
                                 <th> Nome do Colonista </th>
-                                <th> Colônia </th>
                                 <th> Responsável </th>
-                                <th> E-mail do Responsável </th>
-                                
                             </tr>
                         </thead>
                         <tbody id="tablebody">
@@ -232,9 +243,7 @@
 	                                ?>"><?= $colonist -> situation_description ?></td>
 	                               
                                     <td><a id="<?= $colonist->colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
-                                    <td><?= $colonist->camp_name ?></td>
-                                    <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
-                                    <td><?= $colonist->email ?></td>
+                                    <td><a name= "responsavel" id="<?= $colonist -> email ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
                                  </tr>
 	                                <?php
 	                            }
