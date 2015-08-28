@@ -188,10 +188,10 @@
 	                    </tr>
 	                    <tr>
 	                    	<th	align="right">Vagas Disponíveis</th>
-	                    	<td colspan = "2"> <?php echo $vacancy - ($countsAssociatedF->aguardando_pagamento 
+	                    	<td colspan = "2"> <?php echo $vacancyFemale - ($countsAssociatedF->aguardando_pagamento 
 						+ $countsAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento 
 						+ $countsNotAssociatedF->inscrito); ?>
-							<td colspan = "2"> <?php echo $vacancy - ($countsAssociatedM->aguardando_pagamento 
+							<td colspan = "2"> <?php echo $vacancyMale - ($countsAssociatedM->aguardando_pagamento 
 						+ $countsAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento 
 						+ $countsNotAssociatedM->inscrito); ?>
 	                    
