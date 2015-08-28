@@ -9,10 +9,11 @@
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
-                    <option selected="selected" value="<?= $this->config->item('url_link');?>reports/all_registrations">Painel de Inscrições</option>
+                    <option selected="selected" value="<?= $this->config->item('url_link');?>reports/all_registrations">Estatísticas de Inscrições</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/statistics_bycamp">Estatísticas de Inscrições por Turma</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonist_registered">Inscrições</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byschool">Colonistas por Escola</option>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/colonist_byage">Colonistas por Idade</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/colonists_byassociated">Inscrições por Sócio</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/subscriptions_bycamp">Pré-inscrições por Colônia</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/parents_notregistered">Parentes Cadastrados por Colonista</option>

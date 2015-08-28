@@ -228,9 +228,22 @@ class Reports extends CK_Controller {
             if ($camp->getCampName() == $campChosen)
                 $campChosenId = $camp->getCampId();
         }
-
+        
+        $vacancy = 0;
+        
+        if($campChosenId != null) {
+        	$camp = $this -> summercamp_model -> getSummerCampById($campChosenId);
+        	$vacancy = $camp -> getCapacityMale() + $camp -> getCapacityFemale();
+        }
+        else {
+        	foreach ($allCamps as $camp) {
+        		$vacancy = $vacancy + $camp -> getCapacityMale() + $camp -> getCapacityFemale();
+        	}
+        }
+        
         $data['colonia_escolhida'] = $campChosen;
         $data['camps'] = $camps;
+        $data['vacancy'] = $vacancy;
 
         $action = null;
 
@@ -251,11 +264,11 @@ class Reports extends CK_Controller {
         $countsNotAssociatedM = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId,$genderM);
         $countsAssociatedF = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,'TRUE',$campChosenId,$genderF);
         $countsNotAssociatedF = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId,$genderF);
+
         $countsAssociatedT = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,'TRUE',$campChosenId);
         $countsNotAssociatedT = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year,null,$campChosenId);
         
         $countsT = $this->summercamp_model->getCountStatusColonistBySummerCampYearAndGender($year, $campChosenId);
-
         $data['countsAssociatedM'] = $countsAssociatedM;
         $data['countsNotAssociatedM'] = $countsNotAssociatedM;
         $data['countsAssociatedF'] = $countsAssociatedF;
@@ -704,6 +717,76 @@ class Reports extends CK_Controller {
     	$data['campsQtd'] = $campsQtd;
     	
     	$this->loadReportView("reports/summercamps/statistics_bycamp", $data);
+    }
+    
+    public function colonist_byage() {
+    	$data = array();
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_GET['colonia_f']))
+            $campChosen = $_GET['colonia_f'];
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $camps[] = $camp->getCampName();
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
+        }
+
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+        
+        $genders = array(0 => "Feminino", 1 => "Masculino");
+        
+        $genderChosen = 'Masculino';
+        if (isset($_GET['genero_f']))
+        	$genderChosen = $_GET['genero_f'];
+        
+        $data['genero_escolhido'] = $genderChosen;
+        $data['genders'] = $genders;
+        
+        if($campChosenId != null) {
+        	if($genderChosen == 'Masculino') {
+        		$colonists = $this -> summercamp_model -> getColonistsAgeAndSchoolYearBySummerCampAndGender($campChosenId,'M');
+        	}
+        	else {
+        		$colonists = $this -> summercamp_model -> getColonistsAgeAndSchoolYearBySummerCampAndGender($campChosenId,'F');
+        	}
+        	
+        	$data['colonists'] = $colonists;
+        }
+        
+        $this -> loadReportView("reports/summercamps/colonist_byage", $data);
     }
 
     public function associate_campaign_donations() {

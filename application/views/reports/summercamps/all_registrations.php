@@ -71,7 +71,6 @@
 							<th align="right"></th>
 							<th align="right" colspan = 2 style="text-align: center">Feminino</th>
 							<th align="right" colspan = 2 style="text-align: center">Masculino</th>
-							<th align="right" colspan = 3 style="text-align: center">Ambos</th>
 					    <tr>
 					    <tr>
 							<th align="right"></th>
@@ -79,28 +78,12 @@
 							<th align="right">Não Sócio</th>
 							<th align="right">Sócio</th>
 							<th align="right">Não Sócio</th>
-							<th align="right">Sócio</th>
-							<th align="right">Não Sócio</th>
-							<th align="right">Total</th>
-					    <tr>
-							<th align="right">Inscritos</th>
-							<td align='right'> <?php echo $countsAssociatedF->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedT->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedT->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsT->inscrito; ?> </td>
-						</tr>
 						<tr>
 							<th align="right">Pré-inscrições em elaboração</th>
 							<td align='right'> <?php echo $countsAssociatedF->elaboracao; ?> </td>
 							<td align='right'> <?php echo $countsNotAssociatedF->elaboracao; ?> </td>
 							<td align='right'> <?php echo $countsAssociatedM->elaboracao; ?> </td>
 							<td align='right'> <?php echo $countsNotAssociatedM->elaboracao; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedT->elaboracao; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedT->elaboracao; ?> </td>
-							<td align='right'> <?php echo $countsT->elaboracao; ?> </td>
 						</tr>
 						<tr>
 							<th align="right">Pré-inscrições aguardando validação</th>
@@ -108,9 +91,6 @@
 							<td align='right'> <?php echo $countsNotAssociatedF->aguardando_validacao; ?> </td>
 							<td align='right'> <?php echo $countsAssociatedM->aguardando_validacao; ?> </td>
 							<td align='right'> <?php echo $countsNotAssociatedM->aguardando_validacao; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedT->aguardando_validacao; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedT->aguardando_validacao; ?> </td>
-							<td align='right'> <?php echo $countsT->aguardando_validacao; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições não validadas</th>
@@ -118,9 +98,6 @@
 							<td align='right'> <?php echo $countsNotAssociatedF->nao_validada; ?> </td>
 							<td align='right'> <?php echo $countsAssociatedM->nao_validada; ?> </td>
 							<td align='right'> <?php echo $countsNotAssociatedM->nao_validada; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedT->nao_validada; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedT->nao_validada; ?> </td>
-							<td align='right'> <?php echo $countsT->nao_validada; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições validadas</th>
@@ -128,9 +105,6 @@
 							<td align='right'> <?php echo $countsNotAssociatedF->validada; ?> </td>
 							<td align='right'> <?php echo $countsAssociatedM->validada; ?> </td>
 							<td align='right'> <?php echo $countsNotAssociatedM->validada; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedT->validada; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedT->validada; ?> </td>
-							<td align='right'> <?php echo $countsT->validada; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições na fila de espera</th>
@@ -138,9 +112,6 @@
 							<td align='right'> <?php echo $countsNotAssociatedF->fila_espera; ?> </td>
 							<td align='right'> <?php echo $countsAssociatedM->fila_espera; ?> </td>
 							<td align='right'> <?php echo $countsNotAssociatedM->fila_espera; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedT->fila_espera; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedT->fila_espera; ?> </td>
-							<td align='right'> <?php echo $countsT->fila_espera; ?> </td>
 						</tr>
 						<tr>
 							<th align="right" width='200px'>Pré-inscrições aguardando
@@ -149,11 +120,14 @@
 							<td align='right'> <?php echo $countsNotAssociatedF->aguardando_pagamento; ?> </td>
 							<td align='right'> <?php echo $countsAssociatedM->aguardando_pagamento; ?> </td>
 							<td align='right'> <?php echo $countsNotAssociatedM->aguardando_pagamento; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedT->aguardando_pagamento; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedT->aguardando_pagamento; ?> </td>
-							<td align='right'> <?php echo $countsT->aguardando_pagamento; ?> </td>
 						</tr>
-						
+						 <tr>
+							<th align="right">Inscritos</th>
+							<td align='right'> <?php echo $countsAssociatedF->inscrito; ?> </td>
+							<td align='right'> <?php echo $countsNotAssociatedF->inscrito; ?> </td>
+							<td align='right'> <?php echo $countsAssociatedM->inscrito; ?> </td>
+							<td align='right'> <?php echo $countsNotAssociatedM->inscrito; ?> </td>
+						</tr>
 						<tr>
 							<th align="right" width='200px'>Total</th>
 							<td align='right'> <?php echo $countsAssociatedF->inscrito + $countsAssociatedF->aguardando_pagamento + $countsAssociatedF->fila_espera 
@@ -172,19 +146,6 @@
 	                                + $countsNotAssociatedM->validada + $countsNotAssociatedM->nao_validada + $countsNotAssociatedM->aguardando_validacao 
 	                                + $countsNotAssociatedM->elaboracao; ?> 
 	                                </td>
-	                        <td align='right'> <?php echo $countsAssociatedT->inscrito + $countsAssociatedT->aguardando_pagamento + $countsAssociatedT->fila_espera 
-	                                + $countsAssociatedT->validada + $countsAssociatedT->nao_validada + $countsAssociatedT->aguardando_validacao 
-	                                + $countsAssociatedT->elaboracao; ?> 
-	                                </td>
-	                        <td align='right'> <?php echo $countsNotAssociatedT->inscrito + $countsNotAssociatedT->aguardando_pagamento + $countsNotAssociatedT->fila_espera 
-	                                + $countsNotAssociatedT->validada + $countsNotAssociatedT->nao_validada + $countsNotAssociatedT->aguardando_validacao 
-	                                + $countsNotAssociatedT->elaboracao; ?> 
-	                                </td>
-							<td width="60px" align='right'>
-	                                <?php echo $countsT->inscrito + $countsT->aguardando_pagamento + $countsT->fila_espera 
-	                                + $countsT->validada + $countsT->nao_validada + $countsT->aguardando_validacao 
-	                                + $countsT->elaboracao; ?>
-	                            </td>
 						</tr>
 						<tr>
 							<th	align="right" width='200px'>Porcentagem de Inscritos</th>
@@ -224,34 +185,16 @@
 									else echo "0.0";
 									echo "%"; ?> 
 	                                </td>
-	                        <td align='right'> <?php 
-									$countTotalAssociatedT = $countsAssociatedT ->inscrito + $countsAssociatedT->aguardando_pagamento + $countsAssociatedT->fila_espera 
-	                                + $countsAssociatedT->validada + $countsAssociatedT->nao_validada + $countsAssociatedT->aguardando_validacao 
-	                                + $countsAssociatedT->elaboracao;
-									
-									if($countTotalAssociatedT) echo number_format(($countsAssociatedT->inscrito/$countTotalAssociatedT)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-	                        <td align='right'> <?php 
-									$countTotalNotAssociatedT = $countsNotAssociatedT->inscrito + $countsNotAssociatedT->aguardando_pagamento + $countsNotAssociatedT->fila_espera 
-	                                + $countsNotAssociatedT->validada + $countsNotAssociatedT->nao_validada + $countsNotAssociatedT->aguardando_validacao 
-	                                + $countsNotAssociatedT->elaboracao;
-									
-									if($countTotalNotAssociatedT) echo number_format(($countsNotAssociatedT->inscrito/$countTotalNotAssociatedT)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-							<td width="60px" align='right'>
-	                                <?php 
-	                                $countTotalT = $countsT->inscrito + $countsT->aguardando_pagamento + $countsT->fila_espera 
-	                                + $countsT->validada + $countsT->nao_validada + $countsT->aguardando_validacao 
-	                                + $countsT->elaboracao;
-	                                
-	                                if($countTotalT) echo number_format(($countsT->inscrito/$countTotalT)*100,1);
-	                                else echo "0.0";
-									echo "%"; ?>
-	                            </td>
+	                    </tr>
+	                    <tr>
+	                    	<th	align="right">Vagas Disponíveis</th>
+	                    	<td colspan = "2"> <?php echo $vacancy - ($countsAssociatedF->aguardando_pagamento 
+						+ $countsAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento 
+						+ $countsNotAssociatedF->inscrito); ?>
+							<td colspan = "2"> <?php echo $vacancy - ($countsAssociatedM->aguardando_pagamento 
+						+ $countsAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento 
+						+ $countsNotAssociatedM->inscrito); ?>
+	                    
 	                    </tr>
 				</table>
 				<table class="table table-bordered table-striped table-min-td-size"
@@ -264,7 +207,7 @@
 						<th>Total </th>
 					</tr>
 					<tr>
-						<th align="right">Potencial de Inscritos por Colônia</th>
+						<th align="right">Potencial de Inscritos</th>
 						<td width="60px" align='right'> <?php echo $potInscritosAssociated = $countsAssociatedT->aguardando_pagamento 
 						+ $countsAssociatedT->inscrito; ?></td>
 						<td width="60px" align='right'> <?php echo $potInscritosNotAssociated = $countsNotAssociatedT->aguardando_pagamento 
@@ -273,7 +216,7 @@
 						+ $countsT->inscrito; ?></td>
 					</tr>
 					<tr>
-						<th align="right">Porcentagem de Inscritos por Colônia</th>
+						<th align="right">Porcentagem de Inscritos</th>
 						<td width="60px" align='right'><?php 
 						if($potInscritosAssociated)
 							echo number_format(($countsAssociatedT->inscrito/$potInscritosAssociated)*100,1);
@@ -290,73 +233,6 @@
 						 else echo "0.0";
 						 echo "%"; ?>  </td>				
 					</tr>
-				</table>
-				<table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 600px;">
-						<tr>
-							<th align="right"></th>
-							<th align="right" colspan = 2 style="text-align: center">Feminino</th>
-							<th align="right" colspan = 2 style="text-align: center">Masculino</th>
-							<th align="right" colspan = 3 style="text-align: center">Ambos</th>
-					    </tr>
-					    <tr>
-							<th align="right"></th>
-							<th align="right">Sócio</th>
-							<th align="right">Não Sócio</th>
-							<th align="right">Sócio</th>
-							<th align="right">Não Sócio</th>
-							<th align="right">Sócio</th>
-							<th align="right">Não Sócio</th>
-							<th align="right">Total</th>
-					    <tr>					    
-							<tr>
-								<th align="right" width='200px'>Cancelados</th>
-								<td align='right'> <?php echo $countsAssociatedF->cancelado; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedF->cancelado; ?> </td>
-								<td align='right'> <?php echo $countsAssociatedM->cancelado; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedM->cancelado; ?> </td>
-								<td align='right'> <?php echo $countsAssociatedT->cancelado; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedT->cancelado; ?> </td>
-								<td align='right'> <?php echo $countsT->cancelado; ?> </td>
-							</tr>
-							<tr>
-								<th align="right" width='200px'>Desistentes</th>
-								<td align='right'> <?php echo $countsAssociatedF->desistente; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedF->desistente; ?> </td>
-								<td align='right'> <?php echo $countsAssociatedM->desistente; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedM->desistente; ?> </td>
-								<td align='right'> <?php echo $countsAssociatedT->desistente; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedT->desistente; ?> </td>
-								<td align='right'> <?php echo $countsT->desistente; ?> </td>
-							</tr>
-							<tr>
-								<th align="right" width='200px'>Excluidos</th>
-								<td align='right'> <?php echo $countsAssociatedF->excluido; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedF->excluido; ?> </td>
-								<td align='right'> <?php echo $countsAssociatedM->excluido; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedM->excluido; ?> </td>
-								<td align='right'> <?php echo $countsAssociatedT->excluido; ?> </td>
-								<td align='right'> <?php echo $countsNotAssociatedT->excluido; ?> </td>
-								<td align='right'> <?php echo $countsT->excluido; ?> </td>
-							</tr>
-						<tr>
-							<th align="right" width='200px'>Total</th>
-							<td align='right'> <?php echo $countsAssociatedF->excluido + $countsAssociatedF->desistente + $countsAssociatedF->cancelado; ?> 
-	                                </td>
-	                        <td align='right'> <?php echo $countsNotAssociatedF->excluido + $countsNotAssociatedF->desistente + $countsNotAssociatedF->cancelado; ?> 
-	                                </td>
-							<td align='right'> <?php echo $countsAssociatedM->excluido + $countsAssociatedM->desistente + $countsAssociatedM->cancelado; ?> 
-	                                </td>
-	                        <td align='right'> <?php echo $countsNotAssociatedM->excluido + $countsNotAssociatedM->desistente + $countsNotAssociatedM->cancelado; ?> 
-	                                </td>
-	                        <td align='right'> <?php echo $countsAssociatedT->excluido + $countsAssociatedT->desistente + $countsAssociatedT->cancelado; ?> 
-	                                </td>
-	                        <td align='right'> <?php echo $countsNotAssociatedT->excluido + $countsNotAssociatedT->desistente + $countsNotAssociatedT->cancelado; ?> 
-	                                </td>
-							<td align='right'>
-	                                <?php echo $countsT->excluido + $countsT->desistente + $countsT->cancelado; ?>
-	                            </td>
-						</tr>
 				</table>
 				
 				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
