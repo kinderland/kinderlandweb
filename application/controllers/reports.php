@@ -230,21 +230,25 @@ class Reports extends CK_Controller {
                 $campChosenId = $camp->getCampId();
         }
         
-        $vacancy = 0;
+        $vacancyMale = 0;
+        $vacancyFemale = 0;
         
         if($campChosenId != null) {
         	$camp = $this -> summercamp_model -> getSummerCampById($campChosenId);
-        	$vacancy = $camp -> getCapacityMale() + $camp -> getCapacityFemale();
+        	$vacancyMale = $camp -> getCapacityMale();
+        	$vacancyFemale = $camp -> getCapacityFemale();
         }
         else {
         	foreach ($allCamps as $camp) {
-        		$vacancy = $vacancy + $camp -> getCapacityMale() + $camp -> getCapacityFemale();
+        		$vacancyMale = $vacancyMale + $camp -> getCapacityMale();
+        		$vacancyFemale = $vacancyFemale + $camp -> getCapacityFemale();
         	}
         }
         
         $data['colonia_escolhida'] = $campChosen;
         $data['camps'] = $camps;
-        $data['vacancy'] = $vacancy;
+        $data['vacancyMale'] = $vacancyMale;
+        $data['vacancyFemale'] = $vacancyFemale;
 
         $action = null;
 
