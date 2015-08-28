@@ -171,27 +171,6 @@ class Reports extends CK_Controller {
         $data['ano_escolhido'] = $year;
         $data['years'] = $years;
         
-        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
-        $campsQtd = count($allCamps);
-        $camps = array();
-        $start = $campsQtd;
-        $end = 1;
-        
-        $campChosen = null;
-        
-        if (isset($_GET['colonia_f']))
-        	$campChosen = $_GET['colonia_f'];
-        
-        $campChosenId = null;
-        foreach ($allCamps as $camp) {
-        	$camps[] = $camp->getCampName();
-        	if ($camp->getCampName() == $campChosen)
-        		$campChosenId = $camp->getCampId();
-        }
-        
-        $data['colonia_escolhida'] = $campChosen;
-        $data['camps'] = $camps;
-
         $shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," .
                 SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," .
                 SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," .
@@ -203,7 +182,7 @@ class Reports extends CK_Controller {
                 SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," .
                 SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
         
-        $data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year,$shownStatus,$campChosenId);
+        $data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year,$shownStatus);
         $this->loadReportView("reports/summercamps/colonist_registered", $data);
     }
 
