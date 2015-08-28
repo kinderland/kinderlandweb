@@ -105,7 +105,7 @@
 
         </form>
 
-        <table class="table table-bordered table-striped" style="max-width=550px; min-width=550px; table-layout: fixed;"  id="tableDonations">
+        <table class="table table-bordered table-striped" style="max-width:550px; min-width:550px; table-layout: fixed;"  id="tableDonations">
             <thead>
                 <tr>
                     <td colspan="3">
