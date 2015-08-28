@@ -65,7 +65,7 @@
 						</select>
 				</form>
 				<table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 800px;">
+					style="max-width: 700px;">
 					
 						<tr>
 							<th align="right"></th>

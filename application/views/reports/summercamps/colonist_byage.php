@@ -89,11 +89,11 @@
 					</form>
 					<div class="counter"></div> <br>
 					<?php if (isset($colonia_escolhida) && isset($colonists)){ ?>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 400px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th>Colonista</th>
-                                <th>Idade (Anos)</th>
+                                <th>Idade</th>
                                 <th>Ano Escolar</th>
                                 
                             </tr>
