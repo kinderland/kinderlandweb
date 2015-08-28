@@ -58,8 +58,8 @@
 				sort : [sortLowerCase, true, sortLowerCase, true],
 				filters : [true,selectTodas,true, selectTodos],
 				filterText: 'Escreva para filtrar... ',
-				counterText	: showCounter
-				
+				counterText	: showCounter,
+				sortKey : 0				
 			});
 		});
         </script>

@@ -43,7 +43,8 @@
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
 				sort : [sortLowerCase, true, true],
-				counterText : showCounter
+				counterText : showCounter,
+				sortKey : 1
 			});
 		});
         </script>
