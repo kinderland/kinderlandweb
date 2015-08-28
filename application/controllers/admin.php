@@ -646,7 +646,7 @@ class Admin extends CK_Controller {
         $document_type = $this->input->get('document_type', TRUE);
         $document = $this->summercamp_model->getNewestDocument($camp_id, $colonist_id, $document_type);
         if ($document) {
-            if ($document["extension"] == "pdf")
+            if ( strtolower( $document["extension"] ) == "pdf")
                 header("Content-type: application/pdf");
             else
                 header("Content-type: image/jpeg");

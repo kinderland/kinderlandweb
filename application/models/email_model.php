@@ -45,15 +45,19 @@ class email_model extends CK_Model {
 
 	public function saveMailRecipient($emailId, $recipient, $type) {
 		$this -> Logger -> info("Running: " . __METHOD__);
+		try{
+			$insertQuery = "insert into communication_recipient(communication_id, recipient, recipient_type) values (?,?,?)";
 
-		$insertQuery = "insert into communication_recipient(communication_id, recipient, recipient_type) values (?,?,?)";
+			$return = $this -> execute($this -> db, $insertQuery, array($emailId, $recipient, $type));
 
-		$return = $this -> execute($this -> db, $insertQuery, array($emailId, $recipient, $type));
-
-		if (!$return)
+			if (!$return)
+				$this -> Logger -> error("Não pude salvar o recipiente: " . $recipient . " com tipo = " . $type . " e emailId = " . $emailId);
+			else
+				$this -> Logger -> info("Recipiente salvo com sucesso");
+		} catch (Exception $ex) {
 			$this -> Logger -> error("Não pude salvar o recipiente: " . $recipient . " com tipo = " . $type . " e emailId = " . $emailId);
-		else
-			$this -> Logger -> info("Recipiente salvo com sucesso");
+		}
+		
 
 	}
 
