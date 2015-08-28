@@ -181,10 +181,11 @@ class summercamp_model extends CK_Model {
 	
     public function getColonistsAgeAndSchoolYearBySummerCampAndGender($summercampId,$gender) {
     	
-    	$sql = "SELECT scs.summer_camp_id as camp_id, c.colonist_id as colonist_id, p.fullname as colonist_name, age(c.birth_date) as age, scs.school_year as school_year
+    	$sql = "SELECT scs.situation as situation, scss.description as situation_description,scs.summer_camp_id as camp_id, c.colonist_id as colonist_id, p.fullname as colonist_name, age(c.birth_date) as age, scs.school_year as school_year
 				FROM colonist c INNER JOIN summer_camp_subscription scs on scs.colonist_id = c.colonist_id
 				INNER JOIN person p on c.person_id = p.person_id
-				WHERE scs.situation = 5 AND scs.summer_camp_id = ? AND p.gender = ?";
+				INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+				WHERE scs.situation in ('5','4') AND scs.summer_camp_id = ? AND p.gender = ?";
     	
     	$resultSet = $this -> executeRows($this->db,$sql,array($summercampId,$gender));
     	
