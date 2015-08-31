@@ -685,7 +685,7 @@ left outer join summer_camp_subscription scs on scs.person_user_id = a.person_id
 group by p.person_id);
 
 CREATE OR REPLACE VIEW v_colonists_with_responsables_not_parents AS
-		(SELECT p.fullname Colonist,p1.fullname as Responsable, DATE_PART('YEAR',date_start) as Ano, c.person_id as Colonist_id, scs.person_user_id as Responsable_id, sc.camp_name as camp_name, sc.summer_camp_id as camp_id  FROM colonist c
+		(SELECT p.fullname Colonist,p1.fullname as Responsable, DATE_PART('YEAR',sc.date_created) as Ano, c.person_id as Colonist_id, scs.person_user_id as Responsable_id, sc.camp_name as camp_name, sc.summer_camp_id as camp_id  FROM colonist c
 		INNER JOIN summer_camp_subscription scs on c.colonist_id = scs.colonist_id
 		INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
 		INNER JOIN person p on p.person_id = c.person_id
@@ -694,7 +694,7 @@ CREATE OR REPLACE VIEW v_colonists_with_responsables_not_parents AS
 
 CREATE OR REPLACE VIEW v_subscriptions_not_submitted as
 	(SELECT c.colonist_id as colonist_id, p.fullname as colonist_name, p1.person_id as responsable_id, p1.fullname as responsable_name, scs.situation as situation, 
-	scss.description as situation_description, sc.summer_camp_id as camp_id, sc.camp_name as camp_name, DATE_PART('YEAR',date_start) as year FROM person p
+	scss.description as situation_description, sc.summer_camp_id as camp_id, sc.camp_name as camp_name, DATE_PART('YEAR',sc.date_created) as year FROM person p
 	INNER JOIN colonist c on c.person_id = p.person_id
 	INNER JOIN summer_camp_subscription scs on c.colonist_id = scs.colonist_id
 	INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
@@ -711,7 +711,7 @@ CREATE OR REPLACE VIEW v_subscriptions_not_submitted as
 CREATE OR REPLACE VIEW v_discount as (
 		SELECT c.colonist_id as colonist_id, p.fullname as colonist_name, pr.person_id as responsable_id, pr.fullname as responsable_name, 
 		scs.summer_camp_id as camp_id, scs.discount as discount, dr.discount_reason as discount_reason, scs.situation as situation, 
-		scss.description as situation_description, DATE_PART('YEAR',sc.date_start) as year
+		scss.description as situation_description, DATE_PART('YEAR',sc.date_created) as year
 		FROM colonist c 
 		INNER JOIN person p on p.person_id = c.person_id
 		INNER JOIN summer_camp_subscription scs on scs.colonist_id = c.colonist_id
