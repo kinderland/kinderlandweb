@@ -793,6 +793,77 @@ class Reports extends CK_Controller {
         
         $this -> loadReportView("reports/summercamps/colonist_byage", $data);
     }
+    
+    public function queue() {
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = date('Y');
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    	
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    	else {
+    		$year = date('Y');
+    	}
+    	
+    	$data['ano_escolhido'] = $year;
+    	$data['years'] = $years;
+    	
+    	$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+    	$campsQtd = count($allCamps);
+    	$camps = array();
+    	$start = $campsQtd;
+    	$end = 1;
+    	
+    	$campChosen = null;
+    	
+    	if (isset($_GET['colonia_f']))
+    		$campChosen = $_GET['colonia_f'];
+    	
+    	$campChosenId = null;
+    	foreach ($allCamps as $camp) {
+    		$camps[] = $camp->getCampName();
+    		if ($camp->getCampName() == $campChosen)
+    			$campChosenId = $camp->getCampId();
+    	}
+    	
+    	$data['colonia_escolhida'] = $campChosen;
+    	$data['camps'] = $camps;
+    	
+    	$genders = array(0 => "Feminino", 1 => "Masculino");
+    	
+    	$genderChosen = 'Masculino';
+    	if (isset($_GET['genero_f']))
+    		$genderChosen = $_GET['genero_f'];
+    	
+    	$data['genero_escolhido'] = $genderChosen;
+    	$data['genders'] = $genders;
+    	
+    	if($campChosenId != null) {
+    		
+    		if($genderChosen == 'Masculino') {
+    			$colonists = $this -> summercamp_model -> getAllColonistsWithQueueNumberBySummerCamp($campChosenId,'M');
+    		}
+    		else {
+    			$colonists = $this -> summercamp_model -> getAllColonistsWithQueueNumberBySummerCamp($campChosenId,'F');
+    		}
+    		
+    		$data['colonists'] = $colonists;
+    	}
+    	
+    	$this -> loadReportView("reports/summercamps/queue", $data);
+    }
 
     public function associate_campaign_donations() {
         $years = array();

@@ -24,6 +24,9 @@
                 	 <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/discounts">Descontos</option>
                 	<?php } ?>
+                	 <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/queue">Fila de Espera</option>
+                	<?php } ?>
                 </select>
             </div>
         </div>
