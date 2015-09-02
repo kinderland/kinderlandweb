@@ -107,11 +107,9 @@
 					function(l, r) {
 						return l.toLowerCase().localeCompare(r.toLowerCase());
 					}, //Evita problemas com caps-lock
-					function(l, r) {
-						return l.toLowerCase().localeCompare(r.toLowerCase());
-					}
+					null
 					],
-					filters : [true,selectTodos,false,true,selectTodos]
+					filters : [true,selectTodos,false,true,false]
 				});
 			});
         </script>

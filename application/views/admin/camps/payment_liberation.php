@@ -135,7 +135,9 @@
 						return l.toLowerCase().localeCompare(r.toLowerCase());
 					}, //Evita problemas com caps-lock
 					function(l, r) {
-						return l.toLowerCase().localeCompare(r.toLowerCase());
+						var intL = parseInt(l);
+						var intR = parseInt(r);
+						return (intL < intR) ? -1:1;
 					}, //Evita problemas com caps-lock
 					function(l, r) {
 						return l.toLowerCase().localeCompare(r.toLowerCase());
@@ -144,7 +146,7 @@
 						return l.toLowerCase().localeCompare(r.toLowerCase());
 					}
 					],
-					filters : [true,selectTodos,selectTodos,true,selectTodos]
+					filters : [true,selectTodos,true,true,selectTodos]
 				});
 			});
         </script>

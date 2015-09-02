@@ -185,6 +185,23 @@ class CK_Controller extends CI_Controller {
         return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
 
+    public function sendEmailExcluded($person, $colonist, $summerCampName, $parentsMailArray = array()) {
+        $cc = array();
+        $cc[] = "secretaria@kinderland.com.br";
+        foreach ($parentsMailArray as $mail) {
+            if($mail != $person->getEmail())
+                $cc[] = $mail;
+        }
+        $emailSubject = "[Kinderland] Inscricao de " . $colonist->getFullname() . " na colonia " . $summerCampName . " excluida";
+        $emailString = "Prezado (a) " .$person->getFullname(). ",<br /><br />A exclusao da inscricao do 
+        colonista " .$colonist->getFullname(). " na colonia ". $summerCampName ." foi realizada com sucesso.<br /><br />
+        Solicitamos que entre em contato com a secretaria por telefone para tratar de eventual reembolso 
+        da doacao, seguindo os criterios estabelecidos pela Associacao Kinderland.<br /><br />Muito obrigado 
+        pelo interesse em nossas colonias!<br /><br />Associacao Kinderland";
+
+        return $this->sendMail($emailSubject, $emailString, $person, $cc);
+    }
+
     protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
         //$myMail = "testekinderland2015@gmail.com";
         //$config = Array('protocol' => 'smtp', 'smtp_host' => 'ssl://smtp.gmail.com', 'smtp_port' => 465, 'smtp_user' => $myMail, 'smtp_pass' => 'testandoteste', 'mailtype' => 'html', 'charset' => mb_internal_encoding(), 'wordwrap' => TRUE);

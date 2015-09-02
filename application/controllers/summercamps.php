@@ -417,6 +417,26 @@ class SummerCamps extends CK_Controller {
         redirect("summercamps/index");
     }
 
+    public function excludeColonist() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $campId = $this->input->get('camp_id', TRUE);
+        $colonistId = $this->input->get('colonist_id', TRUE);
+        $camper = $this->summercamp_model->getSummerCampSubscription($colonistId, $campId);
+        $personUserId = $camper->getPersonUserId();
+        $responsableId = $this->session->userdata("user_id");
+
+        if ($personUserId !== $responsableId) {
+            $this->Logger->error("Responsavel de id $responsableId tentou excluir o colonista $colonistId da campanha $campId que pertence ao responsavel $personUserId");
+            //$this->index();
+        } else {
+            $this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED);
+            $this->sendExclusionEmail($colonistId, $campId);
+            //$this->index();
+        }
+
+        redirect("summercamps/index");
+    }
+
     public function medicalFile($data) {
         if ($this->summercamp_model->hasDocument($data["camp_id"], $data["colonist_id"], DOCUMENT_MEDICAL_FILE)) {
             $medical_file = $this->medical_file_model->getMedicalFile($data["camp_id"], $data["colonist_id"]);
@@ -683,6 +703,47 @@ class SummerCamps extends CK_Controller {
         }
 
         $this->sendEmailSubmittedPreSubscription($personuser, $colonist, $summercamp->getCampName(), $emailArray);
+    }
+
+    public function sendExclusionEmail($colonistId, $summerCampId) {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $summercamp = $this->summercamp_model->getSummerCampById($summerCampId);
+        if (!$summercamp) {
+            $this->Logger->error("Camp not found, cannot send an email");
+            return;
+        }
+
+        $colonist = $this->colonist_model->getColonist($colonistId);
+        if (!$colonist) {
+            $this->Logger->error("Colonist not found");
+            return;
+        }
+
+        $personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
+        if (!$personuser) {
+            $this->Logger->error("PersonUser related to colonist not found");
+            return;
+        }
+
+        $this->Logger->info("Sending email");
+
+        $responsableId = $personuser->getPersonId();
+
+        $father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+        $mother = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+
+        $emailArray = array();
+        if ($father && $responsableId != $father) {
+            $father = $this->person_model->getPersonFullById($father);
+            $emailArray[] = $father->email;
+        }
+        if ($mother && $mother != $responsableId) {
+            $mother = $this->person_model->getPersonFullById($mother);
+            $emailArray[] = $mother->email;
+        }
+
+        $this->sendEmailExcluded($personuser, $colonist, $summercamp->getCampName(), $emailArray);
     }
 
     public function acceptGeneralRules() {
