@@ -82,6 +82,19 @@ class donation_model extends CK_Model {
 
 	}
 
+	public function sumDonationsColony() {
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "Select sum(donated_value) as sum from donation d
+				  WHERE d.donation_type = 4 AND date_part('year'::text, d.date_created) = date_part('year'::text, now()) AND d.donation_status = 2";
+		$result = $this -> executeRow($this -> db, $sql);
+
+		if ($result) {
+			return $result -> sum;
+		}
+
+	}
+	
+	
 
 	public function updateDonationStatus($donationId, $donationStatus) {
 		$this -> Logger -> info("Running: " . __METHOD__);
@@ -125,6 +138,12 @@ class donation_model extends CK_Model {
 	public function countFreeDonations() {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "SELECT count(distinct donation_id) as contagem FROM donation_detailed WHERE donation_status like 'pago' and donation_type like 'avulsa'";
+		return $this->executeRow($this -> db, $sql)-> contagem;
+	}
+
+	public function countDonationsColony() {
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = "SELECT count(distinct donation_id) as contagem FROM donation WHERE donation_status = ".DONATION_STATUS_PAID." and donation_type = ".DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION;
 		return $this->executeRow($this -> db, $sql)-> contagem;
 	}
 
