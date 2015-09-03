@@ -342,6 +342,12 @@
                                         &nbsp; &nbsp; &nbsp;Prazo expirado
                                     </p>
                                     <?php
+                                } else if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE ||
+                                        $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED) { ?>
+                                    <p style='color:red; font-weight:bold' >
+                                        &nbsp; &nbsp; &nbsp;Posição na fila: <?= $summerCampInscription->getQueueNumber() ?>
+                                    </p>
+                                <?php
                                 }
                             }
 
