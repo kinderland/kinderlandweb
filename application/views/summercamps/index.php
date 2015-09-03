@@ -342,10 +342,11 @@
                                         &nbsp; &nbsp; &nbsp;Prazo expirado
                                     </p>
                                     <?php
-                                } else if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE ||
-                                        $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED) { ?>
+                                } else if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId()
+                                    && ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE ||
+                                        $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)) { ?>
                                     <p style='color:red; font-weight:bold' >
-                                        &nbsp; &nbsp; &nbsp;Posição na fila: <?= $summerCampInscription->getQueueNumber() ?>
+                                        &nbsp; &nbsp; &nbsp;Número na fila: <?= $summerCampInscription->getQueueNumber() ?>
                                     </p>
                                 <?php
                                 }
