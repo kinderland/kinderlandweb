@@ -24,7 +24,7 @@
 
 function formatarEMostrar($valor, $opcao) {
 	if ($opcao == PAYMENT_REPORTBYCARD_VALUES)
-		echo "R$".number_format($valor,0,",",".");
+		echo number_format($valor,0,",",".");
 	else
 		echo $valor;
 }
@@ -55,6 +55,25 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 		
 		
 		<div class="col-lg-10" bgcolor="red">
+				<table class="table table-bordered table-striped table" style="max-width: 200px;">
+					<tr>
+						<th>Filtros:</th>
+					</tr>
+					<tr>
+						<td>Ano:
+						<select>
+							<option value="0">Todos</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>Mes:
+						<select>
+							<option value="0">Todos</option>
+							<option value="12">Dezembro</option>
+						</select></td></td>
+					</tr>
+
+				</table>
 
 			<h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates), $option); ?>
 </h4>				<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas), $option); ?>
