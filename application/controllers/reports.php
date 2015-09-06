@@ -60,6 +60,20 @@ class Reports extends CK_Controller {
 	public function payments_bycard() {
 		$type = $this -> input -> get('type', TRUE);
 		$option = $this -> input -> get('option', TRUE);
+		$year = $this -> input -> get('year', TRUE);
+		$month = $this -> input -> get('month', TRUE);
+		if($year === FALSE){
+				$year = date("Y");
+		} else if($month == 0){
+			$month = FALSE;
+		}
+		$data["year"] = $year;
+		$data["month"] = $month;
+		$years = $this -> campaign_model -> getYearsCampaign();
+		$data['years'] = array();
+		foreach($years as $a_year){
+			$data['years'][] = $a_year->year_event;	
+		}		
 		//Por enquanto só o tipo finalizado é pra ser mostrado.
 		$type = "captured";
 		$title_extra = "";
@@ -71,18 +85,16 @@ class Reports extends CK_Controller {
 			$searchfor = 9;
 			$title_extra = " - Cancelados";
 		}
-		$results = $this -> cielotransaction_model -> statisticsPaymentsByCardFlag($searchfor, $option);
+		$results = $this -> cielotransaction_model -> statisticsPaymentsByCardFlag($searchfor, $option,$year,$month);
 		$data['result'] = $results;
 		if ($option == PAYMENT_REPORTBYCARD_VALUES) {
-			$data['avulsas'] = $this -> donation_model -> sumFreeDonations();
-			$sumAssociates = $this -> donation_model -> sumPayingAssociates();
-			$data['associates'] = $sumAssociates;
-			$data['colonias'] = $this -> donation_model -> sumDonationsColony();
+			$data['avulsas'] = $this -> donation_model -> sumFreeDonations($year,$month);
+			$data['associates'] = $this -> donation_model -> sumPayingAssociates($year,$month);
+			$data['colonies'] = $this -> donation_model -> sumDonationsColony($year,$month);
 		} else {
-			$data['avulsas'] = $this -> donation_model -> countFreeDonations();
-			$countAssociates = $this -> donation_model -> countPayingAssociates();
-			$data['associates'] = $countAssociates;
-			$data['colonias'] = $this -> donation_model -> countDonationsColony();
+			$data['avulsas'] = $this -> donation_model -> countFreeDonations($year,$month);
+			$data['associates']= $this -> donation_model -> countPayingAssociates($year,$month);
+			$data['colonies'] = $this -> donation_model -> countDonationsColony($year,$month);
 		}
 		$creditos[1] = 0;
 		$creditos[2] = 0;
@@ -93,7 +105,7 @@ class Reports extends CK_Controller {
 		$creditos[7] = 0;
 		$creditos[8] = 0;
 
-		if ($results["credito"] !== null) {
+		if (isset($results["credito"])) {
 
 			foreach ($results["credito"] as $credito) {
 				for ($i = 1; $i <= 8; $i++)

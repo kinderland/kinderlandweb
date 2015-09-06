@@ -55,31 +55,54 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 		
 		
 		<div class="col-lg-10" bgcolor="red">
-				<table class="table table-bordered table-striped table" style="max-width: 200px;">
-					<tr>
-						<th>Filtros:</th>
-					</tr>
-					<tr>
-						<td>Ano:
-						<select>
-							<option value="0">Todos</option>
-						</select></td>
-					</tr>
-					<tr>
-						<td>Mes:
-						<select>
-							<option value="0">Todos</option>
-							<option value="12">Dezembro</option>
-						</select></td></td>
-					</tr>
+			
+			             <form method="GET">
+			             	<input type="hidden" name="option" value="<?=$option?>"/>
+	                	<select name="year" onchange="this.form.submit()" id="year">
+        	        		<?php foreach ($years as $y) {
+        	        			$selected = "";
+								if($y == $year)
+									$selected = "selected";
+        	        			echo "<option $selected value='$y'>$y</option>";
+							} ?>                		
+            	    	</select>
 
-				</table>
+                        <select name="month" onchange="this.form.submit()" id="month">
+                            <option value="0" <?php if(!isset($mes)) echo "selected"; ?>)>Todos</option>
+                            <?php 
+
+                                function getMonthName($m){
+                                    switch ($m){
+                                        case 1: return "Janeiro";
+                                        case 2: return "Fevereiro";
+                                        case 3: return "Março";
+                                        case 4: return "Abril";
+                                        case 5: return "Maio";
+                                        case 6: return "Junho";
+                                        case 7: return "Julho";
+                                        case 8: return "Agosto";
+                                        case 9: return "Setembro";
+                                        case 10: return "Outubro";
+                                        case 11: return "Novembro";
+                                        case 12: return "Dezembro";
+                                    }
+                                }
+                                for($m = 1; $m <= 12; $m++) {
+                                    $selected = "";
+                                    if($m == $month)
+                                        $selected = "selected";
+                                    echo "<option $selected value='$m'>".getMonthName($m)."</option>";
+                                } 
+                            ?>                        
+                        </select>
+                	</form>
+
 
 			<h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates), $option); ?>
 </h4>				<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas), $option); ?>
-</h4>				<h4>Doações colonias: <?php formatarEMostrar(intval($colonias), $option); ?>
+</h4>				<h4>Doações colonias: <?php formatarEMostrar(intval($colonies), $option); ?>
 				</h4>
-				<h4>Total: <?php formatarEMostrar(intval($associates) + intval($avulsas)+intval($colonias), $option); ?>
+				<h4>Total: <?php formatarEMostrar(intval($associates) + intval($avulsas)+intval($colonies), $option); ?>
 				</h4>
 
 	<!--		

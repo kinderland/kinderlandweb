@@ -120,11 +120,14 @@
             return false;
         }
 		
-		public function statisticsPaymentsByCardFlag($searchfor,$option){
+		public function statisticsPaymentsByCardFlag($searchfor,$option,$year,$month=FALSE){
 			$this -> Logger -> info("Running: " . __METHOD__);
-			$where = "";
+			$where = "where EXTRACT(YEAR FROM date_created) = $year ";
 			if($searchfor !== FALSE){
-				$where = "where payment_status = $searchfor";
+				$where .= " and payment_status = $searchfor ";
+			}
+			if($month !== FALSE){
+				$where .= " and EXTRACT(MONTH from date_created) = $month ";
 			}
 			if($option == PAYMENT_REPORTBYCARD_QUANTITY)
 				$aggregator = "count(distinct donation_id)";

@@ -58,10 +58,16 @@ class donation_model extends CK_Model {
 		}
 	}
 
-	public function countPayingAssociates() {
+	public function countPayingAssociates($year, $month) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "Select count(distinct person_id) from donation d
-				  WHERE d.donation_type = 2 AND date_part('year'::text, d.date_created) = date_part('year'::text, now()) AND d.donation_status = 2";
+				  WHERE d.donation_type = 2 and d.donation_status = 2";
+		if($year !== FALSE){			
+			$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+		}
+		if($month !== FALSE){
+			$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+		}
 		$result = $this -> executeRow($this -> db, $sql);
 
 		if ($result) {
@@ -70,10 +76,17 @@ class donation_model extends CK_Model {
 
 	}
 
-	public function sumPayingAssociates() {
+	public function sumPayingAssociates($year = FALSE, $month = FALSE) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "Select sum(donated_value) as sum from donation d
-				  WHERE d.donation_type = 2 AND date_part('year'::text, d.date_created) = date_part('year'::text, now()) AND d.donation_status = 2";
+				  WHERE d.donation_type = 2 and d.donation_status = 2";
+		if($year !== FALSE){			
+			$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+		}
+		if($month !== FALSE){
+			$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+		}
+
 		$result = $this -> executeRow($this -> db, $sql);
 
 		if ($result) {
@@ -82,10 +95,19 @@ class donation_model extends CK_Model {
 
 	}
 
-	public function sumDonationsColony() {
+	public function sumDonationsColony($year = FALSE, $month = FALSE) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "Select sum(donated_value) as sum from donation d
-				  WHERE d.donation_type = 4 AND date_part('year'::text, d.date_created) = date_part('year'::text, now()) AND d.donation_status = 2";
+				  WHERE d.donation_type = 4 AND d.donation_status = 2";
+				  
+		if($year !== FALSE){			
+			$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+		}
+		if($month !== FALSE){
+			$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+		}
+				  				  
+				  
 		$result = $this -> executeRow($this -> db, $sql);
 
 		if ($result) {
@@ -135,21 +157,42 @@ class donation_model extends CK_Model {
 		return $this -> executeRows($this -> db, $sql, array(intval($userId)));
 	}
 
-	public function countFreeDonations() {
+	public function countFreeDonations($year = FALSE, $month = FALSE) {
 		$this -> Logger -> info("Running: " . __METHOD__);
-		$sql = "SELECT count(distinct donation_id) as contagem FROM donation_detailed WHERE donation_status like 'pago' and donation_type like 'avulsa'";
+		$sql = "SELECT count(distinct donation_id) as contagem FROM donation WHERE donation_status = ".DONATION_STATUS_PAID." and donation_type = ".DONATION_TYPE_FREEDONATION;
+		if($year !== FALSE){			
+			$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+		}
+		if($month !== FALSE){
+			$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+		}
+		
 		return $this->executeRow($this -> db, $sql)-> contagem;
 	}
 
-	public function countDonationsColony() {
+	public function countDonationsColony($year = FALSE, $month = FALSE) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		$sql = "SELECT count(distinct donation_id) as contagem FROM donation WHERE donation_status = ".DONATION_STATUS_PAID." and donation_type = ".DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION;
+		if($year !== FALSE){			
+			$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+		}
+		if($month !== FALSE){
+			$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+		}
+		
 		return $this->executeRow($this -> db, $sql)-> contagem;
 	}
 
-	public function sumFreeDonations() {
+	public function sumFreeDonations($year=FALSE,$month=FALSE) {
 		$this -> Logger -> info("Running: " . __METHOD__);
-		$sql = "SELECT sum(donated_value) as contagem FROM donation_detailed WHERE donation_status like 'pago' and donation_type like 'avulsa'";
+		$sql = "SELECT sum(donated_value) as contagem FROM donation WHERE donation_status = ".DONATION_STATUS_PAID." and donation_type = ".DONATION_TYPE_FREEDONATION;
+		if($year !== FALSE){			
+			$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+		}
+		if($month !== FALSE){
+			$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+			
+		}
 		return $this->executeRow($this -> db, $sql)-> contagem;
 	}
 
