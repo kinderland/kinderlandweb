@@ -541,7 +541,7 @@ class SummerCamps extends CK_Controller {
             $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
         $userId = $this->session->userdata("user_id");
         if ($_FILES['uploadedfile'] ['error'] > 0 || !$this->summercamp_model->uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, $document_type)) {
-            echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que só são aceitos arquivos até 2MB.');
+            echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB.');
             window.location.replace('" . $this->config->item('url_link') . "summercamps/uploadDocument?camp_id=$camp_id&colonist_id=$colonist_id&document_type=$document_type');</script>";
         } else {
             $this->validation_model->sentNewDocument($colonist_id, $camp_id, $document_type);
