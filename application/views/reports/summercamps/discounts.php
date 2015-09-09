@@ -89,7 +89,7 @@
 						<thead>	
 							<tr>
 								<th></th>
-								<th style="text-align: center" colspan = 2>Quantidade de bolsas cheias</th>
+								<th style="text-align: center" colspan = 2>Quantidade de bolsas</th>
 							</tr>
 						</thead>
 						<tbody>
