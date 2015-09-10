@@ -33,10 +33,29 @@
 				var b = arrumaData(r);
 				return a.toLowerCase().localeCompare(b.toLowerCase());
 			}
+
+			function sortLowerCase(l, r) {
+				return l.toLowerCase().localeCompare(r.toLowerCase());
+			}
+
+			function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
+				return 'Apresentando ' + totalRow + ' doações, de um total de ' + totalRowUnfiltered+ ' doações';
+			}
 		</script>
 
     </head>
     <body>
+    	<script>
+        $(document).ready(function() {
+			$('#sortable-table').datatable({
+				pageSize : Number.MAX_VALUE,
+				sort : [comparaPorData, sortLowerCase],
+				filters : [false, true],
+				filterText : 'Escreva para filtrar... ',
+				counterText	: showCounter
+			});
+		});
+        </script>
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
@@ -96,7 +115,6 @@
                             <tr>
                                 <th> Data e hora </th>
                                 <th> Nome </th>
-                                <th> Sócio </th>
                                 <th> Valor </th>
                                 <th> Forma de Pagamento </th>
                                 <th> Parcelas </th>                                
@@ -109,7 +127,6 @@
                                 <tr>
                                     <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
                                     <td><?= $donation->fullname ?></td>
-                                    <td><?= $donation->associate ?></td>
                                     <td><?= $donation->donated_value ?></td>
                                     <td><?= $donation->payment_type . " " . $donation->cardflag ?></td>
                                     <td><?= $donation->payment_portions ?></td>
