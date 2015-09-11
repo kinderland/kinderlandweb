@@ -439,7 +439,8 @@ class summercamp_model extends CK_Model {
         v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
         v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
         v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
-        p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id
+        p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id,
+        age(c.birth_date) as age
         from summer_camp sc
         join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
         join colonist c on scs.colonist_id = c.colonist_id
@@ -1259,6 +1260,13 @@ class summercamp_model extends CK_Model {
             return $result->lastposition + 1;
         else
             return 1;
+    }
+
+    public function updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3) {
+        $sql = "UPDATE summer_camp_subscription SET roommate1 = ?, roommate2 = ?, roommate3 = ? WHERE summer_camp_id = ? AND colonist_id = ?";
+        $result = $this->execute($this->db, $sql, array($roommate1, $roommate2, $roommate3, intval($summerCampId), intval($colonistId)));
+
+        return $result;
     }
 
 }

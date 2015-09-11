@@ -312,6 +312,7 @@ CREATE TABLE summer_camp_subscription (
     discount integer not null default '0',
     discount_reason_id integer,
     date_payment_limit timestamp without time zone,
+    room_number integer,
     CHECK (discount >= 0 and discount <= 100),
     FOREIGN KEY (discount_reason_id) REFERENCES discount_reason(discount_reason_id) ON DELETE RESTRICT
 );
