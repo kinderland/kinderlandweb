@@ -1155,6 +1155,11 @@ class Reports extends CK_Controller {
 		$data['camp'] = $camp;
 		$data['year'] = $year;
 		
+		if($gender == 'F')
+			$data['pavilhao'] = 'Feminino';
+		else 
+			$data['pavilhao'] = 'Masculino';
+		
 		$summercamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
 		$campId = null;
 		

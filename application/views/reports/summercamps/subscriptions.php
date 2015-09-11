@@ -52,6 +52,7 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
                 		  else { echo $camp;} ?></p>
                 	<p>Ano: <?php echo $year;?></p>
                 	<p>Inscrições com status: <?php echo $status;?></p>
+                	<p>Pavilhão: <?php echo $pavilhao;?></p>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
