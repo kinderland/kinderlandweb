@@ -882,6 +882,7 @@ class Reports extends CK_Controller {
 		$data['year'] = $year;
 		$data['years'] = $years;
 		$data['month'] = $month;
+		$data['type'] = 'campaign_donations';
 		$data['donations'] = $this -> donation_model -> getDonationsDetailed(DONATION_TYPE_ASSOCIATE, $month, $year);
 		$this -> loadReportView("reports/finances/donations", $data);
 	}
@@ -905,6 +906,7 @@ class Reports extends CK_Controller {
 		$data['year'] = $year;
 		$data['years'] = $years;
 		$data['month'] = $month;
+		$data['type'] = 'free_donations';
 		$data['donations'] = $this -> donation_model -> getDonationsDetailed(DONATION_TYPE_FREEDONATION, $month, $year);
 		$this -> loadReportView("reports/finances/donations", $data);
 	}
@@ -1010,6 +1012,67 @@ class Reports extends CK_Controller {
 
 		$data['colonists'] = $colonists;
 		$this -> loadReportView("reports/summercamps/discounts", $data);
+	}
+	
+	public function transactions_expected() {
+		$date = date('Y');
+		
+		$periods = array(0 => "Específico", 1 => $date, 2 => "Janeiro", 3 => "Fevereiro", 4 => "Março", 
+		5 => "Abril", 6 => "Maio", 7 => "Junho", 8 => "Julho", 9 => "Agosto", 10 => "Setembro", 
+		11 => "Outubro", 12 => "Novembro", 13 => "Dezembro");
+		
+		$periodChosen = 'Específico';
+		if (isset($_GET['periodo_f']))
+			$periodChosen = $_GET['periodo_f'];
+		
+		$data['periodo_escolhido'] = $periodChosen;
+		$data['periods'] = $periods;
+		
+		if($periodChosen == "Específico") {
+			if (isset($_GET['periodo_inicial_f'])&&isset($_GET['periodo_final_f'])) {
+				$initialPeriodChosen = $_GET['periodo_inicial_f'];
+				$finalPeriodChosen = $_GET['periodo_final_f'];
+				
+				$data['periodo_inicial_escolhido'] = $initialPeriodChosen;
+				$data['periodo_final_escolhido'] = $finalPeriodChosen;
+			}
+		}
+		
+		$donations = array(0 => "Todas", 1 => "Inscrição Colônia", 2 => "Avulsa", 3 => "Campanha de Sócios");
+		
+		$donationChosen = 'Todas';
+		if (isset($_GET['doacao_f']))
+			$donationChosen = $_GET['doacao_f'];
+		
+		$data['doacao_escolhida'] = $donationChosen;
+		$data['donations'] = $donations;
+		
+		
+		$this -> loadReportView("reports/summercamps/transactions_expected", $data);
+	}
+	
+	public function camps_donations() {
+		$years = array();
+		$start = 2015;
+		$end = date('Y');
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		
+		$month = null;
+		$year = null;
+		if (isset($_GET['mes']) && $_GET['mes'] != 0)
+			$month = $_GET['mes'];
+		if (isset($_GET['ano']) && $_GET['ano'] != 0)
+			$year = $_GET['ano'];
+		
+		$data['year'] = $year;
+		$data['years'] = $years;
+		$data['month'] = $month;
+		$data['type'] = 'camps_donations';
+		$data['donations'] = $this -> donation_model -> getDonationsDetailed(DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION, $month, $year);
+		$this -> loadReportView("reports/finances/donations", $data);	
 	}
 
 }

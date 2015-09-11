@@ -115,6 +115,9 @@
                             <tr>
                                 <th> Data e hora </th>
                                 <th> Nome </th>
+                               <?php if($type != 'campaign_donations') {?>
+                                <th> Sócio </th>
+                               <?php }?>
                                 <th> Valor </th>
                                 <th> Forma de Pagamento </th>
                                 <th> Parcelas </th>                                
@@ -127,6 +130,9 @@
                                 <tr>
                                     <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
                                     <td><?= $donation->fullname ?></td>
+                                   <?php if($type != 'campaign_donations') {?>
+                                	<td><?= $donation->associate ?> </td>
+                               	   <?php }?> 
                                     <td><?= $donation->donated_value ?></td>
                                     <td><?= $donation->payment_type . " " . $donation->cardflag ?></td>
                                     <td><?= $donation->payment_portions ?></td>
