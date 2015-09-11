@@ -54,8 +54,15 @@
                 Administração
             </a>
             <br />
-            <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports"> Relatórios
+            <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports"> 
+                Relatórios
             </a>
+            <!--
+            <br />
+            <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal"> 
+                Quartos
+            </a>
+            -->
         </div>
         <h3>Eventos</h3>
         <div>

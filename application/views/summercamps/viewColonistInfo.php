@@ -58,6 +58,34 @@
 		}
 	}
 
+  function saveChanges(summer_camp_id, colonist_id) {
+    var roommate1 = $("#roommate1").val();
+    var roommate2 = $("#roommate2").val();
+    var roommate3 = $("#roommate3").val();
+
+    var phone1 = $("#phone1").val();
+    var phone2 = $("#phone2").val();
+
+    $.post("<?= $this->config->item('url_link') ?>summercamps/updateInfoPostSubscription",
+            {
+                'colonist_id': colonist_id,
+                'summer_camp_id': summer_camp_id,
+                'roommate1': roommate1,
+                'roommate2': roommate2,
+                'roommate3': roommate3,
+                'phone1': phone1,
+                'phone2': phone2
+            },
+    function (data) {
+        if (data == "true") {
+            alert("Dados atualizados!");
+        } else {
+            alert("Ocorreu um erro ao atualizar o cadastro.");
+        }
+    }
+    );
+  }
+
 
 	$(document).ready(function() {
 		<?php if(isset($noFather)){ ?>
@@ -244,7 +272,7 @@
 
                     <label for="phone2" class="col-lg-3 control-label"> Telefone Secundário: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control phone" disabled placeholder="(ddd) Telefone secundário"
+                        <input type="text" id="phone2" class="form-control phone" placeholder="(ddd) Telefone secundário"
                                name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
                                value="<?php
 							if (!empty($phone2)) {
@@ -566,7 +594,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 1: </label>
                     <div class="col-lg-6">
-                        <input type="text" disabled class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
+                        <input type="text" id="roommate1" class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
                         value="<?php
                                if (!empty($roommate1)) {
                                    echo $roommate1;
@@ -580,7 +608,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 2: </label>
                     <div class="col-lg-6">
-                        <input type="text" disabled class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
+                        <input type="text" id="roommate2" class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
                         value="<?php
                                if (!empty($roommate2)) {
                                    echo $roommate2;
@@ -594,13 +622,19 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 3: </label>
                     <div class="col-lg-6">
-                        <input type="text" disabled class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
+                        <input type="text" id="roommate3" class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
                         value="<?php
                                if (!empty($roommate3)) {
                                    echo $roommate3;
                                }
                                ?>"/>
                     </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                  <button class="btn btn-primary" onclick="saveChanges(<?= $id ?>, <?= $colonistId ?>)"> Salvar alterações </button>
                 </div>
             </div>
 		

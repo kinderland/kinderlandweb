@@ -984,6 +984,113 @@ class SummerCamps extends CK_Controller {
             echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
     }
 
+    public function updateInfoPostSubscription() {
+
+        $colonistId = $_POST["colonist_id"];
+        $summerCampId = $_POST["summer_camp_id"];
+        $roommate1 = $_POST["roommate1"];
+        $roommate2 = $_POST["roommate2"];
+        $roommate3 = $_POST["roommate3"];
+
+        $phone1 = $_POST["phone1"];
+        $phone2 = $_POST["phone2"];
+
+        $camper = $this->summercamp_model->getSummerCampSubscription($colonistId, $summerCampId);
+
+        $this->telephone_model->updatePhone($camper->getPersonId(), $phone1, $phone2);
+
+        $result = $this->summercamp_model->updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3);
+
+        if($result)
+            echo "true";
+        else
+            echo "false";
+
+    }
+
+    public function roomDisposal() {
+        $data = array();
+
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_POST['ano_f']))
+            $year = $_POST['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_POST['colonia_f']))
+            $campChosen = $_POST['colonia_f'];
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $camps[] = $camp -> getCampName();
+            if ($camp -> getCampName() == $campChosen)
+                $campChosenId = $camp -> getCampId();
+        }
+
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+
+
+        if($campChosenId != null && isset($_POST['quarto']) && isset($_POST["pavilhao"])) {
+            $quarto = $_POST['quarto'];
+            $data["quarto"] = $quarto;
+            $pavilhao = $_POST['pavilhao'];
+            $data["pavilhao"] = $pavilhao;
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, 
+                SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId);
+
+            $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+
+            $data["colonists"] = $colonistsSelected;
+        }
+        
+        $this->loadView('summercamps/roomDisposal', $data);
+    }
+
+    public function filterColonists($colonists, $room, $gender){
+        $resultArray = array();
+
+        foreach($colonists as $colonist) {
+            if($colonist->gender == $gender) {
+                if($room < 0)
+                    $resultArray[] = $colonist;
+                else if($room == 0 && ($colonist->room_number == null || $colonist->room_number == 0))
+                    $resultArray[] = $colonist;
+                else if($colonist->room_number == $room) 
+                    $resultArray[] = $colonist;
+                
+            }
+        }
+
+        return $resultArray;
+    }
+
 }
 
 ?>
