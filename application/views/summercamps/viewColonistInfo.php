@@ -631,12 +631,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-lg-6">
-                  <button class="btn btn-primary" onclick="saveChanges(<?= $id ?>, <?= $colonistId ?>)"> Salvar alterações </button>
-                </div>
-            </div>
 		
             <?php if ($summerCamp->isMiniCamp()) { ?>
                 <input type="hidden" name="summerCampMini" value="1"/>
@@ -863,6 +857,12 @@
 
         </form>
         <br />
+         <div class="row">
+                <div class="col-lg-6">
+                  <button class="btn btn-primary" onclick="saveChanges(<?= $id ?>, <?= $colonistId ?>)"> Salvar alterações </button>
+                </div>
+            </div>
+            <br />
         <button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
     </div>
 </div>
