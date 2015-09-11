@@ -475,9 +475,15 @@ class SummerCamps extends CK_Controller {
 
     public function uploadDocument() {
         $this->Logger->info("Starting " . __METHOD__);
-        $data["camp_id"] = $this->input->get('camp_id', TRUE);
-        $data["colonist_id"] = $this->input->get('colonist_id', TRUE);
+        $summerCampId = $this->input->get('camp_id', TRUE);
+        $data["camp_id"] = $summerCampId;
+        $colonistId = $this->input->get('colonist_id', TRUE);
+        $data["colonist_id"] = $colonistId;
         $data["document_type"] = $this->input->get('document_type', TRUE);
+        
+        $status = $this -> summercamp_model -> getColonistStatus($colonistId, $summerCampId);
+        $data['status'] = $status;
+        
         $camper = $this->summercamp_model->getSummerCampSubscription($data["colonist_id"], $data["camp_id"]);
         $validation = $this->validation_model->getColonistValidationInfoObject($data["colonist_id"], $data["camp_id"]);
         if ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN || ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && $validation && !$validation->verifyDocument($data["document_type"]))) {

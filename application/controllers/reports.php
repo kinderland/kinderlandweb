@@ -286,6 +286,70 @@ class Reports extends CK_Controller {
 
 		$this -> loadReportView("reports/summercamps/all_registrations", $data);
 	}
+	
+	public function registrations_deleted() {
+		$data = array();
+		$years = array();
+		$start = 2015;
+		$date = date('Y');
+		$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		while ($campsByYear != null) {
+			$end = $date;
+			$date++;
+			$campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+		}
+		while ($start <= $end) {
+			$years[] = $start;
+			$start++;
+		}
+		$year = null;
+		
+		if (isset($_GET['ano_f']))
+			$year = $_GET['ano_f'];
+		else {
+			$year = date('Y');
+		}
+		
+		$data['ano_escolhido'] = $year;
+		$data['years'] = $years;
+		
+		$allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+		$campsQtd = count($allCamps);
+		$camps = array();
+		$start = $campsQtd;
+		$end = 1;
+		
+		$campChosen = null;
+		
+		if (isset($_GET['colonia_f']))
+			$campChosen = $_GET['colonia_f'];
+		
+		$campChosenId = null;
+		foreach ($allCamps as $camp) {
+			$camps[] = $camp -> getCampName();
+			if ($camp -> getCampName() == $campChosen)
+				$campChosenId = $camp -> getCampId();
+		}
+		
+		$data['colonia_escolhida'] = $campChosen;
+		$data['camps'] = $camps;
+		
+		$genderM = 'M';
+		$genderF = 'F';
+		
+		$countsAssociatedM = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year, 'TRUE', $campChosenId, $genderM);
+		$countsNotAssociatedM = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year, null, $campChosenId, $genderM);
+		$countsAssociatedF = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year, 'TRUE', $campChosenId, $genderF);
+		$countsNotAssociatedF = $this -> summercamp_model -> getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year, null, $campChosenId, $genderF);
+		
+		$countsT = $this -> summercamp_model -> getCountStatusColonistBySummerCampYearAndGender($year, $campChosenId);
+		$data['countsAssociatedM'] = $countsAssociatedM;
+		$data['countsNotAssociatedM'] = $countsNotAssociatedM;
+		$data['countsAssociatedF'] = $countsAssociatedF;
+		$data['countsNotAssociatedF'] = $countsNotAssociatedF;
+		
+		$this -> loadReportView("reports/summercamps/registrations_deleted", $data);
+	}
 
 	public function colonists_byschool() {
 
@@ -1073,6 +1137,60 @@ class Reports extends CK_Controller {
 		$data['type'] = 'camps_donations';
 		$data['donations'] = $this -> donation_model -> getDonationsDetailed(DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION, $month, $year);
 		$this -> loadReportView("reports/finances/donations", $data);	
+	}
+	
+	public function subscriptions() {
+		$camp = $this->input->get('camp', TRUE);
+		$year = $this->input->get('year', TRUE);
+		$status = $this->input->get('status', TRUE);
+		$gender = $this->input->get('gender', TRUE);
+		
+		if(($this->input->get('associated', TRUE)) !== null) {
+			$associated = $this->input->get('associated', TRUE);
+		}
+		else {
+			$associated = null;
+		}
+		
+		$data['camp'] = $camp;
+		$data['year'] = $year;
+		
+		$summercamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+		$campId = null;
+		
+		foreach($summercamps as $summercamp) {
+			if($summercamp -> getCampName() == $camp){
+				$campId = $summercamp -> getCampId();
+				break;
+			}
+		}
+		
+		$colonists = $this -> summercamp_model -> getColonistsDetailedByYearSummerCampAssociationStatusAndGender($year,$status,$gender,$associated,$campId);
+		
+		if($status == '0')
+			$status = 'Pré-inscrição em elaboração';
+		else if($status == '1')
+			$status = 'Pré-inscrição aguardando validação';
+		else if($status == '2')
+			$status = 'Pré-inscrição validada';
+		else if($status == '3')
+			$status = 'Pré-inscrição na fila de espera';
+		else if($status == '4')
+			$status = 'Pré-inscrição aguardando doação';
+		else if($status == '5')
+			$status = 'Inscrito';
+		else if($status == '6')
+			$status = 'Pré-inscrição não validada';
+		else if($status == '-3')
+			$status = 'Cancelado';
+		else if($status == '-2')
+			$status = 'Excluído';
+		else if($status == '-1')
+			$status = 'Desistente';
+		
+		$data['status'] = $status;		
+		$data['colonists'] = $colonists;
+		$this -> loadView("reports/summercamps/subscriptions", $data);
 	}
 
 }

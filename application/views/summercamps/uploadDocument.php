@@ -19,9 +19,9 @@
 		</p>
 		<input type="hidden" name="document_type" value="<?=$document_type ?>" />
 		<br>
-		<input class="btn btn-primary" name="uploadedfile" type="file" />
+		<input  type="file" name="uploadedfile" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
 		<br />
-		<input class="btn btn-primary" type="submit" value="Enviar documento" />
+		<input type="submit" value="Enviar documento" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
 		<?php if(isset($extra)) { ?>
 		<br><br>
 		O último documento enviado tinha o seguinte problema: <?=$extra?>

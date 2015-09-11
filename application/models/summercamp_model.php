@@ -676,6 +676,30 @@ class summercamp_model extends CK_Model {
             return $resultSet;
         }
     }
+    
+    public function getColonistsDetailedByYearSummerCampAssociationStatusAndGender($year,$status,$gender,$associated=null,$summercampId=null) {
+    	$sql = "SELECT c.colonist_id as colonist_id, p.fullname as colonist_name, pr.person_id as responsable_id, 
+				pr.fullname as responsable_name, vrauad.associate as associate, sc.summer_camp_id as camp_id, sc.camp_name as camp_name
+				FROM colonist c INNER JOIN person p on c.person_id = p.person_id
+				INNER JOIN summer_camp_subscription scs on scs.colonist_id = c.colonist_id
+				INNER JOIN summer_camp sc on scs.summer_camp_id = sc.summer_camp_id
+				INNER JOIN person pr on scs.person_user_id = pr.person_id
+				INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = pr.person_id
+				WHERE DATE_PART('YEAR',sc.date_created) = ?
+    			AND p.gender = ?
+				AND scs.situation = ? 
+				AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
+				" . (($summercampId !== null) ? "AND sc.summer_camp_id = ?" : "") . "";
+    	
+   		if($summercampId !== null) {
+   			$resultSet = $this->executeRows($this->db,$sql,array($year,$gender,$status,$summercampId));
+   		}
+   		else {
+   			$resultSet = $this->executeRows($this->db,$sql,array($year,$gender,$status));
+   		}
+   		
+   		return $resultSet;
+    }
 
     public function getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year, $associated, $summerCampId = null, $gender = null) {
         $sql = "select (
