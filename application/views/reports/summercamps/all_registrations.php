@@ -32,7 +32,20 @@
 	src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
 <script type="text/javascript"
 	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
-
+<script type="text/javascript">
+	function showSubReport (camp, year, status, associated, gender) {
+		if(associated != null)
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?camp="+camp+"&year="+year+"&status="+status+"&associated="+associated+"&gender="+gender;
+		else
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?camp="+camp+"&year="+year+"&status="+status+"&gender="+gender;
+		window.open(url, '_blank');
+	}
+</script>
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
 </head>
 <body>
 
@@ -87,47 +100,47 @@
 					<tr>
 							<?php if(!isset($colonia_escolhida)) { $colonia_escolhida = 'Todas';} ?>
 							<th align="right">Pré-inscrições em elaboração</th>
-						<td align='right'><?php if($countsAssociatedF->elaboracao !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=0&associated=true&gender=F"> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao; ?></td>
-						<td align='right'><?php if($countsNotAssociatedF->elaboracao !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=0&gender=F"> <?php echo $countsNotAssociatedF->elaboracao; ?> </a><?php } else echo $countsNotAssociatedF->elaboracao; ?></td>
-						<td align='right'><?php if($countsAssociatedM->elaboracao !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=0&associated=true&gender=M"> <?php echo $countsAssociatedM->elaboracao; ?> </a><?php } else echo $countsAssociatedM->elaboracao; ?></td>
-						<td align='right'><?php if($countsNotAssociatedM->elaboracao !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=0&gender=M"> <?php echo $countsNotAssociatedM->elaboracao; ?> </a><?php } else echo $countsNotAssociatedM->elaboracao; ?></td>
+						<td align='right'><?php if($countsAssociatedF->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, '', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedF->elaboracao; ?></td>
+						<td align='right'><?php if($countsAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedM->elaboracao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, '', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedM->elaboracao; ?></td>
 					</tr>
 					<tr>
 						<th align="right">Pré-inscrições aguardando validação</th>
-						<td align='right'><?php if($countsAssociatedF->aguardando_validacao !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=1&associated=true&gender=F"> <?php echo $countsAssociatedF->aguardando_validacao; ?> </a><?php } else echo $countsAssociatedF->aguardando_validacao; ?></td>
-						<td align='right'><?php if($countsNotAssociatedF->aguardando_validacao !=0) {?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=1&gender=F"> <?php echo $countsNotAssociatedF->aguardando_validacao; ?> </a><?php } else echo $countsNotAssociatedF->aguardando_validacao; ?></td>
-						<td align='right'><?php if($countsAssociatedM->aguardando_validacao !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=1&associated=true&gender=M"> <?php echo $countsAssociatedM->aguardando_validacao; ?> </a><?php } else echo $countsAssociatedM->aguardando_validacao; ?></td>
-						<td align='right'><?php if($countsNotAssociatedM->aguardando_validacao !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=1&gender=M"> <?php echo $countsNotAssociatedM->aguardando_validacao; ?> </a><?php } else echo $countsNotAssociatedM->aguardando_validacao; ?></td>
+						<td align='right'><?php if($countsAssociatedF->aguardando_validacao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->aguardando_validacao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->aguardando_validacao !=0) {?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, '', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedF->aguardando_validacao; ?></td>
+						<td align='right'><?php if($countsAssociatedM->aguardando_validacao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedM->aguardando_validacao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->aguardando_validacao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, '', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedM->aguardando_validacao; ?></td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Pré-inscrições não validadas</th>
-						<td align='right'><?php if($countsAssociatedF->nao_validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=6&associated=true&gender=F"> <?php echo $countsAssociatedF->nao_validada; ?> </a><?php } else echo $countsAssociatedF->nao_validada; ?></td>
-						<td align='right'><?php if($countsNotAssociatedF->nao_validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=6&gender=F"> <?php echo $countsNotAssociatedF->nao_validada; ?> </a><?php } else echo $countsNotAssociatedF->nao_validada; ?></td>
-						<td align='right'><?php if($countsAssociatedM->nao_validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=6&associated=true&gender=M"> <?php echo $countsAssociatedM->nao_validada; ?> </a><?php } else echo $countsAssociatedM->nao_validada; ?></td>
-						<td align='right'><?php if($countsNotAssociatedM->nao_validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=6&gender=M"> <?php echo $countsNotAssociatedM->nao_validada; ?> </a><?php } else echo $countsNotAssociatedM->nao_validada; ?></td>
+						<td align='right'><?php if($countsAssociatedF->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->nao_validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, '', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedF->nao_validada; ?></td>
+						<td align='right'><?php if($countsAssociatedM->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedM->nao_validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, '', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedM->nao_validada; ?></td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Pré-inscrições validadas</th>
-						<td align='right'><?php if($countsAssociatedF->validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=2&associated=true&gender=F"> <?php echo $countsAssociatedF->validada; ?> </a><?php } else echo $countsAssociatedF->validada; ?></td>
-						<td align='right'><?php if($countsNotAssociatedF->validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=2&gender=F"> <?php echo $countsNotAssociatedF->validada; ?> </a><?php } else echo $countsNotAssociatedF->validada; ?></td>
-						<td align='right'><?php if($countsAssociatedM->validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=2&associated=true&gender=M"> <?php echo $countsAssociatedM->validada; ?> </a><?php } else echo $countsAssociatedM->validada; ?></td>
-						<td align='right'><?php if($countsNotAssociatedM->validada !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $camp?>&year=<?= $year?>&status=2&gender=M"> <?php echo $countsNotAssociatedM->validada; ?> </a><?php } else echo $countsNotAssociatedM->validada; ?></td>
+						<td align='right'><?php if($countsAssociatedF->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, '', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedF->validada; ?></td>
+						<td align='right'><?php if($countsAssociatedM->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedM->validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, '', 'M')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedM->validada; ?></td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Pré-inscrições na fila de espera</th>

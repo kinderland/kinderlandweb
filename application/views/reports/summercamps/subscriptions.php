@@ -48,11 +48,11 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
         
 <div class = "row">
                 <div class="col-lg-12 middle-content">
-                	<p><?php if($camp=='Todas'){ echo 'Todas as Colônias'; }
-                		  else { echo $camp;} ?></p>
-                	<p>Ano: <?php echo $year;?></p>
-                	<p>Inscrições com status: <?php echo $status;?></p>
-                	<p>Pavilhão: <?php echo $pavilhao;?></p>
+                	<h2><b> Sub-relatório de Estatísticas de Inscrições <?php $type?></b></h2>
+                	<p><b><?php if($camp=='Todas'){ echo 'Todas as Colônias'; }
+                		  else { echo $camp;} ?></b></p>
+                	<p><b>Inscrições com status: <?php echo $status;?></b></p>
+                	<p><b>Pavilhão: <?php echo $pavilhao;?></b></p>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
