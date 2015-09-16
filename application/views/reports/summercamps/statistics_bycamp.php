@@ -99,9 +99,9 @@
 								$countsFI[$i] = $countsAssociatedF[$i]->inscrito + $countsNotAssociatedF[$i]->inscrito;
 								$countsMI[$i] = $countsAssociatedM[$i]->inscrito + $countsNotAssociatedM[$i]->inscrito;
 							?>
-							<td align='right'><?php if($countsFI[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 5, 'true', 'F')" target="blank"
+							<td align='right'><?php if($countsFI[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 5, '', 'F')" target="blank"
 							> <?php echo $countsFI[$i]; ?></a><?php } else echo $countsFI[$i]; ?></td>
-							<td align='right'><?php if($countsMI[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 5, 'true', 'M')" target="blank"
+							<td align='right'><?php if($countsMI[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 5, '', 'M')" target="blank"
 							> <?php echo $countsMI[$i]; ?></a><?php } else echo $countsMI[$i]; ?></td>
 							<?php $i++; } ?>							
 						</tr>
@@ -115,9 +115,9 @@
 								$countsFA[$i] = $countsAssociatedF[$i]->aguardando_pagamento + $countsNotAssociatedF[$i]->aguardando_pagamento;
 								
 							?>
-							<td align='right'><?php if($countsFA[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 4, 'true', 'F')" target="blank"
+							<td align='right'><?php if($countsFA[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 4, '', 'F')" target="blank"
 							> <?php echo $countsFA[$i]; ?></a><?php } else echo $countsFA[$i]; ?></td>
-							<td align='right'><?php if($countsMA[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 4, 'true', 'M')" target="blank"
+							<td align='right'><?php if($countsMA[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 4, '', 'M')" target="blank"
 							> <?php echo $countsMA[$i]; ?></a><?php } else echo $countsMA[$i]; ?></td>
 							<?php $i++; } ?>
 						</tr>

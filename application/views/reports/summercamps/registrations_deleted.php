@@ -102,33 +102,33 @@
 							<th align="right">Pré-inscrições Canceladas</th>
 						<td align='right'><?php if($countsAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'true', 'F')" target="blank"
 							><?php echo $countsAssociatedF->cancelado; ?></a><?php } else echo $countsAssociatedF->cancelado; ?></td>
-						<td align='right'><?php if($countsNotAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, '', 'F')" target="blank"
+						<td align='right'><?php if($countsNotAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'false', 'F')" target="blank"
 							> <?php echo $countsNotAssociatedF->cancelado; ?></a><?php } else echo $countsNotAssociatedF->cancelado; ?> </td>
 						<td align='right'><?php if($countsAssociatedM->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'true', 'M')" target="blank"
 							> <?php echo $countsAssociatedM->cancelado; ?></a><?php } else echo $countsAssociatedM->cancelado; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedM->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, '', 'M')" target="blank"
+						<td align='right'><?php if($countsNotAssociatedM->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->cancelado; ?></a><?php } else echo $countsNotAssociatedM->cancelado; ?> </td>
 					</tr>
 					<tr>
 						<th align="right">Pré-inscrições Desistentes</th>
 						<td align='right'><?php if($countsAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->desistente; ?></a><?php } else echo $countsAssociatedF->desistente; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, '', 'F')" target="blank"
+						<td align='right'><?php if($countsNotAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'false', 'F')" target="blank"
 							> <?php echo $countsNotAssociatedF->desistente; ?></a><?php } else echo $countsNotAssociatedF->desistente; ?> </td>
 						<td align='right'><?php if($countsAssociatedM->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'true', 'M')" target="blank"
 							> <?php echo $countsAssociatedM->desistente; ?></a><?php } else echo $countsAssociatedM->desistente; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedM->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, '', 'M')" target="blank"
+						<td align='right'><?php if($countsNotAssociatedM->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->desistente; ?></a><?php } else echo $countsNotAssociatedM->desistente; ?> </td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Pré-inscrições Excluídas</th>
 						<td align='right'><?php if($countsAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->excluido; ?></a><?php } else echo $countsAssociatedF->excluido; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, '', 'F')" target="blank"
+						<td align='right'><?php if($countsNotAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'false', 'F')" target="blank"
 							> <?php echo $countsNotAssociatedF->excluido; ?></a><?php } else echo $countsNotAssociatedF->excluido; ?> </td>
 						<td align='right'><?php if($countsAssociatedM->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'true', 'M')" target="blank"
 							> <?php echo $countsAssociatedM->excluido; ?></a><?php } else echo $countsAssociatedM->excluido; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedM->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, '', 'M')" target="blank"
+						<td align='right'><?php if($countsNotAssociatedM->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->excluido; ?></a><?php } else echo $countsNotAssociatedM->excluido; ?> </td>
 					</tr>
 					<tr>

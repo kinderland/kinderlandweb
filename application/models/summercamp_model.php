@@ -689,7 +689,7 @@ class summercamp_model extends CK_Model {
 				WHERE DATE_PART('YEAR',sc.date_created) = ?
     			AND p.gender = ?
 				AND scs.situation = ? 
-				AND vrauad.associate " . (($associated) ? "!" : "") . "= 'não sócio'
+				" . (($associated) ? "" . (($associated!='true') ? "AND vrauad.associate = 'não sócio'" : "AND vrauad.associate != 'não sócio'") . "" : "") . "
 				" . (($summercampId !== null) ? "AND sc.summer_camp_id = ?" : "") . "";
     	
    		if($summercampId !== null) {
