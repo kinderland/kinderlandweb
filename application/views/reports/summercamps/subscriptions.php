@@ -48,9 +48,10 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
         
 <div class = "row">
                 <div class="col-lg-12 middle-content">
-                	<h2><b> Sub-relatório de Estatísticas de Inscrições <?php $type?></b></h2>
+                	<h2><b> Sub-relatório de Estatísticas de Inscrições <?php if($type == '1') { echo 'Descartadas';} 
+                	else if($type == '2') { echo 'Por Turma';} else {} ?></b></h2>
                 	<p><b><?php if($camp=='Todas'){ echo 'Todas as Colônias'; }
-                		  else { echo $camp;} ?></b></p>
+                		  else { echo 'Colônia: '; echo $camp;} ?></b></p>
                 	<p><b>Inscrições com status: <?php echo $status;?></b></p>
                 	<p><b>Pavilhão: <?php echo $pavilhao;?></b></p>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">

@@ -33,6 +33,20 @@
 	src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
 <script type="text/javascript"
 	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+<script type="text/javascript">
+	function showSubReport (camp, year, status, associated, gender) {
+		if(associated != null)
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?type=2&camp="+camp+"&year="+year+"&status="+status+"&associated="+associated+"&gender="+gender;
+		else
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?type=2&camp="+camp+"&year="+year+"&status="+status+"&gender="+gender;
+		window.open(url, '_blank');
+	}
+</script>
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
 
 </head>
 <body>
@@ -82,9 +96,13 @@
 								if($i == 3){
 									break;
 								}
+								$countsFI[$i] = $countsAssociatedF[$i]->inscrito + $countsNotAssociatedF[$i]->inscrito;
+								$countsMI[$i] = $countsAssociatedM[$i]->inscrito + $countsNotAssociatedM[$i]->inscrito;
 							?>
-							<td align='right'> <?php echo $countsFI[$i] = $countsAssociatedF[$i]->inscrito + $countsNotAssociatedF[$i]->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsMI[$i] = $countsAssociatedM[$i]->inscrito + $countsNotAssociatedM[$i]->inscrito; ?> </td>
+							<td align='right'><?php if($countsFI[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 5, 'true', 'F')" target="blank"
+							> <?php echo $countsFI[$i]; ?></a><?php } else echo $countsFI[$i]; ?></td>
+							<td align='right'><?php if($countsMI[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 5, 'true', 'M')" target="blank"
+							> <?php echo $countsMI[$i]; ?></a><?php } else echo $countsMI[$i]; ?></td>
 							<?php $i++; } ?>							
 						</tr>
 						<tr>
@@ -93,9 +111,14 @@
 								if($i == 3){
 									break;
 								}
+								$countsMA[$i] = $countsAssociatedM[$i]->aguardando_pagamento + $countsNotAssociatedM[$i]->aguardando_pagamento;
+								$countsFA[$i] = $countsAssociatedF[$i]->aguardando_pagamento + $countsNotAssociatedF[$i]->aguardando_pagamento;
+								
 							?>
-							<td align='right'> <?php echo $countsFA[$i] = $countsAssociatedF[$i]->aguardando_pagamento + $countsNotAssociatedF[$i]->aguardando_pagamento; ?> </td>
-							<td align='right'> <?php echo $countsMA[$i] = $countsAssociatedM[$i]->aguardando_pagamento + $countsNotAssociatedM[$i]->aguardando_pagamento; ?> </td>
+							<td align='right'><?php if($countsFA[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 4, 'true', 'F')" target="blank"
+							> <?php echo $countsFA[$i]; ?></a><?php } else echo $countsFA[$i]; ?></td>
+							<td align='right'><?php if($countsMA[$i] !=0){?><a onclick="showSubReport('<?= $camp?>', '<?= $year?>', 4, 'true', 'M')" target="blank"
+							> <?php echo $countsMA[$i]; ?></a><?php } else echo $countsMA[$i]; ?></td>
 							<?php $i++; } ?>
 						</tr>
 						<tr>

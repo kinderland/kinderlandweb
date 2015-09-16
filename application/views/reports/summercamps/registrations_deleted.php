@@ -32,7 +32,20 @@
 	src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
 <script type="text/javascript"
 	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
-
+<script type="text/javascript">
+	function showSubReport (camp, year, status, associated, gender) {
+		if(associated != null)
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?type=1&camp="+camp+"&year="+year+"&status="+status+"&associated="+associated+"&gender="+gender;
+		else
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?type=1&camp="+camp+"&year="+year+"&status="+status+"&gender="+gender;
+		window.open(url, '_blank');
+	}
+</script>
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
 </head>
 <body>
 
@@ -87,36 +100,36 @@
 					<tr>
 							<?php if(!isset($colonia_escolhida)) { $colonia_escolhida = 'Todas';} ?>
 							<th align="right">Pré-inscrições Canceladas</th>
-						<td align='right'><?php if($countsAssociatedF->cancelado !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-3&associated=true&gender=F"> <?php echo $countsAssociatedF->cancelado; ?></a><?php } else echo $countsAssociatedF->cancelado; ?></td>
-						<td align='right'><?php if($countsNotAssociatedF->cancelado !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-3&gender=F"> <?php echo $countsNotAssociatedF->cancelado; ?></a><?php } else echo $countsNotAssociatedF->cancelado; ?> </td>
-						<td align='right'><?php if($countsAssociatedM->cancelado !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-3&associated=true&gender=M"> <?php echo $countsAssociatedM->cancelado; ?></a><?php } else echo $countsAssociatedM->cancelado; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedM->cancelado !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-3&gender=M"> <?php echo $countsNotAssociatedM->cancelado; ?></a><?php } else echo $countsNotAssociatedM->cancelado; ?> </td>
+						<td align='right'><?php if($countsAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'true', 'F')" target="blank"
+							><?php echo $countsAssociatedF->cancelado; ?></a><?php } else echo $countsAssociatedF->cancelado; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, '', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->cancelado; ?></a><?php } else echo $countsNotAssociatedF->cancelado; ?> </td>
+						<td align='right'><?php if($countsAssociatedM->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->cancelado; ?></a><?php } else echo $countsAssociatedM->cancelado; ?> </td>
+						<td align='right'><?php if($countsNotAssociatedM->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, '', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->cancelado; ?></a><?php } else echo $countsNotAssociatedM->cancelado; ?> </td>
 					</tr>
 					<tr>
 						<th align="right">Pré-inscrições Desistentes</th>
-						<td align='right'><?php if($countsAssociatedF->desistente !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-1&associated=true&gender=F"> <?php echo $countsAssociatedF->desistente; ?></a><?php } else echo $countsAssociatedF->desistente; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedF->desistente !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-1&gender=F"> <?php echo $countsNotAssociatedF->desistente; ?></a><?php } else echo $countsNotAssociatedF->desistente; ?> </td>
-						<td align='right'><?php if($countsAssociatedM->desistente !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-1&associated=true&gender=M"> <?php echo $countsAssociatedM->desistente; ?></a><?php } else echo $countsAssociatedM->desistente; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedM->desistente !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-1&gender=M"> <?php echo $countsNotAssociatedM->desistente; ?></a><?php } else echo $countsNotAssociatedM->desistente; ?> </td>
+						<td align='right'><?php if($countsAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->desistente; ?></a><?php } else echo $countsAssociatedF->desistente; ?> </td>
+						<td align='right'><?php if($countsNotAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, '', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->desistente; ?></a><?php } else echo $countsNotAssociatedF->desistente; ?> </td>
+						<td align='right'><?php if($countsAssociatedM->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->desistente; ?></a><?php } else echo $countsAssociatedM->desistente; ?> </td>
+						<td align='right'><?php if($countsNotAssociatedM->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, '', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->desistente; ?></a><?php } else echo $countsNotAssociatedM->desistente; ?> </td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Pré-inscrições Excluídas</th>
-						<td align='right'><?php if($countsAssociatedF->excluido !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-2&associated=true&gender=F"> <?php echo $countsAssociatedF->excluido; ?></a><?php } else echo $countsAssociatedF->excluido; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedF->excluido !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-2&gender=F"> <?php echo $countsNotAssociatedF->excluido; ?></a><?php } else echo $countsNotAssociatedF->excluido; ?> </td>
-						<td align='right'><?php if($countsAssociatedM->excluido !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-2&associated=true&gender=M"> <?php echo $countsAssociatedM->excluido; ?></a><?php } else echo $countsAssociatedM->excluido; ?> </td>
-						<td align='right'><?php if($countsNotAssociatedM->excluido !=0){?><a target="blank"
-							href="<?= $this->config->item('url_link'); ?>reports/subscriptions?camp=<?= $colonia_escolhida?>&year=<?= $year?>&status=-2&gender=M"> <?php echo $countsNotAssociatedM->excluido; ?></a><?php } else echo $countsNotAssociatedM->excluido; ?> </td>
+						<td align='right'><?php if($countsAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->excluido; ?></a><?php } else echo $countsAssociatedF->excluido; ?> </td>
+						<td align='right'><?php if($countsNotAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, '', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->excluido; ?></a><?php } else echo $countsNotAssociatedF->excluido; ?> </td>
+						<td align='right'><?php if($countsAssociatedM->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->excluido; ?></a><?php } else echo $countsAssociatedM->excluido; ?> </td>
+						<td align='right'><?php if($countsNotAssociatedM->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, '', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->excluido; ?></a><?php } else echo $countsNotAssociatedM->excluido; ?> </td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Total</th>

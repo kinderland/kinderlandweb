@@ -1142,7 +1142,6 @@ class Reports extends CK_Controller {
 	public function subscriptions() {
 		$camp = $this->input->get('camp', TRUE);
 		$year = $this->input->get('year', TRUE);
-		$type = $this->input->get('type', TRUE);
 		$status = $this->input->get('status', TRUE);
 		$gender = $this->input->get('gender', TRUE);
 		
@@ -1151,6 +1150,13 @@ class Reports extends CK_Controller {
 		}
 		else {
 			$associated = null;
+		}
+		
+		if(($this->input->get('type', TRUE)) !== null) {
+			$type = $this->input->get('type', TRUE);
+		}
+		else {
+			$type = null;
 		}
 		
 		$data['camp'] = $camp;
