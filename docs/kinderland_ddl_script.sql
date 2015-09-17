@@ -686,7 +686,7 @@ left outer join summer_camp_subscription scs on scs.person_user_id = a.person_id
 group by p.person_id);
 
 CREATE OR REPLACE VIEW v_colonists_with_responsables_not_parents AS
-		(SELECT p.fullname Colonist,p1.fullname as Responsable, DATE_PART('YEAR',sc.date_created) as Ano, c.person_id as Colonist_id, scs.person_user_id as Responsable_id, sc.camp_name as camp_name, sc.summer_camp_id as camp_id  FROM colonist c
+		(SELECT p.fullname Colonist,p1.fullname as Responsable, DATE_PART('YEAR',sc.date_created) as Ano, c.colonist_id as Colonist_id, scs.person_user_id as Responsable_id, sc.camp_name as camp_name, sc.summer_camp_id as camp_id  FROM colonist c
 		INNER JOIN summer_camp_subscription scs on c.colonist_id = scs.colonist_id
 		INNER JOIN summer_camp sc on sc.summer_camp_id = scs.summer_camp_id
 		INNER JOIN person p on p.person_id = c.person_id

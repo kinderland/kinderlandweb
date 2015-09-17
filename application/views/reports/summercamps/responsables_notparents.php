@@ -85,7 +85,7 @@
                              foreach ($colonists as $colonist) {
                           ?>  
 						<tr>
-							<td><a id="<?= $colonist -> colonist ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> colonist_id ?>"><?= $colonist -> colonist ?></a></td>
+							<td><a id="<?= $colonist -> colonist ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> camp_id ?>"><?= $colonist -> colonist ?></a></td>
 							<td><?= $colonist -> camp_name ?></td>
                             <td><a id="<?= $colonist -> responsable ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> responsable_id ?>"><?= $colonist -> responsable ?></a></td>
                         </tr>

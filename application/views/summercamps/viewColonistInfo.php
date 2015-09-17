@@ -272,7 +272,7 @@
 
                     <label for="phone2" class="col-lg-3 control-label"> Telefone Secundário: </label>
                     <div class="col-lg-3">
-                        <input type="text" id="phone2" class="form-control phone" placeholder="(ddd) Telefone secundário"
+                        <input type="text" id="phone2" class="form-control phone" <?php if($type!=null){ echo 'disabled';} ?> placeholder="(ddd) Telefone secundário"
                                name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
                                value="<?php
 							if (!empty($phone2)) {
@@ -594,7 +594,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 1: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate1" class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
+                        <input type="text" id="roommate1" <?php if($type!=null){ echo 'disabled';} ?> class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
                         value="<?php
                                if (!empty($roommate1)) {
                                    echo $roommate1;
@@ -608,7 +608,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 2: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate2" class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
+                        <input type="text" id="roommate2" <?php if($type!=null){ echo 'disabled';} ?> class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
                         value="<?php
                                if (!empty($roommate2)) {
                                    echo $roommate2;
@@ -622,7 +622,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 3: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate3" class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
+                        <input type="text" id="roommate3" <?php if($type!=null){ echo 'disabled';} ?> class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
                         value="<?php
                                if (!empty($roommate3)) {
                                    echo $roommate3;
@@ -857,6 +857,9 @@
 
         </form>
         <br />
+        <?php if($type!=null){ ?>
+        	<button class="btn btn-warning" class="button" onclick="self.close()" value="Fechar">Fechar</button>
+       	<?php } else { ?>
          <div class="row">
                 <div class="col-lg-6">
                   <button class="btn btn-primary" onclick="saveChanges(<?= $id ?>, <?= $colonistId ?>)"> Salvar alterações </button>
@@ -864,5 +867,6 @@
             </div>
             <br />
         <button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
+    	<?php } ?>
     </div>
 </div>

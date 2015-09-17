@@ -568,6 +568,15 @@ class Admin extends CK_Controller {
 
     public function viewColonistInfo() {
         $this->Logger->info("Starting " . __METHOD__);
+        
+        if(($this->input->get('type', TRUE)) !== null) {
+        	$type = $this->input->get('type', TRUE);
+        }
+        else {
+        	$type = null;
+        }
+        
+        $data['type'] = $type;
         $colonistId = $this->input->get('colonistId', TRUE);
         $summerCampId = $this->input->get('summerCampId', TRUE);
         $camper = $this->summercamp_model->getSummerCampSubscription($colonistId, $summerCampId);

@@ -255,32 +255,12 @@
 					style="max-width: 600px;">
 
 					<tr>
-						<th></th>
-						<th>Sócios</th>
-						<th>Não Sócios</th>
-						<th>Total</th>
-					</tr>
-					<tr>
-						<th align="right">Potencial de Inscritos</th>
-						<td width="60px" align='right'> <?php echo $potInscritosAssociated = $countsAssociatedT->aguardando_pagamento 
-						+ $countsAssociatedT->inscrito; ?></td>
-						<td width="60px" align='right'> <?php echo $potInscritosNotAssociated = $countsNotAssociatedT->aguardando_pagamento 
-						+ $countsNotAssociatedT->inscrito; ?></td>
-						<td width="60px" align='right'> <?php echo $potInscritos = $countsT->aguardando_pagamento 
-						+ $countsT->inscrito; ?></td>
+						<th align="right"><p>Potencial de Inscritos</p> <p>(Inscritos + Aguardando Pagamento)</p> </th>
+						<td width="60px" align='center'><br><p> <?php echo $potInscritos = $countsT->aguardando_pagamento 
+						+ $countsT->inscrito; ?> </p></td>
 					</tr>
 					<tr>
 						<th align="right">Porcentagem de Inscritos</th>
-						<td width="60px" align='right'><?php 
-						if($potInscritosAssociated)
-							echo number_format(($countsAssociatedT->inscrito/$potInscritosAssociated)*100,1);
-						 else echo "0.0";
-						 echo "%"; ?>  </td>
-						<td width="60px" align='right'><?php 
-						if($potInscritosNotAssociated)
-							echo number_format(($countsNotAssociatedT->inscrito/$potInscritosNotAssociated)*100,1);
-						 else echo "0.0";
-						 echo "%"; ?>  </td>
 						<td width="60px" align='right'><?php 
 						if($potInscritos)
 							echo number_format(($countsT->inscrito/$potInscritos)*100,1);

@@ -148,7 +148,7 @@
                             foreach ($colonists as $colonist) {
                                 ?>
                                 <tr>
-                                    <td><a id="<?= $colonist -> colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> camp_id ?>"><?php echo $colonist -> colonist_name; ?></a></td>
+                                    <td><a id="<?= $colonist -> colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> camp_id ?>"><?php echo $colonist -> colonist_name; ?></a></td>
                                     <td><a id="<?= $colonist -> responsable_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> responsable_id ?>"><?php echo $colonist -> responsable_name; ?></a></td>
                                     <td><?php echo $colonist->discount; echo "%";?></td>
                                     <td><?php echo $colonist->discount_reason;?></td>
