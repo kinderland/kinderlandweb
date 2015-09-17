@@ -155,7 +155,7 @@
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Pré-inscrições aguardando
-							pagamento</th>
+							doação</th>
 						<td align='right'><?php if($countsAssociatedF->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 4, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->aguardando_pagamento; ?></a><?php } else echo $countsAssociatedF->aguardando_pagamento; ?></td>
 						<td align='right'><?php if($countsNotAssociatedF->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 4, 'false', 'F')" target="blank"
@@ -177,64 +177,6 @@
 							> <?php echo $countsNotAssociatedM->inscrito; ?></a><?php } else echo $countsNotAssociatedM->inscrito; ?></td>
 					</tr>
 					<tr>
-						<th align="right" width='200px'>Total</th>
-						<td align='right'> <?php echo $countsAssociatedF->inscrito + $countsAssociatedF->aguardando_pagamento + $countsAssociatedF->fila_espera 
-	                                + $countsAssociatedF->validada + $countsAssociatedF->nao_validada + $countsAssociatedF->aguardando_validacao 
-	                                + $countsAssociatedF->elaboracao; ?> 
-	                                </td>
-						<td align='right'> <?php echo $countsNotAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento + $countsNotAssociatedF->fila_espera 
-	                                + $countsNotAssociatedF->validada + $countsNotAssociatedF->nao_validada + $countsNotAssociatedF->aguardando_validacao 
-	                                + $countsNotAssociatedF->elaboracao; ?> 
-	                                </td>
-						<td align='right'> <?php echo $countsAssociatedM->inscrito + $countsAssociatedM->aguardando_pagamento + $countsAssociatedM->fila_espera 
-	                                + $countsAssociatedM->validada + $countsAssociatedM->nao_validada + $countsAssociatedM->aguardando_validacao 
-	                                + $countsAssociatedM->elaboracao; ?> 
-	                                </td>
-						<td align='right'> <?php echo $countsNotAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento + $countsNotAssociatedM->fila_espera 
-	                                + $countsNotAssociatedM->validada + $countsNotAssociatedM->nao_validada + $countsNotAssociatedM->aguardando_validacao 
-	                                + $countsNotAssociatedM->elaboracao; ?> 
-	                                </td>
-					</tr>
-					<tr>
-						<th align="right" width='200px'>Porcentagem de Inscritos</th>
-						<td align='right'> <?php 
-									$countTotalAssociatedF = $countsAssociatedF->inscrito + $countsAssociatedF->aguardando_pagamento + $countsAssociatedF->fila_espera 
-	                                + $countsAssociatedF->validada + $countsAssociatedF->nao_validada + $countsAssociatedF->aguardando_validacao 
-	                                + $countsAssociatedF->elaboracao;
-									
-									if($countTotalAssociatedF) echo number_format(($countsAssociatedF->inscrito/$countTotalAssociatedF)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-						<td align='right'> <?php 
-									$countTotalNotAssociatedF = $countsNotAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento + $countsNotAssociatedF->fila_espera 
-	                                + $countsNotAssociatedF->validada + $countsNotAssociatedF->nao_validada + $countsNotAssociatedF->aguardando_validacao 
-	                                + $countsNotAssociatedF->elaboracao;
-									
-									if($countTotalNotAssociatedF) echo number_format(($countsNotAssociatedF->inscrito/$countTotalNotAssociatedF)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-						<td align='right'> <?php 
-									$countTotalAssociatedM = $countsAssociatedM ->inscrito + $countsAssociatedM->aguardando_pagamento + $countsAssociatedM->fila_espera 
-	                                + $countsAssociatedM->validada + $countsAssociatedM->nao_validada + $countsAssociatedM->aguardando_validacao 
-	                                + $countsAssociatedM->elaboracao;
-									
-									if($countTotalAssociatedM) echo number_format(($countsAssociatedM->inscrito/$countTotalAssociatedM)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-						<td align='right'> <?php 
-									$countTotalNotAssociatedM = $countsNotAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento + $countsNotAssociatedM->fila_espera 
-	                                + $countsNotAssociatedM->validada + $countsNotAssociatedM->nao_validada + $countsNotAssociatedM->aguardando_validacao 
-	                                + $countsNotAssociatedM->elaboracao;
-									
-									if($countTotalNotAssociatedM) echo number_format(($countsNotAssociatedM->inscrito/$countTotalNotAssociatedM)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-					</tr>
-					<tr>
 						<th align="right">Vagas Disponíveis</th>
 						<td colspan="2"> <?php echo $vacancyFemale - ($countsAssociatedF->aguardando_pagamento 
 						+ $countsAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento 
@@ -250,9 +192,9 @@
 					
 					
 					</tr>
-				</table>
+				<!-- </table>
 				<table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 600px;">
+					style="max-width: 400px;">
 
 					<tr>
 						<th align="right"><p>Potencial de Inscritos</p> <p>(Inscritos + Aguardando Pagamento)</p> </th>
@@ -267,7 +209,7 @@
 						 else echo "0.0";
 						 echo "%"; ?>  </td>
 					</tr>
-				</table>
+				</table> -->
 			</div>
 		</div>
 	</div>
