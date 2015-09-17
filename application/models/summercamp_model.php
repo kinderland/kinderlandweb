@@ -473,7 +473,8 @@ class summercamp_model extends CK_Model {
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
 		v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
 		v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
-		p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id
+		p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id,
+        p.gender as colonist_gender, age(c.birth_date) as age
 		from summer_camp sc
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 		join colonist c on scs.colonist_id = c.colonist_id
@@ -1267,6 +1268,31 @@ class summercamp_model extends CK_Model {
         $result = $this->execute($this->db, $sql, array($roommate1, $roommate2, $roommate3, intval($summerCampId), intval($colonistId)));
 
         return $result;
+    }
+
+    public function updateRoomNumber($colonistId, $summerCampId, $roomNumber) {
+        $sql = "UPDATE summer_camp_subscription SET room_number = ? WHERE summer_camp_id = ? AND colonist_id = ?";
+        $result = $this->execute($this->db, $sql, array(intval($roomNumber), intval($summerCampId), intval($colonistId)));
+
+        return $result;
+    }
+
+    public function getColonistsToDistributeInRooms($summerCampId, $gender) {
+        $sql = "SELECT *, date_part('year',age(c.birth_date)) as age
+                FROM summer_camp_subscription scs
+                INNER JOIN colonist c on c.colonist_id = scs.colonist_id
+                INNER JOIN person p on p.person_id = c.person_id
+                WHERE summer_camp_id = ? AND situation = ?
+                AND p.gender = ?
+                ORDER BY age";
+        $resultSet = $this->executeRowsNoLog($this->db, $sql, array(intval($summerCampId), 
+                        SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $gender));
+
+        if(!$resultSet)
+            return array();
+
+        return $resultSet;
+
     }
 
 }

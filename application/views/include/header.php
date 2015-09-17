@@ -20,6 +20,9 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.widgets.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
+        
 
     </head>
     <body>
