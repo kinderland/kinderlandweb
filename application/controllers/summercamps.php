@@ -480,10 +480,10 @@ class SummerCamps extends CK_Controller {
         $colonistId = $this->input->get('colonist_id', TRUE);
         $data["colonist_id"] = $colonistId;
         $data["document_type"] = $this->input->get('document_type', TRUE);
-        
-        $status = $this -> summercamp_model -> getColonistStatus($colonistId, $summerCampId);
+
+        $status = $this->summercamp_model->getColonistStatus($colonistId, $summerCampId);
         $data['status'] = $status;
-        
+
         $camper = $this->summercamp_model->getSummerCampSubscription($data["colonist_id"], $data["camp_id"]);
         $validation = $this->validation_model->getColonistValidationInfoObject($data["colonist_id"], $data["camp_id"]);
         if ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN || ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && $validation && !$validation->verifyDocument($data["document_type"]))) {
@@ -1007,11 +1007,10 @@ class SummerCamps extends CK_Controller {
 
         $result = $this->summercamp_model->updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3);
 
-        if($result)
+        if ($result)
             echo "true";
         else
             echo "false";
-
     }
 
     public function roomDisposal() {
@@ -1020,11 +1019,11 @@ class SummerCamps extends CK_Controller {
         $years = array();
         $start = 2015;
         $date = date('Y');
-        $campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         while ($campsByYear != null) {
             $end = $date;
             $date++;
-            $campsByYear = $this -> summercamp_model -> getAllSummerCampsByYear($date);
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
         while ($start <= $end) {
             $years[] = $start;
@@ -1041,7 +1040,7 @@ class SummerCamps extends CK_Controller {
         $data['ano_escolhido'] = $year;
         $data['years'] = $years;
 
-        $allCamps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
         $campsQtd = count($allCamps);
         $camps = array();
         $start = $campsQtd;
@@ -1054,9 +1053,9 @@ class SummerCamps extends CK_Controller {
 
         $campChosenId = null;
         foreach ($allCamps as $camp) {
-            $camps[] = $camp -> getCampName();
-            if ($camp -> getCampName() == $campChosen)
-                $campChosenId = $camp -> getCampId();
+            $camps[] = $camp->getCampName();
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
         }
 
         $data['summer_camp_id'] = $campChosenId;
@@ -1064,19 +1063,18 @@ class SummerCamps extends CK_Controller {
         $data['camps'] = $camps;
 
 
-        if($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
+        if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
             $quarto = $_GET['quarto'];
             $data["quarto"] = $quarto;
             $pavilhao = $_GET['pavilhao'];
             $data["pavilhao"] = $pavilhao;
-            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, 
-                SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId);
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId);
 
             $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
 
-            foreach($colonistsSelected as $colonist)
+            foreach ($colonistsSelected as $colonist)
                 $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist);
-            
+
 
             $data["colonists"] = $colonistsSelected;
         }
@@ -1084,26 +1082,25 @@ class SummerCamps extends CK_Controller {
         $this->loadView('summercamps/roomDisposal', $data);
     }
 
-    private function createNamePattern($name){
-        if($name == null || $name == ''){
+    private function createNamePattern($name) {
+        if ($name == null || $name == '') {
             return null;
         }
 
         $nameExploded = explode(" ", $name);
         $namePattern = null;
-        if(is_array($nameExploded)){
+        if (is_array($nameExploded)) {
             $namePattern = "/^";
-            $namePattern .= strtolower(substr($nameExploded[0], 0, 3)). "[\w' ]*";
-            if(count($nameExploded)-1 > 0)
-                $namePattern .= " ". strtolower(substr($nameExploded[count($nameExploded)-1], 0, 3)). "[\w' ]*";
+            $namePattern .= strtolower(substr($nameExploded[0], 0, 3)) . "[\w' ]*";
+            if (count($nameExploded) - 1 > 0)
+                $namePattern .= " " . strtolower(substr($nameExploded[count($nameExploded) - 1], 0, 3)) . "[\w' ]*";
             $namePattern .= "$/";
         }
 
         return $namePattern;
     }
 
-
-    private function countFriendRoommates($colonists, $colonist){
+    private function countFriendRoommates($colonists, $colonist) {
         $roommate1Pattern = $this->createNamePattern($colonist->roommate1);
         $roommate2Pattern = $this->createNamePattern($colonist->roommate2);
         $roommate3Pattern = $this->createNamePattern($colonist->roommate3);
@@ -1111,43 +1108,43 @@ class SummerCamps extends CK_Controller {
         $colonist->roommate1_status = "F";
         $colonist->roommate2_status = "F";
         $colonist->roommate3_status = "F";
-        
+
         $friendCount = 0;
 
-        foreach($colonists as $c){
-            
+        foreach ($colonists as $c) {
+
             $colonistNameLowerCase = trim(strtolower($c->colonist_name));
-            if($roommate1Pattern != null && preg_match($roommate1Pattern, $colonistNameLowerCase)){
-                if($c->room_number == $colonist->room_number && $c->room_number != "") {
+            if ($roommate1Pattern != null && preg_match($roommate1Pattern, $colonistNameLowerCase)) {
+                if ($c->room_number == $colonist->room_number && $c->room_number != "") {
                     $friendCount ++;
                     $colonist->roommate1_status = "T";
                 } else {
-                    if($colonist->roommate1_status != "T")
+                    if ($colonist->roommate1_status != "T")
                         $colonist->roommate1_status = "TF";
                 }
             }
 
-            if($roommate2Pattern != null && preg_match($roommate2Pattern, $colonistNameLowerCase)){
-                if($c->room_number == $colonist->room_number && $c->room_number != "") {
+            if ($roommate2Pattern != null && preg_match($roommate2Pattern, $colonistNameLowerCase)) {
+                if ($c->room_number == $colonist->room_number && $c->room_number != "") {
                     $friendCount ++;
                     $colonist->roommate2_status = "T";
                 } else {
-                    if($colonist->roommate2_status != "T")
+                    if ($colonist->roommate2_status != "T")
                         $colonist->roommate2_status = "TF";
                 }
             }
 
-            if($roommate3Pattern != null && preg_match($roommate3Pattern, $colonistNameLowerCase)){
-                if($c->room_number == $colonist->room_number && $c->room_number != "") {
+            if ($roommate3Pattern != null && preg_match($roommate3Pattern, $colonistNameLowerCase)) {
+                if ($c->room_number == $colonist->room_number && $c->room_number != "") {
                     $friendCount ++;
                     $colonist->roommate3_status = "T";
                 } else {
-                    if($colonist->roommate3_status != "T")
+                    if ($colonist->roommate3_status != "T")
                         $colonist->roommate3_status = "TF";
                 }
             }
         }
-        
+
         return $friendCount;
     }
 
@@ -1156,55 +1153,68 @@ class SummerCamps extends CK_Controller {
         $summerCampId = $this->input->post("summer_camp_id", true);
         $roomNumber = $this->input->post("room_number", true);
 
-        if($this->summercamp_model->updateRoomNumber($colonistId, $summerCampId, $roomNumber))
+        if ($this->summercamp_model->updateRoomNumber($colonistId, $summerCampId, $roomNumber))
             echo "true";
-        else 
+        else
             echo "false";
     }
 
-    private function filterColonists($colonists, $room, $gender){
+    private function filterColonists($colonists, $room, $gender) {
         $resultArray = array();
 
-        foreach($colonists as $colonist) {
-            if($colonist->colonist_gender == $gender) {
-                if($room < 0)
+        foreach ($colonists as $colonist) {
+            if ($colonist->colonist_gender == $gender) {
+                if ($room < 0)
                     $resultArray[] = $colonist;
-                else if($room == 0 && ($colonist->room_number == null || $colonist->room_number == 0))
+                else if ($room == 0 && ($colonist->room_number == null || $colonist->room_number == 0))
                     $resultArray[] = $colonist;
-                else if($colonist->room_number == $room) 
+                else if ($colonist->room_number == $room)
                     $resultArray[] = $colonist;
-                
             }
         }
 
         return $resultArray;
     }
 
-    public function autoFillRooms(){
-        $this->Logger->info("Running:".__METHOD__);
+    public function autoFillRooms() {
+        $this->Logger->info("Running:" . __METHOD__);
 
         $summerCampId = $this->input->post("summer_camp_id", true);
         $gender = $this->input->post("gender", true);
 
         $colonists = $this->summercamp_model->getColonistsToDistributeInRooms($summerCampId, $gender);
-        $colonistsPerRoom = ceil(count($colonists)/6.0);
-        $this->Logger->info("Colonists to distribute in 6 rooms: ". count($colonists));
-        $this->Logger->info("Colonists per room: ". $colonistsPerRoom);
+        $colonistsPerRoom = ceil(count($colonists) / 6.0);
+        $this->Logger->info("Colonists to distribute in 6 rooms: " . count($colonists));
+        $this->Logger->info("Colonists per room: " . $colonistsPerRoom);
         $actualRoom = 1;
         $totalUpdated = 0;
-        while($actualRoom <= 6){
-            for($i = 0; $i < $colonistsPerRoom && $totalUpdated < count($colonists); $i++) {
-                $this->summercamp_model->updateRoomNumber($colonists[(($actualRoom-1)*$colonistsPerRoom)+$i]->colonist_id, $summerCampId, $actualRoom);
+        while ($actualRoom <= 6) {
+            for ($i = 0; $i < $colonistsPerRoom && $totalUpdated < count($colonists); $i++) {
+                $this->summercamp_model->updateRoomNumber($colonists[(($actualRoom - 1) * $colonistsPerRoom) + $i]->colonist_id, $summerCampId, $actualRoom);
                 $totalUpdated++;
             }
-            
-            $this->Logger->info("Number of colonists in room ". $actualRoom .": ". $i);
+
+            $this->Logger->info("Number of colonists in room " . $actualRoom . ": " . $i);
             $actualRoom++;
         }
 
-        $this->Logger->info("Total of colonists allocated: ". $totalUpdated);
+        $this->Logger->info("Total of colonists allocated: " . $totalUpdated);
 
         echo "true";
+    }
+
+    public function generatePDFWithColonistData() {
+        $this->load->plugin('mpdf');
+        $dataIn = $this->input->post('data', TRUE);
+        $dataArray = json_decode($dataIn);
+        for ($i = 0; $i < count($dataArray); $i++) {
+            $idsColonist[$i] = $dataArray[$i][0];
+        }
+        $data["colonists"] = $this->summercamp_model->getColonistDataFromPDF($idsColonist);
+        $this->loadReportView("reports/summercamps/pdf_colonist_info", $data);
+
+        $html = $this->output->get_output();
+        pdf($html, "teste.pdf");
     }
 
 }

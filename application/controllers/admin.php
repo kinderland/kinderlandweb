@@ -122,7 +122,7 @@ class Admin extends CK_Controller {
         }
         $people = $this->summercamp_model->getAssociatedOrNotByStatusAndSummerCamp($campsIdStr, $selected);
         $nextPosition = $this->summercamp_model->getNextAvailablePosition($campsIdStr);
-        
+
         $data['nextPosition'] = $nextPosition;
         $data['people'] = $people;
         $this->loadReportView("admin/camps/queue", $data);
@@ -568,14 +568,11 @@ class Admin extends CK_Controller {
 
     public function viewColonistInfo() {
         $this->Logger->info("Starting " . __METHOD__);
-        
-        if(($this->input->get('type', TRUE)) !== null) {
-        	$type = $this->input->get('type', TRUE);
+        if (($this->input->get('type', TRUE)) !== null) {
+            $type = $this->input->get('type', TRUE);
+        } else {
+            $type = null;
         }
-        else {
-        	$type = null;
-        }
-        
         $data['type'] = $type;
         $colonistId = $this->input->get('colonistId', TRUE);
         $summerCampId = $this->input->get('summerCampId', TRUE);
@@ -631,20 +628,16 @@ class Admin extends CK_Controller {
         } else {
             $data["noMother"] = TRUE;
         }
-
-
         if ($camper->getRoommate1())
             $data['roommate1'] = $camper->getRoommate1();
         if ($camper->getRoommate2())
             $data['roommate2'] = $camper->getRoommate2();
         if ($camper->getRoommate3())
             $data['roommate3'] = $camper->getRoommate3();
-
         if ($data["summerCamp"]->isMiniCamp()) {
             $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
             $data['miniCamp'] = $miniCamp;
         }
-
         $this->loadView('summercamps/viewColonistInfo', $data);
     }
 
@@ -655,7 +648,7 @@ class Admin extends CK_Controller {
         $document_type = $this->input->get('document_type', TRUE);
         $document = $this->summercamp_model->getNewestDocument($camp_id, $colonist_id, $document_type);
         if ($document) {
-            if ( strtolower( $document["extension"] ) == "pdf")
+            if (strtolower($document["extension"]) == "pdf")
                 header("Content-type: application/pdf");
             else
                 header("Content-type: image/jpeg");
