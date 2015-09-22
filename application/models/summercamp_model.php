@@ -1293,23 +1293,42 @@ class summercamp_model extends CK_Model {
     }
 
     public function getColonistDataFromPDF($idsColonist) {
-        $queryParam = "";
-        for ($i = 0; $i < count($idsColonist); $i++) {
-            if ($queryParam != "") {
-                $queryParam .= ",";
-            }
-            $queryParam .= $idsColonist[$i];
-        }
-        $sql = "Select * from summer_camp sc
-		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
-		join colonist c on scs.colonist_id = c.colonist_id
-		join person p on c.person_id = p.person_id
-		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
-		where scs.colonist_id in (" . $queryParam . ") order by fullname";
-        $resultSet = $this->executeRowsNoLog($this->db, $sql);
+        $sql = "Select
+                p.person_id,
+                c.birth_date,
+                scs.*,
+                pr.person_id as responsable_id,
+                motherPS.parent_id as mother_id,
+                fatherPS.parent_id as father_id
+
+                 from colonist as c
+                        join person p on c.person_id = p.person_id
+                        join summer_camp_subscription scs on scs.colonist_id = c.colonist_id
+                        join person pr on pr.person_id = scs.person_user_id
+                        left join parent_summer_camp_subscription fatherPS on fatherPS.colonist_id = c.colonist_id and fatherPS.relation = 'Pai'
+                        left join parent_summer_camp_subscription motherPS on motherPS.colonist_id = c.colonist_id and motherPS.relation = 'Mãe'
+                where c.colonist_id in (" . $idsColonist . ")";
+        $resultSet = $this->executeRow($this->db, $sql);
         if (!$resultSet)
             return array();
         return $resultSet;
+    }
+
+    public function getPersonFullById($personId) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT *, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,
+                    (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
+    			FROM person p
+                        JOIN colonist c on p.person_id = c.person_id
+    			LEFT JOIN address a on a.address_id = p.address_id
+    			LEFT JOIN person_user pu on pu.person_id = p.person_id
+    			WHERE p.person_id = ?";
+        $result = $this->executeRow($this->db, $sql, array(intval($personId), intval($personId), intval($personId)));
+
+        if (!$result)
+            return null;
+
+        return $result;
     }
 
 }

@@ -1208,13 +1208,16 @@ class SummerCamps extends CK_Controller {
         $dataIn = $this->input->post('data', TRUE);
         $dataArray = json_decode($dataIn);
         for ($i = 0; $i < count($dataArray); $i++) {
-            $idsColonist[$i] = $dataArray[$i][0];
+            $data['report'][$i]['colonist_id'] = $dataArray[$i][0];
+            $data['report'][$i]['summercamp'] = $this->summercamp_model->getColonistDataFromPDF($data['report'][$i]['colonist_id']);
+            $data['report'][$i]['colonist'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->person_id);
+            $data['report'][$i]['mother'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->mother_id);
+            $data['report'][$i]['responsable'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->responsable_id);
+            $data['report'][$i]['father'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->father_id);
         }
-        $data["colonists"] = $this->summercamp_model->getColonistDataFromPDF($idsColonist);
         $this->loadReportView("reports/summercamps/pdf_colonist_info", $data);
-
         $html = $this->output->get_output();
-        pdf($html, "teste.pdf");
+        pdf($html, "ficha_colonistas_selecionados.pdf");
     }
 
 }
