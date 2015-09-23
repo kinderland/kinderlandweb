@@ -1071,11 +1071,16 @@ class SummerCamps extends CK_Controller {
             $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId);
 
             $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+            $roomOccupation = [0,0,0,0,0,0,0];
+            foreach ($colonistsSelected as $colonist){
+                $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist, $pavilhao);
+                if($colonist->room_number != "")
+                    $roomOccupation[intval($colonist->room_number)]++;
+                else
+                    $roomOccupation[0]++;
+            }
 
-            foreach ($colonistsSelected as $colonist)
-                $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist);
-
-
+            $data["room_occupation"] = $roomOccupation;
             $data["colonists"] = $colonistsSelected;
         }
 
@@ -1091,7 +1096,7 @@ class SummerCamps extends CK_Controller {
         $namePattern = null;
         if (is_array($nameExploded)) {
             $namePattern = "/^";
-            $namePattern .= strtolower(substr($nameExploded[0], 0, 3)) . "[\w' ]*";
+            $namePattern .= strtolower(substr($nameExploded[0], 0, 3)) . "[\w'éáóíúêôçâôãõàñ ]*";
             if (count($nameExploded) - 1 > 0)
                 $namePattern .= " " . strtolower(substr($nameExploded[count($nameExploded) - 1], 0, 3)) . "[\w' ]*";
             $namePattern .= "$/";
@@ -1100,7 +1105,8 @@ class SummerCamps extends CK_Controller {
         return $namePattern;
     }
 
-    private function countFriendRoommates($colonists, $colonist) {
+    private function countFriendRoommates($colonists, $colonist, $gender) {
+
         $roommate1Pattern = $this->createNamePattern($colonist->roommate1);
         $roommate2Pattern = $this->createNamePattern($colonist->roommate2);
         $roommate3Pattern = $this->createNamePattern($colonist->roommate3);
@@ -1110,40 +1116,53 @@ class SummerCamps extends CK_Controller {
         $colonist->roommate3_status = "F";
 
         $friendCount = 0;
+        $matchesRoommate1 = 0;
+        $matchesRoommate2 = 0;
+        $matchesRoommate3 = 0;
 
         foreach ($colonists as $c) {
 
             $colonistNameLowerCase = trim(strtolower($c->colonist_name));
             if ($roommate1Pattern != null && preg_match($roommate1Pattern, $colonistNameLowerCase)) {
+                $matchesRoommate1++;
                 if ($c->room_number == $colonist->room_number && $c->room_number != "") {
                     $friendCount ++;
                     $colonist->roommate1_status = "T";
                 } else {
                     if ($colonist->roommate1_status != "T")
-                        $colonist->roommate1_status = "TF";
+                        $colonist->roommate1_status = $gender . $c->room_number;
                 }
             }
 
             if ($roommate2Pattern != null && preg_match($roommate2Pattern, $colonistNameLowerCase)) {
+                $matchesRoommate2++;
                 if ($c->room_number == $colonist->room_number && $c->room_number != "") {
                     $friendCount ++;
                     $colonist->roommate2_status = "T";
                 } else {
                     if ($colonist->roommate2_status != "T")
-                        $colonist->roommate2_status = "TF";
+                        $colonist->roommate2_status = $gender . $c->room_number;
                 }
             }
 
             if ($roommate3Pattern != null && preg_match($roommate3Pattern, $colonistNameLowerCase)) {
+                $matchesRoommate3++;
                 if ($c->room_number == $colonist->room_number && $c->room_number != "") {
                     $friendCount ++;
                     $colonist->roommate3_status = "T";
                 } else {
                     if ($colonist->roommate3_status != "T")
-                        $colonist->roommate3_status = "TF";
+                        $colonist->roommate3_status = $gender . $c->room_number;
                 }
             }
         }
+
+        if($matchesRoommate1 > 1)
+            $colonist->roommate1_status = "F";
+        if($matchesRoommate2 > 1)
+            $colonist->roommate2_status = "F";
+        if($matchesRoommate3 > 1)
+            $colonist->roommate3_status = "F";
 
         return $friendCount;
     }

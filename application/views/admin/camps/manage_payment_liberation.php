@@ -62,7 +62,7 @@
 				}
 
 				var datePieces = date_limit.split("/");
-				date_limit = datePieces[2] + "-" + datePieces[1] + "-" + datePieces[0];
+				date_limit = datePieces[2] + "-" + datePieces[1] + "-" + datePieces[0] + " 23:59:59";
 
 				if(confirm("Deseja realmente alterar esta data de prazo para pagamento?")){
 					$.post("<?= $this->config->item('url_link') ?>admin/updateDatePaymentLimit",
