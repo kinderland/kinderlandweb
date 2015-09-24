@@ -37,9 +37,7 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, sortLowerCase,sortLowerCase, sortLowerCase],
-				filters : [false, false, false, false],
-				filterText : 'Escreva para filtrar... ',
+				sort : [sortLowerCase, sortLowerCase,sortLowerCase, sortLowerCase],				
 				counterText	: showCounter
 			});
 		});
@@ -69,7 +67,7 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
                                 ?>
                                 <tr>
                                     <td><a id="<?= $colonist->colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
-                                    <td><a target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> responsable_id ?>"><?= $colonist -> responsable_name ?></a></td>
+                                    <td><a id="<?= $colonist->responsable_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> responsable_id ?>"><?= $colonist -> responsable_name ?></a></td>
                                  	<td><?php if($colonist->associate == 'não sócio') { 
                                  						echo 'Não';
                                  			  } else{

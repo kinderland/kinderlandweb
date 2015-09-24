@@ -35,6 +35,11 @@
         });
 
         function openDisposal(){
+            if($("#pavilhao").val() != "")
+                $(".btn_room_row").show();
+            else
+                $(".btn_room_row").hide();
+
             if($("#anos").val() != null && $("#colonia").val() != 0 && $("#pavilhao").val() != "" && $("#room").val != "") {
                 $("#form_selection").submit();
             }
@@ -96,7 +101,7 @@
 
     <style>
         .T { color: green; }
-        .TF { color: brown; }
+        .TF, .M1, .M2, .M3, .M4, .M5, .M6, .F1, .F2, .F3, .F4, .F5, .F6 { color: brown; }
         .F { color: red; }
     </style>
     <div class = "col-lg-12">
@@ -135,14 +140,43 @@
 
                     <br /><br />
 
-                    <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button>
-                    <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> <?= (isset($pavilhao))?$pavilhao:"Quarto"?>1 </button>
-                    <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> <?= (isset($pavilhao))?$pavilhao:"Quarto"?>2 </button>
-                    <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> <?= (isset($pavilhao))?$pavilhao:"Quarto"?>3 </button>
-                    <button class="btn btn-default" id="btn_room_4" style="margin-left:5px" onclick="openRoomDisposal(4)"> <?= (isset($pavilhao))?$pavilhao:"Quarto"?>4 </button>
-                    <button class="btn btn-default" id="btn_room_5" style="margin-left:5px" onclick="openRoomDisposal(5)"> <?= (isset($pavilhao))?$pavilhao:"Quarto"?>5 </button>
-                    <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> <?= (isset($pavilhao))?$pavilhao:"Quarto"?>6 </button>
-                    <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button>
+                    <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
+                        <table>
+                            <tr>
+                                
+                                <th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_4" style="margin-left:5px" onclick="openRoomDisposal(4)"> 4<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_5" style="margin-left:5px" onclick="openRoomDisposal(5)"> 5<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> 6<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
+                            </tr>
+                            <?php if(isset($room_occupation)){ ?>
+                                <tr>
+                                    <td align="center"><?=$room_occupation[0] ?></td>
+                                    <td align="center"><?=$room_occupation[1] ?></td>
+                                    <td align="center"><?=$room_occupation[2] ?></td>
+                                    <td align="center"><?=$room_occupation[3] ?></td>
+                                    <td align="center"><?=$room_occupation[4] ?></td>
+                                    <td align="center"><?=$room_occupation[5] ?></td>
+                                    <td align="center"><?=$room_occupation[6] ?></td>
+                                    <td align="center"><?= $room_occupation[1]+
+                                            $room_occupation[2]+
+                                            $room_occupation[3]+
+                                            $room_occupation[4]+
+                                            $room_occupation[5]+
+                                            $room_occupation[6] ?>
+                                        <img src="<?= $this->config->item('assets') ?>images/kinderland/help.png" width="15" height="15"
+                                            title="Número de colonistas por quarto."/>
+                                    <td>
+                                    
+                                </tr>
+                            <?php } ?>
+                        </table>
+                    </div>
+            
 
                 </form>
             </div>
@@ -159,6 +193,7 @@
                 <br /><br />
 
                 <div class="col-lg-12">
+                    
                     <p>
                         Código de cores:
                         <br /><br />
@@ -186,9 +221,9 @@
                                     <td><?= $colonist->colonist_name ?></td>
                                     <td><?= explode(" ", $colonist->age)[0] ." anos" ?></td>
                                     <td><?= $colonist->school_name ?></td>
-                                    <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?></span></td>
-                                    <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?></span></td>
-                                    <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?></span></td>
+                                    <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F")?"<br />[".$colonist->roommate1_status."]":'')?></span></td>
+                                    <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?=(($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F")?"<br />[".$colonist->roommate2_status."]":'')?></span></td>
+                                    <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?=(($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F")?"<br />[".$colonist->roommate3_status."]":'')?></span></td>
                                     <td><?= $colonist->friend_roommates ?></td>  
                                     <td><input type="number" min="0" max="6" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>  
                                     <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>)">Salvar</button></td>
