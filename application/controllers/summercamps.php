@@ -1082,6 +1082,7 @@ class SummerCamps extends CK_Controller {
                 }
             }
 
+            $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
             $data["room_occupation"] = $roomOccupation;
             $data["colonists"] = $colonistsSelected;
         }
