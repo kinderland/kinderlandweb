@@ -1071,7 +1071,7 @@ class SummerCamps extends CK_Controller {
             $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId);
 
             $roomOccupation = [0,0,0,0,0,0,0];
-            for ($i = 1; $i < 7); $i++) {
+            for ($i = 1; $i < 7; $i++) {
                 $colonistsSelected = $this->filterColonists($colonists, $i, $pavilhao);
                 foreach ($colonistsSelected as $colonist){
                     $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist, $pavilhao);
