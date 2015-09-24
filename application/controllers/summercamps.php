@@ -1207,9 +1207,15 @@ class SummerCamps extends CK_Controller {
         $this->load->plugin('mpdf');
         $dataIn = $this->input->post('data', TRUE);
         $dataArray = json_decode($dataIn);
-        for ($i = 0; $i < count($dataArray); $i++) {
-            $data['report'][$i]['colonist_id'] = $dataArray[$i][0];
-            $data['report'][$i]['summercamp'] = $this->summercamp_model->getColonistDataFromPDF($data['report'][$i]['colonist_id']);
+        $data['nameFile'] = $this->input->post('name', TRUE);
+        $data['filtros'] = json_decode($this->input->post('filters', TRUE));
+        date_default_timezone_set('America/Sao_Paulo');
+        $data['time'] = date('d-m-Y G:i:sa');
+
+
+        $colonists = $this->summercamp_model->getColonistDataFromPDF($dataArray);
+        for ($i = 0; $i < count($colonists); $i++) {
+            $data['report'][$i]['summercamp'] = $colonists[$i];
             $data['report'][$i]['colonist'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->person_id);
             $data['report'][$i]['mother'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->mother_id);
             $data['report'][$i]['responsable'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->responsable_id);
@@ -1217,7 +1223,7 @@ class SummerCamps extends CK_Controller {
         }
         $this->loadReportView("reports/summercamps/pdf_colonist_info", $data);
         $html = $this->output->get_output();
-        pdf($html, "ficha_colonistas_selecionados.pdf");
+        pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
 
 }

@@ -65,8 +65,6 @@
                     else {
                         nomePadrao = nomePadrao.concat("_".concat(filtroColonia));
                     }
-
-
                     if (filtroStatus == false) {
                         return nomePadrao.concat("_todos_status");
                     }
@@ -118,6 +116,47 @@
                 }
             }
 
+            function getFilters() {
+                var filtros = $(".datatable-filter");
+                var filtroNomeColonista = filtros[1].value;
+                var e = document.getElementById("colonia");
+                var filtroColonia = filtros[2].value;
+                var filtroNomeResponsavel = filtros[3].value;
+                var filtroStatus = filtros[0].value;
+                var saida = [];
+                var temp = "";
+
+                if (filtroColonia == false) {
+                    saida.push("Colônias: todas")
+                }
+                else {
+                    temp = "Colônia: ";
+                    temp = temp.concat(filtroColonia);
+                    saida.push(temp)
+                }
+
+                if (filtroStatus == false) {
+                    saida.push("Status: todos");
+                }
+                else {
+                    temp = "Status: ";
+                    temp = temp.concat(filtroStatus);
+                    saida.push(temp);
+                }
+                if (filtroNomeColonista != "") {
+                    temp = "Filtro por colonista: ";
+                    temp = temp.concat(filtroNomeColonista);
+                    saida.push(temp);
+                }
+                if (filtroNomeResponsavel != "") {
+                    temp = "Filtro por responsável: ";
+                    temp = temp.concat(filtroNomeResponsavel);
+                    saida.push(temp);
+                }
+                return saida;
+
+            }
+
 
             function sendTableToCSV() {
                 var data = [];
@@ -149,6 +188,7 @@
                 var data = [];
                 var table = document.getElementById("tablebody");
                 var name = getCSVName();
+                var filtersWindow = getFilters();
                 var elements = document.getElementsByName('colonista');
                 var tablehead = document.getElementsByTagName("thead")[0];
                 for (var i = 0, row; row = table.rows[i]; i++) {
@@ -165,9 +205,10 @@
                     return;
                 }
                 var dataToSend = JSON.stringify(data);
+                var filtersToSend = JSON.stringify(filtersWindow);
                 var columName = ["Email", "Nome"];
                 var columnNameToSend = JSON.stringify(columName);
-                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, name: name, columName: columnNameToSend});
+                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend});
             }
 
             var selectTodas = {
