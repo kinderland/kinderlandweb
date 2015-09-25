@@ -1068,21 +1068,19 @@ class SummerCamps extends CK_Controller {
             $data["quarto"] = $quarto;
             $pavilhao = $_GET['pavilhao'];
             $data["pavilhao"] = $pavilhao;
-            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId);
-
-            $roomOccupation = [0,0,0,0,0,0,0];
-            for ($i = 1; $i < 7; $i++) {
-                $colonistsSelected = $this->filterColonists($colonists, $i, $pavilhao);
-                foreach ($colonistsSelected as $colonist){
-                    $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist, $pavilhao);
-                    if($colonist->room_number != "")
-                        $roomOccupation[intval($colonist->room_number)]++;
-                    else
-                        $roomOccupation[0]++;
-                }
-            }
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
 
             $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+            foreach ($colonistsSelected as $colonist){
+                $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist, $pavilhao);
+            }
+
+            $roomOccupation = [0,0,0,0,0,0,0];
+            for($i = 0; $i < count($roomOccupation); $i++){
+                $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
+                $roomOccupation[$i] = count($roomColonists);
+            }
+
             $data["room_occupation"] = $roomOccupation;
             $data["colonists"] = $colonistsSelected;
         }
@@ -1095,13 +1093,13 @@ class SummerCamps extends CK_Controller {
             return null;
         }
 
-        $nameExploded = explode(" ", $name);
+        $nameExploded = explode(" ", trim($name));
         $namePattern = null;
         if (is_array($nameExploded)) {
             $namePattern = "/^";
-            $namePattern .= strtolower(substr($nameExploded[0], 0, 3)) . "[\w'éáóíúêôçâôãõàñ ]*";
+            $namePattern .= strtolower(substr(trim($nameExploded[0]), 0, 3)) . "[\w'éáóíúêôçâôãõàñ ]*";
             if (count($nameExploded) - 1 > 0)
-                $namePattern .= " " . strtolower(substr($nameExploded[count($nameExploded) - 1], 0, 3)) . "[\w' ]*";
+                $namePattern .= " " . strtolower(substr(trim($nameExploded[count($nameExploded) - 1]), 0, 3)) . "[\w'éáóíúêôçâôãõàñ ]*";
             $namePattern .= "$/";
         }
 
@@ -1188,7 +1186,8 @@ class SummerCamps extends CK_Controller {
             if ($colonist->colonist_gender == $gender) {
                 if ($room < 0)
                     $resultArray[] = $colonist;
-                else if ($room == 0 && ($colonist->room_number == null || $colonist->room_number == 0))
+                else if ($room == 0 && ($colonist->room_number == null || 
+                    $colonist->room_number == 0 || $colonist->room_number == ''))
                     $resultArray[] = $colonist;
                 else if ($colonist->room_number == $room)
                     $resultArray[] = $colonist;

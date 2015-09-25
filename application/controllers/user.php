@@ -111,16 +111,13 @@ class User extends CK_Controller {
     }
 
     public function admin() {
-        /* switch ($type) {
-          case "user":
-          $data['fullname'] = $this->session->userdata("fullname");
-          $this->loadView("user/menu", $data);
-          break;
-          default: */
         $data['fullname'] = $this->session->userdata("fullname");
         $this->loadView("user/menu_admin", $data);
-        //break;
-        //}
+    }
+
+    public function coordinator() {
+        $data['fullname'] = $this->session->userdata("fullname");
+        $this->loadView("user/menu_coordinator", $data);
     }
 
     public function emails() {

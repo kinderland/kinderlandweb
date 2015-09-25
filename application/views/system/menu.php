@@ -51,7 +51,7 @@ function hasPermission($permissions, $permissionRequested) {
             <?php if (hasPermission($permissions, COORDINATOR)) { ?>
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
-                        <a href="<?= $this->config->item('url_link'); ?>user/coordenador">
+                        <a href="<?= $this->config->item('url_link'); ?>user/coordinator">
                             <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Coordenador</button>
                         </a>
                     </div>

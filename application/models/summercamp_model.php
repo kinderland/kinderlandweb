@@ -467,7 +467,7 @@ class summercamp_model extends CK_Model {
         return $resultSet;
     }
 
-    public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null) {
+    public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null, $gender = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
 		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
@@ -481,23 +481,23 @@ class summercamp_model extends CK_Model {
 		join person p on c.person_id = p.person_id
 		join person pr on pr.person_id = scs.person_user_id
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
-		left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id ";
-        if ($status !== null && $summercampId === null) {
-            $sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',sc.date_created) = ?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year));
-        } else if ($status !== null && $summercampId !== null) {
-            $sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',sc.date_created) = ?
-        			AND sc.summer_camp_id =?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
-        } else if ($status === null && $summercampId !== null) {
-            $sql = $sql . " WHERE DATE_PART('YEAR',date_created) = ?
-        			AND sc.summer_camp_id =?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
-        } else {
-            $sql = $sql . " WHERE DATE_PART('YEAR',date_created) = ?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year));
+		left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id 
+        where DATE_PART('YEAR', sc.date_created) = ? ";
+
+        $arrParam = array($year);
+        if($status !== null){
+            $sql = $sql . " and scs.situation in (" . $status . ") ";
+        }
+        if($summercampId !== null){
+            $sql = $sql . " and sc.summer_camp_id = ? ";
+            $arrParam[] = $summercampId;
+        }
+        if($gender !== null){
+            $sql = $sql . " and p.gender = ? ";
+            $arrParam[] = $gender;
         }
 
+        $resultSet = $this->executeRows($this->db, $sql, $arrParam);
         return $resultSet;
     }
 
