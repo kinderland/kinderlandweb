@@ -1130,8 +1130,12 @@ class SummerCamps extends CK_Controller {
                     $friendCount ++;
                     $colonist->roommate1_status = "T";
                 } else {
-                    if ($colonist->roommate1_status != "T")
-                        $colonist->roommate1_status = $gender . $c->room_number;
+                    if ($colonist->roommate1_status != "T"){
+                        if($c->room_number != "" && $c->room_number != 0)
+                            $colonist->roommate1_status = $c->room_number. $gender;
+                        else
+                            $colonist->roommate1_status = "TF";
+                    }
                 }
             }
 
@@ -1141,8 +1145,12 @@ class SummerCamps extends CK_Controller {
                     $friendCount ++;
                     $colonist->roommate2_status = "T";
                 } else {
-                    if ($colonist->roommate2_status != "T")
-                        $colonist->roommate2_status = $gender . $c->room_number;
+                    if ($colonist->roommate2_status != "T"){
+                        if($c->room_number != "" && $c->room_number != 0)
+                            $colonist->roommate2_status = $c->room_number. $gender;
+                        else
+                            $colonist->roommate2_status = "TF";
+                    }
                 }
             }
 
@@ -1152,8 +1160,12 @@ class SummerCamps extends CK_Controller {
                     $friendCount ++;
                     $colonist->roommate3_status = "T";
                 } else {
-                    if ($colonist->roommate3_status != "T")
-                        $colonist->roommate3_status = $gender . $c->room_number;
+                    if ($colonist->roommate3_status != "T"){
+                        if($c->room_number != "" && $c->room_number != 0)
+                            $colonist->roommate3_status = $c->room_number. $gender;
+                        else
+                            $colonist->roommate3_status = "TF";
+                    }
                 }
             }
         }

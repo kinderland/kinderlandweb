@@ -207,6 +207,7 @@
                                 <th> Colonista </th>
                                 <th> Idade </th>
                                 <th> Escola </th>
+                                <th> Ano Escolar </th>
                                 <th> Amigo 1 </th>
                                 <th> Amigo 2 </th>
                                 <th> Amigo 3 </th>
@@ -221,11 +222,12 @@
                                     <td><?= $colonist->colonist_name ?></td>
                                     <td><?= explode(" ", $colonist->age)[0] ." anos" ?></td>
                                     <td><?= $colonist->school_name ?></td>
-                                    <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F")?"<br />[".$colonist->roommate1_status."]":'')?></span></td>
-                                    <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?=(($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F")?"<br />[".$colonist->roommate2_status."]":'')?></span></td>
-                                    <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?=(($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F")?"<br />[".$colonist->roommate3_status."]":'')?></span></td>
+                                    <td><?= $colonist->school_year ?></td>
+                                    <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF")?"<br />[".$colonist->roommate1_status."]":'')?></span></td>
+                                    <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?=(($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F" && $colonist->roommate2_status != "TF")?"<br />[".$colonist->roommate2_status."]":'')?></span></td>
+                                    <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?=(($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF")?"<br />[".$colonist->roommate3_status."]":'')?></span></td>
                                     <td><?= $colonist->friend_roommates ?></td>  
-                                    <td><input type="number" min="0" max="6" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>  
+                                    <td><input type="number" min="0" max="6" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>  
                                     <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>)">Salvar</button></td>
                                 </tr>                                   
                             <?php } ?>  

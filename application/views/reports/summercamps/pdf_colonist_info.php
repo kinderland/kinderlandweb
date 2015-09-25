@@ -42,6 +42,7 @@ foreach ($report as $colonist) {
                 }
                 ?><br>
                 <strong>Data nascimento: </strong><?= date("d/m/Y", strtotime($colonist['summercamp']->birth_date)); ?><br>
+                <strong>Escola: </strong><?= $colonist['summercamp']->school_name ?><br>
                 <strong>Ano escolar: </strong><?= $colonist['summercamp']->school_year ?><br>
                 <strong>Número Quarto: </strong><?= $colonist['summercamp']->room_number ?><br>
                 <strong>Telefone(s): </strong> <?= $colonist['colonist']->phone1 ?> -- <?= $colonist['colonist']->phone2 ?><br>
