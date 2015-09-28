@@ -25,7 +25,7 @@
         $(document).ready(function() {
             $('#sortable-table').datatable({
                 pageSize : Number.MAX_VALUE,
-                sort : [sortLowerCase, true, sortLowerCase],
+                sort : [sortLowerCase, sortNumber, sortLowerCase],
                 filters : [true, selectTodas, true],
                 filterText : 'Escreva para filtrar...'
             });
@@ -95,6 +95,11 @@
                     }
                 );
             }
+            
+        }
+
+        function sortNumber(a,b) {
+            return a-b;
         }
 
     </script>
@@ -219,8 +224,8 @@
                         <tbody>
                             <?php foreach ($colonists as $colonist) { ?>
                                 <tr>
-                                    <td><?= $colonist->colonist_name ?></td>
-                                    <td><?= explode(" ", $colonist->age)[0] ." anos" ?></td>
+                                    <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
+                                    <td><?= explode(" ", $colonist->age)[0]?></td>
                                     <td><?= $colonist->school_name ?></td>
                                     <td><?= $colonist->school_year ?></td>
                                     <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF")?"<br />[".$colonist->roommate1_status."]":'')?></span></td>
