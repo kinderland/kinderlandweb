@@ -58,7 +58,36 @@
     <?php }?>
 </table>
 <br><br><br><br><br><br><br><br><br>
-<?php $colunistsNumber = 1;
+
+<?php 
+if($type=="Simples"){
+	foreach ($report as $colonist) {
+		?>
+		    <div class="row">
+		        <div class="col-lg-12 middle-content">
+		            <div class="row">
+		            <br>
+		                <span><strong><?= $colonist['colonist']->fullname ?></strong></span><br/>
+		                </div>
+		                </div>
+		                </div>
+	<?php }}
+else if($type == "Documentos"){
+	foreach ($report as $colonist) {
+		?>
+		    <div class="row">
+		        <div class="col-lg-12 middle-content">
+		            <div class="row">
+		            <br>
+		            <tr>
+		                <td><strong><?= $colonist['colonist']->fullname ?></strong></td>
+		                <td><strong><?= $colonist['colonist']->fullname ?></strong></td>
+		                <td><strong><?= $colonist['colonist']->fullname ?></strong></td>
+		                </div>
+		                </div>
+		                </div>
+	<?php }}
+else if($type == "Cadastros" || $type == "Listagem de Inscrições"){ $colunistsNumber = 1;
 foreach ($report as $colonist) {
     ?>
     <div class="row">
@@ -140,6 +169,6 @@ foreach ($report as $colonist) {
     </div>
    <?php $colunistsNumber++; if($colunistsNumber == 3) { $colunistsNumber = 0; ?>
     <p style="page-break-before: always"></p>
-    <?php }?>
+    <?php }}?>
     <?php
 }

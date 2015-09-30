@@ -1263,6 +1263,33 @@ class SummerCamps extends CK_Controller {
         $html = $this->output->get_output();
         pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
+    
+    public function generatePDFTripAuthorization() {
+    	$this->load->plugin('mpdf');
+    	
+    	if($this->input->post('data', TRUE) != null) {
+    	$dataIn = $this->input->post('data', TRUE);
+    	$dataArray = json_decode($dataIn);
+    	
+    	
+    		$colonists = $this->colonist_model->getColonists($dataArray);
+    	
+    	$data['colonists'] = $colonists;
+    	$data['nameFile'] = $this->input->post('name', TRUE);;
+    	}
+    	else{
+    		$data['colonist_id'] = $this->input->post('colonist_id', TRUE);
+    		$data['nameFile'] = 'autorizacao_de_viagem';
+    	}
+    	
+    	$data['type'] = $this->input->post('type', TRUE);
+    	$data['camp_id'] = $this->input->post('camp_id', TRUE);
+    	
+    	
+    	$this->loadReportView("summercamps/pdfTripAuthorization", $data);
+    	$html = $this->output->get_output();
+    	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
 
 }
 

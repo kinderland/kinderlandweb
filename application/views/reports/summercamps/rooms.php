@@ -140,6 +140,44 @@
                 post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
             }
 
+            function geraAutorizacaoPDF(camp_id){
+            	var data = [];
+                var table = document.getElementById("tablebody");
+                var elements = document.getElementsByName('colonista');
+                var tablehead = document.getElementsByTagName("thead")[0];
+                for (var i = 0, row; row = table.rows[i]; i++) {
+                    var data2 = []
+                    //Nome, retira pega o que esta entre um <> e outro <>
+                    var colonist_id = elements[i].getAttribute('id');
+
+                    data2.push(colonist_id);
+                    data.push(data2)
+                }
+                if (i == 0) {
+                    alert('Não há dados para geração da planilha');
+                    return;
+                }
+                var dataToSend = JSON.stringify(data);
+                var type = "Vários";
+
+                var filtroGeneroVal = $("#pavilhao option:selected").val();
+    			var filtroQuarto = $("#room").val();
+    			var nomePadrao = "";
+
+    			if(filtroQuarto == 0)
+        			filtroQuarto = "Sem-Quarto";
+        		else if(filtroQuarto == -1)
+            		filtroQuarto = "Todos-os-Quartos";
+            	else {
+                	filtroQuarto = filtroQuarto.concat(filtroGeneroVal);
+            	}	
+
+    			nomePadrao = nomePadrao.concat(filtroQuarto);
+    			nomePadrao = nomePadrao.concat("-autorização-de-viagem-");
+                
+        		post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFTripAuthorization', {name: nomePadrao, data: dataToSend, camp_id: camp_id, type: type});
+        	}
+
             function gerarPDFcomDadosCadastrais(type) {
                 var data = [];
                 var table = document.getElementById("tablebody");
@@ -309,7 +347,7 @@
                 <br /><br />
 
                 <div class="col-lg-12">
-                <button class="button" onclick="gerarPDFcomDadosCadastrais('Cadastros')" value="">Cadastros</button><button class="button" onclick="sendTableToCSV()" value="">E-mails</button>
+                 <button class="btn btn-primary" onclick="geraAutorizacaoPDF('<?=$summer_camp_id?>')" value="">Autorizações</button>&nbsp;<button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Cadastros')" value="">Cadastros</button>&nbsp;<button class="btn btn-primary" onclick="sendTableToCSV()" value="">E-mails</button>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
@@ -322,7 +360,7 @@
                         <tbody id="tablebody">
                             <?php foreach ($colonists as $colonist) { ?>
                                 <tr>
-                                    <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
+                                    <td><a name= "colonista" id="<?= $colonist->colonist_id ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
                                     <td><?= explode(" ", $colonist->age)[0] ?></td>
                                     <td><?= date('d/m/Y', strtotime(substr($colonist->birth_date, 0, 10))) ?></td>
                                     <td><a name="responsavel" id="<?= $colonist -> user_name?>" key="<?= $colonist -> email?>"></a><?= $colonist->school_year ?></td>

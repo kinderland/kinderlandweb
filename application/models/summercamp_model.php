@@ -1315,6 +1315,8 @@ class summercamp_model extends CK_Model {
         }
         $sql = "Select
                 p.person_id,
+        		c.colonist_id,
+        		p.fullname,
                 c.birth_date,
                 scs.*,
                 pr.person_id as responsable_id,
