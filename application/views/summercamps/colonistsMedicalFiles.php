@@ -96,15 +96,13 @@
                         <option value="F" <?php if(isset($pavilhao) && $pavilhao == "F") echo "selected"; ?>> Feminino </option>
                     </select>
 
-                    <input type="hidden" id="room" name="quarto" value = "<?= (isset($quarto)) ? $quarto : '' ?>" />
+                    <input type="hidden" id="room" name="quarto" value = "<?= (isset($quarto)) ? $quarto : '-1' ?>" />
 
                     <br /><br />
 
                     <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
                         <table>
                             <tr>
-                                
-                                <th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
@@ -115,7 +113,6 @@
                             </tr>
                             <?php if(isset($room_occupation)){ ?>
                                 <tr>
-                                    <td align="center"><?=$room_occupation[0] ?></td>
                                     <td align="center"><?=$room_occupation[1] ?></td>
                                     <td align="center"><?=$room_occupation[2] ?></td>
                                     <td align="center"><?=$room_occupation[3] ?></td>

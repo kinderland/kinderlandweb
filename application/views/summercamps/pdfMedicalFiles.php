@@ -7,7 +7,11 @@
     <tr>
         <td align="center">
             <p>Colônia: <?=$summerCamp->getCampName()?></p>
-            <p>Quarto: <?=$roomNumber?><?=$pavilhao?></p>
+            <?php if($roomNumber > 0 && $roomNumber < 7){ ?>
+                <p>Quarto: <?=$roomNumber?><?=$pavilhao?></p>
+            <?php } else { ?>
+                <p>Pavilhão: <?=$pavilhao?></p>
+            <?php } ?>
         </td>
     </tr>
 </table>
