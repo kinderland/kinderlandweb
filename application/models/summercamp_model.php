@@ -467,7 +467,7 @@ class summercamp_model extends CK_Model {
         return $resultSet;
     }
 
-    public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null, $gender = null) {
+    public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null, $gender = null, $room = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
 		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
@@ -495,6 +495,19 @@ class summercamp_model extends CK_Model {
         if($gender !== null){
             $sql = $sql . " and p.gender = ? ";
             $arrParam[] = $gender;
+        }
+        if($room !== null) {
+        	if($room == 0) {
+        		$sql = $sql . " and scs.room_number is NULL ";
+        	}
+        	else if($room == -1) {
+        		$sql = $sql . " and scs.room_number in (1,2,3,4,5,6) ";
+        	}
+        	else {
+        		$sql = $sql . " and scs.room_number = ? ";
+        		$arrParam[] = $room;
+        	}
+        	
         }
 
         $resultSet = $this->executeRows($this->db, $sql, $arrParam);

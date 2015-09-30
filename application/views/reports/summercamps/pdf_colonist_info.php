@@ -1,7 +1,31 @@
 <table width="100%">
+     <?php 
+            if($type == "Listagem de Quarto") { ?>
     <tr>
         <td align="center">
-            <h1>Listagem de Insrições</h1>
+       
+            	<h1><?= $summercamp ?></h1></td>
+    </tr>
+    <tr>
+        <td align="center">
+            <h1>Cadastros dos Colonistas</h1>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <h3><?= $time ?></h3>
+        </td>
+     </tr>
+     <tr>
+        <td align="center">
+        <br>
+            <h1><?= $room ?></h1>
+        </td>
+     </tr>
+           <?php  } else if($type == "Listagem de Inscrições") {?>
+      <tr>
+      	<td align="center">
+            <h1><?= $type ?></h1>
         </td>
     </tr>
     <tr>
@@ -23,6 +47,7 @@
             ?>
         </td>
     </tr>
+    <?php }?>
 </table>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <?php
@@ -47,10 +72,13 @@ foreach ($report as $colonist) {
                 <strong>Número Quarto: </strong><?= $colonist['summercamp']->room_number ?><br>
                 <strong>Telefone(s): </strong> <?= $colonist['colonist']->phone1 ?> -- <?= $colonist['colonist']->phone2 ?><br>
                 <br>
+                <?php if($type == "Listagem de Quarto") {} else if($type == "Listagem de Inscrições"){?>
                 <strong><?= $amigo ?> 1: </strong><?= $colonist['summercamp']->roommate1 ?><br>
                 <strong><?= $amigo ?> 2: </strong><?= $colonist['summercamp']->roommate2 ?><br>
                 <strong><?= $amigo ?> 3: </strong><?= $colonist['summercamp']->roommate3 ?><br>
                 <br>
+                <?php }?>
+
                 <table>
                     <tr>
                         <td>

@@ -188,6 +188,7 @@
                 var data = [];
                 var table = document.getElementById("tablebody");
                 var name = getCSVName();
+                var type = "Listagem de Inscrições";
                 var filtersWindow = getFilters();
                 var elements = document.getElementsByName('colonista');
                 var tablehead = document.getElementsByTagName("thead")[0];
@@ -208,7 +209,7 @@
                 var filtersToSend = JSON.stringify(filtersWindow);
                 var columName = ["Email", "Nome"];
                 var columnNameToSend = JSON.stringify(columName);
-                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend});
+                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend, type: type});
             }
 
             var selectTodas = {
