@@ -48,6 +48,8 @@ define('SYSTEM_ADMIN',	2);
 define('DIRECTOR',		3);
 define('SECRETARY',		4);
 define('COORDINATOR', 	5);
+define('DOCTOR',		6);
+define('MONITOR',	 	7);
 
 
 /*

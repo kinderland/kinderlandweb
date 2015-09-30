@@ -17,13 +17,14 @@
 		private $analgesicAntipyretic;
 		private $doctorId;
 		private $date;
+		private $doctorObservations;
 
 
 		public function __construct($campId, $colonistId, $bloodType, $rh, 
 			$weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, 
 			$vacineHepatitis, $infectoContagiousAntecedents,
 			$regularUseMedicine, $medicineRestrictions,
-			$allergies, $analgesicAntipyretic,$doctorId, $date){
+			$allergies, $analgesicAntipyretic,$doctorId, $date, $doctorObservations=null){
 			$this->campId = $campId;
 			$this->colonistId = $colonistId;
 			$this->bloodType = $bloodType;
@@ -41,6 +42,7 @@
 			$this->analgesicAntipyretic = $analgesicAntipyretic;
 			$this->doctorId = $doctorId;
 			$this->date = $date;
+			$this->doctorObservations = $doctorObservations;
 		}
 
 		public static function createMedicalFileObject($resultRow){
@@ -61,7 +63,8 @@
 				$resultRow->allergies,
 				$resultRow->analgesic_antipyretic,
 				$resultRow->doctor_id,
-				$resultRow->date			
+				$resultRow->date,
+				$resultRow->doctor_observations		
 			);
 		}
 
@@ -84,6 +87,20 @@
 			$this->bloodType = $bloodType;
 		}
 		public function getBloodType(){
+			return $this->bloodType;
+		}
+
+		public function getBloodTypeName(){
+			switch($this->bloodType){
+				case BLOOD_TYPE_A:
+					return "A";
+				case BLOOD_TYPE_B:
+					return "B";
+				case BLOOD_TYPE_AB:
+					return "AB";
+				case BLOOD_TYPE_O:
+					return "O";
+			}
 			return $this->bloodType;
 		}
 
@@ -184,6 +201,13 @@
 		}
 		public function getDate(){
 			return $this->date;
+		}
+
+		public function setDoctorObservations($doctorObservations){
+			$this->doctorObservations = $doctorObservations;
+		}
+		public function getDoctorObservations(){
+			return $this->doctorObservations;
 		}
 
 
