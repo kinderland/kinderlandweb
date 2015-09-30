@@ -510,6 +510,7 @@ class summercamp_model extends CK_Model {
         	
         }
 
+        $sql .= " ORDER BY colonist_name ";
         $resultSet = $this->executeRows($this->db, $sql, $arrParam);
         return $resultSet;
     }

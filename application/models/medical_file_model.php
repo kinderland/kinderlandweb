@@ -55,5 +55,13 @@ class medical_file_model extends CK_Model{
     	return null;
     }
 
+
+    public function updateDoctorObservations($colonistId, $summerCampId, $observations){
+		$sql = "UPDATE medical_file SET doctor_observations = ? WHERE summer_camp_id = ? AND colonist_id = ?";
+        $result = $this->execute($this->db, $sql, array($observations, intval($summerCampId), intval($colonistId)));
+
+        return $result;
+    }
+
 }
 ?>

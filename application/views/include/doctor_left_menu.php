@@ -1,4 +1,3 @@
-
 <script>
     $(function () {
         $("#accordion").accordion({
@@ -18,11 +17,7 @@
         </div>
         <h3>Colônia</h3>
         <div>
-            <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports"> Relatórios</a>
-            <br />
-            <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal" target="_blank"> 
-                Quartos
-            </a>  
+            <a href="<?= $this->config->item('url_link'); ?>summercamps/medicalFiles"> Fichas médicas </a>
         </div>
         <h3>Eventos</h3>
         <div>
