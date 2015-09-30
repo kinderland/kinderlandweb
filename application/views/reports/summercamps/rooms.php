@@ -50,7 +50,7 @@
     			var filtroGenero = $("#pavilhao option:selected").text();
     			var filtroGeneroVal = $("#pavilhao option:selected").val();
     			var filtroQuarto = $("#room").val();
-    			var nomePadrao = "listagem-quartos-";
+    			var nomePadrao = "";
 
     			if(filtroQuarto == 0)
         			filtroQuarto = "Sem-Quarto";
@@ -59,51 +59,55 @@
             	else {
                 	filtroQuarto = filtroQuarto.concat(filtroGeneroVal);
             	}	
-    			
+
+    			nomePadrao = nomePadrao.concat(filtroQuarto);
+    			nomePadrao = nomePadrao.concat("-");	
     			nomePadrao = nomePadrao.concat(filtroColonia);
     			nomePadrao = nomePadrao.concat("-");
-    			nomePadrao = nomePadrao.concat(filtroGenero);
-    			nomePadrao = nomePadrao.concat("-");
-    			return nomePadrao.concat(filtroQuarto);	
+    			return nomePadrao.concat(filtroGenero);    			
             }
 
             function getFilters() {
-                var filtros = $(".datatable-filter");
-                var filtroNomeColonista = filtros[1].value;
-                var e = document.getElementById("colonia");
-                var filtroColonia = filtros[2].value;
-                var filtroNomeResponsavel = filtros[3].value;
-                var filtroStatus = filtros[0].value;
+            	var filtroColonia = $("#colonia option:selected").text();
+    			var filtroGenero = $("#pavilhao option:selected").text();
+    			var filtroGeneroVal = $("#pavilhao option:selected").val();
+    			var filtroQuarto = $("#room").val();
                 var saida = [];
                 var temp = "";
 
                 if (filtroColonia == false) {
-                    saida.push("Colônias: todas")
+                    saida.push("Colônias: todas");
                 }
                 else {
                     temp = "Colônia: ";
                     temp = temp.concat(filtroColonia);
-                    saida.push(temp)
+                    saida.push(temp);
                 }
 
-                if (filtroStatus == false) {
-                    saida.push("Status: todos");
+                if (filtroQuarto == 0) {
+                    if(filtroGeneroVal == 'M')
+                        temp = "Maculino - ";
+                    else
+                        temp = "Feminino - ";
+                    temp = temp.concat("Sem Quarto");
+                    saida.push(temp);
+                }
+                else if (filtroQuarto == -1) {
+                	if(filtroGeneroVal == 'M')
+                        temp = "Maculino - ";
+                    else
+                        temp = "Feminino - ";
+                    
+                    temp = temp.concat("Todos os Quartos");
+                    saida.push(temp);
                 }
                 else {
-                    temp = "Status: ";
-                    temp = temp.concat(filtroStatus);
+                    temp = "Quarto: ";
+                    temp = temp.concat(filtroQuarto);
+                    temp = temp.concat(filtroGeneroVal);
                     saida.push(temp);
                 }
-                if (filtroNomeColonista != "") {
-                    temp = "Filtro por colonista: ";
-                    temp = temp.concat(filtroNomeColonista);
-                    saida.push(temp);
-                }
-                if (filtroNomeResponsavel != "") {
-                    temp = "Filtro por responsável: ";
-                    temp = temp.concat(filtroNomeResponsavel);
-                    saida.push(temp);
-                }
+                
                 return saida;
 
             }
@@ -136,10 +140,24 @@
                 post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
             }
 
-            function gerarPDFcomDadosCadastrais() {
+            function gerarPDFcomDadosCadastrais(type) {
                 var data = [];
                 var table = document.getElementById("tablebody");
                 var name = getCSVName();
+                var summercamp = $("#colonia option:selected").text();
+                var filtroGeneroVal = $("#pavilhao option:selected").val();
+    			var filtroQuarto = $("#room").val();
+    			var room;
+    			
+    			if(filtroQuarto == -1) {
+					if(filtroGeneroVal == 'M') {
+						room = "Masculino - Todos os Quartos";
+					} else {
+						room = "Feminino - Todos os Quartos";
+					}					
+    			} else {        			
+    	    		room = filtroQuarto.concat(filtroGeneroVal);
+    			}
                 var filtersWindow = getFilters();
                 var elements = document.getElementsByName('colonista');
                 var tablehead = document.getElementsByTagName("thead")[0];
@@ -160,10 +178,12 @@
                 var filtersToSend = JSON.stringify(filtersWindow);
                 var columName = ["Email", "Nome"];
                 var columnNameToSend = JSON.stringify(columName);
-                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend});
+                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend, type: type, summercamp: summercamp, room: room});
             }
 
             function openDisposal(){
+            	$("#room").val(-1);
+            	
                 if($("#pavilhao").val() != "")
                     $(".btn_room_row").show();
                 else
@@ -268,8 +288,6 @@
                      <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
                         <table>
                             <tr>
-                                
-                                <th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
@@ -280,7 +298,7 @@
                             </tr>
                             
                         </table>
-
+					</div>
                 </form>
             </div>
 
@@ -291,7 +309,7 @@
                 <br /><br />
 
                 <div class="col-lg-12">
-                <button class="button" onclick="sendTableToCSV()" value="">Gerar CSV com Nome e E-mail dos Responsáveis</button>
+                <button class="button" onclick="gerarPDFcomDadosCadastrais('Cadastros')" value="">Cadastros</button><button class="button" onclick="sendTableToCSV()" value="">E-mails</button>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>

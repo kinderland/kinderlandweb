@@ -1250,6 +1250,11 @@ class SummerCamps extends CK_Controller {
         $dataIn = $this->input->post('data', TRUE);
         $dataArray = json_decode($dataIn);
         $data['nameFile'] = $this->input->post('name', TRUE);
+        $data['type'] = $this->input->post('type', TRUE);
+        if(($this->input->post('summercamp', TRUE)) != null)
+        	$data['summercamp'] = $this->input->post('summercamp', TRUE);
+        if(($this->input->post('room', TRUE)) != null)
+        	$data['room'] = $this->input->post('room', TRUE);
         $data['filtros'] = json_decode($this->input->post('filters', TRUE));
         date_default_timezone_set('America/Sao_Paulo');
         $data['time'] = date('d-m-Y G:i:sa');

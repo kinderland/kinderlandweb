@@ -1202,5 +1202,66 @@ class Reports extends CK_Controller {
         $data['colonists'] = $colonists;
         $this->loadView("reports/summercamps/subscriptions", $data);
     }
+    
+    public function rooms() {
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = date('Y');
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    	
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    	else {
+    		$year = date('Y');
+    	}
+    	
+    	$data['ano_escolhido'] = $year;
+    	$data['years'] = $years;
+    	
+    	$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+    	$campsQtd = count($allCamps);
+    	$camps = array();
+    	$start = $campsQtd;
+    	$end = 1;
+    	
+    	$campChosen = null;
+    	
+    	if (isset($_GET['colonia_f']))
+    		$campChosen = $_GET['colonia_f'];
+    	
+    	$campChosenId = null;
+    	foreach ($allCamps as $camp) {
+    		$camps[] = $camp->getCampName();
+    		if ($camp->getCampName() == $campChosen)
+    			$campChosenId = $camp->getCampId();
+    	}
+    	
+    	$data['summer_camp_id'] = $campChosenId;
+    	$data['colonia_escolhida'] = $campChosen;
+    	$data['camps'] = $camps;
+    	
+    	
+    	if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
+    		$quarto = $_GET['quarto'];
+    		$data["quarto"] = $quarto;
+    		$pavilhao = $_GET['pavilhao'];
+    		$data["pavilhao"] = $pavilhao;
+    		$colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao, $quarto);
+    		$data["colonists"] = $colonists;
+    	}
+    	
+    	$this->loadReportView('reports/summercamps/rooms', $data);
+    }
 
 }
