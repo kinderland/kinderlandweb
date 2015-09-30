@@ -12,18 +12,18 @@
        
             	<h1><?= $summercamp ?></h1></td>
     </tr>
-    <?php if($type == "Cadastros" || $type == "Documentos")?>
+    <?php if($type == "Cadastros" || $type == "Documentos"){?>
     <tr>
         <td align="center">
             <h1><?php if($type == "Cadastros"){?>Cadastros dos Colonistas<?php } else {?>Documentos dos Colonistas<?php }?></h1>
         </td>
     </tr>
-    <?php } else if($type == "Simples") {?>
     <tr>
         <td align="center">
             <h3><?= $time ?></h3>
         </td>
      </tr>
+     <?php }?>
      <tr>
         <td align="center">
         <br>
@@ -57,7 +57,7 @@
     </tr>
     <?php }?>
 </table>
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br>
 <?php $colunistsNumber = 1;
 foreach ($report as $colonist) {
     ?>
