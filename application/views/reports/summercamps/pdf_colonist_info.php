@@ -50,7 +50,7 @@
     <?php }?>
 </table>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-<?php
+<?php $colunistsNumber = 1;
 foreach ($report as $colonist) {
     ?>
     <div class="row">
@@ -129,5 +129,8 @@ foreach ($report as $colonist) {
             </div>
         </div>
     </div>
+   <?php $colunistsNumber++; if($colunistsNumber == 2) { $colunistsNumber = 0; ?>
+    <p style="page-break-before: always"></p>
+    <?php }?>
     <?php
 }

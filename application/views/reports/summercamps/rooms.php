@@ -50,7 +50,7 @@
     			var filtroGenero = $("#pavilhao option:selected").text();
     			var filtroGeneroVal = $("#pavilhao option:selected").val();
     			var filtroQuarto = $("#room").val();
-    			var nomePadrao = "listagem-quartos-";
+    			var nomePadrao = "";
 
     			if(filtroQuarto == 0)
         			filtroQuarto = "Sem-Quarto";
@@ -59,12 +59,12 @@
             	else {
                 	filtroQuarto = filtroQuarto.concat(filtroGeneroVal);
             	}	
-    			
+
+    			nomePadrao = nomePadrao.concat(filtroQuarto);
+    			nomePadrao = nomePadrao.concat("-");	
     			nomePadrao = nomePadrao.concat(filtroColonia);
     			nomePadrao = nomePadrao.concat("-");
-    			nomePadrao = nomePadrao.concat(filtroGenero);
-    			nomePadrao = nomePadrao.concat("-");
-    			return nomePadrao.concat(filtroQuarto);	
+    			return nomePadrao.concat(filtroGenero);    			
             }
 
             function getFilters() {
