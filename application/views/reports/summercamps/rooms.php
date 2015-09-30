@@ -140,11 +140,10 @@
                 post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
             }
 
-            function gerarPDFcomDadosCadastrais() {
+            function gerarPDFcomDadosCadastrais(type) {
                 var data = [];
                 var table = document.getElementById("tablebody");
                 var name = getCSVName();
-                var type = "Listagem de Quarto";
                 var summercamp = $("#colonia option:selected").text();
                 var filtroGeneroVal = $("#pavilhao option:selected").val();
     			var filtroQuarto = $("#room").val();
@@ -310,7 +309,7 @@
                 <br /><br />
 
                 <div class="col-lg-12">
-                <button class="button" onclick="gerarPDFcomDadosCadastrais()" value="">Cadastros</button><button class="button" onclick="sendTableToCSV()" value="">E-mails</button>
+                <button class="button" onclick="gerarPDFcomDadosCadastrais('Cadastros')" value="">Cadastros</button><button class="button" onclick="sendTableToCSV()" value="">E-mails</button>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>

@@ -1,16 +1,24 @@
+<style>
+	span {
+		font-size: 12px;
+	}
+</style>
+
 <table width="100%">
      <?php 
-            if($type == "Listagem de Quarto") { ?>
+            if($type == "Cadastros" || $type == "Simples" || $type == "Documentos") { ?>
     <tr>
         <td align="center">
        
             	<h1><?= $summercamp ?></h1></td>
     </tr>
+    <?php if($type == "Cadastros" || $type == "Documentos")?>
     <tr>
         <td align="center">
-            <h1>Cadastros dos Colonistas</h1>
+            <h1><?php if($type == "Cadastros"){?>Cadastros dos Colonistas<?php } else {?>Documentos dos Colonistas<?php }?></h1>
         </td>
     </tr>
+    <?php } else if($type == "Simples") {?>
     <tr>
         <td align="center">
             <h3><?= $time ?></h3>
@@ -56,8 +64,9 @@ foreach ($report as $colonist) {
     <div class="row">
         <div class="col-lg-12 middle-content">
             <div class="row">
-                <h2><?= $colonist['colonist']->fullname ?></h2>
-                <strong>Sexo: </strong><?php
+            <br>
+                <span><strong><?= $colonist['colonist']->fullname ?></strong></span><br/>
+                <span><strong>Sexo: </strong><?php
                 if ($colonist['colonist']->gender == 'M') {
                     echo "Masculino";
                     $amigo = "Amigo";
@@ -65,17 +74,18 @@ foreach ($report as $colonist) {
                     echo "Feminino";
                     $amigo = "Amiga";
                 }
-                ?><br>
-                <strong>Data nascimento: </strong><?= date("d/m/Y", strtotime($colonist['summercamp']->birth_date)); ?><br>
-                <strong>Escola: </strong><?= $colonist['summercamp']->school_name ?><br>
-                <strong>Ano escolar: </strong><?= $colonist['summercamp']->school_year ?><br>
-                <strong>Número Quarto: </strong><?= $colonist['summercamp']->room_number ?><br>
-                <strong>Telefone(s): </strong> <?= $colonist['colonist']->phone1 ?> -- <?= $colonist['colonist']->phone2 ?><br>
+                ?></span><br />
+                <span><strong>Data nascimento: </strong><?= date("d/m/Y", strtotime($colonist['summercamp']->birth_date)); ?></span><br />
+                <span><strong>Escola: </strong><?= $colonist['summercamp']->school_name ?></span><br>
+                <span><strong>Ano escolar: </strong><?= $colonist['summercamp']->school_year ?></span><br>
+                <span><strong>Número Quarto: </strong><?= $colonist['summercamp']->room_number ?></span><br>
+                <span><strong>Telefone(s): </strong> <?= $colonist['colonist']->phone1 ?> -- <?= $colonist['colonist']->phone2 ?></span><br>
                 <br>
-                <?php if($type == "Listagem de Quarto") {} else if($type == "Listagem de Inscrições"){?>
-                <strong><?= $amigo ?> 1: </strong><?= $colonist['summercamp']->roommate1 ?><br>
-                <strong><?= $amigo ?> 2: </strong><?= $colonist['summercamp']->roommate2 ?><br>
-                <strong><?= $amigo ?> 3: </strong><?= $colonist['summercamp']->roommate3 ?><br>
+                <?php if($type == "Cadastros") {} else if($type == "Listagem de Inscrições"){?>
+                <span><strong><?= $amigo ?> 1: </strong><?= $colonist['summercamp']->roommate1 ?></span><br>
+                <span><strong><?= $amigo ?> 2: </strong><?= $colonist['summercamp']->roommate2 ?></span><br>
+                <span><strong><?= $amigo ?> 3: </strong><?= $colonist['summercamp']->roommate3 ?></span><br>
+               
                 <br>
                 <?php }?>
 
@@ -87,10 +97,10 @@ foreach ($report as $colonist) {
                             $person = 'Pai';
                             if ($colonist[$key]) {
                                 ?>
-                                <h3><?= $person ?>:</h3>
-                                <strong>Nome: </strong><?= $colonist[$key]->fullname ?><br>
-                                <strong>Telefone(s): </strong> <?= $colonist[$key]->phone1 ?> <?= $colonist[$key]->phone2 ?><br>
-                                <strong>E-mail: </strong> <?= $colonist[$key]->email ?><br>
+                                <span><strong><?= $person ?>:</strong></span><br>
+                                <span><strong>Nome: </strong><?= $colonist[$key]->fullname ?></span><br>
+                                <span><strong>Telefone(s): </strong> <?= $colonist[$key]->phone1 ?> <?= $colonist[$key]->phone2 ?></span><br>
+                                <span><strong>E-mail: </strong> <?= $colonist[$key]->email ?></span><br>
                                 <?php
                             }
                             ?>
@@ -101,10 +111,10 @@ foreach ($report as $colonist) {
                             $person = 'Mãe';
                             if ($colonist[$key]) {
                                 ?>
-                                <h3><?= $person ?>:</h3>
-                                <strong>Nome: </strong><?= $colonist[$key]->fullname ?><br>
-                                <strong>Telefone(s): </strong> <?= $colonist[$key]->phone1 ?> <?= $colonist[$key]->phone2 ?><br>
-                                <strong>E-mail: </strong> <?= $colonist[$key]->email ?><br>
+                                <span><strong><?= $person ?>:</strong></span><br>
+                                <span><strong>Nome: </strong><?= $colonist[$key]->fullname ?></span><br>
+                                <span><strong>Telefone(s): </strong> <?= $colonist[$key]->phone1 ?> <?= $colonist[$key]->phone2 ?></span><br>
+                                <span><strong>E-mail: </strong> <?= $colonist[$key]->email ?></span><br>
                                 <?php
                             }
                             ?>
@@ -118,18 +128,17 @@ foreach ($report as $colonist) {
                 $person = 'Responsável';
                 if ($colonist[$key]) {
                     ?>
-                    <h3><?= $person ?>:</h3>
-                    <strong>Nome: </strong><?= $colonist[$key]->fullname ?><br>
-                    <strong>Telefone(s): </strong> <?= $colonist[$key]->phone1 ?> -- <?= $colonist[$key]->phone2 ?><br>
-                    <strong>E-mail: </strong> <?= $colonist[$key]->email ?><br>
+                    <span><strong><?= $person ?>:</strong></span><br>
+                    <span><strong>Nome: </strong><?= $colonist[$key]->fullname ?></span><br>
+                    <span><strong>Telefone(s): </strong> <?= $colonist[$key]->phone1 ?> -- <?= $colonist[$key]->phone2 ?></span><br>
+                    <span><strong>E-mail: </strong> <?= $colonist[$key]->email ?></span><br>
                     <?php
                 }
                 ?>
-                <strong>----------------------------------------------------------------------------------------------------------------------------</strong>
             </div>
         </div>
     </div>
-   <?php $colunistsNumber++; if($colunistsNumber == 2) { $colunistsNumber = 0; ?>
+   <?php $colunistsNumber++; if($colunistsNumber == 3) { $colunistsNumber = 0; ?>
     <p style="page-break-before: always"></p>
     <?php }?>
     <?php
