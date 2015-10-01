@@ -34,7 +34,7 @@ if($type == "Vários"){
 		<br>Documento:
 		<br> 
 		<br>
-		<span style="font-size:small"> <b>Observação:</b> de acordo com o artigo 83, seus parágrafos e alíneas, da Lei nº 8.069/90,
+	<!--<span style="font-size:small"> <b>Observação:</b> de acordo com o artigo 83, seus parágrafos e alíneas, da Lei nº 8.069/90,
 		tem-se como regra a vedação da viagem de criança (pessoa menor de 12 anos de idade) para fora da comarca onde reside,
 		desacompanhada dos pais ou responsável (guardião ou tutor), sem expressa autorização judicial. Contudo, tratando-se de viagem
 		para comarca contígua à da residência da criança, ou de viagem dentro do mesmo Estado Federado, ou, ainda, dentro da mesma
@@ -45,7 +45,7 @@ if($type == "Vários"){
 		18 anos de idade por precaução. Se o colonista tiver 12 anos ou mais, deve levar consigo no ônibus fretado pela Associação Kinderland
 		um documento (RG ou certidão de nascimento), original ou cópia autenticada, preferencialmente RG por conter foto. Nos demais casos,
 		levar o RG (cópia autenticada) do pai, mãe ou responsável legal pelo colonista. </span>
-	<br>
+	<br> -->
 		
 	</div>
 </div>
@@ -70,7 +70,7 @@ if($type == "Vários"){
 		<br>Documento:
 		<br> 
 		<br>
-		<span style="font-size:small"> <b>Observação:</b> de acordo com o artigo 83, seus parágrafos e alíneas, da Lei nº 8.069/90,
+<!-- 	<span style="font-size:small"> <b>Observação:</b> de acordo com o artigo 83, seus parágrafos e alíneas, da Lei nº 8.069/90,
 		tem-se como regra a vedação da viagem de criança (pessoa menor de 12 anos de idade) para fora da comarca onde reside,
 		desacompanhada dos pais ou responsável (guardião ou tutor), sem expressa autorização judicial. Contudo, tratando-se de viagem
 		para comarca contígua à da residência da criança, ou de viagem dentro do mesmo Estado Federado, ou, ainda, dentro da mesma
@@ -81,7 +81,7 @@ if($type == "Vários"){
 		18 anos de idade por precaução. Se o colonista tiver 12 anos ou mais, deve levar consigo no ônibus fretado pela Associação Kinderland
 		um documento (RG ou certidão de nascimento), original ou cópia autenticada, preferencialmente RG por conter foto. Nos demais casos,
 		levar o RG (cópia autenticada) do pai, mãe ou responsável legal pelo colonista. </span>
-	<br>
+	<br> -->
 		
 	</div>
 </div>

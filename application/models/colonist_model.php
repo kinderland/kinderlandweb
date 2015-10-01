@@ -56,7 +56,7 @@ class colonist_model extends CK_Model {
     		$list .= $idsColonist[$i][0];
     	}
     
-    	$sql = "SELECT * FROM colonist c JOIN person p on p.person_id = c.person_id WHERE colonist_id in (" . $list . ")";
+    	$sql = "SELECT * FROM colonist c JOIN person p on p.person_id = c.person_id WHERE colonist_id in (" . $list . ") order by p.fullname";
     	$resultSet = $this->executeRows($this->db, $sql);
 		    $colonistArray = array();
 
