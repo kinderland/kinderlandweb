@@ -24,17 +24,5 @@
                 Quartos
             </a>  
         </div>
-        <h3>Eventos</h3>
-        <div>
-
-        </div>
-        <h3>Financeiro</h3>
-        <div>
-            
-        </div>
-        <h3>Sistema</h3>
-        <div>
-            
-        </div>
     </div>
 </div>
