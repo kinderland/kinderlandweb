@@ -1449,6 +1449,64 @@ class SummerCamps extends CK_Controller {
         $html = $this->output->get_output();
         pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
+
+    public function manageStaff($summerCampId) {
+        $summerCamp = $this->summercamp_model->getSummerCampById($summerCampId);
+        if($summerCamp != null){
+            $data["summerCamp"] = $summerCamp;
+
+            $data["staff"] = $this->summercamp_model->getCampStaff($summerCampId);
+
+            $data["possibleCoordinators"] = $this->personuser_model->getUsersByUserType(COORDINATOR);
+            $data["possibleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR);
+            $data["possibleDoctors"] = $this->personuser_model->getUsersByUserType(DOCTOR);
+
+            $this->loadReportView("admin/camps/campStaff", $data);
+        }
+    }
+
+    public function updateCoordinator(){
+        $personId = $this->input->post("person_id", true);
+        $summerCampId = $this->input->post("camp_id", true);
+
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 1))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function updateDoctor(){
+        $personId = $this->input->post("person_id", true);
+        $summerCampId = $this->input->post("camp_id", true);
+
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 3))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function updateMonitor(){
+        $personId = $this->input->post("person_id", true);
+        $summerCampId = $this->input->post("camp_id", true);
+        $room = $this->input->post("room_number", true);
+
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2, intval($room)))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function staffMedicalFile() {
+        $data = array();
+        $personId = $this->session->userdata("user_id");
+        $data['personId'] = $personId;
+        $medicalFile = $this->medical_file_model->getMedicalFile($personId);
+        if($medicalFile != null){
+            //TODO
+        } else {
+            //TODO
+        }
+    }
 }
 
 ?>

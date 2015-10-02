@@ -67,6 +67,16 @@ function hasPermission($permissions, $permissionRequested) {
                     </div>
                 </div>
             <?php } ?>
+
+            <?php if (hasPermission($permissions, MONITOR)) { ?>
+                <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
+                        <a href="<?= $this->config->item('url_link'); ?>user/monitor">
+                            <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Monitor</button>
+                        </a>
+                    </div>
+                </div>
+            <?php } ?>
             <div class="row">
                 <div class="col-lg-4 col-lg-offset-4">
                     <a href="<?= $this->config->item('url_link'); ?>login/logout">

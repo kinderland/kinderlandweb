@@ -546,7 +546,7 @@ class Admin extends CK_Controller {
             'secretary' => isset($_POST['secretary']),
             'coordinator' => isset($_POST['coordinator']),
             'doctor' => isset($_POST['doctor']),
-            'monitor' => isset($_POST['monitor'])
+            'monitor' => isset($_POST['monitor_instructor'])
         );
 
         $this->Logger->info("Array New Permissions: " . print_r($arrNewPermissions, true));

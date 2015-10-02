@@ -125,6 +125,11 @@ class User extends CK_Controller {
         $this->loadView("user/menu_doctor", $data);
     }
 
+    public function monitor() {
+        $data['fullname'] = $this->session->userdata("fullname");
+        $this->loadView("user/menu_monitor", $data);
+    }
+
     public function emails() {
         $this->Logger->info("Running: " . __METHOD__);
         $userid = $this->session->userdata("user_id");

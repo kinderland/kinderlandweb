@@ -76,7 +76,7 @@
                                     Não: <input type="radio" name="pre_subscription<?=$camp->getCampId()?>" value="false" <?= (!$camp->isEnabled())?"checked='checked'":""?> />
                                 </td>
                                 <td>M: <?=$camp->getCapacityMale()?> | F: <?=$camp->getCapacityFemale()?></td>
-                                <td> <a onClick="updateCampEnabled(<?=$camp->getCampId()?>)"> Salvar </a> <td/>
+                                <td> <a onClick="updateCampEnabled(<?=$camp->getCampId()?>)"> Salvar </a> | <a href="<?=$this->config->item('url_link')?>summercamps/manageStaff/<?=$camp->getCampId()?>"> Equipe </a> <td/>
                             </tr>
 
                             <?php
