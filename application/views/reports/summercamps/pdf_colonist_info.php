@@ -6,16 +6,16 @@
 
 <table width="100%">
      <?php 
-            if($type == "Cadastros" || $type == "Simples" || $type == "Documentos") { ?>
+            if($type == "Contatos" || $type == "Simples" || $type == "Documentos") { ?>
     <tr>
         <td align="center">
        
             	<h1><?= $summercamp ?></h1></td>
     </tr>
-    <?php if($type == "Cadastros" || $type == "Documentos"){?>
+    <?php if($type == "Contatos" || $type == "Documentos"){?>
     <tr>
         <td align="center">
-            <h1><?php if($type == "Cadastros"){?>Cadastros dos Colonistas<?php } else {?>Documentos dos Colonistas<?php }?></h1>
+            <h1><?php if($type == "Contatos"){?>Contatos dos Colonistas<?php } else {?>Documentos dos Colonistas<?php }?></h1>
         </td>
     </tr>
     <tr>
@@ -87,7 +87,7 @@ else if($type == "Documentos"){
 		                </div>
 		                </div>
 	<?php }}
-else if($type == "Cadastros" || $type == "Listagem de Inscrições"){ $colunistsNumber = 1;
+else if($type == "Contatos" || $type == "Listagem de Inscrições"){ $colunistsNumber = 1;
 foreach ($report as $colonist) {
     ?>
     <div class="row">
@@ -110,7 +110,7 @@ foreach ($report as $colonist) {
                 <span><strong>Número Quarto: </strong><?= $colonist['summercamp']->room_number ?></span><br>
                 <span><strong>Telefone(s): </strong> <?= $colonist['colonist']->phone1 ?> -- <?= $colonist['colonist']->phone2 ?></span><br>
                 <br>
-                <?php if($type == "Cadastros") {} else if($type == "Listagem de Inscrições"){?>
+                <?php if($type == "Contatos") {} else if($type == "Listagem de Inscrições"){?>
                 <span><strong><?= $amigo ?> 1: </strong><?= $colonist['summercamp']->roommate1 ?></span><br>
                 <span><strong><?= $amigo ?> 2: </strong><?= $colonist['summercamp']->roommate2 ?></span><br>
                 <span><strong><?= $amigo ?> 3: </strong><?= $colonist['summercamp']->roommate3 ?></span><br>

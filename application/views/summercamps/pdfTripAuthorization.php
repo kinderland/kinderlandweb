@@ -13,6 +13,7 @@ $end = date("d/m/Y", strtotime($end));
 <?php 
 
 if($type == "Vários"){
+	$number = 0;
 	foreach($colonists as $colonist) {
 		?>
 <div id="main">
@@ -49,7 +50,21 @@ if($type == "Vários"){
 		
 	</div>
 </div>
-<p style="page-break-before: always"></p>
+	<?php $number++; if($number == 2) { $number = 0;?>
+	<p style="page-break-before: always"></p>
+	<?php } else {?>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>	
+	<?php }?>
 <?php }} else {?>
 <div id="main">
 	<div style="font-size:14px; text-align:justify">
