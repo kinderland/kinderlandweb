@@ -6,7 +6,7 @@
 
 <table width="100%">
      <?php 
-            if($type == "Contatos" || $type == "Simples" || $type == "Documentos" || $type == "Cadastros") { ?>
+            if($type == "Contatos" || $type == "Lista" || $type == "Documentos" || $type == "Cadastros") { ?>
     <tr>
         <td align="center">
        
@@ -47,39 +47,45 @@
     </tr>
     <?php }?>
 </table>
-<br><br><br><br><br><br><br><br><br>
+<br><br><br>
 
 <?php 
-if($type=="Simples"){
+if($type=="Lista"){
 	foreach ($report as $colonist) {
 		?>
 		    <div class="row">
 		        <div class="col-lg-12 middle-content">
 		            <div class="row">
-		            <br>
-		                <span><strong><?= $colonist['colonist']->fullname ?></strong></span><br/>
+		                <h3><strong><?= $colonist['colonist']->fullname ?></strong></h3>
 		                </div>
 		                </div>
 		                </div>
 	<?php }}
-else if($type == "Documentos"){
-	foreach ($report as $colonist) {
-		?>
-		    <div class="row">
+else if($type == "Documentos"){ ?>
+	<div class="row">
 		        <div class="col-lg-12 middle-content">
 		            <div class="row">
 		            <br>
 		            <table>
 		            	<tr>
-		                <td><strong><?= $colonist['colonist']->fullname ?></strong></td>
-		                <td><strong><?= $colonist['colonist']->fullname ?></strong></td>
-		                <td><strong><?= $colonist['colonist']->fullname ?></strong></td>
+		            		<td><h3><b>Colonista</b></h3></td>
+		            		<td><h3><b>Tipo de Documento</b></h3></td>
+		            		<td><h3><b>Número do Documento</b></h3></td>
+		            	</tr>
+	<?php foreach ($report as $colonist) {
+		?>
+		            	<tr>
+		                <td><?= $colonist['colonist']->fullname ?></td>
+		                <td><?= $colonist['document']->getDocumentType() ?></td>
+		                <td><?= $colonist['document']->getDocumentNumber() ?></td>
 		                </tr>
-		                </table>
+		                
+	<?php } ?>
+						</table>
 		                </div>
 		                </div>
 		                </div>
-	<?php }}
+<?php }
 else if($type == "Contatos" || $type == "Listagem de Inscrições" || $type == "Cadastros"){ 
 	
 	
