@@ -231,6 +231,21 @@ class personuser_model extends CK_Model {
         return $email;
     }
 
+    public function getUsersByUserType($userType) {
+        $sql = "select
+                *
+                from person p
+                inner join person_user_type put on put.person_id = p.person_id
+                where put.user_type = $userType";
+
+        $rows = $this->executeRows($this->db, $sql);
+        $personUser = array();
+        foreach ($rows as $row) {
+            $personUser[] = Person::createPersonObjectSimple($row, false);
+        }
+        return $personUser;
+    }
+
 }
 
 ?>
