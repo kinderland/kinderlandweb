@@ -187,10 +187,6 @@
 						+ $countsAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento 
 						+ $countsNotAssociatedM->inscrito); ?>
 	                    
-	                    
-					
-					
-					
 					</tr>
 				<!-- </table>
 				<table class="table table-bordered table-striped table-min-td-size"
@@ -208,8 +204,8 @@
 							echo number_format(($countsT->inscrito/$potInscritos)*100,1);
 						 else echo "0.0";
 						 echo "%"; ?>  </td>
-					</tr>
-				</table> -->
+					</tr>-->
+				</table> 
 			</div>
 		</div>
 	</div>

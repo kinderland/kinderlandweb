@@ -1258,8 +1258,7 @@ class SummerCamps extends CK_Controller {
         $data['filtros'] = json_decode($this->input->post('filters', TRUE));
         date_default_timezone_set('America/Sao_Paulo');
         $data['time'] = date('d-m-Y G:i:sa');
-
-
+        
         $colonists = $this->summercamp_model->getColonistDataFromPDF($dataArray);
         for ($i = 0; $i < count($colonists); $i++) {
             $data['report'][$i]['summercamp'] = $colonists[$i];
@@ -1267,10 +1266,13 @@ class SummerCamps extends CK_Controller {
             $data['report'][$i]['mother'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->mother_id);
             $data['report'][$i]['responsable'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->responsable_id);
             $data['report'][$i]['father'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->father_id);
+            if($this -> summercamp_model -> getSummerCampById($data['report'][$i]['summercamp'] -> camp_id)->isMiniCamp()) {
+            	$data['report'][$i]['minik'] = $this -> summercamp_model -> getMiniCampObs($data['report'][$i]['summercamp'] -> camp_id, $data['report'][$i]['summercamp'] -> colonist_id);
+            }
         }
         $this->loadReportView("reports/summercamps/pdf_colonist_info", $data);
-        $html = $this->output->get_output();
-        pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+       	$html = $this->output->get_output();
+        pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf"); 
     }
     
     public function generatePDFTripAuthorization() {
@@ -1429,8 +1431,17 @@ class SummerCamps extends CK_Controller {
         $data["roomNumber"] = $room;
         $data["pavilhao"] = $gender;
         $data["summerCamp"] = $this->summercamp_model->getSummerCampById($summerCampId);
+        
+        if($room == -1) {
+        	$room = "Todos-os-Quartos";
+        	
+        	if($gender == "M")
+        		$gender = "-Masculino";
+        	else 
+        		$gender = "-Feminino";
+        }
 
-        $fileName = "fichas_medicas_".$data["summerCamp"]->getCampName()."_".$room.$gender;
+        $fileName = "Fichas-Medicas-".$room.$gender."-".$data["summerCamp"]->getCampName();
 
         $this->loadView("summercamps/pdfMedicalFiles", $data);
 
