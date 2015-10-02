@@ -1246,7 +1246,7 @@ class Reports extends CK_Controller {
     		if ($camp->getCampName() == $campChosen)
     			$campChosenId = $camp->getCampId();
     	}
-    	
+    	 	
     	$data['summer_camp_id'] = $campChosenId;
     	$data['colonia_escolhida'] = $campChosen;
     	$data['camps'] = $camps;
