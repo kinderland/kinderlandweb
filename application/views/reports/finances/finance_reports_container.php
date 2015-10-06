@@ -15,9 +15,9 @@
                         <option value="<?= $this->config->item('url_link'); ?>reports/free_donations">Doações avulsas</option>
                         <option value="<?= $this->config->item('url_link'); ?>reports/associate_campaign_donations">Doações Campanha de Sócios</option>
                    		<option value="<?= $this->config->item('url_link'); ?>reports/camps_donations">Doações Colônias</option>
+                   		<option value="<?= $this->config->item('url_link'); ?>reports/user_donation_history">Histórico individual de doações</option>
                    		<?php } ?>
                    		<?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
-                    	<option value="<?= $this->config->item('url_link'); ?>reports/user_donation_history">Histórico individual de doações</option>
                     	<option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>
                     	<option value="<?= $this->config->item('url_link'); ?>reports/failed_transactions">Transações Cielo sem sucesso</option>
                     	<?php } ?>
