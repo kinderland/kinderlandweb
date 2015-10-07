@@ -1,4 +1,4 @@
-<?php if($type == "simples") {} else{?>
+<?php if(isset($type) && $type == "simples") {} else{?>
 
 <table width="100%">
     <tr>

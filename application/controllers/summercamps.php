@@ -1472,6 +1472,39 @@ class SummerCamps extends CK_Controller {
         pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");*/
     }
 
+    public function colonistPDFMedicalFile(){
+        $this->load->plugin('mpdf');
+        $data = array("camp_id" => $_GET['camp_id'], "colonist_id" => $_GET['colonist_id']);
+        $doctor = null;
+        $medical_file = null;
+        $colonist = $this->summercamp_model->getColonistInformationById($data["colonist_id"]);
+
+        if ($this->summercamp_model->hasDocument($data["camp_id"], $data["colonist_id"], DOCUMENT_MEDICAL_FILE)) {
+            $medical_file = $this->medical_file_model->getMedicalFile($data["camp_id"], $data["colonist_id"]);
+            $data["medicalFile"] = $medical_file;
+            $doctor = $this->person_model->getPersonById($medical_file->getDoctorId());
+            $tels = $this->telephone_model->getTelephonesByPersonId($medical_file->getDoctorId());
+            if (isset($tels[0]))
+                $doctor->setPhone1($tels[0]);
+            if (isset($tels[1]))
+                $doctor->setPhone2($tels[1]);
+        }
+        $fileName = "Colonista_" . $colonist->colonist_id;
+        $data['time'] = date('d-m-Y G:i:sa');
+
+        $data["colonists"] = array($colonist);
+        $data["medicalFiles"] = array($medical_file);
+        $data["doctors"] = array($doctor);
+        $data['type'] = "simples";
+        $data["summerCamp"] = $this->summercamp_model->getSummerCampById($data["camp_id"]);
+        
+        $this->loadView("summercamps/pdfMedicalFiles", $data);
+
+        $html = $this->output->get_output();
+        
+        pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
+
     public function manageStaff($summerCampId) {
         $summerCamp = $this->summercamp_model->getSummerCampById($summerCampId);
         if($summerCamp != null){

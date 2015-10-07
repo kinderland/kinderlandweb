@@ -345,8 +345,6 @@
 		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">
 	</form>
 	<br />
-	<button class="btn btn-primary" onclick="createPDFMedicalFilest()" value="">PDF com ficha médica</button>
-	<br />
 	<br />
 	<input type="submit" class="btn btn-warning" value="Voltar" id="upload" onClick="history.go(-1);return true;">
 

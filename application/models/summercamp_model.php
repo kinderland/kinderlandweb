@@ -26,7 +26,7 @@ class summercamp_model extends CK_Model {
     
     public function getColonistInformationById($id) {
     	$sql = "select c.colonist_id as colonist_id, scs.summer_camp_id as camp_id, p.gender as pavilhao, scs.room_number as room, 
-    			DATE_PART('YEAR',scs.date_created) as year from summer_camp_subscription scs INNER JOIN colonist c on 
+    			DATE_PART('YEAR',scs.date_created) as year, p.fullname as colonist_name from summer_camp_subscription scs INNER JOIN colonist c on 
     			c.colonist_id = scs.colonist_id INNER JOIN person p on p.person_id = c.person_id
     			WHERE c.colonist_id = ?";
     	$resultSet = $this -> executeRow($this->db, $sql, array($id));
@@ -88,7 +88,7 @@ class summercamp_model extends CK_Model {
     }
 
     public function getAllSummerCampsByYear($year) {
-        $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_created) = ? ORDER BY date_created DESC";
+        $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_created) = ? ORDER BY date_created ASC";
         $resultSet = $this->executeRows($this->db, $sql, array(intval($year)));
 
         $campArray = array();
