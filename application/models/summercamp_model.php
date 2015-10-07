@@ -23,6 +23,16 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
+    
+    public function getColonistInformationById($id) {
+    	$sql = "select c.colonist_id as colonist_id, scs.summer_camp_id as camp_id, p.gender as pavilhao, scs.room_number as room, 
+    			DATE_PART('YEAR',scs.date_created) as year from summer_camp_subscription scs INNER JOIN colonist c on 
+    			c.colonist_id = scs.colonist_id INNER JOIN person p on p.person_id = c.person_id
+    			WHERE c.colonist_id = ?";
+    	$resultSet = $this -> executeRow($this->db, $sql, array($id));
+    	
+    	return $resultSet;
+    }
 
     public function getAllColonistsForDiscount() {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,

@@ -467,6 +467,22 @@ class SummerCamps extends CK_Controller {
                 $data["doctorPhone2"] = $tels[1];
             else
                 $data["doctorPhone2"] = "";
+            
+            
+            $colonistid = $data["colonist_id"];
+            
+            $colonist = $this -> summercamp_model -> getColonistInformationById($colonistid);
+            
+            
+	            $data['colonist_id'] = $colonist -> colonist_id;
+	            $data['ano_escolhido'] = $colonist -> year;
+	            $data['summer_camp_id'] = $colonist -> camp_id;
+	            $data['pavilhao'] = $colonist -> pavilhao;
+	            $data['quarto'] = $colonist -> room;
+	            
+	            $type = 'simples';
+	            $data['type'] = $type;
+	            
             $this->loadView('summercamps/editMedicalFileForm', $data);
         } else {
             $this->loadView('summercamps/medicalFile', $data);
@@ -1403,7 +1419,7 @@ class SummerCamps extends CK_Controller {
             echo "false";
     }
 
-    public function generatePDFWithColonistMedicalFiles($year, $summerCampId, $gender, $room){
+    public function generatePDFWithColonistMedicalFiles($year, $summerCampId, $gender, $room, $type){
         $this->load->plugin('mpdf');
         $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $summerCampId, $gender);
         $colonistsSelected = $this->filterColonists($colonists, $room, $gender);
@@ -1428,26 +1444,32 @@ class SummerCamps extends CK_Controller {
         $data["colonists"] = $colonistsSelected;
         $data["medicalFiles"] = $medicalFiles;
         $data["doctors"] = $doctors;
+        $data['type'] = $type;
 
         $data["roomNumber"] = $room;
         $data["pavilhao"] = $gender;
         $data["summerCamp"] = $this->summercamp_model->getSummerCampById($summerCampId);
         
-        if($room == -1) {
-        	$room = "Todos-os-Quartos";
-        	
-        	if($gender == "M")
-        		$gender = "-Masculino";
-        	else 
-        		$gender = "-Feminino";
+        if($type == "varios") {
+	        if($room == -1) {
+	        	$room = "Todos-os-Quartos";
+	        	
+	        	if($gender == "M")
+	        		$gender = "-Masculino";
+	        	else 
+	        		$gender = "-Feminino";
+	        }
+	
+	        $fileName = "Fichas-Medicas-".$room.$gender."-".$data["summerCamp"]->getCampName();
         }
-
-        $fileName = "Fichas-Medicas-".$room.$gender."-".$data["summerCamp"]->getCampName();
+        
+        else 
+        	$fileName = "ficha-medica-";
 
         $this->loadView("summercamps/pdfMedicalFiles", $data);
-
+/*
         $html = $this->output->get_output();
-        pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+        pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");*/
     }
 
     public function manageStaff($summerCampId) {

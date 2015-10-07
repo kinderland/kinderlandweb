@@ -1,3 +1,5 @@
+<?php if($type == "simples") {} else{?>
+
 <table width="100%">
     <tr>
         <td align="center">
@@ -17,6 +19,7 @@
 </table>
 <p style="page-break-before: always"></p>
 <?php
+} 
 for($i = 0; $i < count($colonists); $i++) {
     $colonist = $colonists[$i];
     $medicalFile = $medicalFiles[$i];

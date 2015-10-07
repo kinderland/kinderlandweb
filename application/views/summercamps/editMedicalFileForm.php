@@ -1,3 +1,11 @@
+ <script type="text/javascript"> 
+
+ function createPDFMedicalFilest() {
+	    var a = "<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?=$ano_escolhido?>/<?=(isset($summer_camp_id)?$summer_camp_id:'')?>/<?=(isset($pavilhao)?$pavilhao:'')?>/<?=(isset($quarto)?$quarto:'')?>/<?=(isset($type)?$type:'')?>";
+	    window.location.href = a;
+	}
+
+ </script>
 <div id="cabecalho">
 	<p align="right" style="color:red">
 		O símbolo * indica preenchimento obrigatório!
@@ -18,6 +26,7 @@
 	} ?>
 
 <script>
+
 	$(document).ready(function() {
 
 		$(('input:radio')).each(function() {
@@ -335,6 +344,9 @@
 		</table>
 		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">
 	</form>
+	<br />
+	<button class="btn btn-primary" onclick="createPDFMedicalFilest()" value="">PDF com ficha médica</button>
+	<br />
 	<br />
 	<input type="submit" class="btn btn-warning" value="Voltar" id="upload" onClick="history.go(-1);return true;">
 
