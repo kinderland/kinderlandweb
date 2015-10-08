@@ -362,6 +362,7 @@
 
                 <div class="col-lg-12">
                   <button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Lista')" value="">Lista</button>&nbsp;<button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Documentos')" value="">Documentos</button>&nbsp;<button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Cadastros')" value="">Cadastros</button>&nbsp;<button class="btn btn-primary" onclick="createPDFMedicalFiles()" value="">Fichas Médicas</button>&nbsp;<button class="btn btn-primary" onclick="geraAutorizacaoPDF('<?=$summer_camp_id?>')" value="">Autorizações</button>&nbsp;<button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Contatos')" value="">Contatos</button>&nbsp;<button class="btn btn-primary" onclick="sendTableToCSV()" value="">E-mails</button>
+                  <br /><br />
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>

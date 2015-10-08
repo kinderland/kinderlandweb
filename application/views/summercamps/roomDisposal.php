@@ -102,6 +102,78 @@
             return a-b;
         }
 
+        function post(path, params, method) {
+            method = method || "post"; // Set method to post by default if not specified.
+
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+                    form.appendChild(hiddenField);
+                }
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function getCSVName(type) {
+            var filtroColonia = $("#colonia option:selected").text();
+            var filtroGenero = $("#pavilhao option:selected").text();
+            var filtroGeneroVal = $("#pavilhao option:selected").val();
+            var filtroQuarto = $("#room").val();
+            var nomePadrao = type.concat("-");
+
+            if(filtroQuarto == 0)
+                filtroQuarto = "Sem-Quarto".concat(filtroGenero);
+            else if(filtroQuarto == -1)
+                filtroQuarto = "Todos-os-Quartos".concat(filtroGenero);
+            else {
+                filtroQuarto = filtroQuarto.concat(filtroGeneroVal);
+            }   
+
+            nomePadrao = nomePadrao.concat(filtroQuarto);
+            nomePadrao = nomePadrao.concat("-");    
+            return nomePadrao.concat(filtroColonia);            
+        }
+
+        function sendTableToCSV() {
+            var data = [];
+            var table = document.getElementById("tablebody");
+            var name = getCSVName('DistQuarto');
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                var data2 = []
+                //Nome, retira pega o que esta entre um <> e outro <>
+                
+                data2.push(row.cells[0].innerHTML.split("<")[1].split(">")[1]);
+                data2.push(row.cells[1].innerHTML);
+                data2.push(row.cells[2].innerHTML);
+                data2.push(row.cells[3].innerHTML);
+                data2.push(row.cells[4].innerHTML.split("<")[1].split(">")[1]);
+                data2.push(row.cells[5].innerHTML.split("<")[1].split(">")[1]);
+                data2.push(row.cells[6].innerHTML.split("<")[1].split(">")[1]);
+                data2.push(row.cells[7].innerHTML);
+                data2.push(row.cells[8].innerHTML.split('value="')[1].split('"')[0]);
+                data.push(data2);
+            }
+            if (i == 0) {
+                alert('Não há dados para geração da planilha');
+                return;
+            }
+            var dataToSend = JSON.stringify(data);
+            var columName = ["Colonista", "Idade", "Escola", "Ano Escolar", "Amigo 1", "Amigo 2", "Amigo 3", "Amigos no quarto", "Quarto"];
+            var columnNameToSend = JSON.stringify(columName);
+
+            post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
+        }
     </script>
 
     <style>
@@ -148,7 +220,6 @@
                     <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
                         <table>
                             <tr>
-                                
                                 <th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
@@ -206,6 +277,9 @@
                         <span class="TF">Marrom: Amigo encontrado e alocado em quartos diferentes ou sem quartos</span><br />
                         <span class="F">Vermelho: Amigo não encontrado no sistema</span><br />
                     </p>
+
+                    <button class="btn btn-primary" onclick="sendTableToCSV()">Exportar para CSV</button>
+                    <br /><br />
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
@@ -221,7 +295,7 @@
                                 <th> Ações </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tablebody">
                             <?php foreach ($colonists as $colonist) { ?>
                                 <tr>
                                     <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
