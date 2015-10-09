@@ -149,6 +149,35 @@
 
 			
 		}
+		
+		public function getCapturedTransactionsByDonationType($type = null) {
+			$sql = "SELECT * FROM v_captured_transactions
+					" . (($type !== null)? "WHERE donation_type = ?" : "") . "
+					ORDER BY date_updated";
+			
+			if($type !== null)
+				$resultSet = $this -> executeRows($this -> db, $sql, array($type));
+			else
+				$resultSet = $this -> executeRows($this -> db, $sql);
+			
+			if($resultSet !== null)
+				return $resultSet;
+			else
+				return null;
+		}
+		
+		public function countTotalDaysCapturedTransaction() {
+			$sql = "SELECT DISTINCT DATE_PART('DAY',date_updated) as day, DATE_PART('MONTH',date_updated) as month, 
+					DATE_PART('YEAR',date_updated) as year FROM cielo_transaction ORDER BY DATE_PART('YEAR',date_updated), 
+					DATE_PART('MONTH',date_updated), DATE_PART('DAY',date_updated)";
+			
+			$resultSet = $this -> executeRows($this -> db, $sql);
+				
+			if($resultSet !== null)
+				return $resultSet;
+			else
+				return null;
+		}
 
     }
 ?>
