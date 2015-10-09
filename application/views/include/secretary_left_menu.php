@@ -52,9 +52,5 @@
         <div>
 
         </div>
-        <h3>Financeiro</h3>
-        <div>
-            <a href="<?= $this->config->item('url_link'); ?>reports/finance_reports">Relatórios</a>
-        </div>
     </div>
 </div>

@@ -417,6 +417,26 @@ class SummerCamps extends CK_Controller {
         redirect("summercamps/index");
     }
 
+    public function excludeColonist() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $campId = $this->input->get('camp_id', TRUE);
+        $colonistId = $this->input->get('colonist_id', TRUE);
+        $camper = $this->summercamp_model->getSummerCampSubscription($colonistId, $campId);
+        $personUserId = $camper->getPersonUserId();
+        $responsableId = $this->session->userdata("user_id");
+
+        if ($personUserId !== $responsableId) {
+            $this->Logger->error("Responsavel de id $responsableId tentou excluir o colonista $colonistId da campanha $campId que pertence ao responsavel $personUserId");
+            //$this->index();
+        } else {
+            $this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED);
+            $this->sendExclusionEmail($colonistId, $campId);
+            //$this->index();
+        }
+
+        redirect("summercamps/index");
+    }
+
     public function medicalFile($data) {
         if ($this->summercamp_model->hasDocument($data["camp_id"], $data["colonist_id"], DOCUMENT_MEDICAL_FILE)) {
             $medical_file = $this->medical_file_model->getMedicalFile($data["camp_id"], $data["colonist_id"]);
@@ -447,6 +467,22 @@ class SummerCamps extends CK_Controller {
                 $data["doctorPhone2"] = $tels[1];
             else
                 $data["doctorPhone2"] = "";
+            
+            
+            $colonistid = $data["colonist_id"];
+            
+            $colonist = $this -> summercamp_model -> getColonistInformationById($colonistid);
+            
+            
+	            $data['colonist_id'] = $colonist -> colonist_id;
+	            $data['ano_escolhido'] = $colonist -> year;
+	            $data['summer_camp_id'] = $colonist -> camp_id;
+	            $data['pavilhao'] = $colonist -> pavilhao;
+	            $data['quarto'] = $colonist -> room;
+	            
+	            $type = 'simples';
+	            $data['type'] = $type;
+	            
             $this->loadView('summercamps/editMedicalFileForm', $data);
         } else {
             $this->loadView('summercamps/medicalFile', $data);
@@ -455,9 +491,15 @@ class SummerCamps extends CK_Controller {
 
     public function uploadDocument() {
         $this->Logger->info("Starting " . __METHOD__);
-        $data["camp_id"] = $this->input->get('camp_id', TRUE);
-        $data["colonist_id"] = $this->input->get('colonist_id', TRUE);
+        $summerCampId = $this->input->get('camp_id', TRUE);
+        $data["camp_id"] = $summerCampId;
+        $colonistId = $this->input->get('colonist_id', TRUE);
+        $data["colonist_id"] = $colonistId;
         $data["document_type"] = $this->input->get('document_type', TRUE);
+
+        $status = $this->summercamp_model->getColonistStatus($colonistId, $summerCampId);
+        $data['status'] = $status;
+
         $camper = $this->summercamp_model->getSummerCampSubscription($data["colonist_id"], $data["camp_id"]);
         $validation = $this->validation_model->getColonistValidationInfoObject($data["colonist_id"], $data["camp_id"]);
         if ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN || ($camper->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && $validation && !$validation->verifyDocument($data["document_type"]))) {
@@ -521,7 +563,7 @@ class SummerCamps extends CK_Controller {
             $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
         $userId = $this->session->userdata("user_id");
         if ($_FILES['uploadedfile'] ['error'] > 0 || !$this->summercamp_model->uploadDocument($camp_id, $colonist_id, $userId, $fileName, $file, $document_type)) {
-            echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que só são aceitos arquivos até 2MB.');
+            echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB.');
             window.location.replace('" . $this->config->item('url_link') . "summercamps/uploadDocument?camp_id=$camp_id&colonist_id=$colonist_id&document_type=$document_type');</script>";
         } else {
             $this->validation_model->sentNewDocument($colonist_id, $camp_id, $document_type);
@@ -683,6 +725,47 @@ class SummerCamps extends CK_Controller {
         }
 
         $this->sendEmailSubmittedPreSubscription($personuser, $colonist, $summercamp->getCampName(), $emailArray);
+    }
+
+    public function sendExclusionEmail($colonistId, $summerCampId) {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $summercamp = $this->summercamp_model->getSummerCampById($summerCampId);
+        if (!$summercamp) {
+            $this->Logger->error("Camp not found, cannot send an email");
+            return;
+        }
+
+        $colonist = $this->colonist_model->getColonist($colonistId);
+        if (!$colonist) {
+            $this->Logger->error("Colonist not found");
+            return;
+        }
+
+        $personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
+        if (!$personuser) {
+            $this->Logger->error("PersonUser related to colonist not found");
+            return;
+        }
+
+        $this->Logger->info("Sending email");
+
+        $responsableId = $personuser->getPersonId();
+
+        $father = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Pai");
+        $mother = $this->summercamp_model->getParentIdOfSummerCampSubscripted($summerCampId, $colonistId, "Mãe");
+
+        $emailArray = array();
+        if ($father && $responsableId != $father) {
+            $father = $this->person_model->getPersonFullById($father);
+            $emailArray[] = $father->email;
+        }
+        if ($mother && $mother != $responsableId) {
+            $mother = $this->person_model->getPersonFullById($mother);
+            $emailArray[] = $mother->email;
+        }
+
+        $this->sendEmailExcluded($personuser, $colonist, $summercamp->getCampName(), $emailArray);
     }
 
     public function acceptGeneralRules() {
@@ -923,6 +1006,562 @@ class SummerCamps extends CK_Controller {
             echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
     }
 
+    public function updateInfoPostSubscription() {
+
+        $colonistId = $_POST["colonist_id"];
+        $summerCampId = $_POST["summer_camp_id"];
+        $roommate1 = $_POST["roommate1"];
+        $roommate2 = $_POST["roommate2"];
+        $roommate3 = $_POST["roommate3"];
+
+        $phone1 = $_POST["phone1"];
+        $phone2 = $_POST["phone2"];
+
+        $camper = $this->summercamp_model->getSummerCampSubscription($colonistId, $summerCampId);
+
+        $this->telephone_model->updatePhone($camper->getPersonId(), $phone1, $phone2);
+
+        $result = $this->summercamp_model->updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3);
+
+        if ($result)
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function roomDisposal() {
+        $data = array();
+
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_GET['colonia_f']))
+            $campChosen = $_GET['colonia_f'];
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $camps[] = $camp->getCampName();
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
+        }
+
+        $data['summer_camp_id'] = $campChosenId;
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+
+
+        if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
+            $quarto = $_GET['quarto'];
+            $data["quarto"] = $quarto;
+            $pavilhao = $_GET['pavilhao'];
+            $data["pavilhao"] = $pavilhao;
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
+
+            $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+            foreach ($colonistsSelected as $colonist){
+                $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist, $pavilhao);
+            }
+
+            $roomOccupation = [0,0,0,0,0,0,0];
+            for($i = 0; $i < count($roomOccupation); $i++){
+                $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
+                $roomOccupation[$i] = count($roomColonists);
+            }
+
+            $data["room_occupation"] = $roomOccupation;
+            $data["colonists"] = $colonistsSelected;
+        }
+
+        $this->loadView('summercamps/roomDisposal', $data);
+    }
+
+    private function createNamePattern($name) {
+        if ($name == null || $name == '') {
+            return null;
+        }
+
+        $nameExploded = explode(" ", trim($name));
+        $namePattern = null;
+        if (is_array($nameExploded)) {
+            $namePattern = "/^";
+            $namePattern .= strtolower(substr(trim($nameExploded[0]), 0, 3)) . "[\w'éáóíúêôçâôãõàñ ]*";
+            if (count($nameExploded) - 1 > 0)
+                $namePattern .= " " . strtolower(substr(trim($nameExploded[count($nameExploded) - 1]), 0, 3)) . "[\w'éáóíúêôçâôãõàñ ]*";
+            $namePattern .= "$/";
+        }
+
+        return $namePattern;
+    }
+
+    private function countFriendRoommates($colonists, $colonist, $gender) {
+
+        $roommate1Pattern = $this->createNamePattern($colonist->roommate1);
+        $roommate2Pattern = $this->createNamePattern($colonist->roommate2);
+        $roommate3Pattern = $this->createNamePattern($colonist->roommate3);
+
+        $colonist->roommate1_status = "F";
+        $colonist->roommate2_status = "F";
+        $colonist->roommate3_status = "F";
+
+        $friendCount = 0;
+        $matchesRoommate1 = 0;
+        $matchesRoommate2 = 0;
+        $matchesRoommate3 = 0;
+
+        foreach ($colonists as $c) {
+
+            $colonistNameLowerCase = trim(strtolower($c->colonist_name));
+            if ($roommate1Pattern != null && preg_match($roommate1Pattern, $colonistNameLowerCase)) {
+                $matchesRoommate1++;
+                if ($c->room_number == $colonist->room_number && $c->room_number != "") {
+                    if($colonist->roommate1_status != "T")
+                        $friendCount ++;
+                    $colonist->roommate1_status = "T";
+                } else {
+                    if ($colonist->roommate1_status != "T"){
+                        if($c->room_number != "" && $c->room_number != 0)
+                            $colonist->roommate1_status = "TF".$c->room_number. $gender;
+                        else
+                            $colonist->roommate1_status = "TF";
+                    }
+                }
+            }
+
+            if ($roommate2Pattern != null && preg_match($roommate2Pattern, $colonistNameLowerCase)) {
+                $matchesRoommate2++;
+                if ($c->room_number == $colonist->room_number && $c->room_number != "") {
+                    if($colonist->roommate2_status != "T")
+                        $friendCount ++;
+                    $colonist->roommate2_status = "T";
+                } else {
+                    if ($colonist->roommate2_status != "T"){
+                        if($c->room_number != "" && $c->room_number != 0)
+                            $colonist->roommate2_status = "TF".$c->room_number. $gender;
+                        else
+                            $colonist->roommate2_status = "TF";
+                    }
+                }
+            }
+
+            if ($roommate3Pattern != null && preg_match($roommate3Pattern, $colonistNameLowerCase)) {
+                $matchesRoommate3++;
+                if ($c->room_number == $colonist->room_number && $c->room_number != "") {
+                    if($colonist->roommate3_status != "T")
+                        $friendCount ++;
+                    $colonist->roommate3_status = "T";
+                } else {
+                    if ($colonist->roommate3_status != "T"){
+                        if($c->room_number != "" && $c->room_number != 0)
+                            $colonist->roommate3_status = "TF".$c->room_number. $gender;
+                        else
+                            $colonist->roommate3_status = "TF";
+                    }
+                }
+            }
+        }
+
+        if($matchesRoommate1 > 1){
+            $colonist->roommate1_status = "F";
+            $friendCount --;
+        }
+        if($matchesRoommate2 > 1){
+            $colonist->roommate2_status = "F";
+            $friendCount --;
+        }
+        if($matchesRoommate3 > 1){
+            $colonist->roommate3_status = "F";
+            $friendCount --;
+        }
+
+        return $friendCount;
+    }
+
+    public function updateRoomNumber() {
+        $colonistId = $this->input->post("colonist_id", true);
+        $summerCampId = $this->input->post("summer_camp_id", true);
+        $roomNumber = $this->input->post("room_number", true);
+
+        if ($this->summercamp_model->updateRoomNumber($colonistId, $summerCampId, $roomNumber))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    private function filterColonists($colonists, $room, $gender) {
+        $resultArray = array();
+
+        foreach ($colonists as $colonist) {
+            if ($colonist->colonist_gender == $gender) {
+                if ($room < 0)
+                    $resultArray[] = $colonist;
+                else if ($room == 0 && ($colonist->room_number == null || 
+                    $colonist->room_number == 0 || $colonist->room_number == ''))
+                    $resultArray[] = $colonist;
+                else if ($colonist->room_number == $room)
+                    $resultArray[] = $colonist;
+            }
+        }
+
+        return $resultArray;
+    }
+
+    public function autoFillRooms() {
+        $this->Logger->info("Running:" . __METHOD__);
+
+        $summerCampId = $this->input->post("summer_camp_id", true);
+        $gender = $this->input->post("gender", true);
+
+        $colonists = $this->summercamp_model->getColonistsToDistributeInRooms($summerCampId, $gender);
+        $colonistsPerRoom = ceil(count($colonists) / 6.0);
+        $this->Logger->info("Colonists to distribute in 6 rooms: " . count($colonists));
+        $this->Logger->info("Colonists per room: " . $colonistsPerRoom);
+        $actualRoom = 1;
+        $totalUpdated = 0;
+        while ($actualRoom <= 6) {
+            for ($i = 0; $i < $colonistsPerRoom && $totalUpdated < count($colonists); $i++) {
+                $this->summercamp_model->updateRoomNumber($colonists[(($actualRoom - 1) * $colonistsPerRoom) + $i]->colonist_id, $summerCampId, $actualRoom);
+                $totalUpdated++;
+            }
+
+            $this->Logger->info("Number of colonists in room " . $actualRoom . ": " . $i);
+            $actualRoom++;
+        }
+
+        $this->Logger->info("Total of colonists allocated: " . $totalUpdated);
+
+        echo "true";
+    }
+
+    public function generatePDFWithColonistData() {
+        $this->load->plugin('mpdf');
+        $dataIn = $this->input->post('data', TRUE);
+        $dataArray = json_decode($dataIn);
+        $data['nameFile'] = $this->input->post('name', TRUE);
+        $data['type'] = $this->input->post('type', TRUE);
+        if(($this->input->post('summercamp', TRUE)) != null)
+        	$data['summercamp'] = $this->input->post('summercamp', TRUE);
+        if(($this->input->post('room', TRUE)) != null)
+        	$data['room'] = $this->input->post('room', TRUE);
+        $data['filtros'] = json_decode($this->input->post('filters', TRUE));
+        date_default_timezone_set('America/Sao_Paulo');
+        $data['time'] = date('d-m-Y G:i:sa');
+        
+        $colonists = $this->summercamp_model->getColonistDataFromPDF($dataArray);
+        for ($i = 0; $i < count($colonists); $i++) {
+            $data['report'][$i]['summercamp'] = $colonists[$i];
+            $data['report'][$i]['colonist'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->person_id);
+            $data['report'][$i]['mother'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->mother_id);
+            $data['report'][$i]['responsable'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->responsable_id);
+            $data['report'][$i]['father'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->father_id);
+            $data['report'][$i]['document'] = $this -> colonist_model -> getColonist($data['report'][$i]['summercamp'] -> colonist_id);
+            if($this -> summercamp_model -> getSummerCampById($data['report'][$i]['summercamp'] -> camp_id)->isMiniCamp()) {
+            	$data['report'][$i]['minik'] = $this -> summercamp_model -> getMiniCampObs($data['report'][$i]['summercamp'] -> camp_id, $data['report'][$i]['summercamp'] -> colonist_id);
+            }
+        }
+        $this->loadReportView("reports/summercamps/pdf_colonist_info", $data);
+       	$html = $this->output->get_output();
+        pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf"); 
+    }
+    
+    public function generatePDFTripAuthorization() {
+    	$this->load->plugin('mpdf');
+    	
+    	if($this->input->post('data', TRUE) != null) {
+    	$dataIn = $this->input->post('data', TRUE);
+    	$dataArray = json_decode($dataIn);
+    	
+    	
+    		$colonists = $this->colonist_model->getColonists($dataArray);
+    	
+    	$data['colonists'] = $colonists;
+    	$data['nameFile'] = $this->input->post('name', TRUE);;
+    	}
+    	else{
+    		$data['colonist_id'] = $this->input->post('colonist_id', TRUE);
+    		$data['nameFile'] = 'autorizacao_de_viagem';
+    	}
+    	
+    	$data['type'] = $this->input->post('type', TRUE);
+    	$data['camp_id'] = $this->input->post('camp_id', TRUE);
+    	
+    	
+    	$this->loadReportView("summercamps/pdfTripAuthorization", $data);
+    	$html = $this->output->get_output();
+    	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
+
+    public function medicalFiles() {
+        $data = array();
+
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_GET['colonia_f']))
+            $campChosen = $_GET['colonia_f'];
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $camps[] = $camp->getCampName();
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
+        }
+
+        $data['summer_camp_id'] = $campChosenId;
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+
+
+        if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
+            $quarto = $_GET['quarto'];
+            $data["quarto"] = $quarto;
+            $pavilhao = $_GET['pavilhao'];
+            $data["pavilhao"] = $pavilhao;
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
+
+            $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+
+            $roomOccupation = [0,0,0,0,0,0,0];
+            for($i = 0; $i < count($roomOccupation); $i++){
+                $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
+                $roomOccupation[$i] = count($roomColonists);
+            }
+
+            $data["room_occupation"] = $roomOccupation;
+            $data["colonists"] = $colonistsSelected;
+        }
+
+        $this->loadView("summercamps/colonistsMedicalFiles", $data);
+    }
+
+    public function viewMedicalFile($colonistId, $summerCampId) {
+        $data = array("camp_id" => $summerCampId, "colonist_id" => $colonistId);
+        if ($this->summercamp_model->hasDocument($data["camp_id"], $data["colonist_id"], DOCUMENT_MEDICAL_FILE)) {
+            $medical_file = $this->medical_file_model->getMedicalFile($data["camp_id"], $data["colonist_id"]);
+            $data["medicalFile"] = $medical_file;
+            $doctor = $this->person_model->getPersonById($medical_file->getDoctorId());
+            $tels = $this->telephone_model->getTelephonesByPersonId($medical_file->getDoctorId());
+            if (isset($tels[0]))
+                $doctor->setPhone1($tels[0]);
+            if (isset($tels[1]))
+                $doctor->setPhone2($tels[1]);
+            $data["doctor"] = $doctor;
+        }
+
+        $this->loadView('summercamps/doctorViewMedicalFile', $data);
+    }
+
+    public function updateDoctorObservations(){
+        $colonistId = $this->input->post("colonist_id", true);
+        $summerCampId = $this->input->post("summer_camp_id", true);
+        $observations = $this->input->post("doctor_observations", true);
+
+        if ($this->medical_file_model->updateDoctorObservations($colonistId, $summerCampId, $observations))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function generatePDFWithColonistMedicalFiles($year, $summerCampId, $gender, $room, $type){
+        $this->load->plugin('mpdf');
+        $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $summerCampId, $gender);
+        $colonistsSelected = $this->filterColonists($colonists, $room, $gender);
+        $medicalFiles = array();
+
+        foreach($colonistsSelected as $colonist){
+            if ($this->summercamp_model->hasDocument($summerCampId, $colonist->colonist_id, DOCUMENT_MEDICAL_FILE)){
+                $mf = $this->medical_file_model->getMedicalFile($summerCampId, $colonist->colonist_id);
+                $medicalFiles[] = $mf;
+                $doctor = $this->person_model->getPersonById($mf->getDoctorId());
+                $tels = $this->telephone_model->getTelephonesByPersonId($mf->getDoctorId());
+                if (isset($tels[0]))
+                    $doctor->setPhone1($tels[0]);
+                if (isset($tels[1]))
+                    $doctor->setPhone2($tels[1]);
+                $doctors[] = $doctor;
+            }
+        }
+        
+        $data['time'] = date('d-m-Y G:i:sa');
+
+        $data["colonists"] = $colonistsSelected;
+        $data["medicalFiles"] = $medicalFiles;
+        $data["doctors"] = $doctors;
+        $data['type'] = $type;
+
+        $data["roomNumber"] = $room;
+        $data["pavilhao"] = $gender;
+        $data["summerCamp"] = $this->summercamp_model->getSummerCampById($summerCampId);
+        
+        if($type == "varios") {
+	        if($room == -1) {
+	        	$room = "Todos-os-Quartos";
+	        	
+	        	if($gender == "M")
+	        		$gender = "-Masculino";
+	        	else 
+	        		$gender = "-Feminino";
+	        }
+	
+	        $fileName = "Fichas-Medicas-".$room.$gender."-".$data["summerCamp"]->getCampName();
+        }
+        
+        else 
+        	$fileName = "ficha-medica-";
+
+        $this->loadView("summercamps/pdfMedicalFiles", $data);
+/*
+        $html = $this->output->get_output();
+        pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");*/
+    }
+
+    public function colonistPDFMedicalFile(){
+        $this->load->plugin('mpdf');
+        $data = array("camp_id" => $_GET['camp_id'], "colonist_id" => $_GET['colonist_id']);
+        $doctor = null;
+        $medical_file = null;
+        $colonist = $this->summercamp_model->getColonistInformationById($data["colonist_id"]);
+
+        if ($this->summercamp_model->hasDocument($data["camp_id"], $data["colonist_id"], DOCUMENT_MEDICAL_FILE)) {
+            $medical_file = $this->medical_file_model->getMedicalFile($data["camp_id"], $data["colonist_id"]);
+            $data["medicalFile"] = $medical_file;
+            $doctor = $this->person_model->getPersonById($medical_file->getDoctorId());
+            $tels = $this->telephone_model->getTelephonesByPersonId($medical_file->getDoctorId());
+            if (isset($tels[0]))
+                $doctor->setPhone1($tels[0]);
+            if (isset($tels[1]))
+                $doctor->setPhone2($tels[1]);
+        }
+        $fileName = "Colonista_" . $colonist->colonist_id;
+        $data['time'] = date('d-m-Y G:i:sa');
+
+        $data["colonists"] = array($colonist);
+        $data["medicalFiles"] = array($medical_file);
+        $data["doctors"] = array($doctor);
+        $data['type'] = "simples";
+        $data["summerCamp"] = $this->summercamp_model->getSummerCampById($data["camp_id"]);
+        
+        $this->loadView("summercamps/pdfMedicalFiles", $data);
+
+        $html = $this->output->get_output();
+        
+        pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
+
+    public function manageStaff($summerCampId) {
+        $summerCamp = $this->summercamp_model->getSummerCampById($summerCampId);
+        if($summerCamp != null){
+            $data["summerCamp"] = $summerCamp;
+
+            $data["staff"] = $this->summercamp_model->getCampStaff($summerCampId);
+
+            $data["possibleCoordinators"] = $this->personuser_model->getUsersByUserType(COORDINATOR);
+            $data["possibleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR);
+            $data["possibleDoctors"] = $this->personuser_model->getUsersByUserType(DOCTOR);
+
+            $this->loadReportView("admin/camps/campStaff", $data);
+        }
+    }
+
+    public function updateCoordinator(){
+        $personId = $this->input->post("person_id", true);
+        $summerCampId = $this->input->post("camp_id", true);
+
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 1))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function updateDoctor(){
+        $personId = $this->input->post("person_id", true);
+        $summerCampId = $this->input->post("camp_id", true);
+
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 3))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function updateMonitor(){
+        $personId = $this->input->post("person_id", true);
+        $summerCampId = $this->input->post("camp_id", true);
+        $room = $this->input->post("room_number", true);
+
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2, intval($room)))
+            echo "true";
+        else
+            echo "false";
+    }
+
+    public function staffMedicalFile() {
+        $data = array();
+        $personId = $this->session->userdata("user_id");
+        $data['personId'] = $personId;
+        $medicalFile = $this->medical_file_model->getMedicalFile($personId);
+        if($medicalFile != null){
+            //TODO
+        } else {
+            //TODO
+        }
+    }
 }
 
 ?>

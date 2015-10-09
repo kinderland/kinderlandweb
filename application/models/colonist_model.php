@@ -45,6 +45,28 @@ class colonist_model extends CK_Model {
 
         return null;
     }
+    public function getColonists($idsColonist) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	
+    	$list = "";
+    	for ($i = 0; $i < count($idsColonist); $i++) {
+    		if ($list) {
+    			$list .= ",";
+    		}
+    		$list .= $idsColonist[$i][0];
+    	}
+    
+    	$sql = "SELECT * FROM colonist c JOIN person p on p.person_id = c.person_id WHERE colonist_id in (" . $list . ") order by p.fullname";
+    	$resultSet = $this->executeRows($this->db, $sql);
+		    $colonistArray = array();
+
+        if ($resultSet)
+            foreach ($resultSet as $row)
+                $colonistArray[] = colonist::createColonistObject($row);
+
+        return $colonistArray;
+    }
+   
 
     public function getColonistPersonUser($colonistId, $summerCampId) {
         $this->Logger->info("Running: " . __METHOD__);

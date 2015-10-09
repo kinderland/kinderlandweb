@@ -23,9 +23,17 @@
 	<body>
 		<script>
 			$(document).ready(function () {
-				$(".birthdate").mask("00/00/0000", {
+				$(".datepicker").mask("00/00/0000", {
 	            	placeholder: "__/__/____"
 	        	});	
+	        	$(function() {
+                    $( ".datepicker" ).datepicker({
+                        dateFormat: "dd/mm/yy",
+                        buttonImage: "<?= $this->config->item('assets'); ?>images/calendar.gif",
+                        buttonImageOnly: true,
+                        buttonText: "Selecionar data"
+                    });
+                });
 	        });
 			function cancelSubscription(colonist_id, summer_camp_id){
 				if(confirm("Deseja realmente cancelar a inscrição deste colonista ?")){
@@ -54,7 +62,7 @@
 				}
 
 				var datePieces = date_limit.split("/");
-				date_limit = datePieces[2] + "-" + datePieces[1] + "-" + datePieces[0];
+				date_limit = datePieces[2] + "-" + datePieces[1] + "-" + datePieces[0] + " 23:59:59";
 
 				if(confirm("Deseja realmente alterar esta data de prazo para pagamento?")){
 					$.post("<?= $this->config->item('url_link') ?>admin/updateDatePaymentLimit",
@@ -99,11 +107,9 @@
 					function(l, r) {
 						return l.toLowerCase().localeCompare(r.toLowerCase());
 					}, //Evita problemas com caps-lock
-					function(l, r) {
-						return l.toLowerCase().localeCompare(r.toLowerCase());
-					}
+					null
 					],
-					filters : [true,selectTodos,selectTodos,true,selectTodos]
+					filters : [true,selectTodos,false,true,false]
 				});
 			});
         </script>
@@ -154,16 +160,6 @@
 								<td> <?= $camp_details[4]['M'] ?> </td>
 								<td> <?= $camp_details[4]['F'] ?> </td>
 							</tr>
-							<tr>
-								<td> Fila de espera </td>
-								<td> <?= $camp_details[3]['M'] ?> </td>
-								<td> <?= $camp_details[3]['F'] ?> </td>
-							</tr>
-							<tr>
-								<td> Disponível </td>
-								<td> <?= $camp_selected_male_capacity - $camp_details[5]['M'] ?> </td>
-								<td> <?= $camp_selected_female_capacity - $camp_details[5]['F'] ?> </td>
-							</tr>
 						</table>
 
 						<hr />
@@ -178,9 +174,8 @@
 									<tr>
 										<th align="right">Colonista</th>
 										<th align="right">Sexo</th>
-										<th align="right">Dia da liberação</th>
+										<th align="right">Prazo</th>
 										<th align="right">Responsável</th>
-										<th align="right">Status</th>
 										<th align="right">Ações</th>
 									</tr>	
 								</thead>
@@ -196,14 +191,12 @@
 
 			                            <td>
 			                            	<input type="text" class="form-control datepicker" style="width:120px !important" id="subscription_payment_<?= $sub -> colonist_id ?>_<?= $sub -> summer_camp_id ?>" value="<?= date('d/m/Y', strtotime(substr($sub->date_payment_limit, 0, 10))) ?>" /> 
-			                            	<img src="<?= $this->config->item('assets'); ?>images/save.png" onclick="updatePaymentLimit(<?= $sub -> colonist_id ?>, <?= $sub -> summer_camp_id ?>)" width="24px" height="24px" /> 
+			                            	<button class="btn btn-primary" onclick="updatePaymentLimit(<?= $sub -> colonist_id ?>, <?= $sub -> summer_camp_id ?>)"> Salvar </button> 
 			                            </td>
 
 			                            <td>
 			                            	<a id="<?= $sub -> responsible_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $sub -> person_user_id ?>"><?= $sub -> responsible_name ?></a>
 			                            </td>
-
-			                            <td><?= $sub->description ?></td>
 
 			                            <td>
 			                            	<a target='blank' href="<?= $this -> config -> item('url_link');?>admin/viewEmails/<?= $sub->person_user_id ?>">Ver e-mails</a>

@@ -34,6 +34,14 @@
 		    return points.sort(function(a, b){return a-b});
 		}
 
+		var selectTodos = {
+				element : null,
+				values : "auto",
+				empty : "Todos",
+				multiple : false,
+				noColumn : false,
+			}
+
 		</script>
 
     </head>
@@ -42,7 +50,9 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, true, true],
+				sort : [sortLowerCase, true, true, true],
+				filters : [false,false,false,selectTodos],
+				filterText : 'Escreva para filtrar... ',
 				counterText : showCounter,
 				sortKey : 1
 			});
@@ -89,13 +99,13 @@
 					</form>
 					<div class="counter"></div> <br>
 					<?php if (isset($colonia_escolhida) && isset($colonists)){ ?>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th>Colonista</th>
-                                <th>Idade (Anos)</th>
+                                <th>Idade</th>
                                 <th>Ano Escolar</th>
-                                
+                                <th>Status</th>                                
                             </tr>
                         </thead>
                         <tbody id="tablebody">
@@ -103,9 +113,16 @@
                             foreach ($colonists as $colonist) {
                                 ?>
                                 <tr>
-                                    <td><a id="<?= $colonist->colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
+                                    <td><a id="<?= $colonist->colonist_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
                                     <td><?php $age = preg_split('/y/', $colonist -> age); echo $age[0]; ?></td>
                                     <td><?= $colonist -> school_year; ?></td>
+                                 	 <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->camp_id?>"><font color="
+	                                <?php
+	                                    switch ($colonist->situation) {
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "#061B91"; break;
+	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50"; break;
+	                                    }
+	                                ?>"><?= $colonist -> situation_description ?></td>
                                  </tr>
 	                                <?php
 	                            }

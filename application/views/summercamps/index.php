@@ -38,7 +38,7 @@
         if (confirm("Tem certeza que deseja excluir o colonista " + name + " ?")) {
             if (subscribed) {
                 if (confirm("Ao excluir esta inscrição, o responsável deve entrar em contato com a secretaria para tratar do eventual reembolso da doação, seguindo os critérios estabelecidos pela Associação Kinderland. Ao optar por excluir, não haverá possibilidade desta inscrição ser retomada. Confirmar exclusão?")) {
-                    window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/deleteColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
+                    window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/excludeColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
                 }
             } else {
                 window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/deleteColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
@@ -342,6 +342,12 @@
                                         &nbsp; &nbsp; &nbsp;Prazo expirado
                                     </p>
                                     <?php
+                                } else if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId()
+                                    && ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE)) { ?>
+                                    <p style='color:red; font-weight:bold' >
+                                        &nbsp; &nbsp; &nbsp;Número na fila: <?= $summerCampInscription->getQueueNumber() ?>
+                                    </p>
+                                <?php
                                 }
                             }
 

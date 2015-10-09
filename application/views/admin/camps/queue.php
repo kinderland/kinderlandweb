@@ -144,7 +144,7 @@ function saveQueuePosition(personId, userName, index){
 	$(document).ready(function() {
 		$('#sortable-table').datatable({
 			pageSize : Number.MAX_VALUE,
-			sort : [sortLowerCase,true],
+			sort : [sortLowerCase,true,true],
 			filters : [true],
 			filterText : 'Escreva para filtrar... ',
 			counterText	: showCounter
@@ -214,6 +214,7 @@ function saveQueuePosition(personId, userName, index){
 							<td><a id="<?= $person -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $person -> person_id ?>"><?= $person -> fullname ?></a></td>
 							<td><?= $person -> person_id ?></td>
                             <td>
+                            	<input type="hidden" id="hidden_order_<?= sprintf('%08d', $person -> queue_number); ?>" />
                             	<input type="text" class="form-control" id="queue_number_<?= $i ?>" value="<?= $person -> queue_number ?>" />
                             </td>
                             <td> <button class="btn btn-primary" onclick="saveQueuePosition(<?= $person -> person_id ?>, '<?= addslashes($person -> fullname) ?>', <?= $i ?>)">Cadastrar</button> </td>

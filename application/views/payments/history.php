@@ -6,7 +6,6 @@
         <?php
         if (isset($donations) && count($donations) > 0) {
             ?>
-
             <table class="table table-condensed table-hover">
                 <tr>
                     <th>Data e hora</th>
@@ -20,13 +19,13 @@
                     <tr>
                         <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
                         <td><?= $donation->donation_type ?>
-                        	<?php 
-                                if(isset($donation->extra)){
-                                    foreach($donation->extra as $extra){
-                                		echo $extra;
-                                	}
+                            <?php
+                            if (isset($donation->extra)) {
+                                foreach ($donation->extra as $extra) {
+                                    echo $extra;
                                 }
-							?>
+                            }
+                            ?>
                         </td>
                         <td><?= $donation->donated_value ?></td>
                         <td><?= $donation->donation_status ?></td>
@@ -35,15 +34,9 @@
                 }
                 ?>
             </table>
-            <?php
-        } else {
-            ?>
-            <h3>
-                Nenhuma doação efetuada até o momento.
-            </h3>
-            <?php
-        }
-        ?>
+        <?php } else { ?>
+            <h3> Nenhuma doação efetuada até o momento.</h3>
+        <?php } ?>
 
     </div>
 </div>

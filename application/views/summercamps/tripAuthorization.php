@@ -9,6 +9,61 @@ $end = $summerCamp -> getDateFinish();
 $end = date("d/m/Y", strtotime($end));
 ?>
 
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Colônia Kinderland</title>
+
+        <link href="<?= $this->config->item('assets'); ?>css/basic.css" rel="stylesheet" />
+        <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
+        </head>
+
+<script>
+function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for (var key in params) {
+        if (params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+	function geraAutorizacaoPDF(colonist_id, camp_id){
+		var type = "Simples";
+		post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFTripAuthorization', {colonist_id: colonist_id, camp_id: camp_id, type: type});
+	}
+
+
+</script>
+
 <div id="main">
 	<!--<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
 	<br/>
@@ -71,8 +126,12 @@ $end = date("d/m/Y", strtotime($end));
 				<!--<h2><a href="@{Admin.geraAutorizacaoPDF(colonista.sequencial)}">Gerar PDF para impressão (Ainda não funcional)</a>
 				<br/>
 				</h2>-->
+				<input type="button" class="btn btn-primary" value = "Gerar PDF para impressão" onclick="geraAutorizacaoPDF('<?=$colonist->getColonistId()?>','<?=$summerCamp -> getCampId()?>')"/>
+				<br><br>
 				<input type="button" class="btn btn-warning" value="Voltar" onclick="history.back()" />
 			</p>
 
 		</div>
+	</div>
+	
 	</div>

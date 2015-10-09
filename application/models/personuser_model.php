@@ -216,6 +216,36 @@ class personuser_model extends CK_Model {
         return FALSE;
     }
 
+    public function getEmailsByUserId($person_id) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "select * from v_report_emails where person_id = ?";
+        $rows = $this->executeRows($this->db, $sql, array(intval($person_id)));
+        foreach ($rows as $row) {
+            $row = $this->extractMessageEmail($row);
+        }
+        return $rows;
+    }
+
+    private function extractMessageEmail($email) {
+        $email->content = substr($email->content, strpos($email->content, "Body:") + 5);
+        return $email;
+    }
+
+    public function getUsersByUserType($userType) {
+        $sql = "select
+                *
+                from person p
+                inner join person_user_type put on put.person_id = p.person_id
+                where put.user_type = $userType";
+
+        $rows = $this->executeRows($this->db, $sql);
+        $personUser = array();
+        foreach ($rows as $row) {
+            $personUser[] = Person::createPersonObjectSimple($row, false);
+        }
+        return $personUser;
+    }
+
 }
 
 ?>

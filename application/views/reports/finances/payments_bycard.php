@@ -24,7 +24,7 @@
 
 function formatarEMostrar($valor, $opcao) {
 	if ($opcao == PAYMENT_REPORTBYCARD_VALUES)
-		echo $valor . ',00';
+		echo number_format($valor,0,",",".");
 	else
 		echo $valor;
 }
@@ -39,7 +39,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 	formatarEMostrar($total, $opcao);
 	echo "</td>";
 
-	for ($i = 1; $i <= 6; $i++) { echo "<td  style='text-align: right;'>";
+	for ($i = 1; $i <= 8; $i++) { echo "<td  style='text-align: right;'>";
 		if (isset($result[$tipo][$cartao][$i]))
 			formatarEMostrar(intval($result[$tipo][$cartao][$i]), $opcao);
 		else
@@ -52,10 +52,58 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 ?>
 <body>
 	<div class = "row">
+		
+		
 		<div class="col-lg-10" bgcolor="red">
-			<h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates),$option); ?> </h4>
-			<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas),$option); ?> </h4>
-			<h4>Total: <?php formatarEMostrar(intval($associates)+intval($avulsas),$option); ?> </h4>
+			
+			             <form method="GET">
+			             	<input type="hidden" name="option" value="<?=$option?>"/>
+	                	<select name="year" onchange="this.form.submit()" id="year">
+        	        		<?php foreach ($years as $y) {
+        	        			$selected = "";
+								if($y == $year)
+									$selected = "selected";
+        	        			echo "<option $selected value='$y'>$y</option>";
+							} ?>                		
+            	    	</select>
+
+                        <select name="month" onchange="this.form.submit()" id="month">
+                            <option value="0" <?php if(!isset($mes)) echo "selected"; ?>)>Todos</option>
+                            <?php 
+
+                                function getMonthName($m){
+                                    switch ($m){
+                                        case 1: return "Janeiro";
+                                        case 2: return "Fevereiro";
+                                        case 3: return "Março";
+                                        case 4: return "Abril";
+                                        case 5: return "Maio";
+                                        case 6: return "Junho";
+                                        case 7: return "Julho";
+                                        case 8: return "Agosto";
+                                        case 9: return "Setembro";
+                                        case 10: return "Outubro";
+                                        case 11: return "Novembro";
+                                        case 12: return "Dezembro";
+                                    }
+                                }
+                                for($m = 1; $m <= 12; $m++) {
+                                    $selected = "";
+                                    if($m == $month)
+                                        $selected = "selected";
+                                    echo "<option $selected value='$m'>".getMonthName($m)."</option>";
+                                } 
+                            ?>                        
+                        </select>
+                	</form>
+
+
+			<h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates), $option); ?>
+</h4>				<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas), $option); ?>
+</h4>				<h4>Doações colonias: <?php formatarEMostrar(intval($colonies), $option); ?>
+				</h4>
+				<h4>Total: <?php formatarEMostrar(intval($associates) + intval($avulsas)+intval($colonies), $option); ?>
+				</h4>
 
 	<!--		
 			<a href="<?= $this -> config -> item('url_link'); ?>reports/payments_bycard">
@@ -71,7 +119,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 	-->	
 			<table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px">
 				<tr>
-					<td colspan="8"> <h4> <b>Cartão de crédito: </b></h4> </td> <?php $tipo = "credito"; ?>
+					<td colspan="10"> <h4> <b>Cartão de crédito: </b></h4> </td> <?php $tipo = "credito"; ?>
 				</tr>
 				<tr>
 					<td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
@@ -82,6 +130,8 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 					<td><h4> <b> 4x </b></h4></td>
 					<td><h4> <b> 5x </b></h4></td>
 					<td><h4> <b> 6x </b></h4></td>
+					<td><h4> <b> 7x </b></h4></td>
+					<td><h4> <b> 8x </b></h4></td>
 				</tr>
 				<tr>
 					<td style="text-align: right;"> Amex </td>
@@ -110,11 +160,11 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 					?>
 					</td>
 					<?php
-						for ($i = 1; $i <= 6; $i++) {
-							echo "<td style='text-align: right;'>";
-							formatarEMostrar($credito[$i], $option);
-							echo "</td>";
-						}
+					for ($i = 1; $i <= 8; $i++) {
+						echo "<td style='text-align: right;'>";
+						formatarEMostrar($credito[$i], $option);
+						echo "</td>";
+					}
 					?>
 				</tr>
 			</table>

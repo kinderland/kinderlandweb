@@ -12,12 +12,18 @@
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions)){ ?>
                         <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_QUANTITY?>">Painel de doações (quantitativo)</option>
                         <option value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?=PAYMENT_REPORTBYCARD_VALUES?>">Painel de doações (valores)</option>
-                        <option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>
-                        <option value="<?= $this->config->item('url_link'); ?>reports/user_donation_history">Histórico individual de doações</option>
                         <option value="<?= $this->config->item('url_link'); ?>reports/free_donations">Doações avulsas</option>
-                        <option value="<?= $this->config->item('url_link'); ?>reports/associate_campaign_donations">Campanha de sócios</option>
-                    <?php } ?>
-                    <option value="<?= $this->config->item('url_link'); ?>reports/failed_transactions">Transações Cielo sem sucesso</option>
+                        <option value="<?= $this->config->item('url_link'); ?>reports/associate_campaign_donations">Doações Campanha de Sócios</option>
+                   		<option value="<?= $this->config->item('url_link'); ?>reports/camps_donations">Doações Colônias</option>
+                   		<option value="<?= $this->config->item('url_link'); ?>reports/user_donation_history">Histórico individual de doações</option>
+                   		<?php } ?>
+                   		<?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
+                    	<option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>
+                    	<option value="<?= $this->config->item('url_link'); ?>reports/failed_transactions">Transações Cielo sem sucesso</option>
+                    	<?php } ?>
+                <!--	<?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
+                	<option value="<?= $this->config->item('url_link'); ?>reports/transactions_expected">Cielo a Receber</option>
+                	<?php } ?> -->
                 </select>
             </div>
         </div>

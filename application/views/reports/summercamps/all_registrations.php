@@ -12,7 +12,6 @@
 	href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
 <link rel="stylesheet"
 	href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
-</script>
 <link rel="stylesheet"
 	href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
 <script type="text/javascript"
@@ -33,10 +32,23 @@
 	src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
 <script type="text/javascript"
 	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
-
+<script type="text/javascript">
+	function showSubReport (camp, year, status, associated, gender) {
+		if(associated != null)
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?camp="+camp+"&year="+year+"&status="+status+"&associated="+associated+"&gender="+gender;
+		else
+			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?camp="+camp+"&year="+year+"&status="+status+"&gender="+gender;
+		window.open(url, '_blank');
+	}
+</script>
+<style>
+	a {
+		cursor: pointer;
+	}
+</style>
 </head>
 <body>
-	
+
 	<div class="main-container-report">
 		<div class="row">
 			<div class="col-lg-10" bgcolor="red">
@@ -51,9 +63,10 @@
 								echo "<option $selected value='$year'>$year</option>";
 							}
 							?>
-						</select>
-						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
-							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
+						</select> <select name="colonia_f" onchange="this.form.submit()"
+						id="colonia">
+						<option value="Todas"
+							<?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
 							<?php
 							foreach ( $camps as $camp ) {
 								$selected = "";
@@ -65,230 +78,134 @@
 						</select>
 				</form>
 				<table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 800px;">
+					style="max-width: 700px;">
+
+					<tr>
+						<th align="right"></th>
+						<th align="right" colspan=2 style="text-align: center">Feminino</th>
+						<th align="right" colspan=2 style="text-align: center">Masculino</th>
 					
-						<tr>
-							<th align="right"></th>
-							<th align="right" colspan = 2 style="text-align: center">Feminino</th>
-							<th align="right" colspan = 2 style="text-align: center">Masculino</th>
-					    <tr>
-					    <tr>
-							<th align="right"></th>
-							<th align="right">Sócio</th>
-							<th align="right">Não Sócio</th>
-							<th align="right">Sócio</th>
-							<th align="right">Não Sócio</th>
-						<tr>
+					
+					<tr>
+					
+					
+					<tr>
+						<th align="right"></th>
+						<th align="right">Sócio</th>
+						<th align="right">Não Sócio</th>
+						<th align="right">Sócio</th>
+						<th align="right">Não Sócio</th>
+					
+					
+					<tr>
+							<?php if(!isset($colonia_escolhida)) { $colonia_escolhida = 'Todas';} ?>
 							<th align="right">Pré-inscrições em elaboração</th>
-							<td align='right'> <?php echo $countsAssociatedF->elaboracao; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->elaboracao; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->elaboracao; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->elaboracao; ?> </td>
-						</tr>
-						<tr>
-							<th align="right">Pré-inscrições aguardando validação</th>
-							<td align='right'> <?php echo $countsAssociatedF->aguardando_validacao; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->aguardando_validacao; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->aguardando_validacao; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->aguardando_validacao; ?> </td>
-						</tr>
-						<tr>
-							<th align="right" width='200px'>Pré-inscrições não validadas</th>
-							<td align='right'> <?php echo $countsAssociatedF->nao_validada; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->nao_validada; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->nao_validada; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->nao_validada; ?> </td>
-						</tr>
-						<tr>
-							<th align="right" width='200px'>Pré-inscrições validadas</th>
-							<td align='right'> <?php echo $countsAssociatedF->validada; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->validada; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->validada; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->validada; ?> </td>
-						</tr>
-						<tr>
-							<th align="right" width='200px'>Pré-inscrições na fila de espera</th>
-							<td align='right'> <?php echo $countsAssociatedF->fila_espera; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->fila_espera; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->fila_espera; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->fila_espera; ?> </td>
-						</tr>
-						<tr>
-							<th align="right" width='200px'>Pré-inscrições aguardando
-								pagamento</th>
-							<td align='right'> <?php echo $countsAssociatedF->aguardando_pagamento; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->aguardando_pagamento; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->aguardando_pagamento; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->aguardando_pagamento; ?> </td>
-						</tr>
-						 <tr>
-							<th align="right">Inscritos</th>
-							<td align='right'> <?php echo $countsAssociatedF->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedF->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsAssociatedM->inscrito; ?> </td>
-							<td align='right'> <?php echo $countsNotAssociatedM->inscrito; ?> </td>
-						</tr>
-						<tr>
-							<th align="right" width='200px'>Total</th>
-							<td align='right'> <?php echo $countsAssociatedF->inscrito + $countsAssociatedF->aguardando_pagamento + $countsAssociatedF->fila_espera 
-	                                + $countsAssociatedF->validada + $countsAssociatedF->nao_validada + $countsAssociatedF->aguardando_validacao 
-	                                + $countsAssociatedF->elaboracao; ?> 
-	                                </td>
-	                        <td align='right'> <?php echo $countsNotAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento + $countsNotAssociatedF->fila_espera 
-	                                + $countsNotAssociatedF->validada + $countsNotAssociatedF->nao_validada + $countsNotAssociatedF->aguardando_validacao 
-	                                + $countsNotAssociatedF->elaboracao; ?> 
-	                                </td>
-							<td align='right'> <?php echo $countsAssociatedM->inscrito + $countsAssociatedM->aguardando_pagamento + $countsAssociatedM->fila_espera 
-	                                + $countsAssociatedM->validada + $countsAssociatedM->nao_validada + $countsAssociatedM->aguardando_validacao 
-	                                + $countsAssociatedM->elaboracao; ?> 
-	                                </td>
-	                        <td align='right'> <?php echo $countsNotAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento + $countsNotAssociatedM->fila_espera 
-	                                + $countsNotAssociatedM->validada + $countsNotAssociatedM->nao_validada + $countsNotAssociatedM->aguardando_validacao 
-	                                + $countsNotAssociatedM->elaboracao; ?> 
-	                                </td>
-						</tr>
-						<tr>
-							<th	align="right" width='200px'>Porcentagem de Inscritos</th>
-							<td align='right'> <?php 
-									$countTotalAssociatedF = $countsAssociatedF->inscrito + $countsAssociatedF->aguardando_pagamento + $countsAssociatedF->fila_espera 
-	                                + $countsAssociatedF->validada + $countsAssociatedF->nao_validada + $countsAssociatedF->aguardando_validacao 
-	                                + $countsAssociatedF->elaboracao;
-									
-									if($countTotalAssociatedF) echo number_format(($countsAssociatedF->inscrito/$countTotalAssociatedF)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-	                        <td align='right'> <?php 
-									$countTotalNotAssociatedF = $countsNotAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento + $countsNotAssociatedF->fila_espera 
-	                                + $countsNotAssociatedF->validada + $countsNotAssociatedF->nao_validada + $countsNotAssociatedF->aguardando_validacao 
-	                                + $countsNotAssociatedF->elaboracao;
-									
-									if($countTotalNotAssociatedF) echo number_format(($countsNotAssociatedF->inscrito/$countTotalNotAssociatedF)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-							<td align='right'> <?php 
-									$countTotalAssociatedM = $countsAssociatedM ->inscrito + $countsAssociatedM->aguardando_pagamento + $countsAssociatedM->fila_espera 
-	                                + $countsAssociatedM->validada + $countsAssociatedM->nao_validada + $countsAssociatedM->aguardando_validacao 
-	                                + $countsAssociatedM->elaboracao;
-									
-									if($countTotalAssociatedM) echo number_format(($countsAssociatedM->inscrito/$countTotalAssociatedM)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-	                        <td align='right'> <?php 
-									$countTotalNotAssociatedM = $countsNotAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento + $countsNotAssociatedM->fila_espera 
-	                                + $countsNotAssociatedM->validada + $countsNotAssociatedM->nao_validada + $countsNotAssociatedM->aguardando_validacao 
-	                                + $countsNotAssociatedM->elaboracao;
-									
-									if($countTotalNotAssociatedM) echo number_format(($countsNotAssociatedM->inscrito/$countTotalNotAssociatedM)*100,1); 
-									else echo "0.0";
-									echo "%"; ?> 
-	                                </td>
-	                    </tr>
-	                    <tr>
-	                    	<th	align="right">Vagas Disponíveis</th>
-	                    	<td colspan = "2"> <?php echo $vacancy - ($countsAssociatedF->aguardando_pagamento 
+						<td align='right'><?php if($countsAssociatedF->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, 'false', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedF->elaboracao; ?></td>
+						<td align='right'><?php if($countsAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->elaboracao; ?></a><?php } else echo $countsAssociatedM->elaboracao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 0, 'false', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->elaboracao; ?></a><?php } else echo $countsNotAssociatedM->elaboracao; ?></td>
+					</tr>
+					<tr>
+						<th align="right">Pré-inscrições aguardando validação</th>
+						<td align='right'><?php if($countsAssociatedF->aguardando_validacao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->aguardando_validacao; ?></a><?php } else echo $countsAssociatedF->aguardando_validacao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->aguardando_validacao !=0) {?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, 'false', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->aguardando_validacao; ?></a><?php } else echo $countsNotAssociatedF->aguardando_validacao; ?></td>
+						<td align='right'><?php if($countsAssociatedM->aguardando_validacao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->aguardando_validacao; ?></a><?php } else echo $countsAssociatedM->aguardando_validacao; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->aguardando_validacao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 1, 'false', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->aguardando_validacao; ?></a><?php } else echo $countsNotAssociatedM->aguardando_validacao; ?></td>
+					</tr>
+					<tr>
+						<th align="right" width='200px'>Pré-inscrições não validadas</th>
+						<td align='right'><?php if($countsAssociatedF->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->nao_validada; ?></a><?php } else echo $countsAssociatedF->nao_validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, 'false', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->nao_validada; ?></a><?php } else echo $countsNotAssociatedF->nao_validada; ?></td>
+						<td align='right'><?php if($countsAssociatedM->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->nao_validada; ?></a><?php } else echo $countsAssociatedM->nao_validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->nao_validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 6, 'false', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->nao_validada; ?></a><?php } else echo $countsNotAssociatedM->nao_validada; ?></td>
+					</tr>
+					<tr>
+						<th align="right" width='200px'>Pré-inscrições validadas</th>
+						<td align='right'><?php if($countsAssociatedF->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->validada; ?></a><?php } else echo $countsAssociatedF->validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, 'false', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->validada; ?></a><?php } else echo $countsNotAssociatedF->validada; ?></td>
+						<td align='right'><?php if($countsAssociatedM->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->validada; ?></a><?php } else echo $countsAssociatedM->validada; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 2, 'false', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->validada; ?></a><?php } else echo $countsNotAssociatedM->validada; ?></td>
+					</tr>
+					<tr>
+						<th align="right" width='200px'>Pré-inscrições na fila de espera</th>
+						<td align='right'><?php if($countsAssociatedF->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 3, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->fila_espera; ?></a><?php } else echo $countsAssociatedF->fila_espera; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 3, 'false', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->fila_espera; ?></a><?php } else echo $countsNotAssociatedF->fila_espera; ?></td>
+						<td align='right'><?php if($countsAssociatedM->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 3, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->fila_espera; ?></a><?php } else echo $countsAssociatedM->fila_espera; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 3, 'false', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->fila_espera; ?></a><?php } else echo $countsNotAssociatedM->fila_espera; ?></td>
+					</tr>
+					<tr>
+						<th align="right" width='200px'>Pré-inscrições aguardando
+							doação</th>
+						<td align='right'><?php if($countsAssociatedF->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 4, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->aguardando_pagamento; ?></a><?php } else echo $countsAssociatedF->aguardando_pagamento; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 4, 'false', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->aguardando_pagamento; ?></a><?php } else echo $countsNotAssociatedF->aguardando_pagamento; ?></td>
+						<td align='right'><?php if($countsAssociatedM->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 4, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->aguardando_pagamento; ?></a><?php } else echo $countsAssociatedM->aguardando_pagamento; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 4, 'false', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->aguardando_pagamento; ?></a><?php } else echo $countsNotAssociatedM->aguardando_pagamento; ?></td>
+					</tr>
+					<tr>
+						<th align="right">Inscritos</th>
+						<td align='right'><?php if($countsAssociatedF->inscrito !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 5, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->inscrito; ?></a><?php } else echo $countsAssociatedF->inscrito; ?></td>
+						<td align='right'><?php if($countsNotAssociatedF->inscrito !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 5, 'false', 'F')" target="blank"
+							> <?php echo $countsNotAssociatedF->inscrito; ?></a><?php } else echo $countsNotAssociatedF->inscrito; ?></td>
+						<td align='right'><?php if($countsAssociatedM->inscrito !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 5, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->inscrito; ?></a><?php } else echo $countsAssociatedM->inscrito; ?></td>
+						<td align='right'><?php if($countsNotAssociatedM->inscrito !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', 5, 'false', 'M')" target="blank"
+							> <?php echo $countsNotAssociatedM->inscrito; ?></a><?php } else echo $countsNotAssociatedM->inscrito; ?></td>
+					</tr>
+					<tr>
+						<th align="right">Vagas Disponíveis</th>
+						<td colspan="2"> <?php echo $vacancyFemale - ($countsAssociatedF->aguardando_pagamento 
 						+ $countsAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento 
 						+ $countsNotAssociatedF->inscrito); ?>
-							<td colspan = "2"> <?php echo $vacancy - ($countsAssociatedM->aguardando_pagamento 
+							
+						
+						<td colspan="2"> <?php echo $vacancyMale - ($countsAssociatedM->aguardando_pagamento 
 						+ $countsAssociatedM->inscrito + $countsNotAssociatedM->aguardando_pagamento 
 						+ $countsNotAssociatedM->inscrito); ?>
 	                    
-	                    </tr>
-				</table>
-				<table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 600px;">
-					
-					<tr>
-						<th></th>
-						<th>Sócios</th>
-						<th>Não Sócios</th>
-						<th>Total </th>
 					</tr>
+				<!-- </table>
+				<table class="table table-bordered table-striped table-min-td-size"
+					style="max-width: 400px;">
+
 					<tr>
-						<th align="right">Potencial de Inscritos</th>
-						<td width="60px" align='right'> <?php echo $potInscritosAssociated = $countsAssociatedT->aguardando_pagamento 
-						+ $countsAssociatedT->inscrito; ?></td>
-						<td width="60px" align='right'> <?php echo $potInscritosNotAssociated = $countsNotAssociatedT->aguardando_pagamento 
-						+ $countsNotAssociatedT->inscrito; ?></td>
-						<td width="60px" align='right'> <?php echo $potInscritos = $countsT->aguardando_pagamento 
-						+ $countsT->inscrito; ?></td>
+						<th align="right"><p>Potencial de Inscritos</p> <p>(Inscritos + Aguardando Pagamento)</p> </th>
+						<td width="60px" align='center'><br><p> <?php echo $potInscritos = $countsT->aguardando_pagamento 
+						+ $countsT->inscrito; ?> </p></td>
 					</tr>
 					<tr>
 						<th align="right">Porcentagem de Inscritos</th>
 						<td width="60px" align='right'><?php 
-						if($potInscritosAssociated)
-							echo number_format(($countsAssociatedT->inscrito/$potInscritosAssociated)*100,1);
-						 else echo "0.0";
-						 echo "%"; ?>  </td>
-						 <td width="60px" align='right'><?php 
-						if($potInscritosNotAssociated)
-							echo number_format(($countsNotAssociatedT->inscrito/$potInscritosNotAssociated)*100,1);
-						 else echo "0.0";
-						 echo "%"; ?>  </td>
-						<td width="60px" align='right'><?php 
 						if($potInscritos)
 							echo number_format(($countsT->inscrito/$potInscritos)*100,1);
 						 else echo "0.0";
-						 echo "%"; ?>  </td>				
-					</tr>
-				</table>
-				
-				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="modal_title">Detalhes das Inscrições</h4>
-					</div>
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-lg-12 middle-content">			
-								<div class="row">
-									<div class="form-group">
-										<div class="col-lg-12">
-											<?php
-                            foreach ($colonists as $colonist) {
-                                ?>
-                                <tr>
-                                    <td><a id="<?= $colonist->fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> colonist_name ?></a></td>
-                                    <td><?= $colonist->camp_name ?></td>
-                                    <td><a id="<?= $colonist -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $colonist -> person_user_id ?>"><?= $colonist -> user_name ?></a></td>
-                                    <td><?= $colonist->email ?></td>
-                                    <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->summer_camp_id?>"><font color="
-                                <?php
-                                    switch ($colonist->situation) {
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION: echo "#061B91"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "#017D50"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN: echo "#555555"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP: echo "#FF0000"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE: echo "#555555"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "#061B91"; break;
-                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50"; break;
-                                    }
-                                ?>"><?= $colonist -> situation_description ?></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		
+						 echo "%"; ?>  </td>
+					</tr>-->
+				</table> 
 			</div>
 		</div>
 	</div>

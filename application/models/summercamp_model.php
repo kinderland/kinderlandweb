@@ -23,6 +23,16 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
+    
+    public function getColonistInformationById($id) {
+    	$sql = "select c.colonist_id as colonist_id, scs.summer_camp_id as camp_id, p.gender as pavilhao, scs.room_number as room, 
+    			DATE_PART('YEAR',scs.date_created) as year, p.fullname as colonist_name from summer_camp_subscription scs INNER JOIN colonist c on 
+    			c.colonist_id = scs.colonist_id INNER JOIN person p on p.person_id = c.person_id
+    			WHERE c.colonist_id = ?";
+    	$resultSet = $this -> executeRow($this->db, $sql, array($id));
+    	
+    	return $resultSet;
+    }
 
     public function getAllColonistsForDiscount() {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
@@ -78,7 +88,7 @@ class summercamp_model extends CK_Model {
     }
 
     public function getAllSummerCampsByYear($year) {
-        $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_created) = ? ORDER BY date_created DESC";
+        $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_created) = ? ORDER BY date_created ASC";
         $resultSet = $this->executeRows($this->db, $sql, array(intval($year)));
 
         $campArray = array();
@@ -178,19 +188,20 @@ class summercamp_model extends CK_Model {
 
         return $campArray;
     }
-	
-    public function getColonistsAgeAndSchoolYearBySummerCampAndGender($summercampId,$gender) {
-    	
-    	$sql = "SELECT scs.summer_camp_id as camp_id, c.colonist_id as colonist_id, p.fullname as colonist_name, age(c.birth_date) as age, scs.school_year as school_year
+
+    public function getColonistsAgeAndSchoolYearBySummerCampAndGender($summercampId, $gender) {
+
+        $sql = "SELECT scs.situation as situation, scss.description as situation_description,scs.summer_camp_id as camp_id, c.colonist_id as colonist_id, p.fullname as colonist_name, age(c.birth_date) as age, scs.school_year as school_year
 				FROM colonist c INNER JOIN summer_camp_subscription scs on scs.colonist_id = c.colonist_id
 				INNER JOIN person p on c.person_id = p.person_id
-				WHERE scs.situation = 5 AND scs.summer_camp_id = ? AND p.gender = ?";
-    	
-    	$resultSet = $this -> executeRows($this->db,$sql,array($summercampId,$gender));
-    	
-    	return $resultSet;
-    
+				INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
+				WHERE scs.situation in ('5','4') AND scs.summer_camp_id = ? AND p.gender = ?";
+
+        $resultSet = $this->executeRows($this->db, $sql, array($summercampId, $gender));
+
+        return $resultSet;
     }
+
     public function getSummerCampById($id) {
         $sql = "SELECT * FROM summer_camp where summer_camp_id = ?";
         $resultSet = $this->executeRow($this->db, $sql, array($id));
@@ -438,7 +449,8 @@ class summercamp_model extends CK_Model {
         v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
         v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
         v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
-        p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id
+        p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id,
+        age(c.birth_date) as age
         from summer_camp sc
         join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
         join colonist c on scs.colonist_id = c.colonist_id
@@ -465,36 +477,51 @@ class summercamp_model extends CK_Model {
         return $resultSet;
     }
 
-    public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null) {
+    public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null, $gender = null, $room = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
 		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
 		v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
 		v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
-		p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id
+		p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id,
+        p.gender as colonist_gender, age(c.birth_date) as age
 		from summer_camp sc
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
 		join colonist c on scs.colonist_id = c.colonist_id
 		join person p on c.person_id = p.person_id
 		join person pr on pr.person_id = scs.person_user_id
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
-		left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id ";
-        if ($status !== null && $summercampId === null) {
-            $sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',sc.date_created) = ?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year));
-        } else if ($status !== null && $summercampId !== null) {
-            $sql = $sql . " WHERE scs.situation in (" . $status . ") AND DATE_PART('YEAR',sc.date_created) = ?
-        			AND sc.summer_camp_id =?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
-        } else if ($status === null && $summercampId !== null) {
-            $sql = $sql . " WHERE DATE_PART('YEAR',date_created) = ?
-        			AND sc.summer_camp_id =?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year, $summercampId));
-        } else {
-            $sql = $sql . " WHERE DATE_PART('YEAR',date_created) = ?";
-            $resultSet = $this->executeRows($this->db, $sql, array($year));
+		left join validation v on v.colonist_id = c.colonist_id and v.summer_camp_id = sc.summer_camp_id 
+        where DATE_PART('YEAR', sc.date_created) = ? ";
+
+        $arrParam = array($year);
+        if($status !== null){
+            $sql = $sql . " and scs.situation in (" . $status . ") ";
+        }
+        if($summercampId !== null){
+            $sql = $sql . " and sc.summer_camp_id = ? ";
+            $arrParam[] = $summercampId;
+        }
+        if($gender !== null){
+            $sql = $sql . " and p.gender = ? ";
+            $arrParam[] = $gender;
+        }
+        if($room !== null) {
+        	if($room == 0) {
+        		$sql = $sql . " and scs.room_number is NULL ";
+        	}
+        	else if($room == -1) {
+        		$sql = $sql . " and scs.room_number in (1,2,3,4,5,6) ";
+        	}
+        	else {
+        		$sql = $sql . " and scs.room_number = ? ";
+        		$arrParam[] = $room;
+        	}
+        	
         }
 
+        $sql .= " ORDER BY colonist_name ";
+        $resultSet = $this->executeRows($this->db, $sql, $arrParam);
         return $resultSet;
     }
 
@@ -674,6 +701,29 @@ class summercamp_model extends CK_Model {
             $resultSet = $this->executeRow($this->db, $sql, array($year, $year, $year, $year, $year, $year, $year, $year, $year, $year));
             return $resultSet;
         }
+    }
+
+    public function getColonistsDetailedByYearSummerCampAssociationStatusAndGender($year, $status, $gender, $associated = null, $summercampId = null) {
+        $sql = "SELECT c.colonist_id as colonist_id, p.fullname as colonist_name, pr.person_id as responsable_id,
+				pr.fullname as responsable_name, vrauad.associate as associate, sc.summer_camp_id as camp_id, sc.camp_name as camp_name
+				FROM colonist c INNER JOIN person p on c.person_id = p.person_id
+				INNER JOIN summer_camp_subscription scs on scs.colonist_id = c.colonist_id
+				INNER JOIN summer_camp sc on scs.summer_camp_id = sc.summer_camp_id
+				INNER JOIN person pr on scs.person_user_id = pr.person_id
+				INNER JOIN v_report_all_users_association_detailed vrauad on vrauad.person_id = pr.person_id
+				WHERE DATE_PART('YEAR',sc.date_created) = ?
+    			AND p.gender = ?
+				AND scs.situation = ?
+				" . (($associated) ? "" . (($associated != 'true') ? "AND vrauad.associate = 'não sócio'" : "AND vrauad.associate != 'não sócio'") . "" : "") . "
+				" . (($summercampId !== null) ? "AND sc.summer_camp_id = ?" : "") . "";
+
+        if ($summercampId !== null) {
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $gender, $status, $summercampId));
+        } else {
+            $resultSet = $this->executeRows($this->db, $sql, array($year, $gender, $status));
+        }
+
+        return $resultSet;
     }
 
     public function getCountStatusColonistAssociatedOrNotBySummerCampYearGender($year, $associated, $summerCampId = null, $gender = null) {
@@ -1164,10 +1214,16 @@ class summercamp_model extends CK_Model {
         return $countDetail;
     }
 
-    public function getAllColonistsWithQueueNumberBySummerCamp($summerCampId) {
+    public function getAllColonistsWithQueueNumberBySummerCamp($summerCampId, $gender = null) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * FROM v_colonists_with_queue_number WHERE summer_camp_id = ?";
-        $resultSet = $this->executeRowsNoLog($this->db, $sql, array($summerCampId));
+        $sql = "SELECT * FROM v_colonists_with_queue_number WHERE summer_camp_id = ?
+        		" . (($gender != null) ? " AND gender = ?" : "") . "";
+
+        if ($gender !== null) {
+            $resultSet = $this->executeRowsNoLog($this->db, $sql, array($summerCampId, $gender));
+        } else {
+            $resultSet = $this->executeRowsNoLog($this->db, $sql, array($summerCampId));
+        }
 
         if ($resultSet)
             return $resultSet;
@@ -1219,14 +1275,122 @@ class summercamp_model extends CK_Model {
         return $result;
     }
 
-    public function getNextAvailablePosition($campsIdStr){
-        $sql = "SELECT MAX(queue_number) as lastposition FROM summer_camp_subscription WHERE summer_camp_id in (" . $campsIdStr .");";
+    public function getNextAvailablePosition($campsIdStr) {
+        $sql = "SELECT MAX(queue_number) as lastposition FROM summer_camp_subscription WHERE summer_camp_id in (" . $campsIdStr . ");";
         $result = $this->executeRow($this->db, $sql);
 
-        if($result)
+        if ($result)
             return $result->lastposition + 1;
         else
             return 1;
+    }
+
+    public function updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3) {
+        $sql = "UPDATE summer_camp_subscription SET roommate1 = ?, roommate2 = ?, roommate3 = ? WHERE summer_camp_id = ? AND colonist_id = ?";
+        $result = $this->execute($this->db, $sql, array($roommate1, $roommate2, $roommate3, intval($summerCampId), intval($colonistId)));
+
+        return $result;
+    }
+
+    public function updateRoomNumber($colonistId, $summerCampId, $roomNumber) {
+        $sql = "UPDATE summer_camp_subscription SET room_number = ? WHERE summer_camp_id = ? AND colonist_id = ?";
+        $result = $this->execute($this->db, $sql, array(intval($roomNumber), intval($summerCampId), intval($colonistId)));
+
+        return $result;
+    }
+
+    public function getColonistsToDistributeInRooms($summerCampId, $gender) {
+        $sql = "SELECT *, date_part('year',age(c.birth_date)) as age
+                FROM summer_camp_subscription scs
+                INNER JOIN colonist c on c.colonist_id = scs.colonist_id
+                INNER JOIN person p on p.person_id = c.person_id
+                WHERE summer_camp_id = ? AND situation = ?
+                AND p.gender = ?
+                ORDER BY age";
+        $resultSet = $this->executeRowsNoLog($this->db, $sql, array(intval($summerCampId),
+            SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $gender));
+
+        if (!$resultSet)
+            return array();
+
+        return $resultSet;
+    }
+
+    public function getColonistDataFromPDF($idsColonist) {
+        $list = "";
+        for ($i = 0; $i < count($idsColonist); $i++) {
+            if ($list) {
+                $list .= ",";
+            }
+            $list .= $idsColonist[$i][0];
+        }
+        $sql = "Select
+                p.person_id,
+        		c.colonist_id as colonist_id,
+        		p.fullname,
+                c.birth_date,
+                scs.*,
+        		scs.summer_camp_id as camp_id,
+                pr.person_id as responsable_id,
+                motherPS.parent_id as mother_id,
+                fatherPS.parent_id as father_id
+
+                 from colonist as c
+                        join person p on c.person_id = p.person_id
+                        join summer_camp_subscription scs on scs.colonist_id = c.colonist_id
+                        join person pr on pr.person_id = scs.person_user_id
+                        left join parent_summer_camp_subscription fatherPS on fatherPS.colonist_id = c.colonist_id and fatherPS.relation = 'Pai'
+                        left join parent_summer_camp_subscription motherPS on motherPS.colonist_id = c.colonist_id and motherPS.relation = 'Mãe'
+                where c.colonist_id in (" . $list . ") order by p.gender, scs.room_number, p.fullname";
+        $resultSet = $this->executeRows($this->db, $sql);
+        if (!$resultSet)
+            return array();
+        return $resultSet;
+    }
+
+    public function getPersonFullById($personId) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT *, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,
+                    (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1 OFFSET 1) AS phone2
+    			FROM person p
+                        JOIN colonist c on p.person_id = c.person_id
+    			LEFT JOIN address a on a.address_id = p.address_id
+    			LEFT JOIN person_user pu on pu.person_id = p.person_id
+    			WHERE p.person_id = ?";
+        $result = $this->executeRow($this->db, $sql, array(intval($personId), intval($personId), intval($personId)));
+
+        if (!$result)
+            return null;
+
+        return $result;
+    }
+
+    public function getCampStaff($summerCampId){
+        $sql = "SELECT * FROM summer_camp_staff staff 
+                INNER JOIN summer_camp_staff_function staff_f on staff_f.staff_function = staff.staff_function
+                INNER JOIN person p on p.person_id = staff.person_id 
+                WHERE summer_camp_id = ?
+                ORDER BY staff.staff_function, staff.room_number";
+        $result = $this->executeRows($this->db, $sql, array(intval($summerCampId)));
+
+        if (!$result)
+            return null;
+
+        return $result;
+    }
+
+    public function updateCampStaff($personId, $summerCampId, $staffFunction, $room = null){
+        $deleteSql = "DELETE FROM summer_camp_staff 
+                      WHERE summer_camp_id = ? AND staff_function = ? ";
+        if($room != null && $room != 0)
+            $deleteSql .= " AND room_number = $room";
+
+        $deleteResult = $this->execute($this->db, $deleteSql, array(intval($personId), intval($summerCampId), intval($staffFunction)));
+
+        $sql = "INSERT INTO summer_camp_staff (person_id, summer_camp_id, staff_function, room_number)
+                VALUES (?, ?, ?, ?)";
+
+        return $this->execute($this->db, $sql, array(intval($personId), intval($summerCampId), intval($staffFunction), $room));
     }
 
 }

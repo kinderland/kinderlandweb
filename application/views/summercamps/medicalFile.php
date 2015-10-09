@@ -30,6 +30,11 @@
 	        $("#cep").mask("00000-000");
 	        $("#cpf").mask("000.000.000-00");
 	}); 
+
+	function createPDFMedicalFiles() {
+        window.location.href = "<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?=$ano_escolhido?>/<?=(isset($summer_camp_id)?$summer_camp_id:'')?>/<?=(isset($pavilhao)?$pavilhao:'')?>/<?=(isset($quarto)?$quarto:'')?>/simples";
+    }
+
 </script>
 
 <div id="cabecalho">
@@ -302,7 +307,7 @@
 			</tr>
 
 		</table>
-		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">
+		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">&nbsp;&nbsp;<button class="btn btn-primary" onclick="createPDFMedicalFiles()" value="">PDF com ficha médica</button>
 	</form>
 	<br />
 	<input type="submit" class="btn btn-warning" value="Voltar" id="upload" onClick="history.go(-1);return true;">

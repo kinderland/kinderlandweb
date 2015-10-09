@@ -84,7 +84,7 @@
                             foreach ($colonists as $colonist) {
                                 ?>
                                 <tr>
-                                    <td><a id="<?= $colonist->fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> fullname ?></a></td>
+                                    <td><a id="<?= $colonist->fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist -> colonist_id ?>&summerCampId=<?= $colonist -> summer_camp_id ?>"><?= $colonist -> fullname ?></a></td>
                                     <td><?= $colonist->camp_name ?></td>
                                     <td><img src="<?php if($colonist->pai ) echo $this -> config -> item('assets') . 'images/payment/greenicon.png" width="20px" height="20px"'; else echo $this -> config -> item('assets') . 'images/payment/redicon.png" width="20px" height="20px"'; ?>"/></td>
                                     <td><img src="<?php if($colonist->mae ) echo $this -> config -> item('assets') . 'images/payment/greenicon.png" width="20px" height="20px"'; else echo $this -> config -> item('assets') . 'images/payment/redicon.png" width="20px" height="20px"'; ?>"/></td>

@@ -54,6 +54,66 @@
 			        });
 				}
 			}
+			function post(path, params, method) {
+				method = method || "post"; // Set method to post by default if not specified.
+
+				// The rest of this code assumes you are not using a library.
+				// It can be made less wordy if you use one.
+			    var form = document.createElement("form");
+			    form.setAttribute("method", method);
+			    form.setAttribute("action", path);
+
+			    for(var key in params) {
+			        if(params.hasOwnProperty(key)) {
+			            var hiddenField = document.createElement("input");
+			            hiddenField.setAttribute("type", "hidden");
+			            hiddenField.setAttribute("name", key);
+			            hiddenField.setAttribute("value", params[key]);
+			            form.appendChild(hiddenField);
+			         }
+			    }
+
+			    document.body.appendChild(form);
+			    form.submit();
+			}
+
+			function getCSVName(){
+				var nomePadrao = "lista_de_espera_colonistas";
+				var colonia_escolhida = document.getElementById('colonia').value;
+				var selecionado = document.getElementById('anos').value;
+				
+				nomePadrao = nomePadrao.concat("_"+colonia_escolhida)
+
+				nomePadrao = nomePadrao.concat("_"+selecionado);
+
+				return nomePadrao;
+			}	
+
+			function sendTableToCSV(){
+				var data = [];
+				var table = document.getElementById("tablebody");
+				var name = getCSVName();
+				var tablehead = document.getElementsByTagName("thead")[0];
+				for (var i = 0, row; row = table.rows[i]; i++) {
+					var data2 = []
+			    	//Nome, retira pega o que esta entre um <> e outro <>
+			    	data2.push(row.cells[0].innerHTML.split("<")[1].split(">")[1]);
+			    	data2.push(row.cells[1].innerHTML);
+			    	data2.push(row.cells[2].innerHTML);
+			    	data2.push(row.cells[3].innerHTML.split("<")[1].split(">")[1]);
+			    	data2.push(row.cells[4].innerHTML);
+			    	data.push(data2)
+			    } 
+			    if(i==0){
+						alert('Não há dados para geração da planilha');
+						return;
+			    }
+			    var dataToSend = JSON.stringify(data);
+			    var columName = ["Colonista", "Sexo","Posição na Lista de Espera", "Responsavel", "Status"];
+			    var columnNameToSend = JSON.stringify(columName);
+			    
+			    post('<?= $this -> config -> item('url_link'); ?>reports/toCSV', {data: dataToSend,name: name,columName: columnNameToSend});
+			}
 
 
 			var selectTodos = {
@@ -75,7 +135,9 @@
 						return l.toLowerCase().localeCompare(r.toLowerCase());
 					}, //Evita problemas com caps-lock
 					function(l, r) {
-						return l.toLowerCase().localeCompare(r.toLowerCase());
+						var intL = parseInt(l);
+						var intR = parseInt(r);
+						return (intL < intR) ? -1:1;
 					}, //Evita problemas com caps-lock
 					function(l, r) {
 						return l.toLowerCase().localeCompare(r.toLowerCase());
@@ -84,7 +146,7 @@
 						return l.toLowerCase().localeCompare(r.toLowerCase());
 					}
 					],
-					filters : [true,selectTodos,selectTodos,true,selectTodos]
+					filters : [true,selectTodos,true,true,selectTodos]
 				});
 			});
         </script>
@@ -172,6 +234,8 @@
 						<?php if(isset($subscriptions)) { ?>
 
 							<hr />
+							<br />
+							<button class="button" onclick="sendTableToCSV()" value="">Gerar Planilha de colonistas na fila</button> <br></br>
 							<br />
 							<table class="table table-bordered table-striped table-min-td-size"
 								style="max-width: 500px; font-size:15px" id="sortable-table">
