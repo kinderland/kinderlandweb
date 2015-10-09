@@ -1079,19 +1079,117 @@ class Reports extends CK_Controller {
     }
 
     public function transactions_expected() {
-        $date = date('Y');
+        $anoAtual = date('Y');
+        
+        $donations = array(0 => "Todas", 1 => "Inscrição Colônia", 2 => "Avulsa", 3 => "Campanha de Sócios");
+        
+        $donationChosen = 'Todas';
+        if (isset($_GET['doacao_f']))
+        	$donationChosen = $_GET['doacao_f'];
+        
+        $data['doacao_escolhida'] = $donationChosen;
+        $data['donations'] = $donations;
+        
+        $type = null;
+        
+        if($donationChosen = 'Inscrição Colônia')
+        	$type = 4;
+        else if($donationChosen == "Avulsa")
+        	$type = 1;
+        else if($donationChosen == "Campanha de Sócios")
+        	$type = 2;        	
+        
+        
+        
+        $allTransactions = null;
+        $transactions = new stdClass();
+        $transactions->valueDay = array();
+        $transactions -> day = array();
+        $transactions -> qtdDays = 0;
+        
+        $dayArr = array();
+        $valueDay = array();
+        
+        $allTransactions = $this -> cielotransaction_model -> getCapturedTransactionsByDonationType($type);
+        $days = $this -> cielotransaction_model -> countTotalDaysCapturedTransaction();
+        
+        $start = strval($days[0]->year)."-".strval($days[0]->month)."-".strval($days[0]->day);
+        
+        $end = count($days);
 
-        $periods = array(0 => "Específico", 1 => $date, 2 => "Janeiro", 3 => "Fevereiro", 4 => "Março",
+        foreach($days as $day) {
+        	$end += 360;
+        }       
+         
+        
+        $transactions -> qtdDays = $end;
+        $start = strtotime($start);
+        
+        for($i = 0; $i < $end; $i++) {
+        	$transactions -> day[$i] = date($start);
+        	$start = strtotime($start."+1 days");
+        }
+        
+        $j = 0;
+        
+        foreach($allTransactions as $trans) {
+        	
+        	foreach($days as $day) {
+        		if((date('d'.$trans -> date_updated) != strval($day -> day)) && (date('m'.$trans -> date_updated) != strval($day -> month)) && (date('Y'.$trans -> date_updated) != strval($day -> year))){
+        			$j++;
+        		}
+        		else 
+        			break;
+        	}
+        	
+        	if($trans -> type == "debito") {
+        		$transactions -> valueDay[$j+1] = $trans->value - (3.4*($trans->value)/100.0);
+        	}
+        	
+        	else if($trans -> type == "credito") {
+        		
+        		if($trans -> portions == 1) {
+        			$transactions -> valueDay[$j+30] = $trans->value - (3.8*($trans->value)/100.0);
+        		}
+        		else  {
+        			
+        			$portions = $trans -> portions;
+        			
+        			if($portions == 2 || $portions == 3)
+        				$value = $trans->value - (4.55*($trans->value)/100.0);
+        			else if($portions == 4 || $portions == 5 || $portions == 6)
+        				$value = $trans->value - (4.80*($trans->value)/100.0);
+        			else
+        				$value = $trans->value - (4.90*($trans->value)/100.0);
+        			
+        			$i=1;
+        			
+        			while($i <= $portions) {
+        				$transactions -> valueDay[$j+30*$i] = $value/$portions;
+        				$i++;
+        			}
+        		}
+        	}
+        }
+
+        $periods = array(0 => "Específico", 1 => $anoAtual, 2 => "Janeiro", 3 => "Fevereiro", 4 => "Março",
             5 => "Abril", 6 => "Maio", 7 => "Junho", 8 => "Julho", 9 => "Agosto", 10 => "Setembro",
             11 => "Outubro", 12 => "Novembro", 13 => "Dezembro");
 
-        $periodChosen = 'Específico';
+        $periodChosen = "Específico";
         if (isset($_GET['periodo_f']))
             $periodChosen = $_GET['periodo_f'];
 
         $data['periodo_escolhido'] = $periodChosen;
         $data['periods'] = $periods;
+        
+        $initialPeriodChosen = null;
+        $finalPeriodChosen = null;
 
+        
+        if (isset($_GET['periodo_f'])) {
+        	
+        
         if ($periodChosen == "Específico") {
             if (isset($_GET['periodo_inicial_f']) && isset($_GET['periodo_final_f'])) {
                 $initialPeriodChosen = $_GET['periodo_inicial_f'];
@@ -1099,20 +1197,130 @@ class Reports extends CK_Controller {
 
                 $data['periodo_inicial_escolhido'] = $initialPeriodChosen;
                 $data['periodo_final_escolhido'] = $finalPeriodChosen;
+                
             }
         }
+        
+        else if($periodChosen == $anoAtual) {
+        	$initialPeriodChosen = $anoAtual."-01-01";
+        	$finalPeriodChosen = $anoAtual."-12-31";   
+        }
+        
+        else {
+        	$mesAtual = null;
+        	
+        	if($periodChosen == "Janeiro") {
+        		$mesAtual = "01";
+        		$diaFinal = "31";
+        	}
+        	else if($periodChosen == "Fevereiro"){
+        		$mesAtual = "02";
+        		$diaFinal = "29";
+        	}        	
+        	else if($periodChosen == "Março"){
+        		$mesAtual = "03";
+        		$diaFinal = "31";
+        	}
+        	else if($periodChosen == "Abril"){
+        		$mesAtual = "04";
+        		$diaFinal = "30";
+        	}
+        	else if($periodChosen == "Maio"){
+        		$mesAtual = "05";
+        		$diaFinal = "31";
+        	}
+        	else if($periodChosen == "Junho"){
+        		$mesAtual = "06";
+        		$diaFinal = "30";
+        	}
+        	else if($periodChosen == "Julho"){
+        		$mesAtual = "07";
+        		$diaFinal = "31";
+        	}
+        	else if($periodChosen == "Agosto"){
+        		$mesAtual = "08";
+        		$diaFinal = "31";
+        	}
+        	else if($periodChosen == "Setembro"){
+        		$mesAtual = "09";
+        		$diaFinal = "30";
+        	}
+        	else if($periodChosen == "Outubro"){
+        		$mesAtual = "10";
+        		$diaFinal = "31";
+        	}
+        	else if($periodChosen == "Novembro"){
+        		$mesAtual = "11";
+        		$diaFinal = "30";
+        	}
+        	else if($periodChosen == "Dezembro"){
+        		$mesAtual = "12";
+        		$diaFinal = "31";
+        	}
+        	
+        	$initialPeriodChosen = $anoAtual."-".$mesAtual."-01";
+        	$finalPeriodChosen =  $anoAtual."-".$mesAtual."-".$diaFinal;      	
+        }
+                
+         $start = strtotime($initialPeriodChosen);
+         $end = strtotime($finalPeriodChosen);
+                
+         $firstDay = strtotime($transactions -> day[0]);
+         $lastDay = strtotime($transactions -> day[($transactions -> qtdDays) -1]);
+                
+         if(($start < $firstDay && $end < $firstDay) || ($start > $end) || ($start > $lastDay)) {
+	         $dayArr = null;
+	         $valueDay = null;
+         }
+         else {
+                	
+	         if($start < $firstDay) {
+	         	$initialPeriodChosen = date($firstDay);
+	         }
+                	
+             if($end > $lastDay) {
+                $finalPeriodChosen = date($lastDay);
+             }
+                	
+	         for($i = 0; $i < $transactions -> qtdDays; $i++) {
+	             if($initialPeriodChosen == $transactions -> day[$i])
+	             break;
+	         }
+	                
+	         for($j = $i; $j < $transactions -> qtdDays; $j++) {
+	              if($finalPeriodChosen == $transactions -> day[$j])
+	              break;
+	         }
+	                
+	         $l = 0;
+	                
+	         
+	         for($k = $i; $k <= $j; $k++) {
+	               $dayArr[$l] = $transactions -> day[$k];
+	               $valueDay[$l] = $transactions -> valueDay[$k];
+	               $l++;
+	         }
+         }
+         
+         $info = array();
+         
+         $l = 0;
+         
+         print_r($dayArr);
+         
+         for($i = 0; $i < $transactions->qtdDays; $i++) {
+         	$obj = new stdClass();
+         	$obj -> day = $dayArr[$i];
+         	$obj -> valueDay = $valueDay[$i];
+         	$info[$l] = $obj;
+         	$l++;
+         }
+         
+         $data['transactions'] = $info;
+        }
 
-        $donations = array(0 => "Todas", 1 => "Inscrição Colônia", 2 => "Avulsa", 3 => "Campanha de Sócios");
 
-        $donationChosen = 'Todas';
-        if (isset($_GET['doacao_f']))
-            $donationChosen = $_GET['doacao_f'];
-
-        $data['doacao_escolhida'] = $donationChosen;
-        $data['donations'] = $donations;
-
-
-        $this->loadReportView("reports/summercamps/transactions_expected", $data);
+        $this->loadReportView("reports/finances/transactions_expected", $data);
     }
 
     public function camps_donations() {
