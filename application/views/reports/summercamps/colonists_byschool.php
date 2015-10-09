@@ -19,84 +19,84 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
         <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
-		
-		<script>
 
-		function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
-			return '';
-		}
+        <script>
 
-		function sortLowerCase(l, r) {
-			return l.toLowerCase().localeCompare(r.toLowerCase());
-		}
+            function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
+                return '';
+            }
 
-		</script>
+            function sortLowerCase(l, r) {
+                return l.toLowerCase().localeCompare(r.toLowerCase());
+            }
+
+        </script>
 
     </head>
     <body>
         <script>
-        $(document).ready(function() {
-			$('#sortable-table').datatable({
-				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, true, true, true, true],
-				counterText	: showCounter
-			});
-		});
+            $(document).ready(function () {
+                $('#sortable-table').datatable({
+                    pageSize: Number.MAX_VALUE,
+                    sort: [true, true, true, true, sortLowerCase],
+                    counterText: showCounter
+                });
+            });
         </script>
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
-                	<form method="GET">
-						<select name="ano_f" onchange="this.form.submit()" id="anos">
-					
-							<?php
-							foreach ( $years as $year ) {
-								$selected = "";
-								if ($ano_escolhido == $year)
-									$selected = "selected";
-								echo "<option $selected value='$year'>$year</option>";
-							}
-							?>
-						</select>
-						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
-							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
-							<?php
-							foreach ( $camps as $camp ) {
-								$selected = "";
-								if ($colonia_escolhida == $camp)
-									$selected = "selected";
-								echo "<option $selected value='$camp'>$camp</option>";
-							}
-							?>
-						</select>
-					</form>
-					
-					<div class="counter"></div>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
+                    <form method="GET">
+                        <select name="ano_f" onchange="this.form.submit()" id="anos">
+
+                            <?php
+                            foreach ($years as $year) {
+                                $selected = "";
+                                if ($ano_escolhido == $year)
+                                    $selected = "selected";
+                                echo "<option $selected value='$year'>$year</option>";
+                            }
+                            ?>
+                        </select>
+                        <select name="colonia_f" onchange="this.form.submit()" id="colonia">
+                            <option value="0" <?php if (!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
+                            <?php
+                            foreach ($camps as $camp) {
+                                $selected = "";
+                                if ($colonia_escolhida == $camp)
+                                    $selected = "selected";
+                                echo "<option $selected value='$camp'>$camp</option>";
+                            }
+                            ?>
+                        </select>
+                    </form>
+
+                    <div class="counter"></div>
+                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 780px; font-size:15px;" id="sortable-table">
                         <thead>
                             <tr>
-                                <th> Nome da Escola </th>
-                                <th> Pré-inscritos </th>
-                                <th> Em fila de espera </th>
-                                <th> Aguardando pagamento </th>
                                 <th> Inscritos </th>
+                                <th> Aguardando doação </th>
+                                <th> Em fila de espera </th>
+                                <th> Em elaboração </th>
+                                <th> Nome da Escola </th>
                             </tr>
                         </thead>
                         <tbody>
-                          <?php
-                          	if(is_array($schools))
-                             foreach ($schools as $school) {
-                                ?>
-                                <tr>
-                                	<td><?= $school->school_name ?></td>
-                                    <td><?= $school->validada ?></td>
-                                    <td><?= $school->fila_espera ?></td>
-                                    <td><?= $school->aguardando_pagamento ?></td>
-                                    <td><?= $school->inscrito ?></td>  
-                                </tr>                                   
-                                  <?php
-                            }
-                            ?>  
+                            <?php
+                            if (is_array($schools))
+                                foreach ($schools as $school) {
+                                    ?>
+                                    <tr>
+                                        <td><?= $school->inscrito ?></td>
+                                        <td><?= $school->aguardando_pagamento ?></td>
+                                        <td><?= $school->fila_espera ?></td>
+                                        <td><?= $school->validada ?></td>
+                                        <td><?= $school->school_name ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                            ?>
                         </tbody>
                     </table>
                 </div>
