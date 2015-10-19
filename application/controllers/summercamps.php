@@ -1562,6 +1562,71 @@ class SummerCamps extends CK_Controller {
             //TODO
         }
     }
+
+    public function monitorRoom() {
+        $data = array();
+
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_GET['colonia_f']))
+            $campChosen = $_GET['colonia_f'];
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $camps[] = $camp->getCampName();
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
+        }
+
+        $data['summer_camp_id'] = $campChosenId;
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+
+
+        if ($campChosenId != null) {
+            $data['room_data'] = $this->summercamp_model->getMonitorRooms($this->session->userdata("user_id"));
+            if(isset($_GET['quarto']) && $quarto > 0 && $quarto < 7){
+                $quarto = $_GET['quarto'];
+                $data["quarto"] = $quarto;
+            }
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $this->session->userdata("gender"));
+
+            $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+            $data['colonists'] = $colonistsSelected;
+        }
+
+        $this->loadView("summercamps/monitorRooms", $data);
+    }
 }
 
 ?>
