@@ -510,6 +510,29 @@ CREATE TABLE medical_file (
     FOREIGN KEY (doctor_id) REFERENCES person(person_id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
+CREATE TABLE medical_file_staff (
+    summer_camp_id integer NOT NULL,
+    person_id integer NOT NULL,
+    blood_type integer NOT NULL,
+    rh boolean NOT NULL,
+    weight numeric NOT NULL,
+    height numeric NOT NULL,
+    physical_activity_restriction character varying(200),
+    vacine_tetanus boolean NOT NULL,
+    vacine_mmr boolean NOT NULL,
+    vacine_hepatitis boolean NOT NULL,
+    infecto_contagious_antecedents character varying(200),
+    regular_use_medicine character varying(200),
+    medicine_restrictions character varying(200),
+    allergies character varying(200),
+    analgesic_antipyretic character varying(200),
+    doctor_id integer NOT NULL,
+    date timestamp without time zone NOT NULL default current_timestamp,
+    PRIMARY KEY (summer_camp_id, person_id),
+    FOREIGN KEY (blood_type) REFERENCES blood_type(blood_type_id) ON UPDATE       CASCADE ON DELETE RESTRICT,
+    FOREIGN KEY (doctor_id) REFERENCES person(person_id) ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
 CREATE TABLE summer_camp_payment_period
 (
   payment_period_id serial NOT NULL,
@@ -738,6 +761,14 @@ CREATE OR REPLACE VIEW v_colonists_waiting_payment AS
      JOIN person p ON p.person_id = c.person_id
      JOIN person pr ON pr.person_id = scs.person_user_id
   WHERE scs.situation = 4;
+  
+  CREATE OR REPLACE VIEW v_captured_transactions AS (
+	SELECT ct.payment_type as type, ct.cardflag as cardflag, ct.payment_portions as portions, ct.date_created as date_created,
+	ct.date_updated as date_updated, ct.transaction_value as value, d.donation_type as donation_type
+	FROM cielo_transaction ct INNER JOIN payment_status ps on ps.payment_status = ct.payment_status
+	INNER JOIN donation d on ct.donation_id = d.donation_id
+	INNER JOIN donation_type dt on dt.donation_type = d.donation_type
+	WHERE ps.payment_status = 6);
 
 CREATE OR REPLACE FUNCTION set_colonist_subscription_waiting_payment(_colonist_id integer, _summer_camp_id integer)
   RETURNS boolean AS
