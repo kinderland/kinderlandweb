@@ -488,6 +488,80 @@ class SummerCamps extends CK_Controller {
             $this->loadView('summercamps/medicalFile', $data);
         }
     }
+    
+    public function chooseCamp(){
+    	$year = date('Y');
+    	$today = date('Y-m-d');
+    	$today = strtotime($today);
+    	$camps = array();
+    	$camps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
+    	$summercamp = array();
+    	$user = $this->personuser_model->getUserById($this->session->userdata("user_id"));
+    	
+    	foreach($camps as $camp) {
+    		$dayFinish = $camp->getDateFinish();
+    		
+    		$dayFinish = strtotime($dayFinish);
+    		
+    		if($today<$dayFinish) {
+    			$summercamp[] = $camp;
+    		}    		
+    	}
+    	
+    	$data['camps'] = $summercamp;
+    	$data['user'] = $user;
+    	
+    	$this->loadView('summercamps/chooseCamp', $data);
+    }
+    
+    public function medicalFileStaff() {
+    	$camp_id = $this->input->get('camp_id', TRUE);
+    	$person_id = $this->input->get('person_id', TRUE);
+    	
+    	$data['person_id'] = $person_id;
+    	$data['camp_id'] = $camp_id;
+    	$data['editable'] = TRUE;
+    	
+    	if ($this->summercamp_model->hasDocumentStaff($camp_id, $person_id, DOCUMENT_MEDICAL_FILE)) {
+    		$medical_file = $this->medical_file_model->getStaffMedicalFile($camp_id, $person_id);
+    		$data["bloodType"] = $medical_file->getBloodType();
+    		$data["rh"] = $medical_file->getRH();
+    		$data["weight"] = $medical_file->getWeight();
+    		$data["height"] = $medical_file->getHeight();
+    		$data["physicalActivityRestriction"] = $medical_file->getPhysicalActivityRestriction();
+    		$data["vacineTetanus"] = $medical_file->getVacineTetanus();
+    		$data["vacineMMR"] = $medical_file->getVacineMMR();
+    		$data["vacineTetanus"] = $medical_file->getVacineTetanus();
+    		$data["vacineHepatitis"] = $medical_file->getVacineHepatitis();
+    		$data["antecedents"] = $medical_file->getInfectoContagiousAntecedents();
+    		$data["regularUseMedicine"] = $medical_file->getRegularUseMedicine();
+    		$data["medicineRestrictions"] = $medical_file->getMedicineRestrictions();
+    		$data["allergies"] = $medical_file->getAllergies();
+    		$data["analgesicAntipyretic"] = $medical_file->getAnalgesicAntipyretic();
+    		$doctorId = $medical_file->getDoctorId();
+    		$doctor = $this->person_model->getPersonById($doctorId);
+    		$data["doctorName"] = $doctor->getFullName();
+    		$data["doctorEmail"] = $doctor->getEmail();
+    		$tels = $this->telephone_model->getTelephonesByPersonId($doctorId);
+    		if (isset($tels[0]))
+    			$data["doctorPhone1"] = $tels[0];
+    		else
+    			$data["doctorPhone1"] = "";
+    		if (isset($tels[1]))
+    			$data["doctorPhone2"] = $tels[1];
+    		else
+    			$data["doctorPhone2"] = "";
+    
+    		
+    		 
+    		$type = 'simples';
+    		$data['type'] = $type;
+    		 
+    		$this->loadView('summercamps/editMedicalFileFormStaff', $data);
+    	} else {
+    		$this->loadView('summercamps/medicalFileStaff', $data);
+    	}
+    }
 
     public function uploadDocument() {
         $this->Logger->info("Starting " . __METHOD__);
@@ -940,6 +1014,71 @@ class SummerCamps extends CK_Controller {
         if ($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
             echo "<script>alert('Ficha medica salva com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
     }
+    
+    public function submitMedicalFileStaff() {
+    	$responsability = $this->input->post('responsability', TRUE);
+    	if (!$responsability) {
+    		echo "<script>alert('Por favor valide a veracidade dos dados.');history.go(-1);</script>";
+    
+    		return;
+    	}
+    	$campId = $this->input->post('camp_id', TRUE);
+    	$personId = $this->input->post('person_id', TRUE);
+    	$bloodType = $this->input->post('bloodType', TRUE);
+    	$rh = $this->input->post('rh', TRUE);
+    	$weight = $this->input->post('weight', TRUE);
+    	$height = $this->input->post('height', TRUE);
+    
+    	if ($this->input->post('physicalrestrictions_radio', TRUE))
+    		$physicalActivityRestriction = $this->input->post('physicalrestrictions_text', TRUE);
+    	else
+    		$physicalActivityRestriction = NULL;
+    
+    	if ($this->input->post('antecedents_radio', TRUE))
+    		$infectoContagiousAntecedents = $this->input->post('antecedents_text', TRUE);
+    	else
+    		$infectoContagiousAntecedents = NULL;
+    
+    	if ($this->input->post('habitualmedicine_radio', TRUE))
+    		$regularUseMedicine = $this->input->post('habitualmedicine_text', TRUE);
+    	else
+    		$regularUseMedicine = NULL;
+    
+    	if ($this->input->post('medicinerestrictions_radio', TRUE))
+    		$medicineRestrictions = $this->input->post('medicinerestrictions_text', TRUE);
+    	else
+    		$medicineRestrictions = NULL;
+    
+    	if ($this->input->post('allergies_radio', TRUE))
+    		$allergies = $this->input->post('allergies_text', TRUE);
+    	else
+    		$allergies = NULL;
+    
+    	if ($this->input->post('analgesicantipyretic_radio', TRUE))
+    		$analgesicAntipyretic = $this->input->post('analgesicantipyretic_text', TRUE);
+    	else
+    		$analgesicAntipyretic = NULL;
+    
+    	$doctorName = $this->input->post('doctor_name', TRUE);
+    	$doctorMail = $this->input->post('doctor_email', TRUE);
+    	$doctorPhone1 = $this->input->post('doctor_phone1', TRUE);
+    	$doctorPhone2 = $this->input->post('doctor_phone2', TRUE);
+    	if ($doctorMail && $doctorMail === "")
+    		$doctorMail = NULL;
+    
+    	$doctorId = $this->person_model->insertPersonWithoutAddress($doctorName, NULL, $doctorMail);
+    	$this->telephone_model->insertNewTelephone($doctorPhone1, $doctorId);
+    
+    	if ($doctorPhone2 && $doctorPhone2 !== "")
+    		$this->telephone_model->insertNewTelephone($doctorPhone2, $doctorId);
+    
+    	$vacineTetanus = $this->input->post('antiTetanus', TRUE);
+    	$vacineMMR = $this->input->post('MMR', TRUE);
+    	$vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
+    
+    	if ($this->medical_file_model->insertNewStaffMedicalFile($campId, $personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
+    		echo "<script>alert('Ficha medica salva com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "system/menu');</script>";
+    }
 
     public function editMedicalFile() {
         $responsability = $this->input->post('responsability', TRUE);
@@ -1004,6 +1143,71 @@ class SummerCamps extends CK_Controller {
 
         if ($this->medical_file_model->updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
             echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+    }
+    
+    public function editMedicalFileStaff() {
+    	$responsability = $this->input->post('responsability', TRUE);
+    	if (!$responsability) {
+    		echo "<script>alert('Por favor valide a veracidade dos dados.');history.go(-1);</script>";
+    
+    		return;
+    	}
+    	$campId = $this->input->post('camp_id', TRUE);
+    	$personId = $this->input->post('person_id', TRUE);
+    	$bloodType = $this->input->post('bloodType', TRUE);
+    	$rh = $this->input->post('rh', TRUE);
+    	$weight = $this->input->post('weight', TRUE);
+    	$height = $this->input->post('height', TRUE);
+    
+    	if ($this->input->post('physicalrestrictions_radio', TRUE))
+    		$physicalActivityRestriction = $this->input->post('physicalrestrictions_text', TRUE);
+    	else
+    		$physicalActivityRestriction = NULL;
+    
+    	if ($this->input->post('antecedents_radio', TRUE))
+    		$infectoContagiousAntecedents = $this->input->post('antecedents_text', TRUE);
+    	else
+    		$infectoContagiousAntecedents = NULL;
+    
+    	if ($this->input->post('habitualmedicine_radio', TRUE))
+    		$regularUseMedicine = $this->input->post('habitualmedicine_text', TRUE);
+    	else
+    		$regularUseMedicine = NULL;
+    
+    	if ($this->input->post('medicinerestrictions_radio', TRUE))
+    		$medicineRestrictions = $this->input->post('medicinerestrictions_text', TRUE);
+    	else
+    		$medicineRestrictions = NULL;
+    
+    	if ($this->input->post('allergies_radio', TRUE))
+    		$allergies = $this->input->post('allergies_text', TRUE);
+    	else
+    		$allergies = NULL;
+    
+    	if ($this->input->post('analgesicantipyretic_radio', TRUE))
+    		$analgesicAntipyretic = $this->input->post('analgesicantipyretic_text', TRUE);
+    	else
+    		$analgesicAntipyretic = NULL;
+    
+    	$doctorName = $this->input->post('doctor_name', TRUE);
+    	$doctorMail = $this->input->post('doctor_email', TRUE);
+    	$doctorPhone1 = $this->input->post('doctor_phone1', TRUE);
+    	$doctorPhone2 = $this->input->post('doctor_phone2', TRUE);
+    	if ($doctorMail && $doctorMail === "")
+    		$doctorMail = NULL;
+    
+    	$doctorId = $this->person_model->insertPersonWithoutAddress($doctorName, NULL, $doctorMail);
+    	$this->telephone_model->insertNewTelephone($doctorPhone1, $doctorId);
+    
+    	if ($doctorPhone2 && $doctorPhone2 !== "")
+    		$this->telephone_model->insertNewTelephone($doctorPhone2, $doctorId);
+    
+    	$vacineTetanus = $this->input->post('antiTetanus', TRUE);
+    	$vacineMMR = $this->input->post('MMR', TRUE);
+    	$vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
+    
+    	if ($this->medical_file_model->updateStaffMedicalFile($campId, $personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
+    		echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "system/menu');</script>";
     }
 
     public function updateInfoPostSubscription() {

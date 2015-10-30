@@ -417,6 +417,46 @@ class summercamp_model extends CK_Model {
             return FALSE;
         }
     }
+    
+    public function hasDocumentStaff($camp_id, $person_id, $document_type) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    
+    	if ($document_type != DOCUMENT_MEDICAL_FILE && $document_type != DOCUMENT_TRIP_AUTHORIZATION && $document_type != DOCUMENT_GENERAL_RULES) {
+    
+    		$sql = 'Select * from document where summer_camp_id = ? and person_id = ? and document_type = ? order by date_created desc';
+    		$resultSet = $this->executeRowsNoLog($this->db, $sql, array($camp_id, $person_id, $document_type));
+    
+    		if ($resultSet)
+    			foreach ($resultSet as $row) {
+    				return TRUE;
+    			}
+    		return FALSE;
+    	} else if ($document_type == DOCUMENT_MEDICAL_FILE) {
+    		$sql = "Select person_id from medical_file_staff where summer_camp_id = ? and person_id = ?";
+    		$resultSet = $this->executeRow($this->db, $sql, array($camp_id, $person_id));
+    		if ($resultSet)
+    			return TRUE;
+    		else
+    			return FALSE;
+    	} else {
+    		$column = "";
+    		if ($document_type == DOCUMENT_TRIP_AUTHORIZATION) {
+    			$column = "accepted_travel_terms";
+    		} else if ($document_type == DOCUMENT_GENERAL_RULES) {
+    			$column = "accepted_terms";
+    		}
+    		$sql = "Select $column from summer_camp_subscription where summer_camp_id = ? and person_id = ?";
+    		$resultSet = $this->executeRow($this->db, $sql, array($camp_id, $person_id));
+    		if ($resultSet) {
+    			if ($document_type == DOCUMENT_GENERAL_RULES && $resultSet->accepted_terms === "t") {
+    				return TRUE;
+    			}
+    			if ($document_type == DOCUMENT_TRIP_AUTHORIZATION && $resultSet->accepted_travel_terms === "t")
+    				return TRUE;
+    		}
+    		return FALSE;
+    	}
+    }
 
     public function getAllColonistsBySummerCampAndYearForValidation($year, $status = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,

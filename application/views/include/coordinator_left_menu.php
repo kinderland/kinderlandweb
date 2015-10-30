@@ -22,6 +22,9 @@
             <br />
             <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal" target="_blank"> 
                 Quartos
+            </a> <br />
+             <a href="<?= $this->config->item('url_link'); ?>summercamps/chooseCamp"> 
+                Minha Ficha Médica
             </a>  
         </div>
     </div>

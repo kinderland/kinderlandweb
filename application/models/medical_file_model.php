@@ -56,15 +56,15 @@ class medical_file_model extends CK_Model{
     }
 
 
-    public function insertNewStaffMedicalFile($summerCampId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
+    public function insertNewStaffMedicalFile($summerCampId, $personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
 		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId){
 		$this->Logger->info("Running: " . __METHOD__);
 
-		$sql = 'INSERT INTO staff_medical_file (summer_camp_id, colonist_id, blood_type, rh, weight, height, physical_activity_restriction,
+		$sql = 'INSERT INTO medical_file_staff (summer_camp_id, person_id, blood_type, rh, weight, height, physical_activity_restriction,
 		vacine_tetanus, vacine_mmr, vacine_hepatitis, infecto_contagious_antecedents, regular_use_medicine, 
 		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id) VALUES (?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?)';
-		$returnId = $this->executeReturningId($this->db, $sql, array(intval($summerCampId), intval($colonistId), intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
+		$returnId = $this->executeReturningId($this->db, $sql, array(intval($summerCampId), intval($personId), intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
 		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId)));
 		if($returnId)
@@ -74,17 +74,17 @@ class medical_file_model extends CK_Model{
 	}
 
 
-	public function updateStaffMedicalFile($summerCampId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
+	public function updateStaffMedicalFile($summerCampId, $personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
 		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId){
  		$this->Logger->info("Running: " . __METHOD__);
  		
-		$sql = 'UPDATE staff_medical_file SET blood_type = ?, rh = ?, weight = ?, height = ?, physical_activity_restriction = ?,
+		$sql = 'UPDATE medical_file_staff SET blood_type = ?, rh = ?, weight = ?, height = ?, physical_activity_restriction = ?,
 		vacine_tetanus = ?, vacine_mmr = ?, vacine_hepatitis = ?, infecto_contagious_antecedents = ?, regular_use_medicine = ?, 
-		medicine_restrictions = ?, allergies = ?, analgesic_antipyretic = ?, doctor_id =? where summer_camp_id = ? and colonist_id = ?';
+		medicine_restrictions = ?, allergies = ?, analgesic_antipyretic = ?, doctor_id =? where summer_camp_id = ? and person_id = ?';
 		$result = $this->execute($this->db, $sql, array(intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId),intval($summerCampId), intval($colonistId)));
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId),intval($summerCampId), intval($personId)));
 
         if ($result)
             return true;
@@ -93,10 +93,10 @@ class medical_file_model extends CK_Model{
 
 
 
-    public function getStaffMedicalFile($campId, $colonistId){
+    public function getStaffMedicalFile($campId, $personId){
     	$this->Logger->info("Running: " . __METHOD__);
-    	$sql = "SELECT * FROM staff_medical_file WHERE summer_camp_id = ? and person_id = ?";
-    	$result = $this->executeRow($this->db, $sql, array(intval($campId),intval($colonistId)));
+    	$sql = "SELECT summer_camp_id, person_id as colonist_id, blood_type, rh, weight, height, physical_activity_restriction, vacine_tetanus, vacine_mmr, vacine_hepatitis, infecto_contagious_antecedents, regular_use_medicine, medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, date, doctor_observations FROM medical_file_staff WHERE summer_camp_id = ? and person_id = ?";
+    	$result = $this->executeRow($this->db, $sql, array(intval($campId),intval($personId)));
 
     	if($result)
     		return MedicalFile::createMedicalFileObject($result);
