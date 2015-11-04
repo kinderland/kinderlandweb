@@ -64,7 +64,7 @@ class medical_file_model extends CK_Model{
 
 		$sql = 'INSERT INTO medical_file_staff (person_id, blood_type, rh, weight, height, physical_activity_restriction,
 		vacine_tetanus, vacine_mmr, vacine_hepatitis, infecto_contagious_antecedents, regular_use_medicine, 
-		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id) VALUES (?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?)';
+		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id) VALUES (?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?)';
 		$returnId = $this->executeReturningId($this->db, $sql, array(intval($personId), intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, 
 		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId)));
