@@ -1050,7 +1050,7 @@ class SummerCamps extends CK_Controller {
     	$vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
     
     	if ($this->medical_file_model->insertNewStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
-    		echo "<script>alert('Ficha medica salva com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "system/menu');</script>";
+    		echo "<script>alert('Ficha medica salva com sucesso.'); window.close();</script>";
     }
 
     public function editMedicalFile() {
@@ -1179,7 +1179,7 @@ class SummerCamps extends CK_Controller {
     	$vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
     
     	if ($this->medical_file_model->updateStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
-    		echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "system/menu');</script>";
+    		echo "<script>alert('Ficha medica atualizada com sucesso.'); window.close();</script>";
     }
 
     public function updateInfoPostSubscription() {
