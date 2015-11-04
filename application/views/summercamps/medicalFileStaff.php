@@ -32,7 +32,7 @@
 	}); 
 
 	function createPDFMedicalFiles() {
-        window.location.href = "<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?=$ano_escolhido?>/<?=(isset($summer_camp_id)?$summer_camp_id:'')?>/<?=(isset($pavilhao)?$pavilhao:'')?>/<?=(isset($quarto)?$quarto:'')?>/simples";
+       // window.location.href = "<?=/* $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?=$ano_escolhido?>/<?=(isset($summer_camp_id)?$summer_camp_id:'')?>/<?=(isset($pavilhao)?$pavilhao:'')?>/<?=(isset($quarto)?$quarto:'')*/?>/simples";
     }
 
 </script>
@@ -50,7 +50,6 @@
 
 <div id='form'>
 	<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/submitMedicalFileStaff" method="post">
-		<input type="hidden" name="camp_id" value="<?=$camp_id ?>" />
 		<input type="hidden" name="person_id" value="<?=$person_id ?>" />
 		<table class="table table-bordered" border=1 align="center">
 			<tr>

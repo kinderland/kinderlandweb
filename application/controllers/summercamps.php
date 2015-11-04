@@ -489,41 +489,15 @@ class SummerCamps extends CK_Controller {
         }
     }
     
-    public function chooseCamp(){
-    	$year = date('Y');
-    	$today = date('Y-m-d');
-    	$today = strtotime($today);
-    	$camps = array();
-    	$camps = $this -> summercamp_model -> getAllSummerCampsByYear($year);
-    	$summercamp = array();
-    	$user = $this->personuser_model->getUserById($this->session->userdata("user_id"));
-    	
-    	foreach($camps as $camp) {
-    		$dayFinish = $camp->getDateFinish();
-    		
-    		$dayFinish = strtotime($dayFinish);
-    		
-    		if($today<$dayFinish) {
-    			$summercamp[] = $camp;
-    		}    		
-    	}
-    	
-    	$data['camps'] = $summercamp;
-    	$data['user'] = $user;
-    	
-    	$this->loadView('summercamps/chooseCamp', $data);
-    }
-    
     public function medicalFileStaff() {
-    	$camp_id = $this->input->get('camp_id', TRUE);
-    	$person_id = $this->input->get('person_id', TRUE);
+    	$user = $this->personuser_model->getUserById($this->session->userdata("user_id"));
+    	$person_id = $user->getPersonId();
     	
     	$data['person_id'] = $person_id;
-    	$data['camp_id'] = $camp_id;
     	$data['editable'] = TRUE;
     	
-    	if ($this->summercamp_model->hasDocumentStaff($camp_id, $person_id, DOCUMENT_MEDICAL_FILE)) {
-    		$medical_file = $this->medical_file_model->getStaffMedicalFile($camp_id, $person_id);
+    	if ($this->summercamp_model->hasDocumentStaff($person_id, DOCUMENT_MEDICAL_FILE)) {
+    		$medical_file = $this->medical_file_model->getStaffMedicalFile($person_id);
     		$data["bloodType"] = $medical_file->getBloodType();
     		$data["rh"] = $medical_file->getRH();
     		$data["weight"] = $medical_file->getWeight();
@@ -1022,7 +996,6 @@ class SummerCamps extends CK_Controller {
     
     		return;
     	}
-    	$campId = $this->input->post('camp_id', TRUE);
     	$personId = $this->input->post('person_id', TRUE);
     	$bloodType = $this->input->post('bloodType', TRUE);
     	$rh = $this->input->post('rh', TRUE);
@@ -1076,7 +1049,7 @@ class SummerCamps extends CK_Controller {
     	$vacineMMR = $this->input->post('MMR', TRUE);
     	$vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
     
-    	if ($this->medical_file_model->insertNewStaffMedicalFile($campId, $personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
+    	if ($this->medical_file_model->insertNewStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
     		echo "<script>alert('Ficha medica salva com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "system/menu');</script>";
     }
 
@@ -1152,7 +1125,6 @@ class SummerCamps extends CK_Controller {
     
     		return;
     	}
-    	$campId = $this->input->post('camp_id', TRUE);
     	$personId = $this->input->post('person_id', TRUE);
     	$bloodType = $this->input->post('bloodType', TRUE);
     	$rh = $this->input->post('rh', TRUE);
@@ -1206,7 +1178,7 @@ class SummerCamps extends CK_Controller {
     	$vacineMMR = $this->input->post('MMR', TRUE);
     	$vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
     
-    	if ($this->medical_file_model->updateStaffMedicalFile($campId, $personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
+    	if ($this->medical_file_model->updateStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
     		echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "system/menu');</script>";
     }
 

@@ -418,13 +418,13 @@ class summercamp_model extends CK_Model {
         }
     }
     
-    public function hasDocumentStaff($camp_id, $person_id, $document_type) {
+    public function hasDocumentStaff($person_id, $document_type) {
     	$this->Logger->info("Running: " . __METHOD__);
     
     	if ($document_type != DOCUMENT_MEDICAL_FILE && $document_type != DOCUMENT_TRIP_AUTHORIZATION && $document_type != DOCUMENT_GENERAL_RULES) {
     
-    		$sql = 'Select * from document where summer_camp_id = ? and person_id = ? and document_type = ? order by date_created desc';
-    		$resultSet = $this->executeRowsNoLog($this->db, $sql, array($camp_id, $person_id, $document_type));
+    		$sql = 'Select * from document where person_id = ? and document_type = ? order by date_created desc';
+    		$resultSet = $this->executeRowsNoLog($this->db, $sql, array($person_id, $document_type));
     
     		if ($resultSet)
     			foreach ($resultSet as $row) {
@@ -432,8 +432,8 @@ class summercamp_model extends CK_Model {
     			}
     		return FALSE;
     	} else if ($document_type == DOCUMENT_MEDICAL_FILE) {
-    		$sql = "Select person_id from medical_file_staff where summer_camp_id = ? and person_id = ?";
-    		$resultSet = $this->executeRow($this->db, $sql, array($camp_id, $person_id));
+    		$sql = "Select person_id from medical_file_staff where person_id = ?";
+    		$resultSet = $this->executeRow($this->db, $sql, array($person_id));
     		if ($resultSet)
     			return TRUE;
     		else
@@ -445,8 +445,8 @@ class summercamp_model extends CK_Model {
     		} else if ($document_type == DOCUMENT_GENERAL_RULES) {
     			$column = "accepted_terms";
     		}
-    		$sql = "Select $column from summer_camp_subscription where summer_camp_id = ? and person_id = ?";
-    		$resultSet = $this->executeRow($this->db, $sql, array($camp_id, $person_id));
+    		$sql = "Select $column from summer_camp_subscription where person_id = ?";
+    		$resultSet = $this->executeRow($this->db, $sql, array($person_id));
     		if ($resultSet) {
     			if ($document_type == DOCUMENT_GENERAL_RULES && $resultSet->accepted_terms === "t") {
     				return TRUE;

@@ -1,8 +1,8 @@
  <script type="text/javascript"> 
 
  function createPDFMedicalFilest() {
-	    var a = "<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?=$ano_escolhido?>/<?=(isset($summer_camp_id)?$summer_camp_id:'')?>/<?=(isset($pavilhao)?$pavilhao:'')?>/<?=(isset($quarto)?$quarto:'')?>/<?=(isset($type)?$type:'')?>";
-	    window.location.href = a;
+	   var a = "<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?=$ano_escolhido?>/<?=(isset($summer_camp_id)?$summer_camp_id:'')?>/<?=(isset($pavilhao)?$pavilhao:'')?>/<?=(isset($quarto)?$quarto:'')?>/<?=(isset($type)?$type:'')?>";
+	  //  window.location.href = a; 
 	}
 
  </script>
@@ -79,7 +79,6 @@
 </script>
 
 
-		<input type="hidden" name="camp_id" value="<?=$camp_id ?>" />
 		<input type="hidden" name="person_id" value="<?=$person_id ?>" />
 		<table class="table table-bordered" border=1 align="center">
 			<tr>

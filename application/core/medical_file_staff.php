@@ -1,0 +1,205 @@
+<?php
+	class MedicalFileStaff {
+		private $personId;
+		private $bloodType;
+		private $rh;
+		private $weight;
+		private $height;
+		private $physicalActivityRestriction;
+		private $vacineTetanus;
+		private $vacineMMR;
+		private $vacineHepatitis;
+		private $infectoContagiousAntecedents;
+		private $regularUseMedicine;
+		private $medicineRestrictions;
+		private $allergies;
+		private $analgesicAntipyretic;
+		private $doctorId;
+		private $date;
+		private $doctorObservations;
+
+
+		public function __construct($personId, $bloodType, $rh, 
+			$weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, 
+			$vacineHepatitis, $infectoContagiousAntecedents,
+			$regularUseMedicine, $medicineRestrictions,
+			$allergies, $analgesicAntipyretic,$doctorId, $date, $doctorObservations=null){
+			$this->personId = $personId;
+			$this->bloodType = $bloodType;
+			$this->rh = $rh;
+			$this->weight = $weight;
+			$this->height = $height;
+			$this->physicalActivityRestriction = $physicalActivityRestriction;
+			$this->vacineTetanus = $vacineTetanus;
+			$this->vacineMMR = $vacineMMR;
+			$this->vacineHepatitis = $vacineHepatitis;
+			$this->infectoContagiousAntecedents = $infectoContagiousAntecedents;
+			$this->regularUseMedicine = $regularUseMedicine;
+			$this->medicineRestrictions = $medicineRestrictions;
+			$this->allergies = $allergies;
+			$this->analgesicAntipyretic = $analgesicAntipyretic;
+			$this->doctorId = $doctorId;
+			$this->date = $date;
+			$this->doctorObservations = $doctorObservations;
+		}
+
+		public static function createMedicalFileStaffObject($resultRow){
+			return new MedicalFileStaff(
+				$resultRow->person_id,
+				$resultRow->blood_type,
+				$resultRow->rh,
+				$resultRow->weight,
+				$resultRow->height,
+				$resultRow->physical_activity_restriction,
+				$resultRow->vacine_tetanus,
+				$resultRow->vacine_mmr,
+				$resultRow->vacine_hepatitis,
+				$resultRow->infecto_contagious_antecedents,
+				$resultRow->regular_use_medicine,
+				$resultRow->medicine_restrictions,
+				$resultRow->allergies,
+				$resultRow->analgesic_antipyretic,
+				$resultRow->doctor_id,
+				$resultRow->date,
+				$resultRow->doctor_observations		
+			);
+		}
+
+		public function setPersonId($personId){
+			$this->personId = $personId;
+		}
+		
+		public function getPersonId(){
+			return $this->personIdId;
+		}
+
+		public function setBloodType($bloodType){
+			$this->bloodType = $bloodType;
+		}
+		public function getBloodType(){
+			return $this->bloodType;
+		}
+
+		public function getBloodTypeName(){
+			switch($this->bloodType){
+				case BLOOD_TYPE_A:
+					return "A";
+				case BLOOD_TYPE_B:
+					return "B";
+				case BLOOD_TYPE_AB:
+					return "AB";
+				case BLOOD_TYPE_O:
+					return "O";
+			}
+			return $this->bloodType;
+		}
+
+		public function setRH($rh){
+			$this->rh = $rh;
+		}
+		public function getRH(){
+			return $this->rh;
+		}
+
+		public function setWeight($weight){
+			$this->weight = $weight;
+		}
+		public function getWeight(){
+			return $this->weight;
+		}
+
+		public function setHeight($height){
+			$this->height = $height;
+		}
+		public function getHeight(){
+			return $this->height;
+		}
+
+		public function setPhysicalActivityRestriction($physicalActivityRestriction){
+			$this->physicalActivityRestriction = $physicalActivityRestriction;
+		}
+		public function getPhysicalActivityRestriction(){
+			return $this->physicalActivityRestriction;
+		}
+
+		public function setVacineTetanus($vacineTetanus){
+			$this->vacineTetanus = $vacineTetanus;
+		}
+		public function getVacineTetanus(){
+			return $this->vacineTetanus;
+		}
+
+		public function setVacineMMR($vacineMMR){
+			$this->vacineMMR = $vacineMMR;
+		}
+		public function getVacineMMR(){
+			return $this->vacineMMR;
+		}
+
+		public function setVacineHepatitis($vacineHepatitis){
+			$this->vacineHepatitis = $vacineHepatitis;
+		}
+		public function getVacineHepatitis(){
+			return $this->vacineHepatitis;
+		}
+
+		public function setInfectoContagiousAntecedents($infectoContagiousAntecedents){
+			$this->infectoContagiousAntecedents = $infectoContagiousAntecedents;
+		}
+		public function getInfectoContagiousAntecedents(){
+			return $this->infectoContagiousAntecedents;
+		}
+
+		public function setRegularUseMedicine($regularUseMedicine){
+			$this->regularUseMedicine = $regularUseMedicine;
+		}
+		public function getRegularUseMedicine(){
+			return $this->regularUseMedicine;
+		}
+
+		public function setMedicineRestrictions($medicineRestrictions){
+			$this->medicineRestrictions = $medicineRestrictions;
+		}
+		public function getMedicineRestrictions(){
+			return $this->medicineRestrictions;
+		}
+
+		public function setAllergies($allergies){
+			$this->allergies = $allergies;
+		}
+		public function getAllergies(){
+			return $this->allergies;
+		}
+
+		public function setAnalgesicAntipyretic($analgesicAntipyretic){
+			$this->analgesicAntipyretic = $analgesicAntipyretic;
+		}
+		public function getAnalgesicAntipyretic(){
+			return $this->analgesicAntipyretic;
+		}
+
+
+		public function setDoctorId($doctorId){
+			$this->doctorId = $doctorId;
+		}
+		public function getDoctorId(){
+			return $this->doctorId;
+		}
+
+		public function setDate($date){
+			$this->date = $date;
+		}
+		public function getDate(){
+			return $this->date;
+		}
+
+		public function setDoctorObservations($doctorObservations){
+			$this->doctorObservations = $doctorObservations;
+		}
+		public function getDoctorObservations(){
+			return $this->doctorObservations;
+		}
+
+
+	}
+?>
