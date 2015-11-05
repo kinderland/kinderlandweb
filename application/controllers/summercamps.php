@@ -1643,9 +1643,9 @@ class SummerCamps extends CK_Controller {
         	$fileName = "ficha-medica-";
 
         $this->loadView("summercamps/pdfMedicalFiles", $data);
-/*
+
         $html = $this->output->get_output();
-        pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");*/
+        pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
 
     public function colonistPDFMedicalFile(){
