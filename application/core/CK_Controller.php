@@ -201,6 +201,22 @@ class CK_Controller extends CI_Controller {
 
         return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
+    
+    public function sendPaymentLiberationEmail($person, $colonist, $summerCampName, $dateLimit, $parentsMailArray = array()) {
+    	$cc = array();
+    	$cc[] = "secretaria@kinderland.com.br";
+    	foreach ($parentsMailArray as $mail) {
+    		if($mail != $person->getEmail())
+    			$cc[] = $mail;
+    	}
+    	$emailSubject = "[Kinderland] ". $summerCampName . " inscricao disponivel para " . $colonist->getFullname();
+    	$emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>A inscrição 
+    		do colonista " . $colonist->getFullname() . " na colonia " . $summerCampName . " já pode ser finalizada.<br>
+			Para tanto, acesse o sistema kinderland e realize a doação até o dia " . $dateLimit.  ". Esta é a única forma de efetivar a inscrição.<br>
+			Solicitamos que não aguarde até o prazo final.<br><br> Obrigado pelo interesse nas Colonias Kinderland.<br><br> Secretaria Kinderland";
+    
+    	return $this->sendMail($emailSubject, $emailString, $person, $cc);
+    }
 
     protected function sendMail($subject, $content, $person, $cc = NULL, $bcc = NULL) {
         //$myMail = "testekinderland2015@gmail.com";

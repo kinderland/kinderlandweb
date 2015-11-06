@@ -102,7 +102,7 @@ class Admin extends CK_Controller {
             }
         }
 
-        $selected = 0;
+        $selected = 2;
         $opcoes = array(0 => "Sócios", 1 => "Não Sócios", 2 => "Todos");
 
         if (isset($_GET['opcao_f']))
@@ -764,10 +764,13 @@ class Admin extends CK_Controller {
 
             if (!$this->summercamp_model->updateColonistToWaitingPayment($colonistId, $summerCampId))
                 throw new Exception("Falha ao mudar status de colonista.");
-
+            
             $this->generic_model->commitTransaction();
-
-            // Enviar email?
+            
+            $summerCampSub = $this->summercamp_model->getSummerCampSubscription($colonistId, $summerCampId);
+            $personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
+            
+            $this->sendPaymentLiberationEmail($personuser, $colonist, $summerCamp->getCampName(), $summerCampSub->getDatePaymentLimitFormatted());
 
             echo "true";
         } catch (Exception $ex) {
@@ -811,9 +814,9 @@ class Admin extends CK_Controller {
                 throw new Exception("Falha ao mudar data de prazo.");
 
             $this->generic_model->commitTransaction();
-
-            // Enviar email?
-
+            
+            //Enviar Email??
+            
             echo "true";
         } catch (Exception $ex) {
             $this->Logger->error("Failed to update user status to waiting payment");
