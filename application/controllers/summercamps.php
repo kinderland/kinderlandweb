@@ -1684,12 +1684,15 @@ class SummerCamps extends CK_Controller {
     public function manageStaff($summerCampId) {
         $summerCamp = $this->summercamp_model->getSummerCampById($summerCampId);
         if($summerCamp != null){
+        	
             $data["summerCamp"] = $summerCamp;
 
             $data["staff"] = $this->summercamp_model->getCampStaff($summerCampId);
 
             $data["possibleCoordinators"] = $this->personuser_model->getUsersByUserType(COORDINATOR);
             $data["possibleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR);
+            $data["possibleMaleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR,'M');
+            $data["possibleFemaleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR,'F');
             $data["possibleDoctors"] = $this->personuser_model->getUsersByUserType(DOCTOR);
 
             $this->loadReportView("admin/camps/campStaff", $data);

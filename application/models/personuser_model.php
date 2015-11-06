@@ -231,14 +231,19 @@ class personuser_model extends CK_Model {
         return $email;
     }
 
-    public function getUsersByUserType($userType) {
+    public function getUsersByUserType($userType,$gender=null) {
         $sql = "select
                 *
                 from person p
                 inner join person_user_type put on put.person_id = p.person_id
-                where put.user_type = $userType";
-
-        $rows = $this->executeRows($this->db, $sql);
+                where put.user_type = $userType
+        		" . (($gender != null) ? "AND p.gender = ?" : "") . "";
+        
+        if($gender!=null)
+        	$rows = $this->executeRows($this->db, $sql,array($gender));
+        else
+        	$rows = $this->executeRows($this->db, $sql);
+        
         $personUser = array();
         foreach ($rows as $row) {
             $personUser[] = Person::createPersonObjectSimple($row, false);
