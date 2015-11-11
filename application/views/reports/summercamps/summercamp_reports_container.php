@@ -9,6 +9,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
+                	<?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions) || in_array(DIRECTOR, $permissions) || in_array(COORDINATOR, $permissions) || in_array(DOCTOR, $permissions)){ ?>
                     <option value="<?= $this->config->item('url_link');?>reports/all_registrations">Estatísticas de Inscrições por Status</option>
                 	<option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/statistics_bycamp">Estatísticas de Inscrições por Turma</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/registrations_deleted">Estatísticas de Inscrições Descartadas</option>
@@ -22,6 +23,7 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/same_parents">Responsáveis com mais de um Colonista</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/subscriptions_notsubmitted">Pré-inscrições não Enviadas</option>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/multiples_subscriptions">Inscrições Múltiplas</option>
+                	<?php } ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/rooms">Quartos</option>
                 	 <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/discounts">Descontos</option>
