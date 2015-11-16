@@ -9,8 +9,9 @@
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
-                    <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
+                    <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(COORDINATOR, $permissions)){ ?>
                         <option value="<?= $this->config->item('url_link'); ?>admin/manageCamps">Cadastro de colônias</option>
+                        <?php } if (in_array(SYSTEM_ADMIN, $permissions)){?>
                         <option value="<?= $this->config->item('url_link'); ?>admin/queue">Fila de Espera</option>
                         <option <?=$discount?> value="<?= $this->config->item('url_link'); ?>admin/setDiscount">Conceder Desconto</option>
                         <option value="<?= $this->config->item('url_link'); ?>admin/paymentLiberation">Liberação para pagamento</option>

@@ -18,7 +18,10 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
-
+<?php 
+        
+      //  require_once renderMenu($permissions); 
+    ?>
     </head>
     <body>
         <script>
@@ -44,12 +47,13 @@
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
-                    
+                   <?php if (in_array(SYSTEM_ADMIN, $permissions)){?> 
                     <a href="<?= $this->config->item('url_link'); ?>admin/createCamp" target="_parent">
                         <button type="button" class="btn btn-primary btn-sm">
                             Criar colônia
                         </button>
                     </a>
+                    <?php }?>
                     <table class="sortable-table" id="sortable-table">
                         <thead> 
                             <tr>
@@ -76,7 +80,7 @@
                                     Não: <input type="radio" name="pre_subscription<?=$camp->getCampId()?>" value="false" <?= (!$camp->isEnabled())?"checked='checked'":""?> />
                                 </td>
                                 <td>M: <?=$camp->getCapacityMale()?> | F: <?=$camp->getCapacityFemale()?></td>
-                                <td> <a onClick="updateCampEnabled(<?=$camp->getCampId()?>)"> Salvar </a> | <a href="<?=$this->config->item('url_link')?>summercamps/manageStaff/<?=$camp->getCampId()?>"> Equipe </a> <td/>
+                                <td> <a target="_blank" onClick="updateCampEnabled(<?=$camp->getCampId()?>)"> Salvar </a> | <a href="<?=$this->config->item('url_link')?>summercamps/manageStaff/<?=$camp->getCampId()?>"> Equipe </a> <td/>
                             </tr>
 
                             <?php
