@@ -354,6 +354,7 @@ class CK_Controller extends CI_Controller {
     }
 
     public function loadReportView($viewName, $data = array()) {
+    	$data['permissions'] = $this->session->userdata("user_types");
         $output = $this->load->view('include/report/header', true);
         $output .= $this->load->view($viewName, $data, true);
         $this->output->set_output($output);

@@ -1695,7 +1695,7 @@ class SummerCamps extends CK_Controller {
             $data["possibleFemaleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR,'F');
             $data["possibleDoctors"] = $this->personuser_model->getUsersByUserType(DOCTOR);
 
-            $this->loadReportView("admin/camps/campStaff", $data);
+            $this->loadView("admin/camps/campStaff", $data);
         }
     }
 
