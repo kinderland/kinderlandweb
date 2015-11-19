@@ -18,6 +18,10 @@
         </div>
         <h3>Colônia</h3>
         <div>
+        	<a href="<?= $this->config->item('url_link'); ?>admin/camp">
+                Administração
+            </a>
+            <br />
             <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports"> Relatórios</a>
             <br />
             <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal" target="_blank"> 

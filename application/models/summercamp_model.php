@@ -1420,17 +1420,32 @@ class summercamp_model extends CK_Model {
     }
 
     public function updateCampStaff($personId, $summerCampId, $staffFunction, $room = null){
-        $deleteSql = "DELETE FROM summer_camp_staff 
-                      WHERE summer_camp_id = ? AND staff_function = ? ";
-        if($room != null && $room > 0 && $room < 6)
-            $deleteSql .= " AND room_number = ".$room;
-
-        $deleteResult = $this->execute($this->db, $deleteSql, array(intval($summerCampId), intval($staffFunction)));
+       
+    	if($staffFunction != 1){
+	    	$deleteSql = "DELETE FROM summer_camp_staff 
+	                      WHERE summer_camp_id = ? AND staff_function = ? AND person_id = ? ";
+	        if($room != null)
+	            $deleteSql .= " AND room_number = '".$room."'";
+	
+	        $deleteResult = $this->execute($this->db, $deleteSql, array(intval($summerCampId), intval($staffFunction), intval($personId)));
+    	}
 
         $sql = "INSERT INTO summer_camp_staff (person_id, summer_camp_id, staff_function, room_number)
-                VALUES (?, ?, ?, ?)";
+                VALUES (?, ?, ?, '".$room."')";
 
-        return $this->execute($this->db, $sql, array(intval($personId), intval($summerCampId), intval($staffFunction), $room));
+        return $this->execute($this->db, $sql, array(intval($personId), intval($summerCampId), intval($staffFunction)));
+    }
+    
+    public function deleteCampStaff($personId, $summerCampId, $staffFunction, $room = null){
+    	 
+    	
+    		$deleteSql = "DELETE FROM summer_camp_staff
+	                      WHERE summer_camp_id = ? AND staff_function = ? AND person_id = ?";
+    		if($room != null)
+    			$deleteSql .= " AND room_number = '".$room."'";
+    
+    		return $this->execute($this->db, $deleteSql, array(intval($summerCampId), intval($staffFunction), intval($personId)));
+    	
     }
 
     public function getMonitorRooms($personId, $summerCampId){

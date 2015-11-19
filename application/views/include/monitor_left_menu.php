@@ -17,7 +17,9 @@
         </div>
         <h3>Colônia</h3>
         <div>
-            <a href="<?= $this->config->item('url_link'); ?>summercamps/monitorRoom"> Quartos </a>
+        	 <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports"> 
+                Relatórios
+            </a>
             <br />
             <a href="<?= $this->config->item('url_link'); ?>summercamps/medicalFileStaff" target="_blank"> 
                 Minha Ficha Médica</a>

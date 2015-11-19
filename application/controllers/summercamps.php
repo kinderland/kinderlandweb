@@ -1692,15 +1692,18 @@ class SummerCamps extends CK_Controller {
     public function manageStaff($summerCampId) {
         $summerCamp = $this->summercamp_model->getSummerCampById($summerCampId);
         if($summerCamp != null){
+        	        	
             $data["summerCamp"] = $summerCamp;
 
             $data["staff"] = $this->summercamp_model->getCampStaff($summerCampId);
 
             $data["possibleCoordinators"] = $this->personuser_model->getUsersByUserType(COORDINATOR);
             $data["possibleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR);
+            $data["possibleMaleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR,'M');
+            $data["possibleFemaleMonitors"] = $this->personuser_model->getUsersByUserType(MONITOR,'F');
             $data["possibleDoctors"] = $this->personuser_model->getUsersByUserType(DOCTOR);
 
-            $this->loadReportView("admin/camps/campStaff", $data);
+            $this->loadView("admin/camps/campStaff", $data);
         }
     }
 
@@ -1713,6 +1716,7 @@ class SummerCamps extends CK_Controller {
         else
             echo "false";
     }
+
     public function updateRoommate(){
     	
     	$colonistId = $this->input->post("colonist_id", true);
@@ -1721,6 +1725,27 @@ class SummerCamps extends CK_Controller {
     	$roommate2 = $this->input->post("roommate2", true);
     	$roommate3 = $this->input->post("roommate3", true);
     	if (($this->summercamp_model->updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3))!= null)
+    		echo "true";
+    	else
+    		echo "false";
+    }
+
+    
+    public function deleteCoordinator(){
+    	$personId = $this->input->post("person_id", true);
+    	$summerCampId = $this->input->post("camp_id", true);
+    
+    	if ($this->summercamp_model->deleteCampStaff($personId, $summerCampId, 1))
+    		echo "true";
+    	else
+    		echo "false";
+    }
+    
+    public function deleteAssistant(){
+    	$personId = $this->input->post("person_id", true);
+    	$summerCampId = $this->input->post("camp_id", true);
+    
+    	if ($this->summercamp_model->deleteCampStaff($personId, $summerCampId, 2))
     		echo "true";
     	else
     		echo "false";
@@ -1741,7 +1766,7 @@ class SummerCamps extends CK_Controller {
         $summerCampId = $this->input->post("camp_id", true);
         $room = $this->input->post("room_number", true);
 
-        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2, intval($room)))
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2, $room))
             echo "true";
         else
             echo "false";
