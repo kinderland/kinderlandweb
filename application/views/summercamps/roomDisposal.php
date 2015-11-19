@@ -298,11 +298,11 @@
                         <script>
                         function editName(colonistId,summerCampId,roommate1, roommate2, roommate3, number){
 							if(number == 1)
-                        		roommate1 = prompt("Digite o nome correto:");
+                        		roommate1 = prompt("Digite o nome correto:",roommate1);
 							else if(number == 2)
-								roomate2 = prompt("Digite o nome correto:");
+								roomate2 = prompt("Digite o nome correto:",roommate2);
 							else
-								roommate3 = prompt("Digite o nome correto:");
+								roommate3 = prompt("Digite o nome correto:",roommate3);
                         	
                         	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateRoommate",
                         				{ colonist_id: colonistId, summer_camp_id: summerCampId, roommate1: roommate1, roommate2: roommate2, roommate3: roommate3 },
