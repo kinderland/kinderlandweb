@@ -1635,6 +1635,14 @@ class SummerCamps extends CK_Controller {
 	        	else 
 	        		$gender = "-Feminino";
 	        }
+	        else if($room == 0) {
+	        	$room = "Sem-Quarto";
+	        	
+	        	if($gender == "M")
+	        		$gender = "-Masculino";
+	        	else 
+	        		$gender = "-Feminino";
+	        }
 	
 	        $fileName = "Fichas-Medicas-".$room.$gender."-".$data["summerCamp"]->getCampName();
         }
@@ -1704,6 +1712,18 @@ class SummerCamps extends CK_Controller {
             echo "true";
         else
             echo "false";
+    }
+    public function updateRoommate(){
+    	
+    	$colonistId = $this->input->post("colonist_id", true);
+    	$summerCampId = $this->input->post("summer_camp_id", true);
+    	$roommate1 = $this->input->post("roommate1", true);
+    	$roommate2 = $this->input->post("roommate2", true);
+    	$roommate3 = $this->input->post("roommate3", true);
+    	if (($this->summercamp_model->updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3))!= null)
+    		echo "true";
+    	else
+    		echo "false";
     }
 
     public function updateDoctor(){
