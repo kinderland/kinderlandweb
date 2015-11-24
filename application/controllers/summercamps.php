@@ -1724,10 +1724,13 @@ class SummerCamps extends CK_Controller {
     	$roommate1 = $this->input->post("roommate1", true);
     	$roommate2 = $this->input->post("roommate2", true);
     	$roommate3 = $this->input->post("roommate3", true);
-    	if (($this->summercamp_model->updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3))!= null)
-    		echo "true";
-    	else
-    		echo "false";
+    	
+    	$result = $this->summercamp_model->updateRoomates($colonistId, $summerCampId, $roommate1, $roommate2, $roommate3);
+    		
+    	if($result)
+            echo "true";
+        else
+            echo "false";
     }
 
     

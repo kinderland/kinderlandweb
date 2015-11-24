@@ -296,26 +296,20 @@
                             </tr>
                         </thead>
                         <script>
-                        function editName(colonistId,summerCampId,roommate1, roommate2, roommate3, number){
-							if(number == 1)
+                        function editName(colonistId, summerCampId, roommate1, roommate2, roommate3, number){
+							if(number == 1){
                         		roommate1 = prompt("Digite o nome correto:",roommate1);
-							else if(number == 2)
-								roomate2 = prompt("Digite o nome correto:",roommate2);
-							else
+							}
+							else if(number == 2){
+								roommate2 = prompt("Digite o nome correto:",roommate2);
+							}
+							else{
 								roommate3 = prompt("Digite o nome correto:",roommate3);
+							}
                         	
                         	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateRoommate",
                         				{ colonist_id: colonistId, summer_camp_id: summerCampId, roommate1: roommate1, roommate2: roommate2, roommate3: roommate3 },
-                        				function(data){
-                            				if(data=="true"){
-                                				alert("Deu certo");
-                                				location.reload();
-                            				}
-                            				else{
-                                				alert("Deu errado");
-                                				location.reload();
-                            				}
-                        				}
+                        				
                         	);
                         }
                                 				
