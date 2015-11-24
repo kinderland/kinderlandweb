@@ -309,7 +309,17 @@
                         	
                         	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateRoommate",
                         				{ colonist_id: colonistId, summer_camp_id: summerCampId, roommate1: roommate1, roommate2: roommate2, roommate3: roommate3 },
-                        				
+                        				function( data  ){
+                            				if(data == "true"){
+                                				alert("Deu certo");
+                                				location.reload();
+                            				}
+                            				else if(data == "false"){
+                                				alert("Deu errado");
+                                				location.reload();
+                            				}
+                            				                            				
+                        				}
                         	);
                         }
                                 				
