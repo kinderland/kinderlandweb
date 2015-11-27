@@ -275,11 +275,11 @@
                             }
                         }
                     ?>
-                    <h3>Colônia: <?=$summerCamp->getCampName();?></h3>
+                    <h3><b>Equipe: <?=$summerCamp->getCampName();?></b></h3>
 
                     <p>
                     <br />
-                        <b>Coordenadores:</b> <br />
+                        <h4><b>Coordenadores:</b> </h4>
                         <table class="sortable-table" style="max-width: 500px;" >
                             <thead> 
                             <tr>
@@ -323,7 +323,7 @@
                     <button class="btn btn-primary" onClick="updateCoordinator(<?=$summerCamp->getCampId();?>,<?= $coordinatorsId[1]?>,<?= $coordinatorsId[2]?>,<?= $coordinatorsId[3]?>)">Salvar </button>
                     <br /><br />
                     <p>
-                       <b> Médico: </b><br />
+                       <h4><b> Médico: </b></h4>
                         <table class="sortable-table" style="max-width: 500px;" >
                             <thead> 
                             <tr>
@@ -352,7 +352,7 @@
 					<button class="btn btn-primary" onClick="updateDoctor(<?=$summerCamp->getCampId();?>,'<?php if(isset($doctor->person_id)) echo $doctor->person_id;?>')">Salvar </button>
                     <p>
                     <br /><br />
-                       <b> Monitores:</b> <br />
+                       <h4><b> Monitores:</b></h4>
                         <table class="sortable-table" id="sortable-table" style="max-width: 500px;">
                             <thead> 
                             <tr>
@@ -422,7 +422,7 @@
                     </p>
                      <button class="btn btn-primary" onClick="updateMonitor(<?=$summerCamp->getCampId();?>,<?= $monitorsId[1]?>,<?= $monitorsId[2]?>,<?= $monitorsId[3]?>,<?= $monitorsId[4]?>,<?= $monitorsId[5]?>,<?= $monitorsId[6]?>,<?= $monitorsId[7]?>,<?= $monitorsId[8]?>,<?= $monitorsId[9]?>,<?= $monitorsId[10]?>,<?= $monitorsId[11]?>,<?= $monitorsId[12]?>)">Salvar </button>
                     <p><br /><br />
-                       <b> Auxiliares: </b> <br />
+                       <h4><b> Auxiliares: </b> </h4>
                         <table class="sortable-table" style="max-width: 500px;" >
                             <thead> 
                             <tr>
