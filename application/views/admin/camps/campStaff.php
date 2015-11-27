@@ -103,45 +103,56 @@
                 var monitorId12 = $("#monitores_6M").val();
                 
                 if( monitorId1!=0 || monitorId2!=0 || monitorId3!=0 || monitorId4!=0 || monitorId5!=0 || monitorId6!=0 || monitorId7!=0 || monitorId8!=0 || monitorId9!=0 || monitorId10!=0 || monitorId11!=0 || monitorId12!=0){
-                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-                        { camp_id: campId, monitorId1: monitorId1, monitorId2: monitorId2, monitorId3: monitorId3, monitorId4: monitorId4, monitorId5: monitorId5, monitorId6: monitorId6, monitorId7: monitorId7, monitorId8: monitorId8, monitorId9: monitorId9, monitorId10: monitorId10, monitorId11: monitorId11, monitorId12: monitorId12 },
-                            function ( data ){
-                                if(data == "true"){
-                                    alert("Monitor atualizado");
-                                	location.reload();
-                                }
-                                else{
-                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-                                            { camp_id: campId, monitorId1: oldMonitorId1, monitorId2: oldMonitorId2, monitorId3: oldMonitorId3, monitorId4: oldMonitorId4, monitorId5: oldMonitorId5, monitorId6: oldMonitorId6, monitorId7: oldMonitorId7, monitorId8: oldMonitorId8, monitorId9: oldMonitorId9, monitorId10: oldMonitorId10, monitorId11: oldMonitorId11, monitorId12: oldMonitorId12 });
-                                    alert("Erro ao atualizar monitor");
-                                    location.reload();
-                                }
+                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteMonitor",
+                            { camp_id: campId },
+                                function ( data ){
+                                    if(data == "true"){
+				                               $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
+						                        { camp_id: campId, monitorId1: monitorId1, monitorId2: monitorId2, monitorId3: monitorId3, monitorId4: monitorId4, monitorId5: monitorId5, monitorId6: monitorId6, monitorId7: monitorId7, monitorId8: monitorId8, monitorId9: monitorId9, monitorId10: monitorId10, monitorId11: monitorId11, monitorId12: monitorId12 },
+						                            function ( data ){
+						                                if(data == "true"){
+						                                    alert("Monitor atualizado");
+						                                	location.reload();
+						                                }
+						                                else{
+						                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
+						                                            { camp_id: campId, monitorId1: oldMonitorId1, monitorId2: oldMonitorId2, monitorId3: oldMonitorId3, monitorId4: oldMonitorId4, monitorId5: oldMonitorId5, monitorId6: oldMonitorId6, monitorId7: oldMonitorId7, monitorId8: oldMonitorId8, monitorId9: oldMonitorId9, monitorId10: oldMonitorId10, monitorId11: oldMonitorId11, monitorId12: oldMonitorId12 });
+						                                    alert("Erro ao atualizar monitor");
+						                                    location.reload();
+						                                }
+						                            }
+						                    );
+                                    }
+                                    else{
+                                        alert("Erro atualizar monitor");
+                                        location.reload();
+                                    }
                             }
-                    );
+                            );
                 } else {
                     alert("Por favor, selecione uma pessoa para ser monitor.");
                     location.reload();
                 }
             }
-            function updateAssistant(campId,number,oldMonitorId) {
+            function addAssistant(campId,number) {
                 var assistantId = $("#assistant"+number).val();
                 var room = '';
                 if(assistantId != '' && assistantId > 0){
-                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-                        { camp_id: campId, person_id: assistantId, room_number:room, oldMonitorId: oldMonitorId },
+                    $.post("<?= $this->config->item('url_link'); ?>summercamps/addAssistant",
+                        { camp_id: campId, person_id: assistantId },
                             function ( data ){
                                 if(data == "true"){
-                                    alert("Assistente atualizado");
+                                    alert("Auxiliar adicionado");
                                     location.reload();
                                 }
                                 else{
-                                    alert("Erro ao atualizar assistente");
+                                    alert("Erro ao adicionar auxiliar");
                                     location.reload();
                                 }
                             }
                     );
                 } else {
-                    alert("Por favor, selecione uma pessoa para ser assistente.");
+                    alert("Por favor, selecione uma pessoa para ser auxiliar.");
                     location.reload();
                 }
             }
@@ -152,16 +163,47 @@
                         { camp_id: campId, person_id: assistantId},
                             function ( data ){
                                 if(data == "true"){
-                                    alert("Assistente excluído");
+                                    alert("Auxiliar excluído");
                                     location.reload();
                                 }
                                 else{
-                                    alert("Erro ao excluir assistente");
+                                    alert("Erro ao excluir auxiliar");
                                     location.reload();
                                 }
                             }
                     );
                 } 
+            }
+
+            function updateAssistant(campId,number,oldAssistantId) {
+            	var assistantId = $("#assistant"+number).val();
+            	
+                if(assistantId != '' && assistantId > 0){
+                    $.post("<?= $this->config->item('url_link'); ?>summercamps/deleteAssistant",
+                        { camp_id: campId, person_id: oldAssistantId},
+                            function ( data ){
+                                if(data == "true"){
+                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/addAssistant",
+                                            { camp_id: campId, person_id: assistantId },
+                                                function ( data ){
+                                                    if(data == "true"){
+                                                        alert("Auxiliar atualizado");
+                                                        location.reload();
+                                                    }
+                                                    else{
+                                                        alert("Erro ao atualizar auxiliar");
+                                                        location.reload();
+                                                    }
+                                                }
+                                        );
+                                }
+                                else{
+                                    alert("Erro ao atualizar assistente");
+                                    location.reload();
+                                }
+                            }
+                    );
+                } 				
             }
         </script>
         <div class="main-container-report">
@@ -320,13 +362,6 @@
                         </thead> 
                         <tbody>
                             <?php
-	                            $i = 1;
-	                            foreach($monitors as $monitor){
-	                            	if(isset($monitor -> person_id)){
-	                            		$monitorsId[$i] = $monitor -> person_id;
-	                            		$i++;
-	                            	}
-	                            }
                                 $i = 1;
                                 $j = 1;
                                 $gender = 'F';
@@ -342,8 +377,10 @@
                                         		if($possibleFemaleMonitors!=null)
                                         		foreach ($possibleFemaleMonitors as $pm ) {
                                         			$selected = "";
-                                        			if ($monitor != null && $pm->getPersonId() == $monitor->person_id)
+                                        			if ($monitor != null && $pm->getPersonId() == $monitor->person_id){
                                         				$selected = "selected";
+                                        				$monitorsId[$j] = $monitor->person_id;
+                                        			}
                                         			echo "<option $selected value='".$pm->getPersonId()."'>".$pm->getFullname()."</option>";
                                         		}                                        		
                                         	}
@@ -351,8 +388,10 @@
                                         		if($possibleMaleMonitors!=null)
 		                                        foreach ($possibleMaleMonitors as $pm ) {
 		                                            $selected = "";
-		                                            if ($monitor != null && $pm->getPersonId() == $monitor->person_id)
-		                                                $selected = "selected";
+		                                            if ($monitor != null && $pm->getPersonId() == $monitor->person_id){
+                                        				$selected = "selected";
+                                        				$monitorsId[$j] = $monitor->person_id;
+                                        			}
 		                                            echo "<option $selected value='".$pm->getPersonId()."'>".$pm->getFullname()."</option>";
 		                                        }
                                         	}
@@ -435,7 +474,7 @@
 			                        </select>
 			                   </td>
 			                   <td>		
-		                        	<a onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </a>
+		                        	<a onClick="addAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </a>
 		                       </td>
 		                   </tr>
 		                </tbody>

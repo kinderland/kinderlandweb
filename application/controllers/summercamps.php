@@ -1832,6 +1832,27 @@ class SummerCamps extends CK_Controller {
         else 
         	echo "false";
     }
+    
+    public function addAssistant(){
+    	$personId = $this->input->post("person_id", true);
+    	$summerCampId = $this->input->post("camp_id", true);  
+    	
+    	if(($this->summercamp_model->getCampStaff($summerCampId)) != null){
+    		$staff = $this->summercamp_model->getCampStaff($summerCampId);
+    	
+    		foreach($staff as $s){
+    			if($s->staff_function == 2 && $s->person_id == $personId){
+    				echo "false";
+    				return;
+    			}
+    		}
+    	}
+    	
+    		if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2))
+    			echo "true";
+    		else
+    			echo "false";
+    }
 
     public function updateMonitor(){
         $summerCampId = $this->input->post("camp_id", true);
@@ -1937,14 +1958,33 @@ class SummerCamps extends CK_Controller {
         	$i++;
         }
         
-        if($this->summercamp_model->deleteAllStaffByFunction($summerCampId, 2)){
 			if ($this->summercamp_model->updateAllCampStaffByFunction($summerCampId,$ids, 2))
 	            echo "true";
 	        else
 	            echo "false";
-        }
-        else 
-        	echo "false";
+    }
+    
+    public function deleteMonitor(){
+    	$summerCampId = $this->input->post("camp_id", true);
+    	 
+    	if(($this->summercamp_model->getCampStaff($summerCampId)) != null){
+    		$staff = $this->summercamp_model->getCampStaff($summerCampId);
+    
+    		foreach($staff as $s){
+    			if($s->staff_function == 2){
+    				if ($this->summercamp_model->deleteAllStaffByFunction($summerCampId, 2)){
+    					echo "true";
+    				}
+    				else{
+    					echo "false";
+    				}
+    
+    				break;
+    			}
+    		}
+    	}
+    	else
+    		echo "true";
     }
 
     public function staffMedicalFile() {

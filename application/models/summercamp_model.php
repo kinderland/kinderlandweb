@@ -1421,7 +1421,7 @@ class summercamp_model extends CK_Model {
 
     public function updateCampStaff($personId, $summerCampId, $staffFunction, $room = null){
        
-    	if($staffFunction != 1){
+    	if($staffFunction != 1 || $room != null){
 	    	$deleteSql = "DELETE FROM summer_camp_staff 
 	                      WHERE summer_camp_id = ? AND staff_function = ? AND person_id = ? ";
 	        if($room != null)
