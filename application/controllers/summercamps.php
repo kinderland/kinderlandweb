@@ -429,7 +429,7 @@ class SummerCamps extends CK_Controller {
             $this->Logger->error("Responsavel de id $responsableId tentou excluir o colonista $colonistId da campanha $campId que pertence ao responsavel $personUserId");
             //$this->index();
         } else {
-            $this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED);
+            //$this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED);
             $this->sendExclusionEmail($colonistId, $campId);
             //$this->index();
         }

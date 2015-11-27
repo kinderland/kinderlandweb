@@ -192,12 +192,11 @@ class CK_Controller extends CI_Controller {
             if($mail != $person->getEmail())
                 $cc[] = $mail;
         }
-        $emailSubject = "[Kinderland] Inscricao de " . $colonist->getFullname() . " na colonia " . $summerCampName . " excluida";
-        $emailString = "Prezado (a) " .$person->getFullname(). ",<br /><br />A exclusao da inscricao do 
-        colonista " .$colonist->getFullname(). " na colonia ". $summerCampName ." foi realizada com sucesso.<br /><br />
-        Solicitamos que entre em contato com a secretaria por telefone para tratar de eventual reembolso 
-        da doacao, seguindo os criterios estabelecidos pela Associacao Kinderland.<br /><br />Muito obrigado 
-        pelo interesse em nossas colonias!<br /><br />Associacao Kinderland";
+        $emailSubject = "[Kinderland]  Solicitação de exclusão: inscricao de " . $colonist->getFullname() . " na colonia " . $summerCampName;
+        $emailString = "Prezado (a) " .$person->getFullname(). ",<br /><br /> Sua solicitação de exclusão da inscrição de " .$colonist->getFullname(). " na colonia ". $summerCampName ." foi encaminhada à secretaria.<br /><br />
+        Aguarde contato para confirmação da exclusão. Eventual reembolso de doações serão tratados seguindo os critérios estabelecidos pela Associação Kinderland.
+        <br /><br />Obrigado pelo interesse na(s) colônia(s) Kinderland! 
+        <br /><br />Diretoria da Associação Kinderland";
 
         return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
