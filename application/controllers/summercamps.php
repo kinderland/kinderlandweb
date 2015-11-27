@@ -1476,7 +1476,7 @@ class SummerCamps extends CK_Controller {
     	$dataArray = json_decode($dataIn);
     	
     	
-    		$colonists = $this->colonist_model->getColonists($dataArray);
+    	$colonists = $this->colonist_model->getColonists($dataArray);
     	
     	$data['colonists'] = $colonists;
     	$data['nameFile'] = $this->input->post('name', TRUE);;
@@ -1491,6 +1491,29 @@ class SummerCamps extends CK_Controller {
     	
     	
     	$this->loadReportView("summercamps/pdfTripAuthorization", $data);
+    	$html = $this->output->get_output();
+    	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
+    
+    public function generateStaffPDFTripAuthorization() {
+    	$this->load->plugin('mpdf');
+    	 
+    	if($this->input->post('data', TRUE) != null) {
+    		$dataIn = $this->input->post('data', TRUE);
+    		$dataArray = json_decode($dataIn);
+    		 
+    		 
+    		$staff = $this->person_model->getPersons($dataArray);
+    		 
+    		$data['staff'] = $staff;
+    		$data['nameFile'] = $this->input->post('name', TRUE);;
+    	}
+    	 
+    	$data['type'] = $this->input->post('type', TRUE);
+    	$data['camp_id'] = $this->input->post('camp_id', TRUE);
+    	 
+    	 
+    	$this->loadReportView("summercamps/staffPdfTripAuthorization", $data);
     	$html = $this->output->get_output();
     	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
