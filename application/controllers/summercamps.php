@@ -1972,7 +1972,7 @@ class SummerCamps extends CK_Controller {
     
     		foreach($staff as $s){
     			if($s->staff_function == 2){
-    				if ($this->summercamp_model->deleteAllStaffByFunction($summerCampId, 2)){
+    				if ($this->summercamp_model->deleteAllStaffByFunction($summerCampId, 2,'true')){
     					echo "true";
     				}
     				else{

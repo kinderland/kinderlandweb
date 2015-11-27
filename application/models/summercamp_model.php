@@ -1469,12 +1469,17 @@ class summercamp_model extends CK_Model {
     	
     }
     
-    public function deleteAllStaffByFunction($summerCampId, $staffFunction){
+    public function deleteAllStaffByFunction($summerCampId, $staffFunction, $monitor = null){
     
     	 
     	$deleteSql = "DELETE FROM summer_camp_staff
 	                      WHERE summer_camp_id = ? AND staff_function = ?";
-    
+    	if($monitor!=null){
+    		$deleteSql .= "AND room_number!=null";
+    	}    
+    	else 
+    		$deleteSql .= "AND room_number==null";
+    	
     	return $this->execute($this->db, $deleteSql, array(intval($summerCampId), intval($staffFunction)));
     	 
     }
