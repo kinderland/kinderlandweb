@@ -96,11 +96,11 @@
             	}
             }
 
-            function updateDoctor(campId) {
+            function updateDoctor(campId,oldDoctorId) {
                 var doctorId = $("#doctor").val();
                 if(doctorId != '' && doctorId > 0){
                     $.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
-                        { camp_id: campId, person_id: doctorId  },
+                        { camp_id: campId, person_id: doctorId, oldDoctorId: oldDoctorId  },
                             function ( data ){
                                 if(data == "true"){
                                     alert("Médico atualizado");
@@ -117,11 +117,11 @@
                 }
             }
 
-            function updateMonitor(room, campId) {
+            function updateMonitor(room, campId, oldMonitorId) {
                 var monitorId = $("#monitores_"+room).val();
                 if(monitorId != '' && monitorId > 0){
                     $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-                        { camp_id: campId, person_id: monitorId, room_number:room },
+                        { camp_id: campId, person_id: monitorId, room_number:room, oldMonitorId: oldMonitorId},
                             function ( data ){
                                 if(data == "true"){
                                     alert("Monitor atualizado");
@@ -137,12 +137,12 @@
                     alert("Por favor, selecione uma pessoa para ser monitor.");
                 }
             }
-            function updateAssistant(campId,number) {
+            function updateAssistant(campId,number,oldMonitorId) {
                 var assistantId = $("#assistant"+number).val();
                 var room = '';
                 if(assistantId != '' && assistantId > 0){
                     $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-                        { camp_id: campId, person_id: assistantId, room_number:room },
+                        { camp_id: campId, person_id: assistantId, room_number:room, oldMonitorId: oldMonitorId },
                             function ( data ){
                                 if(data == "true"){
                                     alert("Assistente atualizado");
@@ -279,7 +279,7 @@
 			                            <?php
 			                            foreach ( $possibleCoordinators as $pm ) {
 			                                $selected = "";
-			                                if ($coordinator != null && $pm->getPersonId() == $coordinator->person_id) {
+			                                if ($coordinator != null && $pm->getPersonId() == $coordinator->person_id && $coordinatorsId[$i] == $coordinator->person_id) {
 			                                    $selected = "selected";	
 			                                }
 			                                echo "<option $selected value='".$pm->getPersonId()."'>".$pm->getFullname()."</option>";
@@ -320,7 +320,7 @@
 			                        </select>
 			                   </td>
 			                   <td>		
-		                        	<a onClick="updateDoctor(<?=$summerCamp->getCampId();?>)">Salvar </a>
+		                        	<a onClick="updateDoctor(<?=$summerCamp->getCampId();?>,'<?php if(isset($doctor->person_id)) echo $doctor->person_id;?>')">Salvar </a>
 		                       </td>
 		                   </tr>
 		                </tbody>
@@ -376,7 +376,7 @@
                                     <?php $quarto = $i.$gender;?>
                                 </td>
                                 <td> 
-                                    <a onClick="updateMonitor('<?=$quarto?>',<?=$summerCamp->getCampId();?>)">Salvar </a>
+                                    <a onClick="updateMonitor('<?=$quarto?>',<?=$summerCamp->getCampId();?>,'<?php if(isset($monitors[$j]->person_id)) echo $monitors[$j]->person_id;?>')">Salvar </a>
                                 <td/>
                             </tr>
 
@@ -425,7 +425,7 @@
 			                        </select>
 			                   </td>
 			                   <td>		
-		                        	<a onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </a>
+		                        	<a onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>,'<?php if(isset($assistants[$i]->person_id)) echo $assistants[$i]->person_id;?>')">Salvar </a>
 		                       </td>
 		                       <td>
 		                        	<a onClick="deleteAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Excluir</a>

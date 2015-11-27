@@ -1780,22 +1780,32 @@ class SummerCamps extends CK_Controller {
     public function updateDoctor(){
         $personId = $this->input->post("person_id", true);
         $summerCampId = $this->input->post("camp_id", true);
-
-        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 3))
-            echo "true";
-        else
-            echo "false";
+        $oldDoctorId = $this->input->post("oldDoctorId", true);
+        
+        if($this->summercamp_model->deleteCampStaff($oldDoctorId,$summerCampId,3)){
+	        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 3))
+	            echo "true";
+	        else
+	            echo "false";
+        }
+        else 
+        	echo "false";
     }
 
     public function updateMonitor(){
         $personId = $this->input->post("person_id", true);
         $summerCampId = $this->input->post("camp_id", true);
         $room = $this->input->post("room_number", true);
-
-        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2, $room))
-            echo "true";
-        else
-            echo "false";
+        $oldMonitorId = $this->input->post("oldMonitorId", true);
+        
+        if($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2, $room)){
+			if ($this->summercamp_model->deleteCampStaff($oldMonitorId,$summerCampId,2,$room))
+	            echo "true";
+	        else
+	            echo "false";
+        }
+        else 
+        	echo "false";
     }
 
     public function staffMedicalFile() {
