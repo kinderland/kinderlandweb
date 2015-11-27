@@ -65,19 +65,30 @@
             	else{
             	
 	                if(coordinatorId != '' && coordinatorId > 0){
-	                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
-	                        { camp_id: campId, person_id: coordinatorId  },
-	                            function ( data ){
-	                                if(data == "true"){
-	                                    alert("Coordenador atualizado");
-	                                	location.reload();
+	                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteCoordinator",
+	                            { camp_id: campId, person_id: personId  },
+	                                function ( data ){
+	                                    if(data == "true"){
+	                                    	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
+	                    	                        { camp_id: campId, person_id: coordinatorId  },
+	                    	                            function ( data ){
+	                    	                                if(data == "true"){
+	                    	                                    alert("Coordenador atualizado");
+	                    	                                	location.reload();
+	                    	                                }
+	                    	                                else{
+	                    	                                    alert("Erro ao atualizar coordenador");
+	                    	                                    location.reload();
+	                    	                                }
+	                    	                            }
+	                    	                    );
+	                                    }
+	                                    else{
+	                                        alert("Erro ao atualizar coordenador");
+	                                        location.reload();
+	                                    }
 	                                }
-	                                else{
-	                                    alert("Erro ao atualizar coordenador");
-	                                    location.reload();
-	                                }
-	                            }
-	                    );
+	                        );
 	                } else {
 	                    alert("Por favor, selecione uma pessoa para ser coordenadora.");
 	                    location.reload();
