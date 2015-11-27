@@ -87,6 +87,7 @@
                         temp = "Maculino - ";
                     else
                         temp = "Feminino - ";
+                    
                     temp = temp.concat("Sem Quarto");
                     saida.push(temp);
                 }
@@ -200,7 +201,14 @@
 						room = "Masculino - Todos os Quartos";
 					} else {
 						room = "Feminino - Todos os Quartos";
-					}					
+					}
+    			}
+    			else if(filtroQuarto == 0) {
+						if(filtroGeneroVal == 'M') {
+							room = "Masculino - Sem Quarto";
+						} else {
+							room = "Feminino - Sem Quarto";
+						}					
     			} else {        			
     	    		room = filtroQuarto.concat(filtroGeneroVal);
     			}
@@ -340,6 +348,7 @@
                      <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
                         <table>
                             <tr>
+                            	<th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>

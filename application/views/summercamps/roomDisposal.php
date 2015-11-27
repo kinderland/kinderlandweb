@@ -295,16 +295,64 @@
                                 <th> Ações </th>
                             </tr>
                         </thead>
+                        <script>
+                        function editName(colonistId, summerCampId, roommate1, roommate2, roommate3, number){
+							if(number == 1){
+                        		roommate1 = prompt("Digite o nome correto:",roommate1);
+							}
+							else if(number == 2){
+								roommate2 = prompt("Digite o nome correto:",roommate2);
+							}
+							else{
+								roommate3 = prompt("Digite o nome correto:",roommate3);
+							}
+                        	
+                        	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateRoommate",
+                        				{ colonist_id: colonistId, summer_camp_id: summerCampId, roommate1: roommate1, roommate2: roommate2, roommate3: roommate3 },
+                        				function( data  ){
+                            				if(data == "true"){
+                                				alert("Amigo atualizado");
+                                				location.reload();
+                            				}
+                            				else if(data == "false"){
+                                				alert("Erro na atualização do amigo");
+                                				location.reload();
+                            				}
+                            				                            				
+                        				}
+                        	);
+                        }
+                                				
+                        										
+                        </script>
+                        
                         <tbody id="tablebody">
                             <?php foreach ($colonists as $colonist) { ?>
                                 <tr>
-                                    <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
+                                    <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link'); ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
                                     <td><?= explode(" ", $colonist->age)[0]?></td>
                                     <td><?= $colonist->school_name ?></td>
                                     <td><?= $colonist->school_year ?></td>
-                                    <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF")?"<br />[".substr($colonist->roommate1_status, 2, 2)."]":'')?></span></td>
+                                    <?php 
+                                    if($colonist->roommate1_status == "F"){
+                                    ?>
+                                   	<td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF")?"<br />[".substr($colonist->roommate1_status, 2, 2)."]":'')?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id;?>', '<?php echo $colonist->summer_camp_id;?>', '<?php echo $colonist->roommate1;?>', '<?php echo $colonist->roommate2;?>', '<?php echo $colonist->roommate3;?>', 1)">Editar</button>
+                                    <?php }else{?>
+                                    <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF")?"<br />[".substr($colonist->roommate1_status, 2, 2)."]":'')?>
+                                    <?php }?>
+                                    <?php 
+                                    if($colonist->roommate2_status == "F"){
+                                    ?>
+                                    <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?=(($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F" && $colonist->roommate2_status != "TF")?"<br />[".substr($colonist->roommate2_status, 2, 2)."]":'')?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id;?>', '<?php echo $colonist->summer_camp_id;?>', '<?php echo $colonist->roommate1;?>', '<?php echo $colonist->roommate2;?>', '<?php echo $colonist->roommate3;?>', 2)">Editar</button>
+                                    <?php }else{?>
                                     <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?=(($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F" && $colonist->roommate2_status != "TF")?"<br />[".substr($colonist->roommate2_status, 2, 2)."]":'')?></span></td>
+                                    <?php }?>
+                                    <?php if($colonist->roommate3_status == "F"){
+                                    ?>
+                                    <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?=(($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF")?"<br />[".substr($colonist->roommate3_status, 2, 2)."]":'')?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id;?>', '<?php echo $colonist->summer_camp_id;?>', '<?php echo $colonist->roommate1;?>', '<?php echo $colonist->roommate2;?>', '<?php echo $colonist->roommate3;?>', 3)">Editar</button>	
+                                    <?php }else{?>
                                     <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?=(($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF")?"<br />[".substr($colonist->roommate3_status, 2, 2)."]":'')?></span></td>
+                                    <?php }?>
                                     <td><?= $colonist->friend_roommates ?></td>  
                                     <td><input type="number" min="0" max="6" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>  
                                     <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>)">Salvar</button></td>
