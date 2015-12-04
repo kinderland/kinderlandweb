@@ -1439,14 +1439,31 @@ class SummerCamps extends CK_Controller {
 
     public function generatePDFWithColonistData() {
         $this->load->plugin('mpdf');
+        $summercampId = null;
+        $monitorInfo = null;
         $dataIn = $this->input->post('data', TRUE);
         $dataArray = json_decode($dataIn);
         $data['nameFile'] = $this->input->post('name', TRUE);
         $data['type'] = $this->input->post('type', TRUE);
-        if(($this->input->post('summercamp', TRUE)) != null)
-        	$data['summercamp'] = $this->input->post('summercamp', TRUE);
-        if(($this->input->post('room', TRUE)) != null)
-        	$data['room'] = $this->input->post('room', TRUE);
+        if(($this->input->post('summercamp', TRUE)) != null){
+        	$summercampId = $this->input->post('summercampId', TRUE);
+        	$summercamp = $this->input->post('summercamp', TRUE);
+        	$data['summercamp'] = $summercamp;
+        }
+        if(($this->input->post('room', TRUE)) != null){
+        	$room = $this->input->post('room', TRUE);
+        	$data['room'] = $room;
+        	
+        	if($summercampId!=null){
+        		if(($this->summercamp_model->getMonitorIdByRoom($summercampId,$room))!=null){
+        			$monitorId = $this->summercamp_model->getMonitorIdByRoom($summercampId,$room);
+        			$monitor = $this->person_model->getPersonById($monitorId->person_id);
+        			$data['monitor'] = $monitor->getFullname();
+        		}
+        	}
+        }
+        
+        $data['monitorInfo'] = $monitorId;
         $data['filtros'] = json_decode($this->input->post('filters', TRUE));
         date_default_timezone_set('America/Sao_Paulo');
         $data['time'] = date('d-m-Y G:i:sa');
@@ -1459,9 +1476,8 @@ class SummerCamps extends CK_Controller {
             $data['report'][$i]['responsable'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->responsable_id);
             $data['report'][$i]['father'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->father_id);
             $data['report'][$i]['document'] = $this -> colonist_model -> getColonist($data['report'][$i]['summercamp'] -> colonist_id);
-            if($this -> summercamp_model -> getSummerCampById($data['report'][$i]['summercamp'] -> camp_id)->isMiniCamp()) {
-            	$data['report'][$i]['minik'] = $this -> summercamp_model -> getMiniCampObs($data['report'][$i]['summercamp'] -> camp_id, $data['report'][$i]['summercamp'] -> colonist_id);
-            }
+            $data['report'][$i]['minik'] = $this -> summercamp_model -> getMiniCampObs($data['report'][$i]['summercamp'] -> camp_id, $data['report'][$i]['summercamp'] -> colonist_id);
+            
         }
         $this->loadReportView("reports/summercamps/pdf_colonist_info", $data);
        	$html = $this->output->get_output();

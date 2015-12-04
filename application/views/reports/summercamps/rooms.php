@@ -191,6 +191,7 @@
                 var table = document.getElementById("tablebody");
                 var name = getCSVName(type);
                 var summercamp = $("#colonia option:selected").text();
+                var summercampId = document.getElementById("colonia").getAttribute('key');
                 var filtroGeneroVal = $("#pavilhao option:selected").val();
     			var filtroQuarto = $("#room").val();
     			var room;
@@ -234,7 +235,7 @@
                 var columnNameToSend = JSON.stringify(columName);
 
                
-                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend, type: type, summercamp: summercamp, room: room});
+                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend, type: type, summercamp: summercamp, summercampId: summercampId, room: room});
                 
             }
             function createPDFMedicalFiles() {
@@ -324,7 +325,7 @@
                         }
                         ?>
                     </select>
-                    <select name="colonia_f" id="colonia" onchange="openDisposal()">
+                    <select name="colonia_f" id= "colonia" key="<?php echo $summer_camp_id; ?>" onchange="openDisposal()">
                         <option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Selecionar</option>
                         <?php
                         foreach ( $camps as $camp ) {
