@@ -1331,7 +1331,14 @@ class summercamp_model extends CK_Model {
 
         return $result;
     }
-
+    /*
+    public function updateStatus($colonistId, $summerCampId, $situation, $cancel_reason){
+    	$sql = "UPDATE summer_camp_subscription SET situation = ?, cancel_reason = ?, WHERE summer_camp_id = ? AND colonist_id = ?";
+    	$result = $this->execute($this->db, $sql, array($situation, $cancel_reason, intval($summerCampId), intval($colonistId)));
+    	
+    	return $result;
+    }
+*/
     public function updateRoomNumber($colonistId, $summerCampId, $roomNumber) {
         $sql = "UPDATE summer_camp_subscription SET room_number = ? WHERE summer_camp_id = ? AND colonist_id = ?";
         $result = $this->execute($this->db, $sql, array(intval($roomNumber), intval($summerCampId), intval($colonistId)));

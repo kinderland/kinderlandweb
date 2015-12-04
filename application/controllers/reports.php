@@ -190,6 +190,38 @@ class Reports extends CK_Controller {
         $data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
         $this->loadReportView("reports/summercamps/colonist_registered", $data);
     }
+    
+    /*terminando ainda public function colonist_exclusion() {
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = intval(date('Y'));
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    		else {
+    			$year = date('Y');
+    		}
+    
+    		$data['ano_escolhido'] = $year;
+    		$data['years'] = $years;
+    
+    		$shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
+    
+    		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
+    		$this->loadReportView("reports/summercamps/colonist_exclusion", $data);
+    }*/
 
     public function all_registrations() {
         $data = array();
@@ -1004,7 +1036,26 @@ class Reports extends CK_Controller {
         $data['files'] = scandir($data['path']);
         $this->loadView("reports/system/logs", $data);
     }
-
+    
+    /*terminando ainda public function password() {
+    	$pass = $this->input->post('senha',true);    	
+    	$id = $this->session->userdata("user_id");    	
+    	$person = $this->personuser_model->getUserById($id);
+    	$login = $person->getLogin();    	
+    	$colonistId = $this->input->post("colonist_id", true);
+    	$summerCampId = $this->input->post("summer_camp_id", true);
+    	$cancel_reason = $this->input->post("cancel_reason", true);
+    	$situation = $this->input->post("situation", true);
+    	$userId = $this->personuser_model->userLogin($login,$pass);
+    	if($userId){
+    		$result = $this->summercamp_model->updateStatus($colonistId, $summerCampId, $situation, $cancel_reason);
+    		echo "true";
+    	}
+    	else
+    		echo "false";
+    	
+    }
+*/
     public function openLog($file) {
         $data['path'] = $this->config->item('log_path', 'logger') . "/" . $file;
         $this->loadReportView("reports/system/openlog", $data);

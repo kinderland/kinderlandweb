@@ -32,6 +32,7 @@
                 	 <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/queue">Fila de Espera por Turma e Pavilhão</option>
                 	<?php } ?>
+                	<?php //Ainda terminando de fazer<option value="<?= $this->config->item('url_link'); reports/colonist_exclusion">Cancelamentos e Exclusões</option> ?>
                 	<!-- <option value="<?php // $this->config->item('url_link'); ?>reports/colonist_exclusion">Cancelamentos e exclusões</option>-->
                 </select>
             </div>
