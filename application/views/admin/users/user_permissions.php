@@ -90,12 +90,12 @@
                             ?>
                                 <tr>
                                     <td><a onclick="prepareModal(<?=$user->person_id ?>)" data-toggle="modal" data-target="#myModal"><?= $user->fullname ?></a></td>
-                                    <td><input type="checkbox" <?=($user->system_admin)?"checked":""?> /></td>
-                                    <td><input type="checkbox" <?=($user->director)?"checked":""?> /></td>
-                                    <td><input type="checkbox" <?=($user->secretary)?"checked":""?> /></td>
-                                    <td><input type="checkbox" <?=($user->coordinator)?"checked":""?> /></td>
-                                    <td><input type="checkbox" <?=($user->doctor)?"checked":""?> /></td>
-                                    <td><input type="checkbox" <?=($user->monitor_instructor)?"checked":""?>/></td>
+                                    <td><input type="checkbox" disabled <?=($user->system_admin)?"checked":""?> /></td>
+                                    <td><input type="checkbox" disabled <?=($user->director)?"checked":""?> /></td>
+                                    <td><input type="checkbox" disabled <?=($user->secretary)?"checked":""?> /></td>
+                                    <td><input type="checkbox" disabled <?=($user->coordinator)?"checked":""?> /></td>
+                                    <td><input type="checkbox" disabled <?=($user->doctor)?"checked":""?> /></td>
+                                    <td><input type="checkbox" disabled <?=($user->monitor_instructor)?"checked":""?>/></td>
                                 </tr>
                             <?php
 								}
