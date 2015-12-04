@@ -43,19 +43,19 @@
 	                    	                        { camp_id: campId, coordinatorId1: cordinatorId1, coordinatorId2: cordinatorId2, coordinatorId3: cordinatorId3  },
 	                    	                            function ( data ){
 	                    	                                if(data == "true"){
-	                    	                                    alert("Coordenador atualizado");
+	                    	                                    alert("Coordenadores atualizados");
 	                    	                                }
 	                    	                                else{
 	                    	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
 	                	                    	                        { camp_id: campId, coordinatorId1: coordinatorId1, coordinatorId2: coordinatorId2, coordinatorId3: coordinatorId3  });
-	                    	                                    alert("Erro ao atualizar coordenador");
+	                    	                                    alert("Erro ao atualizar coordenadores");
 	                    	                                    location.reload();
 	                    	                                }
 	                    	                            }
 	                    	                    );
 	                                    }
 	                                    else{
-	                                        alert("Erro atualizar coordenador");
+	                                        alert("Erro ao atualizar coordenadores");
 	                                        location.reload();
 	                                    }
 	                                }
@@ -80,6 +80,7 @@
 
             function updateDoctor(campId,oldDoctorId) {
                 var doctorId = $("#doctor").val();
+                var func = 3;
                 
                 if(doctorId != '' && doctorId > 0){
                     $.post("<?= $this->config->item('url_link'); ?>summercamps/deleteDoctor",
@@ -107,8 +108,20 @@
                             }
                     );
                 } else {
-                    alert("Por favor, selecione uma pessoa para ser médica.");
-                    location.reload();
+                	$.post("<?= $this->config->item('url_link'); ?>summercamps/existStaffByFunction",
+	                        { camp_id: campId, func: func },
+	                            function ( data ){
+	                                if(data == "true"){
+	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteDoctor",
+	            	                            { camp_id: campId });
+	                                	alert("Médico atualizado");
+	                                }
+	                                else{
+	                                    alert("Por favor, selecione uma pessoa para ser médica.");
+	                                    location.reload();
+	                                }
+	                            }
+	                    );
                 }
             }
 
@@ -125,6 +138,7 @@
                 var monitorId10 = $("#monitores_4M").val();
                 var monitorId11 = $("#monitores_5M").val();
                 var monitorId12 = $("#monitores_6M").val();
+                var func = 2;
                 
                 if( monitorId1!=0 || monitorId2!=0 || monitorId3!=0 || monitorId4!=0 || monitorId5!=0 || monitorId6!=0 || monitorId7!=0 || monitorId8!=0 || monitorId9!=0 || monitorId10!=0 || monitorId11!=0 || monitorId12!=0){
                 	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteMonitor",
@@ -135,26 +149,38 @@
 						                        { camp_id: campId, monitorId1: monitorId1, monitorId2: monitorId2, monitorId3: monitorId3, monitorId4: monitorId4, monitorId5: monitorId5, monitorId6: monitorId6, monitorId7: monitorId7, monitorId8: monitorId8, monitorId9: monitorId9, monitorId10: monitorId10, monitorId11: monitorId11, monitorId12: monitorId12 },
 						                            function ( data ){
 						                                if(data == "true"){
-						                                    alert("Monitor atualizado");
+						                                    alert("Monitores atualizados");
 						                                }
 						                                else{
 						                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
 						                                            { camp_id: campId, monitorId1: oldMonitorId1, monitorId2: oldMonitorId2, monitorId3: oldMonitorId3, monitorId4: oldMonitorId4, monitorId5: oldMonitorId5, monitorId6: oldMonitorId6, monitorId7: oldMonitorId7, monitorId8: oldMonitorId8, monitorId9: oldMonitorId9, monitorId10: oldMonitorId10, monitorId11: oldMonitorId11, monitorId12: oldMonitorId12 });
-						                                    alert("Erro ao atualizar monitor");
+						                                    alert("Erro ao atualizar monitores");
 						                                    location.reload();
 						                                }
 						                            }
 						                    );
                                     }
                                     else{
-                                        alert("Erro atualizar monitor");
+                                        alert("Erro ao atualizar monitores");
                                         location.reload();
                                     }
                             }
                             );
                 } else {
-                    alert("Por favor, selecione uma pessoa para ser monitor.");
-                    location.reload();
+                	$.post("<?= $this->config->item('url_link'); ?>summercamps/existStaffByFunction",
+	                        { camp_id: campId, func: func },
+	                            function ( data ){
+	                                if(data == "true"){
+	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteMonitor",
+	            	                            { camp_id: campId });
+	                                	alert("Monitores atualizados");
+	                                }
+	                                else{
+	                                    alert("Por favor, selecione uma pessoa para ser monitor.");
+	                                    location.reload();
+	                                }
+	                            }
+	                    );
                 }
             }
             function addAssistant(campId,number) {
