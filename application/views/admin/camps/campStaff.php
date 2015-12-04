@@ -27,73 +27,79 @@
                 $(".datepicker").datepicker();
             });
 
-            function updateCoordinator(campId,number,coordinatorId1,coordinatorId2,coordinatorId3) {
-            	var coordinatorId = $("#coordinator"+number).val();
+            function updateCoordinator(campId,coordinatorId1,coordinatorId2,coordinatorId3) {
+            	var cordinatorId1 = $("#coordinator_"+1).val();
+            	var cordinatorId2 = $("#coordinator_"+2).val();
+            	var cordinatorId3 = $("#coordinator_"+3).val();
             	var personId;
-            	var existOther;
-
-            	if(number == 1){
-                	personId = coordinatorId1;
-                	existOther = (coordinatorId2 != 0 || coordinatorId3 != 0);
-            	}
-            	else if(number == 2){
-            		personId = coordinatorId2;
-            		existOther = (coordinatorId1 != 0 || coordinatorId3 != 0);
-            	}
-            	else if(number == 3){
-            		personId = coordinatorId3;
-            		existOther = (coordinatorId1 != 0 || coordinatorId2 != 0);
-            	}
-
-            	if((coordinatorId == '') && existOther) {                	
-
-                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteCoordinator",
-                            { camp_id: campId, person_id: personId  },
-                                function ( data ){
-                                    if(data == "true"){
-                                        alert("Coordenador atualizado");
-                                        location.reload();
-                                    }
-                                    else{
-                                        alert("Erro ao atualizar coordenador");
-                                        location.reload();
-                                    }
-                                }
-                        );
-
-            	}
-            	else{
+            	var func = 1;
             	
-	                if(coordinatorId != '' && coordinatorId > 0){
-	                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
-	                        { camp_id: campId, person_id: coordinatorId  },
-	                            function ( data ){
-	                                if(data == "true"){
-	                                    alert("Coordenador atualizado");
-	                                	location.reload();
+	                if(cordinatorId1 != 0 || cordinatorId2 != 0 || cordinatorId3 != 0 ){
+	                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteCoordinator",
+	                            { camp_id: campId },
+	                                function ( data ){
+	                                    if(data == "true"){
+	                                    	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
+	                    	                        { camp_id: campId, coordinatorId1: cordinatorId1, coordinatorId2: cordinatorId2, coordinatorId3: cordinatorId3  },
+	                    	                            function ( data ){
+	                    	                                if(data == "true"){
+	                    	                                    alert("Coordenadores atualizados");
+	                    	                                }
+	                    	                                else{
+	                    	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
+	                	                    	                        { camp_id: campId, coordinatorId1: coordinatorId1, coordinatorId2: coordinatorId2, coordinatorId3: coordinatorId3  });
+	                    	                                    alert("Erro ao atualizar coordenadores");
+	                    	                                    location.reload();
+	                    	                                }
+	                    	                            }
+	                    	                    );
+	                                    }
+	                                    else{
+	                                        alert("Erro ao atualizar coordenadores");
+	                                        location.reload();
+	                                    }
 	                                }
-	                                else{
-	                                    alert("Erro ao atualizar coordenador");
-	                                    location.reload();
-	                                }
-	                            }
-	                    );
+	                        );
 	                } else {
-	                    alert("Por favor, selecione uma pessoa para ser coordenadora.");
-	                    location.reload();
+	                	$.post("<?= $this->config->item('url_link'); ?>summercamps/existStaffByFunction",
+    	                        { camp_id: campId, func: func },
+    	                            function ( data ){
+    	                                if(data == "true"){
+    	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteCoordinator",
+    	            	                            { camp_id: campId });
+    	                                    alert("Coordenador atualizado");
+    	                                }
+    	                                else{
+    	                                	alert("Por favor, selecione uma pessoa para ser coordenadora.");
+    	            	                    location.reload();
+    	                                }
+    	                            }
+    	                    );
 	                }
-            	}
             }
 
-            function updateDoctor(campId) {
+            function updateDoctor(campId,oldDoctorId) {
                 var doctorId = $("#doctor").val();
+                var func = 3;
+                
                 if(doctorId != '' && doctorId > 0){
-                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
-                        { camp_id: campId, person_id: doctorId  },
+                    $.post("<?= $this->config->item('url_link'); ?>summercamps/deleteDoctor",
+                        { camp_id: campId},
                             function ( data ){
                                 if(data == "true"){
-                                    alert("Médico atualizado");
-                                    location.reload();
+                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
+                                            { camp_id: campId, person_id: doctorId}, 
+                                            function(data){
+                                            	if(data == "true"){
+                                    				alert("Médico atualizado");
+                                            	}
+                                            	else{
+                                            		$.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
+                                                            { camp_id: campId, person_id: oldDoctorId});
+                                            		alert("Erro ao atualizar médico");
+                                                    location.reload();
+                                            	}
+                                			});
                                 }
                                 else{
                                     alert("Erro ao atualizar médico");
@@ -102,49 +108,100 @@
                             }
                     );
                 } else {
-                    alert("Por favor, selecione uma pessoa para ser médica.");
+                	$.post("<?= $this->config->item('url_link'); ?>summercamps/existStaffByFunction",
+	                        { camp_id: campId, func: func },
+	                            function ( data ){
+	                                if(data == "true"){
+	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteDoctor",
+	            	                            { camp_id: campId });
+	                                	alert("Médico atualizado");
+	                                }
+	                                else{
+	                                    alert("Por favor, selecione uma pessoa para ser médica.");
+	                                    location.reload();
+	                                }
+	                            }
+	                    );
                 }
             }
 
-            function updateMonitor(room, campId) {
-                var monitorId = $("#monitores_"+room).val();
-                if(monitorId != '' && monitorId > 0){
-                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-                        { camp_id: campId, person_id: monitorId, room_number:room },
-                            function ( data ){
-                                if(data == "true"){
-                                    alert("Monitor atualizado");
-                                	location.reload();
-                                }
-                                else{
-                                    alert("Erro ao atualizar monitor");
-                                    location.reload();
-                                }
+            function updateMonitor(campId, oldMonitorId1, oldMonitorId2, oldMonitorId3, oldMonitorId4, oldMonitorId5, oldMonitorId6, oldMonitorId7, oldMonitorId8, oldMonitorId9, oldMonitorId10, oldMonitorId11, oldMonitorId12) {
+                var monitorId1 = $("#monitores_1F").val();
+                var monitorId2 = $("#monitores_2F").val();
+                var monitorId3 = $("#monitores_3F").val();
+                var monitorId4 = $("#monitores_4F").val();
+                var monitorId5 = $("#monitores_5F").val();
+                var monitorId6 = $("#monitores_6F").val();
+                var monitorId7 = $("#monitores_1M").val();
+                var monitorId8 = $("#monitores_2M").val();
+                var monitorId9 = $("#monitores_3M").val();
+                var monitorId10 = $("#monitores_4M").val();
+                var monitorId11 = $("#monitores_5M").val();
+                var monitorId12 = $("#monitores_6M").val();
+                var func = 2;
+                
+                if( monitorId1!=0 || monitorId2!=0 || monitorId3!=0 || monitorId4!=0 || monitorId5!=0 || monitorId6!=0 || monitorId7!=0 || monitorId8!=0 || monitorId9!=0 || monitorId10!=0 || monitorId11!=0 || monitorId12!=0){
+                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteMonitor",
+                            { camp_id: campId },
+                                function ( data ){
+                                    if(data == "true"){
+				                               $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
+						                        { camp_id: campId, monitorId1: monitorId1, monitorId2: monitorId2, monitorId3: monitorId3, monitorId4: monitorId4, monitorId5: monitorId5, monitorId6: monitorId6, monitorId7: monitorId7, monitorId8: monitorId8, monitorId9: monitorId9, monitorId10: monitorId10, monitorId11: monitorId11, monitorId12: monitorId12 },
+						                            function ( data ){
+						                                if(data == "true"){
+						                                    alert("Monitores atualizados");
+						                                }
+						                                else{
+						                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
+						                                            { camp_id: campId, monitorId1: oldMonitorId1, monitorId2: oldMonitorId2, monitorId3: oldMonitorId3, monitorId4: oldMonitorId4, monitorId5: oldMonitorId5, monitorId6: oldMonitorId6, monitorId7: oldMonitorId7, monitorId8: oldMonitorId8, monitorId9: oldMonitorId9, monitorId10: oldMonitorId10, monitorId11: oldMonitorId11, monitorId12: oldMonitorId12 });
+						                                    alert("Erro ao atualizar monitores");
+						                                    location.reload();
+						                                }
+						                            }
+						                    );
+                                    }
+                                    else{
+                                        alert("Erro ao atualizar monitores");
+                                        location.reload();
+                                    }
                             }
-                    );
+                            );
                 } else {
-                    alert("Por favor, selecione uma pessoa para ser monitor.");
+                	$.post("<?= $this->config->item('url_link'); ?>summercamps/existStaffByFunction",
+	                        { camp_id: campId, func: func },
+	                            function ( data ){
+	                                if(data == "true"){
+	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteMonitor",
+	            	                            { camp_id: campId });
+	                                	alert("Monitores atualizados");
+	                                }
+	                                else{
+	                                    alert("Por favor, selecione uma pessoa para ser monitor.");
+	                                    location.reload();
+	                                }
+	                            }
+	                    );
                 }
             }
-            function updateAssistant(campId,number) {
+            function addAssistant(campId,number) {
                 var assistantId = $("#assistant"+number).val();
                 var room = '';
                 if(assistantId != '' && assistantId > 0){
-                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-                        { camp_id: campId, person_id: assistantId, room_number:room },
+                    $.post("<?= $this->config->item('url_link'); ?>summercamps/addAssistant",
+                        { camp_id: campId, person_id: assistantId },
                             function ( data ){
                                 if(data == "true"){
-                                    alert("Assistente atualizado");
+                                    alert("Auxiliar adicionado");
                                     location.reload();
                                 }
                                 else{
-                                    alert("Erro ao atualizar assistente");
+                                    alert("Erro ao adicionar auxiliar");
                                     location.reload();
                                 }
                             }
                     );
                 } else {
-                    alert("Por favor, selecione uma pessoa para ser assistente.");
+                    alert("Por favor, selecione uma pessoa para ser auxiliar.");
                     location.reload();
                 }
             }
@@ -155,16 +212,48 @@
                         { camp_id: campId, person_id: assistantId},
                             function ( data ){
                                 if(data == "true"){
-                                    alert("Assistente excluído");
+                                    alert("Auxiliar excluído");
                                     location.reload();
                                 }
                                 else{
-                                    alert("Erro ao excluir assistente");
+                                    alert("Erro ao excluir auxiliar");
                                     location.reload();
                                 }
                             }
                     );
                 } 
+            }
+
+            function updateAssistant(campId,number,oldAssistantId) {
+            	var assistantId = $("#assistant"+number).val();
+            	
+                if(assistantId != '' && assistantId > 0){
+                    $.post("<?= $this->config->item('url_link'); ?>summercamps/deleteAssistant",
+                        { camp_id: campId, person_id: oldAssistantId},
+                            function ( data ){
+                                if(data == "true"){
+                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/addAssistant",
+                                            { camp_id: campId, person_id: assistantId },
+                                                function ( data ){
+                                                    if(data == "true"){
+                                                        alert("Auxiliar atualizado");
+                                                    }
+                                                    else{
+                                                    	$.post("<?= $this->config->item('url_link'); ?>summercamps/addAssistant",
+                                                                { camp_id: campId, person_id: oldAssistantId });;
+                                                        alert("Erro ao atualizar auxiliar");
+                                                        location.reload();
+                                                    }
+                                                }
+                                        );
+                                }
+                                else{
+                                    alert("Erro ao atualizar assistente");
+                                    location.reload();
+                                }
+                            }
+                    );
+                } 				
             }
         </script>
         <div class="main-container-report">
@@ -174,6 +263,7 @@
                         $monitors = array(1 => null, 2 => null, 3 => null, 4 => null, 5 => null, 6 => null, 7 => null, 8 => null, 9 => null, 10 => null, 11 => null, 12 => null);
                         $coordinators = array(1 => null, 2 => null, 3 => null);
                         $coordinatorsId = array(1 => 0, 2 => 0, 3 => 0);
+                        $monitorsId = array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0);
                         $doctor = null;
                         $room = null;
                         $assistants = array();
@@ -235,16 +325,15 @@
                             }
                         }
                     ?>
-                    <h3>Colônia: <?=$summerCamp->getCampName();?></h3>
+                    <h3><b>Equipe: <?=$summerCamp->getCampName();?></b></h3>
 
                     <p>
                     <br />
-                        Coordenadores:<br />
-                        <table class="sortable-table" >
+                        <h4><b>Coordenadores:</b> </h4>
+                        <table class="sortable-table" style="max-width: 500px;" >
                             <thead> 
                             <tr>
                                 <th>Nome</th>
-                                <th>Ações</th>
                             </tr>
                         </thead> 
                         <tbody> 
@@ -263,12 +352,12 @@
 
                             <tr>
                                 <td>
-			                        <select name="coordinator" id="coordinator<?=$i?>">
+			                        <select name="coordinator" id="coordinator_<?=$i?>">
 			                            <option value="">-- Selecione --</option>
 			                            <?php
 			                            foreach ( $possibleCoordinators as $pm ) {
 			                                $selected = "";
-			                                if ($coordinator != null && $pm->getPersonId() == $coordinator->person_id) {
+			                                if ($coordinator != null && $pm->getPersonId() == $coordinator->person_id && $coordinatorsId[$i] == $coordinator->person_id) {
 			                                    $selected = "selected";	
 			                                }
 			                                echo "<option $selected value='".$pm->getPersonId()."'>".$pm->getFullname()."</option>";
@@ -276,21 +365,19 @@
 			                            ?>
 			                        </select>
 			                    </td>
-			                    <td>							
-			                        <a onClick="updateCoordinator(<?=$summerCamp->getCampId();?>,<?=$i?>,<?= $coordinatorsId[1]?>,<?= $coordinatorsId[2]?>,<?= $coordinatorsId[3]?>)">Salvar </a>
-			                    </td>
 			                    </tr>
 			                    <?php $i++;}?>
 			             </tbody>
 			           </table>
                     </p>
+                    <button class="btn btn-primary" onClick="updateCoordinator(<?=$summerCamp->getCampId();?>,<?= $coordinatorsId[1]?>,<?= $coordinatorsId[2]?>,<?= $coordinatorsId[3]?>)">Salvar </button>
+                    <br /><br />
                     <p>
-                        Médico: <br />
-                        <table class="sortable-table" >
+                       <h4><b> Médico: </b></h4>
+                        <table class="sortable-table" style="max-width: 500px;" >
                             <thead> 
                             <tr>
                                 <th>Nome</th>
-                                <th>Ações</th>
                             </tr>
                         </thead> 
                         <tbody>
@@ -307,23 +394,20 @@
 			                            }
 			                            ?>
 			                        </select>
-			                   </td>
-			                   <td>		
-		                        	<a onClick="updateDoctor(<?=$summerCamp->getCampId();?>)">Salvar </a>
-		                       </td>
-		                   </tr>
+			                   </td>	
+		                       </tr>
 		                </tbody>
 		                </table>
                     </p>
-
+					<button class="btn btn-primary" onClick="updateDoctor(<?=$summerCamp->getCampId();?>,'<?php if(isset($doctor->person_id)) echo $doctor->person_id;?>')">Salvar </button>
                     <p>
-                        Monitores: <br />
-                        <table class="sortable-table" id="sortable-table">
+                    <br /><br />
+                       <h4><b> Monitores:</b></h4>
+                        <table class="sortable-table" id="sortable-table" style="max-width: 500px;">
                             <thead> 
                             <tr>
                                 <th>Nome</th>
                                 <th>Quarto</th>
-                                <th>Ações</th>
                             </tr>
                         </thead> 
                         <tbody>
@@ -343,8 +427,10 @@
                                         		if($possibleFemaleMonitors!=null)
                                         		foreach ($possibleFemaleMonitors as $pm ) {
                                         			$selected = "";
-                                        			if ($monitor != null && $pm->getPersonId() == $monitor->person_id)
+                                        			if ($monitor != null && $pm->getPersonId() == $monitor->person_id){
                                         				$selected = "selected";
+                                        				$monitorsId[$j] = $monitor->person_id;
+                                        			}
                                         			echo "<option $selected value='".$pm->getPersonId()."'>".$pm->getFullname()."</option>";
                                         		}                                        		
                                         	}
@@ -352,8 +438,10 @@
                                         		if($possibleMaleMonitors!=null)
 		                                        foreach ($possibleMaleMonitors as $pm ) {
 		                                            $selected = "";
-		                                            if ($monitor != null && $pm->getPersonId() == $monitor->person_id)
-		                                                $selected = "selected";
+		                                            if ($monitor != null && $pm->getPersonId() == $monitor->person_id){
+                                        				$selected = "selected";
+                                        				$monitorsId[$j] = $monitor->person_id;
+                                        			}
 		                                            echo "<option $selected value='".$pm->getPersonId()."'>".$pm->getFullname()."</option>";
 		                                        }
                                         	}
@@ -364,9 +452,6 @@
                                     <?=$i?><?=$gender?>
                                     <?php $quarto = $i.$gender;?>
                                 </td>
-                                <td> 
-                                    <a onClick="updateMonitor('<?=$quarto?>',<?=$summerCamp->getCampId();?>)">Salvar </a>
-                                <td/>
                             </tr>
 
                             <?php
@@ -385,9 +470,10 @@
                         </table>
                         
                     </p>
-                    <p>
-                        Assistentes:  <br />
-                        <table class="sortable-table" >
+                     <button class="btn btn-primary" onClick="updateMonitor(<?=$summerCamp->getCampId();?>,<?= $monitorsId[1]?>,<?= $monitorsId[2]?>,<?= $monitorsId[3]?>,<?= $monitorsId[4]?>,<?= $monitorsId[5]?>,<?= $monitorsId[6]?>,<?= $monitorsId[7]?>,<?= $monitorsId[8]?>,<?= $monitorsId[9]?>,<?= $monitorsId[10]?>,<?= $monitorsId[11]?>,<?= $monitorsId[12]?>)">Salvar </button>
+                    <p><br /><br />
+                       <h4><b> Auxiliares: </b> </h4>
+                        <table class="sortable-table" style="max-width: 500px;" >
                             <thead> 
                             <tr>
                                 <th>Nome</th>
@@ -414,10 +500,10 @@
 			                        </select>
 			                   </td>
 			                   <td>		
-		                        	<a onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </a>
+		                        	<button class="btn btn-primary" onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>,'<?php if(isset($assistants[$i]->person_id)) echo $assistants[$i]->person_id;?>')">Salvar </button>
 		                       </td>
 		                       <td>
-		                        	<a onClick="deleteAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Excluir</a>
+		                        	<button class="btn btn-danger" onClick="deleteAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Excluir</button>
 		                       </td>
 		                   </tr>
 		                <?php  $i++;
@@ -438,16 +524,17 @@
 			                        </select>
 			                   </td>
 			                   <td>		
-		                        	<a onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </a>
+		                        	<button class="btn btn-primary" onClick="addAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </button>
 		                       </td>
 		                   </tr>
 		                </tbody>
 		                </table>
                     </p> 
                     
-
                 </div>
             </div>
+            <br />
+            <button class="btn btn-warning" class="button" onclick="self.close()" value="Fechar">Fechar</button>                    
         </div>
 
     </body>

@@ -35,12 +35,14 @@
 <script>
     function excluir(camp_id, colonist_id, name, subscribed) {
 
-        if (confirm("Tem certeza que deseja excluir o colonista " + name + " ?")) {
-            if (subscribed) {
-                if (confirm("Ao excluir esta inscrição, o responsável deve entrar em contato com a secretaria para tratar do eventual reembolso da doação, seguindo os critérios estabelecidos pela Associação Kinderland. Ao optar por excluir, não haverá possibilidade desta inscrição ser retomada. Confirmar exclusão?")) {
+    	if (subscribed) {
+                if (confirm("A solicitação de exclusão será encaminhada à secretaria, que entrará em contato para confirmar e tratar de eventual reembolso, seguindo os critérios estabelecidos pela Associação Kinderland. Confirma a solicitação?")) {
                     window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/excludeColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
+                    alert("Solicitação de exclusão realizada. Aguarde contato da secretaria.");
+                    location.reload();
                 }
-            } else {
+        } else {
+        	if (confirm("Tem certeza que deseja excluir o colonista " + name + " ?")) {
                 window.location.replace("<?= $this->config->item('url_link'); ?>summercamps/deleteColonist?camp_id=" + camp_id + "&colonist_id=" + colonist_id);
             }
         }
@@ -306,7 +308,7 @@
                             <?php
                             if (($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED)) {  ?>
                                 <button class="btn btn-danger" onclick="excluir(<?= $summerCampInscription->getSummerCampId() ?>,<?= $summerCampInscription->getColonistId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>',<?= $subscribed ?>)" class="btn">
-                                    Excluir inscrição
+                                    Solicitar exclusão
                                 </button>
                             <?php  } else { ?>
                                 <button class="btn btn-warning" onclick="excluir(<?= $summerCampInscription->getSummerCampId() ?>,<?= $summerCampInscription->getColonistId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>',<?= $subscribed ?>)" class="btn">

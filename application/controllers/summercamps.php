@@ -429,7 +429,7 @@ class SummerCamps extends CK_Controller {
             $this->Logger->error("Responsavel de id $responsableId tentou excluir o colonista $colonistId da campanha $campId que pertence ao responsavel $personUserId");
             //$this->index();
         } else {
-            $this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED);
+            //$this->summercamp_model->updateColonistStatus($colonistId, $campId, SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED);
             $this->sendExclusionEmail($colonistId, $campId);
             //$this->index();
         }
@@ -1476,7 +1476,7 @@ class SummerCamps extends CK_Controller {
     	$dataArray = json_decode($dataIn);
     	
     	
-    		$colonists = $this->colonist_model->getColonists($dataArray);
+    	$colonists = $this->colonist_model->getColonists($dataArray);
     	
     	$data['colonists'] = $colonists;
     	$data['nameFile'] = $this->input->post('name', TRUE);;
@@ -1491,6 +1491,29 @@ class SummerCamps extends CK_Controller {
     	
     	
     	$this->loadReportView("summercamps/pdfTripAuthorization", $data);
+    	$html = $this->output->get_output();
+    	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
+    
+    public function generateStaffPDFTripAuthorization() {
+    	$this->load->plugin('mpdf');
+    	 
+    	if($this->input->post('data', TRUE) != null) {
+    		$dataIn = $this->input->post('data', TRUE);
+    		$dataArray = json_decode($dataIn);
+    		 
+    		 
+    		$staff = $this->person_model->getPersons($dataArray);
+    		 
+    		$data['staff'] = $staff;
+    		$data['nameFile'] = $this->input->post('name', TRUE);;
+    	}
+    	 
+    	$data['type'] = $this->input->post('type', TRUE);
+    	$data['camp_id'] = $this->input->post('camp_id', TRUE);
+    	 
+    	 
+    	$this->loadReportView("summercamps/staffPdfTripAuthorization", $data);
     	$html = $this->output->get_output();
     	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
@@ -1710,11 +1733,50 @@ class SummerCamps extends CK_Controller {
     public function updateCoordinator(){
         $personId = $this->input->post("person_id", true);
         $summerCampId = $this->input->post("camp_id", true);
-
-        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 1))
+        $coordinatorId1 = $this->input->post("coordinatorId1", true);
+        $coordinatorId2 = $this->input->post("coordinatorId2", true);
+        $coordinatorId3 = $this->input->post("coordinatorId3", true);
+                
+       	$ids = array();
+        
+        $i=1;
+        
+        if($coordinatorId1!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $coordinatorId1;
+        	$obj -> room ='';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($coordinatorId2!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $coordinatorId2;
+        	$obj -> room ='';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($coordinatorId3!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $coordinatorId3;
+        	$obj -> room ='';
+        	$ids[$i] = $obj;
+        }
+        
+        if ($this->summercamp_model->updateAllCampStaffByFunction($summerCampId,$ids, 1))
             echo "true";
         else
             echo "false";
+    }
+    
+    public function existStaffByFunction(){
+    	$summerCampId = $this->input->post("camp_id", true);
+    	$func = $this->input->post("func", true);
+    	
+    	if(($this->summercamp_model->getCampStaffByFunction($summerCampId,$func))!=null)
+    		echo "true";
+    	else
+    		echo "false";
+    	
     }
 
     public function updateRoommate(){
@@ -1735,20 +1797,21 @@ class SummerCamps extends CK_Controller {
 
     
     public function deleteCoordinator(){
-    	$personId = $this->input->post("person_id", true);
     	$summerCampId = $this->input->post("camp_id", true);
-    
-    	if ($this->summercamp_model->deleteCampStaff($personId, $summerCampId, 1))
+    	
+    	if ($this->summercamp_model->deleteAllCoordinatorsBySummercamp($summerCampId)){
     		echo "true";
-    	else
+    	}
+    	else{
     		echo "false";
+    	}
     }
     
     public function deleteAssistant(){
     	$personId = $this->input->post("person_id", true);
     	$summerCampId = $this->input->post("camp_id", true);
     
-    	if ($this->summercamp_model->deleteCampStaff($personId, $summerCampId, 2))
+    	if ($this->summercamp_model->deleteCampStaff($personId,$summerCampId,2))
     		echo "true";
     	else
     		echo "false";
@@ -1757,22 +1820,165 @@ class SummerCamps extends CK_Controller {
     public function updateDoctor(){
         $personId = $this->input->post("person_id", true);
         $summerCampId = $this->input->post("camp_id", true);
-
+        
         if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 3))
-            echo "true";
-        else
-            echo "false";
+	       echo "true";
+	    else
+	       echo "false";
+        
+    }
+    
+    public function deleteDoctor(){
+    	$summerCampId = $this->input->post("camp_id", true);
+    
+    	if ($this->summercamp_model->deleteAllDoctorsBySummercamp($summerCampId)){
+    		echo "true";
+    	}
+    	else{
+    		echo "false";
+    	}
+    }
+    
+    public function addAssistant(){
+    	$personId = $this->input->post("person_id", true);
+    	$summerCampId = $this->input->post("camp_id", true);  
+    	
+    	if(($this->summercamp_model->getCampStaff($summerCampId)) != null){
+    		$staff = $this->summercamp_model->getCampStaff($summerCampId);
+    	
+    		foreach($staff as $s){
+    			if($s->staff_function == 2 && $s->person_id == $personId){
+    				echo "false";
+    				return;
+    			}
+    		}
+    	}
+    	
+    		if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2))
+    			echo "true";
+    		else
+    			echo "false";
     }
 
     public function updateMonitor(){
-        $personId = $this->input->post("person_id", true);
         $summerCampId = $this->input->post("camp_id", true);
-        $room = $this->input->post("room_number", true);
-
-        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 2, $room))
-            echo "true";
-        else
-            echo "false";
+        $monitorId1 = $this->input->post("monitorId1", true);
+        $monitorId2 = $this->input->post("monitorId2", true);
+        $monitorId3 = $this->input->post("monitorId3", true);
+        $monitorId4 = $this->input->post("monitorId4", true);
+        $monitorId5 = $this->input->post("monitorId5", true);
+        $monitorId6 = $this->input->post("monitorId6", true);
+        $monitorId7 = $this->input->post("monitorId7", true);
+        $monitorId8 = $this->input->post("monitorId8", true);
+        $monitorId9 = $this->input->post("monitorId9", true);
+        $monitorId10 = $this->input->post("monitorId10", true);
+        $monitorId11 = $this->input->post("monitorId11", true);
+        $monitorId12 = $this->input->post("monitorId12", true);
+        
+        $ids = array();
+        
+        $i=1;
+        
+        if($monitorId1!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId1;
+        	$obj -> room ='1F';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId2!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId2;
+        	$obj -> room ='2F';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId3!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId3;
+        	$obj -> room ='3F';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId4!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId4;
+        	$obj -> room ='4F';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId5!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId5;
+        	$obj -> room ='5F';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId6!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId6;
+        	$obj -> room ='6F';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId7!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId7;
+        	$obj -> room ='1M';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId8!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId8;
+        	$obj -> room ='2M';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId9!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId9;
+        	$obj -> room ='3M';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId10!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId10;
+        	$obj -> room ='4M';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId11!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId11;
+        	$obj -> room ='5M';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        if($monitorId12!=0){
+        	$obj = new stdClass();
+        	$obj -> id = $monitorId12;
+        	$obj -> room ='6M';
+        	$ids[$i] = $obj;
+        	$i++;
+        }
+        
+			if ($this->summercamp_model->updateAllCampStaffByFunction($summerCampId,$ids, 2))
+	            echo "true";
+	        else
+	            echo "false";
+    }
+    
+    public function deleteMonitor(){
+    	$summerCampId = $this->input->post("camp_id", true);
+    	 
+    	if ($this->summercamp_model->deleteAllMonitorsBySummercamp($summerCampId)){
+    		echo "true";
+    	}
+    	else{
+    		echo "false";
+    	}
     }
 
     public function staffMedicalFile() {
