@@ -1767,6 +1767,17 @@ class SummerCamps extends CK_Controller {
         else
             echo "false";
     }
+    
+    public function existStaffByFunction(){
+    	$summerCampId = $this->input->post("camp_id", true);
+    	$func = $this->input->post("func", true);
+    	
+    	if(($this->summercamp_model->getCampStaffByFunction($summerCampId,$func))!=null)
+    		echo "true";
+    	else
+    		echo "false";
+    	
+    }
 
     public function updateRoommate(){
     	

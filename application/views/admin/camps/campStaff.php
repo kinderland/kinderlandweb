@@ -32,7 +32,7 @@
             	var cordinatorId2 = $("#coordinator_"+2).val();
             	var cordinatorId3 = $("#coordinator_"+3).val();
             	var personId;
-            	var existOther;
+            	var func = 1;
             	
 	                if(cordinatorId1 != 0 || cordinatorId2 != 0 || cordinatorId3 != 0 ){
 	                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteCoordinator",
@@ -61,8 +61,20 @@
 	                                }
 	                        );
 	                } else {
-	                    alert("Por favor, selecione uma pessoa para ser coordenadora.");
-	                    location.reload();
+	                	$.post("<?= $this->config->item('url_link'); ?>summercamps/existStaffByFunction",
+    	                        { camp_id: campId, func: func },
+    	                            function ( data ){
+    	                                if(data == "true"){
+    	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteCoordinator",
+    	            	                            { camp_id: campId });
+    	                                    alert("Coordenador atualizado");
+    	                                }
+    	                                else{
+    	                                	alert("Por favor, selecione uma pessoa para ser coordenadora.");
+    	            	                    location.reload();
+    	                                }
+    	                            }
+    	                    );
 	                }
             }
 
@@ -462,10 +474,10 @@
 			                        </select>
 			                   </td>
 			                   <td>		
-		                        	<a onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>,'<?php if(isset($assistants[$i]->person_id)) echo $assistants[$i]->person_id;?>')">Salvar </a>
+		                        	<button class="btn btn-primary" onClick="updateAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>,'<?php if(isset($assistants[$i]->person_id)) echo $assistants[$i]->person_id;?>')">Salvar </button>
 		                       </td>
 		                       <td>
-		                        	<a onClick="deleteAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Excluir</a>
+		                        	<button class="btn btn-danger" onClick="deleteAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Excluir</button>
 		                       </td>
 		                   </tr>
 		                <?php  $i++;
@@ -486,16 +498,17 @@
 			                        </select>
 			                   </td>
 			                   <td>		
-		                        	<a onClick="addAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </a>
+		                        	<button class="btn btn-primary" onClick="addAssistant(<?=$summerCamp->getCampId();?>,<?=$i?>)">Salvar </button>
 		                       </td>
 		                   </tr>
 		                </tbody>
 		                </table>
                     </p> 
                     
-
                 </div>
             </div>
+            <br />
+            <button class="btn btn-warning" class="button" onclick="self.close()" value="Fechar">Fechar</button>                    
         </div>
 
     </body>
