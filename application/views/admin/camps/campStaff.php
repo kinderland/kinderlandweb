@@ -44,6 +44,7 @@
 	                    	                            function ( data ){
 	                    	                                if(data == "true"){
 	                    	                                    alert("Coordenadores atualizados");
+	                    	                                    location.reload();
 	                    	                                }
 	                    	                                else{
 	                    	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
@@ -68,6 +69,7 @@
     	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteCoordinator",
     	            	                            { camp_id: campId });
     	                                    alert("Coordenador atualizado");
+    	                                    location.reload();
     	                                }
     	                                else{
     	                                	alert("Por favor, selecione uma pessoa para ser coordenadora.");
@@ -92,6 +94,7 @@
                                             function(data){
                                             	if(data == "true"){
                                     				alert("Médico atualizado");
+                                    				location.reload();
                                             	}
                                             	else{
                                             		$.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
@@ -115,6 +118,7 @@
 	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteDoctor",
 	            	                            { camp_id: campId });
 	                                	alert("Médico atualizado");
+	                                	location.reload();
 	                                }
 	                                else{
 	                                    alert("Por favor, selecione uma pessoa para ser médica.");
@@ -150,6 +154,7 @@
 						                            function ( data ){
 						                                if(data == "true"){
 						                                    alert("Monitores atualizados");
+						                                    location.reload();
 						                                }
 						                                else{
 						                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
@@ -174,6 +179,7 @@
 	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteMonitor",
 	            	                            { camp_id: campId });
 	                                	alert("Monitores atualizados");
+	                                	location.reload();
 	                                }
 	                                else{
 	                                    alert("Por favor, selecione uma pessoa para ser monitor.");
