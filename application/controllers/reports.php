@@ -1115,19 +1115,18 @@ class Reports extends CK_Controller {
         
         $start = strval($days[0]->year)."-".strval($days[0]->month)."-".strval($days[0]->day);
         
-        $end = count($days);
-
-        foreach($days as $day) {
-        	$end += 360;
-        }       
+        $numDays = count($days);
+        
+        $end = strval($days[$numDays-1]->year + 1)."-".strval($days[$numDays-1]->month)."-".strval($days[$numDays-1]->day);     
          
-        
-        $transactions -> qtdDays = $end;
+        $end = strtotime($end);
         $start = strtotime($start);
+        $transactions -> qtdDays = ($end-$start)/(1*24*60*60);
         
-        for($i = 0; $i < $end; $i++) {
-        	$transactions -> day[$i] = date($start);
-        	$start = strtotime($start."+1 days");
+        for($i = 0; $i <= $transactions -> qtdDays; $i++) {
+        	$transactions -> day[$i] = date("Y-m-d",$start);
+        	$transactions -> valueDay[$i] = 0.00;
+        	$start = $start + (1*24*60*60);
         }
         
         $j = 0;
@@ -1135,7 +1134,7 @@ class Reports extends CK_Controller {
         foreach($allTransactions as $trans) {
         	
         	foreach($days as $day) {
-        		if((date('d'.$trans -> date_updated) != strval($day -> day)) && (date('m'.$trans -> date_updated) != strval($day -> month)) && (date('Y'.$trans -> date_updated) != strval($day -> year))){
+        		if(($trans -> day != $day -> day) && ($trans -> month != $day -> month) && ($trans -> year != $day -> year)){
         			$j++;
         		}
         		else 
@@ -1143,13 +1142,13 @@ class Reports extends CK_Controller {
         	}
         	
         	if($trans -> type == "debito") {
-        		$transactions -> valueDay[$j+1] = $trans->value - (3.4*($trans->value)/100.0);
+        		$transactions -> valueDay[$j+1] += $trans->value - (3.4*($trans->value)/100.0);
         	}
         	
         	else if($trans -> type == "credito") {
         		
         		if($trans -> portions == 1) {
-        			$transactions -> valueDay[$j+30] = $trans->value - (3.8*($trans->value)/100.0);
+        			$transactions -> valueDay[$j+30] += $trans->value - (3.8*($trans->value)/100.0);
         		}
         		else  {
         			
@@ -1165,7 +1164,7 @@ class Reports extends CK_Controller {
         			$i=1;
         			
         			while($i <= $portions) {
-        				$transactions -> valueDay[$j+30*$i] = $value/$portions;
+        				$transactions -> valueDay[$j+30*$i] += $value/$portions;
         				$i++;
         			}
         		}
@@ -1197,6 +1196,12 @@ class Reports extends CK_Controller {
 
                 $data['periodo_inicial_escolhido'] = $initialPeriodChosen;
                 $data['periodo_final_escolhido'] = $finalPeriodChosen;
+                
+                $dataInicial = explode("/",$initialPeriodChosen);
+                $dataFinal = explode("/",$finalPeriodChosen);
+                
+                $initialPeriodChosen = $dataInicial[2]."-".$dataInicial[1]."-".$dataInicial[0];
+                $finalPeriodChosen = $dataFinal[2]."-".$dataFinal[1]."-".$dataFinal[0];
                 
             }
         }
@@ -1271,9 +1276,16 @@ class Reports extends CK_Controller {
          if(($start < $firstDay && $end < $firstDay) || ($start > $end) || ($start > $lastDay)) {
 	         $dayArr = null;
 	         $valueDay = null;
+	         echo "Algo";
+	         echo "<br>";
+	         echo $initialPeriodChosen;
+	         echo "<br>";
+	         echo $finalPeriodChosen;
          }
          else {
-                	
+         		echo $initialPeriodChosen;
+         		echo "<br>";
+                echo $finalPeriodChosen;	
 	         if($start < $firstDay) {
 	         	$initialPeriodChosen = date($firstDay);
 	         }
@@ -1296,24 +1308,25 @@ class Reports extends CK_Controller {
 	                
 	         
 	         for($k = $i; $k <= $j; $k++) {
-	               $dayArr[$l] = $transactions -> day[$k];
+	         	  $date = explode("-",$transactions -> day[$k]);
+	         	  $date = $date[2]."/".$date[1]."/".$date[0];
+	         	
+	               $dayArr[$l] = $date;
 	               $valueDay[$l] = $transactions -> valueDay[$k];
 	               $l++;
 	         }
          }
          
-         $info = array();
+         $info = array();    
          
-         $l = 0;
+         $m = 0;
          
-         print_r($dayArr);
-         
-         for($i = 0; $i < $transactions->qtdDays; $i++) {
+         for($i = 0; $i < $l; $i++) {
          	$obj = new stdClass();
          	$obj -> day = $dayArr[$i];
          	$obj -> valueDay = $valueDay[$i];
-         	$info[$l] = $obj;
-         	$l++;
+         	$info[$m] = $obj;
+         	$m++;
          }
          
          $data['transactions'] = $info;
@@ -1470,6 +1483,65 @@ class Reports extends CK_Controller {
     	}
     	
     	$this->loadReportView('reports/summercamps/rooms', $data);
+    }
+    
+    public function staff(){
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = date('Y');
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    	 
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    	else {
+    		$year = date('Y');
+    	}
+    	 
+    	$data['ano_escolhido'] = $year;
+    	$data['years'] = $years;
+    	 
+    	$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+    	$campsQtd = count($allCamps);
+    	$camps = array();
+    	$start = $campsQtd;
+    	$end = 1;
+    	 
+    	$campChosen = null;
+    	 
+    	if (isset($_GET['colonia_f']))
+    		$campChosen = $_GET['colonia_f'];
+    	 
+    	$campChosenId = null;
+    	foreach ($allCamps as $camp) {
+    		$camps[] = $camp->getCampName();
+    		if ($camp->getCampName() == $campChosen)
+    			$campChosenId = $camp->getCampId();
+    	}
+    	 
+    	$data['summer_camp_id'] = $campChosenId;
+    	$data['colonia_escolhida'] = $campChosen;
+    	$data['camps'] = $camps;
+    	
+    	
+    	$staff = null;
+    	
+    	if($campChosenId!=null){
+    		$staff = $this -> summercamp_model -> getCampStaff($campChosenId);
+    		$data['staff'] = $staff;
+    	}
+    	
+    	$this->loadReportView('reports/summercamps/staff', $data);
     }
 
 }

@@ -1534,6 +1534,16 @@ class summercamp_model extends CK_Model {
         return $result;
 
     }
+    public function getMonitorByRoom($summerCampId,$room){
+    	$sql = "SELECT * FROM summer_camp_staff WHERE summer_camp_id = ? AND room_number = ?";
+    	$result = $this->executeRows($this->db, $sql, array(intval($summerCampId),$room));
+    
+    	if (!$result)
+    		return null;
+    
+    	return $result;
+    
+    }
 
 }
 
