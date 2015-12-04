@@ -1788,31 +1788,19 @@ class SummerCamps extends CK_Controller {
     public function deleteCoordinator(){
     	$summerCampId = $this->input->post("camp_id", true);
     	
-    	if(($this->summercamp_model->getCampStaff($summerCampId)) != null){
-    		$staff = $this->summercamp_model->getCampStaff($summerCampId);
-    		
-    		foreach($staff as $s){
-    			if($s->staff_function == 1){
-    				if ($this->summercamp_model->deleteAllStaffByFunction($summerCampId, 1)){
-    					echo "true";
-    				}
-    				else{
-    					echo "false";
-    				}
-    				
-    				break;    				
-    			}
-    		}    		
-    	}
-    	else 
+    	if ($this->summercamp_model->deleteAllCoordinatorsBySummercamp($summerCampId)){
     		echo "true";
+    	}
+    	else{
+    		echo "false";
+    	}
     }
     
     public function deleteAssistant(){
     	$personId = $this->input->post("person_id", true);
     	$summerCampId = $this->input->post("camp_id", true);
     
-    	if ($this->summercamp_model->deleteCampStaff($personId, $summerCampId, 2))
+    	if ($this->summercamp_model->deleteCampStaff($personId,$summerCampId,2))
     		echo "true";
     	else
     		echo "false";
@@ -1821,16 +1809,23 @@ class SummerCamps extends CK_Controller {
     public function updateDoctor(){
         $personId = $this->input->post("person_id", true);
         $summerCampId = $this->input->post("camp_id", true);
-        $oldDoctorId = $this->input->post("oldDoctorId", true);
         
-        if($this->summercamp_model->deleteCampStaff($oldDoctorId,$summerCampId,3)){
-	        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 3))
-	            echo "true";
-	        else
-	            echo "false";
-        }
-        else 
-        	echo "false";
+        if ($this->summercamp_model->updateCampStaff($personId, $summerCampId, 3))
+	       echo "true";
+	    else
+	       echo "false";
+        
+    }
+    
+    public function deleteDoctor(){
+    	$summerCampId = $this->input->post("camp_id", true);
+    
+    	if ($this->summercamp_model->deleteAllDoctorsBySummercamp($summerCampId)){
+    		echo "true";
+    	}
+    	else{
+    		echo "false";
+    	}
     }
     
     public function addAssistant(){
@@ -1967,24 +1962,12 @@ class SummerCamps extends CK_Controller {
     public function deleteMonitor(){
     	$summerCampId = $this->input->post("camp_id", true);
     	 
-    	if(($this->summercamp_model->getCampStaff($summerCampId)) != null){
-    		$staff = $this->summercamp_model->getCampStaff($summerCampId);
-    
-    		foreach($staff as $s){
-    			if($s->staff_function == 2){
-    				if ($this->summercamp_model->deleteAllStaffByFunction($summerCampId, 2,'true')){
-    					echo "true";
-    				}
-    				else{
-    					echo "false";
-    				}
-    
-    				break;
-    			}
-    		}
-    	}
-    	else
+    	if ($this->summercamp_model->deleteAllMonitorsBySummercamp($summerCampId)){
     		echo "true";
+    	}
+    	else{
+    		echo "false";
+    	}
     }
 
     public function staffMedicalFile() {

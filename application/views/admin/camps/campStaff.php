@@ -44,7 +44,6 @@
 	                    	                            function ( data ){
 	                    	                                if(data == "true"){
 	                    	                                    alert("Coordenador atualizado");
-	                    	                                	location.reload();
 	                    	                                }
 	                    	                                else{
 	                    	                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateCoordinator",
@@ -69,13 +68,25 @@
 
             function updateDoctor(campId,oldDoctorId) {
                 var doctorId = $("#doctor").val();
+                
                 if(doctorId != '' && doctorId > 0){
-                    $.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
-                        { camp_id: campId, person_id: doctorId, oldDoctorId: oldDoctorId  },
+                    $.post("<?= $this->config->item('url_link'); ?>summercamps/deleteDoctor",
+                        { camp_id: campId},
                             function ( data ){
                                 if(data == "true"){
-                                    alert("Médico atualizado");
-                                    location.reload();
+                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
+                                            { camp_id: campId, person_id: doctorId}, 
+                                            function(data){
+                                            	if(data == "true"){
+                                    				alert("Médico atualizado");
+                                            	}
+                                            	else{
+                                            		$.post("<?= $this->config->item('url_link'); ?>summercamps/updateDoctor",
+                                                            { camp_id: campId, person_id: oldDoctorId});
+                                            		alert("Erro ao atualizar médico");
+                                                    location.reload();
+                                            	}
+                                			});
                                 }
                                 else{
                                     alert("Erro ao atualizar médico");
@@ -85,6 +96,7 @@
                     );
                 } else {
                     alert("Por favor, selecione uma pessoa para ser médica.");
+                    location.reload();
                 }
             }
 
@@ -112,7 +124,6 @@
 						                            function ( data ){
 						                                if(data == "true"){
 						                                    alert("Monitor atualizado");
-						                                	location.reload();
 						                                }
 						                                else{
 						                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
@@ -188,9 +199,10 @@
                                                 function ( data ){
                                                     if(data == "true"){
                                                         alert("Auxiliar atualizado");
-                                                        location.reload();
                                                     }
                                                     else{
+                                                    	$.post("<?= $this->config->item('url_link'); ?>summercamps/addAssistant",
+                                                                { camp_id: campId, person_id: oldAssistantId });;
                                                         alert("Erro ao atualizar auxiliar");
                                                         location.reload();
                                                     }
