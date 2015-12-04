@@ -25,7 +25,7 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/multiples_subscriptions">Inscrições Múltiplas</option>
                 	<?php } ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/rooms">Quartos</option>
-                	<!-- <option value="<?php // $this->config->item('url_link'); ?>reports/staff">Equipe</option>-->
+                	<option value="<?php echo $this->config->item('url_link'); ?>reports/staff">Equipe</option>
                 	 <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/discounts">Descontos</option>
                 	<?php } ?>

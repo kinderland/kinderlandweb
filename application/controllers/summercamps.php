@@ -1436,6 +1436,44 @@ class SummerCamps extends CK_Controller {
 
         echo "true";
     }
+    
+    public function generateStaffList(){
+    	$this->load->plugin('mpdf');
+    	
+    	$campId = $this->input->post('campId', TRUE);
+    	
+    	$summercamp = $this->summercamp_model->getSummerCampById($campId);
+    	
+    	$staff = $this->summercamp_model->getCampStaffAlphabetic($campId);
+    	$coordinator = array();
+    	$monitor = array();
+    	$doctor = null;
+    	
+    	$data ['nameFile'] = 'Lista da equipe '.$summercamp->getCampName();
+    	
+    	foreach($staff as $s){
+    		if($s->staff_function==1)
+    			$coordinator[] = $s;
+    		else if($s->staff_function==2)
+    			$monitor[]=$s;
+    		else if($s->staff_function==3)
+    			$doctor = $s;
+    	}
+    	
+    	$data['summercamp'] = $summercamp->getCampName();   	
+    	$data['coordinators'] = $coordinator;
+    	$data['monitors'] = $monitor;
+    	$data['doctor'] = $doctor;
+    	
+    	date_default_timezone_set('America/Sao_Paulo');
+    	$data['time'] = date('d-m-Y G:i:sa');
+    	
+    	
+    	$this->loadReportView("reports/summercamps/staffList", $data);
+    	$html = $this->output->get_output();
+    	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    	
+    }
 
     public function generatePDFWithColonistData() {
         $this->load->plugin('mpdf');
@@ -1693,6 +1731,45 @@ class SummerCamps extends CK_Controller {
 
         $html = $this->output->get_output();
         pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
+    
+    public function generatePDFWithStaffMedicalFiles($year, $summerCampId){
+    	$this->load->plugin('mpdf');
+    	$staff = $this->summercamp_model->getCampStaffAlphabetic($summerCampId);
+    	$staffT = array();
+    	$medicalFiles = array();
+    	$doctors=array();
+    
+    	foreach($staff as $s){
+    		if ($this->summercamp_model->hasDocumentStaff($s->person_id, DOCUMENT_MEDICAL_FILE)){
+    			$mf = $this->medical_file_model->getStaffMedicalFile($s->person_id);
+    			$medicalFiles[] = $mf;
+    			$doctor = $this->person_model->getPersonById($mf->getDoctorId());
+    			$tels = $this->telephone_model->getTelephonesByPersonId($mf->getDoctorId());
+    			if (isset($tels[0]))
+    				$doctor->setPhone1($tels[0]);
+    			if (isset($tels[1]))
+    				$doctor->setPhone2($tels[1]);
+    			$doctors[] = $doctor;
+    			$staffT[] = $s;
+    		}
+    	}
+    
+    	$data['time'] = date('d-m-Y G:i:sa');
+    
+    	$data["staff"] = $staffT;
+    	$data["medicalFiles"] = $medicalFiles;
+    	$data["doctors"] = $doctors;
+    
+    	$data["summerCamp"] = $this->summercamp_model->getSummerCampById($summerCampId);
+    
+    	$fileName = "Fichas-Medicas-Equipe-".$data["summerCamp"]->getCampName();
+    	
+    
+    	$this->loadView("summercamps/pdfStaffMedicalFiles", $data);
+    
+    	$html = $this->output->get_output();
+    	pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
 
     public function colonistPDFMedicalFile(){
