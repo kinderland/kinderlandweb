@@ -1551,15 +1551,27 @@ class SummerCamps extends CK_Controller {
     
     public function generateStaffPDFTripAuthorization() {
     	$this->load->plugin('mpdf');
+    	$staffT = array();
     	 
     	$data['type'] = $this->input->post('type', TRUE);
     	$camp_id = $this->input->post('camp_id', TRUE);
     	
     	$staff = $this->summercamp_model->getCampStaffByFunction($camp_id,2);
     	
-    	$data['staff'] = $staff;
-    	$data['start'] = $camp_id->start;
-    	$data['start'] = $camp_id->start;    	 
+    	foreach($staff as $s){
+    		$staffT[] = $this->personuser_model->getUserById($s->person_id);
+    	}
+    	
+    	$summercamp = $this->summercamp_model->getSummerCampById($camp_id);
+    	
+    	$start = date("d/m/Y",strtotime($summercamp->getDateStart()));
+    	$end = date("d/m/Y",strtotime($summercamp->getDateFinish()));
+    	
+    	$data['staff'] = $staffT;
+    	$data['start'] = $start;
+    	$data['end'] = $end;  
+    	
+    	$data ['nameFile'] = 'Autorizações-Monitores-Auxiliares-'.$summercamp->getCampName();
     	 
     	$this->loadReportView("summercamps/staffPdfTripAuthorization", $data);
     	$html = $this->output->get_output();

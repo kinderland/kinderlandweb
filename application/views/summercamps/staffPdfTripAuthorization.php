@@ -19,7 +19,7 @@ if($type == "Vários"){
 	<div style="font-size:14px; text-align:justify">
 		<h1 style = "text-align:center"><strong>Autorização de Viagem</strong></h1>
 		<br>
-		Autorizo o(a) menor <b><?=$s -> fullname ?></b> portador do CPF de número <b><?=$s->cpf?></b> qualificado(a) a viajar para a Colônia de Férias Kinderland, situada
+		Autorizo o(a) menor <b><?=$s -> getFullname(); ?></b> portador do CPF de número <b><?=$s->getCPF();?></b> qualificado(a) a viajar para a Colônia de Férias Kinderland, situada
 		na Estrada Velha de Morro Azul, s/nº, em Sacra Família do Tinguá / Paulo de Frontin (RJ)
 		no período <b><?=$start ?> à <?=$end ?></b>, acompanhado(a) pelos respectivos coordenadores.
 		<br>
