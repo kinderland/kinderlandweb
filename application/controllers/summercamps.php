@@ -1469,7 +1469,7 @@ class SummerCamps extends CK_Controller {
     	$data['time'] = date('d-m-Y G:i:sa');
     	
     	
-    	$this->loadReportView("reports/summercamps/staffList", $data);
+    	$this->loadReportView("summercamps/staffList", $data);
     	$html = $this->output->get_output();
     	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     	
@@ -1552,20 +1552,14 @@ class SummerCamps extends CK_Controller {
     public function generateStaffPDFTripAuthorization() {
     	$this->load->plugin('mpdf');
     	 
-    	if($this->input->post('data', TRUE) != null) {
-    		$dataIn = $this->input->post('data', TRUE);
-    		$dataArray = json_decode($dataIn);
-    		 
-    		 
-    		$staff = $this->person_model->getPersons($dataArray);
-    		 
-    		$data['staff'] = $staff;
-    		$data['nameFile'] = $this->input->post('name', TRUE);;
-    	}
-    	 
     	$data['type'] = $this->input->post('type', TRUE);
-    	$data['camp_id'] = $this->input->post('camp_id', TRUE);
-    	 
+    	$camp_id = $this->input->post('camp_id', TRUE);
+    	
+    	$staff = $this->summercamp_model->getCampStaffByFunction($camp_id,2);
+    	
+    	$data['staff'] = $staff;
+    	$data['start'] = $camp_id->start;
+    	$data['start'] = $camp_id->start;    	 
     	 
     	$this->loadReportView("summercamps/staffPdfTripAuthorization", $data);
     	$html = $this->output->get_output();
@@ -1727,7 +1721,7 @@ class SummerCamps extends CK_Controller {
         else 
         	$fileName = "ficha-medica-";
 
-        $this->loadView("summercamps/pdfMedicalFiles", $data);
+        $this->loadReportView("summercamps/pdfMedicalFiles", $data);
 
         $html = $this->output->get_output();
         pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
@@ -1736,7 +1730,8 @@ class SummerCamps extends CK_Controller {
     public function generatePDFWithStaffMedicalFiles($year, $summerCampId){
     	$this->load->plugin('mpdf');
     	$staff = $this->summercamp_model->getCampStaffAlphabetic($summerCampId);
-    	$staffT = array();
+    	$staffWithMedicalFile = array();
+    	$staffWithoutMedicalFile = array();
     	$medicalFiles = array();
     	$doctors=array();
     
@@ -1751,13 +1746,16 @@ class SummerCamps extends CK_Controller {
     			if (isset($tels[1]))
     				$doctor->setPhone2($tels[1]);
     			$doctors[] = $doctor;
-    			$staffT[] = $s;
+    			$staffWithMedicalFile[] = $s;
     		}
+    		else 
+    			$staffWithoutMedicalFile[] = $s;
     	}
     
     	$data['time'] = date('d-m-Y G:i:sa');
     
-    	$data["staff"] = $staffT;
+    	$data["staffWithMedicalFile"] = $staffWithMedicalFile;
+    	$data["staffWithoutMedicalFile"] = $staffWithoutMedicalFile;
     	$data["medicalFiles"] = $medicalFiles;
     	$data["doctors"] = $doctors;
     
@@ -1766,7 +1764,7 @@ class SummerCamps extends CK_Controller {
     	$fileName = "Fichas-Medicas-Equipe-".$data["summerCamp"]->getCampName();
     	
     
-    	$this->loadView("summercamps/pdfStaffMedicalFiles", $data);
+    	$this->loadReportView("summercamps/pdfStaffMedicalFiles", $data);
     
     	$html = $this->output->get_output();
     	pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
@@ -1798,7 +1796,7 @@ class SummerCamps extends CK_Controller {
         $data['type'] = "simples";
         $data["summerCamp"] = $this->summercamp_model->getSummerCampById($data["camp_id"]);
         
-        $this->loadView("summercamps/pdfMedicalFiles", $data);
+        $this->loadReportView("summercamps/pdfMedicalFiles", $data);
 
         $html = $this->output->get_output();
         

@@ -46,41 +46,11 @@
             }
 
             function geraAutorizacaoPDF(camp_id){
-            	var data = [];
-                var table = document.getElementById("tablebody");
-                var elements = document.getElementsByName('name');
-                var tablehead = document.getElementsByTagName("thead")[0];
-                var functions = document.getElementsByName('function');
-                var functionAction = null;
-                var j=0;
-
-                for (var i = 0, row; row = table.rows[i]; i++) {
-                    var data2 = []
-                    //Nome, retira pega o que esta entre um <> e outro <>
-                    functionAction = functions[i].getAttribute('id');
-
-                    if(functionAction == 2){
-                    	var person_id = elements[i].getAttribute('id');
-                    	j++;
-					    data2.push(person_id);
-                    	data.push(data2);
-                    }
-                }
-                if (i == 0) {
-                    alert('Não há dados para geração da planilha');
-                    return;
-                }
-                if(j==1){
-                	var type = "Simples";
-                }
-                else if(j>1) {
-                	var type = "Vários";
-                }
-                var dataToSend = JSON.stringify(data);
+				var type = "Vários";
             	
     			nomePadrao = "Autorização-de-Viagem-Monitores-Auxiliares";
                 
-        		post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFTripAuthorization', {name: nomePadrao, data: dataToSend, camp_id: camp_id, type: type});
+        		post('<?= $this->config->item('url_link'); ?>summercamps/generateStaffPDFTripAuthorization', {name: nomePadrao,camp_id: camp_id, type: type});
         	}
 
             function gerarLista() {

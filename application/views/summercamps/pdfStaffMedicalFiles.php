@@ -8,15 +8,15 @@
     </tr>
     <tr>
         <td align="center">
-            <p>Equipe: <?=$summerCamp->getCampName()?></p>
+            <h1>Equipe: <?=$summerCamp->getCampName()?></h1>
         </td>
     </tr>
 </table>
 <p style="page-break-before: always"></p>
 <?php
 } 
-for($i = 0; $i < count($staff); $i++) {
-    $s = $staff[$i];
+for($i = 0; $i < count($staffWithMedicalFile); $i++) {
+    $s = $staffWithMedicalFile[$i];
     $medicalFile = $medicalFiles[$i];
     $doctor = $doctors[$i];
     ?>
@@ -189,5 +189,18 @@ for($i = 0; $i < count($staff); $i++) {
         <p style="page-break-before: always"></p>    
     <?php
         }
-    }
-    ?>
+    }  if($staffWithoutMedicalFile!=null){?>
+    <tr>
+        <td align="center">
+       
+            	<h3><?= 'Lista de Pessoas sem Ficha Médica:'; ?></h3></td>
+    </tr>
+    <?php foreach($staffWithoutMedicalFile as $staff) {?>
+    <div class="row">
+		        <div class="col-lg-12 middle-content">
+		            <div class="row" align="justify">
+		                <p><?=$staff->fullname; ?></strong></p>
+		                </div>
+		                </div>
+		                </div>
+	<?php }} ?>
