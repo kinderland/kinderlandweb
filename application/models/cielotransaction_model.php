@@ -151,7 +151,8 @@
 		}
 		
 		public function getCapturedTransactionsByDonationType($type = null) {
-			$sql = "SELECT * FROM v_captured_transactions
+			$sql = "SELECT *,DATE_PART('DAY',date_updated) as day, DATE_PART('MONTH',date_updated) as month, 
+					DATE_PART('YEAR',date_updated) as year FROM v_captured_transactions
 					" . (($type !== null)? "WHERE donation_type = ?" : "") . "
 					ORDER BY date_updated";
 			

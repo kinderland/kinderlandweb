@@ -1143,7 +1143,7 @@ class Reports extends CK_Controller {
         
         $type = null;
         
-        if($donationChosen = 'Inscrição Colônia')
+        if($donationChosen = "Inscrição Colônia")
         	$type = 4;
         else if($donationChosen == "Avulsa")
         	$type = 1;
@@ -1324,7 +1324,7 @@ class Reports extends CK_Controller {
          $firstDay = strtotime($transactions -> day[0]);
          $lastDay = strtotime($transactions -> day[($transactions -> qtdDays) -1]);
                 
-         if(($start < $firstDay && $end < $firstDay) || ($start > $end) || ($start > $lastDay)) {
+         if(($end < $firstDay) || ($start > $end) || ($start > $lastDay)) {
 	         $dayArr = null;
 	         $valueDay = null;
 	         echo "Algo";
