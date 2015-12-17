@@ -229,7 +229,7 @@
                                 <th> <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> 6<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
                             </tr>
-                            <?php if(isset($room_occupation)){ ?>
+                           <?php if(isset($room_occupation)){ ?>
                                 <tr>
                                     <td align="center"><?=$room_occupation[0] ?></td>
                                     <td align="center"><?=$room_occupation[1] ?></td>
@@ -249,7 +249,7 @@
                                     <td>
                                     
                                 </tr>
-                            <?php } ?>
+                            <?php } ?> 
                         </table>
                     </div>
             

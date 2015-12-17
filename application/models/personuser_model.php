@@ -75,7 +75,6 @@ class personuser_model extends CK_Model {
 
     public function userLogin($login, $password) {
         $this->Logger->info("Running: " . __METHOD__);
-
         //Not using log to hide the salt and password from the log.
         $sql = "SELECT person_id,password FROM person_user WHERE login = ?";
         $rs = $this->executeRowsNoLog($this->db, $sql, array($login));

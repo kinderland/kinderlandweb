@@ -3,7 +3,11 @@
         <meta charset="UTF-8">
         <title>Colônia Kinderland</title>
 
+
 		<script>
+
+		
+		
 			function verifyOtherDiscountReason() {
 				var val = $("#discount_reason").val();
 				if (val == -2) {
@@ -208,7 +212,19 @@
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
-					
+					<form method="GET">
+                        <select name="ano_f" onchange="this.form.submit()" id="anos">
+
+                            <?php
+                            foreach ($years as $year) {
+                                $selected = "";
+                                if ($ano_escolhido == $year)
+                                    $selected = "selected";
+                                echo "<option $selected value='$year'>$year</option>";
+                            }
+                            ?>
+                        </select>
+                    </form>
                     <table class="table table-bordered table-striped" style="max-width: 800px; font-size:12px; display:block;" id="sortable-table">
                         <thead>
                             <tr>
@@ -221,6 +237,7 @@
                                 <th style="min-width: 80px; max-width: 70px"> Editar </th>
                             </tr>
                         </thead>
+                        
                         <tbody id="tablebody">
                             <?php
                             foreach ($colonists as $colonist) {
@@ -246,9 +263,7 @@
                             ?>
                         </tbody>
                     </table>
-                </div>
-            </div>
-        </div>
+
 		<div id="blanket" style="display:none;"></div>
 			<div id="popUpDiv" style="display:none;">
 				<table class="table table-bordered table-striped">
@@ -305,5 +320,8 @@
 					</tr>
 				</table>
 		</div>
+	</div>
+   </div>
+  </div>
     </body>
 </html>

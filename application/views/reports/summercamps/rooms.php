@@ -344,11 +344,11 @@
                     <input type="hidden" id="room" name="quarto" value = "<?= (isset($quarto)) ? $quarto : '' ?>" />
 
                     <br /><br />
-                    
-                     <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
+
+                    <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
                         <table>
                             <tr>
-                            	<th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
@@ -357,9 +357,31 @@
                                 <th> <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> 6<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
                             </tr>
-                            
+                           <?php if(isset($room_occupation)){ ?>
+                                <tr>
+                                    <td align="center"><?=$room_occupation[0] ?></td>
+                                    <td align="center"><?=$room_occupation[1] ?></td>
+                                    <td align="center"><?=$room_occupation[2] ?></td>
+                                    <td align="center"><?=$room_occupation[3] ?></td>
+                                    <td align="center"><?=$room_occupation[4] ?></td>
+                                    <td align="center"><?=$room_occupation[5] ?></td>
+                                    <td align="center"><?=$room_occupation[6] ?></td>
+                                    <td align="center"><?= $room_occupation[1]+
+                                            $room_occupation[2]+
+                                            $room_occupation[3]+
+                                            $room_occupation[4]+
+                                            $room_occupation[5]+
+                                            $room_occupation[6] ?>
+                                        <img src="<?= $this->config->item('assets') ?>images/kinderland/help.png" width="15" height="15"
+                                            title="Número de colonistas por quarto."/>
+                                    <td>
+                                    
+                                </tr>
+                            <?php } ?> 
                         </table>
 					</div>
+					
+					
                 </form>
             </div>
 

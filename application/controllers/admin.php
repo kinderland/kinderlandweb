@@ -257,7 +257,97 @@ class Admin extends CK_Controller {
         $this->loadReportView("admin/camps/validate_colonists", $data);
     }
 
+    
+    public function colonist_exclusion() {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = intval(date('Y'));
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    		else {
+    			$year = date('Y');
+    		}
+    
+    		$data['ano_escolhido'] = $year;
+    		$data['years'] = $years;
+    
+    		$shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
+    
+    		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
+    		$this->loadReportView("admin/camps/colonist_exclusion", $data);
+    }
+    
+    public function password() {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	
+    	
+    	$pass = $_POST['senha'];
+    	$id = $this->session->userdata("user_id");
+    	$person = $this->personuser_model->getUserById($id);
+    	$login = $person->getLogin();
+    	$colonistId = $_POST['colonist_id'];
+    	$summerCampId = $_POST['summer_camp_id'];
+    	$situation= $_POST['situation'];
+    	$cancel_reason = $_POST['cancel_reason'];
+    	$discount = $_POST['discount'];
+       	
+    	$userId = $this->personuser_model->userLogin($login,$pass);
+   
+    	 
+    	if($userId != null){
+    		
+    		$result = $this->summercamp_model->updateStatus($colonistId, $summerCampId, $situation, $discount, $cancel_reason);
+    		if($result!=null)
+    			echo "true";
+    		else 
+    			echo "false";
+    	}
+    	else
+    		echo "false";
+    		 
+   	}
+
+    
     public function setDiscount() {
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = intval(date('Y'));
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    	
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    		else {
+    			$year = date('Y');
+    		}
+    	
+    		$data['ano_escolhido'] = $year;
+    		$data['years'] = $years;
+    	
         $this->Logger->info("Running: " . __METHOD__);
         $data['colonists'] = $this->summercamp_model->getAllColonistsForDiscount();
         $data['discountReasons'] = $this->summercamp_model->getDefaultDiscountReasons();
