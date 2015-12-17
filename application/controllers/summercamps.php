@@ -1436,17 +1436,72 @@ class SummerCamps extends CK_Controller {
 
         echo "true";
     }
+    
+    public function generateStaffList(){
+    	$this->load->plugin('mpdf');
+    	
+    	$campId = $this->input->post('campId', TRUE);
+    	
+    	$summercamp = $this->summercamp_model->getSummerCampById($campId);
+    	
+    	$staff = $this->summercamp_model->getCampStaffAlphabetic($campId);
+    	$coordinator = array();
+    	$monitor = array();
+    	$doctor = null;
+    	
+    	$data ['nameFile'] = 'Lista da equipe '.$summercamp->getCampName();
+    	
+    	foreach($staff as $s){
+    		if($s->staff_function==1)
+    			$coordinator[] = $s;
+    		else if($s->staff_function==2)
+    			$monitor[]=$s;
+    		else if($s->staff_function==3)
+    			$doctor = $s;
+    	}
+    	
+    	$data['summercamp'] = $summercamp->getCampName();   	
+    	$data['coordinators'] = $coordinator;
+    	$data['monitors'] = $monitor;
+    	$data['doctor'] = $doctor;
+    	
+    	date_default_timezone_set('America/Sao_Paulo');
+    	$data['time'] = date('d-m-Y G:i:sa');
+    	
+    	
+    	$this->loadReportView("summercamps/staffList", $data);
+    	$html = $this->output->get_output();
+    	pdf($html, $data ['nameFile'] . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    	
+    }
 
     public function generatePDFWithColonistData() {
         $this->load->plugin('mpdf');
+        $summercampId = null;
+        $monitorInfo = null;
         $dataIn = $this->input->post('data', TRUE);
         $dataArray = json_decode($dataIn);
         $data['nameFile'] = $this->input->post('name', TRUE);
         $data['type'] = $this->input->post('type', TRUE);
-        if(($this->input->post('summercamp', TRUE)) != null)
-        	$data['summercamp'] = $this->input->post('summercamp', TRUE);
-        if(($this->input->post('room', TRUE)) != null)
-        	$data['room'] = $this->input->post('room', TRUE);
+        if(($this->input->post('summercamp', TRUE)) != null){
+        	$summercampId = $this->input->post('summercampId', TRUE);
+        	$summercamp = $this->input->post('summercamp', TRUE);
+        	$data['summercamp'] = $summercamp;
+        }
+        if(($this->input->post('room', TRUE)) != null){
+        	$room = $this->input->post('room', TRUE);
+        	$data['room'] = $room;
+        	
+        	if($summercampId!=null){
+        		if(($this->summercamp_model->getMonitorIdByRoom($summercampId,$room))!=null){
+        			$monitorId = $this->summercamp_model->getMonitorIdByRoom($summercampId,$room);
+        			$monitor = $this->person_model->getPersonById($monitorId->person_id);
+        			$data['monitor'] = $monitor->getFullname();
+        		}
+        	}
+        }
+        
+        $data['monitorInfo'] = $monitorId;
         $data['filtros'] = json_decode($this->input->post('filters', TRUE));
         date_default_timezone_set('America/Sao_Paulo');
         $data['time'] = date('d-m-Y G:i:sa');
@@ -1459,9 +1514,8 @@ class SummerCamps extends CK_Controller {
             $data['report'][$i]['responsable'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->responsable_id);
             $data['report'][$i]['father'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->father_id);
             $data['report'][$i]['document'] = $this -> colonist_model -> getColonist($data['report'][$i]['summercamp'] -> colonist_id);
-            if($this -> summercamp_model -> getSummerCampById($data['report'][$i]['summercamp'] -> camp_id)->isMiniCamp()) {
-            	$data['report'][$i]['minik'] = $this -> summercamp_model -> getMiniCampObs($data['report'][$i]['summercamp'] -> camp_id, $data['report'][$i]['summercamp'] -> colonist_id);
-            }
+            $data['report'][$i]['minik'] = $this -> summercamp_model -> getMiniCampObs($data['report'][$i]['summercamp'] -> camp_id, $data['report'][$i]['summercamp'] -> colonist_id);
+            
         }
         $this->loadReportView("reports/summercamps/pdf_colonist_info", $data);
        	$html = $this->output->get_output();
@@ -1497,21 +1551,27 @@ class SummerCamps extends CK_Controller {
     
     public function generateStaffPDFTripAuthorization() {
     	$this->load->plugin('mpdf');
-    	 
-    	if($this->input->post('data', TRUE) != null) {
-    		$dataIn = $this->input->post('data', TRUE);
-    		$dataArray = json_decode($dataIn);
-    		 
-    		 
-    		$staff = $this->person_model->getPersons($dataArray);
-    		 
-    		$data['staff'] = $staff;
-    		$data['nameFile'] = $this->input->post('name', TRUE);;
-    	}
+    	$staffT = array();
     	 
     	$data['type'] = $this->input->post('type', TRUE);
-    	$data['camp_id'] = $this->input->post('camp_id', TRUE);
-    	 
+    	$camp_id = $this->input->post('camp_id', TRUE);
+    	
+    	$staff = $this->summercamp_model->getCampStaffByFunction($camp_id,2);
+    	
+    	foreach($staff as $s){
+    		$staffT[] = $this->personuser_model->getUserById($s->person_id);
+    	}
+    	
+    	$summercamp = $this->summercamp_model->getSummerCampById($camp_id);
+    	
+    	$start = date("d/m/Y",strtotime($summercamp->getDateStart()));
+    	$end = date("d/m/Y",strtotime($summercamp->getDateFinish()));
+    	
+    	$data['staff'] = $staffT;
+    	$data['start'] = $start;
+    	$data['end'] = $end;  
+    	
+    	$data ['nameFile'] = 'Autorizações-Monitores-Auxiliares-'.$summercamp->getCampName();
     	 
     	$this->loadReportView("summercamps/staffPdfTripAuthorization", $data);
     	$html = $this->output->get_output();
@@ -1673,10 +1733,53 @@ class SummerCamps extends CK_Controller {
         else 
         	$fileName = "ficha-medica-";
 
-        $this->loadView("summercamps/pdfMedicalFiles", $data);
+        $this->loadReportView("summercamps/pdfMedicalFiles", $data);
 
         $html = $this->output->get_output();
         pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
+    }
+    
+    public function generatePDFWithStaffMedicalFiles($year, $summerCampId){
+    	$this->load->plugin('mpdf');
+    	$staff = $this->summercamp_model->getCampStaffAlphabetic($summerCampId);
+    	$staffWithMedicalFile = array();
+    	$staffWithoutMedicalFile = array();
+    	$medicalFiles = array();
+    	$doctors=array();
+    
+    	foreach($staff as $s){
+    		if ($this->summercamp_model->hasDocumentStaff($s->person_id, DOCUMENT_MEDICAL_FILE)){
+    			$mf = $this->medical_file_model->getStaffMedicalFile($s->person_id);
+    			$medicalFiles[] = $mf;
+    			$doctor = $this->person_model->getPersonById($mf->getDoctorId());
+    			$tels = $this->telephone_model->getTelephonesByPersonId($mf->getDoctorId());
+    			if (isset($tels[0]))
+    				$doctor->setPhone1($tels[0]);
+    			if (isset($tels[1]))
+    				$doctor->setPhone2($tels[1]);
+    			$doctors[] = $doctor;
+    			$staffWithMedicalFile[] = $s;
+    		}
+    		else 
+    			$staffWithoutMedicalFile[] = $s;
+    	}
+    
+    	$data['time'] = date('d-m-Y G:i:sa');
+    
+    	$data["staffWithMedicalFile"] = $staffWithMedicalFile;
+    	$data["staffWithoutMedicalFile"] = $staffWithoutMedicalFile;
+    	$data["medicalFiles"] = $medicalFiles;
+    	$data["doctors"] = $doctors;
+    
+    	$data["summerCamp"] = $this->summercamp_model->getSummerCampById($summerCampId);
+    
+    	$fileName = "Fichas-Medicas-Equipe-".$data["summerCamp"]->getCampName();
+    	
+    
+    	$this->loadReportView("summercamps/pdfStaffMedicalFiles", $data);
+    
+    	$html = $this->output->get_output();
+    	pdf($html, $fileName . "_" . date('d-m-Y_G:i:sa') . ".pdf");
     }
 
     public function colonistPDFMedicalFile(){
@@ -1705,7 +1808,7 @@ class SummerCamps extends CK_Controller {
         $data['type'] = "simples";
         $data["summerCamp"] = $this->summercamp_model->getSummerCampById($data["camp_id"]);
         
-        $this->loadView("summercamps/pdfMedicalFiles", $data);
+        $this->loadReportView("summercamps/pdfMedicalFiles", $data);
 
         $html = $this->output->get_output();
         

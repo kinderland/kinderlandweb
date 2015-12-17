@@ -1427,6 +1427,20 @@ class summercamp_model extends CK_Model {
         return $result;
     }
     
+    public function getCampStaffAlphabetic($summerCampId){
+    	$sql = "SELECT * FROM summer_camp_staff staff
+                INNER JOIN summer_camp_staff_function staff_f on staff_f.staff_function = staff.staff_function
+                INNER JOIN person p on p.person_id = staff.person_id
+                WHERE summer_camp_id = ?
+                ORDER BY staff.staff_function, p.fullname";
+    	$result = $this->executeRows($this->db, $sql, array(intval($summerCampId)));
+    
+    	if (!$result)
+    		return null;
+    
+    	return $result;
+    }
+    
     public function getCampStaffByFunction($summerCampId,$function){
     	$sql = "SELECT * FROM summer_camp_staff staff
                 INNER JOIN summer_camp_staff_function staff_f on staff_f.staff_function = staff.staff_function
@@ -1541,6 +1555,16 @@ class summercamp_model extends CK_Model {
 
         return $result;
 
+    }
+    public function getMonitorIdByRoom($summerCampId,$room){
+    	$sql = "SELECT * FROM summer_camp_staff WHERE summer_camp_id = ? AND room_number = ?";
+    	$result = $this->executeRow($this->db, $sql, array(intval($summerCampId),$room));
+    
+    	if (!$result)
+    		return null;
+    
+    	return $result;
+    
     }
 
 }

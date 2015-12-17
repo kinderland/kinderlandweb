@@ -14,6 +14,7 @@
 			$gender, $email, $address, $phone1, $phone2);
 
 			$this->login = $login;
+			$this->fullname = $fullname;
 			$this->cpf = $cpf;
 			$this->occupation = $occupation;
 			$this->userTypes = $userTypes;
@@ -44,6 +45,12 @@
 		}
 		public function getLogin(){
 			return $this->login;
+		}
+		public function setFullname($fullname){
+			$this->fullname = $fullname;
+		}
+		public function getFullname(){
+			return $this->fullname;
 		}
 
 		public function setCPF($cpf){

@@ -25,11 +25,15 @@
                 	<option value="<?= $this->config->item('url_link'); ?>reports/multiples_subscriptions">Inscrições Múltiplas</option>
                 	<?php } ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/rooms">Quartos</option>
+<<<<<<< HEAD
                 	<option value="<?php // $this->config->item('url_link'); ?>reports/staff">Equipe</option>
+=======
+                	<option value="<?php echo $this->config->item('url_link'); ?>reports/staff">Equipe</option>
+>>>>>>> 17e2137b09f08b4a2b3af8d320bf58a926fdf4f8
                 	 <?php if (in_array(SYSTEM_ADMIN, $permissions)){ ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/discounts">Descontos</option>
                 	<?php } ?>
-                	 <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
+                	 <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)|| in_array(COORDINATOR, $permissions)){ ?>
                 	<option value="<?= $this->config->item('url_link'); ?>reports/queue">Fila de Espera por Turma e Pavilhão</option>
                 	<?php } ?>
 

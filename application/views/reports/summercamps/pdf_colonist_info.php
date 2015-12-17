@@ -25,7 +25,14 @@
             <h1><?= $room ?></h1>
         </td>
      </tr>
-           <?php  } else if($type == "Listagem de Inscrições") {?>
+     <?php if($type == "Lista" && $monitorInfo!=null) { ?>
+     <tr>
+        <td align="center">
+        <br>
+            <h1><?php echo "Monitor: ".$monitor; ?></h1>
+        </td>
+     </tr>
+           <?php } } else if($type == "Listagem de Inscrições") {?>
       <tr>
       	<td align="center">
             <h1><?= $type ?></h1>
