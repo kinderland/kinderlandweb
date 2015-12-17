@@ -132,6 +132,7 @@
 	                        ?>
 	                    </select>
 	                    <br/>
+	                    <br/>
 	                    <div id="data" <?=(($periodo_escolhido=="Específico")?"":"style='display:none;'") ?>>
 	                    	<table border="0">
 	                    		<tr>
@@ -145,8 +146,8 @@
 	                    	</table>
 	                    	<br />
 	                    	
-	                    	<button class = "btn-btn-primary" onclick="this.form.submit()">Gerar Tabela</button>
 	                    </div>
+	                    <button class="btn btn-primary" onclick="this.form.submit()">Gerar Tabela</button>
 	                </form>
 	                <div class="counter"></div> <br>
 	                <?php if(isset($transactions)) {?>

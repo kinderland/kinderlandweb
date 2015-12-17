@@ -1093,7 +1093,7 @@ class Reports extends CK_Controller {
         
         $type = null;
         
-        if($donationChosen = "Inscrição Colônia")
+        if($donationChosen == "Inscrição Colônia")
         	$type = 4;
         else if($donationChosen == "Avulsa")
         	$type = 1;
@@ -1115,7 +1115,6 @@ class Reports extends CK_Controller {
         $days = $this -> cielotransaction_model -> countTotalDaysCapturedTransaction();
         
         $start = strval($days[0]->year)."-".strval($days[0]->month)."-".strval($days[0]->day);
-        
         $numDays = count($days);
         
         $end = strval($days[$numDays-1]->year + 1)."-".strval($days[$numDays-1]->month)."-".strval($days[$numDays-1]->day);     
@@ -1277,24 +1276,17 @@ class Reports extends CK_Controller {
          if(($end < $firstDay) || ($start > $end) || ($start > $lastDay)) {
 	         $dayArr = null;
 	         $valueDay = null;
-	         echo "Algo";
-	         echo "<br>";
-	         echo $initialPeriodChosen;
-	         echo "<br>";
-	         echo $finalPeriodChosen;
+	         $info = array();
+	         $data['transactions'] = $info;
          }
          else {
-         		echo $initialPeriodChosen;
-         		echo "<br>";
-                echo $finalPeriodChosen;	
 	         if($start < $firstDay) {
-	         	$initialPeriodChosen = date($firstDay);
+	         	$initialPeriodChosen = date("Y-m-d",$firstDay);
 	         }
                 	
              if($end > $lastDay) {
-                $finalPeriodChosen = date($lastDay);
+                $finalPeriodChosen = date("Y-m-d",$lastDay);
              }
-                	
 	         for($i = 0; $i < $transactions -> qtdDays; $i++) {
 	             if($initialPeriodChosen == $transactions -> day[$i])
 	             break;
@@ -1316,21 +1308,21 @@ class Reports extends CK_Controller {
 	               $valueDay[$l] = $transactions -> valueDay[$k];
 	               $l++;
 	         }
-         }
          
-         $info = array();    
-         
-         $m = 0;
-         
-         for($i = 0; $i < $l; $i++) {
-         	$obj = new stdClass();
-         	$obj -> day = $dayArr[$i];
-         	$obj -> valueDay = $valueDay[$i];
-         	$info[$m] = $obj;
-         	$m++;
-         }
-         
-         $data['transactions'] = $info;
+	         $info = array();    
+	         
+	         $m = 0;
+	         
+	         for($i = 0; $i < $l; $i++) {
+	         	$obj = new stdClass();
+	         	$obj -> day = $dayArr[$i];
+	         	$obj -> valueDay = $valueDay[$i];
+	         	$info[$m] = $obj;
+	         	$m++;
+	         }
+	       
+	         $data['transactions'] = $info;
+	        }
         }
 
 

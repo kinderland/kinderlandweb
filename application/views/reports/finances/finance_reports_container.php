@@ -19,7 +19,7 @@
                    		
                     	<option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>
                     	<option value="<?= $this->config->item('url_link'); ?>reports/failed_transactions">Transações Cielo sem sucesso</option>
-                    	<!-- <option value="<?php //echo $this->config->item('url_link'); ?>reports/transactions_expected">Cielo a Receber</option> -->
+                    	<option value="<?php echo $this->config->item('url_link'); ?>reports/transactions_expected">Cielo a Receber</option> 
                 	<?php } ?>
                 </select>
             </div>
