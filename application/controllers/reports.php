@@ -165,6 +165,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = intval(date('Y'));
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -197,6 +198,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -293,6 +295,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -358,6 +361,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -427,6 +431,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -459,6 +464,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -542,6 +548,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -583,6 +590,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -615,6 +623,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -647,6 +656,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -700,6 +710,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -732,6 +743,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -794,6 +806,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -863,6 +876,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -1017,6 +1031,7 @@ class Reports extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -1441,6 +1456,7 @@ class Reports extends CK_Controller {
     	$start = 2015;
     	$date = date('Y');
     	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	$end = $date;
     	while ($campsByYear != null) {
     		$end = $date;
     		$date++;
@@ -1509,6 +1525,7 @@ class Reports extends CK_Controller {
     	$start = 2015;
     	$date = date('Y');
     	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	$end = $date;
     	while ($campsByYear != null) {
     		$end = $date;
     		$date++;

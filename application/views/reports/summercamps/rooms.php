@@ -314,7 +314,7 @@
             <div class = "row">
                 <div class="col-lg-12">
                      <form id="form_selection" method="GET">
-                    <select name="ano_f" id="anos">
+                    <select name="ano_f" onchange="this.form.submit()" id="anos">
                 
                         <?php
                         foreach ( $years as $year ) {

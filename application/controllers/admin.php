@@ -61,6 +61,7 @@ class Admin extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -183,6 +184,7 @@ class Admin extends CK_Controller {
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
         while ($campsByYear != null) {
             $end = $date;
             $date++;
@@ -265,6 +267,7 @@ class Admin extends CK_Controller {
     	$start = 2015;
     	$date = intval(date('Y'));
     	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	$end = $date;
     	while ($campsByYear != null) {
     		$end = $date;
     		$date++;
@@ -328,6 +331,7 @@ class Admin extends CK_Controller {
     	$start = 2015;
     	$date = intval(date('Y'));
     	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	$end = $date;
     	while ($campsByYear != null) {
     		$end = $date;
     		$date++;
@@ -393,17 +397,19 @@ class Admin extends CK_Controller {
             $data["year_selected"] = $yearChosen;
             if (isset($_POST['camp_id'])) {
                 $selectedCamp = $this->summercamp_model->getSummerCampById($_POST['camp_id']);
-                $data["camp_selected_id"] = $selectedCamp->getCampId();
-                $data["camp_selected_name"] = $selectedCamp->getCampName();
-                $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
-                $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
-
-                $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
-                $data["camp_details"] = $campSubscriptions;
-
-                $subscriptions = $this->summercamp_model->getAllColonistsWithQueueNumberBySummerCamp($selectedCamp->getCampId());
-                if ($subscriptions != null)
-                    $data["subscriptions"] = $subscriptions;
+                if($selectedCamp != null){
+	                $data["camp_selected_id"] = $selectedCamp->getCampId();
+	                $data["camp_selected_name"] = $selectedCamp->getCampName();
+	                $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
+	                $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
+	
+	                $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
+	                $data["camp_details"] = $campSubscriptions;
+	
+	                $subscriptions = $this->summercamp_model->getAllColonistsWithQueueNumberBySummerCamp($selectedCamp->getCampId());
+	                if ($subscriptions != null)
+	                    $data["subscriptions"] = $subscriptions;
+                }
             }
 
             $allCamps = $this->summercamp_model->getAllSummerCampsByYear($yearChosen);
@@ -411,6 +417,7 @@ class Admin extends CK_Controller {
         } else {
             $allCamps = $this->summercamp_model->getAllSummerCampsByYear(intval(date('Y')));
             $data["camps"] = $allCamps;
+            $data["year_selected"] = date('Y');
         }
 
         $this->loadReportView("admin/camps/payment_liberation", $data);
@@ -447,22 +454,25 @@ class Admin extends CK_Controller {
             $data["year_selected"] = $yearChosen;
             if (isset($_POST['camp_id'])) {
                 $selectedCamp = $this->summercamp_model->getSummerCampById($_POST['camp_id']);
-                $data["camp_selected_id"] = $selectedCamp->getCampId();
-                $data["camp_selected_name"] = $selectedCamp->getCampName();
-                $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
-                $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
-
-                $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
-                $data["camp_details"] = $campSubscriptions;
-
-                $subscriptions = $this->summercamp_model->getAllColonistsWaitingPaymentBySummerCamp($selectedCamp->getCampId());
-                if ($subscriptions != null)
-                    $data["subscriptions"] = $subscriptions;
+                if($selectedCamp != null) {
+	                $data["camp_selected_id"] = $selectedCamp->getCampId();
+	                $data["camp_selected_name"] = $selectedCamp->getCampName();
+	                $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
+	                $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
+	
+	                $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
+	                $data["camp_details"] = $campSubscriptions;
+	
+	                $subscriptions = $this->summercamp_model->getAllColonistsWaitingPaymentBySummerCamp($selectedCamp->getCampId());
+	                if ($subscriptions != null)
+	                    $data["subscriptions"] = $subscriptions;
+                }
             }
 
             $allCamps = $this->summercamp_model->getAllSummerCampsByYear($yearChosen);
             $data["camps"] = $allCamps;
         } else {
+        	$data["year_selected"] = date('Y');
             $allCamps = $this->summercamp_model->getAllSummerCampsByYear(intval(date('Y')));
             $data["camps"] = $allCamps;
         }
