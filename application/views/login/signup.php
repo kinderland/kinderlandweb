@@ -37,8 +37,8 @@
         }
 
         var cpfNoMask = cpf.value.replace(".", "");
-        cpfNoMask = cpfNoMask.replace(".","");
-        cpfNoMask = cpfNoMask.replace("-","");
+        cpfNoMask = cpfNoMask.replace(".", "");
+        cpfNoMask = cpfNoMask.replace("-", "");
 
         $.get(
                 "<?= $this->config->item('url_link') ?>login/checkExistingEmail?email=" + $("#email").val(),
@@ -59,39 +59,29 @@
                     }
                     if (passErr && emailErr && cpfExistingErr) {
                         alert(msgGeneral + '\n\n' + msgExistingCPF + '\n' + msgEmail + '\n' + msgPass);
-                    }
-                    else if (passErr && emailErr && cpfInvalidErr) {
+                    } else if (passErr && emailErr && cpfInvalidErr) {
                         alert(msgGeneral + '\n\n' + msgInvalidCPF + '\n' + msgEmail + '\n' + msgPass);
-                    }
-                    else if (emailErr && cpfExistingErr) {
+                    } else if (emailErr && cpfExistingErr) {
                         alert(msgGeneral + '\n\n' + msgExistingCPF + '\n' + msgEmail);
-                    }
-                    else if (passErr && cpfExistingErr) {
+                    } else if (passErr && cpfExistingErr) {
                         alert(msgGeneral + '\n\n' + msgExistingCPF + '\n' + msgPass);
-                    }
-                    else if (passErr && emailErr) {
+                    } else if (passErr && emailErr) {
                         alert(msgGeneral + '\n\n' + msgEmail + '\n' + msgPass);
-                    }
-                    else if (passErr && cpfInvalidErr) {
+                    } else if (passErr && cpfInvalidErr) {
                         alert(msgGeneral + '\n\n' + msgInvalidCPF + '\n' + msgPass);
-                    }
-                    else if (emailErr && cpfInvalidErr) {
+                    } else if (emailErr && cpfInvalidErr) {
                         alert(msgGeneral + '\n\n' + msgInvalidCPF + '\n' + msgEmail);
-                    }
-                    else if (cpfInvalidErr) {
+                    } else if (cpfInvalidErr) {
                         alert(msgInvalidCPF);
-                    }
-                    else if (passErr) {
+                    } else if (passErr) {
                         alert(msgPass);
-                    }
-                    else if (emailErr) {
+                    } else if (emailErr) {
                         alert(msgEmail);
-                    }
-                    else if (cpfExistingErr) {
+                    } else if (cpfExistingErr) {
                         alert(msgExistingCPF);
                     }
                 });
-        
+
 //        cpf.value = cpfNoMask;
         $("#signup_form").submit();
     }
@@ -132,8 +122,8 @@
     /* tirado diretamente do site da receita federal */
     function TestaCPF(strCPF) {
         var cpf = strCPF.replace(".", "");
-        cpf = cpf.replace(".","");
-        cpf = cpf.replace("-","");
+        cpf = cpf.replace(".", "");
+        cpf = cpf.replace("-", "");
         var Soma;
         var Resto;
         Soma = 0;
@@ -144,7 +134,8 @@
                 cpf == "88888888888" || cpf == "99999999999")
             return false;
         for (i = 1; i <= 9; i++)
-            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);cpf
+            Soma = Soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+        cpf
         Resto = (Soma * 10) % 11;
         if ((Resto == 10) || (Resto == 11))
             Resto = 0;
@@ -174,8 +165,7 @@
                                 alert("Este CPF já está cadastrado.");
                         });
                 return true;
-            }
-            else {
+            } else {
                 cpfCheck.style.backgroundColor = "#F78D8D";
                 alert("Este CPF não é válido.");
                 return false;
@@ -189,8 +179,7 @@
         confirm_email.onchange = function () {
             if (email.value === confirm_email.value) {
                 confirm_email.style.backgroundColor = "#FFFFFF";
-            }
-            else {
+            } else {
                 confirm_email.style.backgroundColor = "#F78D8D";
                 alert("E-mail e confirmação de e-mail não estão iguais. Favor verificar.");
             }
@@ -203,8 +192,7 @@
         confirm_password.onchange = function () {
             if (password.value === confirm_password.value) {
                 confirm_password.style.backgroundColor = "#FFFFFF";
-            }
-            else {
+            } else {
                 confirm_password.style.backgroundColor = "#F78D8D";
                 alert("Senha e confirmação de senha não estão iguais. Favor verificar.");
                 //$("#confirm_password > div").attr("class", "has-error");
@@ -232,16 +220,16 @@
 
     $(document).ready(function ($) {
         var SPMaskBehavior = function (val) {
-          return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
         },
-        spOptions = {
-          onKeyPress: function(val, e, field, options) {
-              field.mask(SPMaskBehavior.apply({}, arguments), options);
-            },
-          onChange: function(val, e, field, options) {
-              field.mask(SPMaskBehavior.apply({}, arguments), options);
-          }
-        };
+                spOptions = {
+                    onKeyPress: function (val, e, field, options) {
+                        field.mask(SPMaskBehavior.apply({}, arguments), options);
+                    },
+                    onChange: function (val, e, field, options) {
+                        field.mask(SPMaskBehavior.apply({}, arguments), options);
+                    }
+                };
         $(".phone").mask(SPMaskBehavior, spOptions);
         $("#cep").mask("00000-000");
         $("#cpf").mask("000.000.000-00");
@@ -267,10 +255,12 @@
                                name="fullname" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['fullname'])) {
-    echo $_POST['fullname'];
-} ?>"/>
-
+                               value="
+                               <?php
+                               if (!empty($_POST['fullname'])) {
+                                   echo $_POST['fullname'];
+                               }
+                               ?>"/>
                     </div>
 
                     <label for="cpf" class="col-lg-1 control-label"> CPF*: </label>
@@ -279,9 +269,11 @@
                                name="cpf" maxlength="11" onkeypress="return validateNumberInput(event);" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['cpf'])) {
-    echo $_POST['cpf'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['cpf'])) {
+                                   echo $_POST['cpf'];
+                               }
+                               ?>"/>
                         <script type="text/javascript">
                             window.onload = funcCpf();
                         </script>
@@ -293,9 +285,9 @@
                         <select  class="form-control" id="gender" name="gender" >
                             <option value="" selected>-- Selecione --</option>
                             <option value="M"
-<?php if (!empty($_POST['gender']) && ($_POST['gender'] == "M")) echo "selected" ?> >Masculino</option>
+                                    <?php if (!empty($_POST['gender']) && ($_POST['gender'] == "M")) echo "selected" ?> >Masculino</option>
                             <option value="F"
-<?php if (!empty($_POST['gender']) && ($_POST['gender'] == "F")) echo "selected" ?>>Feminino</option>
+                                    <?php if (!empty($_POST['gender']) && ($_POST['gender'] == "F")) echo "selected" ?>>Feminino</option>
                         </select>
                     </div>
                 </div>
@@ -309,9 +301,11 @@
                                name="email" required title ="Favor incluir '@' e '.' ."
                                oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['email'])) {
-    echo $_POST['email'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['email'])) {
+                                   echo $_POST['email'];
+                               }
+                               ?>"/>
                         <script type="text/javascript">
                             window.onload = funcExistingEmail();
                         </script>
@@ -323,9 +317,11 @@
                                name="confirm_email" required title ="Favor incluir '@'' e '.' ."
                                oninvalid="this.setCustomValidity('Este campo requer um endereço de email.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['confirm_email'])) {
-    echo $_POST['confirm_email'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['confirm_email'])) {
+                                   echo $_POST['confirm_email'];
+                               }
+                               ?>"/>
                         <script type="text/javascript">
                             window.onload = funcEmail();
                         </script>
@@ -350,29 +346,35 @@
                                name="street" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['street'])) {
-    echo $_POST['street'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['street'])) {
+                                   echo $_POST['street'];
+                               }
+                               ?>"/>
                     </div>
 
                     <label for="number" class="col-lg-1 control-label"> Número: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Número"
-                               name="number" onkeypress="return validateLetterAndNumberInput(event);" 
+                               name="number" onkeypress="return validateLetterAndNumberInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['number'])) {
-    echo $_POST['number'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['number'])) {
+                                   echo $_POST['number'];
+                               }
+                               ?>"/>
                     </div>
 
                     <label for="complement" class="col-lg-2 control-label"> Complemento: </label>
                     <div class="col-lg-2">
                         <input type="text" class="form-control" placeholder="Complemento"
                                name="complement"
-                               value="<?php if (!empty($_POST['complement'])) {
-    echo $_POST['complement'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['complement'])) {
+                                   echo $_POST['complement'];
+                               }
+                               ?>"/>
                     </div>
                 </div>
             </div>
@@ -382,12 +384,14 @@
                     <label for="city" class="col-lg-1 control-label"> Cidade: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Cidade"
-                               name="city" onkeypress="return validateLetterInput(event);" 
+                               name="city" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['city'])) {
-    echo $_POST['city'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['city'])) {
+                                   echo $_POST['city'];
+                               }
+                               ?>"/>
                     </div>
 
                     <label for="cep" class="col-lg-1 control-label"> CEP: </label>
@@ -397,17 +401,21 @@
                                pattern=".{8,}" id="cep"
                                oninvalid="this.setCustomValidity('O CEP precisa ter 8 dígitos.')"
                                oninput="setCustomValidity('')" onblur="maskCEP(this)"
-                               value="<?php if (!empty($_POST['cep'])) {
-    echo $_POST['cep'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['cep'])) {
+                                   echo $_POST['cep'];
+                               }
+                               ?>"/>
                     </div>
                     <label for="neighborhood" class="col-lg-1 control-label"> Bairro: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control" placeholder="Bairro"
                                name="neighborhood" onkeypress="return validateLetterInput(event);"
-                               value="<?php if (!empty($_POST['neighborhood'])) {
-    echo $_POST['neighborhood'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['neighborhood'])) {
+                                   echo $_POST['neighborhood'];
+                               }
+                               ?>"/>
                     </div>
                 </div>
             </div>
@@ -420,18 +428,22 @@
                                name="phone1" id="phone1" maxlength="25" required onkeypress="return validateNumberInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               value="<?php if (!empty($_POST['phone1'])) {
-    echo $_POST['phone1'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['phone1'])) {
+                                   echo $_POST['phone1'];
+                               }
+                               ?>"/>
                     </div>
 
                     <label for="phone2" class="col-lg-1 control-label"> Telefone Secundário: </label>
                     <div class="col-lg-3">
                         <input type="text" class="form-control phone" placeholder="(ddd) Telefone secundário"
                                name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
-                               value="<?php if (!empty($_POST['phone2'])) {
-    echo $_POST['phone2'];
-} ?>"/>
+                               value="<?php
+                               if (!empty($_POST['phone2'])) {
+                                   echo $_POST['phone2'];
+                               }
+                               ?>"/>
                     </div>
 
                     <label for="uf" class="col-lg-1 control-label"> Estado*: </label>

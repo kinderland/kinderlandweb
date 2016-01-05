@@ -2,3 +2,4 @@ application/logs/*
 application/config/*
 application/nbproject/*
 /nbproject/private/
+/PhpTeste/nbproject/private/
