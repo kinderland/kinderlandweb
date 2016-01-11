@@ -64,7 +64,13 @@
         </div>
         <h3>Eventos</h3>
         <div>
-
+        	<a href="<?= $this->config->item('url_link'); ?>events/admin">
+                Administração
+            </a>
+            <br />
+            <a href="<?= $this->config->item('url_link'); ?>events/event_reports"> 
+                Relatórios
+            </a>  
         </div>
         <h3>Financeiro</h3>
         <div>

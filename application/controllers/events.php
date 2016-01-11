@@ -20,6 +20,14 @@ class Events extends CK_Controller {
 		$this->donation_model->setLogger($this->Logger);
 		$this->eventsubscription_model->setLogger($this->Logger);
 	}
+	
+	public function admin() {
+		$this->loadView("event/event_admin_container");
+	}
+	
+	public function event_reports(){
+		$this->loadView("event/event_reports_container");
+	}
 
 	public function index(){
 		$this->Logger->info("Starting " . __METHOD__);
@@ -268,7 +276,7 @@ class Events extends CK_Controller {
 	public function reportPanel(){
 		$this->Logger->info("Starting " . __METHOD__);
 		$data = array();
-		$this->loadView('event/report_panel', $data);
+		$this->loadReportView('event/report_panel', $data);
 	}
 
 	/*
@@ -312,7 +320,7 @@ class Events extends CK_Controller {
 	
 	public function completeEvent(){
 		$this->Logger->info("Starting " . __METHOD__);
-
+		
 		$event_name = $this -> input -> post('event_name', TRUE);
 		$description = $this -> input -> post('description', TRUE);
 		$date_start = $this -> input -> post('date_start', TRUE);
@@ -332,6 +340,7 @@ class Events extends CK_Controller {
 		$associated_discount=$this -> input -> post("associated_discount", TRUE);
 		$enabled=$this -> input -> post("enabled", TRUE);
 		$errors = array();
+	
 		
 		if($event_name === "")
 			$errors[] = "O campo nome é obrigatório";			
@@ -401,6 +410,11 @@ class Events extends CK_Controller {
 					$errors[] = "Os pagamentos de numero".($i+1)." e ".($j+1)." se sobrepoem";
 				}
 				
+				$payment_date_start[$i] = explode("/",$payment_date_start[$i]);
+				$payment_date_start[$i] = strval($payment_date_start[$i][2])."-".strval($payment_date_start[$i][1])."-".strval($payment_date_start[$i][0]);
+				
+				$payment_date_end[$i] = explode("/",$payment_date_end[$i]);
+				$payment_date_end[$i] = strval($payment_date_end[$i][2])."-".strval($payment_date_end[$i][1])."-".strval($payment_date_end[$i][0]);
 					
 				$payments[] = array(
 					"payment_date_start" => $payment_date_start[$i],
@@ -427,6 +441,16 @@ class Events extends CK_Controller {
 					$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
 				}
 				
+				for($i=0;$i<count($full_price);$i++){
+					
+					$payment_date_start[$i] = explode("/",$payment_date_start[$i]);
+					$payment_date_start[$i] = strval($payment_date_start[$i][2])."-".strval($payment_date_start[$i][1])."-".strval($payment_date_start[$i][0]);
+					
+					$payment_date_end[$i] = explode("/",$payment_date_end[$i]);
+					$payment_date_end[$i] = strval($payment_date_end[$i][2])."-".strval($payment_date_end[$i][1])."-".strval($payment_date_end[$i][0]);
+					
+				}
+				
 			$payments[] = array(
 				"payment_date_start" => $payment_date_start,
 				"payment_date_end"=> $payment_date_end,		
@@ -437,6 +461,24 @@ class Events extends CK_Controller {
 				"associated_discount"=>$associated_discount/100,			
 			);			
 		}	
+		
+		$date_start = explode("/",$date_start);
+		$date_start = strval($date_start[2])."-".strval($date_start[1])."-".strval($date_start[0]);
+		
+		$date_finish = explode("/",$date_finish);
+		$date_finish = strval($date_finish[2])."-".strval($date_finish[1])."-".strval($date_finish[0]);
+		
+		$date_start_show = explode("/",$date_start_show);
+		$date_start_show = strval($date_start_show[2])."-".strval($date_start_show[1])."-".strval($date_start_show[0]);
+		
+		$date_finish_show = explode("/",$date_finish_show);
+		$date_finish_show = strval($date_finish_show[2])."-".strval($date_finish_show[1])."-".strval($date_finish_show[0]);
+				
+		$this->Logger->info($date_start);
+		$this->Logger->info($date_finish);
+		$this->Logger->info($date_start_show);
+		$this->Logger->info($date_finish_show);
+		
 		if(count($errors) > 0)
 			return $this->eventCreate($errors,$event_name,$description,
 			$date_start,$date_finish,$date_start_show,$date_finish_show,$capacity_male,$capacity_female,$capacity_nonsleeper,$payments);		
@@ -446,8 +488,8 @@ class Events extends CK_Controller {
 			$this->Logger->info("Inserting new event");
 			$this->generic_model->startTransaction();
 			
-			$eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, 
-				$date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female,$capacity_nonsleeper);
+			$eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start,$date_finish, 
+				$date_start_show,$date_finish_show, $enabled, $capacity_male, $capacity_female,$capacity_nonsleeper);
 			
 			foreach($payments as $payment){
 				$this->event_model->insertNewPaymentPeriod($eventId,$payment["payment_date_start"],$payment["payment_date_end"],$payment["full_price"],$payment["middle_price"],
@@ -456,13 +498,15 @@ class Events extends CK_Controller {
 			
 			$this->generic_model->commitTransaction();
 			$this->Logger->info("New event successfully inserted");
-			redirect("events/manageEvents");
+			echo "<script>alert('Evento criado com sucesso!');opener.location.reload(); window.close();</script>";
+			//redirect("events/manageEvents");
 
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to insert new event");
 			$this->generic_model->rollbackTransaction();
 			$data['error'] = true;
-			$this->loadView('event/event_create', $data);
+			
+			$this->loadReportView('event/event_create', $data);
 		}
 	}
 
@@ -486,17 +530,19 @@ class Events extends CK_Controller {
         $data["events"] = $eventsToScreen;
 	
         
-        $this -> loadView("event/manage", $data);
+        $this -> loadReportView("event/manage", $data);
     }
     
     public function toggleEnable($eventId){
     	$event = $this->event_model->getEventById($eventId);
 		$payments = $this->event_model->getEventPaymentPeriods($event->getEventId());
 		$event->setIsValid($payments);
-		if($event->getIsValid())
-			echo $this->event_model->toggleEventEnable($eventId);
-		else
-			echo "0";
+		
+        if($event->getIsValid())
+            echo $this->event_model->toggleEventEnable($eventId);
+        else
+            echo "0";
+		
     }
 
 }

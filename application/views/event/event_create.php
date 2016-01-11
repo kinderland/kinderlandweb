@@ -1,3 +1,26 @@
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Colônia Kinderland</title>
+
+        <link href="<?= $this->config->item('assets'); ?>css/basic.css" rel="stylesheet" />
+        <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
+
+
 <link href="<?=$this->config->item('assets');?>css/datepicker.css" rel="stylesheet" />
 <link rel="text/javascript" href="<?=$this->config->item('assets');?>js/datepicker.less.js" />
 
@@ -19,8 +42,9 @@ function addTableLine(linhaAAdicionar){
 
 function alertRequiredFields(){
 	var error = "";
-	if(document.getElementsByName("date_start")[0].value == "")
+	if(document.getElementsByName("date_start")[0].value == ""){
 		error = error.concat("Data de ínicio do periodo do evento\n");
+	}
 	if(document.getElementsByName("date_finish")[0].value == "")
 		error = error.concat("Data de fim do periodo do evento\n");
 	if(document.getElementsByName("date_start_show")[0].value == "")
@@ -49,16 +73,6 @@ function datepickers(){
 	$(".datepickers").datepicker("option", "dateFormat", "dd/mm/yy");	
 }
 
-$(document).ready(function(){
-	datepickers();
-
-	<?php foreach($payments as $payment){ ?>
-		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?=Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?=Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?=$payment["full_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 6-17" name="middle_price[]" id="middle_price" value="<?=$payment["middle_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 0-5" name="children_price[]" id="children_price" value="<?=$payment["children_price"]?>"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_discount[]" id="associated_discount" value="0" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
-	<?php } ?> 
-	
-	
-});
-
 var string = "";
 
 <?php foreach($errors as $error){
@@ -70,7 +84,19 @@ if(string !== ""){
 }
 
 </script>
+</head>
+<body>
+<script>
+$(document).ready(function (){
+	datepickers();
 
+	<?php foreach($payments as $payment){ ?>
+		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?=Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?=Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?=$payment["full_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 6-17" name="middle_price[]" id="middle_price" value="<?=$payment["middle_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 0-5" name="children_price[]" id="children_price" value="<?=$payment["children_price"]?>"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_discount[]" id="associated_discount" value="0" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
+	<?php } ?> 
+	
+	
+});
+</script>
 <form name="event_form" onsubmit="alertRequiredFields()" method="POST" action="<?=$this->config->item('url_link')?>events/completeEvent" id="event_form">
 	<div class="row">
 		<div class="col-lg-12 middle-content">
@@ -183,9 +209,11 @@ if(string !== ""){
 		<div class="col-lg-10">
 			<input type="hidden" name="enabled" id="enabled" value="0" />
 			<button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
-				<a href="<?=$this->config->item('url_link')?>events/index"><button  type="button" class="btn btn-warning"
-					onClick="history.go(-1);return true;">Voltar</button></a>
+				<a href="<?=$this->config->item('url_link')?>events/index"><button  type="button" class="btn btn-danger"
+					onClick="window.close()">Fechar</button></a>
 		</div>
 	</div>
 			
 </form>
+</body>
+</html>

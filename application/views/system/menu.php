@@ -21,17 +21,17 @@ function hasPermission($permissions, $permissionRequested) {
         <!-- end logo -->
 
         <div class="clear"></div>
-        <div class="row">
-            <center><h2> Bem <?= ($gender == "M") ? "vindo" : "vinda" ?>, <?= $fullname ?>.</h2></center>
+        <div class="row" >
+            <center><h1> Bem <?= ($gender == "M") ? "vindo" : "vinda" ?>, <?= $fullname ?>.</h1></center>
             <br />
 
             <!--TO DO: Completar hrefs com os links para as devidas chamadas quando estiverem prontas-->
 
             <?php if (hasPermission($permissions, COMMON_USER)) { ?>
                 <div class="row">
-                    <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
+                    <div  class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
                         <a href="<?= $this->config->item('url_link'); ?>user/menu">
-                            <button class="btn btn-primary" style="margin: 0px auto; width: 100%; ">Usuário comum</button>
+                            <button  class="btn btn-primary" style="margin: auto; width: 100%; ">Usuário comum</button>
                         </a>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ function hasPermission($permissions, $permissionRequested) {
                 <div class="row">
                     <div class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
                         <a href="<?= $this->config->item('url_link'); ?>user/admin">
-                            <button class="btn btn-primary" style="margin: 0px auto; width: 100%">Painel Administrativo</button>
+                            <button class="btn btn-primary " style="margin: 0px auto; width: 100%">Painel Administrativo</button>
                         </a>
                     </div>
                 </div>

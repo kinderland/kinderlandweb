@@ -1,3 +1,38 @@
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Colônia Kinderland</title>
+
+<link href="<?= $this->config->item('assets'); ?>css/basic.css"
+	rel="stylesheet" />
+<!--<link href="<?= $this->config->item('assets'); ?>css/old/screen.css" rel="stylesheet" />-->
+<link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css"
+	rel="stylesheet" />
+<link rel="stylesheet"
+	href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
+<link rel="stylesheet"
+	href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
+<link rel="stylesheet"
+	href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
+<script type="text/javascript"
+	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+
 <script>$( document ).ready(function() {
   $("[name='my-checkbox']").bootstrapSwitch();
   $("[name='my-checkbox']").each(function( index ) {
@@ -8,7 +43,7 @@
     var string = "<?=$this->config->item("url_link")?>events/toggleEnable/".concat($(this).attr("id"));
     var recarrega = "<?=$this->config->item("url_link")?>events/manageEvents/";
     $.post( string ).done(function( data ) {
-    	if(data == 1)
+        if(data == 1)
 		    alert( "Evento modificado com sucesso" );
 		else{
 			alert( "Problema ao modificar o estado do evento" );
@@ -18,12 +53,13 @@
   });
 });
 </script>
-
+</head>
+<body>
 <div class="row">
-    <?php require_once APPPATH.'views/include/common_user_left_menu.php' ?>
+    <?php // require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
-        <a href="<?=$this->config->item("url_link")?>events/eventCreate"><button id="create" class="btn btn-default"  value="Criar novo evento" >Criar novo evento</button></a>
-
+        <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?=$this->config->item("url_link")?>events/eventCreate','dd'); return false;" href=""><button id="create" class="btn btn-primary"  value="Criar novo evento" >Criar novo evento</button></a>
+<br /><br />
 		<?php 
 			if(isset($events) && count($events) > 0) {
 			    ?>
@@ -31,7 +67,8 @@
         <?php
             	foreach($events as $event) {
 		?><tr>
-		<td><a href="<?=$this->config->item("url_link")?>events/info/<?=$event->getEventId()?>"><?=$event->getEventName();?></a></td>
+		<!-- <td><a href="<?php //$this->config->item("url_link")?>events/info/<?php //$event->getEventId()?>"><?php //$event->getEventName();?></a></td> -->
+		<td><?=$event->getEventName();?></td>
         <td><?= date_format(date_create($event->getDateStart()), 'd/m/y');?> </td>
         <td><?= date_format(date_create($event->getDateFinish()), 'd/m/y')?> </td>
         <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$event->getEventId()?>" 
@@ -53,3 +90,5 @@
     </div>
 	</div>
 </div>
+</body>
+</html>
