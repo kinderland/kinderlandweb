@@ -7,11 +7,13 @@ class Reports extends CK_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->helper('url');
+        $this->load->model('person_model');
         $this->load->model('personuser_model');
         $this->load->model('summercamp_model');
         $this->load->model('cielotransaction_model');
         $this->load->model('donation_model');
         $this->load->model('campaign_model');
+        $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
         $this->cielotransaction_model->setLogger($this->Logger);
@@ -1505,12 +1507,93 @@ class Reports extends CK_Controller {
     		$data["quarto"] = $quarto;
     		$pavilhao = $_GET['pavilhao'];
     		$data["pavilhao"] = $pavilhao;
-    		$colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao, $quarto);
+    		$info = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao, $quarto);
     		$roomOccupation = [0,0,0,0,0,0,0];
     		for($i = 0; $i < count($roomOccupation); $i++){
-    			$roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
+    			$roomColonists = $this->filterColonists($info, $i, $pavilhao);
     			$roomOccupation[$i] = count($roomColonists);
     		}
+    		
+    		$colonists = array();
+    		$j = 0;
+    		
+    		foreach($info as $i){
+    			
+    			$obj = new stdClass();
+    			$father_id = null;
+    			$mother_id = null;
+    			$id = null;
+    			
+    			$father_id = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($campChosenId,$i -> colonist_id,'Pai');
+    			if($father_id != null){
+    				$result = $this -> person_model -> getPersonById($father_id);
+    				$fatherName = $result -> getFullname();
+    				$fatherEmail = $result -> getEmail();
+    				
+    				$obj -> fatherName = $fatherName;
+    				$obj -> fatherEmail = $fatherEmail;
+    				
+    			}
+    			else {
+    				$obj -> fatherName = null;
+    				$obj -> fatherEmail = null;
+    			}
+    				
+    			$mother_id = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($campChosenId,$i -> colonist_id,'Mãe');
+    			if($mother_id != null){
+    				$result = $this -> person_model -> getPersonById($mother_id);
+    				$motherName = $result -> getFullname();
+    				$motherEmail = $result -> getEmail();
+    					
+    				$obj -> motherName = $motherName;
+    				$obj -> motherEmail = $motherEmail;
+    				
+    			}
+    			else {
+    				$obj -> motherName = null;
+    				$obj -> motherEmail = null;
+    			}
+    			
+    			$id = $this -> summercamp_model -> getPersonUserIdByColonistId($i -> colonist_id,$campChosenId);
+    			if($id != null){
+    					 
+    				if($id -> person_user_id == $father_id){
+    					$id = null;
+    					$obj -> responsableName = null;
+    					$obj -> responsableEmail = null;
+    				}
+    				else if($id -> person_user_id == $mother_id){
+    					$id = null;
+    					$obj -> responsableName = null;
+    					$obj -> responsableEmail = null;
+    				}
+    				else{
+    					$result = $this -> person_model -> getPersonById($id -> person_user_id);
+    					$responsableName = $result -> getFullname();
+    					$responsableEmail = $result -> getEmail();
+    			
+    					$obj -> responsableName = $responsableName;
+    					$obj -> responsableEmail = $responsableEmail;
+    				}
+    			}
+    			else {
+    				$obj -> responsableName = null;
+    				$obj -> responsableEmail = null;
+    			}
+    				
+    			$obj -> colonist_name = $i -> colonist_name;
+    			$obj -> summer_camp_id = $i -> summer_camp_id;
+    			$obj -> colonist_id = $i -> colonist_id;
+    			$obj -> age = $i -> age;
+    			$obj -> birth_date = $i -> birth_date;
+    			$obj -> user_name = $i -> user_name;
+    			$obj -> email = $i -> email;
+    			$obj -> school_year = $i -> school_year;
+    				
+    			$colonists[$j] = $obj;
+    			$j++;
+    		}
+    		
     		
     		$data["room_occupation"] = $roomOccupation;
     		$data["colonists"] = $colonists;
@@ -1578,5 +1661,4 @@ class Reports extends CK_Controller {
     	
     	$this->loadReportView('reports/summercamps/staff', $data);
     }
-
 }

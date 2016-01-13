@@ -33,6 +33,17 @@ class summercamp_model extends CK_Model {
     	
     	return $resultSet;
     }
+    
+    public function getPersonUserIdByColonistId($colonist_id, $summercamp_id){
+    	$sql = "SELECT person_user_id from summer_camp_subscription where colonist_id = ? and summer_camp_id = ?";
+    	
+    	$resultSet = $this -> executeRow($this->db, $sql, array(intval($colonist_id),intval($summercamp_id)));
+    	
+    	if($resultSet)
+    		return $resultSet;
+    	else 
+    		return null;
+    }
 
     public function getAllColonistsForDiscount() {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
