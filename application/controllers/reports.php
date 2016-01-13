@@ -62,6 +62,7 @@ class Reports extends CK_Controller {
         $option = $this->input->get('option', TRUE);
         $year = $this->input->get('year', TRUE);
         $month = $this->input->get('month', TRUE);
+        echo $year;
         if ($year === FALSE) {
             $year = date("Y");
         } else if ($month == 0) {
@@ -999,11 +1000,11 @@ class Reports extends CK_Controller {
 
     public function failed_transactions() {
         $years = array();
-        $start = 2015;
-        $end = date('Y');
-        while ($start <= $end) {
+        $end = 2015;
+        $start = date('Y');
+        while ($start >= $end) {
             $years[] = $start;
-            $start++;
+            $start--;
         }
 
         $month = null;

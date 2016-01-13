@@ -58,8 +58,6 @@ class cielotransaction_model extends CK_Model {
             join donation_type dt on dt.donation_type = d.donation_type $where
             order by ct.date_created desc";
 
-        echo $sql;
-
         $resultSet = $this->executeRows($this->db, $sql);
         $paymentsArray = array();
         if ($resultSet)
