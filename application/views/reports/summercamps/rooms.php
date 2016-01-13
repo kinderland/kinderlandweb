@@ -210,8 +210,8 @@
 								var nome = colonistsFather[j];
 								var email = colonistsFatherE[j];
 
-								data2.push(nome);
 								data2.push(email);
+								data2.push(nome);
 								data1.push(data2);
 							}
 
@@ -219,8 +219,8 @@
 								var nome = colonistsMother[j];
 								var email = colonistsMotherE[j];
 
-								data3.push(nome);
 								data3.push(email);
+								data3.push(nome);
 								data1.push(data3);
 							}
 
@@ -228,8 +228,8 @@
 								var nome = colonistsResponsable[j];
 								var email = colonistsResponsableE[j];
 
-								data4.push(nome);
 								data4.push(email);
+								data4.push(nome);
 								data1.push(data4);
 							}
 
