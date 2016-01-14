@@ -127,21 +127,40 @@
                             }
                             ?>
                         </select>
-
                         <select name="mes" onchange="this.form.submit()" id="meses">
-                            <option value="0" <?php if (!isset($mes)) echo "selected"; ?>>Todos</option>
-                            <option value="1">Janeiro</option>
-                            <option value="2">Fevereiro</option>
-                            <option value="3">Março</option>
-                            <option value="4">Abril</option>
-                            <option value="5">Maio</option>
-                            <option value="6">Junho</option>
-                            <option value="7">Julho</option>
-                            <option value="8">Agosto</option>
-                            <option value="9">Setembro</option>
-                            <option value="10">Outubro</option>
-                            <option value="11">Novembro</option>
-                            <option value="12">Dezembro</option>
+                            <option value="0"
+                            <?php
+                            if (!isset($mes) || empty($mes)) {
+                                echo "selected";
+                            }
+                            ?>
+                                    >Todos</option>
+                                    <?php
+
+                                    function getMonthName($m) {
+                                        switch ($m) {
+                                            case 1: return "Janeiro";
+                                            case 2: return "Fevereiro";
+                                            case 3: return "Março";
+                                            case 4: return "Abril";
+                                            case 5: return "Maio";
+                                            case 6: return "Junho";
+                                            case 7: return "Julho";
+                                            case 8: return "Agosto";
+                                            case 9: return "Setembro";
+                                            case 10: return "Outubro";
+                                            case 11: return "Novembro";
+                                            case 12: return "Dezembro";
+                                        }
+                                    }
+
+                                    for ($m = 1; $m <= 12; $m++) {
+                                        $selected = "";
+                                        if ($m == $mes)
+                                            $selected = "selected";
+                                        echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
+                                    }
+                                    ?>
                         </select>
                     </form>
                     <div class="counter"></div>

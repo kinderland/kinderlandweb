@@ -146,20 +146,18 @@ class Reports extends CK_Controller {
         $ano = $this->input->get('ano', TRUE);
         $mes = $this->input->get('mes', TRUE);
 
-        $data['payments'] = $this->cielotransaction_model->getPaymentsDetailed($ano, $mes);
-        $data['years'] = $this->cielotransaction_model->getPaymentYears();
         if ($ano)
             $data['ano'] = $ano;
         else {
             $date = new DateTime('NOW');
             $data['ano'] = $date->format("Y");
+            $ano = $date->format("Y");
         }
-        if ($mes)
+        if ($mes) {
             $data['mes'] = $mes;
-        else {
-            $date = new DateTime('NOW');
-            $data['mes'] = $date->format("m");
         }
+        $data['payments'] = $this->cielotransaction_model->getPaymentsDetailed($ano, $mes);
+        $data['years'] = $this->cielotransaction_model->getPaymentYears();
         $this->loadReportView("reports/finances/all_transactions", $data);
     }
 
