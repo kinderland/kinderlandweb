@@ -13,12 +13,14 @@ class Reports extends CK_Controller {
         $this->load->model('cielotransaction_model');
         $this->load->model('donation_model');
         $this->load->model('campaign_model');
+        $this->load->model('telephone_model');
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
         $this->cielotransaction_model->setLogger($this->Logger);
         $this->donation_model->setLogger($this->Logger);
         $this->campaign_model->setLogger($this->Logger);
+        $this->telephone_model->setLogger($this->Logger);
     }
 
     public function user_reports() {
@@ -1512,33 +1514,61 @@ class Reports extends CK_Controller {
     			$id = null;
     			
     			$father_id = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($campChosenId,$i -> colonist_id,'Pai');
-    			if($father_id != null){
+    			if($father_id != FALSE){
     				$result = $this -> person_model -> getPersonById($father_id);
+    				$telephone = $this -> telephone_model -> getTelephonesByPersonId($father_id);
+    				
+    				$tels = array();
+    				
+    				foreach($telephone as $t){
+    					if(!isset($t)||is_null($t)||empty($t)){
+    						
+    					}
+    					else 
+    						$tels[] = $t;
+    				}
+    				
     				$fatherName = $result -> getFullname();
     				$fatherEmail = $result -> getEmail();
     				
     				$obj -> fatherName = $fatherName;
     				$obj -> fatherEmail = $fatherEmail;
+    				$obj -> fatherTel = $tels;
     				
     			}
     			else {
     				$obj -> fatherName = null;
     				$obj -> fatherEmail = null;
+    				$obj -> fatherTel = '-';
     			}
     				
     			$mother_id = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($campChosenId,$i -> colonist_id,'Mãe');
-    			if($mother_id != null){
+    			if($mother_id != FALSE){
     				$result = $this -> person_model -> getPersonById($mother_id);
+    				$telephone = $this -> telephone_model -> getTelephonesByPersonId($mother_id);
+    				
+    				$tels = array();
+    				
+    				foreach($telephone as $t){
+    					if(!isset($t)||is_null($t)||empty($t)){
+    						
+    					}
+    					else 
+    						$tels[] = $t;
+    				}
+    				
     				$motherName = $result -> getFullname();
     				$motherEmail = $result -> getEmail();
     					
     				$obj -> motherName = $motherName;
     				$obj -> motherEmail = $motherEmail;
+    				$obj -> motherTel = $tels;
     				
     			}
     			else {
     				$obj -> motherName = null;
     				$obj -> motherEmail = null;
+    				$obj -> motherTel = '-';
     			}
     			
     			$id = $this -> summercamp_model -> getPersonUserIdByColonistId($i -> colonist_id,$campChosenId);
@@ -1548,11 +1578,13 @@ class Reports extends CK_Controller {
     					$id = null;
     					$obj -> responsableName = null;
     					$obj -> responsableEmail = null;
+    					$obj -> responsableTel = '-';
     				}
     				else if($id -> person_user_id == $mother_id){
     					$id = null;
     					$obj -> responsableName = null;
     					$obj -> responsableEmail = null;
+    					$obj -> responsableTel = '-';
     				}
     				else{
     					$result = $this -> person_model -> getPersonById($id -> person_user_id);
@@ -1561,11 +1593,32 @@ class Reports extends CK_Controller {
     			
     					$obj -> responsableName = $responsableName;
     					$obj -> responsableEmail = $responsableEmail;
+    					
+    					if(($father_id == FALSE) && ($mother_id == FALSE)) {
+    						$telephone = $this -> telephone_model -> getTelephonesByPersonId($id -> person_user_id);
+    						$tels = array();
+    						$add = 1;
+    						
+		    				$tels = array();
+		    				
+		    				foreach($telephone as $t){
+		    					if(!isset($t)||is_null($t)||empty($t)){
+		    						
+		    					}
+		    					else 
+		    						$tels[] = $t;
+		    				}  						
+    						
+    						$obj -> responsableTel = $tels;
+    					}
+    					else 
+    						$obj -> responsableTel = '-';    						
     				}
     			}
     			else {
     				$obj -> responsableName = null;
     				$obj -> responsableEmail = null;
+    				$obj -> responsableTel = '-';
     			}
     				
     			$obj -> colonist_name = $i -> colonist_name;

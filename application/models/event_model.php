@@ -83,6 +83,17 @@ class event_model extends CK_Model {
 
 		return false;
 	}
+	
+	public function updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+		
+		$sql = 'UPDATE event SET event_name = ?,  description = ?, $date_start = ?, date_finish = ?, date_start_show = ?, date_finish_show = ?, enabled = ?, capacity_male = ?, capacity_female = ?, capacity_nonsleeper = ?
+				WHERE event_id = ?';
+		
+		$result = $this -> execute($this->db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $event_id));
+		
+		return $result;
+	}
 
 	public function insertNewPaymentPeriod($eventId, $date_start, $date_finish, $full_price, $middle_price, $children_price, $associate_discount, $portions) {
 		$this -> Logger -> info("Running: " . __METHOD__);
@@ -97,6 +108,14 @@ class event_model extends CK_Model {
 
 		return false;
 
+	}
+	
+	public function deleteEventPaymentPeriods($eventId){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		
+		$sql = 'DELETE FROM payment_period WHERE event_id = ?';
+		
+		return $this->execute($this->db, $deleteSql, array(intval($eventId)));
 	}
 
 	public function getEventPaymentPeriods($eventId) {

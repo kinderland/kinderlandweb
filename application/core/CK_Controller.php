@@ -89,7 +89,7 @@ class CK_Controller extends CI_Controller {
             	
             	$nonsleeper = null;
             	
-            	if($p->nonsleeper == true)
+            	if($p->nonsleeper)
             		$nonsleeper = "sem pernoite";
             	else 
             		$nonsleeper = "com pernoite";
@@ -97,7 +97,7 @@ class CK_Controller extends CI_Controller {
             	$emailString = $emailString . $name->getFullname() . ", " . $p -> description . ", " . $nonsleeper . "<br><br>";
             }
             
-            $emailString = $emailString . "Muito obrigado pela sua contribuição e no interesse pelos evento da Kinderland!<br><br><br><br>" . "Diretoria da Associação Kinderland";
+            $emailString = $emailString . "Muito obrigado pela sua contribuição e no interesse pelos evento da Kinderland!<br><br>" . "Diretoria da Associação Kinderland";
             $emailSubject = "[Kinderland] Inscricao " . $event->getEventName() . " confirmada";
 
             return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
@@ -266,7 +266,7 @@ class CK_Controller extends CI_Controller {
             }
             $addToSubject.="]";
             
-            $to = "suporte@kinderland.com.br";
+            $to = "teste_suporte@kinderland.com.br";
             $cc = NULL;
             $bcc = NULL;
             $subject = $addToSubject . $subject;
