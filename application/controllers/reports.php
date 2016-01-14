@@ -1433,21 +1433,21 @@ class Reports extends CK_Controller {
     }
     
     private function filterColonists($colonists, $room, $gender) {
-    	$resultArray = array();
-    
-    	foreach ($colonists as $colonist) {
-    		if ($colonist->colonist_gender == $gender) {
-    			if ($room < 0)
-    				$resultArray[] = $colonist;
-    				else if ($room == 0 && ($colonist->room_number == null ||
-    						$colonist->room_number == 0 || $colonist->room_number == ''))
-    					$resultArray[] = $colonist;
-    					else if ($colonist->room_number == $room)
-    						$resultArray[] = $colonist;
-    		}
-    	}
-    
-    	return $resultArray;
+            $resultArray = array();
+
+        foreach ($colonists as $colonist) {
+            if ($colonist->colonist_gender == $gender) {
+                if ($room < 0)
+                    $resultArray[] = $colonist;
+                else if ($room == 0 && ($colonist->room_number == null || 
+                    $colonist->room_number == 0 || $colonist->room_number == ''))
+                    $resultArray[] = $colonist;
+                else if ($colonist->room_number == $room)
+                    $resultArray[] = $colonist;
+            }
+        }
+
+        return $resultArray;
     }
     
     public function rooms() {
@@ -1505,15 +1505,18 @@ class Reports extends CK_Controller {
     		$data["quarto"] = $quarto;
     		$pavilhao = $_GET['pavilhao'];
     		$data["pavilhao"] = $pavilhao;
-    		$colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao, $quarto);
+    		$colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
+    		
+    		$colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+    		
     		$roomOccupation = [0,0,0,0,0,0,0];
-    		for($i = 0; $i < count($roomOccupation); $i++){
-    			$roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
-    			$roomOccupation[$i] = count($roomColonists);
-    		}
+    	    for($i = 0; $i < count($roomOccupation); $i++){
+                $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
+                $roomOccupation[$i] = count($roomColonists);
+            }
     		
     		$data["room_occupation"] = $roomOccupation;
-    		$data["colonists"] = $colonists;
+    		$data["colonists"] = $colonistsSelected;
     	}
     	
     	$this->loadReportView('reports/summercamps/rooms', $data);
