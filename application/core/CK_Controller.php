@@ -81,8 +81,23 @@ class CK_Controller extends CI_Controller {
         } else if ($donation->getDonationType() == DONATION_TYPE_SUBSCRIPTION) {
             $person = $this->person_model->getPersonById($donation->getPersonId());
             $event = $this->event_model->getDonationEvent($donation->getDonationId());
-            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o " . $event->getEventName() . " foi recebida com sucesso. <br><br>" . "Muito obrigado pela sua contribuição, ela é muito importante para
-			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
+            $personsDonation = $this -> eventsubscription_model -> getPersonsIdByEventIdAndDonationId($event -> getEventId(), $donation->getDonationId());
+            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o " . $event->getEventName() . " foi recebida com sucesso. <br><br>" . "Seguem os convites 
+            desta inscrição:<br><br>";
+            foreach($personsDonation as $p){
+            	$name = $this->person_model->getPersonById($p->person_id);
+            	
+            	$nonsleeper = null;
+            	
+            	if($p->nonsleeper == true)
+            		$nonsleeper = "sem pernoite";
+            	else 
+            		$nonsleeper = "com pernoite";
+            	
+            	$emailString = $emailString . $name->getFullname() . ", " . $p -> description . ", " . $nonsleeper . "<br><br>";
+            }
+            
+            $emailString = $emailString . "Muito obrigado pela sua contribuição e no interesse pelos evento da Kinderland!<br><br><br><br>" . "Diretoria da Associação Kinderland";
             $emailSubject = "[Kinderland] Inscricao " . $event->getEventName() . " confirmada";
 
             return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
