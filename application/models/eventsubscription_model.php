@@ -33,6 +33,12 @@
 
             return $this->executeRows($this->db, $sql, array(intval($personId), intval($eventId)));
         }
+        public function getPersonsIdByEventIdAndDonationId($eventId, $donationId) {
+        	$sql = "SELECT * FROM event_subscription es INNER JOIN age_group ag
+            		on ag.age_group_id = es.age_group_id WHERE es.event_id = ? AND es.donation_id = ?";
+        	
+        	return $this -> executeRows($this->db, $sql, array(intval($eventId), intval($donationId)));
+        }
 
         public function unsubscribeUsersFromEvent($usersId, $eventId){
             $sql = "UPDATE event_subscription SET subscription_status = -1 WHERE event_id = ? AND person_id in (".$usersId.")";
