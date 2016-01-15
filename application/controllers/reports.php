@@ -82,6 +82,7 @@ class Reports extends CK_Controller {
         $option = $this->input->get('option', TRUE);
         $year = $this->input->get('year', TRUE);
         $month = $this->input->get('month', TRUE);
+        echo $year;
         if ($year === FALSE) {
             $year = date("Y");
         } else if ($month == 0) {
@@ -163,13 +164,20 @@ class Reports extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
 
         $ano = $this->input->get('ano', TRUE);
-        $data['payments'] = $this->cielotransaction_model->getPaymentsDetailed($ano);
+        $mes = $this->input->get('mes', TRUE);
+ 		$data['payments'] = $this->cielotransaction_model->getPaymentsDetailed($ano, $mes);
         $data['years'] = $this->cielotransaction_model->getPaymentYears();
         if ($ano)
             $data['ano'] = $ano;
         else {
             $date = new DateTime('NOW');
             $data['ano'] = $date->format("Y");
+        }
+        if ($mes)
+         	$data['mes'] = $mes;
+        else {
+            $date = new DateTime('NOW');
+            $data['mes'] = $date->format("m");
         }
         $this->loadReportView("reports/finances/all_transactions", $data);
     }
@@ -963,11 +971,11 @@ class Reports extends CK_Controller {
 
     public function associate_campaign_donations() {
         $years = array();
-        $start = 2015;
-        $end = date('Y');
-        while ($start <= $end) {
+        $end = 2015;
+        $start = date('Y');
+        while ($start >= $end) {
             $years[] = $start;
-            $start++;
+            $start--;
         }
 
         $month = null;
