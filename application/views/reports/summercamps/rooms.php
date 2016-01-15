@@ -236,8 +236,7 @@
 				colonistsResponsableT = colonistsResponsableT.split("|");
 				var data2 = [];
 
-				data2.push("Ola $par1$, AQUI VOCÊ ESCREVE A MENSAGEM QUE DESEJA PARA O CLIENTE");
-				data1.push(data2);
+			
 
 				for (var i = 0, row; row = table.rows[i]; i++) {
 					data2 = [];
@@ -270,7 +269,11 @@
 									}
 									else{
 										if(z==0){
-											telephoneFinal = telephone[k];
+											if((telephone[k] + telephone[k + 1]).localeCompare("55") == 0)
+												telephoneFinal = telephone[k];
+											else
+												telephoneFinal = "55" + telephone[k];
+												
 											z++;
 										}
 										else
@@ -323,7 +326,11 @@
 									}
 									else{
 										if(z==0){
-											telephoneFinal = telephone[k];
+											if((telephone[k]+telephone[k+1]).localeCompare("55") == 0)
+												telephoneFinal = telephone[k];
+											else
+												telephoneFinal = "55"+telephone[k];
+												
 											z++;
 										}
 										else
@@ -374,7 +381,11 @@
 									}
 									else{
 										if(z==0){
-											telephoneFinal = telephone[k];
+											if((telephone[k]+telephone[k+1]).localeCompare("55") == 0)
+												telephoneFinal = telephone[k];
+											else
+												telephoneFinal = "55"+telephone[k];
+												
 											z++;
 										}
 										else
@@ -415,8 +426,8 @@
 	                    return;
 	                }
 	                var dataToSend = JSON.stringify(data1);
-	                var columName = ["NOME DA CAMPANHA"];
-	                var columnNameToSend = JSON.stringify(columName);
+	                var columName = [""];
+	                var columnNameToSend = JSON.stringify(null);
 
 	                post('<?= $this->config->item('url_link'); ?>reports/toTXT', {data: dataToSend, name: name, columName: columnNameToSend});
 

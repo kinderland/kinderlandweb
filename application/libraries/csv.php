@@ -101,9 +101,9 @@ function arrayToTXT($logger, $name, $data, $columname = array(),$separator = ";"
 			$write .= $print;
 		}
 	} else {
-		$logger -> error("Columname array was not an array.");
-		throw new Exception("Columname array was not an array.");
-		return -1;
+		//$logger -> error("Columname array was not an array.");
+		//throw new Exception("Columname array was not an array.");
+		//return -1;
 	}
 
 	if (is_array($data)) {
