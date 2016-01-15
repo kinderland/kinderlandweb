@@ -60,6 +60,22 @@ class Reports extends CK_Controller {
             echo "<script>alert('Problema ao gerar csv, tente novamente mais tarde');</script>";
         }
     }
+    
+    public function toTXT() {
+    	$data = $this->input->post('data', TRUE);
+    	$name = $this->input->post('name', TRUE);
+    	$columnNames = $this->input->post('columName', TRUE);
+    	$dataArray = json_decode($data);
+    	if ($columnNames)
+    		$columnNamesArray = json_decode($columnNames);
+    	else
+    		$columnNamesArray = array();
+    	try {
+    		arrayToTXT($this->Logger, $name, $dataArray, $columnNamesArray);
+    	} catch (Exception $e) {
+    		echo "<script>alert('Problema ao gerar csv, tente novamente mais tarde');</script>";
+    	}
+    }
 
     public function payments_bycard() {
         $type = $this->input->get('type', TRUE);
@@ -1518,9 +1534,15 @@ class Reports extends CK_Controller {
     		
     		$colonists = array();
     		$j = 0;
+    		$p;
+    		$tel;
+    		$temTelephone = null;
     		
     		foreach($info as $i){
+    			$temTelephone = 0;
+    			$p = 0;
     			
+    			$this->Logger->info("$# COLONISTA DE ID: " . $i-> colonist_id . " E NOME: " . $i -> colonist_name . "///////");
     			$obj = new stdClass();
     			$father_id = null;
     			$mother_id = null;
@@ -1530,15 +1552,20 @@ class Reports extends CK_Controller {
     			if($father_id != FALSE){
     				$result = $this -> person_model -> getPersonById($father_id);
     				$telephone = $this -> telephone_model -> getTelephonesByPersonId($father_id);
-    				
-    				$tels = array();
-    				
+    				    				
     				foreach($telephone as $t){
     					if(!isset($t)||is_null($t)||empty($t)){
     						
     					}
-    					else 
-    						$tels[] = $t;
+    					else {
+    						if($p==0)
+    							$tel = $t;
+    						else 
+    							$tel = $tel."*".$t;
+    						
+    						$temTelephone = 1;
+    						$this->Logger->info("$# COLONISTA TELEFONE DE PAI " . $result -> getFullname() . ":" . $t);
+    					}
     				}
     				
     				$fatherName = $result -> getFullname();
@@ -1546,13 +1573,14 @@ class Reports extends CK_Controller {
     				
     				$obj -> fatherName = $fatherName;
     				$obj -> fatherEmail = $fatherEmail;
-    				$obj -> fatherTel = $tels;
+    				$obj -> fatherTel = $tel;
     				
     			}
     			else {
     				$obj -> fatherName = null;
     				$obj -> fatherEmail = null;
     				$obj -> fatherTel = '-';
+    				$this->Logger->info("$# COLONISTA SEM ID DA PAI ///////");
     			}
     				
     			$mother_id = $this -> summercamp_model -> getParentIdOfSummerCampSubscripted($campChosenId,$i -> colonist_id,'Mãe');
@@ -1560,14 +1588,21 @@ class Reports extends CK_Controller {
     				$result = $this -> person_model -> getPersonById($mother_id);
     				$telephone = $this -> telephone_model -> getTelephonesByPersonId($mother_id);
     				
-    				$tels = array();
+    				$p = 0;
     				
     				foreach($telephone as $t){
     					if(!isset($t)||is_null($t)||empty($t)){
     						
     					}
-    					else 
-    						$tels[] = $t;
+    					else {
+    						if($p==0)
+    							$tel = $t;
+    						else 
+    							$tel = $tel."*".$t;
+    						
+    						$temTelephone = 1;
+    						$this->Logger->info("$# COLONISTA TELEFONE DE MÃE " . $result -> getFullname() . ":" . $t );
+    					}
     				}
     				
     				$motherName = $result -> getFullname();
@@ -1575,13 +1610,14 @@ class Reports extends CK_Controller {
     					
     				$obj -> motherName = $motherName;
     				$obj -> motherEmail = $motherEmail;
-    				$obj -> motherTel = $tels;
+    				$obj -> motherTel = $tel;
     				
     			}
     			else {
     				$obj -> motherName = null;
     				$obj -> motherEmail = null;
     				$obj -> motherTel = '-';
+    				$this->Logger->info("$# COLONISTA SEM ID DA MÃE ///////");
     			}
     			
     			$id = $this -> summercamp_model -> getPersonUserIdByColonistId($i -> colonist_id,$campChosenId);
@@ -1592,12 +1628,14 @@ class Reports extends CK_Controller {
     					$obj -> responsableName = null;
     					$obj -> responsableEmail = null;
     					$obj -> responsableTel = '-';
+    					$this->Logger->info("$# COLONISTA COM PAI RESPONSÁVEL ///////");
     				}
     				else if($id -> person_user_id == $mother_id){
     					$id = null;
     					$obj -> responsableName = null;
     					$obj -> responsableEmail = null;
     					$obj -> responsableTel = '-';
+    					$this->Logger->info("$# COLONISTA COM MÃE RESPONSÁVEL ///////");
     				}
     				else{
     					$result = $this -> person_model -> getPersonById($id -> person_user_id);
@@ -1607,31 +1645,40 @@ class Reports extends CK_Controller {
     					$obj -> responsableName = $responsableName;
     					$obj -> responsableEmail = $responsableEmail;
     					
-    					if(($father_id == FALSE) && ($mother_id == FALSE)) {
+    					if($temTelephone == 0) {
     						$telephone = $this -> telephone_model -> getTelephonesByPersonId($id -> person_user_id);
     						$tels = array();
     						$add = 1;
     						
-		    				$tels = array();
+		    				$p = 0;
 		    				
 		    				foreach($telephone as $t){
 		    					if(!isset($t)||is_null($t)||empty($t)){
 		    						
 		    					}
-		    					else 
-		    						$tels[] = $t;
+		    					else {
+		    						if($p==0)
+    									$tel = $t;
+    								else 
+    									$tel = $tel."*".$t;
+    								
+		    						$this->Logger->info("$# COLONISTA TELEFONE DE RESPONSÁVEL " . $result -> getFullname() . ":" . $t );
+		    					}
 		    				}  						
     						
-    						$obj -> responsableTel = $tels;
+    						$obj -> responsableTel = $tel;
     					}
-    					else 
-    						$obj -> responsableTel = '-';    						
+    					else {
+    						$obj -> responsableTel = '-'; 
+    						$this->Logger->info("$# COLONISTA COM ID DE PAI E/OU MÃE ///////");
+    					}
     				}
     			}
     			else {
     				$obj -> responsableName = null;
     				$obj -> responsableEmail = null;
     				$obj -> responsableTel = '-';
+    				$this->Logger->info("$# COLONISTA SEM RESPONSÁVEL ///////");
     			}
     				
     			$obj -> colonist_name = $i -> colonist_name;
@@ -1642,6 +1689,7 @@ class Reports extends CK_Controller {
     			$obj -> user_name = $i -> user_name;
     			$obj -> email = $i -> email;
     			$obj -> school_year = $i -> school_year;
+    			$obj -> logger = $this->Logger;
     				
     			$colonists[$j] = $obj;
     			$j++;

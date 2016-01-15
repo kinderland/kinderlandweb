@@ -2,6 +2,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Colônia Kinderland</title>
+        
+        <?php include_once APPPATH . 'libraries/logger.php'; 
+        	include_once 'system/core/Loader.php';
+        ?>
+        
+        
 
         <link href="<?= $this->config->item('assets'); ?>css/basic.css" rel="stylesheet" />
         <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
@@ -193,38 +199,50 @@
             	var data1 = [];
                 var table = document.getElementById("tablebody");
                 var tablehead = document.getElementsByTagName("thead")[0];
-                var name = getCSVName('Telefone');
+                var name = getCSVName('SMS');
                 var colonists = document.getElementsByName('colonista');
                 var telephoneRes = [];
                 var telephoneMom = [];
                 var telephoneDad = [];
-                var tels;
+                var tels = [];
+                var names = [];
+                var q = 0;
                 var n;
-                var pai = 0;
-                var mae = 0;
-                var res = 0;
+                var colonFather;
+                var colonMother;
+                var colonRes;
+                var exist;
                 
                 var add = 1;
                 var colonistsId = document.getElementById("colonistsId").getAttribute('key');
 				colonistsId = colonistsId.split("|");
 
+				var colonistsFather = document.getElementById("colonistsFather").getAttribute('key');
+				colonistsFather = colonistsFather.split("|"); 
+
             	var colonistsFatherT = document.getElementById("colonistsFatherT").getAttribute('key');
-            	colonistsFatherT = colonistsFatherT.split("|");              	            	
+            	colonistsFatherT = colonistsFatherT.split("|"); 
+
+            	var colonistsMother = document.getElementById("colonistsMother").getAttribute('key');
+            	colonistsMother = colonistsMother.split("|");         	            	
 
 				var colonistsMotherT = document.getElementById("colonistsMotherT").getAttribute('key');
 				colonistsMotherT = colonistsMotherT.split("|");
 
+				var colonistsResponsable = document.getElementById("colonistsResponsable").getAttribute('key');
+				colonistsResponsable = colonistsResponsable.split("|");
+
 				var colonistsResponsableT = document.getElementById("colonistsResponsableT").getAttribute('key');
 				colonistsResponsableT = colonistsResponsableT.split("|");
+				var data2 = [];
+
+				data2.push("Ola $par1$, AQUI VOCÊ ESCREVE A MENSAGEM QUE DESEJA PARA O CLIENTE");
+				data1.push(data2);
 
 				for (var i = 0, row; row = table.rows[i]; i++) {
-					var data2 = [];
+					data2 = [];
                     var data3 = [];
                     var data4 = [];
-
-                    pai++;
-                    mae++;
-                    res++;
 
 					var colonist_id = colonists[i].getAttribute('id');
 
@@ -236,29 +254,50 @@
 								n = 0;
 								var r = 0;
 								add = 1;
-								tels = [];
+								var z = 0;
+								exist = false;
 								var telephone = colonistsFatherT[j];
 								telephone = telephone.split("");
 
-								var telephoneFinal = " ";
+								var telephoneFinal;
 
 								for(var k = 0; k < telephone.length; k++){
 									if((telephone[k] == ' ') || (telephone[k] == '(') || (telephone[k] == ')') || (telephone[k] == '+') || (telephone[k] == '-')){
 									}
 									else if(telephone[k] == "*"){
-										telephoneDad[n] = telephoneFinal;
-										n++;
+											telephoneDad[n] = telephoneFinal;
+											n++;
 									}
-									else
-										telephoneFinal = telephoneFinal + telephone[k];
+									else{
+										if(z==0){
+											telephoneFinal = telephone[k];
+											z++;
+										}
+										else
+											telephoneFinal = telephoneFinal + telephone[k];
+									}
 								}
 
 								telephoneDad[n] = telephoneFinal;
 
+								colonFather = colonistsFather[j].split(" ");
+
 								for(var r = 0; r < telephoneDad.length; r++){
-									data2.push(telephoneDad[r]);
-									data2.push("Pai " + pai);
-									data1.push(data2);
+									if(telephoneDad[r] != " "){
+										for( var s = 0; s < tels.length; s++){
+												if(telephoneDad[r].localeCompare(tels[s]) == 0){
+													exist = true;
+													break;
+												}
+										}
+										if(exist === false){
+											tels[q] = telephoneDad[r];
+											data2.push(telephoneDad[r]);
+											data2.push(colonFather[0]);
+											data1.push(data2);
+											q++;
+										}
+									}
 								}
 									
 							}
@@ -267,30 +306,50 @@
 								n = 0;
 								add = 1;
 								var r = 0;
-								tels = [];
+								var z = 0;
+								exist = false;
 								var telephone = colonistsMotherT[j];
 								telephone = telephone.split("");
 
-								var telephoneFinal = " ";
+								var telephoneFinal;
 
 								for(var k = 0; k < telephone.length; k++){
 									if((telephone[k] == ' ') || (telephone[k] == '(') || (telephone[k] == ')') || (telephone[k] == '+') || (telephone[k] == '-')){
 
 									}
 									else if(telephone[k] == "*"){
-										telephoneMom[n] = telephoneFinal;
-										n++;
+											telephoneMom[n] = telephoneFinal;
+											n++;
 									}
-									else
-										telephoneFinal = telephoneFinal + telephone[k];
+									else{
+										if(z==0){
+											telephoneFinal = telephone[k];
+											z++;
+										}
+										else
+											telephoneFinal = telephoneFinal + telephone[k];
+									}
 								}
 
 								telephoneMom[n] = telephoneFinal;
+								colonMother = colonistsMother[j].split(" ");
 
 								for(var r = 0; r < telephoneMom.length; r++){
-									data3.push(telephoneMom[r]);
-									data3.push("Mae "+ mae);
-									data1.push(data3);
+									if(telephoneMom[r] != " "){
+										for( var s = 0; s < tels.length; s++){
+											if(telephoneMom[r].localeCompare(tels[s]) == 0){
+												exist = true;
+												break;
+											}
+										}
+										if(exist === false){
+											tels[q] = telephoneMom[r];
+											data3.push(telephoneMom[r]);
+											data3.push(colonMother[0]);
+											data1.push(data3);
+											q++;
+										}
+									}
 								}
 							}
 
@@ -298,30 +357,50 @@
 								n = 0;
 								add = 1;
 								var r = 0;
-								tels = [];
+								var z = 0;
+								exist = false;
 								var telephone = colonistsResponsableT[j];
 								telephone = telephone.split("");
 
-								var telephoneFinal = " ";
+								var telephoneFinal;
 
 								for(var k = 0; k < telephone.length; k++){
 									if((telephone[k] == ' ') || (telephone[k] == '(') || (telephone[k] == ')') || (telephone[k] == '+') || (telephone[k] == '-')){
 
 									}
 									else if(telephone[k] == "*"){
-										telephoneRes[n] = telephoneFinal;
-										n++;
+											telephoneRes[n] = telephoneFinal;
+											n++;
 									}
-									else
-										telephoneFinal = telephoneFinal + telephone[k];
+									else{
+										if(z==0){
+											telephoneFinal = telephone[k];
+											z++;
+										}
+										else
+											telephoneFinal = telephoneFinal + telephone[k];
+									}
 								}
 
 								telephoneRes[n] = telephoneFinal;
+								colonRes = colonistsResponsable[j].split(" ");
 
 								for(var r = 0; r < telephoneRes.length; r++){
-									data4.push(telephoneRes[r]);
-									data4.push("Res "+ res);
-									data1.push(data4);
+									if(telephoneRes[r] != " " ){
+										for( var s = 0; s < tels.length; s++){
+											if(telephoneRes[r].localeCompare(tels[s]) == 0){
+												exist = true;
+												break;
+											}
+										}
+										if(exist === false){
+											tels[q] = telephoneRes[r];
+											data4.push(telephoneRes[r]);
+											data4.push(colonRes[0]);
+											data1.push(data4);
+											q++;
+										}
+									}
 								}
 							}
 
@@ -329,17 +408,17 @@
 						
 					}
 					
-				}
+				}	
 
 				 if (i == 0) {
 	                    alert('Não há dados para geração da planilha');
 	                    return;
 	                }
 	                var dataToSend = JSON.stringify(data1);
-	                var columName = ["Telefone"];
+	                var columName = ["NOME DA CAMPANHA"];
 	                var columnNameToSend = JSON.stringify(columName);
 
-	                post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
+	                post('<?= $this->config->item('url_link'); ?>reports/toTXT', {data: dataToSend, name: name, columName: columnNameToSend});
 
             }
 
@@ -591,6 +670,14 @@
                             	$colonistsResponsableE[$k] = $colonist -> responsableEmail;
                             	$colonistsResponsableT[$k] = $colonist -> responsableTel;
                             	
+                            	$colonist->logger->info("%&$ COLONISTA COM ID: " . $colonistsId[$k] . " / PAI NOME: " 
+                            			. $colonistsFather[$k] . " / PAI EMAIL: "  . $colonistsFatherE[$k] . 
+                            			" / PAI TEL: " . $colonistsFatherT[$k] . " / MÃE NOME: " 
+                            			. $colonistsMother[$k] . " / MÃE EMAIL: "  . $colonistsMotherE[$k] . 
+                            			" / MÃE TEL: " . $colonistsMotherT[$k] . " / RESPONSÁVEL NOME: " 
+                            			. $colonistsResponsable[$k] . " / RESPONSÁVEL EMAIL: "  . $colonistsResponsableE[$k] . 
+                            			" / RESPONSÁVEL TEL: " . $colonistsResponsableT[$k] . " ///////");
+                            	
                             	$k++;
                             	
                             	?>
@@ -605,80 +692,21 @@
                             $colonistsId = implode("|",$colonistsId);
                             $colonistsFather = implode("|",$colonistsFather);
                             $colonistsFatherE = implode("|",$colonistsFatherE);
-                            
-                            $ctarray = array();
-                            $ctstr = "";
-                            $typeF = "array";
-                            foreach($colonistsFatherT as $cft){
-                            	if(is_array($cft)){
-                            		$typeF = "string";
-	                            	foreach($cft as $c){
-	                           		 	$ctstr = $ctstr."*".$c;
-	                            	}
-	                            	$ctstr = $ctstr."|";
-                            	}                            	
-                            	else {
-                            		$ctarray[] = $cft;
-                            	}
-                            }
-                            
-                            if($typeF != "string")
-                            	$colonistsFatherT = implode("|",$ctarray);
-                            else {
-                            	$colonistsFatherT = $ctstr;
-                            }
-                            
+                            $colonistsFatherT = implode("|",$colonistsFatherT);
                             $colonistsMother = implode("|",$colonistsMother);
                             $colonistsMotherE = implode("|",$colonistsMotherE);
-                            
-                            $ctarray = array();
-                            $ctstr = "";
-                            $typeM = "array";
-                            foreach($colonistsMotherT as $cmt){
-                            	if(is_array($cmt)){
-                            		$typeM = "string";
-		                            foreach($cmt as $c){
-		                            	$ctstr = $ctstr."*".$c;
-	                            	}
-	                            	$ctstr = $ctstr."|";
-                            	}                            	
-                            	else {
-                            		$ctarray[] = $cmt;
-                            	}                          
-                            }
-                            
-                            if($typeM != "string")
-                            	$colonistsMotherT = implode("|",$ctarray);
-                            else{
-                            	$colonistsMotherT = $ctstr;
-                            	$typeM = "string";
-                            }
-                            
+                            $colonistsMotherT = implode("|",$colonistsMotherT);
                             $colonistsResponsable = implode("|",$colonistsResponsable);
                             $colonistsResponsableE = implode("|",$colonistsResponsableE);
+                            $colonistsResponsableT = implode("|",$colonistsResponsableT);
                             
-                            $ctarray = array();
-                            $ctstr = "";
-                            $typeR = "array";
-                            foreach($colonistsResponsableT as $crt){
-                            	if(is_array($crt)){
-                            		$typeR = "string";
-                            		foreach($crt as $c){
-                         
-	                           		 	$ctstr = $ctstr."*".$c;
-	                            	}
-	                            	$ctstr = $ctstr."|";
-                            	}                            	
-                            	else 
-                            		$ctarray[] = $crt;
-                            }
-                            
-                           	if($typeR != "string")
-                            	 $colonistsResponsableT = implode("|",$ctarray);
-                            else{
-                            	$colonistsResponsableT = $ctstr;
-                            	$typeR = "string";
-                            }
+                            $colonists[0]->logger->info("%&$ COLONISTAS COM ID: " . $colonistsId . " / PAIS NOMES: "
+                            		. $colonistsFather . " / PAIS EMAILS: "  . $colonistsFatherE .
+                            		" / PAIS TELS: " . $colonistsFatherT . " / MÃES NOMES: "
+                            		. $colonistsMother . " / MÃES EMAILS: "  . $colonistsMotherE .
+                            		" / MÃES TELS: " . $colonistsMotherT . " / RESPONSÁVELS NOMES: "
+                            		. $colonistsResponsable . " / RESPONSÁVELS EMAILS: "  . $colonistsResponsableE .
+                            		" / RESPONSÁVELS TELS: " . $colonistsResponsableT . " ///////");
                             
                             ?>  
                             <div id="colonistsId" key="<?php echo $colonistsId;?>" style = "display:none"></div>
