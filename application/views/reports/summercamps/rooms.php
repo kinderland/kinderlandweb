@@ -162,94 +162,31 @@
         	}
 
             function sendTableToCSV() {
-                var data1 = [];
-                var table = document.getElementById("tablebody");
-                var name = getCSVName('Email');
-                var elements = document.getElementsByName('responsavel');
-                var summercamp = document.getElementById('colonia');
-                var colonists = document.getElementsByName('colonista');
-                var tablehead = document.getElementsByTagName("thead")[0];
-                var summercamp_id = summercamp.getAttribute('key');
-
-				var colonistsId = document.getElementById("colonistsId").getAttribute('key');
-				colonistsId = colonistsId.split("|");
-
-				var colonistsFather = document.getElementById("colonistsFather").getAttribute('key');
-				colonistsFather = colonistsFather.split("|");
-
-				var colonistsFatherE = document.getElementById("colonistsFatherE").getAttribute('key');
-				colonistsFatherE = colonistsFatherE.split("|");
-
-				var colonistsMother = document.getElementById("colonistsMother").getAttribute('key');
-				colonistsMother = colonistsMother.split("|");
-
-				var colonistsMotherE = document.getElementById("colonistsMotherE").getAttribute('key');
-				colonistsMotherE = colonistsMotherE.split("|");
-
-				var colonistsResponsable = document.getElementById("colonistsResponsable").getAttribute('key');
-				colonistsResponsable = colonistsResponsable.split("|");
-
-				var colonistsResponsableE = document.getElementById("colonistsResponsableE").getAttribute('key');
-				colonistsResponsableE = colonistsResponsableE.split("|");
-                
+               var data = [];
+              var table = document.getElementById("tablebody");
+              var name = getCSVName('Email');
+               var elements = document.getElementsByName('responsavel');
+              var tablehead = document.getElementsByTagName("thead")[0];
                 for (var i = 0, row; row = table.rows[i]; i++) {
-                    var data2 = [];
-                    var data3 = [];
-                    var data4 = [];
-                    //Nome, retira pega o que esta entre um <> e outro <>
-                    var email = elements[i].getAttribute('key');
-					var nome = elements[i].getAttribute('id');
+                  var data2 = []
+                  //Nome, retira pega o que esta entre um <> e outro <>
+                  var email = elements[i].getAttribute('key');
+				var nome = elements[i].getAttribute('id');
+				
+                   data2.push(email);
+                    data2.push(nome);
+                   data.push(data2)
+              }
+             if (i == 0) {
+                   alert('Não há dados para geração da planilha');
+                   return;
+             }
+              var dataToSend = JSON.stringify(data);
+               var columName = ["Email", "Nome"];
+              var columnNameToSend = JSON.stringify(columName);
 
-					var colonist_id = colonists[i].getAttribute('id');
-
-					for( var j = 0; j < colonists.length ; j++){
-						
-						if(colonist_id == colonistsId[j]){
-							
-							if(colonistsFather[j] != ""){
-								var nome = colonistsFather[j];
-								var email = colonistsFatherE[j];
-
-								data2.push(email);
-								data2.push(nome);
-								data1.push(data2);
-							}
-
-							if(colonistsMother[j] != ""){
-								var nome = colonistsMother[j];
-								var email = colonistsMotherE[j];
-
-								data3.push(email);
-								data3.push(nome);
-								data1.push(data3);
-							}
-
-							if(colonistsResponsable[j] != ""){
-								var nome = colonistsResponsable[j];
-								var email = colonistsResponsableE[j];
-
-								data4.push(email);
-								data4.push(nome);
-								data1.push(data4);
-							}
-
-						}
-						
-					} 
-
-					
-                }
-                
-                if (i == 0) {
-                    alert('Não há dados para geração da planilha');
-                    return;
-                }
-                var dataToSend = JSON.stringify(data1);
-                var columName = ["Email", "Nome"];
-                var columnNameToSend = JSON.stringify(columName);
-
-                post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
-            }
+               post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
+ 							}
 
             function gerarTXTcomTelefones() {
 
@@ -662,7 +599,7 @@
                                     <td><?= explode(" ", $colonist->age)[0] ?></td>
                                     <td><?= date('d/m/Y', strtotime(substr($colonist->birth_date, 0, 10))) ?></td>
                                     <td><a name="responsavel" id="<?= $colonist -> user_name?>" key="<?= $colonist -> email?>"></a><?= $colonist->school_year ?></td>
-                                </tr>                                   
+                                </tr>
                             <?php }
                             
                             $colonistsId = implode("|",$colonistsId);
@@ -758,7 +695,6 @@
                     </table>
                 </div>
             </div>
-        <?php } ?>
-        
+		<?php } ?>
     </div>
 </div>
