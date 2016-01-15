@@ -87,10 +87,21 @@ class Reports extends CK_Controller {
         } else if ($month == 0) {
             $month = FALSE;
         }
+        $current_year = date('Y');
+        $checker = 1;
         $data["year"] = $year;
         $data["month"] = $month;
         $years = $this->campaign_model->getYearsCampaign();
+
         $data['years'] = array();
+        foreach ($years as $a_year) {
+            if ($a_year === $current_year) {
+                $checker = 0;
+            }
+        }
+        if ($checker) {
+            $data['years'][] = $current_year;
+        }
         foreach ($years as $a_year) {
             $data['years'][] = $a_year->year_event;
         }
@@ -105,6 +116,7 @@ class Reports extends CK_Controller {
             $searchfor = 9;
             $title_extra = " - Cancelados";
         }
+        // echo $year . "oie" . $month;
         $results = $this->cielotransaction_model->statisticsPaymentsByCardFlag($searchfor, $option, $year, $month);
         $data['result'] = $results;
         if ($option == PAYMENT_REPORTBYCARD_VALUES) {
@@ -175,10 +187,6 @@ class Reports extends CK_Controller {
         }
         if ($mes)
             $data['mes'] = $mes;
-        else {
-            $date = new DateTime('NOW');
-            $data['mes'] = $date->format("m");
-        }
         $data['payments'] = $this->cielotransaction_model->getPaymentsDetailed($ano, $mes);
         $this->loadReportView("reports/finances/all_transactions", $data);
     }
@@ -985,7 +993,9 @@ class Reports extends CK_Controller {
             $month = $_GET['mes'];
         if (isset($_GET['ano']) && $_GET['ano'] != 0)
             $year = $_GET['ano'];
-
+        else {
+            $year = date('Y');
+        }
         $data['year'] = $year;
         $data['years'] = $years;
         $data['month'] = $month;
