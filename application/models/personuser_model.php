@@ -173,14 +173,64 @@ class personuser_model extends CK_Model {
 
     public function getAllUserRegistered() {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * from v_report_user_registered";
+        $sql = "
+        SELECT count_users.count_users,
+        count_associates.count_associates AS count_associates,
+        count_benemerit.count_benemerit,
+        count_non_benemerit.count_non_associate
+
+        FROM
+        ( SELECT count(*) AS count_users
+               FROM person_user) count_users,
+
+        ( SELECT count(*) AS count_associates
+          FROM  donation d, person p
+          WHERE d.donation_type=2
+          AND d.donation_status=2
+          AND d.person_id=p.person_id
+          AND d.person_id not in ( SELECT b.person_id
+                                   FROM   benemerits b )) count_associates,
+
+        ( SELECT count(*) AS count_benemerit
+          FROM benemerits b
+          WHERE b.date_finished IS NULL) count_benemerit,
+
+        ( SELECT count(*) AS count_non_associate
+          FROM person_user
+          WHERE NOT (person_user.person_id IN ( SELECT d.person_id
+                                                FROM   donation d
+                                                WHERE  d.donation_type = 2
+                                                AND d.donation_status = 2
+                                                UNION
+                                                SELECT b.person_id
+                                                FROM   benemerits b))) count_non_benemerit";
+
         $rows = $this->executeRows($this->db, $sql);
         return $rows;
     }
 
     public function getAllUsersDetailed() {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * from v_report_all_users_association_detailed";
+        $sql = "
+            SELECT a.fullname, a.email, a.associate, a.person_id
+            FROM ( SELECT p.fullname, p.email, 'não sócio'::text AS associate, p.person_id
+                   FROM person_user pu
+                   JOIN person p ON pu.person_id = p.person_id
+                   WHERE NOT (pu.person_id IN ( SELECT associates.person_id
+                                                FROM associates))
+            UNION
+            SELECT p.fullname, p.email, 'contribuinte'::text AS associate, p.person_id
+            FROM  donation d, person p
+            WHERE d.donation_type=2
+            AND d.donation_status=2
+            AND d.person_id=p.person_id
+            UNION
+            SELECT p.fullname, p.email, 'benemerito'::text AS associate, p.person_id
+            FROM benemerits b
+            JOIN person p ON p.person_id = b.person_id
+            WHERE b.date_finished IS NULL) a
+            ORDER BY a.fullname;";
+
         $rows = $this->executeRows($this->db, $sql);
         return $rows;
     }
@@ -192,10 +242,12 @@ class personuser_model extends CK_Model {
         return $rows;
     }
 
-    public function checkPermission($class, $method, $userType) {
+    public function checkPermission(
+    $class, $method, $userType) {
         $this->Logger->info("Running: " . __METHOD__);
         foreach ($userType as $typeUser) {
-            $sql = "select system_method_id from system_method where lower(method_name) = ? and lower(controller_name) = ? and user_type = ?;";
+            $sql = "select system_method_id from system_method where lower(method_name) = ? and lower(controller_name) = ? and user_type = ?;
+                ";
             $rows = $this->executeRows($this->db, $sql, array(strtolower($method), strtolower($class), intval($typeUser)));
             if (count($rows) > 0) {
                 return true;
@@ -230,24 +282,31 @@ class personuser_model extends CK_Model {
         return $email;
     }
 
-    public function getUsersByUserType($userType,$gender=null) {
+    public function getUsersByUserType($userType, $gender = null) {
         $sql = "select
                 *
                 from person p
                 inner join person_user_type put on put.person_id = p.person_id
                 where put.user_type = $userType
-        		" . (($gender != null) ? "AND p.gender = ?" : "") . "";
-        
-        if($gender!=null)
-        	$rows = $this->executeRows($this->db, $sql,array($gender));
+                " . (($gender != null) ? "AND p.gender = ?" : "") . "";
+
+        if ($gender != null)
+            $rows = $this->executeRows($this->db, $sql, array($gender));
         else
-        	$rows = $this->executeRows($this->db, $sql);
-        
+            $rows = $this->executeRows($this->db, $sql);
+
         $personUser = array();
         foreach ($rows as $row) {
-            $personUser[] = Person::createPersonObjectSimple($row, false);
+            $personUser[] = Person:: createPersonObjectSimple($row, false);
         }
-        return $personUser;
+        return $personUser
+
+
+
+
+
+
+        ;
     }
 
 }
