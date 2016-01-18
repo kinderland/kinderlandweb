@@ -208,16 +208,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -232,6 +229,7 @@ class Reports extends CK_Controller {
     public function all_registrations() {
         $data = array();
         $years = array();
+
         $start = 2015;
         $date = date('Y');
         $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
@@ -241,16 +239,14 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
+
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -338,16 +334,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -404,16 +397,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -474,16 +464,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -591,16 +578,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -633,16 +617,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -666,16 +647,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -699,16 +677,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -753,16 +728,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -786,16 +758,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -849,16 +818,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -919,16 +885,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -1079,16 +1042,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -1486,16 +1446,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
@@ -1711,16 +1668,13 @@ class Reports extends CK_Controller {
             $date++;
             $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
         }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
+        $years = $this->summercamp_model->getAllSummerCampsYears();
         $year = null;
 
         if (isset($_GET['ano_f']))
             $year = $_GET['ano_f'];
         else {
-            $year = date('Y');
+            $year = $years[0];
         }
 
         $data['ano_escolhido'] = $year;
