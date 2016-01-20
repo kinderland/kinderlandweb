@@ -14,6 +14,8 @@ class Reports extends CK_Controller {
         $this->load->model('donation_model');
         $this->load->model('campaign_model');
         $this->load->model('telephone_model');
+        $this->load->model('event_model');
+        $this->load->model('eventsubscription_model');
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
@@ -21,6 +23,8 @@ class Reports extends CK_Controller {
         $this->donation_model->setLogger($this->Logger);
         $this->campaign_model->setLogger($this->Logger);
         $this->telephone_model->setLogger($this->Logger);
+        $this->event_model->setLogger($this->Logger);
+        $this->eventsubscription_model->setLogger($this->Logger);
     }
 
     public function user_reports() {
@@ -44,6 +48,53 @@ class Reports extends CK_Controller {
         $data['users'] = $this->personuser_model->getAllUsersDetailed();
         $this->loadReportView("reports/users/all_users", $data);
     }
+    
+    public function event_reports(){
+    	$this->loadView("reports/events/event_reports_container");
+    }
+    
+    public function reportPanel(){
+    	$this->Logger->info("Starting " . __METHOD__);
+    	$data = array();
+    	$this->loadReportView('reports/events/report_panel', $data);
+    }
+    
+    /*
+     public function loadReportPanel(){
+     $this->Logger->info("Starting " . __METHOD__);
+    
+     $eventId = $_POST['event_id'];
+     $reportType = $_POST['report_type'];
+    
+     $data = array();
+    
+     if(!$this->checkSession())
+     	redirect("login/index");
+    
+     	try {
+     	$this->Logger->info("Retrieving information about event with id: ". $eventId);
+    
+     	$event = $this->event_model->getEventById($eventId);
+     	$subscriptions = $this->eventsubscription_model->getSubscriptionsByEventId($eventId);
+     	$price = $this->eventsubscription_model->getEventPrices($eventId);
+     	$age_groups = $this->eventsubscription_model->getAgeGroups();
+    
+     	$data['event'] = $event;
+     	$data['subscriptions'] = $subscriptions;
+     	$data['price'] = $price;
+     	$data['age_groups'] = $age_groups;
+    
+     	if($error)
+     		$data['error'] = $error;
+    
+     		$this->loadView('event/report_panel', $data);
+     			
+     		} catch (Exception $ex) {
+     		$this->Logger->error("Unable to load information about event with id: ". $eventId);
+     		$this->index();
+     		}
+    
+     		}*/
 
     public function toCSV() {
         $data = $this->input->post('data', TRUE);

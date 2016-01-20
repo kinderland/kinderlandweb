@@ -56,12 +56,23 @@ class event_model extends CK_Model {
                 on es.person_id = p.person_id
             where es.event_id = ? and es.subscription_status = 3
                 and p.gender = 'F'
+				
+			UNION
+
+            select 
+                'TRUE' as nonsleeper, count(es.event_id) as vagas_ocupadas
+            from person p
+            left outer join event_subscription es
+                on es.person_id = p.person_id
+            where es.event_id = ? and es.subscription_status = 3
+                and es.nonsleeper = TRUE
         ";
 
-		$capacityResultSet = $this -> executeRows($this -> db, $sqlCapacity, array(intval($eventId), intval($eventId)));
+		$capacityResultSet = $this -> executeRows($this -> db, $sqlCapacity, array(intval($eventId), intval($eventId), intval($eventId)));
 
-		$resultSet -> capacity_male = $resultSet -> capacity_male - $capacityResultSet[1] -> vagas_ocupadas;
-		$resultSet -> capacity_female = $resultSet -> capacity_female - $capacityResultSet[0] -> vagas_ocupadas;
+		$resultSet -> capacity_male = $resultSet -> capacity_male - $capacityResultSet[0] -> vagas_ocupadas;
+		$resultSet -> capacity_female = $resultSet -> capacity_female - $capacityResultSet[1] -> vagas_ocupadas;
+		$resultSet -> capacity_nonsleeper = $resultSet -> capacity_nonsleeper - $capacityResultSet[2] -> vagas_ocupadas;
 
 		if ($resultSet)
 			return Event::createEventObject($resultSet);
@@ -87,7 +98,7 @@ class event_model extends CK_Model {
 	public function updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		
-		$sql = 'UPDATE event SET event_name = ?,  description = ?, $date_start = ?, date_finish = ?, date_start_show = ?, date_finish_show = ?, enabled = ?, capacity_male = ?, capacity_female = ?, capacity_nonsleeper = ?
+		$sql = 'UPDATE event SET event_name = ?,  description = ?, date_start = ?, date_finish = ?, date_start_show = ?, date_finish_show = ?, enabled = ?, capacity_male = ?, capacity_female = ?, capacity_nonsleeper = ?
 				WHERE event_id = ?';
 		
 		$result = $this -> execute($this->db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $event_id));
@@ -113,7 +124,7 @@ class event_model extends CK_Model {
 	public function deleteEventPaymentPeriods($eventId){
 		$this -> Logger -> info("Running: " . __METHOD__);
 		
-		$sql = 'DELETE FROM payment_period WHERE event_id = ?';
+		$deleteSql = 'DELETE FROM payment_period WHERE event_id = ?';
 		
 		return $this->execute($this->db, $deleteSql, array(intval($eventId)));
 	}

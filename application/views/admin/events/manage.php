@@ -41,7 +41,7 @@
   });
   $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function(event, state) {
     var string = "<?=$this->config->item("url_link")?>events/toggleEnable/".concat($(this).attr("id"));
-    var recarrega = "<?=$this->config->item("url_link")?>events/manageEvents/";
+    var recarrega = "<?=$this->config->item("url_link")?>admin/manageEvents/";
     $.post( string ).done(function( data ) {
         if(data == 1)
 		    alert( "Evento modificado com sucesso" );
@@ -58,7 +58,7 @@
 <div class="row">
     <?php // require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
-        <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?=$this->config->item("url_link")?>events/eventCreate','dd'); return false;" href=""><button id="create" class="btn btn-primary"  value="Criar novo evento" >Criar novo evento</button></a>
+        <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?=$this->config->item("url_link")?>admin/eventCreate','dd'); return false;" href=""><button id="create" class="btn btn-primary"  value="Criar novo evento" >Criar novo evento</button></a>
 <br /><br />
 		<?php 
 			if(isset($events) && count($events) > 0) {
@@ -67,8 +67,7 @@
         <?php
             	foreach($events as $event) {
 		?><tr>
-		<!-- <td><a href="<?php //$this->config->item("url_link")?>events/info/<?php //$event->getEventId()?>"><?php //$event->getEventName();?></a></td> -->
-		<td><?=$event->getEventName();?></td>
+		<body onunload="window.opener.location.reload();"><td><a target='_blank' onclick="window.open('<?php echo $this->config->item("url_link");?>admin/editEvent/<?php echo $event->getEventId()?>','dd'); return false;" href=""><?php echo $event->getEventName();?></a></td>
         <td><?= date_format(date_create($event->getDateStart()), 'd/m/y');?> </td>
         <td><?= date_format(date_create($event->getDateFinish()), 'd/m/y')?> </td>
         <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$event->getEventId()?>" 

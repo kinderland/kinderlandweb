@@ -64,11 +64,11 @@
         </div>
         <h3>Eventos</h3>
         <div>
-        	<a href="<?= $this->config->item('url_link'); ?>events/admin">
+        	<a href="<?= $this->config->item('url_link'); ?>admin/event_admin">
                 Administração
             </a>
             <br />
-            <a href="<?= $this->config->item('url_link'); ?>events/event_reports"> 
+            <a href="<?= $this->config->item('url_link'); ?>reports/event_reports"> 
                 Relatórios
             </a>  
         </div>

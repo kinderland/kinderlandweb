@@ -91,7 +91,7 @@
 		
 				<div class='row'>
 					<div class="col-lg-3">
-						<form name="event_panel" method="POST" action="<?=$this->config->item('url_link')?>events/loadReportPanel" id="event_panel" >
+						<form name="event_panel" method="POST" action="<?=$this->config->item('url_link')?>reports/loadReportPanel" id="event_panel" >
 						<select  class="form-control" id="event_id" name="event_id" >
 								<option value="" selected>-- Selecione --</option>
 								<?php

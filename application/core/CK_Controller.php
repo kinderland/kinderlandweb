@@ -89,7 +89,7 @@ class CK_Controller extends CI_Controller {
             	
             	$nonsleeper = null;
             	
-            	if($p->nonsleeper)
+            	if($p->nonsleeper == "t")
             		$nonsleeper = "sem pernoite";
             	else 
             		$nonsleeper = "com pernoite";
