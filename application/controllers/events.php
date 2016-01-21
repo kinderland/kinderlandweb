@@ -33,7 +33,7 @@ class Events extends CK_Controller {
 		$this->loadView("event/home", $data);
 	}
 
-	public function info($eventId, $error=false){
+	public function info($eventId, $error=false,$age_group=NULL,$nonsleeper=NULL,$gender=NULL){
 		$this->Logger->info("Starting " . __METHOD__);
 
 		if(!$this->checkSession())
@@ -54,7 +54,11 @@ class Events extends CK_Controller {
 			$data['user_associate'] = false;///true;//$this->personuser_model->isAssociate($this->session->userdata("user_id"));
 			$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($this->session->userdata("user_id"));
 			$data['peoplejson'] = json_encode($data['people']);
-
+			$data['age_group'] = $age_group; 
+			$data['nonsleeper'] = $nonsleeper;
+			$data['gender'] = $gender;
+			$data['name'] = "";
+			
 			$this->Logger->debug("People json: ".$data['peoplejson']);
 
 			$this->Logger->info("Loading screen");
@@ -116,9 +120,10 @@ class Events extends CK_Controller {
 			$this->Logger->info("Subscribing user {$userId} on event {$eventId}");
 			$event = $this->event_model->getEventById($eventId);
 
-			$this->eventsubscription_model->createSubcription($event, $userId, $userId, SUSCRIPTION_STATUS_WAITING_PAYMENT);
-
+			$result = $this->eventsubscription_model->createSubcription($event, $userId, $userId, SUSCRIPTION_STATUS_WAITING_PAYMENT);
+			
 			$this->info($eventId);
+			
 		} catch (Exception $ex) {
 			$this->Logger->error("Failed to subscribe user on event");
 			$this->info($eventId, true);
@@ -182,16 +187,42 @@ class Events extends CK_Controller {
 			$this->Logger->info("Subscribing person {$personId} on event {$eventId} under responsability of user {$userId}");
 			$event = $this->event_model->getEventById($eventId);
 
-			$this->eventsubscription_model->createSubcription($event, $userId, $personId, SUSCRIPTION_STATUS_WAITING_PAYMENT, $age_group_id, $isAssociate, $nonSleeper);
-			$this->generic_model->commitTransaction();
-			$this->Logger->info("Person subscribed");
-			$this->Logger->info("Loading event details page");
+			$result = $this->eventsubscription_model->createSubcription($event, $userId, $personId, SUSCRIPTION_STATUS_WAITING_PAYMENT, $age_group_id, $isAssociate, $nonSleeper);
+			
+			if($result == "ok"){			
+				$this->generic_model->commitTransaction();
+				$this->Logger->info("Person subscribed");
+				$this->Logger->info("Loading event details page");
+	
+				$this->info($eventId);
+				echo "<script>alert('Convite criado com sucesso!');</script>";
+				redirect("events/info/".$eventId);
+			}
+			else if($result == "Falha na hora de inserir a inscrição"){
+				echo "<script>alert('Não foi possível criar o convite. Tente Novamente!');window.location.back();</script>"; 				
+			}
+			else if($result == "Sem vaga"){
 
-			$this->info($eventId);
+				$person = $this -> person_model -> getPersonById($personId);
+				
+				if($person->getGender() == 'M')
+					$gender = 'Masculino ';
+				else if($person->getGender() == 'F')
+					$gender = 'Feminino ';
+				 
+				if($nonSleeper == 'true')
+					$nonsleeper = 'sem Pernoite';
+				else if($nonSleeper == 'false')
+					$nonsleeper = 'com Pernoite';
+				 
+				echo "<script>alert('Infelizmente, não há mais disponibilidade de convites".$gender.$nonsleeper.");window.location.back();</script>";
+			}
 		} catch (Exception $ex) {
 			$this->generic_model->rollbackTransaction();
 			$this->Logger->error("Failed to subscribe person on event");
 			$this->info($eventId, true);
+			echo "<script>alert('Erro ao criar o convite. Tente Novamente!');window.location.back();</script>";
+			
 		}
 	}
 

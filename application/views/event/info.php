@@ -127,9 +127,26 @@
 			}
 
 			function validateFormInfo(){
-				// TODO: Validate info
+				var fullname = document.getElementById("fullname").value;
+				var age_group = document.getElementById("age_group").value;
+				var gender = document.getElementById("gender").value;
+				var nonsleeper = document.getElementsByName("nonsleeper");
+				var error = "";
 
-				$("#form_subscribe").submit();
+				if(fullname == "")
+					error = error.concat("Nome Completo\n");
+				if(age_group == "")
+					error = error.concat("Faixa Etária\n");
+				if(gender == "")
+					error = error.concat("Sexo\n");
+				if(nonsleeper[0].checked === false && nonsleeper[1].checked === false)
+					error = error.concat("Com Pernoite\n");
+
+				if(error != ""){
+					alert("Os seguintes campos precisam ser preenchidos:\n\n".concat(error));
+				}
+				else
+					$("#form_subscribe").submit();
 			}
 
 		</script>
@@ -318,43 +335,22 @@
 
 								<div>
 								</div>
-
-								<?php if(isset($people) && is_array($people) && count($people) > 0) { ?>
-									<br />
-									<div class="row">
-										<div class="form-group">
-											<label for="box_options" class="col-lg-3 control-label"> Opções de pessoas: </label>
-											<div class="col-lg-9">
-												<select class="form-control" id="box_options" name="box_options">
-													<option value="" selected>-- Selecione --</option>
-												  	<?php 
-												  		$i = 0;
-												  		foreach($people as $person) { 
-												  	?>
-												  		<option value="<?=$i++?>"><?=$person->getFullname()?></option>
-												  	<?php } ?>
-												</select> 
-											</div>
-										</div>
-									</div>
-									<br />
-								<?php } ?>
-								
+																
 								<form name="form_subscribe" method="POST" action="<?=$this->config->item('url_link')?>events/subscribePerson" id="form_subscribe">
 									<div class="row">
 										<input type="hidden" id="event_id" name="event_id" value="<?=$event->getEventId()?>" />
 										<input type="hidden" id="user_id" name="user_id" value="<?=$user_id?>" />
 										<input type="hidden" id="person_id" name="person_id" value="" />
 										<div class="form-group">
-											<label for="fullname" class="col-lg-2 control-label"> Nome Completo: </label>
+											<label for="fullname" class="col-lg-2 control-label"> Nome Completo*: </label>
 											<div class="col-lg-4">
 												<input type="text" class="form-control" placeholder="Nome Completo"
-													name="fullname" id="fullname"/>
+													name="fullname" value="<?php echo $name;?>" id="fullname" />
 											</div>
 
-											<label for="gender" class="col-lg-2 control-label"> Sexo: </label>
+											<label for="gender" class="col-lg-2 control-label"> Sexo*: </label>
 											<div class="col-lg-4">
-												<select class="form-control" id="gender" name="gender" >
+												<select class="form-control" id="gender" name="gender">
 													<option value="" selected>-- Selecione --</option>
 													<option value="M">Masculino</option>
 													<option value="F">Feminino</option>
@@ -386,9 +382,9 @@
 												</p>
 											</div>
 
-											<label for="age_group" class="col-lg-2 control-label"> Faixa Etária: </label>
+											<label for="age_group" class="col-lg-2 control-label"> Faixa Etária*: </label>
 											<div class="col-lg-4">
-												<select class="form-control" id="age_group" name="age_group" >
+												<select class="form-control" id="age_group" name="age_group">
 													<option value="" selected>-- Selecione --</option>
 													<?php
 														foreach($age_groups as $group){
@@ -402,9 +398,9 @@
 									<div class="row">
 										<div class="form-group">
 											<div class="col-lg-6">
-												<label for="nonsleeper" class="control-label"> Sem pernoite: </label>
-												<input type="radio" class="" name="nonsleeper" id="nonsleeper" value="true" /> Sim 
-												<input type="radio" class="" name="nonsleeper" id="nonsleeper" value="false" /> Não 
+												<label for="nonsleeper" class="control-label"> Com Pernoite*: </label>
+												<input type="radio" class="" name="nonsleeper" id="nonsleeper" value="false" /> Sim 
+												<input type="radio" class="" name="nonsleeper" id="nonsleeper" value="true" /> Não 
 											</div>
 										</div>
 									</div>

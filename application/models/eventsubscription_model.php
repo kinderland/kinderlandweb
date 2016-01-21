@@ -11,11 +11,31 @@
         public function createSubcription($event, $userId, $personId, $subscriptionStatus, $ageGroup, $isAssociate, $nonSleeper) {
             $subs = $this->getSubscriptionByPersonIdAndEventId($personId, $event->getEventId());
             if(count($subs) == 0){
-                $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate, nonsleeper) 
-                    VALUES(?,?,?,?,?,?,?)";
-
-                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate, $nonSleeper )))
-                    return true;
+            	
+            	if($nonSleeper == 'true'){
+            		$avaiable = $event->getCapacityNonSleeper();
+            	}
+            	else{
+            		$person = $this -> person_model -> getPersonById($personId);
+            		
+            		if($person->getGender() == 'M')
+            			$avaiable = $event->getCapacityMale();
+            		else if($person->getGender() == 'F')
+            			$avaiable = $event->getCapacityFemale();
+            	}
+            	
+            	if($avaiable > 0){
+            	
+	                $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate, nonsleeper) 
+	                    VALUES(?,?,?,?,?,?,?)";
+	
+	                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate, $nonSleeper )))
+	                    return "ok";
+	                else 
+	                	return "Falha na hora de inserir a inscrição";
+            	}
+            	else 
+            		return "Sem vaga";
             } else {
                 //Tratar do caso se a inscrição estiver confirmada.
                 
