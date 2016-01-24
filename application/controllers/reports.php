@@ -1631,27 +1631,13 @@ class Reports extends CK_Controller {
                 $id = $this->summercamp_model->getPersonUserIdByColonistId($i->colonist_id, $campChosenId);
                 if ($id != null) {
 
-                    if ($id->person_user_id == $father_id) {
-                        $id = null;
-                        $obj->responsableName = null;
-                        $obj->responsableEmail = null;
-                        $obj->responsableTel = '-';
-                        $this->Logger->info("$# COLONISTA COM PAI RESPONSÁVEL ///////");
-                    } else if ($id->person_user_id == $mother_id) {
-                        $id = null;
-                        $obj->responsableName = null;
-                        $obj->responsableEmail = null;
-                        $obj->responsableTel = '-';
-                        $this->Logger->info("$# COLONISTA COM MÃE RESPONSÁVEL ///////");
-                    } else {
-                        $result = $this->person_model->getPersonById($id->person_user_id);
+                    	$result = $this->person_model->getPersonById($id->person_user_id);
                         $responsableName = $result->getFullname();
                         $responsableEmail = $result->getEmail();
 
                         $obj->responsableName = $responsableName;
                         $obj->responsableEmail = $responsableEmail;
-
-                        if ($temTelephone == 0) {
+                        
                             $telephone = $this->telephone_model->getTelephonesByPersonId($id->person_user_id);
                             $tels = array();
                             $add = 1;
@@ -1666,23 +1652,14 @@ class Reports extends CK_Controller {
                                         $tel = $t;
                                     else
                                         $tel = $tel . "*" . $t;
-
-                                    $this->Logger->info("$# COLONISTA TELEFONE DE RESPONSÁVEL " . $result->getFullname() . ":" . $t);
                                 }
                             }
 
                             $obj->responsableTel = $tel;
-                        }
-                        else {
-                            $obj->responsableTel = '-';
-                            $this->Logger->info("$# COLONISTA COM ID DE PAI E/OU MÃE ///////");
-                        }
-                    }
                 } else {
                     $obj->responsableName = null;
                     $obj->responsableEmail = null;
                     $obj->responsableTel = '-';
-                    $this->Logger->info("$# COLONISTA SEM RESPONSÁVEL ///////");
                 }
 
                 $obj->colonist_name = $i->colonist_name;
