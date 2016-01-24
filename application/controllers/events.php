@@ -149,10 +149,132 @@ class Events extends CK_Controller {
 			$this->generic_model->commitTransaction();
 
 			$this->info($eventId);
+			echo true;
 		} catch (Exception $ex) {
 			$this->generic_model->rollbackTransaction();
 			$this->Logger->error("Failed to subscribe user on event");
 			$this->info($eventId, true);
+			echo false;
+		}
+	}
+	
+	public function checkVacancy(){
+		$this->Logger->info("Starting VAGAS " . __METHOD__);
+		
+		$type = $this -> input -> post('type',TRUE);
+		
+		if($type == "Simples"){
+			$nonsleeper = $this -> input -> post('nonsleeper',TRUE);
+			$gender = $this -> input -> post('gender',TRUE);
+			$event_id = $this -> input -> post('event_id',TRUE);
+			
+			$event = $this -> event_model -> getEventById($event_id);
+			
+			$avaiable = null;
+			
+			if($nonsleeper == 'true'){
+				$avaiable = $event -> getCapacityNonSleeper();
+			}
+			else{
+				if($gender == 'M'){
+					$avaiable = $event -> getCapacityMale();
+				}
+				else if($gender == 'F'){
+					$avaiable = $event -> getCapacityFemale();
+				}
+			}
+			
+			if($avaiable>0){
+				echo true;
+				return;
+			}
+			else{
+				echo false;
+				return;
+			}
+		}
+		else if($type == "Completo"){
+			$this->Logger->info("Starting Completo");
+			
+			$event_id = $this -> input -> post('event_id',TRUE);
+			$person_ids = $this -> input -> post('person_ids',TRUE);
+			$person_ids = explode(",", $person_ids);
+			$this->Logger->info("Event id: ".$event_id);
+			
+			foreach($person_ids as $ids){
+				$this->Logger->info("Person ids: ".$ids);
+			}
+				
+			$event = $this -> event_model -> getEventById($event_id);
+				
+			$error = "";
+			$numbers = array(0,0,0);
+			$avaiable = array($event->getCapacityNonSleeper(),$event->getCapacityMale(),$event->getCapacityFemale());
+			$description = array("Masculino e Feminino sem pernoite\n","Masculino com pernoite\n","Feminino com pernoite\n");
+			
+			foreach($person_ids as $id){
+				$this->Logger->info("Starting Person with id ".$id);
+				$person = $this -> person_model -> getPersonById($id);
+				$subs = $this -> eventsubscription_model -> getSubscriptionByPersonIdAndEventId($id,$event_id);
+				
+				if($subs->nonsleeper == 't'){
+					if($avaiable[0]<1){
+						$numbers[0]++;
+					}
+					else {
+						$avaiable[0]--;
+					}
+				}
+				else if($subs->nonsleeper == 'f'){
+					if($person -> getGender() == 'M'){
+						if($avaiable[1]<1){
+							$numbers[1]++;
+						}
+						else{
+							$avaiable[1]--;
+						}
+					}
+					else if($person -> getGender() == 'F'){
+						if($avaiable[2]<1){
+							$numbers[2]++;
+						}
+						else{
+							$avaiable[2]--;
+						}
+					}
+				}
+				$this->Logger->info("Starting number 0: ".$numbers[0]);
+				$this->Logger->info("Starting number 1: ".$numbers[1]);
+				$this->Logger->info("Starting number 2: ".$numbers[2]);
+			}
+			
+			for($i = 0; $i < 3; $i++){
+				if($numbers[$i]==1){
+					$error = $error.$description[$i];
+				}
+				else if($numbers[$i]>1){
+					if($i == 0){
+						if($event->getCapacityNonSleeper()>0)
+							$error = $error.$event->getCapacityNonSleeper()." ".$description[$i];
+					}
+					else if($i == 1){
+						if($event->getCapacityMale()>0)
+							$error = $error.$event->getCapacityMale()." ".$description[$i];
+					}
+					else if($i == 2){
+						if($event->getCapacityFemale()>0)
+							$error = $error.$event->getCapacityFemale()." ".$description[$i];
+					}
+				}
+				$this->Logger->info("error: ".$error);
+			}
+			
+			if($error != ""){
+				if($numbers[0]>1 || $numbers[1]>1 || $numbers[2]>1)
+					echo "Infelizmente, nem todos os convites selecionados estão disponíveis. Dos escolhidos, há apenas: \n\n".$error;
+				else
+					echo "Infelizmente, os seguintes convites não estão mais disponíveis:\n\n".$error;					
+			}
 		}
 	}
 
@@ -189,40 +311,17 @@ class Events extends CK_Controller {
 
 			$result = $this->eventsubscription_model->createSubcription($event, $userId, $personId, SUSCRIPTION_STATUS_WAITING_PAYMENT, $age_group_id, $isAssociate, $nonSleeper);
 			
-			if($result == "ok"){			
+			if($result == true){			
 				$this->generic_model->commitTransaction();
 				$this->Logger->info("Person subscribed");
 				$this->Logger->info("Loading event details page");
 	
 				$this->info($eventId);
-				echo "<script>alert('Convite criado com sucesso!');</script>";
-				redirect("events/info/".$eventId);
-			}
-			else if($result == "Falha na hora de inserir a inscrição"){
-				echo "<script>alert('Não foi possível criar o convite. Tente Novamente!');window.location.back();</script>"; 				
-			}
-			else if($result == "Sem vaga"){
-
-				$person = $this -> person_model -> getPersonById($personId);
-				
-				if($person->getGender() == 'M')
-					$gender = 'Masculino ';
-				else if($person->getGender() == 'F')
-					$gender = 'Feminino ';
-				 
-				if($nonSleeper == 'true')
-					$nonsleeper = 'sem Pernoite';
-				else if($nonSleeper == 'false')
-					$nonsleeper = 'com Pernoite';
-				 
-				echo "<script>alert('Infelizmente, não há mais disponibilidade de convites".$gender.$nonsleeper.");window.location.back();</script>";
 			}
 		} catch (Exception $ex) {
 			$this->generic_model->rollbackTransaction();
 			$this->Logger->error("Failed to subscribe person on event");
 			$this->info($eventId, true);
-			echo "<script>alert('Erro ao criar o convite. Tente Novamente!');window.location.back();</script>";
-			
 		}
 	}
 

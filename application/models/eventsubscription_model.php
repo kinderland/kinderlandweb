@@ -12,30 +12,13 @@
             $subs = $this->getSubscriptionByPersonIdAndEventId($personId, $event->getEventId());
             if(count($subs) == 0){
             	
-            	if($nonSleeper == 'true'){
-            		$avaiable = $event->getCapacityNonSleeper();
-            	}
-            	else{
-            		$person = $this -> person_model -> getPersonById($personId);
-            		
-            		if($person->getGender() == 'M')
-            			$avaiable = $event->getCapacityMale();
-            		else if($person->getGender() == 'F')
-            			$avaiable = $event->getCapacityFemale();
-            	}
-            	
-            	if($avaiable > 0){
-            	
 	                $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate, nonsleeper) 
 	                    VALUES(?,?,?,?,?,?,?)";
 	
 	                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate, $nonSleeper )))
-	                    return "ok";
+	                    return true;
 	                else 
-	                	return "Falha na hora de inserir a inscrição";
-            	}
-            	else 
-            		return "Sem vaga";
+	                	return false;
             } else {
                 //Tratar do caso se a inscrição estiver confirmada.
                 
@@ -51,7 +34,7 @@
         public function getSubscriptionByPersonIdAndEventId($personId, $eventId){
             $sql = "SELECT * FROM event_subscription WHERE person_id = ? AND event_id = ?";
 
-            return $this->executeRows($this->db, $sql, array(intval($personId), intval($eventId)));
+            return $this->executeRow($this->db, $sql, array(intval($personId), intval($eventId)));
         }
         public function getPersonsIdByEventIdAndDonationId($eventId, $donationId) {
         	$sql = "SELECT * FROM event_subscription es INNER JOIN age_group ag
