@@ -54,39 +54,27 @@
 		                    </form>
 		                  </div>
 		                </div>
-		                <?php if($event !== null){?>
 		                <table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 700px;">
 							<tr>
-							  	<th>Ingressos</th>
-							    <th>Feminino</th>
-							    <th>Masculino</th>		
-							    <th>Sem Pernoite</th>
-							    <th>Total</th>
-							</tr>
-							<tr>
-							  	<td>Disponibilizado</td>
-							    <td><?php echo $info["fem"] + $dispFem;?></td>
-							    <td><?php echo $info["mas"] + $dispMas;?></td>		
-							    <td><?php echo $info["non"] + $dispNon;?></td>
-							    <td><?php echo $info["fem"]+$info["mas"]+$info["non"] + $dispNon + $dispMas + $dispFem;?></td>
+							  	<th>Por faixa etária</th>
+							    <th>Feminino +18</th>
+							    <th>7 - 17</th>		
+							    <th>0 - 6</th>
+							    <th>Masculino +18</th>
+							    <th>7 - 17</th>		
+							    <th>0 - 6</th>
 							</tr>
 							<tr>
 							  	<td>Vendido</td>
-							    <td><?php echo $info["fem"];?></td>
-							    <td><?php echo $info["mas"];?></td>		
-							    <td><?php echo $info["non"];?></td>
-							    <td><?php echo $info["fem"]+$info["mas"]+$info["non"];?></td>
-							</tr>
-							<tr>
-							  	<td>Disponível</td>
-							    <td><?php echo $dispFem;?></td>
-							    <td><?php echo $dispMas;?></td>		
-							    <td><?php echo $dispNon;?></td>
-							    <td><?php echo $dispNon + $dispMas + $dispFem;;?></td>
+							    <td><?php echo $info["fem18"]; ?></td>
+							    <td><?php echo $info["fem717"]; ?></td>		
+							    <td><?php echo $info["fem06"]; ?></td>
+							    <td><?php echo $info["mas18"]; ?></td>
+							    <td><?php echo $info["mas717"]; ?></td>		
+							    <td><?php echo $info["mas06"]; ?></td>
 							</tr>
 						</table>
-						<?php }?>
 		 </div>
 	</body>
 </html>

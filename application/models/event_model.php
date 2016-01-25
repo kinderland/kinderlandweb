@@ -79,6 +79,47 @@ class event_model extends CK_Model {
 
 		return null;
 	}
+	
+	public function getAllEventsPostDate($date){
+		$sql = "SELECT * FROM event WHERE date_finish > ?
+				ORDER BY date_finish ASC";		
+		
+		$resultSet = $this -> executeRows($this->db,$sql,array($date));
+		
+		if($resultSet)
+			return $resultSet;
+		else 
+			return null;
+	}
+	
+	public function getAllEventsByYear($year){
+		$sql = "SELECT * FROM event WHERE DATE_PART('YEAR',date_finish) = ?
+				ORDER BY date_finish ASC";
+	
+		$resultSet = $this -> executeRows($this->db,$sql,array($year));
+	
+		if($resultSet)
+			return $resultSet;
+		else
+			return null;
+	}
+	
+	public function getAllEventsYears() {
+		$sql = "
+            SELECT distinct(EXTRACT(YEAR FROM date_finish)) as anos
+            FROM event
+            ORDER BY anos DESC;";
+	
+		$resultSet = $this->executeRows($this->db, $sql);
+	
+		$yearsArray = array();
+	
+		if ($resultSet)
+			foreach ($resultSet as $row)
+				$yearsArray[] = $row->anos;
+	
+			return $yearsArray;
+	}
 
 	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper) {
 

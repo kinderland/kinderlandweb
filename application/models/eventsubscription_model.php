@@ -160,7 +160,7 @@
         public function getSubscriptionsByEventId ($eventId,$type = null){
             $sql = "SELECT * FROM event_subscription es
             		INNER JOIN person p on p.person_id = es.person_id
-            		WHERE es.event_id = ".$eventId;
+            		WHERE es.event_id = ?";
             
             if($type == "nonsleeper")          
             	$sql = $sql."AND es.nonsleeper = TRUE";
@@ -169,7 +169,7 @@
             else if($type == "capacity_female")
             	$sql = $sql."AND p.gender = 'F'";
             
-            return $this->executeRows($this->db, $sql, array());
+            return $this->executeRows($this->db, $sql, array($eventId));
         }
 
     }
