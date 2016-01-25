@@ -216,8 +216,14 @@ class personuser_model extends CK_Model {
             FROM ( SELECT p.fullname, p.email, 'não sócio'::text AS associate, p.person_id
                    FROM person_user pu
                    JOIN person p ON pu.person_id = p.person_id
-                   WHERE NOT (pu.person_id IN ( SELECT associates.person_id
-                                                FROM associates))
+                   WHERE NOT (pu.person_id IN ( SELECT d.person_id
+                                                FROM person p, donation d
+                                                WHERE d.donation_type=2
+                                                AND d.donation_status=2
+                                                AND d.person_id=p.person_id
+                                                UNION
+                                                SELECT person_id
+                                                FROM  benemerits))
             UNION
             SELECT p.fullname, p.email, 'contribuinte'::text AS associate, p.person_id
             FROM  donation d, person p
@@ -229,7 +235,7 @@ class personuser_model extends CK_Model {
             FROM benemerits b
             JOIN person p ON p.person_id = b.person_id
             WHERE b.date_finished IS NULL) a
-            ORDER BY a.fullname;";
+            ORDER BY a.fullname";
 
         $rows = $this->executeRows($this->db, $sql);
         return $rows;
