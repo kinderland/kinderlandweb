@@ -48,7 +48,7 @@
             <div class = "row">
                 <div class="col-lg-12">
                    <?php if (in_array(SYSTEM_ADMIN, $permissions)){?> 
-                    <a href="<?= $this->config->item('url_link'); ?>admin/createCamp" target="_parent">
+                    <a target="_blank" href="<?= $this->config->item('url_link'); ?>admin/createCamp" target="_parent">
                         <button type="button" class="btn btn-primary btn-sm">
                             Criar colônia
                         </button>

@@ -575,7 +575,9 @@ class Admin extends CK_Controller {
     }
 
     public function createCamp() {
-        $this->loadView("admin/camps/insert_camp");
+    	$data['payments'] = array();
+    	
+        $this->loadView("admin/camps/insert_camp",$data);
     }
 
     public function queue() {
