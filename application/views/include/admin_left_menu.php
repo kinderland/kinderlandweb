@@ -58,7 +58,7 @@
                 Relatórios
             </a>
             <br />
-            <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal" target="_blank"> 
+            <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal"> 
                 Quartos
             </a>  
         </div>
