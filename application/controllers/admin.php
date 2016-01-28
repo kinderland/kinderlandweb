@@ -774,7 +774,7 @@ class Admin extends CK_Controller {
     }
 
     public function colonist_exclusion() {
-<<<<<<< HEAD
+
     	$this->Logger->info("Running: " . __METHOD__);
     	$data = array();
     	$years = array();
@@ -839,41 +839,9 @@ class Admin extends CK_Controller {
     		$this->loadReportView("admin/camps/colonist_exclusion", $data);
     }
     
-=======
-        $this->Logger->info("Running: " . __METHOD__);
-        $data = array();
-        $years = array();
-        $start = 2015;
-        $date = intval(date('Y'));
-        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-        $end = $date;
-        while ($campsByYear != null) {
-            $end = $date;
-            $date++;
-            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-        }
-        while ($start <= $end) {
-            $years[] = $start;
-            $start++;
-        }
-        $year = null;
 
-        if (isset($_GET['ano_f']))
-            $year = $_GET['ano_f'];
-        else {
-            $year = date('Y');
-        }
 
-        $data['ano_escolhido'] = $year;
-        $data['years'] = $years;
 
-        $shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-
-        $data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
-        $this->loadReportView("admin/camps/colonist_exclusion", $data);
-    }
-
->>>>>>> d10b3e0df36e6b3d2ac7a49df90e25dd4ec2dda3
     public function password() {
         $this->Logger->info("Running: " . __METHOD__);
 

@@ -363,6 +363,7 @@
 											<div class="form-group">
 												<div class="col-lg-6">
 												
+												
 													<input type="hidden" id="colonist_id" name="colonist_id" value="" />
                                                     <input type="hidden" id="discount" name="discount" value="" />
                                                     <input type="hidden" id="summer_camp_id" name="summer_camp_id" value="" />
