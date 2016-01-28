@@ -24,6 +24,7 @@ class Admin extends CK_Controller {
         $this->load->model('email_model');
         $this->load->model('event_model');
         $this->load->model('eventsubscription_model');
+        $this->load->model('campaign_model');
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
@@ -36,523 +37,511 @@ class Admin extends CK_Controller {
         $this->email_model->setLogger($this->Logger);
         $this->event_model->setLogger($this->Logger);
         $this->eventsubscription_model->setLogger($this->Logger);
+        $this->campaign_model->setLogger($this->Logger);
     }
-    
-    public function event_admin() {
-    	$this->loadView("admin/events/event_admin_container");
-    }
-    
-    public function completeEvent(){
-    	$this->Logger->info("Starting " . __METHOD__);
-    
-    	$event_name = $this -> input -> post('event_name', TRUE);
-    	$description = $this -> input -> post('description', TRUE);
-    	$date_start = $this -> input -> post('date_start', TRUE);
-    	$date_finish = $this -> input -> post('date_finish', TRUE);
-    	$date_start_show = $this -> input -> post('date_start_show', TRUE);
-    	$date_finish_show = $this -> input -> post('date_finish_show', TRUE);
-    	$capacity_male = $this -> input -> post('capacity_male', TRUE);
-    	$capacity_female = $this -> input -> post('capacity_female', TRUE);
-    	$capacity_nonsleeper = $this -> input -> post('capacity_nonsleeper', TRUE);
-    	$payments = array();
-    	$payment_date_end = $this -> input -> post("payment_date_end", TRUE);
-    	$payment_date_start = $this -> input -> post("payment_date_start", TRUE);
-    	$full_price=$this -> input -> post("full_price", TRUE);
-    	$children_price=$this -> input -> post("children_price", TRUE);
-    	$middle_price=$this -> input -> post("middle_price", TRUE);
-    	$payment_portions=$this -> input -> post("payment_portions", TRUE);
-    	$associated_discount=$this -> input -> post("associated_discount", TRUE);
-    	$enabled=$this -> input -> post("enabled", TRUE);
-    	$errors = array();
-    
-    
-    	if($event_name === "")
-    		$errors[] = "O campo nome é obrigatório";
-    	if(!$date_start)
-    		$date_start = NULL;
-    	if(!$date_start_show)
-    		$date_start_show = NULL;
-    	if(!$date_finish)
-    		$date_finish = NULL;
-    	if(!$date_finish_show)
-    		$date_finish_show = NULL;
-    	if(!$enabled)
-    		$enabled = "false";
-    	else if($enabled === "1")
-    		$enabled = "true";
-    
-    	if($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
-    		$errors[] = "A data do ínicio do período do evento antecede a data de fim do evento";
-    
-    	if($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
-    		$errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições";
-    
-    	if($date_start && $date_finish_show && Events::verifyAntecedence($date_start, $date_finish_show))
-    		$errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições";
-    		
-    	if($capacity_male === "")
-    		$capacity_male = 0;
-    	if($capacity_female === "")
-    		$capacity_female = 0;
-    	if($capacity_nonsleeper === "")
-    		$capacity_nonsleeper = 0;
-    
-    	if(is_array($full_price)){
-    		for($i=0;$i<count($full_price);$i++){
-    			if(!$payment_date_start[$i])
-    				$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem data de inicio";
-    			if(!$payment_date_end[$i])
-    				$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem data de fim";
-    			if(!$full_price[$i])
-    				$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem valor ";
-    			if(!$middle_price[$i])
-    				$middle_price[$i] = $full_price[$i];
-    			if(!$children_price[$i])
-    				$children_price[$i] = $middle_price[$i];
-    			if($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])){
-    				$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
-    			}
-    			if($payment_date_start[$i] && $payment_date_end[$i] && (
-    					!Events::verifyAntecedence($payment_date_start[$i], $date_finish_show) ||
-    					!Events::verifyAntecedence($payment_date_end[$i], $date_finish_show)   ||
-    					!Events::verifyAntecedence($date_start_show, $payment_date_start[$i])  )
-    			)
-    				$errors[] = "O pagamento de numero ".($i+1)." está fora do periodo de inscrições";
-    			for($j=$i+1;$j<count($full_price);$j++ ){
-    				if
-    				(
-    						(
-    								Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j])
-    								&& Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
-    						)
-    						||
-    						(
-    								Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i])
-    								&& Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
-    						)
-    				)
-    					$errors[] = "Os pagamentos de numero".($i+1)." e ".($j+1)." se sobrepoem";
-    			}
-    
-    			$payment_date_start[$i] = explode("/",$payment_date_start[$i]);
-    			$payment_date_start[$i] = strval($payment_date_start[$i][2])."-".strval($payment_date_start[$i][1])."-".strval($payment_date_start[$i][0]);
-    
-    			$payment_date_end[$i] = explode("/",$payment_date_end[$i]);
-    			$payment_date_end[$i] = strval($payment_date_end[$i][2])."-".strval($payment_date_end[$i][1])."-".strval($payment_date_end[$i][0]." 23:59:59");
-    			
-    			$date_start = explode("/",$date_start);
-    			$date_start = strval($date_start[2])."-".strval($date_start[1])."-".strval($date_start[0]);
-    			 
-    			$date_finish = explode("/",$date_finish);
-    			$date_finish = strval($date_finish[2])."-".strval($date_finish[1])."-".strval($date_finish[0]." 23:59:59");
-    			 
-    			$date_start_show = explode("/",$date_start_show);
-    			$date_start_show = strval($date_start_show[2])."-".strval($date_start_show[1])."-".strval($date_start_show[0]);
-    			 
-    			$date_finish_show = explode("/",$date_finish_show);
-    			$date_finish_show = strval($date_finish_show[2])."-".strval($date_finish_show[1])."-".strval($date_finish_show[0]." 23:59:59");
-    				
-    			$payments[] = array(
-    					"payment_date_start" => $payment_date_start[$i],
-    					"payment_date_end"=> $payment_date_end[$i],
-    					"full_price"=>$full_price[$i],
-    					"children_price"=>$children_price[$i],
-    					"middle_price"=>$middle_price[$i],
-    					"payment_portions"=>$payment_portions[$i],
-    					"associated_discount"=>$associated_discount[$i]/100,
-    			);
-    		}
-    	} else if($full_price !== FALSE){
-    		if(!$payment_date_start)
-    			$errors[] = "O pagamento não tem data de inicio";
-    		if(!$payment_date_end)
-    			$errors[] = "O pagamento não tem data de fim";
-    		if(!$full_price)
-    			$errors[] = "O pagamento não tem valor ";
-    		if(!$middle_price)
-    			$middle_price = $full_price;
-    		if(!$children_price)
-    			$children_price = $middle_price;
-    		if($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])){
-    			$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
-    		}
-    
-    		for($i=0;$i<count($full_price);$i++){
-    				
-    			$payment_date_start[$i] = explode("/",$payment_date_start[$i]);
-    			$payment_date_start[$i] = strval($payment_date_start[$i][2])."-".strval($payment_date_start[$i][1])."-".strval($payment_date_start[$i][0]);
-    				
-    			$payment_date_end[$i] = explode("/",$payment_date_end[$i]);
-    			$payment_date_end[$i] = strval($payment_date_end[$i][2])."-".strval($payment_date_end[$i][1])."-".strval($payment_date_end[$i][0]." 23:59:59");
-    				
-    		}
-    
-    		$payments[] = array(
-    				"payment_date_start" => $payment_date_start,
-    				"payment_date_end"=> $payment_date_end,
-    				"full_price"=>$full_price,
-    				"children_price"=>$children_price,
-    				"middle_price"=>$middle_price,
-    				"payment_portions"=>$payment_portions,
-    				"associated_discount"=>$associated_discount/100,
-    		);
-    			
-    		$date_start = explode("/",$date_start);
-    		$date_start = strval($date_start[2])."-".strval($date_start[1])."-".strval($date_start[0]);
-    			
-    		$date_finish = explode("/",$date_finish);
-    		$date_finish = strval($date_finish[2])."-".strval($date_finish[1])."-".strval($date_finish[0]." 23:59:59");
-    			
-    		$date_start_show = explode("/",$date_start_show);
-    		$date_start_show = strval($date_start_show[2])."-".strval($date_start_show[1])."-".strval($date_start_show[0]);
-    			
-    		$date_finish_show = explode("/",$date_finish_show);
-    		$date_finish_show = strval($date_finish_show[2])."-".strval($date_finish_show[1])."-".strval($date_finish_show[0]." 23:59:59");
-    	}
-    
-    	if(count($errors) > 0)
-    		return $this->eventCreate($errors,$event_name,$description,
-    				$date_start,$date_finish,$date_start_show,$date_finish_show,$capacity_male,$capacity_female,$capacity_nonsleeper,$payments);
-    
-    
-    	try{
-    		$this->Logger->info("Inserting new event");
-    		$this->generic_model->startTransaction();
-    			
-    		$eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start,$date_finish,
-    				$date_start_show,$date_finish_show, $enabled, $capacity_male, $capacity_female,$capacity_nonsleeper);
-    			
-    		if($eventId){
-    			foreach($payments as $payment){
-    				$this->event_model->insertNewPaymentPeriod($eventId,$payment["payment_date_start"],$payment["payment_date_end"],$payment["full_price"],$payment["middle_price"],
-    						$payment["children_price"],$payment["associated_discount"],$payment["payment_portions"]);
-    			}
-    				
-    			$this->generic_model->commitTransaction();
-    			$this->Logger->info("New event successfully inserted");
-    			echo "<script>alert('Evento criado com sucesso!');opener.location.reload(); window.close();</script>";
-    			//redirect("events/manageEvents");
-    		}
-    		else
-    			echo "<script>alert('Ocorreu um erro ao criar o evento. Tente novamente.');window.history.back();</script>";
-    
-    	} catch (Exception $ex) {
-    		$this->Logger->error("Failed to insert new event");
-    		$this->generic_model->rollbackTransaction();
-    		$data['error'] = true;
-    			
-    		$this->loadReportView('admin/events/event_create', $data);
-    	}
-    }
-    
-    public function eventCreate($errors = array(),$event_name=NULL,$description=NULL,
-    		$date_start=NULL,$date_finish=NULL,$date_start_show=NULL,$date_finish_show=NULL,$capacity_male=NULL,$capacity_female=NULL,$capacity_nonsleeper=NULL,$payments=array()){
-    	$this->Logger->info("Starting " . __METHOD__);
-    	$data = array();
-    	$data["errors"] = $errors;
-    	$data["event_name"] = $event_name;
-    	$data["description"] = $description;
-    	$data["date_start"] = Events::toMMDDYYYY($date_start);
-    	$data["date_finish"] = Events::toMMDDYYYY($date_finish);
-    	$data["date_start_show"] = Events::toMMDDYYYY($date_start_show);
-    	$data["date_finish_show"] = Events::toMMDDYYYY($date_finish_show);
-    	$data["capacity_male"] = $capacity_male;
-    	$data["capacity_female"] = $capacity_female;
-    	$data["capacity_nonsleeper"] = $capacity_nonsleeper;
-    	$data["payments"] = $payments;
-    
-    	$this->loadView('admin/events/event_create', $data);
-    }
-    
-    public function editEvent($event_id=NULL, $errors=array(), $event_name=NULL,$description=NULL,
-    		$date_start=NULL,$date_finish=NULL,$date_start_show=NULL,$date_finish_show=NULL,$capacity_male=NULL,$capacity_female=NULL,$capacity_nonsleeper=NULL,$payments=array()) {
-    	$eventId = $event_id;
-    
-    	$event = $this -> event_model -> getEventById($eventId);
-    	$paymentPeriods = $this -> event_model -> getEventPaymentPeriods($eventId);
-    
-    	$data['event_id'] = $eventId;
-    	$data['event_name'] = $event->getEventName();
-    	$data['description'] = $event->getDescription();
-    	$data["errors"] = $errors;
-    	
-    	$date = explode("-",$event->getDateStart());
-    	$dateDay = explode(" ",$date[2]);
-    	$date = $dateDay[0]."/".$date[1]."/".$date[0];
-    	$data['date_start'] = $date;
-    	
-    	$date = explode("-",$event->getDateFinish());
-    	$dateDay = explode(" ",$date[2]);
-    	$date = $dateDay[0]."/".$date[1]."/".$date[0];
-    	$data['date_finish'] = $date;
-    	
-    	$date = explode("-",$event->getDateStartShow());
-    	$dateDay = explode(" ",$date[2]);
-    	$date = $dateDay[0]."/".$date[1]."/".$date[0];
-    	$data['date_start_show'] = $date;
-    	
-    	$date = explode("-",$event->getDateFinishShow());
-    	$dateDay = explode(" ",$date[2]);
-    	$date = $dateDay[0]."/".$date[1]."/".$date[0];
-    	$data['date_finish_show'] = $date;
-    	
-    	$data['enabled'] = $event->isEnabled();
-    	$data['capacity_male'] = $event->getCapacityMale();
-    	$data['capacity_female'] = $event->getCapacityFemale();
-    	$data['capacity_nonsleeper'] = $event->getCapacityNonSleeper();
-    	
-    	if($payments==null){    
-	    	foreach($paymentPeriods as $payment){
-	    		$datePayment = explode("-",$payment->getDateStart());
-	    		$dateDay = explode(" ",$datePayment[2]);
-	    		$datePayment = $dateDay[0]."/".$datePayment[1]."/".$datePayment[0];
-	    		$datePaymentEnd = explode("-",$payment->getDateFinish());
-	    		$dateDay = explode(" ",$datePaymentEnd[2]);
-	    		$datePaymentEnd = $dateDay[0]."/".$datePaymentEnd[1]."/".$datePaymentEnd[0];
-	    		
-	    		$payments[] = array(
-	    				"payment_date_start" => $datePayment,
-	    				"payment_date_end"=> $datePaymentEnd,
-	    				"full_price" => $payment->getFullPrice(),
-	    				"children_price" => $payment->getChildrenPrice(),
-	    				"middle_price" => $payment->getMiddlePrice(),
-	    				"payment_portions" => $payment->getPortions(),
-	    				"associated_discount" => $payment->getAssociateDiscount(),
-	    		);
-	    	}
-    	}
-    
-    	$data['payments'] = $payments;
-    
-    	$this->loadView('admin/events/event_edit', $data);
-    }
-    
-    public function updateEvent($event_id){
-    
-    	$this->Logger->info("Starting " . __METHOD__);
-    
-    	$event_name = $this -> input -> post('event_name', TRUE);
-    	$description = $this -> input -> post('description', TRUE);
-    	$date_start = $this -> input -> post('date_start', TRUE);
-    	$date_finish = $this -> input -> post('date_finish', TRUE);
-    	$date_start_show = $this -> input -> post('date_start_show', TRUE);
-    	$date_finish_show = $this -> input -> post('date_finish_show', TRUE);
-    	$capacity_male = $this -> input -> post('capacity_male', TRUE);
-    	$capacity_female = $this -> input -> post('capacity_female', TRUE);
-    	$capacity_nonsleeper = $this -> input -> post('capacity_nonsleeper', TRUE);
-    	$payments = array();
-    	$payment_date_end = $this -> input -> post("payment_date_end", TRUE);
-    	$payment_date_start = $this -> input -> post("payment_date_start", TRUE);
-    	$full_price=$this -> input -> post("full_price", TRUE);
-    	$children_price=$this -> input -> post("children_price", TRUE);
-    	$middle_price=$this -> input -> post("middle_price", TRUE);
-    	$payment_portions=$this -> input -> post("payment_portions", TRUE);
-    	$associated_discount=$this -> input -> post("associated_discount", TRUE);
-    	$enabled=$this -> input -> post("enabled", TRUE);
-    	$errors = array();
-    
-    
-    	if($event_name === "")
-    		$errors[] = "O campo nome é obrigatório";
-    	if(!$date_start)
-    		$date_start = NULL;
-    	if(!$date_start_show)
-    		$date_start_show = NULL;
-    	if(!$date_finish)
-    		$date_finish = NULL;
-    	if(!$date_finish_show)
-    		$date_finish_show = NULL;
-    	if(!$enabled)
-    		$enabled = "false";
-    	else if($enabled === "1")
-    		$enabled = "true";
-    
-    	if($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
-    		$errors[] = "A data do ínicio do período do evento antecede a data de fim do evento";
-    
-    	if($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
-    		$errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições";
-    
-    	if($date_start && $date_finish_show && Events::verifyAntecedence($date_start, $date_finish_show))
-    		$errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições";
-    		
-    	if($capacity_male === "")
-    		$capacity_male = 0;
-    	if($capacity_female === "")
-    		$capacity_female = 0;
-    	if($capacity_nonsleeper === "")
-    		$capacity_nonsleeper = 0;
-    
-    	if(is_array($full_price)){
-    		for($i=0;$i<count($full_price);$i++){
-    			if(!$payment_date_start[$i])
-    				$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem data de inicio";
-    			if(!$payment_date_end[$i])
-    				$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem data de fim";
-    			if(!$full_price[$i])
-    				$errors[] = "O periodo de pagamento de numero ".($i+1)." não tem valor ";
-    			if(!$middle_price[$i])
-    				$middle_price[$i] = $full_price[$i];
-    			if(!$children_price[$i])
-    				$children_price[$i] = $middle_price[$i];
-    			if($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])){
-    				$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
-    			}
-    			if($payment_date_start[$i] && $payment_date_end[$i] && (
-    					!Events::verifyAntecedence($payment_date_start[$i], $date_finish_show) ||
-    					!Events::verifyAntecedence($payment_date_end[$i], $date_finish_show)   ||
-    					!Events::verifyAntecedence($date_start_show, $payment_date_start[$i])  )
-    			)
-    				$errors[] = "O pagamento de numero ".($i+1)." está fora do periodo de inscrições";
-    			for($j=$i+1;$j<count($full_price);$j++ ){
-    				if
-    				(
-    						(
-    								Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j])
-    								&& Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
-    						)
-    						||
-    						(
-    								Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i])
-    								&& Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
-    						)
-    				)
-    					$errors[] = "Os pagamentos de numero".($i+1)." e ".($j+1)." se sobrepoem";
-    			}
-    
-    			$payment_date_start[$i] = explode("/",$payment_date_start[$i]);
-    			$payment_date_start[$i] = strval($payment_date_start[$i][2])."-".strval($payment_date_start[$i][1])."-".strval($payment_date_start[$i][0]);
-    
-    			$payment_date_end[$i] = explode("/",$payment_date_end[$i]);
-    			$payment_date_end[$i] = strval($payment_date_end[$i][2])."-".strval($payment_date_end[$i][1])."-".strval($payment_date_end[$i][0]." 23:59:59");
-    				
-    			$payments[] = array(
-    					"payment_date_start" => $payment_date_start[$i],
-    					"payment_date_end"=> $payment_date_end[$i],
-    					"full_price"=>$full_price[$i],
-    					"children_price"=>$children_price[$i],
-    					"middle_price"=>$middle_price[$i],
-    					"payment_portions"=>$payment_portions[$i],
-    					"associated_discount"=>$associated_discount[$i]/100,
-    			);
-    		}
-    	} else if($full_price !== FALSE){
-    		if(!$payment_date_start)
-    			$errors[] = "O pagamento não tem data de inicio";
-    		if(!$payment_date_end)
-    			$errors[] = "O pagamento não tem data de fim";
-    		if(!$full_price)
-    			$errors[] = "O pagamento não tem valor ";
-    		if(!$middle_price)
-    			$middle_price = $full_price;
-    		if(!$children_price)
-    			$children_price = $middle_price;
-    		if($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])){
-    			$errors[] = "O pagamento de numero ".($i+1)." tinha data de fim anterior a data de inicio";
-    		}
-    
-    		for($i=0;$i<count($full_price);$i++){
-    				
-    			$payment_date_start[$i] = explode("/",$payment_date_start[$i]);
-    			$payment_date_start[$i] = strval($payment_date_start[$i][2])."-".strval($payment_date_start[$i][1])."-".strval($payment_date_start[$i][0]);
-    				
-    			$payment_date_end[$i] = explode("/",$payment_date_end[$i]);
-    			$payment_date_end[$i] = strval($payment_date_end[$i][2])."-".strval($payment_date_end[$i][1])."-".strval($payment_date_end[$i][0]." 23:59:59");
-    				
-    		}
-    
-    		$payments[] = array(
-    				"payment_date_start" => $payment_date_start,
-    				"payment_date_end"=> $payment_date_end,
-    				"full_price"=>$full_price,
-    				"children_price"=>$children_price,
-    				"middle_price"=>$middle_price,
-    				"payment_portions"=>$payment_portions,
-    				"associated_discount"=>$associated_discount/100,
-    		);
-    	}
-    
-    	$date_start = explode("/",$date_start);
-    	$date_start = strval($date_start[2])."-".strval($date_start[1])."-".strval($date_start[0]);
-    
-    	$date_finish = explode("/",$date_finish);
-    	$date_finish = strval($date_finish[2])."-".strval($date_finish[1])."-".strval($date_finish[0]." 23:59:59");
-    
-    	$date_start_show = explode("/",$date_start_show);
-    	$date_start_show = strval($date_start_show[2])."-".strval($date_start_show[1])."-".strval($date_start_show[0]);
-    
-    	$date_finish_show = explode("/",$date_finish_show);
-    	$date_finish_show = strval($date_finish_show[2])."-".strval($date_finish_show[1])."-".strval($date_finish_show[0]." 23:59:59");
-    
-    	$subscribed_male = $this-> eventsubscription_model -> getSubscriptionsByEventId($event_id,'capacity_male');
-    	$capacity_male = $capacity_male + count($subscribed_male);
-    	
-    	$subscribed_female = $this-> eventsubscription_model -> getSubscriptionsByEventId($event_id,'capacity_female');
-    	$capacity_female = $capacity_female + count($subscribed_female);
-    	
-    	$subscribed_nonsleeper = $this-> eventsubscription_model -> getSubscriptionsByEventId($event_id,'nonsleeper');
-    	$capacity_nonsleeper = $capacity_nonsleeper + count($subscribed_nonsleeper);
-    	
-    	if(count($errors) > 0)
-    		return $this->editEvent($event_id,$errors,$event_name,$description,
-    				$date_start,$date_finish,$date_start_show,$date_finish_show,$capacity_male,$capacity_female,$capacity_nonsleeper,$payments);
 
-    	try{
-    		$this->Logger->info("Updating event " . $event_name);
-    		$this->generic_model->startTransaction();
-    
-    		$eventId = $this->event_model->updateEvent($event_id, $event_name, $description, $date_start,$date_finish,
-    				$date_start_show,$date_finish_show, $enabled, $capacity_male, $capacity_female,$capacity_nonsleeper);
-    			
-    		if($eventId){
-    			$this->event_model->deleteEventPaymentPeriods($event_id);
-    			 
-    			foreach($payments as $payment){
-    				$this->event_model->insertNewPaymentPeriod($event_id,$payment["payment_date_start"],$payment["payment_date_end"],$payment["full_price"],$payment["middle_price"],
-    						$payment["children_price"],$payment["associated_discount"],$payment["payment_portions"]);
-    			}
-    			
-    			$this->generic_model->commitTransaction();
-    			$this->Logger->info("New event successfully inserted");
-    			echo "<script>alert('Evento atualizado com sucesso!');opener.location.reload(); window.close();</script>";
-    			//redirect("events/manageEvents");
-    		}
-    		else
-    			echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
-    
-    	} catch (Exception $ex) {
-    		$this->Logger->error("Failed to insert new event");
-    		$this->generic_model->rollbackTransaction();
-    		$data['error'] = true;
-    		
-    		echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
-    		
-    		//$this->loadReportView('admin/events/event_edit', $data);
-    	}
-    
+    public function campaign_admin() {
+        $this->loadView("admin/campaigns/campaign_admin_container");
     }
-    
+
+    public function associated_campaign() {
+        $this->loadView("admin/campaigns/associated_campaign");
+    }
+
+    public function event_admin() {
+        $this->loadView("admin/events/event_admin_container");
+    }
+
+    public function completeEvent() {
+        $this->Logger->info("Starting " . __METHOD__);
+
+        $event_name = $this->input->post('event_name', TRUE);
+        $description = $this->input->post('description', TRUE);
+        $date_start = $this->input->post('date_start', TRUE);
+        $date_finish = $this->input->post('date_finish', TRUE);
+        $date_start_show = $this->input->post('date_start_show', TRUE);
+        $date_finish_show = $this->input->post('date_finish_show', TRUE);
+        $capacity_male = $this->input->post('capacity_male', TRUE);
+        $capacity_female = $this->input->post('capacity_female', TRUE);
+        $capacity_nonsleeper = $this->input->post('capacity_nonsleeper', TRUE);
+        $payments = array();
+        $payment_date_end = $this->input->post("payment_date_end", TRUE);
+        $payment_date_start = $this->input->post("payment_date_start", TRUE);
+        $full_price = $this->input->post("full_price", TRUE);
+        $children_price = $this->input->post("children_price", TRUE);
+        $middle_price = $this->input->post("middle_price", TRUE);
+        $payment_portions = $this->input->post("payment_portions", TRUE);
+        $associated_discount = $this->input->post("associated_discount", TRUE);
+        $enabled = $this->input->post("enabled", TRUE);
+        $errors = array();
+
+
+        if ($event_name === "")
+            $errors[] = "O campo nome é obrigatório";
+        if (!$date_start)
+            $date_start = NULL;
+        if (!$date_start_show)
+            $date_start_show = NULL;
+        if (!$date_finish)
+            $date_finish = NULL;
+        if (!$date_finish_show)
+            $date_finish_show = NULL;
+        if (!$enabled)
+            $enabled = "false";
+        else if ($enabled === "1")
+            $enabled = "true";
+
+        if ($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento";
+
+        if ($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
+            $errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições";
+
+        if ($date_start && $date_finish_show && Events::verifyAntecedence($date_start, $date_finish_show))
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições";
+
+        if ($capacity_male === "")
+            $capacity_male = 0;
+        if ($capacity_female === "")
+            $capacity_female = 0;
+        if ($capacity_nonsleeper === "")
+            $capacity_nonsleeper = 0;
+
+        if (is_array($full_price)) {
+            for ($i = 0; $i < count($full_price); $i++) {
+                if (!$payment_date_start[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio";
+                if (!$payment_date_end[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim";
+                if (!$full_price[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor ";
+                if (!$middle_price[$i])
+                    $middle_price[$i] = $full_price[$i];
+                if (!$children_price[$i])
+                    $children_price[$i] = $middle_price[$i];
+                if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+                }
+                if ($payment_date_start[$i] && $payment_date_end[$i] && (
+                        !Events::verifyAntecedence($payment_date_start[$i], $date_finish_show) ||
+                        !Events::verifyAntecedence($payment_date_end[$i], $date_finish_show) ||
+                        !Events::verifyAntecedence($date_start_show, $payment_date_start[$i]) )
+                )
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições";
+                for ($j = $i + 1; $j < count($full_price); $j++) {
+                    if
+                    (
+                            (
+                            Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j]) && Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
+                            ) ||
+                            (
+                            Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) && Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
+                            )
+                    )
+                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem";
+                }
+
+                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+
+                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+
+                $date_start = explode("/", $date_start);
+                $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+
+                $date_finish = explode("/", $date_finish);
+                $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+
+                $date_start_show = explode("/", $date_start_show);
+                $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+
+                $date_finish_show = explode("/", $date_finish_show);
+                $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+
+                $payments[] = array(
+                    "payment_date_start" => $payment_date_start[$i],
+                    "payment_date_end" => $payment_date_end[$i],
+                    "full_price" => $full_price[$i],
+                    "children_price" => $children_price[$i],
+                    "middle_price" => $middle_price[$i],
+                    "payment_portions" => $payment_portions[$i],
+                    "associated_discount" => $associated_discount[$i] / 100,
+                );
+            }
+        } else if ($full_price !== FALSE) {
+            if (!$payment_date_start)
+                $errors[] = "O pagamento não tem data de inicio";
+            if (!$payment_date_end)
+                $errors[] = "O pagamento não tem data de fim";
+            if (!$full_price)
+                $errors[] = "O pagamento não tem valor ";
+            if (!$middle_price)
+                $middle_price = $full_price;
+            if (!$children_price)
+                $children_price = $middle_price;
+            if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
+                $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+            }
+
+            for ($i = 0; $i < count($full_price); $i++) {
+
+                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+
+                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+            }
+
+            $payments[] = array(
+                "payment_date_start" => $payment_date_start,
+                "payment_date_end" => $payment_date_end,
+                "full_price" => $full_price,
+                "children_price" => $children_price,
+                "middle_price" => $middle_price,
+                "payment_portions" => $payment_portions,
+                "associated_discount" => $associated_discount / 100,
+            );
+
+            $date_start = explode("/", $date_start);
+            $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+
+            $date_finish = explode("/", $date_finish);
+            $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+
+            $date_start_show = explode("/", $date_start_show);
+            $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+
+            $date_finish_show = explode("/", $date_finish_show);
+            $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+        }
+
+        if (count($errors) > 0)
+            return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $payments);
+
+
+        try {
+            $this->Logger->info("Inserting new event");
+            $this->generic_model->startTransaction();
+
+            $eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper);
+
+            if ($eventId) {
+                foreach ($payments as $payment) {
+                    $this->event_model->insertNewPaymentPeriod($eventId, $payment["payment_date_start"], $payment["payment_date_end"], $payment["full_price"], $payment["middle_price"], $payment["children_price"], $payment["associated_discount"], $payment["payment_portions"]);
+                }
+
+                $this->generic_model->commitTransaction();
+                $this->Logger->info("New event successfully inserted");
+                echo "<script>alert('Evento criado com sucesso!');opener.location.reload(); window.close();</script>";
+                //redirect("events/manageEvents");
+            } else
+                echo "<script>alert('Ocorreu um erro ao criar o evento. Tente novamente.');window.history.back();</script>";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new event");
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+
+            $this->loadReportView('admin/events/event_create', $data);
+        }
+    }
+
+    public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array()) {
+        $this->Logger->info("Starting " . __METHOD__);
+        $data = array();
+        $data["errors"] = $errors;
+        $data["event_name"] = $event_name;
+        $data["description"] = $description;
+        $data["date_start"] = Events::toMMDDYYYY($date_start);
+        $data["date_finish"] = Events::toMMDDYYYY($date_finish);
+        $data["date_start_show"] = Events::toMMDDYYYY($date_start_show);
+        $data["date_finish_show"] = Events::toMMDDYYYY($date_finish_show);
+        $data["capacity_male"] = $capacity_male;
+        $data["capacity_female"] = $capacity_female;
+        $data["capacity_nonsleeper"] = $capacity_nonsleeper;
+        $data["payments"] = $payments;
+
+        $this->loadView('admin/events/event_create', $data);
+    }
+
+    public function editEvent($event_id = NULL, $errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array()) {
+        $eventId = $event_id;
+
+        $event = $this->event_model->getEventById($eventId);
+        $paymentPeriods = $this->event_model->getEventPaymentPeriods($eventId);
+
+        $data['event_id'] = $eventId;
+        $data['event_name'] = $event->getEventName();
+        $data['description'] = $event->getDescription();
+        $data["errors"] = $errors;
+
+        $date = explode("-", $event->getDateStart());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_start'] = $date;
+
+        $date = explode("-", $event->getDateFinish());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_finish'] = $date;
+
+        $date = explode("-", $event->getDateStartShow());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_start_show'] = $date;
+
+        $date = explode("-", $event->getDateFinishShow());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_finish_show'] = $date;
+
+        $data['enabled'] = $event->isEnabled();
+        $data['capacity_male'] = $event->getCapacityMale();
+        $data['capacity_female'] = $event->getCapacityFemale();
+        $data['capacity_nonsleeper'] = $event->getCapacityNonSleeper();
+
+        if ($payments == null) {
+            foreach ($paymentPeriods as $payment) {
+                $datePayment = explode("-", $payment->getDateStart());
+                $dateDay = explode(" ", $datePayment[2]);
+                $datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
+                $datePaymentEnd = explode("-", $payment->getDateFinish());
+                $dateDay = explode(" ", $datePaymentEnd[2]);
+                $datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+
+                $payments[] = array(
+                    "payment_date_start" => $datePayment,
+                    "payment_date_end" => $datePaymentEnd,
+                    "full_price" => $payment->getFullPrice(),
+                    "children_price" => $payment->getChildrenPrice(),
+                    "middle_price" => $payment->getMiddlePrice(),
+                    "payment_portions" => $payment->getPortions(),
+                    "associated_discount" => $payment->getAssociateDiscount(),
+                );
+            }
+        }
+
+        $data['payments'] = $payments;
+
+        $this->loadView('admin/events/event_edit', $data);
+    }
+
+    public function updateEvent($event_id) {
+
+        $this->Logger->info("Starting " . __METHOD__);
+
+        $event_name = $this->input->post('event_name', TRUE);
+        $description = $this->input->post('description', TRUE);
+        $date_start = $this->input->post('date_start', TRUE);
+        $date_finish = $this->input->post('date_finish', TRUE);
+        $date_start_show = $this->input->post('date_start_show', TRUE);
+        $date_finish_show = $this->input->post('date_finish_show', TRUE);
+        $capacity_male = $this->input->post('capacity_male', TRUE);
+        $capacity_female = $this->input->post('capacity_female', TRUE);
+        $capacity_nonsleeper = $this->input->post('capacity_nonsleeper', TRUE);
+        $payments = array();
+        $payment_date_end = $this->input->post("payment_date_end", TRUE);
+        $payment_date_start = $this->input->post("payment_date_start", TRUE);
+        $full_price = $this->input->post("full_price", TRUE);
+        $children_price = $this->input->post("children_price", TRUE);
+        $middle_price = $this->input->post("middle_price", TRUE);
+        $payment_portions = $this->input->post("payment_portions", TRUE);
+        $associated_discount = $this->input->post("associated_discount", TRUE);
+        $enabled = $this->input->post("enabled", TRUE);
+        $errors = array();
+
+
+        if ($event_name === "")
+            $errors[] = "O campo nome é obrigatório";
+        if (!$date_start)
+            $date_start = NULL;
+        if (!$date_start_show)
+            $date_start_show = NULL;
+        if (!$date_finish)
+            $date_finish = NULL;
+        if (!$date_finish_show)
+            $date_finish_show = NULL;
+        if (!$enabled)
+            $enabled = "false";
+        else if ($enabled === "1")
+            $enabled = "true";
+
+        if ($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento";
+
+        if ($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
+            $errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições";
+
+        if ($date_start && $date_finish_show && Events::verifyAntecedence($date_start, $date_finish_show))
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições";
+
+        if ($capacity_male === "")
+            $capacity_male = 0;
+        if ($capacity_female === "")
+            $capacity_female = 0;
+        if ($capacity_nonsleeper === "")
+            $capacity_nonsleeper = 0;
+
+        if (is_array($full_price)) {
+            for ($i = 0; $i < count($full_price); $i++) {
+                if (!$payment_date_start[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio";
+                if (!$payment_date_end[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim";
+                if (!$full_price[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor ";
+                if (!$middle_price[$i])
+                    $middle_price[$i] = $full_price[$i];
+                if (!$children_price[$i])
+                    $children_price[$i] = $middle_price[$i];
+                if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+                }
+                if ($payment_date_start[$i] && $payment_date_end[$i] && (
+                        !Events::verifyAntecedence($payment_date_start[$i], $date_finish_show) ||
+                        !Events::verifyAntecedence($payment_date_end[$i], $date_finish_show) ||
+                        !Events::verifyAntecedence($date_start_show, $payment_date_start[$i]) )
+                )
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições";
+                for ($j = $i + 1; $j < count($full_price); $j++) {
+                    if
+                    (
+                            (
+                            Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j]) && Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
+                            ) ||
+                            (
+                            Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) && Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
+                            )
+                    )
+                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem";
+                }
+
+                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+
+                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+
+                $payments[] = array(
+                    "payment_date_start" => $payment_date_start[$i],
+                    "payment_date_end" => $payment_date_end[$i],
+                    "full_price" => $full_price[$i],
+                    "children_price" => $children_price[$i],
+                    "middle_price" => $middle_price[$i],
+                    "payment_portions" => $payment_portions[$i],
+                    "associated_discount" => $associated_discount[$i] / 100,
+                );
+            }
+        } else if ($full_price !== FALSE) {
+            if (!$payment_date_start)
+                $errors[] = "O pagamento não tem data de inicio";
+            if (!$payment_date_end)
+                $errors[] = "O pagamento não tem data de fim";
+            if (!$full_price)
+                $errors[] = "O pagamento não tem valor ";
+            if (!$middle_price)
+                $middle_price = $full_price;
+            if (!$children_price)
+                $children_price = $middle_price;
+            if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
+                $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+            }
+
+            for ($i = 0; $i < count($full_price); $i++) {
+
+                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+
+                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+            }
+
+            $payments[] = array(
+                "payment_date_start" => $payment_date_start,
+                "payment_date_end" => $payment_date_end,
+                "full_price" => $full_price,
+                "children_price" => $children_price,
+                "middle_price" => $middle_price,
+                "payment_portions" => $payment_portions,
+                "associated_discount" => $associated_discount / 100,
+            );
+        }
+
+        $date_start = explode("/", $date_start);
+        $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+
+        $date_finish = explode("/", $date_finish);
+        $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+
+        $date_start_show = explode("/", $date_start_show);
+        $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+
+        $date_finish_show = explode("/", $date_finish_show);
+        $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+
+        $subscribed_male = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_male');
+        $capacity_male = $capacity_male + count($subscribed_male);
+
+        $subscribed_female = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_female');
+        $capacity_female = $capacity_female + count($subscribed_female);
+
+        $subscribed_nonsleeper = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'nonsleeper');
+        $capacity_nonsleeper = $capacity_nonsleeper + count($subscribed_nonsleeper);
+
+        if (count($errors) > 0)
+            return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $payments);
+
+        try {
+            $this->Logger->info("Updating event " . $event_name);
+            $this->generic_model->startTransaction();
+
+            $eventId = $this->event_model->updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper);
+
+            if ($eventId) {
+                $this->event_model->deleteEventPaymentPeriods($event_id);
+
+                foreach ($payments as $payment) {
+                    $this->event_model->insertNewPaymentPeriod($event_id, $payment["payment_date_start"], $payment["payment_date_end"], $payment["full_price"], $payment["middle_price"], $payment["children_price"], $payment["associated_discount"], $payment["payment_portions"]);
+                }
+
+                $this->generic_model->commitTransaction();
+                $this->Logger->info("New event successfully inserted");
+                echo "<script>alert('Evento atualizado com sucesso!');opener.location.reload(); window.close();</script>";
+                //redirect("events/manageEvents");
+            } else
+                echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new event");
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+
+            echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
+
+            //$this->loadReportView('admin/events/event_edit', $data);
+        }
+    }
+
     public function manageEvents() {
-    	$this -> Logger -> info("Starting " . __METHOD__);
-    
-    	if (!$this -> checkSession())
-    		redirect("login/index");
-    
-    	if (!$this -> checkPermition(array(COMMON_USER,SECRETARY, SYSTEM_ADMIN))) {
-    		$this -> denyAcess(___METHOD___);
-    	}
-    
-    	$events = $this->event_model->getAllEvents();
-    	$eventsToScreen = array();
-    	foreach ($events as $event) {
-    		$payments = $this->event_model->getEventPaymentPeriods($event->getEventId());
-    		$event->setIsValid($payments);
-    		$eventsToScreen[] = $event;
-    	}
-    	$data["events"] = $eventsToScreen;
-    
-    
-    	$this -> loadReportView("admin/events/manage", $data);
+        $this->Logger->info("Starting " . __METHOD__);
+
+        if (!$this->checkSession())
+            redirect("login/index");
+
+        if (!$this->checkPermition(array(COMMON_USER, SECRETARY, SYSTEM_ADMIN))) {
+            $this->denyAcess(___METHOD___);
+        }
+
+        $events = $this->event_model->getAllEvents();
+        $eventsToScreen = array();
+        foreach ($events as $event) {
+            $payments = $this->event_model->getEventPaymentPeriods($event->getEventId());
+            $event->setIsValid($payments);
+            $eventsToScreen[] = $event;
+        }
+        $data["events"] = $eventsToScreen;
+
+
+        $this->loadReportView("admin/events/manage", $data);
     }
 
     public function camp() {
@@ -575,9 +564,9 @@ class Admin extends CK_Controller {
     }
 
     public function createCamp() {
-    	$data['payments'] = array();
-    	
-        $this->loadView("admin/camps/insert_camp",$data);
+        $data['payments'] = array();
+
+        $this->loadView("admin/camps/insert_camp", $data);
     }
 
     public function queue() {
@@ -784,99 +773,95 @@ class Admin extends CK_Controller {
         $this->loadReportView("admin/camps/validate_colonists", $data);
     }
 
-    
     public function colonist_exclusion() {
-    	$this->Logger->info("Running: " . __METHOD__);
-    	$data = array();
-    	$years = array();
-    	$start = 2015;
-    	$date = intval(date('Y'));
-    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	$end = $date;
-    	while ($campsByYear != null) {
-    		$end = $date;
-    		$date++;
-    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	}
-    	while ($start <= $end) {
-    		$years[] = $start;
-    		$start++;
-    	}
-    	$year = null;
-    
-    	if (isset($_GET['ano_f']))
-    		$year = $_GET['ano_f'];
-    		else {
-    			$year = date('Y');
-    		}
-    
-    		$data['ano_escolhido'] = $year;
-    		$data['years'] = $years;
-    
-    		$shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-    
-    		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
-    		$this->loadReportView("admin/camps/colonist_exclusion", $data);
-    }
-    
-    public function password() {
-    	$this->Logger->info("Running: " . __METHOD__);
-    	
-    	
-    	$pass = $_POST['senha'];
-    	$id = $this->session->userdata("user_id");
-    	$person = $this->personuser_model->getUserById($id);
-    	$login = $person->getLogin();
-    	$colonistId = $_POST['colonist_id'];
-    	$summerCampId = $_POST['summer_camp_id'];
-    	$situation= $_POST['situation'];
-    	$cancel_reason = $_POST['cancel_reason'];
-    	$discount = $_POST['discount'];
-       	
-    	$userId = $this->personuser_model->userLogin($login,$pass);
-   
-    	 
-    	if($userId != null){
-    		
-    		$result = $this->summercamp_model->updateStatus($colonistId, $summerCampId, $situation, $discount, $cancel_reason);
-    		if($result!=null)
-    			echo "true";
-    		else 
-    			echo "false";
-    	}
-    	else
-    		echo "false";
-    		 
-   	}
+        $this->Logger->info("Running: " . __METHOD__);
+        $data = array();
+        $years = array();
+        $start = 2015;
+        $date = intval(date('Y'));
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
 
-    
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
+
+        $data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
+        $this->loadReportView("admin/camps/colonist_exclusion", $data);
+    }
+
+    public function password() {
+        $this->Logger->info("Running: " . __METHOD__);
+
+
+        $pass = $_POST['senha'];
+        $id = $this->session->userdata("user_id");
+        $person = $this->personuser_model->getUserById($id);
+        $login = $person->getLogin();
+        $colonistId = $_POST['colonist_id'];
+        $summerCampId = $_POST['summer_camp_id'];
+        $situation = $_POST['situation'];
+        $cancel_reason = $_POST['cancel_reason'];
+        $discount = $_POST['discount'];
+
+        $userId = $this->personuser_model->userLogin($login, $pass);
+
+
+        if ($userId != null) {
+
+            $result = $this->summercamp_model->updateStatus($colonistId, $summerCampId, $situation, $discount, $cancel_reason);
+            if ($result != null)
+                echo "true";
+            else
+                echo "false";
+        } else
+            echo "false";
+    }
+
     public function setDiscount() {
-    	$data = array();
-    	$years = array();
-    	$start = 2015;
-    	$date = intval(date('Y'));
-    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	$end = $date;
-    	while ($campsByYear != null) {
-    		$end = $date;
-    		$date++;
-    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	}
-    	while ($start <= $end) {
-    		$years[] = $start;
-    		$start++;
-    	}
-    	$year = null;
-    	
-    	if (isset($_GET['ano_f']))
-    		$year = $_GET['ano_f'];
-    		else {
-    			$year = date('Y');
-    		}
-    	
-    		$data['ano_escolhido'] = $year;
-    		$data['years'] = $years;
-    	
+        $data = array();
+        $years = array();
+        $start = 2015;
+        $date = intval(date('Y'));
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
         $this->Logger->info("Running: " . __METHOD__);
         $data['colonists'] = $this->summercamp_model->getAllColonistsForDiscount();
         $data['discountReasons'] = $this->summercamp_model->getDefaultDiscountReasons();
@@ -922,18 +907,18 @@ class Admin extends CK_Controller {
             $data["year_selected"] = $yearChosen;
             if (isset($_POST['camp_id'])) {
                 $selectedCamp = $this->summercamp_model->getSummerCampById($_POST['camp_id']);
-                if($selectedCamp != null){
-	                $data["camp_selected_id"] = $selectedCamp->getCampId();
-	                $data["camp_selected_name"] = $selectedCamp->getCampName();
-	                $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
-	                $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
-	
-	                $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
-	                $data["camp_details"] = $campSubscriptions;
-	
-	                $subscriptions = $this->summercamp_model->getAllColonistsWithQueueNumberBySummerCamp($selectedCamp->getCampId());
-	                if ($subscriptions != null)
-	                    $data["subscriptions"] = $subscriptions;
+                if ($selectedCamp != null) {
+                    $data["camp_selected_id"] = $selectedCamp->getCampId();
+                    $data["camp_selected_name"] = $selectedCamp->getCampName();
+                    $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
+                    $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
+
+                    $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
+                    $data["camp_details"] = $campSubscriptions;
+
+                    $subscriptions = $this->summercamp_model->getAllColonistsWithQueueNumberBySummerCamp($selectedCamp->getCampId());
+                    if ($subscriptions != null)
+                        $data["subscriptions"] = $subscriptions;
                 }
             }
 
@@ -979,25 +964,25 @@ class Admin extends CK_Controller {
             $data["year_selected"] = $yearChosen;
             if (isset($_POST['camp_id'])) {
                 $selectedCamp = $this->summercamp_model->getSummerCampById($_POST['camp_id']);
-                if($selectedCamp != null) {
-	                $data["camp_selected_id"] = $selectedCamp->getCampId();
-	                $data["camp_selected_name"] = $selectedCamp->getCampName();
-	                $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
-	                $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
-	
-	                $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
-	                $data["camp_details"] = $campSubscriptions;
-	
-	                $subscriptions = $this->summercamp_model->getAllColonistsWaitingPaymentBySummerCamp($selectedCamp->getCampId());
-	                if ($subscriptions != null)
-	                    $data["subscriptions"] = $subscriptions;
+                if ($selectedCamp != null) {
+                    $data["camp_selected_id"] = $selectedCamp->getCampId();
+                    $data["camp_selected_name"] = $selectedCamp->getCampName();
+                    $data["camp_selected_male_capacity"] = $selectedCamp->getCapacityMale();
+                    $data["camp_selected_female_capacity"] = $selectedCamp->getCapacityFemale();
+
+                    $campSubscriptions = $this->summercamp_model->getSummerCampSubscriptionsByStatusAndGender($_POST["camp_id"]);
+                    $data["camp_details"] = $campSubscriptions;
+
+                    $subscriptions = $this->summercamp_model->getAllColonistsWaitingPaymentBySummerCamp($selectedCamp->getCampId());
+                    if ($subscriptions != null)
+                        $data["subscriptions"] = $subscriptions;
                 }
             }
 
             $allCamps = $this->summercamp_model->getAllSummerCampsByYear($yearChosen);
             $data["camps"] = $allCamps;
         } else {
-        	$data["year_selected"] = date('Y');
+            $data["year_selected"] = date('Y');
             $allCamps = $this->summercamp_model->getAllSummerCampsByYear(intval(date('Y')));
             $data["camps"] = $allCamps;
         }
@@ -1389,12 +1374,12 @@ class Admin extends CK_Controller {
 
             if (!$this->summercamp_model->updateColonistToWaitingPayment($colonistId, $summerCampId))
                 throw new Exception("Falha ao mudar status de colonista.");
-            
+
             $this->generic_model->commitTransaction();
-            
+
             $summerCampSub = $this->summercamp_model->getSummerCampSubscription($colonistId, $summerCampId);
             $personuser = $this->colonist_model->getColonistPersonUser($colonistId, $summerCampId);
-            
+
             $this->sendPaymentLiberationEmail($personuser, $colonist, $summerCamp->getCampName(), $summerCampSub->getDatePaymentLimitFormatted());
 
             echo "true";
@@ -1439,9 +1424,9 @@ class Admin extends CK_Controller {
                 throw new Exception("Falha ao mudar data de prazo.");
 
             $this->generic_model->commitTransaction();
-            
+
             //Enviar Email??
-            
+
             echo "true";
         } catch (Exception $ex) {
             $this->Logger->error("Failed to update user status to waiting payment");
