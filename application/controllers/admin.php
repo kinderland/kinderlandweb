@@ -287,6 +287,37 @@ class Admin extends CK_Controller {
     
     		$data['ano_escolhido'] = $year;
     		$data['years'] = $years;
+    		
+    		$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+    		$campsQtd = count($allCamps);
+    		$camps = array();
+    		$start = $campsQtd;
+    		$end = 1;
+    		
+    		$campChosen = null;
+    		
+    		if (isset($_GET['colonia_f']))
+    			$campChosen = $_GET['colonia_f'];
+    		
+    			$campCount = array();
+    			$count = null;
+    		
+    			$campChosenId = null;
+    			foreach ($allCamps as $camp) {
+    				$count = $this->summercamp_model->getCountStatusBySummerCamp($camp->getCampId());
+    		
+    				if ($count != null) {
+    					$campCount[] = $count;
+    					$camps[] = $camp->getCampName();
+    				}
+    		
+    				if ($camp->getCampName() == $campChosen)
+    					$campChosenId = $camp->getCampId();
+    			}
+    		
+    			$data['colonia_escolhida'] = $campChosen;
+    			$data['camps'] = $camps;
+    			$data['campCount'] = $campCount;
     
     		$shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
     

@@ -41,6 +41,8 @@
 			function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
 				return 'Apresentando ' + totalRow + ' doações, de um total de ' + totalRowUnfiltered+ ' doações';
 			}
+
+
 		</script>
 
     </head>
@@ -56,6 +58,27 @@
 			});
 		});
         </script>
+        
+		<script>
+
+		function getDonationStatus(donation_id){
+
+			 $.post("<?= $this->config->item('url_link') ?>reports/getDonationStatus",
+                    {
+                		'donation_id': donation_id,
+                    },
+
+                  	 function ( data ){
+                  	     if(data == "true"){
+                  	        return "true";
+                   	    }
+                      }	
+           	  );
+		}
+
+	
+		</script>
+        
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
@@ -103,8 +126,9 @@
                         Valor: R$
                         <?php
                             $value = 0;
+                           	
                             foreach ($donations as $donation){
-                                $value += $donation->donated_value;
+                            			$value += $donation->donated_value;
                             }
 
                             echo number_format($value, 2, ',', '.');

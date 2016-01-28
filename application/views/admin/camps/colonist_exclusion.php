@@ -22,53 +22,8 @@
 
         <script type="text/javascript">
 
-        	function openValidationTab(colonist_id, summer_camp_id, situation, discount, discount_reason_id) {
-          	  	$("#validation_tab_" + colonist_id + "_" + summer_camp_id + "_" + situation + "_" + discount).fadeIn();
-        	}
         	
-        	function closeValidationTab(colonist_id, summer_camp_id, situation, discount, discount_reason_id) {
-           	 	$("#validation_tab_" + colonist_id + "_" + summer_camp_id + "_" + situation + "_" + discount).fadeOut();
-       		}
 
-    		function saveValidation(colonist_id, summer_camp_id, situation, discount){
-    			var formName = "#form_validation_" + colonist_id + "_" + summer_camp_id + "_" + situation + "_" + discount;
-				var cancel_reason = $(formName + ' input[name=cancel_reason]').val();
-				var senha = $(formName + ' input[name=senha]').val();
-				
-				if(situation == 3 || situation == 4 || situation == 5){
-					discount=0;
-				}
-				
-				if(situation == 5)
-					situation = -2;
-										
-				else if(situation == 3 || situation == 4 || situation == 1 || situation == 0 || situation == 2)
-					situation = -3;
-
-				 $.post("<?= $this->config->item('url_link') ?>admin/password",
-	                        {
-								'senha': senha,
-                     			'colonist_id': colonist_id,
-	                            'summer_camp_id': summer_camp_id,
-	                            'situation': situation, 
-	                            'cancel_reason': cancel_reason,
-	                            'discount': discount,
-	                        },
-
-                          	 function ( data ){
-                          	     if(data == "true"){
-                          	         alert("Status alterado com sucesso");
-                         	          location.reload();
-                           	    }
-                          	     else if(data == "false"){
-                          	         alert("Senha Incorreta");					                                    
-
-                                 }
-                              }	
-                   	  );
-
-    		}
-			
             function post(path, params, method) {
                 method = method || "post"; // Set method to post by default if not specified.
                 
@@ -92,6 +47,20 @@
                 form.submit();
             }
 
+
+
+            function sendInfoToModal(colonistName, campName, userName, situation, colonistId, summerCampId, discount){
+        		$("#colonist_name").html(colonistName);
+        		$("#camp_name").html(campName);
+        		$("#user_name").html(userName);
+        		$("#situation").html(situation);
+        		$("#colonist_id").html(colonistId);
+        		$("#summer_camp_id").html(summerCampId);
+        		$("#discount").html(discount);
+            }
+
+
+			
             function getCSVName() {
                 var filtros = $(".datatable-filter");
                 var filtroNomeColonista = filtros[1].value;
@@ -232,10 +201,22 @@
 
     </head>
     <body>
+            <script>
+            $(document).ready(function () {
+                $('#sortable-table').datatable({
+                    pageSize: Number.MAX_VALUE,
+                    sort: [true, sortLowerCase, true, sortLowerCase],
+                    filters: [selectTodos, true, selectTodas, true],
+                    filterText: 'Escreva para filtrar... ',
+                    counterText: showCounter
+                });
+            });
+        </script>
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
                     <form method="GET">
+                    <b> Ano: </b>
                         <select name="ano_f" onchange="this.form.submit()" id="anos">
 
                             <?php
@@ -247,6 +228,8 @@
                             }
                             ?>
                         </select>
+                       
+                        
                     </form>
                     <div class="counter"></div> <br>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
@@ -260,10 +243,53 @@
                             </tr>
                         </thead>
                         
+                        <script>
+
+                        function excluirColonista(){
+                        	var senha = document.getElementById('password').value;
+                        	var cancel_reason = document.getElementById('cancel_reason').value;
+                        	var colonist_id=document.getElementById("colonist_id").textContent;
+                        	var summer_camp_id=document.getElementById("summer_camp_id").textContent;
+                      	    var discount=document.getElementById("discount").textContent;
+                    	    var situation=document.getElementById("situation").textContent;
+
+                    	    if(situation == 3 || situation == 4 || situation == 5){
+            					discount = 0;
+            				}
+            				
+            				if(situation == 5)
+            					situation = -2;
+            										
+            				else if(situation == 3 || situation == 4 || situation == 1 || situation == 0 || situation == 2)
+            					situation = -3;
+                    	    $.post('<?= $this->config->item('url_link');?>admin/password',
+            						{senha: senha, colonist_id: colonist_id, summer_camp_id: summer_camp_id, situation: situation, cancel_reason: cancel_reason, discount: discount},
+            						function(data){
+            							if(data=="true"){
+            								alert("Colonista excluído com sucesso");
+            								location.reload();
+            							}
+            							else{
+            								alert("Não foi possível excluir o colonista. Tente novamente!");
+            								location.reload();
+            							}
+            						}
+            				);											
+                    	}	
+
+                        	                        	
+            													
+            								
+
+                        </script>
+                        
                         <tbody id="tablebody">
                             <?php
+                            $colonistsId = array();
+                            $i = 0;
 
                             foreach ($colonists as $colonist) {
+
                                 ?>
                                 <tr>
                                     <td id="colonist_situation_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"><font color="
@@ -298,81 +324,99 @@
                                     <?php 
                                     if ($colonist->situation == 3 || $colonist->situation == 4 || $colonist->situation == 1 || $colonist->situation == 0 || $colonist->situation == 2 ){
                                     ?>
-                                    <td><button class="btn btn-primary" onClick="openValidationTab(<?= $colonist->colonist_id ?>, <?= $colonist->summer_camp_id ?>, <?= $colonist->situation ?>, <?= $colonist->discount ?>)">Cancelar</button></td>
+                                    <td><button class="btn btn-primary" onclick="sendInfoToModal('<?= $colonist->colonist_name ?>', '<?= $colonist->camp_name ?>', '<?= $colonist->user_name ?>', '<?= $colonist->situation ?>', '<?= $colonist->colonist_id ?>', '<?= $colonist->summer_camp_id ?>', '<?= $colonist->discount ?>')" data-toggle="modal" data-target="#myModal">Cancelar</button></td>
                                     
                                     <?php }
                                     else if ($colonist->situation == 5){
                                     ?>
-                                    <td><button class="btn btn-primary"  onClick="openValidationTab(<?= $colonist->colonist_id ?>, <?= $colonist->summer_camp_id ?>, <?= $colonist->situation ?>, <?= $colonist->discount ?>)">Excluir</button></td>
+                                    <td><button class="btn btn-primary"  onclick="sendInfoToModal('<?= $colonist->colonist_name ?>', '<?= $colonist->camp_name ?>', '<?= $colonist->user_name ?>', '<?= $colonist->situation ?>', '<?= $colonist->colonist_id ?>', '<?= $colonist->summer_camp_id ?>', '<?= $colonist->discount ?>')" data-toggle="modal" data-target="#myModal">Excluir</button></td>
                                     <?php 
                                     }else{
                                     ?>
-                                    <td><a href="#" </a></td>
+                                    <td><a href="" </a></td>
                                     <?php }?>
                                     
                                 </tr>                                
-                                     <tr id="validation_tab_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>_<?= $colonist->situation ?>_<?= $colonist->discount ?>" style="display:none">
-                                    <td colspan="5">
-                                        <form id="form_validation_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>_<?= $colonist->situation ?>_<?= $colonist->discount ?>" name="form_validation_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>, <?= $colonist->situation ?>_<?= $colonist->discount ?>">
-                                            <input type="hidden" name="colonist_id" value="<?= $colonist->colonist_id ?>" />
-                                            <input type="hidden" name="summer_camp_id" value="<?= $colonist->summer_camp_id ?>" />
-                                            <input type="hidden" name="situation" value="<?= $colonist->situation ?>" />
-                                            <input type="hidden" name="discount" value="<?= $colonist->discount ?>" />                                            
-                                            <table class="table table-bordered table-striped table-min-td-size">                                             
-                                               
-                                                <tbody>
-                                                    <tr>
-                                                        <td> Colonista </td> 
-                                                        <td><?= $colonist->colonist_name ?></td>                                                      
-                                                    </tr>
 
-                                                    <tr>
-                                                        <td> Colônia </td>
-                                                        <td> <?= $colonist->camp_name ?> </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td> Responsável </td>
-                                                        <td> <?= $colonist->user_name ?> </td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td> Status Atual </td>
-                                                        <td> <?= $colonist->situation ?> </td>
-                                                    </tr>
-                                                   
-                                                    <tr>
-                                                        <td> Senha </td>
-                                                        <td>
-                                                            <input type="text" name="senha" class="form-control"/>
-                                                        </td>
-                                                    </tr>                                                    
-                                                    
-                                                    <tr>
-                                                        <td> Motivo </td>
-                                                        <td>
-                                                            <input type="text" name="cancel_reason" class="form-control"/>
-                                                        </td>
-                                                    </tr>
-                                                    
-
-                                                </tbody>
-                                            </table>
-                                        </form>
-										<button class="btn btn-warning" onClick="saveValidation(<?= $colonist->colonist_id ?>, <?= $colonist->summer_camp_id ?>, <?= $colonist->situation ?>, <?= $colonist->discount ?>)">Atualizar</button>
-                                        <button class="btn btn-warning" onClick="closeValidationTab(<?= $colonist->colonist_id ?>, <?= $colonist->summer_camp_id ?>, <?= $colonist->situation ?>, <?= $colonist->discount ?>)">Fechar</button>
-                                        <br><br><br><br>
-                                    
-                                  
                                 <?php
                             }
-                            ?>					
-								
-                                </tr>
+                            ?>				
+                            
+                            	
                         </tbody>
                     </table>
                 </div>
             </div>
+            	<!-- Modal -->
+            	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="modal_title"></h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-lg-6 middle-content">
+								<form name="form_password" method="POST" action="<?=$this->config->item('url_link')?>admin/password" id="form_password">	                                         
+										<div class="row">
+											<div class="form-group">
+												<div class="col-lg-6">
+												
+													<input type="hidden" id="colonist_id" name="colonist_id" value="" />
+                                                    <input type="hidden" id="discount" name="discount" value="" />
+                                                    <input type="hidden" id="summer_camp_id" name="summer_camp_id" value="" />
+                                                    
+                                                    													
+													<tr>
+                                                        <td> Colonista: </td> 
+                                                        <span id='colonist_name'></span> <br><br>                                                 
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> Colônia: </td>
+                                                        <span id='camp_name'></span> <br><br>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> Responsável: </td>
+                                                        <span id='user_name' name="user_name"></span> <br><br>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> Status Atual: </td>
+                                                        <span id='situation'></span> <br><br>
+                                                    </tr>
+                                                   
+                                                    <tr>
+                                                        <td> Senha: </td>
+                                                        <td>
+                                                            <input type="text" id="password" name="senha" /> <br><br>
+                                                        </td>
+                                                    </tr>                                                    
+                                                    
+                                                    <tr>
+                                                        <td> Motivo: </td>
+                                                        <td>
+                                                            <input type="text" id="cancel_reason" name="cancel_reason" /> <br>
+                                                        </td>
+                                                    </tr>
+													<input type="hidden" id="situation" name="situation" value="" />
+													
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn-warning" data-dismiss="modal">Voltar</button>
+							<button class="btn btn-warning" onClick="excluirColonista()">Confirmar</button>
+
+					</div>
+				</div>
+			</div>
         </div>
     </body>
 </html>
