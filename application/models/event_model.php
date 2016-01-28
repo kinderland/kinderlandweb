@@ -56,17 +56,69 @@ class event_model extends CK_Model {
                 on es.person_id = p.person_id
             where es.event_id = ? and es.subscription_status = 3
                 and p.gender = 'F'
+				
+			UNION
+
+            select 
+                'TRUE' as nonsleeper, count(es.event_id) as vagas_ocupadas
+            from person p
+            left outer join event_subscription es
+                on es.person_id = p.person_id
+            where es.event_id = ? and es.subscription_status = 3
+                and es.nonsleeper = TRUE
         ";
 
-		$capacityResultSet = $this -> executeRows($this -> db, $sqlCapacity, array(intval($eventId), intval($eventId)));
+		$capacityResultSet = $this -> executeRows($this -> db, $sqlCapacity, array(intval($eventId), intval($eventId), intval($eventId)));
 
-		$resultSet -> capacity_male = $resultSet -> capacity_male - $capacityResultSet[1] -> vagas_ocupadas;
-		$resultSet -> capacity_female = $resultSet -> capacity_female - $capacityResultSet[0] -> vagas_ocupadas;
+		$resultSet -> capacity_male = $resultSet -> capacity_male - $capacityResultSet[0] -> vagas_ocupadas;
+		$resultSet -> capacity_female = $resultSet -> capacity_female - $capacityResultSet[1] -> vagas_ocupadas;
+		$resultSet -> capacity_nonsleeper = $resultSet -> capacity_nonsleeper - $capacityResultSet[2] -> vagas_ocupadas;
 
 		if ($resultSet)
 			return Event::createEventObject($resultSet);
 
 		return null;
+	}
+	
+	public function getAllEventsPostDate($date){
+		$sql = "SELECT * FROM event WHERE date_finish > ?
+				ORDER BY date_finish ASC";		
+		
+		$resultSet = $this -> executeRows($this->db,$sql,array($date));
+		
+		if($resultSet)
+			return $resultSet;
+		else 
+			return null;
+	}
+	
+	public function getAllEventsByYear($year){
+		$sql = "SELECT * FROM event WHERE DATE_PART('YEAR',date_finish) = ?
+				ORDER BY date_finish ASC";
+	
+		$resultSet = $this -> executeRows($this->db,$sql,array($year));
+	
+		if($resultSet)
+			return $resultSet;
+		else
+			return null;
+	}
+	
+	public function getAllEventsYears() {
+		$sql = "
+            SELECT distinct(EXTRACT(YEAR FROM date_finish)) as anos
+            FROM event
+            ORDER BY anos DESC;";
+	
+		$resultSet = $this->executeRows($this->db, $sql);
+	
+		$yearsArray = array();
+	
+		if ($resultSet)
+			foreach ($resultSet as $row)
+				$yearsArray[] = $row->anos;
+	
+			return $yearsArray;
 	}
 
 	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper) {
@@ -83,6 +135,17 @@ class event_model extends CK_Model {
 
 		return false;
 	}
+	
+	public function updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+		
+		$sql = 'UPDATE event SET event_name = ?,  description = ?, date_start = ?, date_finish = ?, date_start_show = ?, date_finish_show = ?, enabled = ?, capacity_male = ?, capacity_female = ?, capacity_nonsleeper = ?
+				WHERE event_id = ?';
+		
+		$result = $this -> execute($this->db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $event_id));
+		
+		return $result;
+	}
 
 	public function insertNewPaymentPeriod($eventId, $date_start, $date_finish, $full_price, $middle_price, $children_price, $associate_discount, $portions) {
 		$this -> Logger -> info("Running: " . __METHOD__);
@@ -97,6 +160,14 @@ class event_model extends CK_Model {
 
 		return false;
 
+	}
+	
+	public function deleteEventPaymentPeriods($eventId){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		
+		$deleteSql = 'DELETE FROM payment_period WHERE event_id = ?';
+		
+		return $this->execute($this->db, $deleteSql, array(intval($eventId)));
 	}
 
 	public function getEventPaymentPeriods($eventId) {

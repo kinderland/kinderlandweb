@@ -30,6 +30,7 @@
 
     });
 </script>
+
 <div class="col-lg-3  left-action-bar">
     <div id="accordion">
         <h3>Usuários</h3>
@@ -44,6 +45,10 @@
         </div>
         <h3>Campanha de sócios</h3>
         <div>
+            <a href="<?= $this->config->item('url_link'); ?>admin/campaign_admin">
+                Administração
+            </a>
+            <br />
             <a href="<?= $this->config->item('url_link'); ?>reports/associated_campaign">
                 Relatórios
             </a>
@@ -54,23 +59,23 @@
                 Administração
             </a>
             <br />
-            <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports"> 
+            <a href="<?= $this->config->item('url_link'); ?>reports/camp_reports">
                 Relatórios
             </a>
             <br />
-            <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal" target="_blank"> 
+            <a href="<?= $this->config->item('url_link'); ?>summercamps/roomDisposal">
                 Quartos
-            </a>  
+            </a>
         </div>
         <h3>Eventos</h3>
         <div>
-        	<a href="<?= $this->config->item('url_link'); ?>events/admin">
+            <a href="<?= $this->config->item('url_link'); ?>admin/event_admin">
                 Administração
             </a>
             <br />
-            <a href="<?= $this->config->item('url_link'); ?>events/event_reports"> 
+            <a href="<?= $this->config->item('url_link'); ?>reports/event_reports">
                 Relatórios
-            </a>  
+            </a>
         </div>
         <h3>Financeiro</h3>
         <div>

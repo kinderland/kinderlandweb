@@ -10,17 +10,17 @@
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)){ ?>
-                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>events/manageEvents"> Cadastro de Eventos </option>
+                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/reportPanel"> Painel de Relatório </option>
+                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/report_panel_byage">Painel de Eventos por Faixa Etária</option>
                 	<?php } ?>
                 </select>
             </div>
         </div>
         <hr class="footer-hr" />
         
-        <div class="row">
-            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>events/manageEvents" />
+         <div class="row">
+            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>reports/report_panel_byage" />
         </div>
-
     </div>
 
 </div>

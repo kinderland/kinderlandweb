@@ -1,19 +1,38 @@
     <div class = "row">
-    <?php $actual_screen = "COLONIA"; ?>
-    <?php require_once APPPATH . 'views/include/director_left_menu.php' ?>
+    <?php // $actual_screen = "COLONIA"; ?>
+    <?php //require_once APPPATH . 'views/include/director_left_menu.php' ?>
         <script>
             $(function() {
                 $("#sortable-table").tablesorter({widgets: ['zebra']});
                 $(function() {
                     $( ".datepicker" ).datepicker({
                         showOn: "button",
-                        dateFormat: "yy-mm-dd",
+                        dateFormat: "dd/mm/yy",
                         buttonImage: "<?= $this->config->item('assets'); ?>images/calendar.gif",
                         buttonImageOnly: true,
                         buttonText: "Selecionar data"
                     });
                 });
             });
+
+            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_price[]" id="associated_price" value="0" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
+
+            function addTableLine(linhaAAdicionar){
+            	if(!linhaAAdicionar)
+            		$('#table > tbody:last').append(linha);
+            	else
+            		$('#table > tbody:last').append(linhaAAdicionar);
+            	datepickers();
+            	$(".delete").on('click', function(event) {
+            		$(this).parent().parent().remove();
+            	});
+
+            }
+
+            function datepickers(){
+            	$('.datepickers').datepicker();
+            	$(".datepickers").datepicker("option", "dateFormat", "dd/mm/yy");	
+            }
 
             function validateInfo() {
                 var formValid = true;
@@ -58,6 +77,12 @@
                 else
                     alert(alertMsg);
             }
+
+            $(document).ready(function (){
+                <?php foreach($payments as $payment){ ?>
+        		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?=Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?=Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?=$payment["full_price"]?>"></td>		   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="Valor associado" name="associated_price[]" id="associated_price" value="0" min="0"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
+        		<?php } ?> 
+            });
         </script>
         <div class="col-lg-9 middle-content">
             <div class="row">
@@ -177,20 +202,24 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    &nbsp;
-                </div>
-                <div class="row">
-                    &nbsp;
-                </div>
+				<br/>
+               <div class="row">	
+					<label for="capacity_male" class="col-lg-4 control-label"> Períodos para pagamento: </label><br />
+				
+               <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Parcelas max</th><th>Valor Sócio</th></tr> 
+			   <tbody>
+			   </tbody>
+			   </table>
+			   <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
+				</div>
+				<br/>
                 <div class="row">
                     <div class="col-lg-12 form-group">
                         <div class="col-lg-2">
                             <button type="button" class="btn btn-primary" onClick="validateInfo()">Confirmar</button>
                         </div>
                         <div class="col-lg-2">
-                            <button type="button" class="btn btn-warning" onClick="history.back(-1)">Fechar</button>
+                            <button type="button" class="btn btn-danger" onClick="window.close()">Fechar</button>
                         </div>
                     </div>
                 </div>

@@ -11,11 +11,14 @@
         public function createSubcription($event, $userId, $personId, $subscriptionStatus, $ageGroup, $isAssociate, $nonSleeper) {
             $subs = $this->getSubscriptionByPersonIdAndEventId($personId, $event->getEventId());
             if(count($subs) == 0){
-                $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate, nonsleeper) 
-                    VALUES(?,?,?,?,?,?,?)";
-
-                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate, $nonSleeper )))
-                    return true;
+            	
+	                $sql = "INSERT INTO event_subscription (person_id, event_id, person_user_id, subscription_status, age_group_id, associate, nonsleeper) 
+	                    VALUES(?,?,?,?,?,?,?)";
+	
+	                if ($this->execute($this->db, $sql, array( intval($personId), intval($event->getEventId()), intval($userId), $subscriptionStatus, intval($ageGroup), $isAssociate, $nonSleeper )))
+	                    return true;
+	                else 
+	                	return false;
             } else {
                 //Tratar do caso se a inscrição estiver confirmada.
                 
@@ -31,7 +34,7 @@
         public function getSubscriptionByPersonIdAndEventId($personId, $eventId){
             $sql = "SELECT * FROM event_subscription WHERE person_id = ? AND event_id = ?";
 
-            return $this->executeRows($this->db, $sql, array(intval($personId), intval($eventId)));
+            return $this->executeRow($this->db, $sql, array(intval($personId), intval($eventId)));
         }
         public function getPersonsIdByEventIdAndDonationId($eventId, $donationId) {
         	$sql = "SELECT * FROM event_subscription es INNER JOIN age_group ag
@@ -154,9 +157,19 @@
             $sql = "UPDATE event_subscription SET subscription_status = ? WHERE donation_id = ?";
             return $this->execute($this->db, $sql, array($status, intval($donation_id)));
         }
-        public function getSubscriptionsByEventId ($eventId){
-            $sql = "SELECT * FROM event_subscription WHERE event_id = ?";
-            return $this->executeRows($this->db, $sql, array(intval($eventId)));
+        public function getSubscriptionsByEventId ($eventId,$type = null){
+            $sql = "SELECT * FROM event_subscription es
+            		INNER JOIN person p on p.person_id = es.person_id
+            		WHERE es.event_id = ?";
+            
+            if($type == "nonsleeper")          
+            	$sql = $sql."AND es.nonsleeper = TRUE";
+            else if($type == "capacity_male")
+            	$sql = $sql."AND p.gender = 'M'";
+            else if($type == "capacity_female")
+            	$sql = $sql."AND p.gender = 'F'";
+            
+            return $this->executeRows($this->db, $sql, array($eventId));
         }
 
     }

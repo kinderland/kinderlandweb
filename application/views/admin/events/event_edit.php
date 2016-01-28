@@ -90,18 +90,18 @@ if(string !== ""){
 $(document).ready(function (){
 	datepickers();
 
-	<?php foreach($payments as $payment){ ?>
-		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?=Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?=Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?=$payment["full_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 6-17" name="middle_price[]" id="middle_price" value="<?=$payment["middle_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 0-5" name="children_price[]" id="children_price" value="<?=$payment["children_price"]?>"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_discount[]" id="associated_discount" value="0" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
+	<?php  foreach($payments as $payment){ ?>
+		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td><td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?php echo $payment["full_price"]?>"></td><td><input type="text" class="form-control" placeholder="Valor 6-17" name="middle_price[]" id="middle_price" value="<?php echo $payment["middle_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 0-5" name="children_price[]" id="children_price" value="<?php echo $payment["children_price"]?>"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="<?php echo $payment["payment_portions"]?>" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_discount[]" id="associated_discount" value="<?php echo $payment["associated_discount"]*100;?>" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
 	<?php } ?> 
 	
 	
 });
 </script>
-<form name="event_form" onsubmit="alertRequiredFields()" method="POST" action="<?=$this->config->item('url_link')?>events/completeEvent" id="event_form">
+<form name="event_form" onsubmit="alertRequiredFields()" method="POST" action="<?=$this->config->item('url_link')?>admin/updateEvent/<?php echo $event_id;?>" id="event_form">
 	<div class="row">
 		<div class="col-lg-12 middle-content">
 			<div class="row">
-				<div class="col-lg-8"><h4>Cadastro de evento</h4></div>
+				<div class="col-lg-8"><h4>Edição de evento</h4></div>
 			</div>
 			<hr />
 
@@ -129,14 +129,14 @@ $(document).ready(function (){
 			<div class="row">
 				<div class="form-group">
 					<label for="date_start" class="col-lg-2 control-label"> Período do Evento: </label>
-					<label for="date_start" class="col-lg-1 control-label"> Início: </label>
+					<label for="date_start" class="col-lg-1 control-label"> Início*: </label>
 					<div class="col-lg-2">
-						<input type="text" class=" datepickers form-control" placeholder="Data de Início" value="<?=$date_start?>" name="date_start"/>
+						<input type="text" class=" datepickers form-control" placeholder="Data de Início" value="<?php echo Events::toMMDDYYYY($date_start);?>" name="date_start" />
 					</div>
 
-					<label for="date_finish" class="col-lg-1 control-label"> Fim: </label>
+					<label for="date_finish" class="col-lg-1 control-label"> Fim*: </label>
 					<div class="col-lg-2">
-						<input type="text" class="datepickers form-control" placeholder="Data de Término" value="<?=$date_finish?>" name="date_finish"/>
+						<input type="text" class="datepickers form-control" placeholder="Data de Término" value="<?php echo Events::toMMDDYYYY($date_finish);?>" name="date_finish" />
 					</div>
 				</div>
 			</div>
@@ -144,13 +144,13 @@ $(document).ready(function (){
 			<div class="row">
 				<div class="form-group">
 					<label for="date_start" class="col-lg-2 control-label"> Período do Inscrições: </label>
-					<label for="date_start_show" class="col-lg-1 control-label"> Início: </label>
+					<label for="date_start_show" class="col-lg-1 control-label"> Início*: </label>
 					<div class="col-lg-2">
-						<input type="text" class="form-control datepickers" placeholder="Início da exibição do evento" value="<?=$date_start_show?>" name="date_start_show"/>
+						<input type="text" class="form-control datepickers" placeholder="Início da exibição do evento" value="<?php echo Events::toMMDDYYYY($date_start_show);?>" name="date_start_show" />
 					</div>
-					<label for="date_finish_show" class="col-lg-1 control-label"> Fim: </label>
+					<label for="date_finish_show" class="col-lg-1 control-label"> Fim*: </label>
 					<div class="col-lg-2">
-						<input type="text" class="form-control datepickers" placeholder="Término da exibição do evento" value="<?=$date_finish_show?>" name="date_finish_show"/>
+						<input type="text" class="form-control datepickers" placeholder="Término da exibição do evento" value="<?php echo Events::toMMDDYYYY($date_finish_show);?>" name="date_finish_show" />
 					</div>
 				</div>
 			</div>
@@ -164,9 +164,11 @@ $(document).ready(function (){
 			<div class="row">
 				<label for="empty-space" class="col-lg-1 control-label"></label>
 				<div class="form-group">
-					<label for="capacity_male" class="col-lg-2 control-label"> Masculino: </label>
+					<label for="capacity_male" class="col-lg-2 control-label"> Masculino*: </label>
 					<div class="col-lg-2">
-						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control" placeholder="Pavilhão Masculino" value="<?=$capacity_male?>" name="capacity_male"/>
+						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão Masculino" value="<?=$capacity_male?>" name="capacity_male" required 
+							oninput="setCustomValidity('')"
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/>
 					</div>
 				</div>
 			</div>
@@ -174,9 +176,11 @@ $(document).ready(function (){
 			<div class="row">
 			<label for="empty-space" class="col-lg-1 control-label"></label>
 				<div class="form-group">
-					<label for="capacity_female" class="col-lg-2 control-label"> Feminino: </label>
+					<label for="capacity_female" class="col-lg-2 control-label"> Feminino*: </label>
 					<div class="col-lg-2">
-						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control" placeholder="Pavilhão feminino" value="<?=$capacity_female?>" name="capacity_female" /> 
+						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão feminino" value="<?=$capacity_female?>" name="capacity_female" required 
+							oninput="setCustomValidity('')"
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/> 
 					</div>
 				</div>
 			</div>
@@ -184,9 +188,11 @@ $(document).ready(function (){
 			<div class="row">
 				<label for="empty-space" class="col-lg-1 control-label"></label>
 				<div class="form-group">
-					<label for="capacity_nonsleeper" class="col-lg-2 control-label"> Sem pernoite: </label>
+					<label for="capacity_nonsleeper" class="col-lg-2 control-label"> Sem pernoite*: </label>
 					<div class="col-lg-2">
-						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control" pattern="\d*" placeholder="Sem pernoite" value="<?=$capacity_nonsleeper?>" name="capacity_nonsleeper" />
+						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="Sem pernoite" value="<?=$capacity_nonsleeper?>" name="capacity_nonsleeper" required 
+							oninput="setCustomValidity('')"
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/>
 					</div>
 				</div>
 			</div>
