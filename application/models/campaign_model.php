@@ -21,6 +21,21 @@ class campaign_model extends CK_Model {
         return $this->executeRows($this->db, $sql, array(intval($year)));
     }
 
+    public function getAllCampaigns() {
+        $sql = "SELECT *
+                FROM campaign
+                ORDER BY date_start DESC";
+        $resultSet = $this->executeRows($this->db, $sql);
+
+        $campaignArray = array();
+
+        if ($resultSet)
+            foreach ($resultSet as $row)
+                $campaignArray[] = Campaign::createCampaignObject($row);
+
+        return $campaignArray;
+    }
+
 }
 
 ?>

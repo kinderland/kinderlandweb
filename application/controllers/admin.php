@@ -6,6 +6,7 @@ require_once APPPATH . 'core/summercampSubscription.php';
 require_once APPPATH . 'core/colonist.php';
 require_once APPPATH . 'core/event.php';
 require_once APPPATH . 'controllers/events.php';
+require_once APPPATH . 'core/campaign.php';
 
 class Admin extends CK_Controller {
 
@@ -44,8 +45,19 @@ class Admin extends CK_Controller {
         $this->loadView("admin/campaigns/campaign_admin_container");
     }
 
-    public function associated_campaign() {
-        $this->loadView("admin/campaigns/associated_campaign");
+    public function manageCampaigns() {
+        $this->Logger->info("Starting " . __METHOD__);
+
+        if (!$this->checkSession())
+            redirect("login/index");
+
+        if (!$this->checkPermition(array(SYSTEM_ADMIN))) {
+            $this->denyAcess(___METHOD___);
+        }
+        $data["campaigns"] = $this->campaign_model->getAllCampaigns();
+
+
+        $this->loadReportView("admin/campaigns/manageCampaigns", $data);
     }
 
     public function event_admin() {
@@ -775,72 +787,69 @@ class Admin extends CK_Controller {
 
     public function colonist_exclusion() {
 
-    	$this->Logger->info("Running: " . __METHOD__);
-    	$data = array();
-    	$years = array();
-    	$start = 2015;
-    	$date = intval(date('Y'));
-    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	$end = $date;
-    	while ($campsByYear != null) {
-    		$end = $date;
-    		$date++;
-    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	}
-    	while ($start <= $end) {
-    		$years[] = $start;
-    		$start++;
-    	}
-    	$year = null;
-    
-    	if (isset($_GET['ano_f']))
-    		$year = $_GET['ano_f'];
-    		else {
-    			$year = date('Y');
-    		}
-    
-    		$data['ano_escolhido'] = $year;
-    		$data['years'] = $years;
-    		
-    		$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
-    		$campsQtd = count($allCamps);
-    		$camps = array();
-    		$start = $campsQtd;
-    		$end = 1;
-    		
-    		$campChosen = null;
-    		
-    		if (isset($_GET['colonia_f']))
-    			$campChosen = $_GET['colonia_f'];
-    		
-    			$campCount = array();
-    			$count = null;
-    		
-    			$campChosenId = null;
-    			foreach ($allCamps as $camp) {
-    				$count = $this->summercamp_model->getCountStatusBySummerCamp($camp->getCampId());
-    		
-    				if ($count != null) {
-    					$campCount[] = $count;
-    					$camps[] = $camp->getCampName();
-    				}
-    		
-    				if ($camp->getCampName() == $campChosen)
-    					$campChosenId = $camp->getCampId();
-    			}
-    		
-    			$data['colonia_escolhida'] = $campChosen;
-    			$data['camps'] = $camps;
-    			$data['campCount'] = $campCount;
-    
-    		$shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-    
-    		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
-    		$this->loadReportView("admin/camps/colonist_exclusion", $data);
+        $this->Logger->info("Running: " . __METHOD__);
+        $data = array();
+        $years = array();
+        $start = 2015;
+        $date = intval(date('Y'));
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_GET['colonia_f']))
+            $campChosen = $_GET['colonia_f'];
+
+        $campCount = array();
+        $count = null;
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $count = $this->summercamp_model->getCountStatusBySummerCamp($camp->getCampId());
+
+            if ($count != null) {
+                $campCount[] = $count;
+                $camps[] = $camp->getCampName();
+            }
+
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
+        }
+
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+        $data['campCount'] = $campCount;
+
+        $shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
+
+        $data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
+        $this->loadReportView("admin/camps/colonist_exclusion", $data);
     }
-    
-
-
 
     public function password() {
         $this->Logger->info("Running: " . __METHOD__);

@@ -10,7 +10,7 @@
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)) { ?>
-                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/associated_campaign"> Cadastro de Campanha de Sócios </option>
+                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/manageCampaigns"> Cadastro de Campanha de Sócios </option>
                     <?php } ?>
                 </select>
             </div>
@@ -18,7 +18,7 @@
         <hr class="footer-hr" />
 
         <div class="row">
-            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>admin/associated_campaign" />
+            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>admin/manageCampaigns" />
         </div>
 
     </div>
