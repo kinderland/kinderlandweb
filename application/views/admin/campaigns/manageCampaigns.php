@@ -57,20 +57,30 @@
         <div class="row">
             <?php // require_once APPPATH.'views/include/common_user_left_menu.php'  ?>
             <div class="col-lg-10 middle-content">
-                <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?= $this->config->item("url_link") ?>admin/CampaignCreate', 'dd');
+                <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?= $this->config->item("url_link") ?>admin/campaignCreate', 'dd');
                         return false;" href=""><button id="create" class="btn btn-primary"  value="Criar nova campanha" >Criar nova campanha</button></a>
                     <br /><br />
                     <?php
                     if (isset($campaigns) && count($campaigns) > 0) {
                         ?>
-                        <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th><th>Habilitar na Interface</th></tr>
-                                    <?php
-                                    foreach ($campaigns as $campaign) {
-                                        ?><tr>
-                                <body onunload="window.opener.location.reload();"><td><a target='_blank' onclick="window.open('<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaign->getCampaignId() ?>', 'dd');
-                                                return false;" href=""><?php echo $campaign->getCampaignYear(); ?></a></td>
-                                <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
-                                <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y') ?> </td>
+                        <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th><th>Status</th><th>Editar</th></tr>
+                            <?php
+                            foreach ($campaigns as $index => $campaign) {
+                                ?><tr>
+                                    <td><?php echo $campaign->getCampaignYear(); ?></td>
+                                    <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
+                                    <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y') ?> </td>
+                                    <td style="<?php
+                                    if ($status[$index] === 'Finalizada')
+                                        echo "color:red";
+                                    else
+                                    if ($status[$index] === 'Em andamento')
+                                        echo "color:green";
+                                    else
+                                        echo "color:blue";
+                                    ?>"><?php echo $status[$index]; ?></td>
+                                <body onunload="window.opener.location.reload();"><td><button class="btn btn-primary" target='_blank' onclick="window.open('<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaigns[$index]->getCampaignId() ?>', 'dd');
+                                        return false;" href="">Editar</button></td>
                                <!-- <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?= $campaign->getCampaignId() ?>"
                                 <?php
                                 if (!$event->getIsValid())

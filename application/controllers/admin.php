@@ -55,9 +55,67 @@ class Admin extends CK_Controller {
             $this->denyAcess(___METHOD___);
         }
         $data["campaigns"] = $this->campaign_model->getAllCampaigns();
-
-
+        $status = array();
+        foreach ($data["campaigns"] as $campaign) {
+            if ($campaign->getDateStart() > date("Y-m-d H:i:s"))
+                $status[] = 'Não iniciada';
+            else {
+                if ($campaign->getDateFinish() < date("Y-m-d H:i:s"))
+                    $status[] = 'Finalizada';
+                else {
+                    $status[] = 'Em andamento';
+                }
+            }
+        }
+        $data["status"] = $status;
         $this->loadReportView("admin/campaigns/manageCampaigns", $data);
+    }
+
+    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL) {
+        $this->Logger->info("Starting " . __METHOD__);
+        $data = array();
+        $data["errors"] = $errors;
+        $data["date_start"] = $date_start;
+        $data["date_finish"] = $date_finish;
+
+        $this->loadView("admin/campaigns/campaignCreate", $data);
+    }
+
+    public function completeCampaign() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $date_start = $this->input->post('date_start', TRUE);
+        $date_finish = $this->input->post('date_finish', TRUE);
+        $date_created = date("Y-m-d H:i:s");
+        $errors = array();
+        if (!isset($date_start) || empty($date_start))
+            $errors[] = "Campo Início é obrigatório\n";
+        if (!isset($date_finish) || empty($date_finish))
+            $errors[] = "Campo Início é obrigatório\n";
+        $date_start = explode("/", $date_start);
+        $year = $date_start[2];
+        $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0] . " 00:00:00");
+        $date_finish = explode("/", $date_finish);
+        $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+        if (count($errors) > 0)
+            return $this->campaignCreate($errors, $date_start, $date_finish);
+        try {
+            $this->Logger->info("Inserting new campaign");
+            $this->generic_model->startTransaction();
+            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $date_start, $date_finish);
+            $this->generic_model->commitTransaction();
+            if ($campaignId) {
+                $this->generic_model->commitTransaction();
+                $this->Logger->info("New campaign successfully inserted");
+                echo "<script>alert('Campanha criada com sucesso!');opener.location.reload(); window.close();</script>";
+            } else
+                echo "<script>alert('Ocorreu um erro ao criar a campanha. Tente novamente.');window.history.back();</script>";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new campaign");
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+
+            $this->loadReportView('admin/events/event_create', $data);
+        }
     }
 
     public function event_admin() {
@@ -246,7 +304,7 @@ class Admin extends CK_Controller {
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New event successfully inserted");
                 echo "<script>alert('Evento criado com sucesso!');opener.location.reload(); window.close();</script>";
-                //redirect("events/manageEvents");
+//redirect("events/manageEvents");
             } else
                 echo "<script>alert('Ocorreu um erro ao criar o evento. Tente novamente.');window.history.back();</script>";
         } catch (Exception $ex) {
@@ -519,7 +577,7 @@ class Admin extends CK_Controller {
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New event successfully inserted");
                 echo "<script>alert('Evento atualizado com sucesso!');opener.location.reload(); window.close();</script>";
-                //redirect("events/manageEvents");
+//redirect("events/manageEvents");
             } else
                 echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
         } catch (Exception $ex) {
@@ -529,7 +587,7 @@ class Admin extends CK_Controller {
 
             echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
 
-            //$this->loadReportView('admin/events/event_edit', $data);
+//$this->loadReportView('admin/events/event_edit', $data);
         }
     }
 
@@ -1446,7 +1504,7 @@ class Admin extends CK_Controller {
 
             $this->generic_model->commitTransaction();
 
-            // Enviar email?
+// Enviar email?
 
             echo "true";
         } catch (Exception $ex) {
@@ -1469,7 +1527,7 @@ class Admin extends CK_Controller {
 
             $this->generic_model->commitTransaction();
 
-            //Enviar Email??
+//Enviar Email??
 
             echo "true";
         } catch (Exception $ex) {

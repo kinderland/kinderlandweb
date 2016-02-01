@@ -24,7 +24,7 @@ class campaign_model extends CK_Model {
     public function getAllCampaigns() {
         $sql = "SELECT *
                 FROM campaign
-                ORDER BY date_start DESC";
+                ORDER BY date_finish DESC";
         $resultSet = $this->executeRows($this->db, $sql);
 
         $campaignArray = array();
@@ -34,6 +34,26 @@ class campaign_model extends CK_Model {
                 $campaignArray[] = Campaign::createCampaignObject($row);
 
         return $campaignArray;
+    }
+
+    public function insertNewCampaign($year, $date_created, $date_start, $date_finish) {
+        $id = $this->getCampaignNextId();
+        $sql = "INSERT INTO campaign(campaign_year,date_created,date_start,date_finish)
+                VALUES (?,?,?,?)";
+
+        $resultSet = $this->executeRows($this->db, $sql, array($year, $date_created, $date_start, $date_finish));
+        if ($resultSet)
+            return $resultSet;
+        return false;
+    }
+
+    public function getCampaignNextId() {
+        $sql = "SELECT max(campaign_id)+1 as 1
+                FROM campaign";
+        $resultSet = $this->executeRows($this->db, $sql);
+        if (!$resultSet)
+            return 1;
+        return $resultSet;
     }
 
 }
