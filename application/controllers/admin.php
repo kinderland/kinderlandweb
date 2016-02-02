@@ -75,8 +75,9 @@ class Admin extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
         $data["errors"] = $errors;
-        $data["date_start"] = $date_start;
-        $data["date_finish"] = $date_finish;
+        $data["date_start"] = Events::toMMDDYYYY($date_start);
+        $data["date_finish"] = Events::toMMDDYYYY($date_finish);
+
 
         $this->loadView("admin/campaigns/campaignCreate", $data);
     }
@@ -102,7 +103,6 @@ class Admin extends CK_Controller {
             $this->Logger->info("Inserting new campaign");
             $this->generic_model->startTransaction();
             $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $date_start, $date_finish);
-            $this->generic_model->commitTransaction();
             if ($campaignId) {
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New campaign successfully inserted");

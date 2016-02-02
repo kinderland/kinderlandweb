@@ -39,9 +39,8 @@ class campaign_model extends CK_Model {
     public function insertNewCampaign($year, $date_created, $date_start, $date_finish) {
         $id = $this->getCampaignNextId();
         $sql = "INSERT INTO campaign(campaign_year,date_created,date_start,date_finish)
-                VALUES (?,?,?,?)";
-
-        $resultSet = $this->executeRows($this->db, $sql, array($year, $date_created, $date_start, $date_finish));
+                VALUES (" . $year . ",'" . $date_created . "','" . $date_start . "','" . $date_finish . "')";
+        $resultSet = $this->executeReturningId($this->db, $sql);
         if ($resultSet)
             return $resultSet;
         return false;

@@ -62,39 +62,33 @@
                     <br /><br />
                     <?php
                     if (isset($campaigns) && count($campaigns) > 0) {
+                        $i = 0;
                         ?>
                         <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th><th>Status</th><th>Editar</th></tr>
                             <?php
-                            foreach ($campaigns as $index => $campaign) {
+                            foreach ($campaigns as $campaign) {
                                 ?><tr>
                                     <td><?php echo $campaign->getCampaignYear(); ?></td>
                                     <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
                                     <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y') ?> </td>
                                     <td style="<?php
-                                    if ($status[$index] === 'Finalizada')
+                                    if ($status[$i] === 'Finalizada')
                                         echo "color:red";
                                     else
-                                    if ($status[$index] === 'Em andamento')
+                                    if ($status[$i] === 'Em andamento')
                                         echo "color:green";
                                     else
                                         echo "color:blue";
-                                    ?>"><?php echo $status[$index]; ?></td>
-                                <body onunload="window.opener.location.reload();"><td><button class="btn btn-primary" target='_blank' onclick="window.open('<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaigns[$index]->getCampaignId() ?>', 'dd');
-                                        return false;" href="">Editar</button></td>
-                               <!-- <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?= $campaign->getCampaignId() ?>"
-                                <?php
-                                if (!$event->getIsValid())
-                                    echo " disabled ";
-                                if ($event->isEnabled())
-                                    echo "checkedInDatabase='true'";
-                                ?> /> </td> -->
+                                    ?>"><?php echo $status[$i]; ?></td>
+                                <body onunload="window.opener.location.reload();"><td><a target='_blank' class="btn btn-primary " onclick="window.open('<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaign->getCampaignId() ?>', 'dd'); return false;" href="">Editar</a></td>
+
                                 </tr>
                                 <?php
+                                $i++;
                             }
                             ?> </table>
                         <?php
                     } else {
-                        echo isset($campaigns);
                         ?>
                         <h3>
                             Nenhuma campanha registrada para acontecer nos próximos dias.
