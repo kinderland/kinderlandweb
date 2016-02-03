@@ -37,22 +37,12 @@ class campaign_model extends CK_Model {
     }
 
     public function insertNewCampaign($year, $date_created, $date_start, $date_finish) {
-        $id = $this->getCampaignNextId();
         $sql = "INSERT INTO campaign(campaign_year,date_created,date_start,date_finish)
-                VALUES (" . $year . ",'" . $date_created . "','" . $date_start . "','" . $date_finish . "')";
-        $resultSet = $this->executeReturningId($this->db, $sql);
+                VALUES (?,?,?,?)";
+        $resultSet = $this->executeReturningId($this->db, $sql,array($year,$date_created,$date_start,$date_finish));
         if ($resultSet)
             return $resultSet;
         return false;
-    }
-
-    public function getCampaignNextId() {
-        $sql = "SELECT max(campaign_id)+1 as 1
-                FROM campaign";
-        $resultSet = $this->executeRows($this->db, $sql);
-        if (!$resultSet)
-            return 1;
-        return $resultSet;
     }
 
 }
