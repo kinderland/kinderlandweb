@@ -243,42 +243,24 @@
 		?>
 			<div class='row'>
 				<div class="col-lg-8">
-					<h3><?=$event->getEventName();?></h3>
-				</div>
-				<div class="col-lg-4">
-					<h3>
-						Data: 
-						<strong>
+					<h2><?=$event->getEventName();?></h2>
+					<h4 align="left"><strong><?=$event->getDescription();?></strong></h4>
+					<h4>
+						<strong>Período:</strong>
 							<?= date_format(date_create($event->getDateStart()), 'd/m/y');?> 
 							<?= ($event->getDateStart() != $event->getDateFinish())? " - ".date_format(date_create($event->getDateFinish()), 'd/m/y'):""?>
-						</strong>
-					</h3>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<p align="left">
-						<?=$event->getDescription();?>
-					</p>
-				</div>
-				
-			</div>
+						
+					</h4>
 			<?php
 				if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 			?>
-			<div class="row">
-				<div class="col-lg-12">
 					<p align="left">
 						<?=$fullname?>, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos.
 					</p>
-				</div>
-			</div>
 			<?php
 				}
 			?>
-
-			<div class="row">
-				<div class="col-lg-12">
+					<h4><strong>Valores:</strong></h4>
 					<table class="table table-bordered table-striped" style="max-width:550px; min-width:550px; table-layout: fixed;">
 						<tr>
 							<th></th>
@@ -299,23 +281,24 @@
 							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
 						</tr>
 					</table>
-				</div>
-			</div>
-			<?php 
+							<h4><strong>Meus convites:</strong></h4>
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+								Novo convite
+							</button>
+							<br/><br/>
+							<?php 
 				if(count($subscriptions) > 0) {
 			?>
-				<div class="row">
-					<div class="col-lg-12">	
-							<h4>Meus convites:</h4>
 						<div name="form_submit_payment" id="form_submit_payment">
 							<input type="hidden" name="user_id" value="<?php echo$user_id?>" />
 							<table class="table table-bordered table-striped" style="max-width:808px; min-width:550px; table-layout: fixed;">
 								<tr>
 									<th style="width:60px">Pagar</th>
 									<th style="width:300px">Nome do convidado</th>
-									<th style="width:auto">Faixa etária</th>
-									<th style="width:auto">Descrição do convite</th>
-									<th style="width:90px">Excluir</th>
+									<th style="width:100px">Faixa etária</th>
+									<th style="width:165px">Descrição do convite</th>
+									<th style="width:90px">Ação</th>
 								</tr>
 								<?php 
 									foreach($subscriptions as $subscr){
@@ -364,13 +347,54 @@
 									}
 								?>
 							</table>
-						</div>
-					<div>
-				</div>
+					</div>
 			<?php
 				} 
 			?>
-					
+			<h4><strong>Doação:</strong></h4>
+			<div style= "margin-top: 15px; font-size:14px;" id="cart-info">
+			<table  class="table table-bordered table-striped" style="max-width:425px; min-width:100px; table-layout: fixed;">
+				<tr>
+					<th style="width:210px">Quantidade de convites:</th>
+					<td><span id="qtd_invites">0</span></td>
+				</tr>
+				<tr>
+					<th style="width:210px">Subtotal:</th>
+					<td>R$<span id="subtotal">0,00</span></td>
+				</tr>
+				<tr>
+					<th style="width:210px">Desconto:</th>
+					<td>R$<span id="discount">0,00</span></td>
+				</tr>
+				<tr>
+					<th style="width:210px">Total:</th>
+					<td>R$<span id="price_total">0,00</span></td>
+					<?php
+					if($price != null){
+				?>
+					<td>
+					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$event->getEventId()?>)">Prosseguir</button>
+					</td>
+				<?php
+					}
+				?>
+				</tr>
+				</table>
+		</div>	
+	</div>
+	<div class="row">
+			&nbsp;
+		</div>
+		<div class="row">
+			&nbsp;
+		</div>
+		<div class="row">
+			&nbsp;
+		</div>
+	</div>
+</div>
+</div>
+</div>
 			
 		<?php 
 			} else {
@@ -383,12 +407,7 @@
 			}
 		?>
 
-		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-			Novo convite
-		</button>
-
-		<!-- Modal -->
+<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -489,50 +508,5 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="row" id="cart-info">
-
-			<div class="col-lg-3 col-lg-offset-5" style="border-left-style:solid; border-left-width:1px; border-left-color:#cccccc">
-				Quantidade de convites:<br />
-				Subtotal:<br />
-				Desconto:<br />
-
-				Total:
-			</div>
-			<div class="col-lg-2">
-				<span id="qtd_invites">0</span><br />
-				R$<span id="subtotal">0,00</span><br />
-				R$<span id="discount">0,00</span><br />
-				R$<span id="price_total">0,00</span>
-			</div>
-			<div class="col-lg-1">
-				<?php
-					if($price != null){
-				?>
-					<br />
-					<br />
-
-					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$event->getEventId()?>)">Pagar</button>
-				<?php
-					}
-				?>
-			</div>
-		</div>
-
-		<div class="row">
-			&nbsp;
-		</div>
-		<div class="row">
-			&nbsp;
-		</div>
-		<div class="row">
-			&nbsp;
-		</div>
-			
-
-	</div>
-</div>
-</div>
-</div>
 </body>
 </html>
