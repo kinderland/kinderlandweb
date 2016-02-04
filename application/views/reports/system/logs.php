@@ -5,6 +5,8 @@
     require_once renderMenu($permissions);
     ?>
     <div class="col-lg-9">
+        <h3><strong>Logs</strong></h3>
+        <hr/>
         <div class="row">
             <div class="col-lg-8">
                 <?php
@@ -16,7 +18,7 @@
                 ?>
             </div>
         </div>
-        <hr class="footer-hr" />
+        <br>
     </div>
 
 </div>
