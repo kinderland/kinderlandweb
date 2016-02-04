@@ -54,7 +54,19 @@
 });
 </script>
 </head>
+<style>
+
+div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+
+</style>
 <body>
+<div class="scroll">
 <div class="row">
     <?php // require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
@@ -89,5 +101,6 @@
     </div>
 	</div>
 </div>
+
 </body>
 </html>

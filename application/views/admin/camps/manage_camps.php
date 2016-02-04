@@ -23,6 +23,17 @@
       //  require_once renderMenu($permissions); 
     ?>
     </head>
+    <style>
+    
+    div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+    
+    </style>
     <body>
         <script>
             $(function() {
@@ -44,6 +55,7 @@
                 );
             }
         </script>
+        <div class="scroll">
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
@@ -72,7 +84,7 @@
                             ?>
 
                             <tr>
-                                <td><?= $camp->getCampName() . ( ($camp->isMiniCamp())? " (Mini)":"" ) ?></td>
+                                <body onunload="window.opener.location.reload();"><td><a target='_blank' onclick="window.open('<?php echo $this->config->item("url_link");?>admin/editCamp/<?php echo $camp->getCampId()?>','dd'); return false;" href=""><?php echo $camp->getCampName() . ( ($camp->isMiniCamp())? " (Mini)":"" );?></a></td>
                                 <td><?= date_format(date_create($camp->getDateStart()), 'd/m/y');?></td>
                                 <td><?= date_format(date_create($camp->getDateFinish()), 'd/m/y');?></td>
                                 <td>
@@ -92,6 +104,6 @@
                 </div>
             </div>
         </div>
-
+		</div>
     </body>
 </html>

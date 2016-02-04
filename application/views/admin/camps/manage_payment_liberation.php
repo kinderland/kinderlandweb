@@ -20,6 +20,17 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
         <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
 	</head>
+	<style>
+	
+	div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+	
+	</style>
 	<body>
 		<script>
 			$(document).ready(function () {
@@ -113,6 +124,7 @@
 				});
 			});
         </script>
+        <div class="scroll">
 		<div class="main-container-report">
 			<div class="row">
 				<div class="col-lg-10" bgcolor="red">
@@ -213,6 +225,7 @@
 					<?php } ?>
 				</div>
 			</div>
+		</div>
 		</div>
 	</body>
 </html>

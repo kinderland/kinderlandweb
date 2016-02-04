@@ -110,6 +110,14 @@
 				width: 400px;
 				height: 200px;
 			}
+			
+			div.scroll{
+    	
+    			width:100%;
+    			height:100%;
+    			overflow-x:hidden;
+    
+   		 	}
 		</style>
 
         <link href="<?= $this -> config -> item('assets'); ?>css/basic.css" rel="stylesheet" />
@@ -208,7 +216,7 @@
 					}
 
     	</script>
-
+		<div class="scroll">
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
@@ -225,7 +233,7 @@
                             ?>
                         </select>
                     </form>
-                    <table class="table table-bordered table-striped" style="max-width: 800px; font-size:12px; display:block;" id="sortable-table">
+                    <table class="table table-bordered table-striped" style="width: 93%; font-size:12px; display:block;" id="sortable-table">
                         <thead>
                             <tr>
                                 <th style="min-width: 100px; max-width: 100px"> Nome do Colonista </th>
@@ -322,6 +330,7 @@
 		</div>
 	</div>
    </div>
+  </div>
   </div>
     </body>
 </html>

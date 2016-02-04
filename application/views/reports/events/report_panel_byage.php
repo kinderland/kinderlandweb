@@ -24,7 +24,19 @@
 
 		</script>
 	</head>
+	<style>
+	
+	div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+	
+	</style>
 	<body>
+	<div class="scroll">
 		<div class="main-container-report">
 		            <div class = "row">
 		                <div class="col-lg-12">
@@ -75,6 +87,7 @@
 							    <td><?php echo $info["mas06"]; ?></td>
 							</tr>
 						</table>
+		 </div>
 		 </div>
 	</body>
 </html>
