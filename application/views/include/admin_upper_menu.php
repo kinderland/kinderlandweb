@@ -82,7 +82,7 @@
                         <ul class = "dropdown-menu" >
                             <li > <a href = "<?= $this->config->item('url_link'); ?>admin/camp" > Administração </a></li >
                             <li > <a href = "<?= $this->config->item('url_link'); ?>reports/camp_reports" > Relatórios </a></li >
-                            <li > <a href = "<?= $this->config->item('url_link'); ?>summercamps/roomDisposal" target = "_blank" > Quartos </a></li >
+                            <li > <a href = "<?= $this->config->item('url_link'); ?>summercamps/roomDisposal" > Quartos </a></li >
                         </ul>
                     </li>
                     <li class="dropdown">

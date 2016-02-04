@@ -1,52 +1,59 @@
+<head>    <?php $actual_screen = "COLONIA"; ?>
+    <?php
+    require_once APPPATH . 'core/menu_helper.php';
+    require_once renderMenu($permissions);
+    ?></head>
+
+
 <div class = "row">
-    <script type="text/javascript"> 
+    <script type="text/javascript">
 
         var selectTodas = {
-                element : null,
-                values : "auto",
-                empty : "Todas",
-                multiple : false,
-                noColumn : false,
-            }
-        
+            element: null,
+            values: "auto",
+            empty: "Todas",
+            multiple: false,
+            noColumn: false,
+        }
+
         var selectTodos = {
-                element : null,
-                values : "auto",
-                empty : "Todos",
-                multiple : false,
-                noColumn : false,
-            }
-        
+            element: null,
+            values: "auto",
+            empty: "Todos",
+            multiple: false,
+            noColumn: false,
+        }
+
         function sortLowerCase(l, r) {
             return l.toLowerCase().localeCompare(r.toLowerCase());
         }
 
-        
-        $(document).ready(function() {
+
+        $(document).ready(function () {
             $('#sortable-table').datatable({
-                pageSize : Number.MAX_VALUE,
-                sort : [sortLowerCase, sortNumber, sortLowerCase],
-                filters : [true, selectTodas, true],
-                filterText : 'Escreva para filtrar...'
+                pageSize: Number.MAX_VALUE,
+                sort: [sortLowerCase, sortNumber, sortLowerCase],
+                filters: [true, selectTodas, true],
+                filterText: 'Escreva para filtrar...'
             });
-            
-            if($("#room").val() != null)
-                $("#btn_room_"+$("#room").val()).switchClass("btn-default", "btn-primary");
+
+            if ($("#room").val() != null)
+                $("#btn_room_" + $("#room").val()).switchClass("btn-default", "btn-primary");
         });
 
-        function openDisposal(){
-            if($("#pavilhao").val() != "")
+        function openDisposal() {
+            if ($("#pavilhao").val() != "")
                 $(".btn_room_row").show();
             else
                 $(".btn_room_row").hide();
 
-            if($("#anos").val() != null && $("#colonia").val() != 0 && $("#pavilhao").val() != "" && $("#room").val != "") {
+            if ($("#anos").val() != null && $("#colonia").val() != 0 && $("#pavilhao").val() != "" && $("#room").val != "") {
                 $("#form_selection").submit();
             }
         }
 
-        function openRoomDisposal( roomFilter ) {
-            if($("#anos").val() != null && $("#colonia").val() != 0 && $("#pavilhao").val() != "") {
+        function openRoomDisposal(roomFilter) {
+            if ($("#anos").val() != null && $("#colonia").val() != 0 && $("#pavilhao").val() != "") {
                 $("#room").val(roomFilter);
                 $("#form_selection").submit();
             } else {
@@ -54,52 +61,52 @@
             }
         }
 
-        function saveRoomNumber(colonistId, summerCampId){
-            var roomNumber = $("#colonist_room_"+colonistId+"_"+summerCampId).val();
-            if(roomNumber == "" || roomNumber == null || !(roomNumber > 0 && roomNumber <= 6)){
+        function saveRoomNumber(colonistId, summerCampId) {
+            var roomNumber = $("#colonist_room_" + colonistId + "_" + summerCampId).val();
+            if (roomNumber == "" || roomNumber == null || !(roomNumber > 0 && roomNumber <= 6)) {
                 alert("Número do quarto inválido. Favor entrar com números de 1 até 6.");
                 return 0;
             } else {
                 $.post("<?= $this->config->item('url_link') ?>summercamps/updateRoomNumber",
-                    {
-                        'colonist_id': colonistId,
-                        'summer_camp_id': summerCampId,
-                        'room_number': roomNumber
-                    },
-                    function (data) {
-                        if (data == "true") {
-                            window.location.reload();
-                            //alert("Alteração de quarto gravada com sucesso!");
-                        } else {
-                            alert("Ocorreu um erro ao gravar a alteração de quarto.");
+                        {
+                            'colonist_id': colonistId,
+                            'summer_camp_id': summerCampId,
+                            'room_number': roomNumber
+                        },
+                        function (data) {
+                            if (data == "true") {
+                                window.location.reload();
+                                //alert("Alteração de quarto gravada com sucesso!");
+                            } else {
+                                alert("Ocorreu um erro ao gravar a alteração de quarto.");
+                            }
                         }
-                    }
                 );
             }
         }
 
         function autoDistribute(summerCampId, gender) {
-            if(confirm("O sistema irá distribuir os colonistas automaticamente, por idade.\n\nAtenção: se já houver colonista(s) em quarto(s). Ao prosseguir, todos serão redistribuidos. Confirma?")){
+            if (confirm("O sistema irá distribuir os colonistas automaticamente, por idade.\n\nAtenção: se já houver colonista(s) em quarto(s). Ao prosseguir, todos serão redistribuidos. Confirma?")) {
                 $.post("<?= $this->config->item('url_link') ?>summercamps/autoFillRooms",
-                    {
-                        'summer_camp_id': summerCampId,
-                        'gender': gender
-                    },
-                    function (data) {
-                        if (data == "true") {
-                            window.location.reload();
-                            //alert("Alteração de quarto gravada com sucesso!");
-                        } else {
-                            alert("Ocorreu um erro ao auto distribuir colonistas.");
+                        {
+                            'summer_camp_id': summerCampId,
+                            'gender': gender
+                        },
+                        function (data) {
+                            if (data == "true") {
+                                window.location.reload();
+                                //alert("Alteração de quarto gravada com sucesso!");
+                            } else {
+                                alert("Ocorreu um erro ao auto distribuir colonistas.");
+                            }
                         }
-                    }
                 );
             }
-            
+
         }
 
-        function sortNumber(a,b) {
-            return a-b;
+        function sortNumber(a, b) {
+            return a - b;
         }
 
         function post(path, params, method) {
@@ -132,17 +139,17 @@
             var filtroQuarto = $("#room").val();
             var nomePadrao = type.concat("-");
 
-            if(filtroQuarto == 0)
+            if (filtroQuarto == 0)
                 filtroQuarto = "Sem-Quarto".concat(filtroGenero);
-            else if(filtroQuarto == -1)
+            else if (filtroQuarto == -1)
                 filtroQuarto = "Todos-os-Quartos".concat(filtroGenero);
             else {
                 filtroQuarto = filtroQuarto.concat(filtroGeneroVal);
-            }   
+            }
 
             nomePadrao = nomePadrao.concat(filtroQuarto);
-            nomePadrao = nomePadrao.concat("-");    
-            return nomePadrao.concat(filtroColonia);            
+            nomePadrao = nomePadrao.concat("-");
+            return nomePadrao.concat(filtroColonia);
         }
 
         function sendTableToCSV() {
@@ -152,7 +159,7 @@
             for (var i = 0, row; row = table.rows[i]; i++) {
                 var data2 = []
                 //Nome, retira pega o que esta entre um <> e outro <>
-                
+
                 data2.push(row.cells[0].innerHTML.split("<")[1].split(">")[1]);
                 data2.push(row.cells[1].innerHTML);
                 data2.push(row.cells[2].innerHTML);
@@ -184,11 +191,13 @@
     <div class = "col-lg-12">
         <div class = "row">
             <div class="col-lg-11">
+                <h3><strong>Quartos</strong></h3>
+                <hr/>
                 <form id="form_selection" method="GET">
                     <select name="ano_f"  onchange="this.form.submit()" id="anos">
-                
+
                         <?php
-                        foreach ( $years as $year ) {
+                        foreach ($years as $year) {
                             $selected = "";
                             if ($ano_escolhido == $year)
                                 $selected = "selected";
@@ -197,9 +206,9 @@
                         ?>
                     </select>
                     <select name="colonia_f" id="colonia" onchange="openDisposal()">
-                        <option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Selecionar</option>
+                        <option value="0" <?php if (!isset($colonia_escolhida)) echo "selected"; ?>>Selecionar</option>
                         <?php
-                        foreach ( $camps as $camp ) {
+                        foreach ($camps as $camp) {
                             $selected = "";
                             if ($colonia_escolhida == $camp)
                                 $selected = "selected";
@@ -208,68 +217,70 @@
                         ?>
                     </select>
                     <select name="pavilhao" id="pavilhao" onchange="openDisposal()">
-                        <option value=""  <?php if(!isset($pavilhao)) echo "selected"; ?>> Selecionar </option>
-                        <option value="M" <?php if(isset($pavilhao) && $pavilhao == "M") echo "selected"; ?>> Masculino </option>
-                        <option value="F" <?php if(isset($pavilhao) && $pavilhao == "F") echo "selected"; ?>> Feminino </option>
+                        <option value=""  <?php if (!isset($pavilhao)) echo "selected"; ?>> Selecionar </option>
+                        <option value="M" <?php if (isset($pavilhao) && $pavilhao == "M") echo "selected"; ?>> Masculino </option>
+                        <option value="F" <?php if (isset($pavilhao) && $pavilhao == "F") echo "selected"; ?>> Feminino </option>
                     </select>
 
                     <input type="hidden" id="room" name="quarto" value = "<?= (isset($quarto)) ? $quarto : '' ?>" />
 
                     <br /><br />
 
-                    <div class="btn_room_row" style="<?= ((isset($quarto))?'':'display:none')?>" >
+                    <div class="btn_room_row" style="<?= ((isset($quarto)) ? '' : 'display:none') ?>" >
                         <table>
                             <tr>
                                 <th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_4" style="margin-left:5px" onclick="openRoomDisposal(4)"> 4<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_5" style="margin-left:5px" onclick="openRoomDisposal(5)"> 5<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> 6<?= (isset($pavilhao))?$pavilhao:""?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_4" style="margin-left:5px" onclick="openRoomDisposal(4)"> 4<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_5" style="margin-left:5px" onclick="openRoomDisposal(5)"> 5<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> 6<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
                             </tr>
-                           <?php if(isset($room_occupation)){ ?>
+                            <?php if (isset($room_occupation)) { ?>
                                 <tr>
-                                    <td align="center"><?=$room_occupation[0] ?></td>
-                                    <td align="center"><?=$room_occupation[1] ?></td>
-                                    <td align="center"><?=$room_occupation[2] ?></td>
-                                    <td align="center"><?=$room_occupation[3] ?></td>
-                                    <td align="center"><?=$room_occupation[4] ?></td>
-                                    <td align="center"><?=$room_occupation[5] ?></td>
-                                    <td align="center"><?=$room_occupation[6] ?></td>
-                                    <td align="center"><?= $room_occupation[1]+
-                                            $room_occupation[2]+
-                                            $room_occupation[3]+
-                                            $room_occupation[4]+
-                                            $room_occupation[5]+
-                                            $room_occupation[6] ?>
+                                    <td align="center"><?= $room_occupation[0] ?></td>
+                                    <td align="center"><?= $room_occupation[1] ?></td>
+                                    <td align="center"><?= $room_occupation[2] ?></td>
+                                    <td align="center"><?= $room_occupation[3] ?></td>
+                                    <td align="center"><?= $room_occupation[4] ?></td>
+                                    <td align="center"><?= $room_occupation[5] ?></td>
+                                    <td align="center"><?= $room_occupation[6] ?></td>
+                                    <td align="center"><?=
+                                        $room_occupation[1] +
+                                        $room_occupation[2] +
+                                        $room_occupation[3] +
+                                        $room_occupation[4] +
+                                        $room_occupation[5] +
+                                        $room_occupation[6]
+                                        ?>
                                         <img src="<?= $this->config->item('assets') ?>images/kinderland/help.png" width="15" height="15"
-                                            title="Número de colonistas por quarto."/>
+                                             title="Número de colonistas por quarto."/>
                                     <td>
-                                    
+
                                 </tr>
-                            <?php } ?> 
+                            <?php } ?>
                         </table>
                     </div>
-            
+
 
                 </form>
             </div>
 
             <div class="col-lg-1">
-                <?php if(isset($pavilhao)&&isset($colonia_escolhida)){ ?>
+                <?php if (isset($pavilhao) && isset($colonia_escolhida)) { ?>
                     <button class="btn btn-info" onclick="autoDistribute(<?= $summer_camp_id ?>, '<?= $pavilhao ?>')"> Auto distribuir </button>
                 <?php } ?>
             </div>
         </div>
 
-        <?php if(isset($colonists)) { ?>
+        <?php if (isset($colonists)) { ?>
             <div class = "row">
                 <br /><br />
 
                 <div class="col-lg-12">
-                    
+
                     <p>
                         Código de cores:
                         <br /><br />
@@ -296,74 +307,71 @@
                             </tr>
                         </thead>
                         <script>
-                        function editName(colonistId, summerCampId, roommate1, roommate2, roommate3, number){
-							if(number == 1){
-                        		roommate1 = prompt("Digite o nome correto:",roommate1);
-							}
-							else if(number == 2){
-								roommate2 = prompt("Digite o nome correto:",roommate2);
-							}
-							else{
-								roommate3 = prompt("Digite o nome correto:",roommate3);
-							}
-                        	if(roommate1 == null || roommate2 == null || roommate3 == null)
-                            	return;
-                        	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateRoommate",
-                        				{ colonist_id: colonistId, summer_camp_id: summerCampId, roommate1: roommate1, roommate2: roommate2, roommate3: roommate3 },
-                        				function( data  ){
-                            				if(data == "true"){
-                                				alert("Amigo atualizado");
-                                				location.reload();
-                            				}
-                            				else if(data == "false"){
-                                				alert("Erro na atualização do amigo");
-                                				location.reload();
-                            				}
-                            				                            				
-                        				}
-                        	);
-                        }
-                                				
-                        										
+                            function editName(colonistId, summerCampId, roommate1, roommate2, roommate3, number) {
+                                if (number == 1) {
+                                    roommate1 = prompt("Digite o nome correto:", roommate1);
+                                } else if (number == 2) {
+                                    roommate2 = prompt("Digite o nome correto:", roommate2);
+                                } else {
+                                    roommate3 = prompt("Digite o nome correto:", roommate3);
+                                }
+                                if (roommate1 == null || roommate2 == null || roommate3 == null)
+                                    return;
+                                $.post("<?= $this->config->item('url_link'); ?>summercamps/updateRoommate",
+                                        {colonist_id: colonistId, summer_camp_id: summerCampId, roommate1: roommate1, roommate2: roommate2, roommate3: roommate3},
+                                        function (data) {
+                                            if (data == "true") {
+                                                alert("Amigo atualizado");
+                                                location.reload();
+                                            } else if (data == "false") {
+                                                alert("Erro na atualização do amigo");
+                                                location.reload();
+                                            }
+
+                                        }
+                                );
+                            }
+
+
                         </script>
-                        
+
                         <tbody id="tablebody">
                             <?php foreach ($colonists as $colonist) { ?>
                                 <tr>
                                     <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link'); ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
-                                    <td><?= explode(" ", $colonist->age)[0]?></td>
+                                    <td><?= explode(" ", $colonist->age)[0] ?></td>
                                     <td><?= $colonist->school_name ?></td>
                                     <td><?= $colonist->school_year ?></td>
-                                    <?php 
-                                    if($colonist->roommate1_status == "F"){
-                                    ?>
-                                   	<td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF")?"<br />[".substr($colonist->roommate1_status, 2, 2)."]":'')?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id;?>', '<?php echo $colonist->summer_camp_id;?>', '<?php echo $colonist->roommate1;?>', '<?php echo $colonist->roommate2;?>', '<?php echo $colonist->roommate3;?>', 1)">Editar</button>
-                                    <?php }else{?>
-                                    <td><span class="<?=$colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?=(($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF")?"<br />[".substr($colonist->roommate1_status, 2, 2)."]":'')?>
-                                    <?php }?>
-                                    <?php 
-                                    if($colonist->roommate2_status == "F"){
-                                    ?>
-                                    <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?=(($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F" && $colonist->roommate2_status != "TF")?"<br />[".substr($colonist->roommate2_status, 2, 2)."]":'')?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id;?>', '<?php echo $colonist->summer_camp_id;?>', '<?php echo $colonist->roommate1;?>', '<?php echo $colonist->roommate2;?>', '<?php echo $colonist->roommate3;?>', 2)">Editar</button>
-                                    <?php }else{?>
-                                    <td><span class="<?=$colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?=(($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F" && $colonist->roommate2_status != "TF")?"<br />[".substr($colonist->roommate2_status, 2, 2)."]":'')?></span></td>
-                                    <?php }?>
-                                    <?php if($colonist->roommate3_status == "F"){
-                                    ?>
-                                    <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?=(($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF")?"<br />[".substr($colonist->roommate3_status, 2, 2)."]":'')?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id;?>', '<?php echo $colonist->summer_camp_id;?>', '<?php echo $colonist->roommate1;?>', '<?php echo $colonist->roommate2;?>', '<?php echo $colonist->roommate3;?>', 3)">Editar</button>	
-                                    <?php }else{?>
-                                    <td><span class="<?=$colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?=(($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF")?"<br />[".substr($colonist->roommate3_status, 2, 2)."]":'')?></span></td>
-                                    <?php }?>
-                                    <td><?= $colonist->friend_roommates ?></td>  
-                                    <td><input type="number" min="0" max="6" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>  
-                                    <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>)">Salvar</button></td>
-                                </tr>                                   
-                            <?php } ?>  
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        <?php } ?>
-        
-    </div>
-</div>
+                                    <?php
+                                    if ($colonist->roommate1_status == "F") {
+                                        ?>
+                                        <td><span class="<?= $colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?= (($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF") ? "<br />[" . substr($colonist->roommate1_status, 2, 2) . "]" : '') ?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id; ?>', '<?php echo $colonist->summer_camp_id; ?>', '<?php echo $colonist->roommate1; ?>', '<?php echo $colonist->roommate2; ?>', '<?php echo $colonist->roommate3; ?>', 1)">Editar</button>
+                                            <?php } else { ?>
+                                                <td><span class="<?= $colonist->roommate1_status ?>"><?= $colonist->roommate1 ?> <?= (($colonist->roommate1_status != "T" && $colonist->roommate1_status != "F" && $colonist->roommate1_status != "TF") ? "<br />[" . substr($colonist->roommate1_status, 2, 2) . "]" : '') ?>
+                                                    <?php } ?>
+                                                    <?php
+                                                    if ($colonist->roommate2_status == "F") {
+                                                        ?>
+                                                        <td><span class="<?= $colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?= (($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F" && $colonist->roommate2_status != "TF") ? "<br />[" . substr($colonist->roommate2_status, 2, 2) . "]" : '') ?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id; ?>', '<?php echo $colonist->summer_camp_id; ?>', '<?php echo $colonist->roommate1; ?>', '<?php echo $colonist->roommate2; ?>', '<?php echo $colonist->roommate3; ?>', 2)">Editar</button>
+                                                            <?php } else { ?>
+                                                                <td><span class="<?= $colonist->roommate2_status ?>"><?= $colonist->roommate2 ?> <?= (($colonist->roommate2_status != "T" && $colonist->roommate2_status != "F" && $colonist->roommate2_status != "TF") ? "<br />[" . substr($colonist->roommate2_status, 2, 2) . "]" : '') ?></span></td>
+                                                            <?php } ?>
+                                                            <?php if ($colonist->roommate3_status == "F") {
+                                                                ?>
+                                                                <td><span class="<?= $colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?= (($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF") ? "<br />[" . substr($colonist->roommate3_status, 2, 2) . "]" : '') ?><br><button class="btn btn-primary"  onclick=" editName('<?php echo $colonist->colonist_id; ?>', '<?php echo $colonist->summer_camp_id; ?>', '<?php echo $colonist->roommate1; ?>', '<?php echo $colonist->roommate2; ?>', '<?php echo $colonist->roommate3; ?>', 3)">Editar</button>
+                                                                    <?php } else { ?>
+                                                                        <td><span class="<?= $colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?= (($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF") ? "<br />[" . substr($colonist->roommate3_status, 2, 2) . "]" : '') ?></span></td>
+                                                                    <?php } ?>
+                                                                    <td><?= $colonist->friend_roommates ?></td>
+                                                                    <td><input type="number" min="0" max="6" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>
+                                                                    <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>)">Salvar</button></td>
+                                                                    </tr>
+                                                                <?php } ?>
+                                                                </tbody>
+                                                                </table>
+                                                                </div>
+                                                                </div>
+                                                            <?php } ?>
+
+                                                            </div>
+                                                            </div>

@@ -8,6 +8,8 @@
     ?>
     <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/select.box.iframe.js"></script>
     <div style="width:100%">
+        <h3><strong>Relatórios</strong></h3>
+        <hr/>
         <div class="col-lg-8">
             <select class="report-select" name="report_select" id="report_select">
                 <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions)) { ?>
@@ -24,7 +26,7 @@
                 <?php } ?>
             </select>
         </div>
-        <hr class="footer-hr" />
+        <br>
 
         <div class="row">
             <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?= PAYMENT_REPORTBYCARD_QUANTITY ?>" />
