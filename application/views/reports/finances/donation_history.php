@@ -81,7 +81,7 @@
         <div class = "row">
             <div class="col-lg-12">
 
-                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px" id="sortable-table">
+                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 1000px; font-size:15px" id="sortable-table">
                     <thead>
                         <tr>
                             <th> Nome </th>

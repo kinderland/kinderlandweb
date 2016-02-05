@@ -120,7 +120,7 @@
             echo number_format($value, 2, ',', '.');
             ?>
         </p>
-        <table class="table table-bordered table-striped table-min-td-size" style="max-width: 500px; font-size:13px" id="sortable-table">
+        <table class="table table-bordered table-striped table-min-td-size" style="max-width: 1000px; font-size:15px" id="sortable-table">
             <thead>
                 <tr>
                     <th> Data e hora </th>
