@@ -82,7 +82,7 @@
         	<div class="main-container-report">
             	<div class = "row">
                 	<div class="col-lg-12">
-                    <table class="table table-bordered table-striped table-min-td-size" style="width: 93.6%; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 1000px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome </th>

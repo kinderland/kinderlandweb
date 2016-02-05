@@ -233,14 +233,14 @@
                             ?>
                         </select>
                     </form>
-                    <table class="table table-bordered table-striped" style="width: 93%; font-size:12px; display:block;" id="sortable-table">
+                    <table class="table table-bordered table-striped" style="width: 1000px; font-size:15px; display:block;" id="sortable-table">
                         <thead>
                             <tr>
                                 <th style="min-width: 100px; max-width: 100px"> Nome do Colonista </th>
                                 <th style="min-width: 140px; max-width: 140px"> Colônia </th>
                                 <th style="min-width: 100px; max-width: 100px"> Responsável </th>
                                 <th style="min-width: 140px; max-width: 140px"> Status da inscrição </th>
-                                <th style="min-width: 70px; max-width: 70px"> % Desconto </th>
+                                <th> % Desconto </th>
                                 <th style="min-width: 80px; max-width: 70px"> Motivo </th>
                                 <th style="min-width: 80px; max-width: 70px"> Editar </th>
                             </tr>

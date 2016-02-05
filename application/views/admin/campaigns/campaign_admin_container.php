@@ -5,7 +5,7 @@
     require_once renderMenu($permissions);
     ?>
     <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/select.box.iframe.js"></script>
-    <div class="col-lg-9">
+    <div class="col-lg-9" style="width: 1100px;">
         <h3><strong>Administração</strong></h3>
         <hr/>
         <div class="row">

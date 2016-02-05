@@ -20,6 +20,17 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
         <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
 	</head>
+	<style>
+	
+	div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+	
+	</style>
 	<body>
 		<script>
 
@@ -150,6 +161,7 @@
 				});
 			});
         </script>
+        <div class="scroll">
 		<div class="main-container-report">
 			<div class="row">
 				<div class="col-lg-10" bgcolor="red">
@@ -238,15 +250,15 @@
 							<button class="button" onclick="sendTableToCSV()" value="">Gerar Planilha de colonistas na fila</button> <br></br>
 							<br />
 							<table class="table table-bordered table-striped table-min-td-size"
-								style="max-width: 500px; font-size:15px" id="sortable-table">
+								style="width: 93%; font-size:15px" id="sortable-table">
 								<thead>
 									<tr>
-										<th align="right">Colonista</th>
-										<th align="right">Sexo</th>
-										<th align="right">Posição</th>
-										<th align="right">Responsável</th>
-										<th align="right">Status</th>
-										<th align="right">Ações</th>
+										<th>Colonista</th>
+										<th>Sexo</th>
+										<th>Posição</th>
+										<th>Responsável</th>
+										<th>Status</th>
+										<th>Ações</th>
 									</tr>	
 								</thead>
 								<tbody id="tablebody"> 
@@ -271,6 +283,7 @@
 					<?php } ?>
 				</div>
 			</div>
+		</div>
 		</div>
 	</body>
 </html>
