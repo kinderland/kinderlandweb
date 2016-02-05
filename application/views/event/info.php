@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+		function alertaTempoTotal(){
+			alert("ATENÇÃO! Você terá 10 minutos para criar os convite e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
+		}	
+
+		setTimeout(alertaTempoTotal,50);
+
+</script>
+
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -21,9 +31,11 @@
 
     </head>
     <body>
+    <div id="thisdiv">
 	<div class="row">
 	<?php require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
+		
 		<script type="text/javascript">
 
 			function subscribeUserOnSession(userId, eventId){
@@ -40,18 +52,20 @@
 					$.post( "<?=$this->config->item('url_link');?>events/subscribeUser", 
 							{ event_id: eventId, user_id: userId },
 							function ( data ){
-								location.reload();
+								$('#thisdiv').load(document.URL +  ' #thisdiv');
+								$('#myModal').modal('hide');
 							}
 					);
 				}	
-			}
+			}			
 
 			function deleteSubscription(eventId, userId){
 
 			    $.post( "<?=$this->config->item('url_link');?>events/unsubscribeUsers", 
 						{ event_id: eventId, user_ids: userId },
 						function ( data ){
-							location.reload();
+							$('#thisdiv').load(document.URL +  ' #thisdiv');
+							$('#myModal').modal('hide');
 						}
 				);
 			}
@@ -77,7 +91,8 @@
 							}
 							else{
 								alert(data);
-								location.reload();
+								$('#thisdiv').load(document.URL +  ' #thisdiv');
+								$('#myModal').modal('hide');
 							}
 				});
 			}
@@ -180,6 +195,8 @@
 
 				if(fullname == "")
 					error = error.concat("Nome Completo\n");
+				if(associateyes === "false" && associateno === "false")
+					error = error.concat("Dependente de Sócio\n");
 				if(age_group == "")
 					error = error.concat("Faixa Etária\n");
 				if(gender == "")
@@ -212,7 +229,10 @@
 								function(data){
 									if(data){
 										alert("Convite criado com sucesso!\n\n ATENÇÃO: O convite só será efetivamente adquirido se houver disponibilidade no momento em que a doação for realizada.");
-										location.reload();		
+										$('#thisdiv').load(document.URL +  ' #thisdiv');
+										$('#myModal').modal('hide');
+										$('body').removeClass('modal-open');
+										$('.modal-backdrop').remove();	
 									}
 									else{
 										alert("Houve um erro na criação do convite. Tente novamente!");	
@@ -236,8 +256,8 @@
 				}
 			}
 
-		</script>
 
+		</script>
 		<?php 
 			if($event != null && $event instanceof Event) { 
 		?>
@@ -382,18 +402,6 @@
 				</table>
 		</div>	
 	</div>
-	<div class="row">
-			&nbsp;
-		</div>
-		<div class="row">
-			&nbsp;
-		</div>
-		<div class="row">
-			&nbsp;
-		</div>
-	</div>
-</div>
-</div>
 </div>
 			
 		<?php 
@@ -413,15 +421,14 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="solicitar-convite">Solicitar Convite</h4>
+					<h4 class="modal-title" id="solicitar-convite">Solicitar Convite: <?=$event->getEventName()?></h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-lg-12 middle-content">
 								<div class="row">
-									<div class="col-lg-8"><h4>Inscrição de pessoa no evento: <?=$event->getEventName()?></h4></div>
+									
 								</div>
-								<hr />
 
 								<div>
 								</div>
@@ -432,15 +439,18 @@
 										<input type="hidden" id="user_id" name="user_id" value="<?=$user_id?>" />
 										<input type="hidden" id="person_id" name="person_id" value="" />
 										<div class="form-group">
-											<label for="fullname" class="col-lg-2 control-label"> Nome Completo*: </label>
-											<div class="col-lg-4">
-												<input type="text" class="form-control" placeholder="Nome Completo"
+											<label for="fullname" style="width: 150px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Nome Completo*: </label>
+											
+												<input  style="width: 300px" type="text" class="form-control" placeholder="Nome Completo"
 													name="fullname" value="<?php echo $name;?>" id="fullname" />
 											</div>
-
-											<label for="gender" class="col-lg-2 control-label"> Sexo*: </label>
-											<div class="col-lg-4">
-												<select class="form-control" id="gender" name="gender">
+											</div>
+											<br />
+											<div class="row">
+											<div class="form-group">
+											<label style="width: 60px;margin-bottom:0px; margin-top:7px; padding-right:0px" for="gender" class="col-lg-1 control-label"> Sexo*: </label>
+											<div style="width: 240px;" class="col-lg-2 control-label">
+												<select  class="form-control" id="gender" name="gender">
 													<option value="" selected>-- Selecione --</option>
 													<option value="M">Masculino</option>
 													<option value="F">Feminino</option>
@@ -448,10 +458,11 @@
 											</div>
 										</div>
 									</div>
+									<br />
 
 									<div class="row">
 										<div class="form-group">
-											<div class="col-lg-6">
+											<div class="col-lg-7">
 												<p>
 													<?php
 														if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
@@ -463,19 +474,23 @@
 													<?php
 														} else {
 													?>
-														<label for="associate_true" class="control-label"> Dependente de sócio?: </label>
-														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true"; ?>','<?php echo "associate_false";?>')" disabled/> Sim 
+														<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
+														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true"; ?>','<?php echo "associate_false";?>')"/> Sim 
 														<label for="associate_false" class="control-label"></label>
-														<input type="radio" class="associate_no" name="associate" id="associate_false" value="true" onclick = "changeValue('<?php echo "associate_false";  ?>','<?php echo "associate_true"; ?>')" checked disabled /> Não
+														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false";  ?>','<?php echo "associate_true"; ?>')"/> Não
 													<?php
 														}
 													?>
 
 												</p>
 											</div>
+											</div>
+											</div>
+											<div class="row">
+											<div class="form-group">
 
-											<label for="age_group" class="col-lg-2 control-label"> Faixa Etária*: </label>
-											<div class="col-lg-4">
+											<label for="age_group" style="width: 125px; margin-bottom:0px; margin-top:7px; padding-right:0px" class="col-lg-1 control-label"> Faixa Etária*: </label>
+											<div style="width: 240px;padding-left:0px" class="col-lg-1 control-label">
 												<select class="form-control" id="age_group" name="age_group">
 													<option value="" selected>-- Selecione --</option>
 													<?php
@@ -487,6 +502,7 @@
 											</div>
 										</div>
 									</div>
+									<br />
 									<div class="row">
 										<div class="form-group">
 											<div class="col-lg-6">
@@ -507,6 +523,7 @@
 					</div>
 				</div>
 			</div>
+		</div>
 		</div>
 </body>
 </html>
