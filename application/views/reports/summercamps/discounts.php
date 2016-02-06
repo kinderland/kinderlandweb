@@ -41,18 +41,30 @@
 		</script>
 
     </head>
+    <style>
+    
+    div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+    
+    </style>
     <body>
         <script>
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
 				sort : [sortLowerCase, sortLowerCase, true, true, true],
-				filters : [true, true, selectTodos, selectTodos, selectTodos],
+				filters : [true, true, selectTodos, false, selectTodos],
 				filterText : 'Escreva para filtrar... ',
 				counterText	: showCounter
 			});
 		});
         </script>
+     <div class="scroll">
      <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
@@ -133,7 +145,7 @@
 						</tbody>
 					</table>
 					<table  class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 825px;" id="sortable-table">
+					style="width:1000px; font-size:15px" id="sortable-table">
 						<thead>
                             <tr>
                                 <th>Nome do Colonista</th>
@@ -176,6 +188,7 @@
 					<?php } ?>
                 </div>
             </div>
+        </div>
         </div>
     </body>
 </html>

@@ -22,6 +22,15 @@
 		
 
     </head>
+    <style>
+    div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+    </style>
     <body>
         <script>
 
@@ -69,10 +78,11 @@
 			});
 			
         </script>
-        <div class="main-container-report">
-            <div class = "row">
-                <div class="col-lg-12">
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px" id="sortable-table">
+        <div class="scroll">
+        	<div class="main-container-report">
+            	<div class = "row">
+                	<div class="col-lg-12">
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 1000px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome </th>
@@ -102,8 +112,9 @@
                             ?>
                         </tbody>
                     </table>
+                    </div>
                 </div>
-            </div>
+            
 
             <!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
@@ -143,5 +154,6 @@
 				</div>
 			</div>
         </div>
+     </div>   
     </body>
 </html>

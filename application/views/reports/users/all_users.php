@@ -22,6 +22,17 @@
 		
 
     </head>
+    <style>
+    
+    div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+    
+    </style>
     <body>
         <script>
     		function post(path, params, method) {
@@ -132,11 +143,12 @@
 					});
 					});
         </script>
+        <div class="scroll">
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
 					<button class="button" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 1000px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome </th>
@@ -160,6 +172,7 @@
                     </table>
                 </div>
             </div>
+        </div>
         </div>
     </body>
 </html>

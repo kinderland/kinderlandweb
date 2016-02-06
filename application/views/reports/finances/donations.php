@@ -1,3 +1,13 @@
+<style type="text/css">
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        padding-left:5px;
+    }
+</style>
+
+
+
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -19,155 +29,128 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
         <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
-		
-		<script>
-			function arrumaData(data){
-				var separaEspaco = data.split(" ");
-				var separaBarra = separaEspaco[0].split("/");
-				var d = separaBarra[2].concat(separaBarra[1].concat(separaBarra[0].concat(separaEspaco[1])));
-				return d;
-			}
-		
-			function comparaPorData(l,r){
-				var a = arrumaData(l);
-				var b = arrumaData(r);
-				return a.toLowerCase().localeCompare(b.toLowerCase());
-			}
 
-			function sortLowerCase(l, r) {
-				return l.toLowerCase().localeCompare(r.toLowerCase());
-			}
+        <script>
+            function arrumaData(data) {
+                var separaEspaco = data.split(" ");
+                var separaBarra = separaEspaco[0].split("/");
+                var d = separaBarra[2].concat(separaBarra[1].concat(separaBarra[0].concat(separaEspaco[1])));
+                return d;
+            }
 
-			function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
-				return 'Apresentando ' + totalRow + ' doações, de um total de ' + totalRowUnfiltered+ ' doações';
-			}
+            function comparaPorData(l, r) {
+                var a = arrumaData(l);
+                var b = arrumaData(r);
+                return a.toLowerCase().localeCompare(b.toLowerCase());
+            }
 
+            function sortLowerCase(l, r) {
+                return l.toLowerCase().localeCompare(r.toLowerCase());
+            }
 
-		</script>
+            function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
+                return 'Apresentando ' + totalRow + ' doações, de um total de ' + totalRowUnfiltered + ' doações';
+            }
+        </script>
 
     </head>
     <body>
-    	<script>
-        $(document).ready(function() {
-			$('#sortable-table').datatable({
-				pageSize : Number.MAX_VALUE,
-				sort : [comparaPorData, sortLowerCase],
-				filters : [false, true],
-				filterText : 'Escreva para filtrar... ',
-				counterText	: showCounter
-			});
-		});
+        <script>
+            $(document).ready(function () {
+                $('#sortable-table').datatable({
+                    pageSize: Number.MAX_VALUE,
+                    sort: [comparaPorData, sortLowerCase],
+                    filters: [false, true],
+                    filterText: 'Escreva para filtrar... ',
+                    counterText: showCounter
+                });
+            });
         </script>
-        
-		<script>
+        <form method="GET">
+            <select name="ano" onchange="this.form.submit()" id="anos">
+                <?php
+                foreach ($years as $y) {
+                    $selected = "";
+                    if ($y == $year)
+                        $selected = "selected";
+                    echo "<option $selected value='$y'>$y</option>";
+                }
+                ?>
+            </select>
 
-		function getDonationStatus(donation_id){
+            <select name="mes" onchange="this.form.submit()" id="meses">
+                <option value="0" <?php if (!isset($mes)) echo "selected"; ?>)>Todos</option>
+                <?php
 
-			 $.post("<?= $this->config->item('url_link') ?>reports/getDonationStatus",
-                    {
-                		'donation_id': donation_id,
-                    },
+                function getMonthName($m) {
+                    switch ($m) {
+                        case 1: return "Janeiro";
+                        case 2: return "Fevereiro";
+                        case 3: return "Março";
+                        case 4: return "Abril";
+                        case 5: return "Maio";
+                        case 6: return "Junho";
+                        case 7: return "Julho";
+                        case 8: return "Agosto";
+                        case 9: return "Setembro";
+                        case 10: return "Outubro";
+                        case 11: return "Novembro";
+                        case 12: return "Dezembro";
+                    }
+                }
 
-                  	 function ( data ){
-                  	     if(data == "true"){
-                  	        return "true";
-                   	    }
-                      }	
-           	  );
-		}
+                for ($m = 1; $m <= 12; $m++) {
+                    $selected = "";
+                    if ($m == $month)
+                        $selected = "selected";
+                    echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
+                }
+                ?>
+            </select>
+        </form>
 
-	
-		</script>
-        
-        <div class="main-container-report">
-            <div class = "row">
-                <div class="col-lg-12">
-                	<form method="GET">
-	                	<select name="ano" onchange="this.form.submit()" id="anos">
-        	        		<?php foreach ($years as $y) {
-        	        			$selected = "";
-								if($y == $year)
-									$selected = "selected";
-        	        			echo "<option $selected value='$y'>$y</option>";
-							} ?>                		
-            	    	</select>
+        <p>Doações no período: <?= (is_array($donations)) ? count($donations) : 0 ?> ----
+            Valor: R$
+            <?php
+            $value = 0;
+            foreach ($donations as $donation) {
+                $value += $donation->donated_value;
+            }
 
-                        <select name="mes" onchange="this.form.submit()" id="meses">
-                            <option value="0" <?php if(!isset($mes)) echo "selected"; ?>)>Todos</option>
-                            <?php 
-
-                                function getMonthName($m){
-                                    switch ($m){
-                                        case 1: return "Janeiro";
-                                        case 2: return "Fevereiro";
-                                        case 3: return "Março";
-                                        case 4: return "Abril";
-                                        case 5: return "Maio";
-                                        case 6: return "Junho";
-                                        case 7: return "Julho";
-                                        case 8: return "Agosto";
-                                        case 9: return "Setembro";
-                                        case 10: return "Outubro";
-                                        case 11: return "Novembro";
-                                        case 12: return "Dezembro";
-                                    }
-                                }
-                                for($m = 1; $m <= 12; $m++) {
-                                    $selected = "";
-                                    if($m == $month)
-                                        $selected = "selected";
-                                    echo "<option $selected value='$m'>".getMonthName($m)."</option>";
-                                } 
-                            ?>                        
-                        </select>
-                	</form>
-
-                    <p>Doações no período: <?=(is_array($donations))?count($donations):0?> ---- 
-                        Valor: R$
-                        <?php
-                            $value = 0;
-                           	
-                            foreach ($donations as $donation){
-                            			$value += $donation->donated_value;
-                            }
-
-                            echo number_format($value, 2, ',', '.');
-                        ?>
-                    </p>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 500px; font-size:12px" id="sortable-table">
-                        <thead>
-                            <tr>
-                                <th> Data e hora </th>
-                                <th> Nome </th>
-                               <?php if($type != 'campaign_donations') {?>
-                                <th> Sócio </th>
-                               <?php }?>
-                                <th> Valor </th>
-                                <th> Forma de Pagamento </th>
-                                <th> Parcelas </th>                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            foreach ($donations as $donation) {
-                                ?>
-                                <tr>
-                                    <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
-                                    <td><?= $donation->fullname ?></td>
-                                   <?php if($type != 'campaign_donations') {?>
-                                	<td><?= $donation->associate ?> </td>
-                               	   <?php }?> 
-                                    <td><?= $donation->donated_value ?></td>
-                                    <td><?= $donation->payment_type . " " . $donation->cardflag ?></td>
-                                    <td><?= $donation->payment_portions ?></td>
-                                </tr>
-                                <?php
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+            echo number_format($value, 2, ',', '.');
+            ?>
+        </p>
+        <table class="table table-bordered table-striped table-min-td-size" style="max-width: 1000px; font-size:15px" id="sortable-table">
+            <thead>
+                <tr>
+                    <th> Data e hora </th>
+                    <th> Nome </th>
+                    <?php if ($type != 'campaign_donations') { ?>
+                        <th> Sócio </th>
+                    <?php } ?>
+                    <th> Valor </th>
+                    <th> Forma de Pagamento </th>
+                    <th> Parcelas </th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($donations as $donation) {
+                    ?>
+                    <tr>
+                        <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
+                        <td><?= $donation->fullname ?></td>
+                        <?php if ($type != 'campaign_donations') { ?>
+                            <td><?= $donation->associate ?> </td>
+                        <?php } ?>
+                        <td><?= $donation->donated_value ?></td>
+                        <td><?= $donation->payment_type . " " . $donation->cardflag ?></td>
+                        <td><?= $donation->payment_portions ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+        </table>
     </body>
 </html>

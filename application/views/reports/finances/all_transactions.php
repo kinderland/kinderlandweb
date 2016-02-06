@@ -1,3 +1,12 @@
+<style type="text/css">
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        padding-left:5px;
+    }
+</style>
+
+
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -113,90 +122,87 @@
                 });
             });
         </script>
-        <div class="main-container-report">
-            <div class = "row">
-                <div class="col-lg-12">
-                    <form method="GET">
-                        <select name="ano" onchange="this.form.submit()" id="anos">
-                            <?php
-                            foreach ($years as $year) {
-                                $selected = "";
-                                if ($ano == $year)
-                                    $selected = "selected";
-                                echo "<option $selected id='$year'>$year</option>";
-                            }
-                            ?>
-                        </select>
-                        <select name="mes" onchange="this.form.submit()" id="meses">
-                            <option value="0"
-                            <?php
-                            if (!isset($mes) || empty($mes)) {
-                                echo "selected";
-                            }
-                            ?>
-                                    >Todos</option>
-                                    <?php
-
-                                    function getMonthName($m) {
-                                        switch ($m) {
-                                            case 1: return "Janeiro";
-                                            case 2: return "Fevereiro";
-                                            case 3: return "Março";
-                                            case 4: return "Abril";
-                                            case 5: return "Maio";
-                                            case 6: return "Junho";
-                                            case 7: return "Julho";
-                                            case 8: return "Agosto";
-                                            case 9: return "Setembro";
-                                            case 10: return "Outubro";
-                                            case 11: return "Novembro";
-                                            case 12: return "Dezembro";
-                                        }
-                                    }
-
-                                    for ($m = 1; $m <= 12; $m++) {
-                                        $selected = "";
-                                        if ($m == $mes)
-                                            $selected = "selected";
-                                        echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
-                                    }
-                                    ?>
-                        </select>
-                    </form>
-                    <div class="counter"></div>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 500px; font-size:12px" id="sortable-table">
-                        <thead>
-                            <tr>
-                                <th> Data criação </th>
-                                <th> Id </th>
-                                <th> Status </th>
-                                <th> Nome </th>
-                                <th style="width:40px;"> Valor </th>
-                                <th> Forma de Pagamento </th>
-                                <th> Parcelas </th>
-                                <th> Motivo </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            foreach ($payments as $payment) {
-                                ?>
-                                <tr>
-                                    <td><?= $payment["date_created"] ?></td>
-                                    <td><?= $payment["tid"] ?></td>
-                                    <td><?= $payment["payment_status"] ?></td>
-                                    <td><?= $payment["name"] ?></td>
-                                    <td>R$<?= intval($payment["value"]) ?>.00</td>
-                                    <td><?= $payment["cardflag"] ?></td>
-                                    <td><?= $payment["payment_portions"] ?></td>
-                                    <td><?= $payment["reason"] ?></td>
-                                </tr>
+        <div class = "row">
+            <div class="col-lg-12">
+                <form method="GET">
+                    <select name="ano" onchange="this.form.submit()" id="anos">
+                        <?php
+                        foreach ($years as $year) {
+                            $selected = "";
+                            if ($ano == $year)
+                                $selected = "selected";
+                            echo "<option $selected id='$year'>$year</option>";
+                        }
+                        ?>
+                    </select>
+                    <select name="mes" onchange="this.form.submit()" id="meses">
+                        <option value="0"
+                        <?php
+                        if (!isset($mes) || empty($mes)) {
+                            echo "selected";
+                        }
+                        ?>
+                                >Todos</option>
                                 <?php
-                            }
+
+                                function getMonthName($m) {
+                                    switch ($m) {
+                                        case 1: return "Janeiro";
+                                        case 2: return "Fevereiro";
+                                        case 3: return "Março";
+                                        case 4: return "Abril";
+                                        case 5: return "Maio";
+                                        case 6: return "Junho";
+                                        case 7: return "Julho";
+                                        case 8: return "Agosto";
+                                        case 9: return "Setembro";
+                                        case 10: return "Outubro";
+                                        case 11: return "Novembro";
+                                        case 12: return "Dezembro";
+                                    }
+                                }
+
+                                for ($m = 1; $m <= 12; $m++) {
+                                    $selected = "";
+                                    if ($m == $mes)
+                                        $selected = "selected";
+                                    echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
+                                }
+                                ?>
+                    </select>
+                </form>
+                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 1000px; font-size:15px;" id="sortable-table">
+                    <thead>
+                        <tr>
+                            <th> Data criação </th>
+                            <th> Id </th>
+                            <th style="width:60px;"> Status </th>
+                            <th> Nome </th>
+                            <th > Valor </th>
+                            <th> Forma de Pagamento </th>
+                            <th> Parcelas </th>
+                            <th> Motivo </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        foreach ($payments as $payment) {
                             ?>
-                        </tbody>
-                    </table>
-                </div>
+                            <tr>
+                                <td><?= $payment["date_created"] ?></td>
+                                <td><?= $payment["tid"] ?></td>
+                                <td><?= $payment["payment_status"] ?></td>
+                                <td><?= $payment["name"] ?></td>
+                                <td>R$<?= intval($payment["value"]) ?>.00</td>
+                                <td><?= $payment["cardflag"] ?></td>
+                                <td><?= $payment["payment_portions"] ?></td>
+                                <td><?= $payment["reason"] ?></td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </body>

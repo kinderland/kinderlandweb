@@ -45,10 +45,18 @@
 	a {
 		cursor: pointer;
 	}
+	
+	div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
 </style>
 </head>
 <body>
-
+	<div class="scroll">
 	<div class="main-container-report">
 		<div class="row">
 			<div class="col-lg-10" bgcolor="red">
@@ -208,6 +216,7 @@
 				</table> 
 			</div>
 		</div>
+	</div>
 	</div>
 </body>
 </html>

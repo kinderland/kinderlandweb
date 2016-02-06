@@ -20,7 +20,21 @@
         <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 
     </head>
+    
+    <style>
+    div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+    
+    
+    </style>
+    
     <body>
+    <div class="scroll">
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-10" bgcolor="red">
@@ -60,6 +74,7 @@
                     </table>
                 </div>
             </div>
+        </div>
         </div>
     </body>
 </html>

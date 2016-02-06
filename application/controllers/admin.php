@@ -6,6 +6,7 @@ require_once APPPATH . 'core/summercampSubscription.php';
 require_once APPPATH . 'core/colonist.php';
 require_once APPPATH . 'core/event.php';
 require_once APPPATH . 'controllers/events.php';
+require_once APPPATH . 'core/campaign.php';
 
 class Admin extends CK_Controller {
 
@@ -44,8 +45,77 @@ class Admin extends CK_Controller {
         $this->loadView("admin/campaigns/campaign_admin_container");
     }
 
-    public function associated_campaign() {
-        $this->loadView("admin/campaigns/associated_campaign");
+    public function manageCampaigns() {
+        $this->Logger->info("Starting " . __METHOD__);
+
+        if (!$this->checkSession())
+            redirect("login/index");
+
+        if (!$this->checkPermition(array(SYSTEM_ADMIN))) {
+            $this->denyAcess(___METHOD___);
+        }
+        $data["campaigns"] = $this->campaign_model->getAllCampaigns();
+        $status = array();
+        foreach ($data["campaigns"] as $campaign) {
+            if ($campaign->getDateStart() > date("Y-m-d H:i:s"))
+                $status[] = 'Não iniciada';
+            else {
+                if ($campaign->getDateFinish() < date("Y-m-d H:i:s"))
+                    $status[] = 'Finalizada';
+                else {
+                    $status[] = 'Em andamento';
+                }
+            }
+        }
+        $data["status"] = $status;
+        $this->loadReportView("admin/campaigns/manageCampaigns", $data);
+    }
+
+    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL) {
+        $this->Logger->info("Starting " . __METHOD__);
+        $data = array();
+        $data["errors"] = $errors;
+        $data["date_start"] = Events::toMMDDYYYY($date_start);
+        $data["date_finish"] = Events::toMMDDYYYY($date_finish);
+
+
+        $this->loadView("admin/campaigns/campaignCreate", $data);
+    }
+
+    public function completeCampaign() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $date_start = $this->input->post('date_start', TRUE);
+        $date_finish = $this->input->post('date_finish', TRUE);
+        $date_created = date("Y-m-d H:i:s");
+        $errors = array();
+        if (!isset($date_start) || empty($date_start))
+            $errors[] = "Campo Início é obrigatório\n";
+        if (!isset($date_finish) || empty($date_finish))
+            $errors[] = "Campo Início é obrigatório\n";
+        $date_start = explode("/", $date_start);
+        $year = $date_start[2];
+        $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0] . " 00:00:00");
+        $date_finish = explode("/", $date_finish);
+        $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+        if (count($errors) > 0)
+            return $this->campaignCreate($errors, $date_start, $date_finish);
+        try {
+            $this->Logger->info("Inserting new campaign");
+            $this->generic_model->startTransaction();
+            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $date_start, $date_finish);
+            if ($campaignId) {
+                $this->generic_model->commitTransaction();
+                $this->Logger->info("New campaign successfully inserted");
+                echo "<script>alert('Campanha criada com sucesso!');opener.location.reload(); window.close();</script>";
+            } else
+                echo "<script>alert('Ocorreu um erro ao criar a campanha. Tente novamente.');window.history.back();</script>";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new campaign");
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+
+            $this->loadReportView('admin/events/event_create', $data);
+        }
     }
 
     public function event_admin() {
@@ -234,7 +304,7 @@ class Admin extends CK_Controller {
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New event successfully inserted");
                 echo "<script>alert('Evento criado com sucesso!');opener.location.reload(); window.close();</script>";
-                //redirect("events/manageEvents");
+//redirect("events/manageEvents");
             } else
                 echo "<script>alert('Ocorreu um erro ao criar o evento. Tente novamente.');window.history.back();</script>";
         } catch (Exception $ex) {
@@ -507,7 +577,7 @@ class Admin extends CK_Controller {
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New event successfully inserted");
                 echo "<script>alert('Evento atualizado com sucesso!');opener.location.reload(); window.close();</script>";
-                //redirect("events/manageEvents");
+//redirect("events/manageEvents");
             } else
                 echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
         } catch (Exception $ex) {
@@ -517,7 +587,7 @@ class Admin extends CK_Controller {
 
             echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
 
-            //$this->loadReportView('admin/events/event_edit', $data);
+//$this->loadReportView('admin/events/event_edit', $data);
         }
     }
 
@@ -825,72 +895,69 @@ class Admin extends CK_Controller {
 
     public function colonist_exclusion() {
 
-    	$this->Logger->info("Running: " . __METHOD__);
-    	$data = array();
-    	$years = array();
-    	$start = 2015;
-    	$date = intval(date('Y'));
-    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	$end = $date;
-    	while ($campsByYear != null) {
-    		$end = $date;
-    		$date++;
-    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	}
-    	while ($start <= $end) {
-    		$years[] = $start;
-    		$start++;
-    	}
-    	$year = null;
-    
-    	if (isset($_GET['ano_f']))
-    		$year = $_GET['ano_f'];
-    		else {
-    			$year = date('Y');
-    		}
-    
-    		$data['ano_escolhido'] = $year;
-    		$data['years'] = $years;
-    		
-    		$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
-    		$campsQtd = count($allCamps);
-    		$camps = array();
-    		$start = $campsQtd;
-    		$end = 1;
-    		
-    		$campChosen = null;
-    		
-    		if (isset($_GET['colonia_f']))
-    			$campChosen = $_GET['colonia_f'];
-    		
-    			$campCount = array();
-    			$count = null;
-    		
-    			$campChosenId = null;
-    			foreach ($allCamps as $camp) {
-    				$count = $this->summercamp_model->getCountStatusBySummerCamp($camp->getCampId());
-    		
-    				if ($count != null) {
-    					$campCount[] = $count;
-    					$camps[] = $camp->getCampName();
-    				}
-    		
-    				if ($camp->getCampName() == $campChosen)
-    					$campChosenId = $camp->getCampId();
-    			}
-    		
-    			$data['colonia_escolhida'] = $campChosen;
-    			$data['camps'] = $camps;
-    			$data['campCount'] = $campCount;
-    
-    		$shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
-    
-    		$data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
-    		$this->loadReportView("admin/camps/colonist_exclusion", $data);
+        $this->Logger->info("Running: " . __METHOD__);
+        $data = array();
+        $years = array();
+        $start = 2015;
+        $date = intval(date('Y'));
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_GET['colonia_f']))
+            $campChosen = $_GET['colonia_f'];
+
+        $campCount = array();
+        $count = null;
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $count = $this->summercamp_model->getCountStatusBySummerCamp($camp->getCampId());
+
+            if ($count != null) {
+                $campCount[] = $count;
+                $camps[] = $camp->getCampName();
+            }
+
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
+        }
+
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+        $data['campCount'] = $campCount;
+
+        $shownStatus = SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED . "," . SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
+
+        $data['colonists'] = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
+        $this->loadReportView("admin/camps/colonist_exclusion", $data);
     }
-    
-
-
 
     public function password() {
         $this->Logger->info("Running: " . __METHOD__);
@@ -1487,7 +1554,7 @@ class Admin extends CK_Controller {
 
             $this->generic_model->commitTransaction();
 
-            // Enviar email?
+// Enviar email?
 
             echo "true";
         } catch (Exception $ex) {
@@ -1510,7 +1577,7 @@ class Admin extends CK_Controller {
 
             $this->generic_model->commitTransaction();
 
-            //Enviar Email??
+//Enviar Email??
 
             echo "true";
         } catch (Exception $ex) {

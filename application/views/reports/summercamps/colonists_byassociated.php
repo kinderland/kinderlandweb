@@ -42,6 +42,17 @@
 		</script>
 
     </head>
+    <style>
+    
+    div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    
+    }
+    
+    </style>
     <body>
         <script>
         $(document).ready(function() {
@@ -55,6 +66,7 @@
 			});
 		});
         </script>
+        <div class="scroll">
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
@@ -72,7 +84,7 @@
 						</select>
 						</form>
 					<div class="counter"></div>
-                    <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 93%; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Responsável </th>
@@ -103,6 +115,7 @@
                     </table>
                 </div>
             </div>
+        </div>
         </div>
     </body>
 </html>

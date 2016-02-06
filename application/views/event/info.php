@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+		function alertaTempoTotal(){
+			alert("ATENÇÃO! Você terá 10 minutos para criar os convite e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
+		}	
+
+		setTimeout(alertaTempoTotal,50);
+
+</script>
+
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -21,9 +31,11 @@
 
     </head>
     <body>
+    <div id="thisdiv">
 	<div class="row">
 	<?php require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
+		
 		<script type="text/javascript">
 
 			function subscribeUserOnSession(userId, eventId){
@@ -40,18 +52,20 @@
 					$.post( "<?=$this->config->item('url_link');?>events/subscribeUser", 
 							{ event_id: eventId, user_id: userId },
 							function ( data ){
-								location.reload();
+								$('#thisdiv').load(document.URL +  ' #thisdiv');
+								$('#myModal').modal('hide');
 							}
 					);
 				}	
-			}
+			}			
 
 			function deleteSubscription(eventId, userId){
 
 			    $.post( "<?=$this->config->item('url_link');?>events/unsubscribeUsers", 
 						{ event_id: eventId, user_ids: userId },
 						function ( data ){
-							location.reload();
+							$('#thisdiv').load(document.URL +  ' #thisdiv');
+							$('#myModal').modal('hide');
 						}
 				);
 			}
@@ -77,7 +91,8 @@
 							}
 							else{
 								alert(data);
-								location.reload();
+								$('#thisdiv').load(document.URL +  ' #thisdiv');
+								$('#myModal').modal('hide');
 							}
 				});
 			}
@@ -180,6 +195,8 @@
 
 				if(fullname == "")
 					error = error.concat("Nome Completo\n");
+				if(associateyes === "false" && associateno === "false")
+					error = error.concat("Dependente de Sócio\n");
 				if(age_group == "")
 					error = error.concat("Faixa Etária\n");
 				if(gender == "")
@@ -212,7 +229,10 @@
 								function(data){
 									if(data){
 										alert("Convite criado com sucesso!\n\n ATENÇÃO: O convite só será efetivamente adquirido se houver disponibilidade no momento em que a doação for realizada.");
-										location.reload();		
+										$('#thisdiv').load(document.URL +  ' #thisdiv');
+										$('#myModal').modal('hide');
+										$('body').removeClass('modal-open');
+										$('.modal-backdrop').remove();	
 									}
 									else{
 										alert("Houve um erro na criação do convite. Tente novamente!");	
@@ -236,49 +256,31 @@
 				}
 			}
 
-		</script>
 
+		</script>
 		<?php 
 			if($event != null && $event instanceof Event) { 
 		?>
 			<div class='row'>
 				<div class="col-lg-8">
-					<h3><?=$event->getEventName();?></h3>
-				</div>
-				<div class="col-lg-4">
-					<h3>
-						Data: 
-						<strong>
+					<h2><?=$event->getEventName();?></h2>
+					<h4 align="left"><strong><?=$event->getDescription();?></strong></h4>
+					<h4>
+						<strong>Período:</strong>
 							<?= date_format(date_create($event->getDateStart()), 'd/m/y');?> 
 							<?= ($event->getDateStart() != $event->getDateFinish())? " - ".date_format(date_create($event->getDateFinish()), 'd/m/y'):""?>
-						</strong>
-					</h3>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12">
-					<p align="left">
-						<?=$event->getDescription();?>
-					</p>
-				</div>
-				
-			</div>
+						
+					</h4>
 			<?php
 				if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 			?>
-			<div class="row">
-				<div class="col-lg-12">
 					<p align="left">
 						<?=$fullname?>, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos.
 					</p>
-				</div>
-			</div>
 			<?php
 				}
 			?>
-
-			<div class="row">
-				<div class="col-lg-12">
+					<h4><strong>Valores:</strong></h4>
 					<table class="table table-bordered table-striped" style="max-width:550px; min-width:550px; table-layout: fixed;">
 						<tr>
 							<th></th>
@@ -299,23 +301,24 @@
 							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
 						</tr>
 					</table>
-				</div>
-			</div>
-			<?php 
+							<h4><strong>Meus convites:</strong></h4>
+							<!-- Button trigger modal -->
+							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+								Novo convite
+							</button>
+							<br/><br/>
+							<?php 
 				if(count($subscriptions) > 0) {
 			?>
-				<div class="row">
-					<div class="col-lg-12">	
-							<h4>Meus convites:</h4>
 						<div name="form_submit_payment" id="form_submit_payment">
 							<input type="hidden" name="user_id" value="<?php echo$user_id?>" />
 							<table class="table table-bordered table-striped" style="max-width:808px; min-width:550px; table-layout: fixed;">
 								<tr>
 									<th style="width:60px">Pagar</th>
 									<th style="width:300px">Nome do convidado</th>
-									<th style="width:auto">Faixa etária</th>
-									<th style="width:auto">Descrição do convite</th>
-									<th style="width:90px">Excluir</th>
+									<th style="width:100px">Faixa etária</th>
+									<th style="width:165px">Descrição do convite</th>
+									<th style="width:90px">Ação</th>
 								</tr>
 								<?php 
 									foreach($subscriptions as $subscr){
@@ -364,13 +367,42 @@
 									}
 								?>
 							</table>
-						</div>
-					<div>
-				</div>
+					</div>
 			<?php
 				} 
 			?>
-					
+			<h4><strong>Doação:</strong></h4>
+			<div style= "margin-top: 15px; font-size:14px;" id="cart-info">
+			<table  class="table table-bordered table-striped" style="max-width:425px; min-width:100px; table-layout: fixed;">
+				<tr>
+					<th style="width:210px">Quantidade de convites:</th>
+					<td><span id="qtd_invites">0</span></td>
+				</tr>
+				<tr>
+					<th style="width:210px">Subtotal:</th>
+					<td>R$<span id="subtotal">0,00</span></td>
+				</tr>
+				<tr>
+					<th style="width:210px">Desconto:</th>
+					<td>R$<span id="discount">0,00</span></td>
+				</tr>
+				<tr>
+					<th style="width:210px">Total:</th>
+					<td>R$<span id="price_total">0,00</span></td>
+					<?php
+					if($price != null){
+				?>
+					<td>
+					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$event->getEventId()?>)">Prosseguir</button>
+					</td>
+				<?php
+					}
+				?>
+				</tr>
+				</table>
+		</div>	
+	</div>
+</div>
 			
 		<?php 
 			} else {
@@ -383,26 +415,20 @@
 			}
 		?>
 
-		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-			Novo convite
-		</button>
-
-		<!-- Modal -->
+<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="solicitar-convite">Solicitar Convite</h4>
+					<h4 class="modal-title" id="solicitar-convite">Solicitar Convite: <?=$event->getEventName()?></h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-lg-12 middle-content">
 								<div class="row">
-									<div class="col-lg-8"><h4>Inscrição de pessoa no evento: <?=$event->getEventName()?></h4></div>
+									
 								</div>
-								<hr />
 
 								<div>
 								</div>
@@ -413,15 +439,18 @@
 										<input type="hidden" id="user_id" name="user_id" value="<?=$user_id?>" />
 										<input type="hidden" id="person_id" name="person_id" value="" />
 										<div class="form-group">
-											<label for="fullname" class="col-lg-2 control-label"> Nome Completo*: </label>
-											<div class="col-lg-4">
-												<input type="text" class="form-control" placeholder="Nome Completo"
+											<label for="fullname" style="width: 150px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Nome Completo*: </label>
+											
+												<input  style="width: 300px" type="text" class="form-control" placeholder="Nome Completo"
 													name="fullname" value="<?php echo $name;?>" id="fullname" />
 											</div>
-
-											<label for="gender" class="col-lg-2 control-label"> Sexo*: </label>
-											<div class="col-lg-4">
-												<select class="form-control" id="gender" name="gender">
+											</div>
+											<br />
+											<div class="row">
+											<div class="form-group">
+											<label style="width: 60px;margin-bottom:0px; margin-top:7px; padding-right:0px" for="gender" class="col-lg-1 control-label"> Sexo*: </label>
+											<div style="width: 240px;" class="col-lg-2 control-label">
+												<select  class="form-control" id="gender" name="gender">
 													<option value="" selected>-- Selecione --</option>
 													<option value="M">Masculino</option>
 													<option value="F">Feminino</option>
@@ -429,10 +458,11 @@
 											</div>
 										</div>
 									</div>
+									<br />
 
 									<div class="row">
 										<div class="form-group">
-											<div class="col-lg-6">
+											<div class="col-lg-7">
 												<p>
 													<?php
 														if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
@@ -444,19 +474,23 @@
 													<?php
 														} else {
 													?>
-														<label for="associate_true" class="control-label"> Dependente de sócio?: </label>
-														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true"; ?>','<?php echo "associate_false";?>')" disabled/> Sim 
+														<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
+														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true"; ?>','<?php echo "associate_false";?>')"/> Sim 
 														<label for="associate_false" class="control-label"></label>
-														<input type="radio" class="associate_no" name="associate" id="associate_false" value="true" onclick = "changeValue('<?php echo "associate_false";  ?>','<?php echo "associate_true"; ?>')" checked disabled /> Não
+														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false";  ?>','<?php echo "associate_true"; ?>')"/> Não
 													<?php
 														}
 													?>
 
 												</p>
 											</div>
+											</div>
+											</div>
+											<div class="row">
+											<div class="form-group">
 
-											<label for="age_group" class="col-lg-2 control-label"> Faixa Etária*: </label>
-											<div class="col-lg-4">
+											<label for="age_group" style="width: 125px; margin-bottom:0px; margin-top:7px; padding-right:0px" class="col-lg-1 control-label"> Faixa Etária*: </label>
+											<div style="width: 240px;padding-left:0px" class="col-lg-1 control-label">
 												<select class="form-control" id="age_group" name="age_group">
 													<option value="" selected>-- Selecione --</option>
 													<?php
@@ -468,6 +502,7 @@
 											</div>
 										</div>
 									</div>
+									<br />
 									<div class="row">
 										<div class="form-group">
 											<div class="col-lg-6">
@@ -489,50 +524,6 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="row" id="cart-info">
-
-			<div class="col-lg-3 col-lg-offset-5" style="border-left-style:solid; border-left-width:1px; border-left-color:#cccccc">
-				Quantidade de convites:<br />
-				Subtotal:<br />
-				Desconto:<br />
-
-				Total:
-			</div>
-			<div class="col-lg-2">
-				<span id="qtd_invites">0</span><br />
-				R$<span id="subtotal">0,00</span><br />
-				R$<span id="discount">0,00</span><br />
-				R$<span id="price_total">0,00</span>
-			</div>
-			<div class="col-lg-1">
-				<?php
-					if($price != null){
-				?>
-					<br />
-					<br />
-
-					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$event->getEventId()?>)">Pagar</button>
-				<?php
-					}
-				?>
-			</div>
 		</div>
-
-		<div class="row">
-			&nbsp;
-		</div>
-		<div class="row">
-			&nbsp;
-		</div>
-		<div class="row">
-			&nbsp;
-		</div>
-			
-
-	</div>
-</div>
-</div>
-</div>
 </body>
 </html>
