@@ -29,6 +29,13 @@
     <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 
 </head>
+<style>
+
+div.pad{
+	padding-left:20%;
+}
+
+</style>
 <?php
 
 function formatarEMostrar($valor, $opcao) {
@@ -67,7 +74,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 
             <form method="GET">
                 <input type="hidden" name="option" value="<?= $option ?>"/>
-                <select name="year" onchange="this.form.submit()" id="year">
+               Ano: <select name="year" onchange="this.form.submit()" id="year">
                     <?php
                     foreach ($years as $y) {
                         $selected = "";
@@ -78,7 +85,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                     ?>
                 </select>
 
-                <select name="month" onchange="this.form.submit()" id="month">
+                Mês: <select name="month" onchange="this.form.submit()" id="month">
                     <option value="0" <?php if (!isset($mes)) echo "selected"; ?>)>Todos</option>
                     <?php
 
@@ -108,7 +115,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                     ?>
                 </select>
             </form>
-
+			<div class="pad">
 
             <h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates), $option); ?>
             </h4>				<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas), $option); ?>
@@ -216,6 +223,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                     <td style="text-align: right;"><?php echo formatarEMostrar($debito, $option); ?></td>
                 </tr>
             </table>
+            </div>
         </div>
     </div>
 </body>

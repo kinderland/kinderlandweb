@@ -29,7 +29,11 @@
     	width:100%;
     	height:100%;
     	overflow-x:hidden;
+    	
+    }
     
+    div.pad{
+    	padding-left:20%
     }
     
     </style>
@@ -195,6 +199,7 @@
                             ?>
                         </select>
                         <br> </br>
+                        <div class="pad">
                         <table class="table table-bordered table-striped table-min-td-size"
                                style="max-width: 600px;">
                             <thead>
@@ -244,6 +249,7 @@
                             }
                             ?>
                         </select>
+                        <br> </br>
 
                     </form>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
@@ -310,6 +316,7 @@
                                         ?>
                                     </td>
                                 </tr>
+                                </div>
                                 <tr id="validation_tab_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>" style="display:none">
                                     <td colspan="5">
                                         <form id="form_validation_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>" name="form_validation_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>">

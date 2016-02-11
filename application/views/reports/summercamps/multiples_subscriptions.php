@@ -57,6 +57,7 @@
     		width:100%;
     		height:100%;
     		overflow-x:hidden;
+    		padding-right:550px;
     
     	}
     
@@ -79,7 +80,7 @@
             <div class = "row">
                 <div class="col-lg-12">
                 	<form method="GET">
-						<select name="ano_f" onchange="this.form.submit()" id="anos">
+						Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 					
 							<?php
 							foreach ( $years as $year ) {
@@ -92,7 +93,7 @@
 						</select>
 						</form>
 					<div class="counter"></div>
-                    <table class="table table-bordered table-striped table-min-td-size" style="width: 1000px; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 1100px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                             	<th style="min-width: 100px; max-width: 100px">Nome do Colonista</th>

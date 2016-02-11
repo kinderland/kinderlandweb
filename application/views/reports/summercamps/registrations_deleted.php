@@ -53,6 +53,11 @@
     	overflow-x:hidden;
     
     }
+    
+    div.pad{
+    
+    	padding-left:14%
+    }
 </style>
 </head>
 <body>
@@ -61,7 +66,7 @@
 		<div class="row">
 			<div class="col-lg-10" bgcolor="red">
 				<form method="GET">
-					<select name="ano_f" onchange="this.form.submit()" id="anos">
+					Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 					
 							<?php
 							foreach ( $years as $year ) {
@@ -71,7 +76,8 @@
 								echo "<option $selected value='$year'>$year</option>";
 							}
 							?>
-						</select> <select name="colonia_f" onchange="this.form.submit()"
+						</select> 
+						Colônia: <select name="colonia_f" onchange="this.form.submit()"
 						id="colonia">
 						<option value="Todas"
 							<?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
@@ -85,6 +91,7 @@
 							?>
 						</select>
 				</form>
+				<div class="pad">
 				<table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 700px;">
 
@@ -147,6 +154,7 @@
 						<td align='right'> <?php echo $countsNotAssociatedM->cancelado + $countsNotAssociatedM->desistente + $countsNotAssociatedM->excluido; ?> </td>
 					</tr>
 				</table>
+				</div>
 			</div>
 		</div>
 	</div>

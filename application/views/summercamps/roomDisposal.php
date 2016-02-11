@@ -194,7 +194,7 @@
                 <h3><strong>Quartos</strong></h3>
                 <hr/>
                 <form id="form_selection" method="GET">
-                    <select name="ano_f"  onchange="this.form.submit()" id="anos">
+                    Ano: <select name="ano_f"  onchange="this.form.submit()" id="anos">
 
                         <?php
                         foreach ($years as $year) {
@@ -205,7 +205,7 @@
                         }
                         ?>
                     </select>
-                    <select name="colonia_f" id="colonia" onchange="openDisposal()">
+                   Colônia: <select name="colonia_f" id="colonia" onchange="openDisposal()">
                         <option value="0" <?php if (!isset($colonia_escolhida)) echo "selected"; ?>>Selecionar</option>
                         <?php
                         foreach ($camps as $camp) {
@@ -216,7 +216,7 @@
                         }
                         ?>
                     </select>
-                    <select name="pavilhao" id="pavilhao" onchange="openDisposal()">
+                   Gênero: <select name="pavilhao" id="pavilhao" onchange="openDisposal()">
                         <option value=""  <?php if (!isset($pavilhao)) echo "selected"; ?>> Selecionar </option>
                         <option value="M" <?php if (isset($pavilhao) && $pavilhao == "M") echo "selected"; ?>> Masculino </option>
                         <option value="F" <?php if (isset($pavilhao) && $pavilhao == "F") echo "selected"; ?>> Feminino </option>

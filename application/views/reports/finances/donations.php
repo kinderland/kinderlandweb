@@ -54,6 +54,13 @@
         </script>
 
     </head>
+    <style>
+    
+    div.pad{
+    	padding-left:7%;
+    }
+    
+    </style>
     <body>
         <script>
             $(document).ready(function () {
@@ -67,7 +74,7 @@
             });
         </script>
         <form method="GET">
-            <select name="ano" onchange="this.form.submit()" id="anos">
+            Ano: <select name="ano" onchange="this.form.submit()" id="anos">
                 <?php
                 foreach ($years as $y) {
                     $selected = "";
@@ -78,7 +85,7 @@
                 ?>
             </select>
 
-            <select name="mes" onchange="this.form.submit()" id="meses">
+            Mês: <select name="mes" onchange="this.form.submit()" id="meses">
                 <option value="0" <?php if (!isset($mes)) echo "selected"; ?>)>Todos</option>
                 <?php
 
@@ -108,7 +115,7 @@
                 ?>
             </select>
         </form>
-
+		<div class="pad">
         <p>Doações no período: <?= (is_array($donations)) ? count($donations) : 0 ?> ----
             Valor: R$
             <?php
@@ -152,5 +159,6 @@
                 ?>
             </tbody>
         </table>
+        </div>
     </body>
 </html>

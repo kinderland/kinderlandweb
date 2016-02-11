@@ -48,8 +48,17 @@
     	width:100%;
     	height:100%;
     	overflow-x:hidden;
+    	padding-right:500;
     
     }
+    
+    div.pad{
+    	padding-left:25%;
+    }
+    
+    div.pad1{
+   		padding-left:10%;
+   	}
     
     </style>
     <body>
@@ -69,7 +78,7 @@
             <div class = "row">
                 <div class="col-lg-12">
 					<form method="GET">
-					<select name="ano_f" onchange="this.form.submit()" id="anos">
+					Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 					
 							<?php
 							foreach ( $years as $year ) {
@@ -80,7 +89,7 @@
 							}
 							?>
 						</select>
-						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
+						Colônia: <select name="colonia_f" onchange="this.form.submit()" id="colonia">
 							<?php if (!(isset($discountsT) && isset($discountsI) && !is_null($discountsT) && !is_null($discountsI))){ ?>
 							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>-- Selecionar --</option>
 							<?php }?>
@@ -96,6 +105,7 @@
 						</select>
 					</form>
 					<?php if (isset($colonists) && isset($discountsT) && isset($discountsI) && !is_null($discountsT) && !is_null($discountsI)){ ?>
+					<div class="pad">
 					<table  class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 600px;">
 						<thead>	
@@ -144,6 +154,8 @@
 							</tr>
 						</tbody>
 					</table>
+					</div>
+					<div class="pad1">
 					<table  class="table table-bordered table-striped table-min-td-size"
 					style="width:1000px; font-size:15px" id="sortable-table">
 						<thead>
@@ -185,6 +197,7 @@
 	                            ?>    
                         </tbody>
 					</table>
+					</div>
 					<?php } ?>
                 </div>
             </div>

@@ -80,6 +80,14 @@
 	    </script>
 	
 	</head>
+	<style>
+	
+	div.pad{
+	
+		padding-left:8%
+	}		
+			
+	</style>
 	<body>
 	    <script>
 	        $(document).ready(function () {
@@ -108,7 +116,7 @@
 	        <div class = "row">
 	            <div class="col-lg-12">
 	                <form id="form_periodo" method="GET">
-	                    <select name="periodo_f" id="periodos" onchange="handlePeriodFields()">
+	                   Período: <select name="periodo_f" id="periodos" onchange="handlePeriodFields()">
 	
 	                        <?php
 	                        foreach ($periods as $period) {
@@ -120,7 +128,7 @@
 	                        }
 	                        ?>
 	                    </select>
-	                    <select name="doacao_f" id="doacoes">
+	                   Doação: <select name="doacao_f" id="doacoes">
 	
 	                        <?php
 	                        foreach ($donations as $donation) {
@@ -147,10 +155,12 @@
 	                    	<br />
 	                    	
 	                    </div>
+	                    <div class="pad">
 	                    <button class="btn btn-primary" onclick="this.form.submit()">Gerar Tabela</button>
 	                </form>
 	                <div class="counter"></div> <br>
 	                <?php if(isset($transactions)) {?>
+	                
 	                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">
 	                    <thead>
 	                        <tr>
@@ -173,6 +183,7 @@
 	                        ?>
 	                    </tbody>
 	                </table>
+	                </div>
 	                <?php }?>
 	            </div>
 	        </div>
