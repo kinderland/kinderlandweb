@@ -71,13 +71,13 @@ class Admin extends CK_Controller {
         $this->loadReportView("admin/campaigns/manageCampaigns", $data);
     }
 
-    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL) {
+    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $price = NULL) {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
         $data["errors"] = $errors;
-        $data["date_start"] = Events::toMMDDYYYY($date_start);
-        $data["date_finish"] = Events::toMMDDYYYY($date_finish);
-
+        $data["date_start"] = $date_start;
+        $data["date_finish"] = $date_finish;
+        $data["price"] = $price;
 
         $this->loadView("admin/campaigns/campaignCreate", $data);
     }
@@ -86,23 +86,35 @@ class Admin extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
         $date_start = $this->input->post('date_start', TRUE);
         $date_finish = $this->input->post('date_finish', TRUE);
+        $price = $this->input->post('price', TRUE);
         $date_created = date("Y-m-d H:i:s");
         $errors = array();
         if (!isset($date_start) || empty($date_start))
             $errors[] = "Campo Início é obrigatório\n";
         if (!isset($date_finish) || empty($date_finish))
             $errors[] = "Campo Início é obrigatório\n";
-        $date_start = explode("/", $date_start);
-        $year = $date_start[2];
-        $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0] . " 00:00:00");
-        $date_finish = explode("/", $date_finish);
-        $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-        if (count($errors) > 0)
-            return $this->campaignCreate($errors, $date_start, $date_finish);
+        $new_date_start = explode("/", $date_start);
+        $year = $new_date_start[2];
+        $new_date_start = strval($new_date_start[2]) . "-" . strval($new_date_start[1]) . "-" . strval($new_date_start[0] . " 00:00:00");
+        $new_date_finish = explode("/", $date_finish);
+        $new_date_finish = strval($new_date_finish[2]) . "-" . strval($new_date_finish[1]) . "-" . strval($new_date_finish[0] . " 23:59:59");
+        $campaigns = $this->campaign_model->getAllCampaigns();
+        foreach ($campaigns as $campaign) {
+            if ($campaign->getCampaignYear() === $year) {
+                $errors[] = "Já existe uma outra campanha que começou nesse ano\n";
+                break;
+            }
+        }
+        if (count($errors) > 0) {
+            echo "ERROS: \n";
+            foreach ($errors as $error)
+                echo $error . "\n";
+            return $this->campaignCreate($errors, $date_start, $date_finish, $price);
+        }
         try {
             $this->Logger->info("Inserting new campaign");
             $this->generic_model->startTransaction();
-            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $date_start, $date_finish);
+            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $new_date_start, $new_date_finish, $price);
             if ($campaignId) {
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New campaign successfully inserted");

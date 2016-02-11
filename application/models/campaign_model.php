@@ -36,10 +36,10 @@ class campaign_model extends CK_Model {
         return $campaignArray;
     }
 
-    public function insertNewCampaign($year, $date_created, $date_start, $date_finish) {
-        $sql = "INSERT INTO campaign(campaign_year,date_created,date_start,date_finish)
-                VALUES (?,?,?,?)";
-        $resultSet = $this->executeReturningId($this->db, $sql,array($year,$date_created,$date_start,$date_finish));
+    public function insertNewCampaign($year, $date_created, $date_start, $date_finish, $price) {
+        $sql = "INSERT INTO campaign(campaign_year,date_created,date_start,date_finish,price)
+                VALUES (?,?,?,?,?)";
+        $resultSet = $this->executeReturningId($this->db, $sql, array($year, $date_created, $date_start, $date_finish, $price));
         if ($resultSet)
             return $resultSet;
         return false;

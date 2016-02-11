@@ -6,16 +6,18 @@ class Campaign {
     private $campaignYear;
     private $dateStart;
     private $dateFinish;
+    private $price;
 
-    public function __construct($campaignId, $campaignYear, $dateStart, $dateFinish) {
+    public function __construct($campaignId, $campaignYear, $dateStart, $dateFinish, $price) {
         $this->campaignId = $campaignId;
         $this->campaignYear = $campaignYear;
         $this->dateStart = $dateStart;
         $this->dateFinish = $dateFinish;
+        $this->price = $price;
     }
 
     public static function createCampaignObject($resultRow) {
-        return new Campaign($resultRow->campaign_id, $resultRow->campaign_year, $resultRow->date_start, $resultRow->date_finish);
+        return new Campaign($resultRow->campaign_id, $resultRow->campaign_year, $resultRow->date_start, $resultRow->date_finish, $resultRow->price);
     }
 
     public function setCampaignId($campaignId) {
@@ -48,6 +50,14 @@ class Campaign {
 
     public function getDateFinish() {
         return $this->dateFinish;
+    }
+
+    public function setPrice($price) {
+        $this->price = $price;
+    }
+
+    public function getPrice() {
+        return $this->price;
     }
 
 }
