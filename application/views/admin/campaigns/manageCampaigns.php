@@ -54,66 +54,56 @@
             });
         </script>
         <style>
-        
-        div.scroll{
-    	
-    	width:100%;
-    	height:100%;
-    	overflow-x:hidden;
-    
-    }
-        
+
+            div.scroll{
+
+                width:100%;
+                height:100%;
+                overflow-x:hidden;
+
+            }
+
         </style>
     <body>
-    	<div class="scroll">
-        <div class="row">
-            <?php // require_once APPPATH.'views/include/common_user_left_menu.php'  ?>
-            <div class="col-lg-10 middle-content">
-                <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?= $this->config->item("url_link") ?>admin/campaignCreate', 'dd');
-                        return false;" href=""><button id="create" class="btn btn-primary"  value="Criar nova campanha" >Criar nova campanha</button></a>
-                    <br /><br />
-                    <?php
-                    if (isset($campaigns) && count($campaigns) > 0) {
-                        $i = 0;
-                        ?>
-                        <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th><th>Status</th><th>Editar</th></tr>
-                            <?php
-                            foreach ($campaigns as $campaign) {
-                                ?><tr>
-                                    <td><?php echo $campaign->getCampaignYear(); ?></td>
-                                    <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
-                                    <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y') ?> </td>
-                                    <td style="<?php
-                                    if ($status[$i] === 'Finalizada')
-                                        echo "color:red";
-                                    else
-                                    if ($status[$i] === 'Em andamento')
-                                        echo "color:green";
-                                    else
-                                        echo "color:blue";
-                                    ?>"><?php echo $status[$i]; ?></td>
-                                <body onunload="window.opener.location.reload();"><td><a target='_blank' class="btn btn-primary " onclick="window.open('<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaign->getCampaignId() ?>', 'dd'); return false;" href="">Editar</a></td>
+        <div class="scroll">
+            <div class="row">
+                <?php // require_once APPPATH.'views/include/common_user_left_menu.php'  ?>
+                <div class="col-lg-10 middle-content">
+                    <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?= $this->config->item("url_link") ?>admin/campaignCreate', 'dd');
+                            return false;" href=""><button id="create" class="btn btn-primary"  value="Criar nova campanha" >Criar nova campanha</button></a>
+                        <br /><br />
+                        <?php
+                        if (isset($campaigns) && count($campaigns) > 0) {
+                            ?>
+                            <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th><th>Preço</th></tr>
+                                        <?php
+                                        foreach ($campaigns as $campaign) {
+                                            ?><tr>
+                                    <body onunload="window.opener.location.reload();"><td><a target='_blank'  onclick="window.open('<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaign->getCampaignId() ?>', 'dd'); return false;" href="">
+                                            <?php echo $campaign->getCampaignYear(); ?></a></td>
 
-                                </tr>
-                                <?php
-                                $i++;
-                            }
-                            ?> </table>
-                        <?php
-                    } else {
+                                    <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
+                                    <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y'); ?> </td>
+                                    <td><?php echo $campaign->getPrice(); ?></td>
+                                    </tr>
+                                    <?php
+                                }
+                                ?> </table>
+                            <?php
+                        } else {
+                            ?>
+                            <h3>
+                                Nenhuma campanha registrada para acontecer nos próximos dias.
+                                <br />Continue acompanhando a Colônia Kinderland pelo nosso website.
+                            </h3>
+                            <?php
+                        }
                         ?>
-                        <h3>
-                            Nenhuma campanha registrada para acontecer nos próximos dias.
-                            <br />Continue acompanhando a Colônia Kinderland pelo nosso website.
-                        </h3>
-                        <?php
-                    }
-                    ?>
+                </div>
+                </body>
             </div>
-    </body>
-</div>
-</div>
-</div>
+        </div>
+    </div>
 </body>
 </html>
 

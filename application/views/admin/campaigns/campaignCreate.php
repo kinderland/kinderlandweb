@@ -53,9 +53,8 @@ foreach ($errors as $error) {
     echo "string = string.concat('$error\\n');";
 }
 ?>
-
             if (string !== "") {
-                alert("Os seguintes erros foram encontrados:\n".concat(string));
+                window.alert("Os seguintes erros foram encontrados:\n".concat(string));
             }
 
         </script>
@@ -66,7 +65,7 @@ foreach ($errors as $error) {
                 datepickers();
             });
         </script>
-        <form name="event_form" onsubmit="alertRequiredFields()" method="POST" action="<?= $this->config->item('url_link') ?>admin/completeCampaign" id="campaign_form">
+        <form name="campaign_form" onsubmit="alertRequiredFields()" method="POST" action="<?= $this->config->item('url_link') ?>admin/completeCampaign" id="campaign_form">
             <div class="row">
                 <div class="col-lg-12 middle-content">
                     <div class="row">
@@ -78,7 +77,7 @@ foreach ($errors as $error) {
 
                         <div class="row">
                             <div class="form-group">
-                                <label for="date_start" class="col-lg-2 control-label"> Período da campanha: </label>
+                                <label for="date_start" class="col-lg-12 control-label"> Período da campanha: </label>
                                 <label for="date_start" class="col-lg-1 control-label"> Início*: </label>
                                 <div class="col-lg-2">
                                     <input type="text" class=" datepickers form-control required" placeholder="Data de Início" value="<?= $date_start ?>" name="date_start" />
@@ -89,20 +88,24 @@ foreach ($errors as $error) {
                                     <input type="text" class="datepickers form-control required" placeholder="Data de Término" value="<?= $date_finish ?>" name="date_finish" />
                                 </div>
                             </div>
-                        </div>
-                        <br />
-                        <div style="padding-top:100px">
-                        </div>
-                        <div class="form-group">
-                            <div class="col-lg-10">
-                                <button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
-                                <a href="<?= $this->config->item('url_link') ?>events/index"><button  type="button" class="btn btn-danger"
-                                                                                                      onClick="window.close()">Fechar</button></a>
+                            <br><br>
+                            <label for="price" class = "col-lg-1"> Preço: </label>
+                            <div class ="col-lg-1">
+                                <input type="number" step="0.01" placeholder="Preço da campanha" value="<?= $price ?>" name="price" />
+                            </div>
+                            <br>
+                            <div style="padding-top:100px">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-10">
+                                    <button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
+                                    <a href="<?= $this->config->item('url_link') ?>events/index"><button  type="button" class="btn btn-danger"
+                                                                                                          onClick="window.close()">Fechar</button></a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
     </body>
 </html>
