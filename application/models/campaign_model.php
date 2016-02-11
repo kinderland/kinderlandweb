@@ -45,6 +45,15 @@ class campaign_model extends CK_Model {
         return false;
     }
 
+    public function getCurrentCampaign() {
+        $sql = "SELECT * FROM campaign WHERE date_start<=NOW() AND date_finish>=NOW()";
+        $resultSet = $this->executeRows($this->db, $sql);
+        if (count($resultSet) !== 1)
+            return false;
+        $campaign = Campaign::createCampaignObject($resultSet);
+        return $campaign;
+    }
+
 }
 
 ?>

@@ -55,19 +55,7 @@ class Admin extends CK_Controller {
             $this->denyAcess(___METHOD___);
         }
         $data["campaigns"] = $this->campaign_model->getAllCampaigns();
-        $status = array();
-        foreach ($data["campaigns"] as $campaign) {
-            if ($campaign->getDateStart() > date("Y-m-d H:i:s"))
-                $status[] = 'Não iniciada';
-            else {
-                if ($campaign->getDateFinish() < date("Y-m-d H:i:s"))
-                    $status[] = 'Finalizada';
-                else {
-                    $status[] = 'Em andamento';
-                }
-            }
-        }
-        $data["status"] = $status;
+
         $this->loadReportView("admin/campaigns/manageCampaigns", $data);
     }
 
