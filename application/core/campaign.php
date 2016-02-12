@@ -8,7 +8,7 @@ class Campaign {
     private $dateFinish;
     private $price;
 
-    public function __construct($campaignId, $campaignYear = NULL, $dateStart = NULL, $dateFinish = NULL, $price = NULL) {
+    public function __construct($campaignId, $campaignYear, $dateStart, $dateFinish, $price) {
         $this->campaignId = $campaignId;
         $this->campaignYear = $campaignYear;
         $this->dateStart = $dateStart;

@@ -50,7 +50,7 @@ class campaign_model extends CK_Model {
         $resultSet = $this->executeRows($this->db, $sql);
         if (count($resultSet) !== 1)
             return false;
-        $campaign = Campaign::createCampaignObject($resultSet);
+        $campaign = Campaign::createCampaignObject($resultSet[0]);
         return $campaign;
     }
 
