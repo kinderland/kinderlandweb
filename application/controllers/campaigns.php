@@ -37,6 +37,10 @@ class Campaigns extends CK_Controller {
         $date_finish = strval($date_finish[2]) . "/" . strval($date_finish[1]) . "/" . strval($date_finish[0]);
         $data["date_finish"] = $date_finish;
         $data["campaign"] = $campaign;
+
+        $userId = $this->session->userdata("user_id");
+        $associate = $this->donation_model->userIsAlreadyAssociate($userId);
+        $data["associate"] = $associate;
         $this->loadView("campaign/index", $data);
     }
 
