@@ -49,7 +49,7 @@
                     }
                 } else {
                     ?>
-                    <h3><strong> A campanha de sócios não está aberta no momento. Continue acompanhando nosso site para novidades.</strong></h3>
+                    <h3><strong> A campanha de sócios não está aberta no momento.<br> Continue acompanhando nosso site para novidades.</strong></h3>
                 <?php } ?>
 
 
