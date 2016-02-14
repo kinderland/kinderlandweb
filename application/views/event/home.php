@@ -3,35 +3,33 @@
 	<div class="col-lg-10 middle-content">
 
 		<?php 
-			if(isset($events) && count($events) > 0) { 
-				foreach($events as $event) {
+			if(isset($events) && count($events) > 0) { ?>
+			<h2><strong>Eventos:</strong></h2><br />
+			<div class='row'>
+			<div class="col-lg-8">
+				<table  class="table table-bordered table-striped" style="max-width:900px; min-width:100px; table-layout: fixed;">
+					<tr>
+						<th style="width:100px">Nome</th>
+						<th style="width:300px">Descrição</th>
+						<th style="width:115px">Início</th>
+						<th style="width:115px">Fim</th>
+						<th style="width:100px">Ação</th>
+					</tr>
+			<?php 	foreach($events as $event) {
 		?>
-		<a href="<?=$this->config->item("url_link")?>events/info/<?=$event->getEventId()?>">
-			<div class='row event-row'>
-				<div class="col-lg-8">
-					<h3><?=$event->getEventName();?></h3>
-					<p>
-						Data: 
-						<strong>
-							<?= date_format(date_create($event->getDateStart()), 'd/m/y H:i');?> 
-							<?= ($event->getDateStart() != $event->getDateFinish())? " - ".date_format(date_create($event->getDateFinish()), 'd/m/y H:i'):""?>
-						</strong>
-					</p>
-				</div>
-				<div class="col-lg-4">
-					
-				</div>
-
-				<div class="col-lg-10 col-lg-offset-1">
-					<p align="center">
-						<?=$event->getDescription();?>
-					</p>
-				</div>
-			</div>
-		</a>
+					<tr>
+						<td><?=$event->getEventName();?></td>
+						<td><?=$event->getDescription();?></td>
+						<td><?= date_format(date_create($event->getDateStart()), 'd/m/y H:i');?></td>
+						<td><?= ($event->getDateStart() != $event->getDateFinish())? "".date_format(date_create($event->getDateFinish()), 'd/m/y H:i'):""?></td>
+						<td><a href="<?=$this->config->item("url_link")?>events/info/<?=$event->getEventId()?>"><button class="btn btn-primary">Inscrição</button></a></td>
+					</tr>
 		<?php 
-				}
-			} else {
+				} ?>
+				</table>
+				</div>
+				</div>
+		<?php 	} else {
 		?>
 			<h3> 
 				Nenhum evento registrado para acontecer nos próximos dias. 

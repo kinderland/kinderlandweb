@@ -39,40 +39,34 @@ class event_model extends CK_Model {
 		$resultSet = $this -> executeRow($this -> db, $sql, array(intval($eventId)));
 
 		$sqlCapacity = "
-            select 
-                'M' as gender, count(es.event_id) as vagas_ocupadas
+            SELECT (select count(es.event_id) as male_vagas_ocupadas
             from person p
             left outer join event_subscription es
                 on es.person_id = p.person_id
-            where es.event_id = ? and es.subscription_status = 3
+            where es.event_id = ? and es.subscription_status in (2,3)
                 and p.gender = 'M'
+                and es.nonsleeper = 'FALSE') as male_vagas_ocupadas,
 
-            UNION
-
-            select 
-                'F' as gender, count(es.event_id) as vagas_ocupadas
+            (select count(es.event_id) as female_vagas_ocupadas
             from person p
             left outer join event_subscription es
                 on es.person_id = p.person_id
-            where es.event_id = ? and es.subscription_status = 3
+            where es.event_id = ? and es.subscription_status in (2,3)
                 and p.gender = 'F'
-				
-			UNION
-
-            select 
-                'TRUE' as nonsleeper, count(es.event_id) as vagas_ocupadas
+                and es.nonsleeper = 'FALSE') as female_vagas_ocupadas,
+            (select count(es.event_id) as nonsleeper_vagas_ocupadas
             from person p
             left outer join event_subscription es
                 on es.person_id = p.person_id
-            where es.event_id = ? and es.subscription_status = 3
-                and es.nonsleeper = TRUE
+            where es.event_id = ? and es.subscription_status in (2,3)
+                and es.nonsleeper = 'TRUE') as nonsleeper_vagas_ocupadas
         ";
 
-		$capacityResultSet = $this -> executeRows($this -> db, $sqlCapacity, array(intval($eventId), intval($eventId), intval($eventId)));
+		$capacityResultSet = $this -> executeRow($this -> db, $sqlCapacity, array(intval($eventId), intval($eventId), intval($eventId)));
 
-		$resultSet -> capacity_male = $resultSet -> capacity_male - $capacityResultSet[0] -> vagas_ocupadas;
-		$resultSet -> capacity_female = $resultSet -> capacity_female - $capacityResultSet[1] -> vagas_ocupadas;
-		$resultSet -> capacity_nonsleeper = $resultSet -> capacity_nonsleeper - $capacityResultSet[2] -> vagas_ocupadas;
+		$resultSet -> capacity_male = $resultSet -> capacity_male - $capacityResultSet -> male_vagas_ocupadas;
+		$resultSet -> capacity_female = $resultSet -> capacity_female - $capacityResultSet -> female_vagas_ocupadas;
+		$resultSet -> capacity_nonsleeper = $resultSet -> capacity_nonsleeper - $capacityResultSet -> nonsleeper_vagas_ocupadas;
 
 		if ($resultSet)
 			return Event::createEventObject($resultSet);

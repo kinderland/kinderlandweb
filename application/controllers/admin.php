@@ -369,6 +369,9 @@ class Admin extends CK_Controller {
         $data['capacity_male'] = $event->getCapacityMale();
         $data['capacity_female'] = $event->getCapacityFemale();
         $data['capacity_nonsleeper'] = $event->getCapacityNonSleeper();
+        $data['male_eventSubscribed'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_male",'ocupados'));
+        $data['female_eventSubscribed'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_female",'ocupados'));
+        $data['nonsleeper_eventSubscribed'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_nonsleeper",'ocupados'));
 
         if ($payments == null) {
             foreach ($paymentPeriods as $payment) {
@@ -549,13 +552,13 @@ class Admin extends CK_Controller {
         $date_finish_show = explode("/", $date_finish_show);
         $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
 
-        $subscribed_male = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_male');
+        $subscribed_male = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_male','ocupados');
         $capacity_male = $capacity_male + count($subscribed_male);
 
-        $subscribed_female = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_female');
+        $subscribed_female = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_female','ocupados');
         $capacity_female = $capacity_female + count($subscribed_female);
 
-        $subscribed_nonsleeper = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'nonsleeper');
+        $subscribed_nonsleeper = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'nonsleeper','ocupados');
         $capacity_nonsleeper = $capacity_nonsleeper + count($subscribed_nonsleeper);
 
         if (count($errors) > 0)

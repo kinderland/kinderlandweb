@@ -45,7 +45,38 @@ class Events extends CK_Controller {
 
 			$subscriptions = $this->eventsubscription_model->getSubscriptionsForEventByUserId($this->session->userdata("user_id"), $eventId);
 			$price = $this->eventsubscription_model->getEventPrices($eventId);
-
+			$totalPrice = 0.00;
+			$subtotalPrice = 0.00;
+			$discount = 0.00;
+			$qtd = 0;
+			$singlePrice;
+			
+			foreach($subscriptions as $sub){
+				if($sub->subscription_status == 2){
+					if($sub->age_group_id == 1){
+						$singlePrice = $price->children_price;															
+					} else if($sub->age_group_id == 2){
+						$singlePrice = $price->middle_price;
+					} else if($sub->age_group_id == 3){
+						$singlePrice = $price->full_price;
+					}
+					
+					$subtotalPrice += $singlePrice;
+					
+					if($sub->associate == TRUE){
+						$discount += $singlePrice*$price->associate_discount;
+						$singlePrice = $singlePrice - ($singlePrice*$price->associate_discount);					
+					}
+					
+					$totalPrice += $singlePrice;
+					$qtd++;
+				}
+			}
+			
+			$data['totalPrice'] = $totalPrice;
+			$data['subtotalPrice'] = $subtotalPrice;
+			$data['discount'] = $discount;
+			$data['qtd'] = $qtd;
 			$data['event'] = $event;
 			$data['subscriptions'] = $subscriptions;
 			$data['price'] = $price;
@@ -145,7 +176,7 @@ class Events extends CK_Controller {
 			$this->generic_model->startTransaction();
 
 			$this->eventsubscription_model->unsubscribeUsersFromEvent($userIds, $eventId);
-
+			
 			$this->generic_model->commitTransaction();
 
 			$this->info($eventId);
@@ -161,9 +192,6 @@ class Events extends CK_Controller {
 	public function checkVacancy(){
 		$this->Logger->info("Starting VAGAS " . __METHOD__);
 		
-		$type = $this -> input -> post('type',TRUE);
-		
-		if($type == "Simples"){
 			$nonsleeper = $this -> input -> post('nonsleeper',TRUE);
 			$gender = $this -> input -> post('gender',TRUE);
 			$event_id = $this -> input -> post('event_id',TRUE);
@@ -172,10 +200,10 @@ class Events extends CK_Controller {
 			
 			$avaiable = null;
 			
-			if($nonsleeper == 'true'){
+			if($nonsleeper == "true"){
 				$avaiable = $event -> getCapacityNonSleeper();
 			}
-			else{
+			else if($nonsleeper == "false") {
 				if($gender == 'M'){
 					$avaiable = $event -> getCapacityMale();
 				}
@@ -184,7 +212,7 @@ class Events extends CK_Controller {
 				}
 			}
 			
-			if($avaiable>0){
+			if($avaiable > 0){
 				echo true;
 				return;
 			}
@@ -192,90 +220,6 @@ class Events extends CK_Controller {
 				echo false;
 				return;
 			}
-		}
-		else if($type == "Completo"){
-			$this->Logger->info("Starting Completo");
-			
-			$event_id = $this -> input -> post('event_id',TRUE);
-			$person_ids = $this -> input -> post('person_ids',TRUE);
-			$person_ids = explode(",", $person_ids);
-			$this->Logger->info("Event id: ".$event_id);
-			
-			foreach($person_ids as $ids){
-				$this->Logger->info("Person ids: ".$ids);
-			}
-				
-			$event = $this -> event_model -> getEventById($event_id);
-				
-			$error = "";
-			$numbers = array(0,0,0);
-			$avaiable = array($event->getCapacityNonSleeper(),$event->getCapacityMale(),$event->getCapacityFemale());
-			$description = array("Masculino e Feminino sem pernoite\n","Masculino com pernoite\n","Feminino com pernoite\n");
-			
-			foreach($person_ids as $id){
-				$this->Logger->info("Starting Person with id ".$id);
-				$person = $this -> person_model -> getPersonById($id);
-				$subs = $this -> eventsubscription_model -> getSubscriptionByPersonIdAndEventId($id,$event_id);
-				
-				if($subs->nonsleeper == 't'){
-					if($avaiable[0]<1){
-						$numbers[0]++;
-					}
-					else {
-						$avaiable[0]--;
-					}
-				}
-				else if($subs->nonsleeper == 'f'){
-					if($person -> getGender() == 'M'){
-						if($avaiable[1]<1){
-							$numbers[1]++;
-						}
-						else{
-							$avaiable[1]--;
-						}
-					}
-					else if($person -> getGender() == 'F'){
-						if($avaiable[2]<1){
-							$numbers[2]++;
-						}
-						else{
-							$avaiable[2]--;
-						}
-					}
-				}
-				$this->Logger->info("Starting number 0: ".$numbers[0]);
-				$this->Logger->info("Starting number 1: ".$numbers[1]);
-				$this->Logger->info("Starting number 2: ".$numbers[2]);
-			}
-			
-			for($i = 0; $i < 3; $i++){
-				if($numbers[$i]==1){
-					$error = $error.$description[$i];
-				}
-				else if($numbers[$i]>1){
-					if($i == 0){
-						if($event->getCapacityNonSleeper()>0)
-							$error = $error.$event->getCapacityNonSleeper()." ".$description[$i];
-					}
-					else if($i == 1){
-						if($event->getCapacityMale()>0)
-							$error = $error.$event->getCapacityMale()." ".$description[$i];
-					}
-					else if($i == 2){
-						if($event->getCapacityFemale()>0)
-							$error = $error.$event->getCapacityFemale()." ".$description[$i];
-					}
-				}
-				$this->Logger->info("error: ".$error);
-			}
-			
-			if($error != ""){
-				if($numbers[0]>1 || $numbers[1]>1 || $numbers[2]>1)
-					echo "Infelizmente, nem todos os convites selecionados estão disponíveis. Dos escolhidos, há apenas: \n\n".$error;
-				else
-					echo "Infelizmente, os seguintes convites não estão mais disponíveis:\n\n".$error;					
-			}
-		}
 	}
 
 	public function subscribePerson(){
