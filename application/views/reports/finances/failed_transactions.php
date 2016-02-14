@@ -51,7 +51,7 @@
                     **Lista de pessoas que não obtiveram <font color="red">nenhum</font> sucesso ao realizar doações no período selecionado
                 </p>
                 <form method="GET">
-                    <select name="ano" onchange="this.form.submit()" id="anos">
+                    Ano: <select name="ano" onchange="this.form.submit()" id="anos">
                         <?php
                         foreach ($years as $y) {
                             $selected = "";
@@ -62,7 +62,7 @@
                         ?>
                     </select>
 
-                    <select name="mes" onchange="this.form.submit()" id="meses">
+                    Mês: <select name="mes" onchange="this.form.submit()" id="meses">
                         <option value="0" <?php if (!isset($mes)) echo "selected"; ?>)>Todos</option>
                         <?php
 

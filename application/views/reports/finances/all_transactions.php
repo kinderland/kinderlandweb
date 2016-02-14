@@ -125,7 +125,7 @@
         <div class = "row">
             <div class="col-lg-12">
                 <form method="GET">
-                    <select name="ano" onchange="this.form.submit()" id="anos">
+                   Ano: <select name="ano" onchange="this.form.submit()" id="anos">
                         <?php
                         foreach ($years as $year) {
                             $selected = "";
@@ -135,7 +135,7 @@
                         }
                         ?>
                     </select>
-                    <select name="mes" onchange="this.form.submit()" id="meses">
+                    Mês: <select name="mes" onchange="this.form.submit()" id="meses">
                         <option value="0"
                         <?php
                         if (!isset($mes) || empty($mes)) {
@@ -171,7 +171,7 @@
                                 ?>
                     </select>
                 </form>
-                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 1000px; font-size:15px;" id="sortable-table">
+                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 900px; font-size:14px;" id="sortable-table">
                     <thead>
                         <tr>
                             <th> Data criação </th>

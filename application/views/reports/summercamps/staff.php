@@ -97,6 +97,11 @@
     
     }
     
+    div.pad{
+    	padding-left:25%;
+    	
+    }
+    
     </style>
     <body>
         <script>
@@ -116,7 +121,7 @@
             <div class = "row">
                 <div class="col-lg-12">
                      <form id="form_selection" method="GET">
-                    <select name="ano_f" onchange="this.form.submit()" id="anos">
+                   Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
                 
                         <?php
                         foreach ( $years as $year ) {
@@ -127,7 +132,7 @@
                         }
                         ?>
                     </select>
-                    <select name="colonia_f" key="<?php echo $summer_camp_id;?>" onchange="this.form.submit()" id="colonia" >
+                    Colônia: <select name="colonia_f" key="<?php echo $summer_camp_id;?>" onchange="this.form.submit()" id="colonia" >
                         <option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Selecionar</option>
                         <?php
                         foreach ( $camps as $camp ) {
@@ -145,6 +150,7 @@
 
         <?php if(isset($staff)) { $function = null;
         $qtdMonitor = 0; $qtdMedico = 0; $qtdAssistente = 0; $qtdCoordenador = 0;?>
+           <div class="pad">
             <div class = "row">
                <div class="col-lg-12">
                 <?php foreach($staff as $s){
@@ -183,8 +189,10 @@
         			  else if($qtdAssistente==1) echo $qtdAssistente." auxiliar";
         			  else if($qtdAssistente==0) echo 'Sem auxiliar';?>
                 <br /> <br />
+                
                	<button class="btn btn-primary" onclick="gerarLista()" value="">Lista</button>&nbsp;<button class="btn btn-primary" onclick="createPDFMedicalFiles()" value="">Fichas Médicas</button>&nbsp;<button class="btn btn-primary" onclick="geraAutorizacaoPDF('<?= $summer_camp_id?>')" value="">Autorizações</button>
                   <br /><br />
+                  
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 400px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
@@ -216,6 +224,7 @@
                             <?php } ?>  
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
         <?php } ?>

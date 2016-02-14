@@ -48,6 +48,8 @@
     		width:100%;
     		height:100%;
     		overflow-x:hidden;
+    		padding-right:500px;
+    		padding-left:20px;
     
     	}
     
@@ -70,7 +72,7 @@
                 <div class="col-lg-12">
                 Pré-inscrições com cadastro e anexos prontos para submissão, porém não enviados pelo responsável. <br></br>
                 	<form method="GET">
-						<select name="ano_f" onchange="this.form.submit()" id="anos">
+						Ano; <select name="ano_f" onchange="this.form.submit()" id="anos">
 					
 							<?php
 							foreach ( $years as $year ) {
@@ -81,7 +83,7 @@
 							}
 							?>
 						</select>
-						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
+						Colônia: <select name="colonia_f" onchange="this.form.submit()" id="colonia">
 							<option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Todas</option>
 							<?php
 							foreach ( $camps as $camp ) {
@@ -94,7 +96,7 @@
 						</select>
 					</form>
 					<div class="counter"></div> <br>
-                    <table class="table table-bordered table-striped table-min-td-size" style="width: 93%; font-size:15px" id="sortable-table">
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 1100px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome do Colonista </th>

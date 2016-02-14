@@ -54,6 +54,11 @@
     	overflow-x:hidden;
     
     }
+    
+    div.pad{
+    
+    	padding-left:13%
+    }
 </style>
 
 </head>
@@ -63,7 +68,7 @@
 		<div class="row">
 			<div class="col-lg-10" bgcolor="red">
 				<form method="GET">
-					<select name="ano_f" onchange="this.form.submit()" id="anos">
+					Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 					
 							<?php
 							foreach ( $years as $year ) {
@@ -75,6 +80,7 @@
 							?>
 						</select>
 				</form>
+				<div class="pad">
 				<table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 800px;">
 					
@@ -182,7 +188,7 @@
 							<?php $i++; } ?>				
 						</tr>
 				</table>
-				
+				</div>
 		
 			</div>
 		</div>

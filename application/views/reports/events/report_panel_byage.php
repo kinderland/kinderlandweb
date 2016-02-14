@@ -31,8 +31,12 @@
     	width:100%;
     	height:100%;
     	overflow-x:hidden;
-    
+    	
     }
+    
+    div.pad{
+    	padding-left:9%;
+    	}
 	
 	</style>
 	<body>
@@ -41,7 +45,7 @@
 		            <div class = "row">
 		                <div class="col-lg-12">
 		                     <form id="form_selection" method="GET">
-		                    <select name="ano_f" onchange="this.form.submit()" id="anos">
+		                    Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 		                
 		                        <?php
 		                        foreach ( $years as $year ) {
@@ -52,7 +56,7 @@
 		                        }
 		                        ?>
 		                    </select>
-		                    <select name="evento_f" onchange="this.form.submit()" id="events">
+		                    Evento: <select name="evento_f" onchange="this.form.submit()" id="events">
 		                
 		                        <?php
 		                        foreach ( $events as $event ) {
@@ -66,6 +70,7 @@
 		                    </form>
 		                  </div>
 		                </div>
+		                <div class="pad">
 		                <table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 700px;">
 							<tr>
@@ -87,6 +92,7 @@
 							    <td><?php echo $info["mas06"]; ?></td>
 							</tr>
 						</table>
+						</div>
 		 </div>
 		 </div>
 	</body>

@@ -27,24 +27,32 @@
             <?php require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
             <div class="col-lg-10 middle-content">
                 <?php if (isset($campaign) && !empty($campaign)) { ?>
-                    <h3><strong>Campanha de sócios <?php echo $campaign->GetCampaignYear; ?></strong></h3>
-                    <hr/>
-                    <h5>Campanha iniciada em: <?php echo $date_start ?> às 00:00</h5>
-                    <br>
-                    <h5> Término da campanha: <?php echo $date_finish ?> às 23:59</h5>
+                    <h3><strong>Campanha de sócios <?php echo $campaign->getCampaignYear(); ?></strong></h3>
+                    <hr class="footer-hr"/>
 
+                    <?php if (isset($associate) && !empty($associate)) { ?>
+                        <h3>Você já é um sócio dessa campanha.</h3>
+                    <?php } else { ?>
+                        <h5>Campanha iniciada em: <?php echo $date_start
+                        ?> às 00:00</h5>
+                        <h5> Término da campanha: <?php echo $date_finish ?> às 23:59</h5>
+                        <h5> Valor da doação: R$ <?php echo $campaign->getPrice(); ?></h5>
 
+                        <div style="margin-top:130px">
+                            <h6 style="color:red"><strong>Ao se tornar um sócio da Colônia Kinderland, você recebe diversos benefícios e prioridades.
+                                    Você continuará como sócio até a próxima Campanha de Sócios começar. </strong></h6>
+                        </div>
 
-                <?php } else { ?>
-                    <h3><strong> A campanha de sócios não está aberta no momento. Continue acompanhando nosso site para novidades.</strong></h3>
+                        <a class="btn btn-primary" role="button" href="<?= $this->config->item('url_link') ?>campaigns/startAssociation">Prosseguir</a>
+
+                        <?php
+                    }
+                } else {
+                    ?>
+                    <h3><strong> A campanha de sócios não está aberta no momento.<br> Continue acompanhando nosso site para novidades.</strong></h3>
                 <?php } ?>
 
 
-            </div>
-            <div class ="col-lg-10">
-                <h6 style="color:red"><strong>Ao se tornar um sócio da Colônia Kinderland, você recebe diversos benefícios e prioridades.
-                        Você continuará como sócio até a próxima Campanha de Sócios começar. </strong></h6>
-                <button class="btn btn-primary" href="<?= $this->config->item('url_link') ?>/campaign/startAssociation">Prosseguir</button>
             </div>
         </div>
     </div>

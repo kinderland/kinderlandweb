@@ -29,6 +29,13 @@
     <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 
 </head>
+<style>
+
+    div.pad{
+        padding-left:20%;
+    }
+
+</style>
 <?php
 
 function formatarEMostrar($valor, $opcao) {
@@ -67,7 +74,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
 
             <form method="GET">
                 <input type="hidden" name="option" value="<?= $option ?>"/>
-                <select name="year" onchange="this.form.submit()" id="year">
+                Ano: <select name="year" onchange="this.form.submit()" id="year">
                     <?php
                     foreach ($years as $y) {
                         $selected = "";
@@ -78,7 +85,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                     ?>
                 </select>
 
-                <select name="month" onchange="this.form.submit()" id="month">
+                Mês: <select name="month" onchange="this.form.submit()" id="month">
                     <option value="0" <?php if (!isset($mes)) echo "selected"; ?>)>Todos</option>
                     <?php
 
@@ -108,114 +115,115 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                     ?>
                 </select>
             </form>
+            <div class="pad">
 
+                <h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates), $option); ?>
+                </h4>				<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas), $option); ?>
+                </h4>				<h4>Doações colonias: <?php formatarEMostrar(intval($colonies), $option); ?>
+                </h4>
+                <h4>Total: <?php formatarEMostrar(intval($associates) + intval($avulsas) + intval($colonies), $option); ?>
+                </h4>
 
-            <h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates), $option); ?>
-            </h4>				<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas), $option); ?>
-            </h4>				<h4>Doações colonias: <?php formatarEMostrar(intval($colonies), $option); ?>
-            </h4>
-            <h4>Total: <?php formatarEMostrar(intval($associates) + intval($avulsas) + intval($colonies), $option); ?>
-            </h4>
-
-            <!--
-                            <a href="<?= $this->config->item('url_link'); ?>reports/payments_bycard">
-                            <button class="btn btn-primary" style="margin: 0px auto; ">Todos os pagamentos</button>
-                            </a>
-                            <a href="<?= $this->config->item('url_link'); ?>reports/payments_bycard?type=captured">
-                            <button class="btn btn-primary" style="margin: 0px auto; ">Pagamentos finalizados</button>
-                            </a>
-                            <a href="<?= $this->config->item('url_link'); ?>reports/payments_bycard?type=canceled">
-                            <button class="btn btn-primary" style="margin: 0px auto; ">Pagamentos cancelados</button>
-                            </a>
-                            <br>
-            -->
-            <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px">
-                <tr>
-                    <td colspan="10"> <h4> <b>Cartão de crédito: </b></h4> </td> <?php $tipo = "credito"; ?>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
-                    <td style="text-align: right;"><h4> <b> Total </b></h4> </td>
-                    <td><h4> <b> 1x </b></h4></td>
-                    <td><h4> <b> 2x </b></h4></td>
-                    <td><h4> <b> 3x </b></h4></td>
-                    <td><h4> <b> 4x </b></h4></td>
-                    <td><h4> <b> 5x </b></h4></td>
-                    <td><h4> <b> 6x </b></h4></td>
-                    <td><h4> <b> 7x </b></h4></td>
-                    <td><h4> <b> 8x </b></h4></td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"> Amex </td>
-                    <?php
-                    $cartao = "amex";
-                    imprimeDados($result, $tipo, $cartao, $option);
-                    ?>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"> Mastercard </td>
-                    <?php
-                    $cartao = "mastercard";
-                    imprimeDados($result, $tipo, $cartao, $option);
-                    ?>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"> Visa </td>
-                    <?php
-                    $cartao = "visa";
-                    imprimeDados($result, $tipo, $cartao, $option);
-                    ?>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"> Totais crédito </td>
-                    <td style="text-align: right;"><?php
-                        $total = 0;
-                        foreach ($credito as $resultado)
-                            $total += $resultado;
-                        formatarEMostrar($total, $option);
+                <!--
+                                <a href="<?= $this->config->item('url_link'); ?>reports/payments_bycard">
+                                <button class="btn btn-primary" style="margin: 0px auto; ">Todos os pagamentos</button>
+                                </a>
+                                <a href="<?= $this->config->item('url_link'); ?>reports/payments_bycard?type=captured">
+                                <button class="btn btn-primary" style="margin: 0px auto; ">Pagamentos finalizados</button>
+                                </a>
+                                <a href="<?= $this->config->item('url_link'); ?>reports/payments_bycard?type=canceled">
+                                <button class="btn btn-primary" style="margin: 0px auto; ">Pagamentos cancelados</button>
+                                </a>
+                                <br>
+                -->
+                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px; font-size:15px">
+                    <tr>
+                        <td colspan="10"> <h4> <b>Cartão de crédito: </b></h4> </td> <?php $tipo = "credito"; ?>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
+                        <td style="text-align: right;"><h4> <b> Total </b></h4> </td>
+                        <td><h4> <b> 1x </b></h4></td>
+                        <td><h4> <b> 2x </b></h4></td>
+                        <td><h4> <b> 3x </b></h4></td>
+                        <td><h4> <b> 4x </b></h4></td>
+                        <td><h4> <b> 5x </b></h4></td>
+                        <td><h4> <b> 6x </b></h4></td>
+                        <td><h4> <b> 7x </b></h4></td>
+                        <td><h4> <b> 8x </b></h4></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"> Amex </td>
+                        <?php
+                        $cartao = "amex";
+                        imprimeDados($result, $tipo, $cartao, $option);
                         ?>
-                    </td>
-                    <?php
-                    for ($i = 1; $i <= 8; $i++) {
-                        echo "<td style='text-align: right;'>";
-                        formatarEMostrar($credito[$i], $option);
-                        echo "</td>";
-                    }
-                    ?>
-                </tr>
-            </table>
-            <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px;">
-                <tr>
-                    <td colspan="2" style="text-align: center;"> <h4> <b>Cartão de débito: </b></h4> </td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
-                    <td style="text-align: center;"><h4> <b> Total </b></h4> </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"> Mastercard </td>
+                        <?php
+                        $cartao = "mastercard";
+                        imprimeDados($result, $tipo, $cartao, $option);
+                        ?>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"> Visa </td>
+                        <?php
+                        $cartao = "visa";
+                        imprimeDados($result, $tipo, $cartao, $option);
+                        ?>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"> Totais crédito </td>
+                        <td style="text-align: right;"><?php
+                            $total = 0;
+                            foreach ($credito as $resultado)
+                                $total += $resultado;
+                            formatarEMostrar($total, $option);
+                            ?>
+                        </td>
+                        <?php
+                        for ($i = 1; $i <= 8; $i++) {
+                            echo "<td style='text-align: right;'>";
+                            formatarEMostrar($credito[$i], $option);
+                            echo "</td>";
+                        }
+                        ?>
+                    </tr>
+                </table>
+                <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px;">
+                    <tr>
+                        <td colspan="2" style="text-align: center;"> <h4> <b>Cartão de débito: </b></h4> </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><h4> <b> Bandeira do cartão </b></h4> </td>
+                        <td style="text-align: center;"><h4> <b> Total </b></h4> </td>
 
-                </tr>
-                <tr>
-                    <td style="text-align: right;"> Maestro </td>
-                    <td style="text-align: right;"><?php
-                        if (isset($result["debito"]["mastercard"][1]))
-                            echo formatarEMostrar(intval($result["debito"]["mastercard"][1]), $option);
-                        else
-                            echo formatarEMostrar(0, $option);
-                        ?></td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"> Visa Electron </td>
-                    <td style="text-align: right;"><?php
-                        if (isset($result["debito"]["visa"][1]))
-                            echo formatarEMostrar(intval($result["debito"]["visa"][1]), $option);
-                        else
-                            echo formatarEMostrar(0, $option);
-                        ?></td>
-                </tr>
-                <tr>
-                    <td style="text-align: right;"> Total débito </td>
-                    <td style="text-align: right;"><?php echo formatarEMostrar($debito, $option); ?></td>
-                </tr>
-            </table>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"> Maestro </td>
+                        <td style="text-align: right;"><?php
+                            if (isset($result["debito"]["mastercard"][1]))
+                                echo formatarEMostrar(intval($result["debito"]["mastercard"][1]), $option);
+                            else
+                                echo formatarEMostrar(0, $option);
+                            ?></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"> Visa Electron </td>
+                        <td style="text-align: right;"><?php
+                            if (isset($result["debito"]["visa"][1]))
+                                echo formatarEMostrar(intval($result["debito"]["visa"][1]), $option);
+                            else
+                                echo formatarEMostrar(0, $option);
+                            ?></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"> Total débito </td>
+                        <td style="text-align: right;"><?php echo formatarEMostrar($debito, $option); ?></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </body>

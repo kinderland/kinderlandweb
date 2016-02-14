@@ -1,6 +1,7 @@
 <?php
 
 require_once APPPATH . 'core/CK_Controller.php';
+require_once APPPATH . 'core/campaign.php';
 
 class Reports extends CK_Controller {
 
@@ -48,227 +49,223 @@ class Reports extends CK_Controller {
         $data['users'] = $this->personuser_model->getAllUsersDetailed();
         $this->loadReportView("reports/users/all_users", $data);
     }
-    
-    public function event_reports(){
-    	$this->loadView("reports/events/event_reports_container");
+
+    public function event_reports() {
+        $this->loadView("reports/events/event_reports_container");
     }
-    
-    public function reportPanel(){
-    	$data = array();
-    	$years = array();
-    	$start = 2015;
-    	$date = date('Y');
-    	$eventsByDate = $this->event_model->getAllEventsByYear($date);
-    	$end = $date;
-    	while ($eventsByDate != null) {
-    		$end = $date;
-    		$date++;
-    		$eventsByDate = $this->event_model->getAllEventsByYear($date);
-    	}
-    	$years = $this->event_model->getAllEventsYears();
-    	$year = null;
-    	
-    	if (isset($_GET['ano_f']))
-    		$year = $_GET['ano_f'];
-    	else {
-    		$year = $years[0];
-    	}
-    	
-    	$data['ano_escolhido'] = $year;
-    	$data['years'] = $years;
-    	
-    	if($year == date('Y')){
-    		$today = date('Y')."-".date("m")."-".date("d");
-    		$allEvents = $this->event_model->getAllEventsPostDate($today);
-    	}
-    	else{
-    		$allEvents = $this->event_model->getAllEventsByYear($year);
-    	}
-    	
-    	$eventsQtd = count($allEvents);
-    	$events = array();
-    	$start = $eventsQtd;
-    	$end = 1;
-    	
-    	$eventChosen = $allEvents[0]->event_name;
-    	
-    	if (isset($_GET['evento_f']))
-    		$eventChosen = $_GET['evento_f'];
-    	
-    	$eventChosenId = null;
-    	foreach ($allEvents as $event) {
-    		$events[] = $event->event_name;
-    		if ($event->event_name == $eventChosen)
-    			$eventChosenId = $event->event_id;
-    	}
-    	
-    	if($eventChosenId === null){
-    		$events = null;
-    		$eventChosen = $allEvents[0]->event_name;
-    		foreach ($allEvents as $event) {
-    			$events[] = $event->event_name;
-    			if ($event->event_name == $eventChosen)
-    				$eventChosenId = $event->event_id;
-    		}
-    	}
-    	
-    	$gender = null;
-    	$age = null;
-    	$type = array("fem"=>0,"mas"=>0,"non"=>0);
-    	$subscriptions = $this -> eventsubscription_model -> getSubscriptionsByEventId($eventChosenId);
-    	
-    	foreach($subscriptions as $subs){
-    		if($subs->subscription_status == 3 && $subs->nonsleeper == 'f'){
-	    		if($subs->gender == 'M'){ 
-	    			$type["mas"]++;   			
-	    		}
-	    		else if($subs->gender == 'F'){ 
-	    			$type["fem"]++;     			
-	    		}
-    		}
-    		else if($subs->subscription_status == 3 && $subs->nonsleeper == 't'){
-    			$type["non"]++;
-    		}
-    	}
-    	
-    	$event = null;
-    	
-    	if($eventChosenId!==null){
-    		$event = $this -> event_model -> getEventById($eventChosenId);
-    		$this->Logger->info("ID DO EVENTO: ".$event->getEventId());
-    		$data['dispFem'] = $event->getCapacityFemale();
-    		$data['dispMas'] = $event->getCapacityMale();
-    		$data['dispNon'] = $event->getCapacityNonSleeper();
-    	}
-    	    	
-    	$data['event_id'] = $eventChosenId;
-    	$data['evento_escolhido'] = $eventChosen;
-    	$data['events'] = $events;
-    	$data['event'] = $event;
-    	$data['info'] = $type;
-    	
-    	$this->loadReportView('reports/events/report_panel', $data);
+
+    public function reportPanel() {
+        $data = array();
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $eventsByDate = $this->event_model->getAllEventsByYear($date);
+        $end = $date;
+        while ($eventsByDate != null) {
+            $end = $date;
+            $date++;
+            $eventsByDate = $this->event_model->getAllEventsByYear($date);
+        }
+        $years = $this->event_model->getAllEventsYears();
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = $years[0];
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        if ($year == date('Y')) {
+            $today = date('Y') . "-" . date("m") . "-" . date("d");
+            $allEvents = $this->event_model->getAllEventsPostDate($today);
+        } else {
+            $allEvents = $this->event_model->getAllEventsByYear($year);
+        }
+
+        $eventsQtd = count($allEvents);
+        $events = array();
+        $start = $eventsQtd;
+        $end = 1;
+
+        $eventChosen = $allEvents[0]->event_name;
+
+        if (isset($_GET['evento_f']))
+            $eventChosen = $_GET['evento_f'];
+
+        $eventChosenId = null;
+        foreach ($allEvents as $event) {
+            $events[] = $event->event_name;
+            if ($event->event_name == $eventChosen)
+                $eventChosenId = $event->event_id;
+        }
+
+        if ($eventChosenId === null) {
+            $events = null;
+            $eventChosen = $allEvents[0]->event_name;
+            foreach ($allEvents as $event) {
+                $events[] = $event->event_name;
+                if ($event->event_name == $eventChosen)
+                    $eventChosenId = $event->event_id;
+            }
+        }
+
+        $gender = null;
+        $age = null;
+        $type = array("fem" => 0, "mas" => 0, "non" => 0);
+        $subscriptions = $this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId);
+
+        foreach ($subscriptions as $subs) {
+            if ($subs->subscription_status == 3 && $subs->nonsleeper == 'f') {
+                if ($subs->gender == 'M') {
+                    $type["mas"] ++;
+                } else if ($subs->gender == 'F') {
+                    $type["fem"] ++;
+                }
+            } else if ($subs->subscription_status == 3 && $subs->nonsleeper == 't') {
+                $type["non"] ++;
+            }
+        }
+
+        $event = null;
+
+        if ($eventChosenId !== null) {
+            $event = $this->event_model->getEventById($eventChosenId);
+            $this->Logger->info("ID DO EVENTO: " . $event->getEventId());
+            $data['dispFem'] = $event->getCapacityFemale();
+            $data['dispMas'] = $event->getCapacityMale();
+            $data['dispNon'] = $event->getCapacityNonSleeper();
+        }
+
+        $data['event_id'] = $eventChosenId;
+        $data['evento_escolhido'] = $eventChosen;
+        $data['events'] = $events;
+        $data['event'] = $event;
+        $data['info'] = $type;
+
+        $this->loadReportView('reports/events/report_panel', $data);
     }
-    
+
     public function report_panel_byage() {
-    	$data = array();
-    	$years = array();
-    	$start = 2015;
-    	$date = date('Y');
-    	$eventsByDate = $this->event_model->getAllEventsByYear($date);
-    	$end = $date;
-    	while ($eventsByDate != null) {
-    		$end = $date;
-    		$date++;
-    		$eventsByDate = $this->event_model->getAllEventsByYear($date);
-    	}
-    	$years = $this->event_model->getAllEventsYears();
-    	$year = null;
-    	
-    	if (isset($_GET['ano_f']))
-    		$year = $_GET['ano_f'];
-    	else {
-    		$year = $years[0];
-    	}
-    	
-    	$data['ano_escolhido'] = $year;
-    	$data['years'] = $years;
-    	
-    	if($year == date('Y')){
-    		$today = date('Y')."-".date("m")."-".date("d");
-    		$allEvents = $this->event_model->getAllEventsPostDate($today);
-    	}
-    	else{
-    		$allEvents = $this->event_model->getAllEventsByYear($year);
-    	}
-    	
-    	$eventsQtd = count($allEvents);
-    	$events = array();
-    	$start = $eventsQtd;
-    	$end = 1;
-    	
-    	$eventChosen = $allEvents[0]->event_name;
-    	
-    	if (isset($_GET['evento_f']))
-    		$eventChosen = $_GET['evento_f'];
-    	
-    	$eventChosenId = null;
-    	foreach ($allEvents as $event) {
-    		$events[] = $event->event_name;
-    		if ($event->event_name == $eventChosen)
-    			$eventChosenId = $event->event_id;
-    	}
-    	
-    	$gender = null;
-    	$age = null;
-    	$type = array("fem18"=>0,"fem717"=>0,"fem06"=>0,"mas18"=>0,"mas717"=>0,"mas06"=>0);
-    	$subscriptions = $this -> eventsubscription_model -> getSubscriptionsByEventId($eventChosenId);
-    	
-    	foreach($subscriptions as $subs){
-    		if($subs->subscription_status == 3 && $subs->nonsleeper == 'f'){
-	    		if($subs->gender == 'M'){ 
-	    			if($subs->age_group_id == 1)
-	    				$type["mas06"]++;
-	    			else if($subs->age_group_id == 2)
-	    				$type["mas717"]++;
-	    			else if($subs->age_group_id == 3)
-	    				$type["mas18"]++;    			
-	    		}
-	    		else if($subs->gender == 'F'){ 
-	    			if($subs->age_group_id == 1)
-	    				$type["fem06"]++;
-	    			else if($subs->age_group_id == 2)
-	    				$type["fem717"]++;
-	    			else if($subs->age_group_id == 3)
-	    				$type["fem18"]++;    			
-	    		}
-    		}
-    	}
-    	    	
-    	$data['event_id'] = $eventChosenId;
-    	$data['evento_escolhido'] = $eventChosen;
-    	$data['events'] = $events;
-    	$data['info'] = $type;
-    	
-    	$this->loadReportView('reports/events/report_panel_byage', $data);
+        $data = array();
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $eventsByDate = $this->event_model->getAllEventsByYear($date);
+        $end = $date;
+        while ($eventsByDate != null) {
+            $end = $date;
+            $date++;
+            $eventsByDate = $this->event_model->getAllEventsByYear($date);
+        }
+        $years = $this->event_model->getAllEventsYears();
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = $years[0];
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        if ($year == date('Y')) {
+            $today = date('Y') . "-" . date("m") . "-" . date("d");
+            $allEvents = $this->event_model->getAllEventsPostDate($today);
+        } else {
+            $allEvents = $this->event_model->getAllEventsByYear($year);
+        }
+
+        $eventsQtd = count($allEvents);
+        $events = array();
+        $start = $eventsQtd;
+        $end = 1;
+
+        $eventChosen = $allEvents[0]->event_name;
+
+        if (isset($_GET['evento_f']))
+            $eventChosen = $_GET['evento_f'];
+
+        $eventChosenId = null;
+        foreach ($allEvents as $event) {
+            $events[] = $event->event_name;
+            if ($event->event_name == $eventChosen)
+                $eventChosenId = $event->event_id;
+        }
+
+        $gender = null;
+        $age = null;
+        $type = array("fem18" => 0, "fem717" => 0, "fem06" => 0, "mas18" => 0, "mas717" => 0, "mas06" => 0);
+        $subscriptions = $this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId);
+
+        foreach ($subscriptions as $subs) {
+            if ($subs->subscription_status == 3 && $subs->nonsleeper == 'f') {
+                if ($subs->gender == 'M') {
+                    if ($subs->age_group_id == 1)
+                        $type["mas06"] ++;
+                    else if ($subs->age_group_id == 2)
+                        $type["mas717"] ++;
+                    else if ($subs->age_group_id == 3)
+                        $type["mas18"] ++;
+                }
+                else if ($subs->gender == 'F') {
+                    if ($subs->age_group_id == 1)
+                        $type["fem06"] ++;
+                    else if ($subs->age_group_id == 2)
+                        $type["fem717"] ++;
+                    else if ($subs->age_group_id == 3)
+                        $type["fem18"] ++;
+                }
+            }
+        }
+
+        $data['event_id'] = $eventChosenId;
+        $data['evento_escolhido'] = $eventChosen;
+        $data['events'] = $events;
+        $data['info'] = $type;
+
+        $this->loadReportView('reports/events/report_panel_byage', $data);
     }
-    
+
     /*
-     public function loadReportPanel(){
-     $this->Logger->info("Starting " . __METHOD__);
-    
-     $eventId = $_POST['event_id'];
-     $reportType = $_POST['report_type'];
-    
-     $data = array();
-    
-     if(!$this->checkSession())
-     	redirect("login/index");
-    
-     	try {
-     	$this->Logger->info("Retrieving information about event with id: ". $eventId);
-    
-     	$event = $this->event_model->getEventById($eventId);
-     	$subscriptions = $this->eventsubscription_model->getSubscriptionsByEventId($eventId);
-     	$price = $this->eventsubscription_model->getEventPrices($eventId);
-     	$age_groups = $this->eventsubscription_model->getAgeGroups();
-    
-     	$data['event'] = $event;
-     	$data['subscriptions'] = $subscriptions;
-     	$data['price'] = $price;
-     	$data['age_groups'] = $age_groups;
-    
-     	if($error)
-     		$data['error'] = $error;
-    
-     		$this->loadView('event/report_panel', $data);
-     			
-     		} catch (Exception $ex) {
-     		$this->Logger->error("Unable to load information about event with id: ". $eventId);
-     		$this->index();
-     		}
-    
-     		}*/
+      public function loadReportPanel(){
+      $this->Logger->info("Starting " . __METHOD__);
+
+      $eventId = $_POST['event_id'];
+      $reportType = $_POST['report_type'];
+
+      $data = array();
+
+      if(!$this->checkSession())
+      redirect("login/index");
+
+      try {
+      $this->Logger->info("Retrieving information about event with id: ". $eventId);
+
+      $event = $this->event_model->getEventById($eventId);
+      $subscriptions = $this->eventsubscription_model->getSubscriptionsByEventId($eventId);
+      $price = $this->eventsubscription_model->getEventPrices($eventId);
+      $age_groups = $this->eventsubscription_model->getAgeGroups();
+
+      $data['event'] = $event;
+      $data['subscriptions'] = $subscriptions;
+      $data['price'] = $price;
+      $data['age_groups'] = $age_groups;
+
+      if($error)
+      $data['error'] = $error;
+
+      $this->loadView('event/report_panel', $data);
+
+      } catch (Exception $ex) {
+      $this->Logger->error("Unable to load information about event with id: ". $eventId);
+      $this->index();
+      }
+
+      } */
 
     public function toCSV() {
         $data = $this->input->post('data', TRUE);
@@ -313,22 +310,23 @@ class Reports extends CK_Controller {
             $month = FALSE;
         }
         $current_year = date('Y');
+
         $checker = 1;
         $data["year"] = $year;
         $data["month"] = $month;
         $years = $this->campaign_model->getYearsCampaign();
-
-        $data['years'] = array();
+        $data["years"] = array();
+        /* foreach ($years as $a_year) {
+          if ($a_year === $current_year) {
+          $checker = 0;
+          break;
+          }
+          }
+          if ($checker) {
+          $data["years"][] = $current_year;
+          } Tem que fazer essa checagem funcionar depois. */
         foreach ($years as $a_year) {
-            if ($a_year === $current_year) {
-                $checker = 0;
-            }
-        }
-        if ($checker) {
-            $data['years'][] = $current_year;
-        }
-        foreach ($years as $a_year) {
-            $data['years'][] = $a_year->year_event;
+            $data["years"][] = $a_year->campaign_year;
         }
         //Por enquanto só o tipo finalizado é pra ser mostrado.
         $type = "captured";
@@ -1805,31 +1803,31 @@ class Reports extends CK_Controller {
                 $id = $this->summercamp_model->getPersonUserIdByColonistId($i->colonist_id, $campChosenId);
                 if ($id != null) {
 
-                    	$result = $this->person_model->getPersonById($id->person_user_id);
-                        $responsableName = $result->getFullname();
-                        $responsableEmail = $result->getEmail();
+                    $result = $this->person_model->getPersonById($id->person_user_id);
+                    $responsableName = $result->getFullname();
+                    $responsableEmail = $result->getEmail();
 
-                        $obj->responsableName = $responsableName;
-                        $obj->responsableEmail = $responsableEmail;
-                        
-                            $telephone = $this->telephone_model->getTelephonesByPersonId($id->person_user_id);
-                            $tels = array();
-                            $add = 1;
+                    $obj->responsableName = $responsableName;
+                    $obj->responsableEmail = $responsableEmail;
 
-                            $p = 0;
+                    $telephone = $this->telephone_model->getTelephonesByPersonId($id->person_user_id);
+                    $tels = array();
+                    $add = 1;
 
-                            foreach ($telephone as $t) {
-                                if (!isset($t) || is_null($t) || empty($t)) {
+                    $p = 0;
 
-                                } else {
-                                    if ($p == 0)
-                                        $tel = $t;
-                                    else
-                                        $tel = $tel . "*" . $t;
-                                }
-                            }
+                    foreach ($telephone as $t) {
+                        if (!isset($t) || is_null($t) || empty($t)) {
 
-                            $obj->responsableTel = $tel;
+                        } else {
+                            if ($p == 0)
+                                $tel = $t;
+                            else
+                                $tel = $tel . "*" . $t;
+                        }
+                    }
+
+                    $obj->responsableTel = $tel;
                 } else {
                     $obj->responsableName = null;
                     $obj->responsableEmail = null;

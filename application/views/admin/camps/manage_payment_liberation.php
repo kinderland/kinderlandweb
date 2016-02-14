@@ -29,6 +29,12 @@
     	overflow-x:hidden;
     
     }
+    
+    div.pad{
+    	
+    	padding-left: 23%;
+    }
+	
 	
 	</style>
 	<body>
@@ -156,6 +162,7 @@
 					</form>
 
 					<?php if(isset($camp_details)) { ?>
+					<div class="pad">
 						<table class="table table-bordered tablesorter table-striped table-min-td-size" style="max-width: 500px; font-size:15px">
 							<tr>
 								<th> Status </th>
@@ -173,6 +180,7 @@
 								<td> <?= $camp_details[4]['F'] ?> </td>
 							</tr>
 						</table>
+						</div>
 
 						<hr />
 

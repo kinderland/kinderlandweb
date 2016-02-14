@@ -1,3 +1,12 @@
+<style type="text/css">
+    html, body {
+        
+        padding-left:30px;
+    }
+</style>
+
+
+
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -30,6 +39,7 @@
     	width:100%;
     	height:100%;
     	overflow-x:hidden;
+    	padding-left:12%;
     
     }
     

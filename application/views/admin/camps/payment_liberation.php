@@ -29,6 +29,10 @@
     	overflow-x:hidden;
     
     }
+    div.pad{
+    	
+    	padding-left: 23%;
+    }
 	
 	</style>
 	<body>
@@ -193,7 +197,8 @@
 					</form>
 
 					<?php if(isset($camp_details)) { ?>
-						<table class="table table-bordered tablesorter table-striped table-min-td-size" style="max-width: 500px; font-size:15px">
+						<div class="pad">
+						<table class="table table-bordered tablesorter table-striped table-min-td-size" style="max-width: 500px; padding-left: 30%; font-size:15px">
 							<tr>
 								<th> Status </th>
 								<th> Masculino </th>
@@ -220,6 +225,7 @@
 								<td> <?= $camp_selected_female_capacity - $camp_details[5]['F'] ?> </td>
 							</tr>
 						</table>
+						</div>
 
 						<hr />
 
@@ -250,7 +256,7 @@
 							<button class="button" onclick="sendTableToCSV()" value="">Gerar Planilha de colonistas na fila</button> <br></br>
 							<br />
 							<table class="table table-bordered table-striped table-min-td-size"
-								style="width: 93%; font-size:15px" id="sortable-table">
+								style="width: 1000px; font-size:15px" id="sortable-table">
 								<thead>
 									<tr>
 										<th>Colonista</th>

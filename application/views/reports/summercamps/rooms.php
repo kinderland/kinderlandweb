@@ -665,7 +665,7 @@
             <div class = "row">
                 <div class="col-lg-12">
                      <form id="form_selection" method="GET">
-                    <select name="ano_f" onchange="this.form.submit()" id="anos">
+                   Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
                 
                         <?php
                         foreach ( $years as $year ) {
@@ -676,7 +676,7 @@
                         }
                         ?>
                     </select>
-                    <select name="colonia_f" id= "colonia" key="<?php echo $summer_camp_id; ?>" onchange="openDisposal()">
+                    Colônia: <select name="colonia_f" id= "colonia" key="<?php echo $summer_camp_id; ?>" onchange="openDisposal()">
                         <option value="0" <?php if(!isset($colonia_escolhida)) echo "selected"; ?>>Selecionar</option>
                         <?php
                         foreach ( $camps as $camp ) {
@@ -687,7 +687,7 @@
                         }
                         ?>
                     </select>
-                    <select name="pavilhao" id="pavilhao" onchange="openDisposal()">
+                   Gênero: <select name="pavilhao" id="pavilhao" onchange="openDisposal()">
                         <option value=""  <?php if(!isset($pavilhao)) echo "selected"; ?>> Selecionar </option>
                         <option value="M" <?php if(isset($pavilhao) && $pavilhao == "M") echo "selected"; ?>> Masculino </option>
                         <option value="F" <?php if(isset($pavilhao) && $pavilhao == "F") echo "selected"; ?>> Feminino </option>
@@ -815,14 +815,7 @@
                             $colonistsResponsableE = implode("|",$colonistsResponsableE);
                             $colonistsResponsableT = implode("|",$colonistsResponsableT);
                             
-                            $colonists[0]->logger->info("%&$ COLONISTAS COM ID: " . $colonistsId . " / PAIS NOMES: "
-                            		. $colonistsFather . " / PAIS EMAILS: "  . $colonistsFatherE .
-                            		" / PAIS TELS: " . $colonistsFatherT . " / MÃES NOMES: "
-                            		. $colonistsMother . " / MÃES EMAILS: "  . $colonistsMotherE .
-                            		" / MÃES TELS: " . $colonistsMotherT . " / RESPONSÁVELS NOMES: "
-                            		. $colonistsResponsable . " / RESPONSÁVELS EMAILS: "  . $colonistsResponsableE .
-                            		" / RESPONSÁVELS TELS: " . $colonistsResponsableT . " ///////");
-                            
+                           
                             ?>  
                             <div id="colonistsId" key="<?php echo $colonistsId;?>" style = "display:none"></div>
                             <div id="colonistsFather" key="<?php echo $colonistsFather;?>" style = "display:none"></div>

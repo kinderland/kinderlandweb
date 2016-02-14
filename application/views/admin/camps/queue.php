@@ -206,7 +206,7 @@ div.scroll{
 				<button class="button" onclick="sendTableToCSV()" value="">Gerar Planilha Para Sorteio</button> <br></br>
 				<span style="font-size:18px">Próximo número disponível: <b><?= $nextPosition; ?></b></span>
 				<table class="table table-bordered table-striped table-min-td-size"
-					style="width: 93%; font-size:15px" id="sortable-table">
+					style="width: 1000px; font-size:15px" id="sortable-table">
 					<thead>
 						<tr>
 							<th align="right">Responsável</th>

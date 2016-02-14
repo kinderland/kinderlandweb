@@ -246,7 +246,7 @@
     	width:100%;
     	height:100%;
     	overflow-x:hidden;
-    
+    	padding-right:40%;
     }
     
     </style>
@@ -267,7 +267,7 @@
             <div class = "row">
                 <div class="col-lg-12">
                     <form method="GET">
-                        <select name="ano_f" onchange="this.form.submit()" id="anos">
+                       Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 
                             <?php
                             foreach ($years as $year) {
