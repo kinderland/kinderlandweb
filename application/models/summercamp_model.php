@@ -1497,6 +1497,20 @@ class summercamp_model extends CK_Model {
 
         return $this->execute($this->db, $sql, array(intval($personId), intval($summerCampId), intval($staffFunction)));
     }
+    
+    public function insertNewSummercampPaymentPeriod($camp_id, $date_start, $date_finish, $price, $portions, $associate_price) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+
+		$sql = 'INSERT INTO summer_camp_payment_period(summer_camp_id, date_start, date_finish, price, portions, associate_price) VALUES (?,?,?,?,?,?,?,?)';
+
+		$returnId = $this -> executeReturningId($this -> db, $sql, array($camp_id, $date_start, $date_finish, $price, $portions, $associate_price));
+
+		if ($returnId)
+			return $returnId;
+
+		return false;
+
+	}
 
     public function updateAllCampStaffByFunction($summerCampId, $ids, $staffFunction) {
 

@@ -157,7 +157,7 @@
             $sql = "UPDATE event_subscription SET subscription_status = ? WHERE donation_id = ?";
             return $this->execute($this->db, $sql, array($status, intval($donation_id)));
         }
-        public function getSubscriptionsByEventId ($eventId,$type = null){
+        public function getSubscriptionsByEventId ($eventId,$type = null,$status=null){
             $sql = "SELECT * FROM event_subscription es
             		INNER JOIN person p on p.person_id = es.person_id
             		WHERE es.event_id = ?";
@@ -165,9 +165,16 @@
             if($type == "nonsleeper")          
             	$sql = $sql."AND es.nonsleeper = TRUE";
             else if($type == "capacity_male")
-            	$sql = $sql."AND p.gender = 'M'";
+            	$sql = $sql."AND p.gender = 'M'
+            			AND es.nonsleeper = FALSE";
             else if($type == "capacity_female")
-            	$sql = $sql."AND p.gender = 'F'";
+            	$sql = $sql."AND p.gender = 'F'
+            			AND es.nonsleeper = FALSE";
+            
+            if($status === 'ocupados')
+            	$sql = $sql." AND es.subscription_status in (2,3)";
+            else if($status !== null)
+            	$sql = $sql." AND es.subscription_status = ".$status;
             
             return $this->executeRows($this->db, $sql, array($eventId));
         }

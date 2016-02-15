@@ -1,12 +1,3 @@
-<script type="text/javascript">
-
-		function alertaTempoTotal(){
-			alert("ATENÇÃO! Você terá 10 minutos para criar os convite e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
-		}	
-
-		setTimeout(alertaTempoTotal,50);
-
-</script>
 
 <html lang="pt-br">
     <head>
@@ -31,7 +22,7 @@
 
     </head>
     <body>
-    <div id="thisdiv">
+    
 	<div class="row">
 	<?php require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
@@ -51,7 +42,7 @@
 				if(!alreadyInvited){
 					$.post( "<?=$this->config->item('url_link');?>events/subscribeUser", 
 							{ event_id: eventId, user_id: userId },
-							function ( data ){
+							function ( data ){								
 								$('#thisdiv').load(document.URL +  ' #thisdiv');
 								$('#myModal').modal('hide');
 							}
@@ -71,38 +62,31 @@
 			}
 
 			function paymentDetailsScreen(event_id){
-				var type = "Completo";
 				
-				var personIds = $("input[name=subscriptions]:checked").map(function() {
-							return this.value;
-						}).get().join(",");
+				var personIds = document.getElementsByName("personIds");
+				var Ids;
 
 				if(personIds.length == 0){
 					alert("Selecione os convites que deseja pagar.");
 					return;
 				}
 
-				$.post("<?php  echo $this->config->item('url_link');?>events/checkVacancy", {person_ids: personIds, event_id: event_id, type: type}, 
-						function(data){
-							if(!data){
-								$.redirect( "<?=$this->config->item('url_link');?>events/checkoutSubscriptions", 
-										{ event_id: event_id, person_ids: personIds },
+				for(var i = 0; i < personIds.length; i++){
+					if(i == 0)
+						Ids = personIds[i].getAttribute("Id");
+					else
+						Ids = Ids.concat(",").concat(personIds[i].getAttribute("Id"));
+				}
+
+				$.redirect( "<?=$this->config->item('url_link');?>events/checkoutSubscriptions", 
+										{ event_id: event_id, person_ids: Ids },
 										"POST");
-							}
-							else{
-								alert(data);
-								$('#thisdiv').load(document.URL +  ' #thisdiv');
-								$('#myModal').modal('hide');
-							}
-				});
 			}
 
 			$("document").ready(function(){
 				var peopleJson = <?=$peoplejson?>;
 				var subscriptions = <?=json_encode($subscriptions)?>;
 				var price = <?=json_encode($price)?>;
-
-				$(".subscriptions").prop("checked", false);
 
 				$("#box_options").change(function(){
 					var person = peopleJson[parseInt($("#box_options").val())];
@@ -120,39 +104,6 @@
 						$("#gender").prop("disabled", false);;
 						$("#person_id").val("");
 					}	
-				});
-
-				$(".subscriptions").change(function(){
-					var sub = getSubscriptionByPersonId(subscriptions, this.value);
-					var priceAge = getPriceByAgeGroup(price, sub.age_group_id);
-
-					if(this.checked) {
-						var subtotal = parseFloat($("#subtotal").text().replace(",", ".")) + parseFloat(priceAge);
-
-						$("#subtotal").text(subtotal.toFixed(2).toString().replace(".", ","));
-						$("#qtd_invites").text(parseInt($("#qtd_invites").text()) + 1);
-						if(sub.associate == "t"){
-							var discount = parseFloat($("#discount").text().replace(",", ".")) + parseFloat(priceAge) * price.associate_discount;
-							$("#discount").text(discount.toFixed(2).toString().replace(".", ","));
-						}
-							
-
-						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
-						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
-					} else {
-						var subtotal = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat(priceAge);
-						$("#subtotal").text(subtotal.toFixed(2).toString().replace(".", ","));
-						$("#qtd_invites").text(parseInt($("#qtd_invites").text()) - 1);
-						if(sub.associate == "t"){
-							var discount = parseFloat($("#discount").text().replace(",", ".")) - parseFloat(priceAge) * price.associate_discount;
-							$("#discount").text(discount.toFixed(2).toString().replace(".", ","));
-						}
-
-						var totalAcc = parseFloat($("#subtotal").text().replace(",", ".")) - parseFloat($("#discount").text().replace(",", "."));
-						$("#price_total").text(totalAcc.toFixed(2).toString().replace(".", ","));
-					}
-						
-
 				});
 			});
 
@@ -228,7 +179,7 @@
 								person_id: person_id, age_group: age_group, associate: associate, nonsleeper: nonsleeper, gender:gender, fullname: fullname},
 								function(data){
 									if(data){
-										alert("Convite criado com sucesso!\n\n ATENÇÃO: O convite só será efetivamente adquirido se houver disponibilidade no momento em que a doação for realizada.");
+										alert("Convite criado com sucesso!");
 										$('#thisdiv').load(document.URL +  ' #thisdiv');
 										$('#myModal').modal('hide');
 										$('body').removeClass('modal-open');
@@ -258,6 +209,7 @@
 
 
 		</script>
+		<div id="thisdiv">
 		<?php 
 			if($event != null && $event instanceof Event) { 
 		?>
@@ -303,9 +255,15 @@
 					</table>
 							<h4><strong>Meus convites:</strong></h4>
 							<!-- Button trigger modal -->
+							<?php if($event -> getCapacityNonSleeper() == 0 && $event -> getCapacityMale() == 0 && $event -> getCapacityFemale() == 0){?>
+							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" disabled>
+								Não há mais convite disponível
+							</button>
+							<?php } else{?>
 							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
 								Novo convite
 							</button>
+							<?php }?>
 							<br/><br/>
 							<?php 
 				if(count($subscriptions) > 0) {
@@ -314,28 +272,20 @@
 							<input type="hidden" name="user_id" value="<?php echo$user_id?>" />
 							<table class="table table-bordered table-striped" style="max-width:808px; min-width:550px; table-layout: fixed;">
 								<tr>
-									<th style="width:60px">Pagar</th>
 									<th style="width:300px">Nome do convidado</th>
 									<th style="width:100px">Faixa etária</th>
 									<th style="width:165px">Descrição do convite</th>
+									<th style="width:165px">Status</th>
 									<th style="width:90px">Ação</th>
 								</tr>
 								<?php 
 									foreach($subscriptions as $subscr){
 								?>
-									<tr>
-										<td>
-											<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK) { ?>
-											<div  class="col-lg-8" style="align:center">
-												<input type="checkbox" name="subscriptions" id="subscriptions" class="subscriptions" value="<?=$subscr->person_id?>" />
-											</div>
-											<?php }  else { ?>
-											<div  class="col-lg-8" style="align:center">
-												<img style="align:center" src="<?= $this->config->item('assets') ."images/kinderland/confirma.png" ?>" width="20px" height="20px"/>
-											</div>
-											<?php } ?>
-										</td>
-										<td><?= $subscr->fullname ?></td>
+									<tr><?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK){?>
+										<td name="personIds" id="<?=$subscr->person_id?>"><?= $subscr->fullname ?></td>
+										<?php } else{?>
+											<td><?= $subscr->fullname ?></td>
+										<?php }?>
 										<td><?= $subscr->age_description ?></td>
 										<td>
 											<?php
@@ -354,9 +304,17 @@
 													} 
 												
 												} else {
-													echo "Prazo de pagamento terminado";
+													echo "Prazo de doação terminado";
 												}
 										  ?></td>
+										  <td>
+										  	<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK){
+										  			echo "Aguardando Doação";
+										  	} else{
+										  		echo "Doação Realizada";
+										  	}
+										  		?>											  										  
+										  </td>
 										 <td>
 										 	<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK) { ?>
 										 		<button class="btn btn-danger" onclick="deleteSubscription(<?=$event->getEventId()?>, <?=$subscr->person_id?>)">Excluir</button>
@@ -376,19 +334,19 @@
 			<table  class="table table-bordered table-striped" style="max-width:425px; min-width:100px; table-layout: fixed;">
 				<tr>
 					<th style="width:210px">Quantidade de convites:</th>
-					<td><span id="qtd_invites">0</span></td>
+					<td><span id="qtd_invites"><?php echo $qtd; ?></span></td>
 				</tr>
 				<tr>
 					<th style="width:210px">Subtotal:</th>
-					<td>R$<span id="subtotal">0,00</span></td>
+					<td>R$<span id="subtotal"><?php echo number_format($subtotalPrice,2,",","."); ?></span></td>
 				</tr>
 				<tr>
 					<th style="width:210px">Desconto:</th>
-					<td>R$<span id="discount">0,00</span></td>
+					<td>R$<span id="discount"><?php echo number_format($discount,2,",","."); ?></span></td>
 				</tr>
 				<tr>
 					<th style="width:210px">Total:</th>
-					<td>R$<span id="price_total">0,00</span></td>
+					<td>R$<span id="price_total"><?php echo number_format($totalPrice,2,",","."); ?></span></td>
 					<?php
 					if($price != null){
 				?>
@@ -467,7 +425,7 @@
 													<?php
 														if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 													?>
-														<label for="associate_true" class="control-label" Dependente de sócio?: </label>
+														<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
 														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true";  ?>','<?php echo "associate_false";?>')"/> Sim 
 														<label for="associate_false" class="control-label"></label>
 														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false"; ?>','<?php echo "associate_true"; ?>')" /> Não
@@ -475,9 +433,9 @@
 														} else {
 													?>
 														<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
-														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true"; ?>','<?php echo "associate_false";?>')"/> Sim 
+														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true"; ?>','<?php echo "associate_false";?>')" disabled/> Sim 
 														<label for="associate_false" class="control-label"></label>
-														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false";  ?>','<?php echo "associate_true"; ?>')"/> Não
+														<input type="radio" class="associate_no" name="associate" id="associate_false" value="true" onclick = "changeValue('<?php echo "associate_false";  ?>','<?php echo "associate_true"; ?>')" checked disabled/> Não
 													<?php
 														}
 													?>
@@ -527,3 +485,38 @@
 		</div>
 </body>
 </html>
+<script type="text/javascript">
+
+		function alertaTempoTotal(){
+			alert("ATENÇÃO! Você terá 10 minutos para criar os convites e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
+		}
+
+		function alertaTempoAcabando(){
+			alert("ATENÇÃO! Você tem mais 2 minutos para criar os convites e prosseguir com a doação.");
+		}	
+
+		function deletAll(){
+			var eventId = document.getElementById("event_id").value;
+			var personIds = document.getElementsByName("personIds");
+
+			for(var i = 0; i < personIds.length; i++){
+				deleteSubscription(eventId,personIds[i].getAttribute("Id"));
+			}
+		}
+
+		window.onbeforeunload = function() {
+			deletAll();
+		};
+
+		function alertaAcabou(){
+			alert("Tempo Esgotado!");
+			location.reload();
+		}
+
+		setTimeout(alertaAcabou,1000*60*10);
+
+		setTimeout(alertaTempoAcabando,1000*60*8);
+
+		setTimeout(alertaTempoTotal,50);
+
+</script>

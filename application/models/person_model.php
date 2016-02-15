@@ -128,7 +128,6 @@ class person_model extends CK_Model {
 
         return true;
     }
-
 }
 
 ?>

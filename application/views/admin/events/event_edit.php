@@ -157,45 +157,40 @@ $(document).ready(function (){
 			<br />
 			<div class="row">
 				<div class="form-group">
-					<label for="capacity_male" class="col-lg-4 control-label"> Quantidade máxima de convites: </label>
-				</div>
-			</div>
-			<br/>
-			<div class="row">
-				<label for="empty-space" class="col-lg-1 control-label"></label>
-				<div class="form-group">
-					<label for="capacity_male" class="col-lg-2 control-label"> Masculino*: </label>
-					<div class="col-lg-2">
-						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão Masculino" value="<?=$capacity_male?>" name="capacity_male" required 
+					<table class="table table-bordered table-striped" style="max-width:800px; min-width:700px; table-layout: fixed;">
+						<tr>
+							<th></th>
+							<th>Convites Disponíveis</th>
+							<th>Convites Reservados</th>
+							<th>Total</th>
+						</tr>
+						<tr>
+							<th>Masculino: </th>
+							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão Masculino" value="<?=$capacity_male?>" name="capacity_male" required 
 							oninput="setCustomValidity('')"
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/>
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/></td>
+							<td><?php echo $male_eventSubscribed;?></td>
+							<td><?php echo $male_eventSubscribed + $capacity_male;?></td>
+						</tr>
+						<tr>
+							<th>Feminino:</th>
+							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão feminino" value="<?=$capacity_female?>" name="capacity_female" required 
+							oninput="setCustomValidity('')"
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/></td>
+							<td><?php echo $female_eventSubscribed;?></td>
+							<td><?php echo $female_eventSubscribed + $capacity_female;?></td>
+						</tr>
+						<tr>
+							<th>Sem pernoite:</th>
+							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="Sem pernoite" value="<?=$capacity_nonsleeper?>" name="capacity_nonsleeper" required 
+							oninput="setCustomValidity('')"
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/></td>
+							<td><?php echo $nonsleeper_eventSubscribed;?></td>
+							<td><?php echo $nonsleeper_eventSubscribed + $capacity_nonsleeper;?></td>
+						</tr>
+					</table>
 					</div>
 				</div>
-			</div>
-			<br />
-			<div class="row">
-			<label for="empty-space" class="col-lg-1 control-label"></label>
-				<div class="form-group">
-					<label for="capacity_female" class="col-lg-2 control-label"> Feminino*: </label>
-					<div class="col-lg-2">
-						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão feminino" value="<?=$capacity_female?>" name="capacity_female" required 
-							oninput="setCustomValidity('')"
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/> 
-					</div>
-				</div>
-			</div>
-			<br />
-			<div class="row">
-				<label for="empty-space" class="col-lg-1 control-label"></label>
-				<div class="form-group">
-					<label for="capacity_nonsleeper" class="col-lg-2 control-label"> Sem pernoite*: </label>
-					<div class="col-lg-2">
-						<input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="Sem pernoite" value="<?=$capacity_nonsleeper?>" name="capacity_nonsleeper" required 
-							oninput="setCustomValidity('')"
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/>
-					</div>
-				</div>
-			</div>
 			<br />
 			<div class="row">	
 					<label for="capacity_male" class="col-lg-4 control-label"> Períodos para pagamento: </label><br />
