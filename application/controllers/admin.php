@@ -78,25 +78,30 @@ class Admin extends CK_Controller {
         $date_created = date("Y-m-d H:i:s");
         $errors = array();
         if (!isset($date_start) || empty($date_start))
-            $errors[] = "Campo Início é obrigatório\n";
+            $errors[] = "Campo Início é obrigatório<br>";
         if (!isset($date_finish) || empty($date_finish))
-            $errors[] = "Campo Início é obrigatório\n";
-        $new_date_start = explode("/", $date_start);
-        $year = $new_date_start[2];
-        $new_date_start = strval($new_date_start[2]) . "-" . strval($new_date_start[1]) . "-" . strval($new_date_start[0] . " 00:00:00");
-        $new_date_finish = explode("/", $date_finish);
-        $new_date_finish = strval($new_date_finish[2]) . "-" . strval($new_date_finish[1]) . "-" . strval($new_date_finish[0] . " 23:59:59");
-        $campaigns = $this->campaign_model->getAllCampaigns();
-        foreach ($campaigns as $campaign) {
-            if ($campaign->getCampaignYear() === $year) {
-                $errors[] = "Já existe uma outra campanha que começou nesse ano\n";
-                break;
+            $errors[] = "Campo Fim é obrigatório<br>";
+        if (!isset($price) || empty($price) )
+            $errors[] = "Campo Preço é obrigatório<br>";
+        if (count($errors) === 0) {
+            $new_date_start = explode("/", $date_start);
+            $year = $new_date_start[2];
+            $new_date_start = strval($new_date_start[2]) . "-" . strval($new_date_start[1]) . "-" . strval($new_date_start[0] . " 00:00:00");
+            $new_date_finish = explode("/", $date_finish);
+            $new_date_finish = strval($new_date_finish[2]) . "-" . strval($new_date_finish[1]) . "-" . strval($new_date_finish[0] . " 23:59:59");
+            $campaigns = $this->campaign_model->getAllCampaigns();
+            foreach ($campaigns as $campaign) {
+                if ($campaign->getCampaignYear() === $year) {
+                    $errors[] = "Já existe uma outra campanha que começou nesse ano<br>";
+                    break;
+                }
+            }
+
+            if (!Events::verifyAntecedence($date_start, $date_finish)) {
+                $errors[] = "Data de início deve proceder a data de fim.<br>";
             }
         }
         if (count($errors) > 0) {
-            echo "ERROS: \n";
-            foreach ($errors as $error)
-                echo $error . "\n";
             return $this->campaignCreate($errors, $date_start, $date_finish, $price);
         }
         try {

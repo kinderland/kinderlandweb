@@ -26,36 +26,13 @@
 
         <script type="text/javascript" charset="utf-8">
 
-            function alertRequiredFields() {
-                var error = "";
-                if (document.getElementsByName("date_start")[0].value == "") {
-                    error = error.concat("Data de ínicio do periodo da campanha\n");
-                }
-                if (document.getElementsByName("date_finish")[0].value == "")
-                    error = error.concat("Data de fim do periodo da campanha\n");
-
-                if (error != "") {
-                    alert("Dados faltando para a criação da campanha.\nOs dados incompletos são:\n".concat(error));
-                    document.getElementsByName("enabled")[0].value = 0;
-                }
-                document.getElementsByName("enabled")[0].value = 1;
-            }
 
             function datepickers() {
                 $('.datepickers').datepicker();
                 $(".datepickers").datepicker("option", "dateFormat", "dd/mm/yy");
             }
 
-            var string = "";
 
-<?php
-foreach ($errors as $error) {
-    echo "string = string.concat('$error\\n');";
-}
-?>
-            if (string !== "") {
-                window.alert("Os seguintes erros foram encontrados:\n".concat(string));
-            }
 
         </script>
     </head>
@@ -68,10 +45,22 @@ foreach ($errors as $error) {
         <form name="campaign_form" onsubmit="alertRequiredFields()" method="POST" action="<?= $this->config->item('url_link') ?>admin/completeCampaign" id="campaign_form">
             <div class="row">
                 <div class="col-lg-12 middle-content">
+
                     <div class="row">
                         <div class="col-lg-8"><h4>Cadastro da campanha</h4></div>
                     </div>
                     <hr />
+                    <?php
+                    if (count($errors) > 0) {
+                        echo '<div class="alert alert-danger">
+                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                              <strong>Os seguintes erros foram encontrados:<br></strong>';
+                        foreach ($errors as $error) {
+                            echo $error;
+                        }
+                        echo "</div>";
+                    }
+                    ?>
 
                     <div class="row">
 

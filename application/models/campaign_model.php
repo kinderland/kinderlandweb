@@ -21,11 +21,11 @@ class campaign_model extends CK_Model {
                 AND   d.donation_status = 2
                 AND   d.date_created >= (SELECT c.date_start
                                          FROM campaign c
-                                         WHERE campaign_year ='2015')
+                                         WHERE campaign_year = '?')
                 AND   d.date_created <= (SELECT cc.date_finish
                                          FROM campaign cc
-                                         WHERE campaign_year = '2015');";
-        return $this->executeRows($this->db, $sql, array(intval($year)));
+                                         WHERE campaign_year = '?');";
+        return $this->executeRows($this->db, $sql, array(intval($year),intval($year)));
     }
 
     public function getAllCampaigns() {

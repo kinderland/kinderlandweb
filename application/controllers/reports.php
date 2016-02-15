@@ -316,15 +316,15 @@ class Reports extends CK_Controller {
         $data["month"] = $month;
         $years = $this->campaign_model->getYearsCampaign();
         $data["years"] = array();
-        /* foreach ($years as $a_year) {
-          if ($a_year === $current_year) {
-          $checker = 0;
-          break;
-          }
-          }
-          if ($checker) {
-          $data["years"][] = $current_year;
-          } Tem que fazer essa checagem funcionar depois. */
+        foreach ($years as $a_year) {
+            if ($a_year->campaign_year === $current_year) {
+                $checker = 0;
+                break;
+            }
+        }
+        if ($checker) {
+            $data["years"][] = $current_year;
+        }
         foreach ($years as $a_year) {
             $data["years"][] = $a_year->campaign_year;
         }
@@ -1739,7 +1739,7 @@ class Reports extends CK_Controller {
 
                     foreach ($telephone as $t) {
                         if (!isset($t) || is_null($t) || empty($t)) {
-
+                            
                         } else {
                             if ($p == 0)
                                 $tel = $t;
@@ -1774,7 +1774,7 @@ class Reports extends CK_Controller {
 
                     foreach ($telephone as $t) {
                         if (!isset($t) || is_null($t) || empty($t)) {
-
+                            
                         } else {
                             if ($p == 0)
                                 $tel = $t;
@@ -1818,7 +1818,7 @@ class Reports extends CK_Controller {
 
                     foreach ($telephone as $t) {
                         if (!isset($t) || is_null($t) || empty($t)) {
-
+                            
                         } else {
                             if ($p == 0)
                                 $tel = $t;
