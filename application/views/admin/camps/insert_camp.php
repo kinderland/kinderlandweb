@@ -15,7 +15,7 @@
                 });
             });
 
-            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_price[]" id="associated_price" value="0" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
+            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="text" class="form-control" placeholder="Valor Sócio" name="associated_price[]" id="associated_price"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
 
             function addTableLine(linhaAAdicionar){
             	if(!linhaAAdicionar)
@@ -80,149 +80,103 @@
 
             $(document).ready(function (){
                 <?php foreach($payments as $payment){ ?>
-        		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?=Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?=Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price" value="<?=$payment["price"]?>"></td>		   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="Valor associado" name="associated_price[]" id="associated_price" value="0" min="0"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
+        		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?=Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?=Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price" value="<?=$payment["price"]?>"></td>		   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="text" class="form-control" placeholder="Valor Sócio" name="associated_price[]" id="associated_price" value="<?php echo $payment['associated_price'];?>"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
         		<?php } ?> 
             });
         </script>
         <div class="col-lg-9 middle-content">
             <div class="row">
-                <div class="col-lg-6">
                     <h3> Criar colônia </h3>
-                </div>
-            </div>
-            <div class="row">
-                &nbsp;
-            </div>
+            <br/>
             <form name="form_insert_camp" method="POST" action="<?=$this->config->item('url_link')?>admin/insertNewCamp" id="form_insert_camp">
-                <div class="row">
-                    <div class="col-lg-12 form-group">
-                        <label for="camp_name" class="col-lg-2 control-label"> Nome da colônia: </label>
-                        <div class="col-lg-6">
-                            <input type="text" class="form-control"
+                        <label for="camp_name" style="width: 125px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-2 control-label"> Nome da colônia: </label>
+                        <div class="col-lg-6" style="width: 590px; padding-left:0px;">
+                            <input type="text" style="width: 590px;" class="form-control"
                                 name="camp_name" id="camp_name"/>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    &nbsp;
-                </div>
-                <div class="row">    
-                    <div class="col-lg-12 form-group">
-                        <label for="date_start" class="col-lg-2 control-label"> Data Início: </label>
-                        <div class="col-lg-3">
+                <br/><br/><br />
+                        <label for="date_start" style="width: 80px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;" class="col-lg-2 control-label"> Data Início: </label>
+                        <div class="col-lg-3" style="padding-left:3px;">
                             <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_start" id="date_start"/>
                         </div>
 
-                        <label for="date_finish" class="col-lg-2 control-label"> Data Fim: </label>
-                        <div class="col-lg-3">
+                        <label for="date_finish" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-2 control-label"> Data Fim: </label>
+                        <div class="col-lg-3" style="padding-left:3px;">
                             <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_finish" id="date_finish"/>
                         </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    &nbsp;
-                </div>
-                <div class="row">
-                    <div class="col-lg-4 form-group">
+                 <br/><br/><br />
+                    <div class="col-lg-4 form-group" style="float:left; padding-left:0px;">
                         Número máximo de colonistas:
                     </div>
-                    <div class="col-lg-4 col-lg-offset-3 form-group">
-                        Tipo de colônia:
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 form-group">
-                        <div class="row">
-                            <label for="capacity_male" class="col-lg-3 control-label"> Masculino: </label>
-                            <div class="col-lg-3">
+                    <br/><br/>                    
+                            <label for="capacity_male" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-3 control-label"> Masculino: </label>
+                            <div class="col-lg-3" style="padding-left:10px;">
                                 <input type="text" class="form-control" name="capacity_male" id="capacity_male" />
                             </div>
-
-                            <div class="col-lg-4 col-lg-offset-1">
+                       <br/><br/>
+                           
+                            <label for="capacity_female" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-3 control-label"> Feminino: </label>
+                            <div class="col-lg-3" style="padding-left:10px;">
+                                <input type="text" class="form-control" name="capacity_female" id="capacity_female" />
+                            </div>
+                           <br/><br/><br/> 
+                
+                <div class="col-lg-4 col-lg-offset-1"  style="width: 120px; padding-left:0px; padding-top:0px; padding-bottom:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; margin-left:0px;">
+                        Tipo de colônia:
+                    </div>
+                    <br/><br/>
+                    <div class="col-lg-4 col-lg-offset-1" style="width: 140px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-left:0px;">
                                 <label for="mini_camp" class="control-label"> Kinderland Verão: </label>
                                 <input type="radio" name="mini_camp" value="false" checked />
                             </div>
-                        </div>
-                        <div class="row">
-                           
-                            <label for="capacity_female" class="col-lg-3 control-label"> Feminino: </label>
-                            <div class="col-lg-3">
-                                <input type="text" class="form-control" name="capacity_female" id="capacity_female" />
-                            </div>
-
-                            <div class="col-lg-4 col-lg-offset-1">
+                    <div class="col-lg-4 col-lg-offset-1" style="width: 200px; padding-left:15px; padding-right:0px; margin-bottom:0px; margin-left:0px;">
                                 <label for="mini_camp" class="control-label"> Mini Kinderland: </label>
                                 <input type="radio" name="mini_camp" value="true" />
                             </div> 
-                        </div> 
-                    </div>
-                </div>
-                <div class="row">
-                    &nbsp;
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 form-group">
+                            <br/><br />
+                    <div class="col-lg-6 form-group" style="width: 300px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;">
                         Período de pré-inscrições para associados:
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 form-group">
-                        <label for="date_start_pre_associate" class="col-lg-2 control-label"> Data Início: </label>
-                        <div class="col-lg-3">
+                <br/><br/> 
+                        <label for="date_start_pre_associate" class="col-lg-2 control-label" style="width: 80px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;"> Data Início: </label>
+                        <div class="col-lg-3" style="padding-left:3px;">
                             <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_start_pre_associate" id="date_start_pre_associate"/>
                         </div>
 
-                        <label for="date_finish_pre_associate" class="col-lg-2 control-label"> Data Fim: </label>
-                        <div class="col-lg-3">
+                        <label for="date_finish_pre_associate" class="col-lg-2 control-label" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;"> Data Fim: </label>
+                        <div class="col-lg-3" style="padding-left:3px;">
                             <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_finish_pre_associate" id="date_finish_pre_associate"/>
                         </div>
-                    </div>
-                </div>
+                        <br/><br/><br/>
 
-                <div class="row">
-                    &nbsp;
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-4 form-group">
+                    <div class="col-lg-4 form-group" style="width: 300px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;">
                         Período de pré-inscrições:
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 form-group">
-                        <label for="date_start_pre" class="col-lg-2 control-label"> Data Início: </label>
-                        <div class="col-lg-3">
+                <br/><br/>
+                        <label for="date_start_pre" class="col-lg-2 control-label" style="width: 80px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;"> Data Início: </label>
+                        <div class="col-lg-3" style="padding-left:3px;">
                             <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_start_pre" id="date_start_pre"/>
                         </div>
 
-                        <label for="date_finish_pre" class="col-lg-2 control-label"> Data Fim: </label>
-                        <div class="col-lg-3">
+                        <label for="date_finish_pre" class="col-lg-2 control-label" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;"> Data Fim: </label>
+                        <div class="col-lg-3" style="padding-left:3px;">
                             <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" name="date_finish_pre" id="date_finish_pre"/>
                         </div>
-                    </div>
-                </div>
-				<br/>
-               <div class="row">	
-					<label for="capacity_male" class="col-lg-4 control-label"> Períodos para pagamento: </label><br />
+				<br/><br/><br/>	
+					<div class="col-lg-4 form-group" for="capacity_male" class="col-lg-4 control-label" style="width: 200px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;"> Períodos para pagamento: </div><br /><br/>
 				
-               <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Parcelas max</th><th>Valor Sócio</th></tr> 
+               <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th style="width: 150px;">Parcelas max</th><th style="width: 200px;">Valor Sócio</th></tr> 
 			   <tbody>
 			   </tbody>
 			   </table>
-			   <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
-				</div>
-				<br/>
-                <div class="row">
-                    <div class="col-lg-12 form-group">
-                        <div class="col-lg-2">
-                            <button type="button" class="btn btn-primary" onClick="validateInfo()">Confirmar</button>
+			   <button style="width: 110px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;" type="button" value="" onclick="addTableLine()">Novo periodo</button>
+				<br/><br/><br/>
+                        <div class="col-lg-2" style="width: 80px; padding-left:0px; padding-right:120px; margin-bottom:0px; margin-top:7px; float:left;">
+                            <button  type="button" class="btn btn-primary" onClick="validateInfo()">Confirmar</button>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;">
                             <button type="button" class="btn btn-danger" onClick="window.close()">Fechar</button>
                         </div>
-                    </div>
-                </div>
             </form>
         </div>
     </div>

@@ -506,11 +506,12 @@
 
 		window.onbeforeunload = function() {
 			deletAll();
+			location.reload(true);
 		};
 
 		function alertaAcabou(){
 			alert("Tempo Esgotado!");
-			location.reload();
+			location.reload(true);
 		}
 
 		setTimeout(alertaAcabou,1000*60*10);

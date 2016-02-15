@@ -1501,7 +1501,7 @@ class summercamp_model extends CK_Model {
     public function insertNewSummercampPaymentPeriod($camp_id, $date_start, $date_finish, $price, $portions, $associate_price) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 
-		$sql = 'INSERT INTO summer_camp_payment_period(summer_camp_id, date_start, date_finish, price, portions, associate_price) VALUES (?,?,?,?,?,?,?,?)';
+		$sql = 'INSERT INTO summer_camp_payment_period(summer_camp_id, date_start, date_finish, price, portions, associate_price) VALUES (?,?,?,?,?,?)';
 
 		$returnId = $this -> executeReturningId($this -> db, $sql, array($camp_id, $date_start, $date_finish, $price, $portions, $associate_price));
 

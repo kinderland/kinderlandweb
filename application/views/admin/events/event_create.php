@@ -157,7 +157,7 @@ $(document).ready(function (){
 			<br />
 			<div class="row">
 				<div class="form-group">
-					<label for="capacity_male" class="col-lg-4 control-label"> Quantidade máxima de convites: </label>
+					<label for="capacity_male" class="col-lg-4 control-label"> Quantidade de convites: </label>
 				</div>
 			</div>
 			<br/>

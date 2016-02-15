@@ -160,33 +160,40 @@ $(document).ready(function (){
 					<table class="table table-bordered table-striped" style="max-width:800px; min-width:700px; table-layout: fixed;">
 						<tr>
 							<th></th>
-							<th>Convites Disponíveis</th>
-							<th>Convites Reservados</th>
-							<th>Total</th>
+							<th>Quantidade de Convites</th>
+							<th>Pagos</th>
+							<th>Aguardando Pagamento</th>
+							<th>Disponíveis</th>
 						</tr>
 						<tr>
 							<th>Masculino: </th>
-							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão Masculino" value="<?=$capacity_male?>" name="capacity_male" required 
+							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão Masculino" value="<?php echo $male_eventSubscribed + $capacity_male;?>" name="capacity_male" required 
 							oninput="setCustomValidity('')"
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/></td>
-							<td><?php echo $male_eventSubscribed;?></td>
-							<td><?php echo $male_eventSubscribed + $capacity_male;?></td>
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							min="<?php echo $male_eventSubscribed; ?>"/></td>
+							<td><?php echo $male_paid;?></td>
+							<td><?php echo $male_eventSubscribed - $male_paid;?></td>
+							<td><?php echo $capacity_male;?></td>
 						</tr>
 						<tr>
 							<th>Feminino:</th>
-							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão feminino" value="<?=$capacity_female?>" name="capacity_female" required 
+							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão feminino" value="<?php echo $female_eventSubscribed + $capacity_female;?>" name="capacity_female" required 
 							oninput="setCustomValidity('')"
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/></td>
-							<td><?php echo $female_eventSubscribed;?></td>
-							<td><?php echo $female_eventSubscribed + $capacity_female;?></td>
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							min="<?php echo $female_eventSubscribed; ?>"/></td>
+							<td><?php echo $female_paid;?></td>
+							<td><?php echo $female_eventSubscribed - $female_paid;?></td>
+							<td><?php echo $capacity_female;?></td>
 						</tr>
 						<tr>
 							<th>Sem pernoite:</th>
-							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="Sem pernoite" value="<?=$capacity_nonsleeper?>" name="capacity_nonsleeper" required 
+							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="Sem pernoite" value="<?php echo $nonsleeper_eventSubscribed + $capacity_nonsleeper;?>" name="capacity_nonsleeper" required 
 							oninput="setCustomValidity('')"
-							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"/></td>
-							<td><?php echo $nonsleeper_eventSubscribed;?></td>
-							<td><?php echo $nonsleeper_eventSubscribed + $capacity_nonsleeper;?></td>
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							min="<?php echo $nonsleeper_eventSubscribed; ?>"/></td>
+							<td><?php echo $nonsleeper_paid;?></td>
+							<td><?php echo $nonsleeper_eventSubscribed - $nonsleeper_paid;?></td>
+							<td><?php echo $capacity_nonsleeper;?></td>
 						</tr>
 					</table>
 					</div>

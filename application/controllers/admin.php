@@ -372,11 +372,20 @@ class Admin extends CK_Controller {
 
         $data['enabled'] = $event->isEnabled();
         $data['capacity_male'] = $event->getCapacityMale();
+        $this->Logger->info("Capacity Male: ".$event->getCapacityMale());
         $data['capacity_female'] = $event->getCapacityFemale();
+        $this->Logger->info("Capacity Female: ".$event->getCapacityFemale());
         $data['capacity_nonsleeper'] = $event->getCapacityNonSleeper();
+        $this->Logger->info("Capacity nonsleeper: ".$event->getCapacityNonSleeper());
         $data['male_eventSubscribed'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_male",'ocupados'));
+        $this->Logger->info("male eventSubscribed: ".count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_male",'ocupados')));
         $data['female_eventSubscribed'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_female",'ocupados'));
-        $data['nonsleeper_eventSubscribed'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_nonsleeper",'ocupados'));
+        $this->Logger->info("female eventSubscribed: ".count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_female",'ocupados')));
+        $data['nonsleeper_eventSubscribed'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"nonsleeper",'ocupados'));
+        $this->Logger->info("nonsleeper eventSubscribed: ".count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"nonsleeper",'ocupados')));
+        $data['male_paid'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_male",3));
+        $data['female_paid'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"capacity_female",3));
+        $data['nonsleeper_paid'] = count($this -> eventsubscription_model -> getSubscriptionsByEventId($eventId,"nonsleeper",3));
 
         if ($payments == null) {
             foreach ($paymentPeriods as $payment) {
@@ -557,15 +566,6 @@ class Admin extends CK_Controller {
         $date_finish_show = explode("/", $date_finish_show);
         $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
 
-        $subscribed_male = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_male','ocupados');
-        $capacity_male = $capacity_male + count($subscribed_male);
-
-        $subscribed_female = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'capacity_female','ocupados');
-        $capacity_female = $capacity_female + count($subscribed_female);
-
-        $subscribed_nonsleeper = $this->eventsubscription_model->getSubscriptionsByEventId($event_id, 'nonsleeper','ocupados');
-        $capacity_nonsleeper = $capacity_nonsleeper + count($subscribed_nonsleeper);
-
         if (count($errors) > 0)
             return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $payments);
 
@@ -723,7 +723,33 @@ class Admin extends CK_Controller {
 
     public function insertNewCamp() {
         $this->Logger->info("Running: " . __METHOD__);
-        $camp = new SummerCamp(null, $_POST['camp_name'], null, $_POST['date_start'], $_POST['date_finish'], $_POST['date_start_pre'], $_POST['date_finish_pre'], $_POST['date_start_pre_associate'], $_POST['date_finish_pre_associate'], null, //description
+        
+        $date_start = $_POST['date_start'];
+        $date_start = explode("/", $date_start);
+        $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+        
+        $date_finish = $_POST['date_finish'];
+        $date_finish = explode("/", $date_finish);
+        $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+        
+        $date_start_pre = $_POST['date_start_pre'];
+        $date_start_pre = explode("/", $date_start_pre);
+        $date_start_pre = strval($date_start_pre[2]) . "-" . strval($date_start_pre[1]) . "-" . strval($date_start_pre[0]);
+        
+        $date_finish_pre = $_POST['date_finish_pre'];
+        $date_finish_pre = explode("/", $date_finish_pre);
+        $date_finish_pre = strval($date_finish_pre[2]) . "-" . strval($date_finish_pre[1]) . "-" . strval($date_finish_pre[0] . " 23:59:59");
+        
+        $date_start_pre_associate = $_POST['date_start_pre_associate'];
+        $date_start_pre_associate = explode("/", $date_start_pre_associate);
+        $date_start_pre_associate = strval($date_start_pre_associate[2]) . "-" . strval($date_start_pre_associate[1]) . "-" . strval($date_start_pre_associate[0]);
+        
+        $date_finish_pre_associate = $_POST['date_finish_pre_associate'];
+        $date_finish_pre_associate = explode("/", $date_finish_pre_associate);
+        $date_finish_pre_associate = strval($date_finish_pre_associate[2]) . "-" . strval($date_finish_pre_associate[1]) . "-" . strval($date_finish_pre_associate[0] . " 23:59:59");
+        
+        
+        $camp = new SummerCamp(null, $_POST['camp_name'], null, $date_start, $date_finish, $date_start_pre, $date_finish_pre, $date_start_pre_associate, $date_finish_pre_associate, null, //description
                 true, //preEnabled
                 $_POST['capacity_male'], $_POST['capacity_female'], $_POST['mini_camp']
         );
@@ -753,15 +779,13 @@ class Admin extends CK_Controller {
         		);
         	}
         } else if ($price !== FALSE) {
+        	
+        		$payment_date_start = explode("/", $payment_date_start);
+        		$payment_date_start = strval($payment_date_start[2]) . "-" . strval($payment_date_start[1]) . "-" . strval($payment_date_start[0]);
         
-        	for ($i = 0; $i < count($price); $i++) {
-        
-        		$payment_date_start[$i] = explode("/", $payment_date_start[$i]);
-        		$payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
-        
-        		$payment_date_end[$i] = explode("/", $payment_date_end[$i]);
-        		$payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
-        	}
+        		$payment_date_end = explode("/", $payment_date_end);
+        		$payment_date_end = strval($payment_date_end[2]) . "-" . strval($payment_date_end[1]) . "-" . strval($payment_date_end[0] . " 23:59:59");
+        	
         
         	$payments[] = array(
         			"payment_date_start" => $payment_date_start,
