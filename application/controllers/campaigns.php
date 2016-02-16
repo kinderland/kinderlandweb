@@ -19,11 +19,11 @@ class Campaigns extends CK_Controller {
 
     public function index() {
         $this->Logger->info("Starting " . __METHOD__);
-
+		$hourfinish = date('23:59');
         if (!$this->checkSession())
             redirect("login/index");
 
-        $campaign = $this->campaign_model->getCurrentCampaign();
+        $campaign = $this->campaign_model->getCurrentYearCampaign();
         if ($campaign) {
             $date_start = $campaign->getDateStart();
             $helper = explode(" ", $date_start);
@@ -41,6 +41,12 @@ class Campaigns extends CK_Controller {
             $associate = $this->donation_model->userIsAlreadyAssociate($userId);
             $data["associate"] = $associate;
         }
+       	
+        $dataatual = date('d/m/Y');
+        $year = date('Y');
+       	$data['hourfinish'] = $hourfinish;
+        $data['dataatual'] = $dataatual;
+        $data['year'] = $year;
         $data["campaign"] = $campaign;
         $this->loadView("campaign/index", $data);
     }
