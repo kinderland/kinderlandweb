@@ -52,8 +52,10 @@ class campaign_model extends CK_Model {
         return false;
     }
 
-    public function getCurrentCampaign() {
-        $sql = "SELECT * FROM campaign WHERE date_start<=NOW() AND date_finish>=NOW()";
+    public function getCurrentYearCampaign() {
+        $sql = "SELECT * 
+                FROM campaign
+                WHERE EXTRACT(YEAR FROM date_start) = EXTRACT(YEAR FROM NOW())";
         $resultSet = $this->executeRows($this->db, $sql);
         if (count($resultSet) !== 1)
             return false;
