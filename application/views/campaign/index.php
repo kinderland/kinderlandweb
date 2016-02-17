@@ -26,7 +26,8 @@
         <div class="row">
             <?php require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
             <div class="col-lg-10 middle-content">
-                <?php if ($date_finish > $dataatual || $date_finish == $dataatual ) { ?>
+            <?php if ($campaign) {?>
+                <?php if (strtotime($dataatual) > strtotime($date_start) && (strtotime($date_finish) == strtotime($dataatual) || strtotime($dataatual) < strtotime($date_finish)) ) { ?>
                     <h3><strong>Campanha de sócios <?php echo $campaign->getCampaignYear(); ?></strong></h3>
                     <hr class="footer-hr"/>
              <div class="row">
@@ -56,7 +57,7 @@
                     <?php if (isset($benemerito) && $benemerito) { ?>
                         identificadas como beneméritas ou membros da diretoria. Nestes casos, não há necessidade de doação. Entretanto, se houver interesse e possibilidade, sugerimos aos beneméritos que utilizem a opção de “Doação Avulsa” do Sistema Kinderland.
                     <?php } else { ?>
-                        que contribuírem com um valor igual a <b>R$ <?php echo $campaign->getPrice(); ?> a partir do dia <?php echo $date_start ?> às 00:00 até o dia <?php echo $date_finish ?> às 23:59.</b>
+                        que contribuírem com um valor igual a <b>R$ <?php echo $campaign->getPrice(); ?> a partir do dia <?php echo $date_start ?> até o dia <?php echo $date_finish ?>.</b>
                     <?php } ?>
 
                 </p>
@@ -69,19 +70,31 @@
                 <p align="justify">
                     Caso não receba a mensagem de confirmação, por alguma demora na autorização por parte da Cielo ou da administradora de cartões, pedimos para entrar em contato conosco por telefone (21 2266-1980) ou e-mail (secretaria@kinderland.com.br) antes de efetuar nova tentativa de doação.
                 </p>
+                <div style="margin-top:130px">
+                     <h6 style="color:red"><strong>Ao se tornar um sócio da Colônia Kinderland, você recebe diversos benefícios e prioridades.
+                              Você continuará como sócio até a próxima Campanha de Sócios começar. </strong></h6>
+                 </div>
+ 
+                  <a class="btn btn-primary" role="button" href="<?= $this->config->item('url_link') ?>campaigns/startAssociation">Prosseguir</a>
                 
                 <?php }
-                    else if($year == date('h')) {
-                    ?>
-                    <p align="justify">
-                    <strong> Aguarde, em breve iniciaremos a campanha de sócios <?php echo $year ?>.</strong>
+                    else if (strtotime($dataatual) > strtotime($date_finish)){  ?>
+               		<p align="justify">
+                	<strong> A campanha de sócios <?php echo $year ?>  já foi encerrada.</strong>
+                	</p>
                     </p>
                 <?php }
-              		 else if ($date_finish < $dataatual){  ?>
-               		<p align="justify">
-                	<strong> A campanha de sócios <?php echo $year ?> já foi encerrada.</strong>
-                	</p>
+              		 else{
+                    ?>
+                    <p align="justify">
+                    <strong> Aguarde, em breve iniciaremos a campanha de sócios <?php echo $year ?> .</strong>
+                    </p>
+                <?php }} else{?>
+                    <p align="justify">
+                    <strong> Aguarde, em breve iniciaremos a campanha de sócios <?php echo $year ?> .</strong>
+                    </p>
                 <?php }?>
+                
                 			
             </div>
         </div>
