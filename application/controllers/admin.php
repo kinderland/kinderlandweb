@@ -153,7 +153,7 @@ class Admin extends CK_Controller {
 
 
         if ($event_name === "")
-            $errors[] = "O campo nome é obrigatório";
+            $errors[] = "O campo nome é obrigatório\n";
         if (!$date_start)
             $date_start = NULL;
         if (!$date_start_show)
@@ -168,14 +168,15 @@ class Admin extends CK_Controller {
             $enabled = "true";
 
         if ($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
-            $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento";
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento\\n";
 
         if ($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
-            $errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições";
+            $errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições\\n";
 
         if ($date_start && $date_finish_show && Events::verifyAntecedence($date_start, $date_finish_show))
-            $errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições";
-
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições\\n";
+        
+       
         if ($capacity_male === "")
             $capacity_male = 0;
         if ($capacity_female === "")
@@ -186,24 +187,24 @@ class Admin extends CK_Controller {
         if (is_array($full_price)) {
             for ($i = 0; $i < count($full_price); $i++) {
                 if (!$payment_date_start[$i])
-                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio";
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio\\n";
                 if (!$payment_date_end[$i])
-                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim";
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim\\n";
                 if (!$full_price[$i])
-                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor ";
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor\\n";
                 if (!$middle_price[$i])
                     $middle_price[$i] = $full_price[$i];
                 if (!$children_price[$i])
                     $children_price[$i] = $middle_price[$i];
                 if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
-                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
                 }
                 if ($payment_date_start[$i] && $payment_date_end[$i] && (
                         !Events::verifyAntecedence($payment_date_start[$i], $date_finish_show) ||
                         !Events::verifyAntecedence($payment_date_end[$i], $date_finish_show) ||
                         !Events::verifyAntecedence($date_start_show, $payment_date_start[$i]) )
                 )
-                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições";
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições\\n";
                 for ($j = $i + 1; $j < count($full_price); $j++) {
                     if
                     (
@@ -214,27 +215,40 @@ class Admin extends CK_Controller {
                             Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) && Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
                             )
                     )
-                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem";
+                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
                 }
+                
+                if($payment_date_start[$i]){
 
-                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
-                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
-
-                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
-                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
-
-                $date_start = explode("/", $date_start);
-                $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
-
-                $date_finish = explode("/", $date_finish);
-                $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-
-                $date_start_show = explode("/", $date_start_show);
-                $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
-
-                $date_finish_show = explode("/", $date_finish_show);
-                $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
-
+	                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+	                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+                }
+                
+                if($payment_date_end[$i]){
+                	$payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                	$payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+                }
+                
+                if($date_start){
+                	$date_start = explode("/", $date_start);
+                	$date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+                }
+                
+                if($date_finish){
+                	$date_finish = explode("/", $date_finish);
+                	$date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+                }
+                
+                if($date_start_show){
+                	$date_start_show = explode("/", $date_start_show);
+                	$date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+                }
+                
+                if($date_finish_show){
+                	$date_finish_show = explode("/", $date_finish_show);
+                	$date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+                }
+                
                 $payments[] = array(
                     "payment_date_start" => $payment_date_start[$i],
                     "payment_date_end" => $payment_date_end[$i],
@@ -247,26 +261,30 @@ class Admin extends CK_Controller {
             }
         } else if ($full_price !== FALSE) {
             if (!$payment_date_start)
-                $errors[] = "O pagamento não tem data de inicio";
+                $errors[] = "O pagamento não tem data de inicio\\n";
             if (!$payment_date_end)
-                $errors[] = "O pagamento não tem data de fim";
+                $errors[] = "O pagamento não tem data de fim\\n";
             if (!$full_price)
-                $errors[] = "O pagamento não tem valor ";
+                $errors[] = "O pagamento não tem valor\\n";
             if (!$middle_price)
                 $middle_price = $full_price;
             if (!$children_price)
                 $children_price = $middle_price;
             if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
-                $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+                $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
             }
 
             for ($i = 0; $i < count($full_price); $i++) {
-
-                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
-                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
-
-                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
-                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+            	
+            	if($payment_date_start[$i]){
+                	$payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                	$payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+            	}
+            	
+            	if($payment_date_end[$i]){
+                	$payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                	$payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+            	}
             }
 
             $payments[] = array(
@@ -279,46 +297,81 @@ class Admin extends CK_Controller {
                 "associated_discount" => $associated_discount / 100,
             );
 
-            $date_start = explode("/", $date_start);
-            $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
-
-            $date_finish = explode("/", $date_finish);
-            $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-
-            $date_start_show = explode("/", $date_start_show);
-            $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
-
-            $date_finish_show = explode("/", $date_finish_show);
-            $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+        		if($date_start){
+                	$date_start = explode("/", $date_start);
+                	$date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+                }
+                
+                if($date_finish){
+                	$date_finish = explode("/", $date_finish);
+                	$date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+                }
+                
+                if($date_start_show){
+                	$date_start_show = explode("/", $date_start_show);
+                	$date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+                }
+                
+                if($date_finish_show){
+                	$date_finish_show = explode("/", $date_finish_show);
+                	$date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+                }
+        }
+        
+        $events = $this -> event_model -> getAllEvents();
+        
+        foreach($events as $event){
+        	 
+        	if($date_start && $date_finish && ((Events::verifyAntecedence($event -> getDateStart(), $date_start) && Events::verifyAntecedence($date_start,$event->getDateFinish())) || (Events::verifyAntecedence($event -> getDateStart(),$date_finish) && Events::verifyAntecedence($date_finish,$event->getDateFinish())))){
+        		$errors[] = "Há um evento nesse período\\n";
+        		break;
+        	}
         }
 
-        if (count($errors) > 0 || $error !=""){
+        if (count($errors) > 0 || $error != ""){
         	
-        	$date_start = explode("-", $date_start);
-        	$date_start[2] = explode(" ",$date_start[2]);
-        	$date_start = strval($date_start[1]) . "/" . strval($date_start[2][0]) . "/" . strval($date_start[0]);
+        	if($date_start){
+        		$date_start = explode("-", $date_start);
+        		$date_start[2] = explode(" ",$date_start[2]);
+        		$date_start = strval($date_start[1]) . "/" . strval($date_start[2][0]) . "/" . strval($date_start[0]);
+        	}
         	
-        	$date_finish = explode("-", $date_finish);
-        	$date_finish[2] = explode(" ",$date_finish[2]);
-        	$date_finish = strval($date_finish[1]) . "/" . strval($date_finish[2][0]) . "/" . strval($date_finish[0]);
+        	if($date_finish){
+        		$date_finish = explode("-", $date_finish);
+        		$date_finish[2] = explode(" ",$date_finish[2]);
+        		$date_finish = strval($date_finish[1]) . "/" . strval($date_finish[2][0]) . "/" . strval($date_finish[0]);
+        	}
         	
-        	$date_start_show = explode("-", $date_start_show);
-        	$date_start_show[2] = explode(" ",$date_start_show[2]);
-        	$date_start_show = strval($date_start_show[1]) . "/" . strval($date_start_show[2][0]) . "/" . strval($date_start_show[0]);
+        	if($date_start_show){
+        		$date_start_show = explode("-", $date_start_show);
+        		$date_start_show[2] = explode(" ",$date_start_show[2]);
+        		$date_start_show = strval($date_start_show[1]) . "/" . strval($date_start_show[2][0]) . "/" . strval($date_start_show[0]);
+        	}
         	
-        	$date_finish_show = explode("-", $date_finish_show);
-        	$date_finish_show[2] = explode(" ",$date_finish_show[2]);
-        	$date_finish_show = strval($date_finish_show[1]) . "/" . strval($date_finish_show[2][0]) . "/" . strval($date_finish_show[0]);
+        	if($date_finish_show){
+        		$date_finish_show = explode("-", $date_finish_show);
+        		$date_finish_show[2] = explode(" ",$date_finish_show[2]);
+        		$date_finish_show = strval($date_finish_show[1]) . "/" . strval($date_finish_show[2][0]) . "/" . strval($date_finish_show[0]);
+        	}
         	
         	$paymentsError = array();
         	
         	foreach ($payments as $payment) {
-        		$datePayment = explode("-", $payment['payment_date_start']);
-        		$dateDay = explode(" ", $datePayment[2]);
-        		$datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
-        		$datePaymentEnd = explode("-", $payment['payment_date_end']);
-        		$dateDay = explode(" ", $datePaymentEnd[2]);
-        		$datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+        		
+        		$datePayment = null;
+        		$datePaymentEnd = null;
+        		
+        		if($payment['payment_date_start']){
+        			$datePayment = explode("-", $payment['payment_date_start']);
+        			$dateDay = explode(" ", $datePayment[2]);
+        			$datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
+        		}
+        		
+        		if($payment['payment_date_end']){
+        			$datePaymentEnd = explode("-", $payment['payment_date_end']);
+        			$dateDay = explode(" ", $datePaymentEnd[2]);
+        			$datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+        		}
         	
         		$paymentsError[] = array(
         				"payment_date_start" => $datePayment,
@@ -331,7 +384,13 @@ class Admin extends CK_Controller {
         		);
         	}
         	
-        	$errors[] = $error;
+        	if($error != ""){
+        		$errors[] = $error;
+        	}
+        	
+        	foreach ($errors as $e){
+        		$this->Logger->info("Error: ".$e);
+        	}
         
             return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError);
         }
@@ -350,10 +409,9 @@ class Admin extends CK_Controller {
 
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New event successfully inserted");
-                echo "<script>alert('Evento criado com sucesso!');opener.location.reload(); window.close();</script>";
-//redirect("events/manageEvents");
+                return $this->manageEvents('Evento criado com sucesso!');
             } else
-                echo "<script>alert('Ocorreu um erro ao criar o evento. Tente novamente.');window.history.back();</script>";
+            	return $this->manageEvents('Ocorreu um erro ao criar o evento. Tente novamente.');
         } catch (Exception $ex) {
             $this->Logger->error("Failed to insert new event");
             $this->generic_model->rollbackTransaction();
@@ -377,8 +435,12 @@ class Admin extends CK_Controller {
         $data["capacity_female"] = $capacity_female;
         $data["capacity_nonsleeper"] = $capacity_nonsleeper;
         $data["payments"] = $payments;
+        
+        foreach ($errors as $e){
+        	$this->Logger->info("Error: ".$e);
+        }
 
-        $this->loadView('admin/events/event_create', $data);
+        $this->loadReportView('admin/events/event_create', $data);
     }
 
     public function editEvent($event_id = NULL, $errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array()) {
@@ -452,7 +514,7 @@ class Admin extends CK_Controller {
 
         $data['payments'] = $payments;
 
-        $this->loadView('admin/events/event_edit', $data);
+        $this->loadReportView('admin/events/event_edit', $data);
     }
 
     public function updateEvent($event_id) {
@@ -477,11 +539,12 @@ class Admin extends CK_Controller {
         $payment_portions = $this->input->post("payment_portions", TRUE);
         $associated_discount = $this->input->post("associated_discount", TRUE);
         $enabled = $this->input->post("enabled", TRUE);
+   	 	$error = $this->input->post("error", TRUE);
         $errors = array();
 
 
         if ($event_name === "")
-            $errors[] = "O campo nome é obrigatório";
+            $errors[] = "O campo nome é obrigatório\n";
         if (!$date_start)
             $date_start = NULL;
         if (!$date_start_show)
@@ -496,13 +559,13 @@ class Admin extends CK_Controller {
             $enabled = "true";
 
         if ($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
-            $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento";
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento\\n";
 
         if ($date_start_show && $date_finish_show && !Events::verifyAntecedence($date_start_show, $date_finish_show))
-            $errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições";
+            $errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições\\n";
 
         if ($date_start && $date_finish_show && Events::verifyAntecedence($date_start, $date_finish_show))
-            $errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições";
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim de inscrições\\n";
 
         if ($capacity_male === "")
             $capacity_male = 0;
@@ -514,24 +577,24 @@ class Admin extends CK_Controller {
         if (is_array($full_price)) {
             for ($i = 0; $i < count($full_price); $i++) {
                 if (!$payment_date_start[$i])
-                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio";
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio\\n";
                 if (!$payment_date_end[$i])
-                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim";
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim\\n";
                 if (!$full_price[$i])
-                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor ";
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor\\n";
                 if (!$middle_price[$i])
                     $middle_price[$i] = $full_price[$i];
                 if (!$children_price[$i])
                     $children_price[$i] = $middle_price[$i];
                 if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
-                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
                 }
                 if ($payment_date_start[$i] && $payment_date_end[$i] && (
                         !Events::verifyAntecedence($payment_date_start[$i], $date_finish_show) ||
                         !Events::verifyAntecedence($payment_date_end[$i], $date_finish_show) ||
                         !Events::verifyAntecedence($date_start_show, $payment_date_start[$i]) )
                 )
-                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições";
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições\\n";
                 for ($j = $i + 1; $j < count($full_price); $j++) {
                     if
                     (
@@ -542,15 +605,40 @@ class Admin extends CK_Controller {
                             Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) && Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
                             )
                     )
-                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem";
+                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
                 }
+                
+                if($payment_date_start[$i]){
 
-                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
-                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
-
-                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
-                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
-
+	                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+	                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+                }
+                
+                if($payment_date_end[$i]){
+                	$payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                	$payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+                }
+                
+                if($date_start){
+                	$date_start = explode("/", $date_start);
+                	$date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+                }
+                
+                if($date_finish){
+                	$date_finish = explode("/", $date_finish);
+                	$date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+                }
+                
+                if($date_start_show){
+                	$date_start_show = explode("/", $date_start_show);
+                	$date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+                }
+                
+                if($date_finish_show){
+                	$date_finish_show = explode("/", $date_finish_show);
+                	$date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+                }
+                
                 $payments[] = array(
                     "payment_date_start" => $payment_date_start[$i],
                     "payment_date_end" => $payment_date_end[$i],
@@ -563,26 +651,30 @@ class Admin extends CK_Controller {
             }
         } else if ($full_price !== FALSE) {
             if (!$payment_date_start)
-                $errors[] = "O pagamento não tem data de inicio";
+                $errors[] = "O pagamento não tem data de inicio\\n";
             if (!$payment_date_end)
-                $errors[] = "O pagamento não tem data de fim";
+                $errors[] = "O pagamento não tem data de fim\\n";
             if (!$full_price)
-                $errors[] = "O pagamento não tem valor ";
+                $errors[] = "O pagamento não tem valor\\n";
             if (!$middle_price)
                 $middle_price = $full_price;
             if (!$children_price)
                 $children_price = $middle_price;
             if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
-                $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio";
+                $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
             }
 
             for ($i = 0; $i < count($full_price); $i++) {
-
-                $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
-                $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
-
-                $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
-                $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+            	
+            	if($payment_date_start[$i]){
+                	$payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                	$payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+            	}
+            	
+            	if($payment_date_end[$i]){
+                	$payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                	$payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+            	}
             }
 
             $payments[] = array(
@@ -594,22 +686,104 @@ class Admin extends CK_Controller {
                 "payment_portions" => $payment_portions,
                 "associated_discount" => $associated_discount / 100,
             );
+
+        		if($date_start){
+                	$date_start = explode("/", $date_start);
+                	$date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+                }
+                
+                if($date_finish){
+                	$date_finish = explode("/", $date_finish);
+                	$date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+                }
+                
+                if($date_start_show){
+                	$date_start_show = explode("/", $date_start_show);
+                	$date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+                }
+                
+                if($date_finish_show){
+                	$date_finish_show = explode("/", $date_finish_show);
+                	$date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
+                }
+        }
+        
+        $events = $this -> event_model -> getAllEvents();
+        
+        foreach($events as $event){
+        
+        	if($event->getEventId() != $event_id && $date_start && $date_finish && ((Events::verifyAntecedence($event -> getDateStart(), $date_start) && Events::verifyAntecedence($date_start,$event->getDateFinish())) || (Events::verifyAntecedence($date_start, $event -> getDateStart()) && Events::verifyAntecedence($date_finish,$event->getDateFinish())))){
+        		$errors[] = "Há um evento nesse período\\n";
+        		break;
+        	}
         }
 
-        $date_start = explode("/", $date_start);
-        $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
-
-        $date_finish = explode("/", $date_finish);
-        $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-
-        $date_start_show = explode("/", $date_start_show);
-        $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
-
-        $date_finish_show = explode("/", $date_finish_show);
-        $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
-
-        if (count($errors) > 0)
-            return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $payments);
+        if (count($errors) > 0 || $error != ""){
+        	
+        	if($date_start){
+        		$date_start = explode("-", $date_start);
+        		$date_start[2] = explode(" ",$date_start[2]);
+        		$date_start = strval($date_start[1]) . "/" . strval($date_start[2][0]) . "/" . strval($date_start[0]);
+        	}
+        	
+        	if($date_finish){
+        		$date_finish = explode("-", $date_finish);
+        		$date_finish[2] = explode(" ",$date_finish[2]);
+        		$date_finish = strval($date_finish[1]) . "/" . strval($date_finish[2][0]) . "/" . strval($date_finish[0]);
+        	}
+        	
+        	if($date_start_show){
+        		$date_start_show = explode("-", $date_start_show);
+        		$date_start_show[2] = explode(" ",$date_start_show[2]);
+        		$date_start_show = strval($date_start_show[1]) . "/" . strval($date_start_show[2][0]) . "/" . strval($date_start_show[0]);
+        	}
+        	
+        	if($date_finish_show){
+        		$date_finish_show = explode("-", $date_finish_show);
+        		$date_finish_show[2] = explode(" ",$date_finish_show[2]);
+        		$date_finish_show = strval($date_finish_show[1]) . "/" . strval($date_finish_show[2][0]) . "/" . strval($date_finish_show[0]);
+        	}
+        	
+        	$paymentsError = array();
+        	
+        	foreach ($payments as $payment) {
+        		
+        		$datePayment = null;
+        		$datePaymentEnd = null;
+        		
+        		if($payment['payment_date_start']){
+        			$datePayment = explode("-", $payment['payment_date_start']);
+        			$dateDay = explode(" ", $datePayment[2]);
+        			$datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
+        		}
+        		
+        		if($payment['payment_date_end']){
+        			$datePaymentEnd = explode("-", $payment['payment_date_end']);
+        			$dateDay = explode(" ", $datePaymentEnd[2]);
+        			$datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+        		}
+        	
+        		$paymentsError[] = array(
+        				"payment_date_start" => $datePayment,
+        				"payment_date_end" => $datePaymentEnd,
+        				"full_price" => $payment['full_price'],
+        				"children_price" => $payment['children_price'],
+        				"middle_price" => $payment['middle_price'],
+        				"payment_portions" => $payment['payment_portions'],
+        				"associated_discount" => $payment['associated_discount'],
+        		);
+        	}
+        	
+        	if($error != ""){
+        		$errors[] = $error;
+        	}
+        	
+        	foreach ($errors as $e){
+        		$this->Logger->info("Error: ".$e);
+        	}
+        
+            return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError);
+        }
 
         try {
             $this->Logger->info("Updating event " . $event_name);
@@ -626,22 +800,22 @@ class Admin extends CK_Controller {
 
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New event successfully inserted");
-                echo "<script>alert('Evento atualizado com sucesso!');opener.location.reload(); window.close();</script>";
+                return $this->manageEvents('Evento atualizado com sucesso!');
 //redirect("events/manageEvents");
             } else
-                echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
+            	return $this->manageEvents('Ocorreu um erro ao atualizar o evento. Tente novamente.');
         } catch (Exception $ex) {
             $this->Logger->error("Failed to insert new event");
             $this->generic_model->rollbackTransaction();
             $data['error'] = true;
-
-            echo "<script>alert('Ocorreu um erro ao atualizar o evento. Tente novamente.');window.history.back();</script>";
+            
+            return $this->manageEvents('Ocorreu um erro ao atualizar o evento. Tente novamente.');
 
 //$this->loadReportView('admin/events/event_edit', $data);
         }
     }
 
-    public function manageEvents() {
+    public function manageEvents($message=null) {
         $this->Logger->info("Starting " . __METHOD__);
 
         if (!$this->checkSession())
@@ -659,7 +833,8 @@ class Admin extends CK_Controller {
             $eventsToScreen[] = $event;
         }
         $data["events"] = $eventsToScreen;
-
+        $data["message"] = $message;
+        
 
         $this->loadReportView("admin/events/manage", $data);
     }

@@ -43,27 +43,28 @@ function addTableLine(linhaAAdicionar){
 function alertRequiredFields(){
 	var error = "";
 	if(document.getElementsByName("date_start")[0].value == ""){
-		error = error.concat("Data de ínicio do periodo do evento\n");
+		error = error.concat("Data de ínicio do periodo do evento\\n");
 	}
 	if(document.getElementsByName("date_finish")[0].value == "")
-		error = error.concat("Data de fim do periodo do evento\n");
+		error = error.concat("Data de fim do periodo do evento\\n");
 	if(document.getElementsByName("date_start_show")[0].value == "")
-		error = error.concat("Data de ínicio do período de inscrições\n");
+		error = error.concat("Data de ínicio do período de inscrições\\n");
 	if(document.getElementsByName("date_finish_show")[0].value == "")
-		error = error.concat("Data de fim do período de inscrições\n");
+		error = error.concat("Data de fim do período de inscrições\\n");
 	if( 
 	   	(parseInt(document.getElementsByName("capacity_male")[0].value) || 0) + 
 	   	(parseInt(document.getElementsByName("capacity_female")[0].value) || 0) + 
 	   	(parseInt(document.getElementsByName("capacity_nonsleeper")[0].value) || 0 ) 
 	   	<= 0
 	   )
-		error = error.concat("Quantidade de ingressos disponivel <= 0\n");
+		error = error.concat("Quantidade de ingressos disponivel <= 0\\n");
 
 	if(document.getElementsByName("payment_date_start[]")[0] == undefined)
-   		error = error.concat("Não tem data de ínicio de pagamento\n");
+   		error = error.concat("Não tem data de ínicio de pagamento\\n");
 	if(error != ""){
-		alert("Tentaremos salvar o evento, porém faltam alguns dados considerados mínimos para que o cadastro possa ser considerado como completo.\nOs dados incompletos são:\n".concat(error));
+		//alert("Tentaremos salvar o evento, porém faltam alguns dados considerados mínimos para que o cadastro possa ser considerado como completo.\nOs dados incompletos são:\n".concat(error));
 		document.getElementsByName("enabled")[0].value = 0;
+		document.getElementsByName("error")[0].value = error;
 	}
 	document.getElementsByName("enabled")[0].value = 1;
 }
@@ -75,8 +76,8 @@ function datepickers(){
 
 var string = "";
 
-<?php foreach($errors as $error){
-	echo "string = string.concat('$error\\n');";
+<?php foreach($errors as $e){
+	echo "string = string.concat('$e');";
 } ?>
 
 if(string !== ""){
@@ -216,9 +217,10 @@ $(document).ready(function (){
 	<div class="form-group">
 		<div class="col-lg-10">
 			<input type="hidden" name="enabled" id="enabled" value="0" />
+			<input type="hidden" name="error" id="error" value="" />
 			<button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
-				<a href="<?=$this->config->item('url_link')?>events/index"><button  type="button" class="btn btn-danger"
-					onClick="window.close()">Fechar</button></a>
+				<button  type="button" class="btn btn-warning"
+					onClick="history.back()">Voltar</button></a>
 		</div>
 	</div>
 			
