@@ -19,7 +19,8 @@ class Campaigns extends CK_Controller {
 
     public function index() {
         $this->Logger->info("Starting " . __METHOD__);
-		$hourfinish = date('23:59');
+        $data['fullname'] = $this->session->userdata("fullname");
+		
         if (!$this->checkSession())
             redirect("login/index");
 
@@ -44,7 +45,7 @@ class Campaigns extends CK_Controller {
         
         $dataatual = date("d-m-Y");
         $year = date('Y');
-       	$data['hourfinish'] = $hourfinish;
+       	
         $data['dataatual'] = $dataatual;
         $data['year'] = $year;
         $data["campaign"] = $campaign;
