@@ -148,6 +148,7 @@ class Admin extends CK_Controller {
         $payment_portions = $this->input->post("payment_portions", TRUE);
         $associated_discount = $this->input->post("associated_discount", TRUE);
         $enabled = $this->input->post("enabled", TRUE);
+        $error = $this->input->post("error", TRUE);
         $errors = array();
 
 
@@ -291,8 +292,49 @@ class Admin extends CK_Controller {
             $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
         }
 
-        if (count($errors) > 0)
-            return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $payments);
+        if (count($errors) > 0 || $error !=""){
+        	
+        	$date_start = explode("-", $date_start);
+        	$date_start[2] = explode(" ",$date_start[2]);
+        	$date_start = strval($date_start[1]) . "/" . strval($date_start[2][0]) . "/" . strval($date_start[0]);
+        	
+        	$date_finish = explode("-", $date_finish);
+        	$date_finish[2] = explode(" ",$date_finish[2]);
+        	$date_finish = strval($date_finish[1]) . "/" . strval($date_finish[2][0]) . "/" . strval($date_finish[0]);
+        	
+        	$date_start_show = explode("-", $date_start_show);
+        	$date_start_show[2] = explode(" ",$date_start_show[2]);
+        	$date_start_show = strval($date_start_show[1]) . "/" . strval($date_start_show[2][0]) . "/" . strval($date_start_show[0]);
+        	
+        	$date_finish_show = explode("-", $date_finish_show);
+        	$date_finish_show[2] = explode(" ",$date_finish_show[2]);
+        	$date_finish_show = strval($date_finish_show[1]) . "/" . strval($date_finish_show[2][0]) . "/" . strval($date_finish_show[0]);
+        	
+        	$paymentsError = array();
+        	
+        	foreach ($payments as $payment) {
+        		$datePayment = explode("-", $payment['payment_date_start']);
+        		$dateDay = explode(" ", $datePayment[2]);
+        		$datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
+        		$datePaymentEnd = explode("-", $payment['payment_date_end']);
+        		$dateDay = explode(" ", $datePaymentEnd[2]);
+        		$datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+        	
+        		$paymentsError[] = array(
+        				"payment_date_start" => $datePayment,
+        				"payment_date_end" => $datePaymentEnd,
+        				"full_price" => $payment['full_price'],
+        				"children_price" => $payment['children_price'],
+        				"middle_price" => $payment['middle_price'],
+        				"payment_portions" => $payment['payment_portions'],
+        				"associated_discount" => $payment['associated_discount'],
+        		);
+        	}
+        	
+        	$errors[] = $error;
+        
+            return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError);
+        }
 
 
         try {

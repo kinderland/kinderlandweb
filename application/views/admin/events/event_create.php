@@ -62,8 +62,9 @@ function alertRequiredFields(){
 	if(document.getElementsByName("payment_date_start[]")[0] == undefined)
    		error = error.concat("Não tem data de ínicio de pagamento\n");
 	if(error != ""){
-		alert("Tentaremos salvar o evento, porém faltam alguns dados considerados mínimos para que o cadastro possa ser considerado como completo.\nOs dados incompletos são:\n".concat(error));
+		//alert("Tentaremos salvar o evento, porém faltam alguns dados considerados mínimos para que o cadastro possa ser considerado como completo.\nOs dados incompletos são:\n".concat(error));
 		document.getElementsByName("enabled")[0].value = 0;
+		document.getElementsByName("error")[0].value = error;
 	}
 	document.getElementsByName("enabled")[0].value = 1;
 }
@@ -131,12 +132,12 @@ $(document).ready(function (){
 					<label for="date_start" class="col-lg-2 control-label"> Período do Evento: </label>
 					<label for="date_start" class="col-lg-1 control-label"> Início*: </label>
 					<div class="col-lg-2">
-						<input type="text" class=" datepickers form-control required" placeholder="Data de Início" value="<?=$date_start?>" name="date_start" />
+						<input type="text" class=" datepickers form-control required" placeholder="Data de Início" value="<?php echo Events::toMMDDYYYY($date_start);?>" name="date_start" />
 					</div>
 
 					<label for="date_finish" class="col-lg-1 control-label"> Fim*: </label>
 					<div class="col-lg-2">
-						<input type="text" class="datepickers form-control required" placeholder="Data de Término" value="<?=$date_finish?>" name="date_finish" />
+						<input type="text" class="datepickers form-control required" placeholder="Data de Término" value="<?php echo Events::toMMDDYYYY($date_finish);?>" name="date_finish" />
 					</div>
 				</div>
 			</div>
@@ -146,11 +147,11 @@ $(document).ready(function (){
 					<label for="date_start" class="col-lg-2 control-label"> Período do Inscrições: </label>
 					<label for="date_start_show" class="col-lg-1 control-label"> Início*: </label>
 					<div class="col-lg-2">
-						<input type="text" class="form-control datepickers required" placeholder="Início da exibição do evento" value="<?=$date_start_show?>" name="date_start_show" />
+						<input type="text" class="form-control datepickers required" placeholder="Início da exibição do evento" value="<?php echo Events::toMMDDYYYY($date_start_show);?>" name="date_start_show" />
 					</div>
 					<label for="date_finish_show" class="col-lg-1 control-label"> Fim*: </label>
 					<div class="col-lg-2">
-						<input type="text" class="form-control datepickers required" placeholder="Término da exibição do evento" value="<?=$date_finish_show?>" name="date_finish_show" />
+						<input type="text" class="form-control datepickers required" placeholder="Término da exibição do evento" value="<?php echo Events::toMMDDYYYY($date_finish_show);?>" name="date_finish_show" />
 					</div>
 				</div>
 			</div>
@@ -214,6 +215,7 @@ $(document).ready(function (){
 	<div class="form-group">
 		<div class="col-lg-10">
 			<input type="hidden" name="enabled" id="enabled" value="0" />
+			<input type="hidden" name="error" id="error" value="" />
 			<button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
 				<a href="<?=$this->config->item('url_link')?>events/index"><button  type="button" class="btn btn-danger"
 					onClick="window.close()">Fechar</button></a>
