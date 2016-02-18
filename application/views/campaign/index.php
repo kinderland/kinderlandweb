@@ -27,11 +27,12 @@
             <?php require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
             <div class="col-lg-10 middle-content">
             
-            <?php if (isset($associate) && !empty($associate)) { ?>
-                      <h3><?php $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?> <?php $year ?>. Obrigado por sua contribuição.</h3>
             
-            <?php } if ($campaign) {?>
-                <?php if (strtotime($dataatual) > strtotime($date_start) && (strtotime($date_finish) == strtotime($dataatual) || strtotime($dataatual) < strtotime($date_finish)) ) { ?>
+            
+            <?php  if ($campaign) {?>
+            		<?php if (isset($associate) && !empty($associate)) { ?>
+                      <h3><?php echo $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?> <?php $year ?>. Obrigado por sua contribuição.</h3>
+                <?php } if (strtotime($dataatual) > strtotime($date_start) && (strtotime($date_finish) == strtotime($dataatual) || strtotime($dataatual) < strtotime($date_finish)) ) { ?>
                     <h3><strong>Campanha de sócios <?php echo $campaign->getCampaignYear(); ?></strong></h3>
                     <hr class="footer-hr"/>
              <div class="row">
@@ -81,13 +82,14 @@
                 <?php }
                     else if (strtotime($dataatual) > strtotime($date_finish)){  ?>
                     	<?php if (isset($associate) && !empty($associate)) { ?>
-                      			<h3><?php $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?> <?php $year ?>. Obrigado por sua contribuição.</h3>
+                      <h3><?php echo $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?> <?php $year ?>. Obrigado por sua contribuição.</h3>
+                      			<h3>Campanha encerrada em <?php echo $year ?>.</h3>
                       			
 				                    <hr class="footer-hr"/>
 				             		<div class="row">
 				            	<div class="col-lg-9">
 				                <p align="justify">
-				                <p align="justify"> Campanha encerrada em <?php $year ?>.
+				                
 				                <p align="justify"> A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de contribuições e doações regulares. Elas são utilizadas na manutenção e investimentos no espaço onde a Colônia de Férias é realizada, além de ajudar com os demais custos institucionais.</p>
 				                <p align="justify"> Estas doações podem ser espontâneas e feitas a qualquer momento, como contribuições de ítens úteis para a colônia de férias, material de construção ou equipamentos em geral. Agradecemos a todos que indistintamente contribuem regularmente como associados ou doadores avulsos.</p>
 				                <p align="justify"> A Associação Kinderland realiza projetos sociais com jovens de comunidades carentes, oferece bolsas parciais ou integrais para colonistas nas temporadas de verão e participa de várias outras iniciativas comunitárias. Somente com estas doações tudo isto torna-se possível.</p>
