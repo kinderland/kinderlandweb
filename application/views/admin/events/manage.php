@@ -52,6 +52,10 @@
 		});
   });
 });
+
+<?php if($message){?>
+	alert('<?php echo $message;?>');
+	<?php }?>
 </script>
 </head>
 <style>
@@ -71,7 +75,7 @@ div.scroll{
 <div class="row">
     <?php // require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
-        <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?=$this->config->item("url_link")?>admin/eventCreate','dd'); return false;" href=""><button id="create" class="btn btn-primary"  value="Criar novo evento" >Criar novo evento</button></a>
+        <a href="<?=$this->config->item("url_link")?>admin/eventCreate"><button id="create" class="btn btn-primary"  value="Criar novo evento" >Criar novo evento</button></a>
 <br /><br />
 		<?php 
 			if(isset($events) && count($events) > 0) {
@@ -80,7 +84,7 @@ div.scroll{
         <?php
             	foreach($events as $event) {
 		?><tr>
-		<body onunload="window.opener.location.reload();"><td><a target='_blank' onclick="window.open('<?php echo $this->config->item("url_link");?>admin/editEvent/<?php echo $event->getEventId()?>','dd'); return false;" href=""><?php echo $event->getEventName();?></a></td>
+		<td><a href="<?php echo $this->config->item("url_link");?>admin/editEvent/<?php echo $event->getEventId()?>"><?php echo $event->getEventName();?></a></td>
         <td><?= date_format(date_create($event->getDateStart()), 'd/m/y');?> </td>
         <td><?= date_format(date_create($event->getDateFinish()), 'd/m/y')?> </td>
         <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$event->getEventId()?>" 
