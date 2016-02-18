@@ -21,6 +21,13 @@
     <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 
 </head>
+<style>
+
+div.scroll{
+	padding-left: 20px;
+}
+
+</style>
 <body>
     <div id="thisdiv">
         <div class="row">
@@ -36,7 +43,9 @@
             <div class="col-lg-9">
                 <p align="justify">
                 <?php if (isset($associate) && !empty($associate) || (isset($benemerito) && $benemerito)) { ?>
-                      <h3 align="justify"><?php echo $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?> <?php $year ?>. Obrigado por sua contribuição.</h3>
+                	<div class="scroll">
+                      <h3 align="justify"><?php echo $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?>. Obrigado por sua contribuição.</h3>
+                      </div>
                       <?php }?>
                 <p align="justify"> A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de contribuições e doações regulares. Elas são utilizadas na manutenção e investimentos no espaço onde a Colônia de Férias é realizada, além de ajudar com os demais custos institucionais.</p>
                 <p align="justify"> Estas doações podem ser espontâneas e feitas a qualquer momento, como contribuições de ítens úteis para a colônia de férias, material de construção ou equipamentos em geral. Agradecemos a todos que indistintamente contribuem regularmente como associados ou doadores avulsos.</p>
@@ -84,8 +93,10 @@
             <div class="col-lg-9">
                 <p align="justify">
                     	<?php if (isset($associate) || !empty($associate) || (isset($benemerito) && $benemerito)) { ?>
-                      <h3 align="justify"><?php echo $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?> <?php $year ?>. Obrigado por sua contribuição.</h3>
+                   <div class="scroll">
+                      <h3 align="justify"><?php echo $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?>. Obrigado por sua contribuição.</h3>
                       <h3 align="justify">Campanha encerrada em <?php echo $date_finish ?>. </h3>
+                   </div>
                 <p align="justify"> A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de contribuições e doações regulares. Elas são utilizadas na manutenção e investimentos no espaço onde a Colônia de Férias é realizada, além de ajudar com os demais custos institucionais.</p>
                 <p align="justify"> Estas doações podem ser espontâneas e feitas a qualquer momento, como contribuições de ítens úteis para a colônia de férias, material de construção ou equipamentos em geral. Agradecemos a todos que indistintamente contribuem regularmente como associados ou doadores avulsos.</p>
                 <p align="justify"> A Associação Kinderland realiza projetos sociais com jovens de comunidades carentes, oferece bolsas parciais ou integrais para colonistas nas temporadas de verão e participa de várias outras iniciativas comunitárias. Somente com estas doações tudo isto torna-se possível.</p>
