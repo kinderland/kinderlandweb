@@ -28,21 +28,21 @@ class Campaigns extends CK_Controller {
             $date_start = $campaign->getDateStart();
             $helper = explode(" ", $date_start);
             $date_start = explode("-", $helper[0]);
-            $date_start = strval($date_start[2]) . "/" . strval($date_start[1]) . "/" . strval($date_start[0]);
+            $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
             $data["date_start"] = $date_start;
-
+			
             $date_finish = $campaign->getDateFinish();
             $helper = explode(" ", $date_finish);
             $date_finish = explode("-", $helper[0]);
-            $date_finish = strval($date_finish[2]) . "/" . strval($date_finish[1]) . "/" . strval($date_finish[0]);
+            $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0]);
             $data["date_finish"] = $date_finish;
-
+			
             $userId = $this->session->userdata("user_id");
             $associate = $this->donation_model->userIsAlreadyAssociate($userId);
             $data["associate"] = $associate;
         }
-       	
-        $dataatual = date('d/m/Y');
+        
+        $dataatual = date("d-m-Y");
         $year = date('Y');
        	$data['hourfinish'] = $hourfinish;
         $data['dataatual'] = $dataatual;
@@ -53,7 +53,7 @@ class Campaigns extends CK_Controller {
 
     public function startAssociation() {
         $this->Logger->info("Starting " . __METHOD__);
-        $campaign = $this->campaign_model->getCurrentCampaign();
+        $campaign = $this->campaign_model->getCurrentYearCampaign();
         $price = $campaign->getPrice();
         $userId = $this->session->userdata("user_id");
         try {
