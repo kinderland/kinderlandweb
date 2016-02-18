@@ -78,11 +78,11 @@ class Admin extends CK_Controller {
         $date_created = date("Y-m-d H:i:s");
         $errors = array();
         if (!isset($date_start) || empty($date_start))
-            $errors[] = "Campo Início é obrigatório<br>";
+            $errors[] = 'Campo Início é obrigatório.\n';
         if (!isset($date_finish) || empty($date_finish))
-            $errors[] = "Campo Fim é obrigatório<br>";
+            $errors[] = 'Campo Fim é obrigatório.\n';
         if (!isset($price) || empty($price) )
-            $errors[] = "Campo Preço é obrigatório<br>";
+            $errors[] = 'Campo Preço é obrigatório.\n';
         if (count($errors) === 0) {
             $new_date_start = explode("/", $date_start);
             $year = $new_date_start[2];
@@ -92,13 +92,13 @@ class Admin extends CK_Controller {
             $campaigns = $this->campaign_model->getAllCampaigns();
             foreach ($campaigns as $campaign) {
                 if ($campaign->getCampaignYear() === $year) {
-                    $errors[] = "Já existe uma outra campanha que começou nesse ano<br>";
+                    $errors[] = 'Já existe uma outra campanha que começou nesse ano.\n';
                     break;
                 }
             }
 
             if (!Events::verifyAntecedence($date_start, $date_finish)) {
-                $errors[] = "Data de início deve proceder a data de fim.<br>";
+                $errors[] = 'Data de início deve proceder a data de fim.\n';
             }
         }
         if (count($errors) > 0) {
