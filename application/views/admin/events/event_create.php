@@ -86,6 +86,19 @@ if(string !== ""){
 
 </script>
 </head>
+<style>
+
+div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    	padding-left:20px;
+    
+    }
+
+</style>
+<div class="scroll">
 <body>
 <script>
 $(document).ready(function (){
@@ -98,6 +111,7 @@ $(document).ready(function (){
 	
 });
 </script>
+
 <form name="event_form" onsubmit="alertRequiredFields()" method="POST" action="<?=$this->config->item('url_link')?>admin/completeEvent" id="event_form">
 	<div class="row">
 		<div class="col-lg-12 middle-content">
@@ -199,8 +213,8 @@ $(document).ready(function (){
 			</div>
 			<br />
 			<div class="row">	
-					<label for="capacity_male" class="col-lg-4 control-label"> Períodos para pagamento: </label><br />
-				
+					<label for="capacity_male" class="col-lg-12 control-label"> Períodos para pagamento: </label><br />
+				<div class="col-lg-12">
                <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Valor 6-17 anos</th><th>Valor 0-5 anos</th><th>Parcelas max</th><th>Desconto Sócio</th></tr> 
 			   <tbody>
 			   </tbody>
@@ -221,7 +235,7 @@ $(document).ready(function (){
 					onClick="history.back()">Voltar</button></a>
 		</div>
 	</div>
-			
+		</div>	
 </form>
 </body>
 </html>

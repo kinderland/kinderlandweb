@@ -74,7 +74,7 @@ div.scroll{
 <div class="scroll">
 <div class="row">
     <?php // require_once APPPATH.'views/include/common_user_left_menu.php' ?>
-	<div class="col-lg-10 middle-content">
+	<div class="col-lg-12 middle-content">
         <a href="<?=$this->config->item("url_link")?>admin/eventCreate"><button id="create" class="btn btn-primary"  value="Criar novo evento" >Criar novo evento</button></a>
 <br /><br />
 		<?php 

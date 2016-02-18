@@ -86,8 +86,26 @@ if(string !== ""){
 
 </script>
 </head>
+<style>
+
+div.scroll{
+    	
+    	width:100%;
+    	height:100%;
+    	overflow-x:hidden;
+    	padding-left:10%;
+    	font-size:14px;
+    }
+    
+
+
+		
+
+</style>
 <body>
+<div class="scroll">
 <script>
+
 $(document).ready(function (){
 	datepickers();
 
@@ -98,6 +116,7 @@ $(document).ready(function (){
 	
 });
 </script>
+
 <form name="event_form" onsubmit="alertRequiredFields()" method="POST" action="<?=$this->config->item('url_link')?>admin/updateEvent/<?php echo $event_id;?>" id="event_form">
 	<div class="row">
 		<div class="col-lg-12 middle-content">
@@ -201,13 +220,14 @@ $(document).ready(function (){
 				</div>
 			<br />
 			<div class="row">	
-					<label for="capacity_male" class="col-lg-4 control-label"> Períodos para pagamento: </label><br />
-				
+					<label for="capacity_male" class="col-lg-1 control-label"> Períodos para pagamento: </label><br />
+			<div class="col-lg-12">
                <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Valor 6-17 anos</th><th>Valor 0-5 anos</th><th>Parcelas max</th><th>Desconto Sócio</th></tr> 
 			   <tbody>
 			   </tbody>
 			   </table>
 			   <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
+			   </div>
 			</div>
 		</div>
 	<br />
@@ -225,5 +245,6 @@ $(document).ready(function (){
 	</div>
 			
 </form>
+</div>
 </body>
 </html>
