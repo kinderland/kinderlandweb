@@ -1658,200 +1658,75 @@ class Reports extends CK_Controller {
     }
 
     public function rooms() {
-        $data = array();
-        $years = array();
-        $start = 2015;
-        $date = date('Y');
-        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-        $end = $date;
-        while ($campsByYear != null) {
-            $end = $date;
-            $date++;
-            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-        }
-        $years = $this->summercamp_model->getAllSummerCampsYears();
-        $year = null;
-
-        if (isset($_GET['ano_f']))
-            $year = $_GET['ano_f'];
-        else {
-            $year = $years[0];
-        }
-
-        $data['ano_escolhido'] = $year;
-        $data['years'] = $years;
-
-        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
-        $campsQtd = count($allCamps);
-        $camps = array();
-        $start = $campsQtd;
-        $end = 1;
-
-        $campChosen = null;
-
-        if (isset($_GET['colonia_f']))
-            $campChosen = $_GET['colonia_f'];
-
-        $campChosenId = null;
-        foreach ($allCamps as $camp) {
-            $camps[] = $camp->getCampName();
-            if ($camp->getCampName() == $campChosen)
-                $campChosenId = $camp->getCampId();
-        }
-
-        $data['summer_camp_id'] = $campChosenId;
-        $data['colonia_escolhida'] = $campChosen;
-        $data['camps'] = $camps;
-
-
-        if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
-            $quarto = $_GET['quarto'];
-            $data["quarto"] = $quarto;
-            $pavilhao = $_GET['pavilhao'];
-            $data["pavilhao"] = $pavilhao;
-            $info = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao, $quarto);
-            $roomOccupation = [0, 0, 0, 0, 0, 0, 0];
-            for ($i = 0; $i < count($roomOccupation); $i++) {
-                $roomColonists = $this->filterColonists($info, $i, $pavilhao);
-                $roomOccupation[$i] = count($roomColonists);
-            }
-
-            $colonists = array();
-            $j = 0;
-            $p;
-            $tel;
-            $temTelephone = null;
-
-            foreach ($info as $i) {
-                $temTelephone = 0;
-                $p = 0;
-
-                $this->Logger->info("$# COLONISTA DE ID: " . $i->colonist_id . " E NOME: " . $i->colonist_name . "///////");
-                $obj = new stdClass();
-                $father_id = null;
-                $mother_id = null;
-                $id = null;
-
-                $father_id = $this->summercamp_model->getParentIdOfSummerCampSubscripted($campChosenId, $i->colonist_id, 'Pai');
-                if ($father_id != FALSE) {
-                    $result = $this->person_model->getPersonById($father_id);
-                    $telephone = $this->telephone_model->getTelephonesByPersonId($father_id);
-
-                    foreach ($telephone as $t) {
-                        if (!isset($t) || is_null($t) || empty($t)) {
-                            
-                        } else {
-                            if ($p == 0)
-                                $tel = $t;
-                            else
-                                $tel = $tel . "*" . $t;
-
-                            $temTelephone = 1;
-                            $this->Logger->info("$# COLONISTA TELEFONE DE PAI " . $result->getFullname() . ":" . $t);
-                        }
-                    }
-
-                    $fatherName = $result->getFullname();
-                    $fatherEmail = $result->getEmail();
-
-                    $obj->fatherName = $fatherName;
-                    $obj->fatherEmail = $fatherEmail;
-                    $obj->fatherTel = $tel;
-                }
-                else {
-                    $obj->fatherName = null;
-                    $obj->fatherEmail = null;
-                    $obj->fatherTel = '-';
-                    $this->Logger->info("$# COLONISTA SEM ID DA PAI ///////");
-                }
-
-                $mother_id = $this->summercamp_model->getParentIdOfSummerCampSubscripted($campChosenId, $i->colonist_id, 'Mãe');
-                if ($mother_id != FALSE) {
-                    $result = $this->person_model->getPersonById($mother_id);
-                    $telephone = $this->telephone_model->getTelephonesByPersonId($mother_id);
-
-                    $p = 0;
-
-                    foreach ($telephone as $t) {
-                        if (!isset($t) || is_null($t) || empty($t)) {
-                            
-                        } else {
-                            if ($p == 0)
-                                $tel = $t;
-                            else
-                                $tel = $tel . "*" . $t;
-
-                            $temTelephone = 1;
-                            $this->Logger->info("$# COLONISTA TELEFONE DE MÃE " . $result->getFullname() . ":" . $t);
-                        }
-                    }
-
-                    $motherName = $result->getFullname();
-                    $motherEmail = $result->getEmail();
-
-                    $obj->motherName = $motherName;
-                    $obj->motherEmail = $motherEmail;
-                    $obj->motherTel = $tel;
-                }
-                else {
-                    $obj->motherName = null;
-                    $obj->motherEmail = null;
-                    $obj->motherTel = '-';
-                    $this->Logger->info("$# COLONISTA SEM ID DA MÃE ///////");
-                }
-
-                $id = $this->summercamp_model->getPersonUserIdByColonistId($i->colonist_id, $campChosenId);
-                if ($id != null) {
-
-                    $result = $this->person_model->getPersonById($id->person_user_id);
-                    $responsableName = $result->getFullname();
-                    $responsableEmail = $result->getEmail();
-
-                    $obj->responsableName = $responsableName;
-                    $obj->responsableEmail = $responsableEmail;
-
-                    $telephone = $this->telephone_model->getTelephonesByPersonId($id->person_user_id);
-                    $tels = array();
-                    $add = 1;
-
-                    $p = 0;
-
-                    foreach ($telephone as $t) {
-                        if (!isset($t) || is_null($t) || empty($t)) {
-                            
-                        } else {
-                            if ($p == 0)
-                                $tel = $t;
-                            else
-                                $tel = $tel . "*" . $t;
-                        }
-                    }
-
-                    $obj->responsableTel = $tel;
-                } else {
-                    $obj->responsableName = null;
-                    $obj->responsableEmail = null;
-                    $obj->responsableTel = '-';
-                }
-
-                $obj->colonist_name = $i->colonist_name;
-                $obj->summer_camp_id = $i->summer_camp_id;
-                $obj->colonist_id = $i->colonist_id;
-                $obj->age = $i->age;
-                $obj->birth_date = $i->birth_date;
-                $obj->user_name = $i->user_name;
-                $obj->email = $i->email;
-                $obj->school_year = $i->school_year;
-                $obj->logger = $this->Logger;
-
-                $colonists[$j] = $obj;
-                $j++;
-            }
-
-
-            $data["room_occupation"] = $roomOccupation;
-            $data["colonists"] = $colonists;
-        }
+    	$data = array();
+    	
+    	$years = array();
+    	$start = 2015;
+    	$date = date('Y');
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	$end = $date;
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	while ($start <= $end) {
+    		$years[] = $start;
+    		$start++;
+    	}
+    	$year = null;
+    	
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    		else {
+    			$year = date('Y');
+    		}
+    	
+    		$data['ano_escolhido'] = $year;
+    		$data['years'] = $years;
+    	
+    		$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+    		$campsQtd = count($allCamps);
+    		$camps = array();
+    		$start = $campsQtd;
+    		$end = 1;
+    	
+    		$campChosen = null;
+    	
+    		if (isset($_GET['colonia_f']))
+    			$campChosen = $_GET['colonia_f'];
+    	
+    			$campChosenId = null;
+    			foreach ($allCamps as $camp) {
+    				$camps[] = $camp->getCampName();
+    				if ($camp->getCampName() == $campChosen)
+    					$campChosenId = $camp->getCampId();
+    			}
+    	
+    			$data['summer_camp_id'] = $campChosenId;
+    			$data['colonia_escolhida'] = $campChosen;
+    			$data['camps'] = $camps;
+    	
+    	
+    			if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
+    				$quarto = $_GET['quarto'];
+    				$data["quarto"] = $quarto;
+    				$pavilhao = $_GET['pavilhao'];
+    				$data["pavilhao"] = $pavilhao;
+    				$colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
+    	
+    				$colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+    				
+    	
+    				$roomOccupation = [0,0,0,0,0,0,0];
+    				for($i = 0; $i < count($roomOccupation); $i++){
+    					$roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
+    					$roomOccupation[$i] = count($roomColonists);
+    				}
+    	
+    				$data["room_occupation"] = $roomOccupation;
+    				$data["colonists"] = $colonistsSelected;
+    			}
 
         $this->loadReportView('reports/summercamps/rooms', $data);
     }
