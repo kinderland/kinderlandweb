@@ -1,3 +1,14 @@
+<?php
+    function do_alert($errors) 
+    {
+        if (count($errors)>0)
+        {
+            $all_errors = implode('',$errors);
+        echo '<script type="text/javascript">alert("Os seguintes erros foram encontrados: \n' . $all_errors . '"); </script>';
+        }
+    }
+?>
+
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -42,6 +53,7 @@
                 datepickers();
             });
         </script>
+        <?php do_alert($errors) ?>
         <form name="campaign_form" onsubmit="alertRequiredFields()" method="POST" action="<?= $this->config->item('url_link') ?>admin/completeCampaign" id="campaign_form">
             <div class="row">
                 <div class="col-lg-12 middle-content">
@@ -50,17 +62,7 @@
                         <div class="col-lg-8"><h4>Cadastro da campanha</h4></div>
                     </div>
                     <hr />
-                    <?php
-                    if (count($errors) > 0) {
-                        echo '<div class="alert alert-danger">
-                              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                              <strong>Os seguintes erros foram encontrados:<br></strong>';
-                        foreach ($errors as $error) {
-                            echo $error;
-                        }
-                        echo "</div>";
-                    }
-                    ?>
+
 
                     <div class="row">
 
