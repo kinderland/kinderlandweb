@@ -94,7 +94,7 @@ div.scroll{
     	height:100%;
     	overflow-x:hidden;
     	padding-left:10%;
-    	font-size:14px;
+    	
     }
     
 
@@ -220,7 +220,7 @@ $(document).ready(function (){
 				</div>
 			<br />
 			<div class="row">	
-					<label for="capacity_male" class="col-lg-1 control-label"> Períodos para pagamento: </label><br />
+					<label for="capacity_male" style="width:300px" class="col-lg-1 control-label"> Períodos para pagamento: </label><br />
 			<div class="col-lg-12">
                <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Valor 6-17 anos</th><th>Valor 0-5 anos</th><th>Parcelas max</th><th>Desconto Sócio</th></tr> 
 			   <tbody>
@@ -230,8 +230,6 @@ $(document).ready(function (){
 			   </div>
 			</div>
 		</div>
-	<br />
-	<br />
 	<br />
 	<br />
 	<div class="form-group">
