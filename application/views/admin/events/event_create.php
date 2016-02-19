@@ -93,7 +93,7 @@ div.scroll{
     	width:100%;
     	height:100%;
     	overflow-x:hidden;
-    	padding-left:20px;
+    	padding-left:10%;
     
     }
 
@@ -222,8 +222,6 @@ $(document).ready(function (){
 			   <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
 			</div>
 		</div>
-	<br />
-	<br />
 	<br />
 	<br />
 	<div class="form-group">
