@@ -91,7 +91,7 @@ div.scroll{
                     <hr class="footer-hr"/>
              <div class="row">
             <div class="col-lg-9">
-                <p align="justify">
+                <p align="left">
                     	<?php if (!empty($associate) || (isset($benemerito) && $benemerito)) { ?>
                    <div class="scroll">
                       <h3 align="left"><?php echo $fullname ?>, você já é <?= ($gender == "M") ? "sócio" : "sócia" ?>. Obrigado por sua contribuição.</h3>
