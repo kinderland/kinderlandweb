@@ -67,7 +67,7 @@
                                 <tr>
                                     <td><a target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $user->person_id ?>"><?= $user->fullname ?></a></td>
                                     <td><?= $user->email ?></td>
-                                    <td><?= date("d/m/Y", strtotime($user->data_associacao)) ?></td>
+                                    <td><?= date("d/m/Y", strtotime($user->association_date)) ?></td>
                                 </tr>
                                 <?php
                             }

@@ -390,7 +390,7 @@ class Reports extends CK_Controller {
 
     public function associated_year($year) {
         $data['summary'] = $this->campaign_model->getAssociatedCount($year);
-        $data['users'] = $this->personuser_model->getAllContribuintsDetailed();
+        $data['users'] = $this->personuser_model->getAllContribuintsDetailed($year);
         $this->loadReportView("reports/associated/associated_year", $data);
     }
 

@@ -241,10 +241,20 @@ class personuser_model extends CK_Model {
         return $rows;
     }
 
-    public function getAllContribuintsDetailed() {
+    public function getAllContribuintsDetailed($year) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * from v_rel_associated_campaign";
-        $rows = $this->executeRows($this->db, $sql);
+        $sql = " SELECT p.fullname,p.email,p.person_id,d.date_created as association_date
+                 FROM donation d, person p
+                 WHERE d.person_id = p.person_id
+                 AND   d.donation_type=2 
+                 AND   d.donation_status=2
+                 AND   d.date_created >= (SELECT c.date_start
+                                          FROM campaign c
+                                          WHERE campaign_year = '?')
+                 AND   d.date_created <= (SELECT cc.date_finish
+                                          FROM campaign cc
+                                          WHERE campaign_year = '?')";
+        $rows = $this->executeRows($this->db, $sql,array(intval($year),intval($year)));
         return $rows;
     }
 
