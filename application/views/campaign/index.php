@@ -37,7 +37,7 @@ div.scroll{
             <h3><strong>Campanha de sócios <?php echo $year ?></strong></h3>
             
             <?php  if ($campaign) {?>
-                <?php  if (strtotime($dataatual) > strtotime($date_start) && (strtotime($date_finish) == strtotime($dataatual) || strtotime($dataatual) < strtotime($date_finish)) ) { ?>
+                <?php  if (strtotime($dataatual) >= strtotime($date_start)  && strtotime($dataatual) <= strtotime($date_finish) ) { ?>
                     <hr class="footer-hr"/>
              <div class="row">
             <div class="col-lg-9">

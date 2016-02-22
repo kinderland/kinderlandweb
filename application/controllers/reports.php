@@ -314,7 +314,7 @@ class Reports extends CK_Controller {
         $checker = 1;
         $data["year"] = $year;
         $data["month"] = $month;
-        $years = $this->campaign_model->getYearsCampaign();
+        $years = $this->campaign_model->getPastYearsCampaign();
         $data["years"] = array();
         foreach ($years as $a_year) {
             if ($a_year->campaign_year === $current_year) {
@@ -384,7 +384,7 @@ class Reports extends CK_Controller {
     }
 
     public function associated_campaign() {
-        $data['years'] = $this->campaign_model->getYearsCampaign();
+        $data['years'] = $this->campaign_model->getPastYearsCampaign();
         $this->loadView("reports/associated/associated_campaign", $data);
     }
 

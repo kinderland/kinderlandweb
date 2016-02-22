@@ -14,6 +14,12 @@ class campaign_model extends CK_Model {
         return $row;
     }
 
+        public function getPastYearsCampaign() {
+        $sql = "SELECT campaign_year FROM campaign WHERE EXTRACT(YEAR FROM date_start) <= EXTRACT(YEAR FROM NOW()) ORDER BY campaign_year DESC;";
+        $row = $this->executeRows($this->db, $sql);
+        return $row;
+    }
+    
     public function getAssociatedCount($year) {
         $sql = "SELECT count(*)
                 FROM donation d
