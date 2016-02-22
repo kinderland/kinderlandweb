@@ -267,6 +267,11 @@ class Admin extends CK_Controller {
 
         if (is_array($full_price)) {
             for ($i = 0; $i < count($full_price); $i++) {
+            	$this->Logger->info("INÍCIO PAGAMENTO: ".$payment_date_start[$i]);
+            	$this->Logger->info("FINAL PAGAMENTO: ".$payment_date_end[$i]);
+            	$this->Logger->info("INÍCIO INSCRIÇÕES: ".$date_start_show);
+            	$this->Logger->info("FINAL INSCRIÇÕES: ".$date_finish_show);
+            	
                 if (!$payment_date_start[$i])
                     $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio\\n";
                 if (!$payment_date_end[$i])
@@ -308,26 +313,6 @@ class Admin extends CK_Controller {
                 if ($payment_date_end[$i]) {
                     $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
                     $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
-                }
-
-                if ($date_start) {
-                    $date_start = explode("/", $date_start);
-                    $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
-                }
-
-                if ($date_finish) {
-                    $date_finish = explode("/", $date_finish);
-                    $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-                }
-
-                if ($date_start_show) {
-                    $date_start_show = explode("/", $date_start_show);
-                    $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
-                }
-
-                if ($date_finish_show) {
-                    $date_finish_show = explode("/", $date_finish_show);
-                    $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
                 }
 
                 $payments[] = array(
@@ -377,26 +362,26 @@ class Admin extends CK_Controller {
                 "payment_portions" => $payment_portions,
                 "associated_discount" => $associated_discount / 100,
             );
-
-            if ($date_start) {
-                $date_start = explode("/", $date_start);
-                $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
-            }
-
-            if ($date_finish) {
-                $date_finish = explode("/", $date_finish);
-                $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-            }
-
-            if ($date_start_show) {
-                $date_start_show = explode("/", $date_start_show);
-                $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
-            }
-
-            if ($date_finish_show) {
-                $date_finish_show = explode("/", $date_finish_show);
-                $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
-            }
+        }
+        
+        if ($date_start) {
+        	$date_start = explode("/", $date_start);
+        	$date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+        }
+        
+        if ($date_finish) {
+        	$date_finish = explode("/", $date_finish);
+        	$date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+        }
+        
+        if ($date_start_show) {
+        	$date_start_show = explode("/", $date_start_show);
+        	$date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+        }
+        
+        if ($date_finish_show) {
+        	$date_finish_show = explode("/", $date_finish_show);
+        	$date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
         }
 
         $events = $this->event_model->getAllEvents();
@@ -410,30 +395,6 @@ class Admin extends CK_Controller {
         }
 
         if (count($errors) > 0 || $error != "") {
-
-            if ($date_start) {
-                $date_start = explode("-", $date_start);
-                $date_start[2] = explode(" ", $date_start[2]);
-                $date_start = strval($date_start[1]) . "/" . strval($date_start[2][0]) . "/" . strval($date_start[0]);
-            }
-
-            if ($date_finish) {
-                $date_finish = explode("-", $date_finish);
-                $date_finish[2] = explode(" ", $date_finish[2]);
-                $date_finish = strval($date_finish[1]) . "/" . strval($date_finish[2][0]) . "/" . strval($date_finish[0]);
-            }
-
-            if ($date_start_show) {
-                $date_start_show = explode("-", $date_start_show);
-                $date_start_show[2] = explode(" ", $date_start_show[2]);
-                $date_start_show = strval($date_start_show[1]) . "/" . strval($date_start_show[2][0]) . "/" . strval($date_start_show[0]);
-            }
-
-            if ($date_finish_show) {
-                $date_finish_show = explode("-", $date_finish_show);
-                $date_finish_show[2] = explode(" ", $date_finish_show[2]);
-                $date_finish_show = strval($date_finish_show[1]) . "/" . strval($date_finish_show[2][0]) . "/" . strval($date_finish_show[0]);
-            }
 
             $paymentsError = array();
 
@@ -700,26 +661,6 @@ class Admin extends CK_Controller {
                     $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
                 }
 
-                if ($date_start) {
-                    $date_start = explode("/", $date_start);
-                    $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
-                }
-
-                if ($date_finish) {
-                    $date_finish = explode("/", $date_finish);
-                    $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-                }
-
-                if ($date_start_show) {
-                    $date_start_show = explode("/", $date_start_show);
-                    $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
-                }
-
-                if ($date_finish_show) {
-                    $date_finish_show = explode("/", $date_finish_show);
-                    $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
-                }
-
                 $payments[] = array(
                     "payment_date_start" => $payment_date_start[$i],
                     "payment_date_end" => $payment_date_end[$i],
@@ -767,26 +708,26 @@ class Admin extends CK_Controller {
                 "payment_portions" => $payment_portions,
                 "associated_discount" => $associated_discount / 100,
             );
-
-            if ($date_start) {
-                $date_start = explode("/", $date_start);
-                $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
-            }
-
-            if ($date_finish) {
-                $date_finish = explode("/", $date_finish);
-                $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
-            }
-
-            if ($date_start_show) {
-                $date_start_show = explode("/", $date_start_show);
-                $date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
-            }
-
-            if ($date_finish_show) {
-                $date_finish_show = explode("/", $date_finish_show);
-                $date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
-            }
+        }
+        
+        if ($date_start) {
+        	$date_start = explode("/", $date_start);
+        	$date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+        }
+        
+        if ($date_finish) {
+        	$date_finish = explode("/", $date_finish);
+        	$date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+        }
+        
+        if ($date_start_show) {
+        	$date_start_show = explode("/", $date_start_show);
+        	$date_start_show = strval($date_start_show[2]) . "-" . strval($date_start_show[1]) . "-" . strval($date_start_show[0]);
+        }
+        
+        if ($date_finish_show) {
+        	$date_finish_show = explode("/", $date_finish_show);
+        	$date_finish_show = strval($date_finish_show[2]) . "-" . strval($date_finish_show[1]) . "-" . strval($date_finish_show[0] . " 23:59:59");
         }
 
         $events = $this->event_model->getAllEvents();
@@ -800,31 +741,7 @@ class Admin extends CK_Controller {
         }
 
         if (count($errors) > 0 || $error != "") {
-
-            if ($date_start) {
-                $date_start = explode("-", $date_start);
-                $date_start[2] = explode(" ", $date_start[2]);
-                $date_start = strval($date_start[1]) . "/" . strval($date_start[2][0]) . "/" . strval($date_start[0]);
-            }
-
-            if ($date_finish) {
-                $date_finish = explode("-", $date_finish);
-                $date_finish[2] = explode(" ", $date_finish[2]);
-                $date_finish = strval($date_finish[1]) . "/" . strval($date_finish[2][0]) . "/" . strval($date_finish[0]);
-            }
-
-            if ($date_start_show) {
-                $date_start_show = explode("-", $date_start_show);
-                $date_start_show[2] = explode(" ", $date_start_show[2]);
-                $date_start_show = strval($date_start_show[1]) . "/" . strval($date_start_show[2][0]) . "/" . strval($date_start_show[0]);
-            }
-
-            if ($date_finish_show) {
-                $date_finish_show = explode("-", $date_finish_show);
-                $date_finish_show[2] = explode(" ", $date_finish_show[2]);
-                $date_finish_show = strval($date_finish_show[1]) . "/" . strval($date_finish_show[2][0]) . "/" . strval($date_finish_show[0]);
-            }
-
+        	
             $paymentsError = array();
 
             foreach ($payments as $payment) {

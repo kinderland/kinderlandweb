@@ -240,13 +240,21 @@
 							<th><?=$age_groups[1]->description?></th>
 							<th><?=$age_groups[0]->description?></th>
 						</tr>
-						<?php foreach($prices as $price){?>
+						<?php foreach($prices as $p){?>
 							<tr>
-								<th><?= date_format(date_create($price->date_start), 'd/m/y');?> 
-							<?= ($price->date_start != $price->date_finish)? " - ".date_format(date_create($price->date_finish), 'd/m/y'):""?></th>
-								<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
-								<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
-								<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
+								<?php if($p->date_start == $price->date_start && $p->date_finish == $price->date_finish){?>
+								<th><?= date_format(date_create($p->date_start), 'd/m/y');?> 
+							<?= ($p->date_start != $p->date_finish)? " - ".date_format(date_create($p->date_finish), 'd/m/y'):""?></th>
+								<th>R$ <?=number_format($p->full_price, 2, ',', '.');?></th>
+								<th>R$ <?=number_format($p->middle_price, 2, ',', '.');?></th>
+								<th>R$ <?=number_format($p->children_price, 2, ',', '.');?></th>
+							<?php } else{?>
+								<td><?= date_format(date_create($p->date_start), 'd/m/y');?> 
+							<?= ($p->date_start != $p->date_finish)? " - ".date_format(date_create($p->date_finish), 'd/m/y'):""?></td>
+								<td>R$ <?=number_format($p->full_price, 2, ',', '.');?></td>
+								<td>R$ <?=number_format($p->middle_price, 2, ',', '.');?></td>
+								<td>R$ <?=number_format($p->children_price, 2, ',', '.');?></td>
+							<?php }?>
 							</tr>
 						<?php }?>
 					</table>
@@ -271,6 +279,8 @@
 								<tr>
 									<th style="width:300px">Nome do convidado</th>
 									<th style="width:100px">Faixa etária</th>
+									<th style="width:80px">Pernoite</th>
+									<th style="width:165px">Dependente de Sócio</th>
 									<th style="width:165px">Descrição do convite</th>
 									<th style="width:165px">Status</th>
 									<th style="width:90px">Ação</th>
@@ -284,6 +294,8 @@
 											<td><?= $subscr->fullname ?></td>
 										<?php }?>
 										<td><?= $subscr->age_description ?></td>
+										<td><?php if(!empty($subscr->nonsleeper) && ($subscr->nonsleeper === "t")) echo 'Não'; else echo 'Sim'; ?></td>
+										<td><?php if(!empty($subscr->associate) && ($subscr->associate === "t")) echo 'Sim'; else echo 'Não'; ?></td>
 										<td>
 											<?php
 												if($price != null){
@@ -485,6 +497,7 @@
 <script type="text/javascript">
 
 		function alertaTempoTotal(){
+			$('#thisdiv').load(document.URL +  ' #thisdiv');
 			alert("ATENÇÃO! Você terá 10 minutos para criar os convites e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
 		}
 
@@ -515,6 +528,6 @@
 
 		setTimeout(alertaTempoAcabando,1000*60*8);
 
-		setTimeout(alertaTempoTotal,50);
+		setTimeout(alertaTempoTotal,0);
 
 </script>
