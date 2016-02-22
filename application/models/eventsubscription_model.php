@@ -75,23 +75,30 @@
             return $people;
         }
 
-        public function getEventPrices($eventId){
-            $sql = "SELECT * from payment_period
-                    where event_id = ?  
-                    and date_start <= ? and date_finish >= ?";
-
-            $prices =  $this->executeRow($this->db, $sql, array(intval($eventId), date('Y-m-d H:m:s'), date('Y-m-d H:m:s') ));
-            if(count($prices) > 0)
-                return $prices;
-            else {
-                $sql = "SELECT * from payment_period
-                    where event_id = ?  
-                    and date_start = (SELECT max(date_start) from payment_period
-                    where event_id = ?)";
-
-                $prices = $this->executeRow($this->db, $sql, array(intval($eventId), intval($eventId) ));
-                return $prices;
-            }
+        public function getEventPrices($eventId,$type = null){
+        	if($type !== null){
+        		$sql = "SELECT * from payment_period
+        		where event_id = ?";
+        		
+        		return $this->executeRows($this->db, $sql, array(intval($eventId)));
+        	}else{
+	            $sql = "SELECT * from payment_period
+	                    where event_id = ?  
+	                    and date_start <= ? and date_finish >= ?";
+	
+	            $prices =  $this->executeRow($this->db, $sql, array(intval($eventId), date('Y-m-d H:m:s'), date('Y-m-d H:m:s') ));
+	            if(count($prices) > 0)
+	                return $prices;
+	            else {
+	                $sql = "SELECT * from payment_period
+	                    where event_id = ?  
+	                    and date_start = (SELECT max(date_start) from payment_period
+	                    where event_id = ?)";
+	
+	                $prices = $this->executeRow($this->db, $sql, array(intval($eventId), intval($eventId) ));
+	                return $prices;
+	            }
+        	}
                 
         }
 

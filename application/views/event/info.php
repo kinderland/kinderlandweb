@@ -235,23 +235,20 @@
 					<h4><strong>Valores:</strong></h4>
 					<table class="table table-bordered table-striped" style="max-width:550px; min-width:550px; table-layout: fixed;">
 						<tr>
-							<th></th>
+							<th style="width:150px"></th>
 							<th><?=$age_groups[2]->description?></th>
 							<th><?=$age_groups[1]->description?></th>
 							<th><?=$age_groups[0]->description?></th>
 						</tr>
-						<tr>
-							<td>Masculino</td>
-							<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
-							<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
-							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
-						</tr>
-						<tr>
-							<td>Feminino</td>
-							<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
-							<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
-							<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
-						</tr>
+						<?php foreach($prices as $price){?>
+							<tr>
+								<th><?= date_format(date_create($price->date_start), 'd/m/y');?> 
+							<?= ($price->date_start != $price->date_finish)? " - ".date_format(date_create($price->date_finish), 'd/m/y'):""?></th>
+								<td>R$ <?=number_format($price->full_price, 2, ',', '.');?></td>
+								<td>R$ <?=number_format($price->middle_price, 2, ',', '.');?></td>
+								<td>R$ <?=number_format($price->children_price, 2, ',', '.');?></td>
+							</tr>
+						<?php }?>
 					</table>
 							<h4><strong>Meus convites:</strong></h4>
 							<!-- Button trigger modal -->

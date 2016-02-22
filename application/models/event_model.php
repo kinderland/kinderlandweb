@@ -22,7 +22,7 @@ class event_model extends CK_Model {
 	}
 
 	public function getPublicOpenEvents() {
-		$sql = "SELECT * FROM open_public_events";
+		$sql = "SELECT * FROM open_public_events ORDER BY date_start ASC";
 		$resultSet = $this -> executeRows($this -> db, $sql);
 
 		$eventArray = array();

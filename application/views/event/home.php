@@ -13,15 +13,17 @@
 						<th style="width:300px">Descrição</th>
 						<th style="width:115px">Início</th>
 						<th style="width:115px">Fim</th>
-						<th style="width:100px">Ação</th>
+						<th style="width:170px">Inscrições abertas até</th>
+						<th style="width:100px">Ação</th>						
 					</tr>
 			<?php 	foreach($events as $event) {
 		?>
 					<tr>
 						<td><?=$event->getEventName();?></td>
 						<td><?=$event->getDescription();?></td>
-						<td><?= date_format(date_create($event->getDateStart()), 'd/m/y H:i');?></td>
-						<td><?= ($event->getDateStart() != $event->getDateFinish())? "".date_format(date_create($event->getDateFinish()), 'd/m/y H:i'):""?></td>
+						<td><?= date_format(date_create($event->getDateStart()), 'd/m/y');?></td>
+						<td><?= ($event->getDateStart() != $event->getDateFinish())? "".date_format(date_create($event->getDateFinish()), 'd/m/y'):""?></td>
+						<td><?= date_format(date_create($event->getDateFinishShow()), 'd/m/y')?></td>
 						<td><a href="<?=$this->config->item("url_link")?>events/info/<?=$event->getEventId()?>"><button class="btn btn-primary">Inscrição</button></a></td>
 					</tr>
 		<?php 

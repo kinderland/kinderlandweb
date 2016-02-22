@@ -44,7 +44,7 @@ class Events extends CK_Controller {
 			$event = $this->event_model->getEventById($eventId);
 
 			$subscriptions = $this->eventsubscription_model->getSubscriptionsForEventByUserId($this->session->userdata("user_id"), $eventId);
-			$price = $this->eventsubscription_model->getEventPrices($eventId);
+			$price = $this->eventsubscription_model->getEventPrices($eventId,"all");
 			$totalPrice = 0.00;
 			$subtotalPrice = 0.00;
 			$discount = 0.00;
@@ -79,7 +79,7 @@ class Events extends CK_Controller {
 			$data['qtd'] = $qtd;
 			$data['event'] = $event;
 			$data['subscriptions'] = $subscriptions;
-			$data['price'] = $price;
+			$data['prices'] = $price;
 			$data['age_groups'] = $this->eventsubscription_model->getAgeGroups();
 			$data['user_id'] = $this->session->userdata("user_id");
 			$data['user_associate'] = $this->personuser_model->isAssociate($this->session->userdata("user_id"));
