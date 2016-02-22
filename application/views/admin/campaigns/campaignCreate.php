@@ -1,12 +1,11 @@
 <?php
-    function do_alert($errors) 
-    {
-        if (count($errors)>0)
-        {
-            $all_errors = implode('',$errors);
+
+function do_alert($errors) {
+    if (count($errors) > 0) {
+        $all_errors = implode('', $errors);
         echo '<script type="text/javascript">alert("Os seguintes erros foram encontrados: \n' . $all_errors . '"); </script>';
-        }
     }
+}
 ?>
 
 <html lang="pt-br">
@@ -37,7 +36,23 @@
 
         <script type="text/javascript" charset="utf-8">
 
+            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td>\n\
+                 <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>\n\
+                 <td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price"></td>\n\
+                 <td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="8"></td>			   		\n\
+                 <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td></tr>';
 
+            function addTableLine(linhaAAdicionar) {
+                if (!linhaAAdicionar)
+                    $('#table > tbody:last').append(linha);
+                else
+                    $('#table > tbody:last').append(linhaAAdicionar);
+                datepickers();
+                $(".delete").on('click', function (campaign) {
+                    $(this).parent().parent().remove();
+                });
+
+            }
             function datepickers() {
                 $('.datepickers').datepicker();
                 $(".datepickers").datepicker("option", "dateFormat", "dd/mm/yy");
@@ -87,10 +102,23 @@
                             <br>
                             <div style="padding-top:100px">
                             </div>
+                            <br />
+                            <br />
+                            <div class="row">	
+                                <label class="col-lg- control-label"> Períodos para pagamento:                        <h5 style="color:red">Os períodos de pagamentos devem estar em ordem.</h5></label><br />
+                                <div class="col-lg-12">
+                                    <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Parcelas max</th></tr> 
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
+                                </div>
+                            </div>
+                            <br /><br />
                             <div class="form-group">
                                 <div class="col-lg-10">
                                     <button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
-                                   <button  type="button" class="btn btn-danger" onClick="window.close()">Fechar</button>
+                                    <button  type="button" class="btn btn-danger" onClick="window.close()">Fechar</button>
                                 </div>
                             </div>
                         </div>

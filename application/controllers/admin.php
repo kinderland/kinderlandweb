@@ -75,8 +75,13 @@ class Admin extends CK_Controller {
         $date_start = $this->input->post('date_start', TRUE);
         $date_finish = $this->input->post('date_finish', TRUE);
         $price = $this->input->post('price', TRUE);
+        $prep_payment_start = $this->input->post('payment_date_start', TRUE);
+        $prep_payment_end = $this->input->post('payment_date_end', TRUE);
+        $payment_portions = $this->input->post('payment_portions', TRUE);
+        $full_price = $this->input->post('full_price',TRUE);
         $date_created = date("Y-m-d H:i:s");
         $errors = array();
+        $payments = array();
         if (!isset($date_start) || empty($date_start))
             $errors[] = 'Campo Início é obrigatório.\n';
         if (!isset($date_finish) || empty($date_finish))
@@ -101,6 +106,37 @@ class Admin extends CK_Controller {
                 $errors[] = 'Data de início deve proceder a data de fim.\n';
             }
         }
+                if (is_array($full_price)) {
+            for ($i = 0; $i < count($full_price); $i++) {
+                if (!$prep_payment_start[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio\\n";
+                if (!$prep_payment_end[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim\\n";
+                if (!$full_price[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor\\n";
+                if ($prep_payment_start[$i] && $prep_payment_end[$i] && !Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$i])) {
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
+                }
+                if ($prep_payment_start[$i] && $prep_payment_end[$i] && (
+                        !Events::verifyAntecedence($prep_payment_start[$i], $date_finish) ||
+                        !Events::verifyAntecedence($prep_payment_end[$i], $date_finish) ||
+                        !Events::verifyAntecedence($date_start, $prep_payment_start[$i]) )
+                )
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições\\n";
+                for ($j = $i + 1; $j < count($full_price); $j++) {
+                    if
+                    (
+                            (
+                            Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j]) && Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
+                            ) ||
+                            (
+                            Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) && Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
+                            )
+                    )
+                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
+                }
+                }}//Fecha os errosdos pagamentos.
+
         if (count($errors) > 0) {
             return $this->campaignCreate($errors, $date_start, $date_finish, $price);
         }
