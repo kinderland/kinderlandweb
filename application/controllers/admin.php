@@ -59,13 +59,14 @@ class Admin extends CK_Controller {
         $this->loadReportView("admin/campaigns/manageCampaigns", $data);
     }
 
-    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $price = NULL) {
+    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $full_price = NULL, $payments = array()) {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
         $data["errors"] = $errors;
         $data["date_start"] = $date_start;
         $data["date_finish"] = $date_finish;
-        $data["price"] = $price;
+        $data["full_price"] = $full_price;
+        $data["payments"] = $payments;
 
         $this->loadView("admin/campaigns/campaignCreate", $data);
     }
@@ -77,7 +78,7 @@ class Admin extends CK_Controller {
         $price = $this->input->post('price', TRUE);
         $prep_payment_start = $this->input->post('payment_date_start', TRUE);
         $prep_payment_end = $this->input->post('payment_date_end', TRUE);
-        $payment_portions = $this->input->post('payment_portions', TRUE);
+        $portions = $this->input->post('payment_portions', TRUE);
         $full_price = $this->input->post('full_price', TRUE);
         $date_created = date("Y-m-d H:i:s");
         $errors = array();
@@ -137,21 +138,29 @@ class Admin extends CK_Controller {
           $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
           }
           }} */ //Fecha os erros dos pagamentos. Deixar isso aqui por enquanto.
+        for ($i = 0; $i < $periods_count; $i++) {
+            $helper = explode("/", $prep_payment_start[$i]);
+            $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
+            $helper = explode("/", $prep_payment_end[$i]);
+            $p_end = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 23:59:59");
 
+            $payments[] = array(
+                "payment_date_start" => $p_start,
+                "payment_date_finish" => $p_end,
+                "price" => $price[$i],
+                "portions" => $portions[$i]
+            );
+        }
         if (count($errors) > 0) {
-            return $this->campaignCreate($errors, $date_start, $date_finish, $price);
+            return $this->campaignCreate($errors, $date_start, $date_finish, $full_price, $payments);
         }
         try {
             $this->Logger->info("Inserting new campaign");
             $this->generic_model->startTransaction();
-            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $new_date_start, $new_date_finish, $price);
+            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $new_date_start, $new_date_finish, $full_price);
             if ($campaignId) {
-                for ($i = 0; $i < $periods_count; $i++) {
-                    $helper = explode("/", $prep_payment_start[$i]);
-                    $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
-                    $helper = explode("/", $prep_payment_end[$i]);
-                    $p_end = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 23:59:59");
-                    $paymentId = $this->campaign_model->InsertNewPaymentPeriod($campaignId, $p_start, $p_end, $full_price[$i], $payment_portions[$i]);
+                foreach ($payments as $payment) {
+                    $paymentId = $this->campaign_model->InsertNewPaymentPeriod($campaignId, $payment["payment_date_start"], $payment["payment_date_finish"], $payment["price"], $payment["portions"]);
                 }
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New campaign successfully inserted");
@@ -171,7 +180,7 @@ class Admin extends CK_Controller {
         $campaign = $this->campaign_model->getCampaignById($campaign_id);
         $date_start = $campaign->getDateStart();
         $date_finish = $campaign->getDateFinish();
-        $price = $campaign->getPrice();
+        $full_price = $campaign->getPrice();
         $current = $this->campaign_model->CheckCampaignCurrency($campaign_id);
         $date_start = explode(" ", $date_start);
         $date_start = explode("-", $date_start[0]);
@@ -179,12 +188,31 @@ class Admin extends CK_Controller {
         $date_finish = explode(" ", $date_finish);
         $date_finish = explode("-", $date_finish[0]);
         $date_finish = implode("/", array_reverse($date_finish));
+        $all_payments = $this->campaign_model->GetCampaignPeriods($campaign_id);
+        $payments = array();
+
+        foreach ($all_payments as $payment) {
+            $helper = explode(" ", $payment->date_start);
+            $helper = explode("-", $helper[0]);
+            $p_start = implode("/", array_reverse($helper));
+            $helper = explode(" ", $payment->date_finish);
+            $helper = explode("-", $helper[0]);
+            $p_finish = implode("/", array_reverse($helper));
+
+            $payments[] = array(
+                "payment_date_start" => $p_start,
+                "payment_date_finish" => $p_finish,
+                "price" => $payment->price,
+                "portions" => $payment->portions
+            );
+        }
         $data['date_start'] = $date_start;
         $data['date_finish'] = $date_finish;
-        $data['price'] = $price;
+        $data['full_price'] = $full_price;
         $data['current'] = $current;
         $data['campaign_id'] = $campaign_id;
         $data['errors'] = $errors;
+        $data['payments'] = $payments;
         $this->loadView("admin/campaigns/editCampaign", $data);
     }
 

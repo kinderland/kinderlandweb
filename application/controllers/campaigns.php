@@ -55,13 +55,12 @@ class Campaigns extends CK_Controller {
     public function startAssociation() {
         $this->Logger->info("Starting " . __METHOD__);
         $campaign = $this->campaign_model->getCurrentYearCampaign();
-        $price = $this->campaign_model->GetCurrentPeriodPrice($campaign->getCampaignId());
-        var_dump($price);
+        $period = $this->campaign_model->GetCurrentPeriod($campaign->getCampaignId());
         $userId = $this->session->userdata("user_id");
         try {
             $this->generic_model->startTransaction();
             $this->Logger->info("Creating donation");
-            $donationId = $this->donation_model->createDonation($userId, $price, DONATION_TYPE_ASSOCIATE);
+            $donationId = $this->donation_model->createDonation($userId, $period->price, DONATION_TYPE_ASSOCIATE);
             $this->Logger->info("Created donation with id: " . $donationId);
 
             $this->generic_model->commitTransaction();
