@@ -226,8 +226,12 @@ class Admin extends CK_Controller {
         $date_start = $this->input->post('date_start', TRUE);
         $date_finish = $this->input->post('date_finish', TRUE);
         $price = $this->input->post('price', TRUE);
+        $payment_date_start = $this->input->post('payment_date_start', TRUE);
+        $payment_date_finish = $this->input->post('payment_date_finish', TRUE);
+        $portions = $this->input->post('portions', TRUE);
         $campaign_id = $this->input->post('id', TRUE);
         $errors = array();
+        $payments = count($price);
         if (!isset($date_start) || empty($date_start))
             $errors[] = 'Campo Início é obrigatório.\n';
         if (!isset($date_finish) || empty($date_finish))
@@ -261,7 +265,15 @@ class Admin extends CK_Controller {
             $campaignId = $this->campaign_model->updateCampaign($campaign_id, $new_date_start, $new_date_finish);
 
             if ($campaignId) {
+                $result = $this->campaign_model->DeleteOldPeriods($campaign_id);
+                for ($i = 0; $i < $payments; $i++) {
+                    $helper = explode("/", $payment_date_start[$i]);
+                    $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
+                    $helper = explode("/", $payment_date_finish[$i]);
+                    $p_finish = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 23:59:59");
 
+                    $paymentId = $this->campaign_model->InsertNewPaymentPeriod($campaign_id, $p_start, $p_finish, $price[$i], $portions[$i]);
+                }
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New campaign successfully inserted");
                 echo "<script>alert('Campanha atualizada com sucesso!');opener.location.reload(); window.close();</script>";

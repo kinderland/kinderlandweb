@@ -117,6 +117,12 @@ class campaign_model extends CK_Model {
         return false;
     }
 
+    public function DeleteOldPeriods($campaign_id)
+    {
+       $sql = "DELETE FROM campaign_payment_period WHERE campaign_id=?";
+       $result = $this->execute($this->db,$sql,array(intval($campaign_id)));
+       return $result;
+    }
 }
 
 ?>
