@@ -65,7 +65,7 @@ div.scroll{
 
                 <p align="left">
                     A Associação Kinderland considera como associado as pessoas pertencentes ao nosso cadastro que contribuírem com um valor igual a
-                     <b>R$ <?php echo $campaign->getPrice(); ?> a partir do dia <?php echo $date_start ?> até o dia <?php echo $date_finish ?>.</b>
+                     <b>R$ <?php echo $paymentPeriod->price;  ?> a partir do dia <?php echo $date_start ?> até o dia <?php echo $date_finish ?>.</b>
                     
 
                 </p>
@@ -115,7 +115,7 @@ div.scroll{
 
                 <p align="left">
                     A Associação Kinderland considera como associado as pessoas pertencentes ao nosso cadastro que contribuírem com um valor igual a 
-                    <b>R$ <?php echo $campaign->getPrice(); ?> a partir do dia <?php echo $date_start ?> até o dia <?php echo $date_finish ?>.</b>
+                    <b>R$ <?php echo $paymentPeriod->price; ?> a partir do dia <?php echo $date_start ?> até o dia <?php echo $date_finish ?>.</b>
                     
 
                 </p>

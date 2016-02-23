@@ -26,6 +26,11 @@ class Campaigns extends CK_Controller {
 
         $campaign = $this->campaign_model->getCurrentYearCampaign();
         if ($campaign) {
+        	$campaignId = $campaign->getCampaignId();
+        	$paymentPeriod = $this->campaign_model->GetCurrentPeriod($campaignId);
+        	$data['paymentPeriod'] = $paymentPeriod;
+        	
+        	
             $date_start = $campaign->getDateStart();
             $helper = explode(" ", $date_start);
             $date_start = explode("-", $helper[0]);
@@ -45,7 +50,7 @@ class Campaigns extends CK_Controller {
 
         $dataatual = date("d-m-Y");
         $year = date('Y');
-
+		
         $data['dataatual'] = $dataatual;
         $data['year'] = $year;
         $data["campaign"] = $campaign;
