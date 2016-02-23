@@ -101,6 +101,15 @@ class campaign_model extends CK_Model {
         return false;
     }
 
+    public function GetCurrentPeriodPrice($campaignId) {
+        $sql = "SELECT price FROM campaign_payment_period WHERE campaign_id=? AND date_start<=NOW() AND date_finish>=NOW()";
+        $result = $this->executeRow($this->db, $sql, array(intval($campaignId)));
+        echo $sql;
+        if ($result)
+            return $result->price;
+        return false;
+    }
+
 }
 
 ?>
