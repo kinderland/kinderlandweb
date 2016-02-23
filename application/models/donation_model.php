@@ -30,7 +30,7 @@ class donation_model extends CK_Model {
             else
                 return 1;
         } elseif ($donation->getDonationType() == DONATION_TYPE_ASSOCIATE) {
-            $sql = "SELECT * FROM campaign_payment_period WHERE date_start <= NOW() and date_finish >= NOW() AND campaign_id IN (SELECT campaign_id FROM current_campaign)";
+            $sql = "SELECT portions FROM campaign_payment_period WHERE date_start <= NOW() and date_finish >= NOW() ";
             $result = $this->executeRow($this->db, $sql);
             if ($result)
                 return $result->portions;
