@@ -67,12 +67,14 @@ function do_alert($errors) {
         <script>
             $(document).ready(function () {
                 datepickers();
+            });
+            $(document).ready(function () {
 <?php foreach ($payments as $payment) { ?>
                     addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"]) ?>"</td> \n\
-                                                                              <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_finish"]) ?>"</td> \n\
-                                                                              <td><input type="text" class="form-control" placeholder="Preço" name="price[]" id="price" value="<?php echo $payment["price"] ?>"></td> \n\
-                                                                              <td><input type="number" class="form-control" name="portions[]" id="portions" value="<?php echo $payment["portions"] ?>" min="1" max="5"></td> \n\
-                                                                              <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td></tr>	');
+                                                                                              <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_finish"]) ?>"</td> \n\
+                                                                                              <td><input type="text" class="form-control" placeholder="Preço" name="price[]" id="price" value="<?php echo $payment["price"] ?>"></td> \n\
+                                                                                              <td><input type="number" class="form-control" name="portions[]" id="portions" value="<?php echo $payment["portions"] ?>" min="1" max="5"></td> \n\
+                                                                                              <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td></tr>	');
 <?php } ?>
             });
         </script>
@@ -107,10 +109,6 @@ function do_alert($errors) {
                                 </div>
                             </div>
                             <br><br>
-                            <label for="price" class = "col-lg-1"> Preço: </label>
-                            <div class ="col-lg-1">
-                                <input type="number" step="0.01" placeholder="Preço da campanha" value="<?= $full_price ?>" name="full_price" />
-                            </div>
                             <input type="hidden" name="id" value="<?php echo $campaign_id ?>"/>
                             <br>
                             <div style="padding-top:100px">

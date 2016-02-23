@@ -49,10 +49,10 @@ class campaign_model extends CK_Model {
         return $campaignArray;
     }
 
-    public function insertNewCampaign($year, $date_created, $date_start, $date_finish, $price) {
-        $sql = "INSERT INTO campaign(campaign_year,date_created,date_start,date_finish,price)
-                VALUES (?,?,?,?,?)";
-        $resultSet = $this->executeReturningId($this->db, $sql, array($year, $date_created, $date_start, $date_finish, $price));
+    public function insertNewCampaign($year, $date_created, $date_start, $date_finish) {
+        $sql = "INSERT INTO campaign(campaign_year,date_created,date_start,date_finish)
+                VALUES (?,?,?,?)";
+        $resultSet = $this->executeReturningId($this->db, $sql, array($year, $date_created, $date_start, $date_finish));
         if ($resultSet)
             return $resultSet;
         return false;
@@ -80,16 +80,16 @@ class campaign_model extends CK_Model {
     }
 
     public function CheckCampaignCurrency($campaign_id) {
-        $sql = "SELECT * FROM campaign WHERE campaign_id = '?' AND date_start<=NOW() AND date_finish>=NOW()";
+        $sql = "SELECT * FROM campaign WHERE campaign_id = '?' AND date_start<=NOW()";
         $resultSet = $this->executeRows($this->db, $sql, array(intval($campaign_id)));
         if ($resultSet)
             return true;
         return false;
     }
 
-    public function updateCampaign($campaign_id, $date_start, $date_finish, $price) {
-        $sql = "UPDATE campaign SET date_start = ?, date_finish=?, price='?' WHERE campaign_id='?'";
-        $resultSet = $this->execute($this->db, $sql, array($date_start, $date_finish, floatval($price), intval($campaign_id)));
+    public function updateCampaign($campaign_id, $date_start, $date_finish) {
+        $sql = "UPDATE campaign SET date_start = ?, date_finish=? WHERE campaign_id='?'";
+        $resultSet = $this->execute($this->db, $sql, array($date_start, $date_finish, intval($campaign_id)));
         return $resultSet;
     }
 

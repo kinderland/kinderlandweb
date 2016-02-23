@@ -76,7 +76,7 @@
                         <?php
                         if (isset($campaigns) && count($campaigns) > 0) {
                             ?>
-                            <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th><th>Preço</th></tr>
+                            <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th></tr>
                                         <?php
                                         foreach ($campaigns as $campaign) {
                                             ?><tr>
@@ -85,7 +85,6 @@
 
                                     <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
                                     <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y'); ?> </td>
-                                    <td><?php echo $campaign->getPrice(); ?></td>
                                     </tr>
                                     <?php
                                 }

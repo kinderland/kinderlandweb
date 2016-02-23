@@ -59,13 +59,12 @@ class Admin extends CK_Controller {
         $this->loadReportView("admin/campaigns/manageCampaigns", $data);
     }
 
-    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $full_price = NULL, $payments = array()) {
+    public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
         $data["errors"] = $errors;
         $data["date_start"] = $date_start;
         $data["date_finish"] = $date_finish;
-        $data["full_price"] = $full_price;
         $data["payments"] = $payments;
 
         $this->loadView("admin/campaigns/campaignCreate", $data);
@@ -79,17 +78,15 @@ class Admin extends CK_Controller {
         $prep_payment_start = $this->input->post('payment_date_start', TRUE);
         $prep_payment_end = $this->input->post('payment_date_end', TRUE);
         $portions = $this->input->post('payment_portions', TRUE);
-        $full_price = $this->input->post('full_price', TRUE);
         $date_created = date("Y-m-d H:i:s");
         $errors = array();
         $payments = array();
+        $payments_error = array();
         $periods_count = count($prep_payment_start);
         if (!isset($date_start) || empty($date_start))
             $errors[] = 'Campo Início é obrigatório.\n';
         if (!isset($date_finish) || empty($date_finish))
             $errors[] = 'Campo Fim é obrigatório.\n';
-        if (!isset($price) || empty($price))
-            $errors[] = 'Campo Preço é obrigatório.\n';
         if (count($errors) === 0) {
             $new_date_start = explode("/", $date_start);
             $year = $new_date_start[2];
@@ -151,13 +148,22 @@ class Admin extends CK_Controller {
                 "portions" => $portions[$i]
             );
         }
+
+        for ($i = 0; $i < $periods_count; $i++) {
+            $payments_error[] = array(
+                "payment_date_start" => $prep_payment_start[$i],
+                "payment_date_finish" => $prep_payment_end[$i],
+                "price" => $price[$i],
+                "portions" => $portions[$i]
+            );
+        }
         if (count($errors) > 0) {
-            return $this->campaignCreate($errors, $date_start, $date_finish, $full_price, $payments);
+            return $this->campaignCreate($errors, $date_start, $date_finish, $payments_error);
         }
         try {
             $this->Logger->info("Inserting new campaign");
             $this->generic_model->startTransaction();
-            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $new_date_start, $new_date_finish, $full_price);
+            $campaignId = $this->campaign_model->insertNewCampaign($year, $date_created, $new_date_start, $new_date_finish);
             if ($campaignId) {
                 foreach ($payments as $payment) {
                     $paymentId = $this->campaign_model->InsertNewPaymentPeriod($campaignId, $payment["payment_date_start"], $payment["payment_date_finish"], $payment["price"], $payment["portions"]);
@@ -180,7 +186,6 @@ class Admin extends CK_Controller {
         $campaign = $this->campaign_model->getCampaignById($campaign_id);
         $date_start = $campaign->getDateStart();
         $date_finish = $campaign->getDateFinish();
-        $full_price = $campaign->getPrice();
         $current = $this->campaign_model->CheckCampaignCurrency($campaign_id);
         $date_start = explode(" ", $date_start);
         $date_start = explode("-", $date_start[0]);
@@ -190,25 +195,25 @@ class Admin extends CK_Controller {
         $date_finish = implode("/", array_reverse($date_finish));
         $all_payments = $this->campaign_model->GetCampaignPeriods($campaign_id);
         $payments = array();
+        if ($all_payments) {
+            foreach ($all_payments as $payment) {
+                $helper = explode(" ", $payment->date_start);
+                $helper = explode("-", $helper[0]);
+                $p_start = implode("/", array_reverse($helper));
+                $helper = explode(" ", $payment->date_finish);
+                $helper = explode("-", $helper[0]);
+                $p_finish = implode("/", array_reverse($helper));
 
-        foreach ($all_payments as $payment) {
-            $helper = explode(" ", $payment->date_start);
-            $helper = explode("-", $helper[0]);
-            $p_start = implode("/", array_reverse($helper));
-            $helper = explode(" ", $payment->date_finish);
-            $helper = explode("-", $helper[0]);
-            $p_finish = implode("/", array_reverse($helper));
-
-            $payments[] = array(
-                "payment_date_start" => $p_start,
-                "payment_date_finish" => $p_finish,
-                "price" => $payment->price,
-                "portions" => $payment->portions
-            );
+                $payments[] = array(
+                    "payment_date_start" => $p_start,
+                    "payment_date_finish" => $p_finish,
+                    "price" => $payment->price,
+                    "portions" => $payment->portions
+                );
+            }
         }
         $data['date_start'] = $date_start;
         $data['date_finish'] = $date_finish;
-        $data['full_price'] = $full_price;
         $data['current'] = $current;
         $data['campaign_id'] = $campaign_id;
         $data['errors'] = $errors;
@@ -227,8 +232,6 @@ class Admin extends CK_Controller {
             $errors[] = 'Campo Início é obrigatório.\n';
         if (!isset($date_finish) || empty($date_finish))
             $errors[] = 'Campo Fim é obrigatório.\n';
-        if (!isset($price) || empty($price))
-            $errors[] = 'Campo Preço é obrigatório.\n';
         if (count($errors) === 0) {
             $new_date_start = explode("/", $date_start);
             $year = $new_date_start[2];
@@ -255,7 +258,7 @@ class Admin extends CK_Controller {
             $this->Logger->info("Updating campaign " . $campaign_id);
             $this->generic_model->startTransaction();
 
-            $campaignId = $this->campaign_model->updateCampaign($campaign_id, $new_date_start, $new_date_finish, $price);
+            $campaignId = $this->campaign_model->updateCampaign($campaign_id, $new_date_start, $new_date_finish);
 
             if ($campaignId) {
 
