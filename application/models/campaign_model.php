@@ -14,12 +14,12 @@ class campaign_model extends CK_Model {
         return $row;
     }
 
-        public function getPastYearsCampaign() {
+    public function getPastYearsCampaign() {
         $sql = "SELECT campaign_year FROM campaign WHERE EXTRACT(YEAR FROM date_start) <= EXTRACT(YEAR FROM NOW()) ORDER BY campaign_year DESC;";
         $row = $this->executeRows($this->db, $sql);
         return $row;
     }
-    
+
     public function getAssociatedCount($year) {
         $sql = "SELECT count(*)
                 FROM donation d
@@ -31,7 +31,7 @@ class campaign_model extends CK_Model {
                 AND   d.date_created <= (SELECT cc.date_finish
                                          FROM campaign cc
                                          WHERE campaign_year = '?');";
-        return $this->executeRows($this->db, $sql, array(intval($year),intval($year)));
+        return $this->executeRows($this->db, $sql, array(intval($year), intval($year)));
     }
 
     public function getAllCampaigns() {
@@ -59,7 +59,7 @@ class campaign_model extends CK_Model {
     }
 
     public function getCurrentYearCampaign() {
-        $sql = "SELECT * 
+        $sql = "SELECT *
                 FROM campaign
                 WHERE EXTRACT(YEAR FROM date_start) = EXTRACT(YEAR FROM NOW())";
         $resultSet = $this->executeRows($this->db, $sql);
@@ -71,28 +71,36 @@ class campaign_model extends CK_Model {
 
     public function getCampaignById($Id) {
         $sql = "SELECT * FROM campaign WHERE campaign_id = '?'";
-        $resultSet = $this->executeRows($this->db,$sql,array(intval($Id)));
-        if ($resultSet)
-        {
+        $resultSet = $this->executeRows($this->db, $sql, array(intval($Id)));
+        if ($resultSet) {
             $campaign = Campaign::createCampaignObject($resultSet[0]);
             return $campaign;
         }
         return false;
     }
-    
+
     public function CheckCampaignCurrency($campaign_id) {
-         $sql = "SELECT * FROM campaign WHERE campaign_id = '?' AND date_start<=NOW() AND date_finish>=NOW()";
-         $resultSet = $this->executeRows($this->db,$sql,array(intval($campaign_id)));
-         if ($resultSet)
-             return true;
-         return false;
+        $sql = "SELECT * FROM campaign WHERE campaign_id = '?' AND date_start<=NOW() AND date_finish>=NOW()";
+        $resultSet = $this->executeRows($this->db, $sql, array(intval($campaign_id)));
+        if ($resultSet)
+            return true;
+        return false;
     }
-    
-    public function updateCampaign($campaign_id,$date_start,$date_finish,$price){
+
+    public function updateCampaign($campaign_id, $date_start, $date_finish, $price) {
         $sql = "UPDATE campaign SET date_start = ?, date_finish=?, price='?' WHERE campaign_id='?'";
-        $resultSet = $this->execute($this->db,$sql,array($date_start,$date_finish,floatval($price),intval($campaign_id)));
+        $resultSet = $this->execute($this->db, $sql, array($date_start, $date_finish, floatval($price), intval($campaign_id)));
         return $resultSet;
     }
+
+    public function InsertNewPaymentPeriod($campaignId, $date_start, $date_finish, $price, $portions) {
+        $sql = "INSERT INTO campaign_payment_period(campaign_id,date_start,date_finish,price,portions) VALUES (?,?,?,?,?)";
+        $resultSet = $this->executeReturningId($this->db, $sql, array(intval($campaignId), $date_start, $date_finish, $price, intval($portions)));
+        if ($resultSet)
+            return $resultSet;
+        return false;
+    }
+
 }
 
 ?>
