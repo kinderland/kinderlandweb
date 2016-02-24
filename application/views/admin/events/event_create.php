@@ -51,6 +51,8 @@ function alertRequiredFields(){
 		error = error.concat("Data de ínicio do período de inscrições\\n");
 	if(document.getElementsByName("date_finish_show")[0].value == "")
 		error = error.concat("Data de fim do período de inscrições\\n");
+	if(document.getElementsByName("type")[0].value == "")
+		error = error.concat("Tipo de evento\\n");
 	if( 
 	   	(parseInt(document.getElementsByName("capacity_male")[0].value) || 0) + 
 	   	(parseInt(document.getElementsByName("capacity_female")[0].value) || 0) + 
@@ -67,6 +69,10 @@ function alertRequiredFields(){
 		document.getElementsByName("error")[0].value = error;
 	}
 	document.getElementsByName("enabled")[0].value = 1;
+}
+
+function back(){
+	$.redirect("<?=$this->config->item('url_link');?>admin/manageEvents");
 }
 
 function datepickers(){
@@ -158,7 +164,7 @@ $(document).ready(function (){
 			<br />
 			<div class="row">
 				<div class="form-group">
-					<label for="date_start" class="col-lg-2 control-label"> Período do Inscrições: </label>
+					<label for="date_start" class="col-lg-2 control-label"> Período de Inscrição: </label>
 					<label for="date_start_show" class="col-lg-1 control-label"> Início*: </label>
 					<div class="col-lg-2">
 						<input type="text" class="form-control datepickers required" placeholder="Início da exibição do evento" value="<?php echo Events::toMMDDYYYY($date_start_show);?>" name="date_start_show" />
@@ -170,6 +176,27 @@ $(document).ready(function (){
 				</div>
 			</div>
 			<br />
+			<div class="row">
+				<div class="form-group">
+					<label for="type" style="width:150px" class="col-lg-2 control-label">Tipo de Evento:</label>
+					<div class="col-lg-2" style="width:230px">
+						<select style="width:200px" class="form-control required" name="type" oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
+                               onchange="setCustomValidity('')">
+						<?php if($type === null){?>
+							<option value="">-- Selecione --</option>
+							<option value="1">Interno</option>
+							<option value="2">Externo</option>
+							<option value="3">Misto</option>
+						<?php } else{?>
+							<option <?php if($type == "1") echo "selected"; ?> value="1">Interno</option>
+							<option <?php if($type == "2") echo "selected"; ?> value="2">Externo</option>
+							<option <?php if($type == "3") echo "selected"; ?> value="3">Misto</option>
+						<?php }?>
+						</select>
+					</div>
+				</div>
+			</div>
+			<br />			
 			<div class="row">
 				<div class="form-group">
 					<label for="capacity_male" class="col-lg-4 control-label"> Quantidade de convites: </label>
@@ -230,7 +257,7 @@ $(document).ready(function (){
 			<input type="hidden" name="error" id="error" value="" />
 			<button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
 				<button  type="button" class="btn btn-warning"
-					onClick="history.back()">Voltar</button></a>
+					onClick="back()">Voltar</button></a>
 		</div>
 	</div>
 		</div>	

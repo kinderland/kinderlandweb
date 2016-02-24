@@ -14,7 +14,7 @@ class Event {
 	private $capacityNonSleeper;
 	private $isValid;
 
-	public function __construct($eventId, $eventName, $dateStart, $dateFinish, /*$price,*/$dateStartShow, $dateFinishShow, $description, $enabled, $capacityMale, $capacityFemale, $capacityNonSleeper) {
+	public function __construct($eventId, $eventName, $dateStart, $dateFinish, /*$price,*/$dateStartShow, $dateFinishShow, $description, $enabled, $capacityMale, $capacityFemale, $capacityNonSleeper,$type) {
 		$this -> eventId = $eventId;
 		$this -> eventName = $eventName;
 		$this -> dateStart = $dateStart;
@@ -28,12 +28,13 @@ class Event {
 		$this -> capacityFemale = $capacityFemale;
 		$this -> capacityNonSleeper = $capacityNonSleeper;
 		$this -> isValid = -1;
+		$this -> type_id = $type;
 	}
 
 	public static function createEventObject($resultRow) {
 		return new Event($resultRow -> event_id, $resultRow -> event_name, $resultRow -> date_start, $resultRow -> date_finish,
 		//$resultRow->price,
-		$resultRow -> date_start_show, $resultRow -> date_finish_show, $resultRow -> description, $resultRow -> enabled, $resultRow -> capacity_male, $resultRow -> capacity_female, $resultRow -> capacity_nonsleeper);
+		$resultRow -> date_start_show, $resultRow -> date_finish_show, $resultRow -> description, $resultRow -> enabled, $resultRow -> capacity_male, $resultRow -> capacity_female, $resultRow -> capacity_nonsleeper, $resultRow -> type_id);
 	}
 
 	public function setEventId($eventId) {
@@ -183,7 +184,14 @@ class Event {
 	public function getIsValid(){
 		return $this->isValid;
 	}
-
+	
+	public function setType($type){
+		$this->type_id = $type;
+	}
+	
+	public function getType() {
+		return $this -> type_id;
+	}
 
 }
 ?>

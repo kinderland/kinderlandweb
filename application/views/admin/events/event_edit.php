@@ -26,6 +26,29 @@
 
 <script type="text/javascript" charset="utf-8">
 
+function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for (var key in params) {
+        if (params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
 var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 6-17" name="middle_price[]" id="middle_price"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 0-5" name="children_price[]" id="children_price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_discount[]" id="associated_discount" value="0" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
 
 function addTableLine(linhaAAdicionar){
@@ -72,6 +95,22 @@ function alertRequiredFields(){
 function datepickers(){
 	$('.datepickers').datepicker();
 	$(".datepickers").datepicker("option", "dateFormat", "dd/mm/yy");	
+}
+function back(){
+	$.redirect("<?=$this->config->item('url_link');?>admin/manageEvents");
+}
+
+function token_generate(event_id){
+	$.post('<?= $this -> config -> item('url_link'); ?>admin/token_generate', {event_id: event_id},
+			function(data){
+				if(data == true){
+					alert("Token gerado com sucesso!");
+					location.reload();
+				} else {
+					alert("Occorreu um problema ao gerar o Token. Tente novamente!");
+					location.reload();
+				}				
+	});	
 }
 
 var string = "";
@@ -177,6 +216,33 @@ $(document).ready(function (){
 			<br />
 			<div class="row">
 				<div class="form-group">
+					<label for="type" style="width:150px" class="col-lg-2 control-label">Tipo de Evento:</label>
+					<div class="col-lg-2" style="width:230px">
+						<select style="width:200px" class="form-control required" name="type" oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
+                               onchange="setCustomValidity('')">
+							<option <?php if($type == "1") echo "selected"; ?> value="1">Interno</option>
+							<option <?php if($type == "2") echo "selected"; ?> value="2">Externo</option>
+							<option <?php if($type == "3") echo "selected"; ?> value="3">Misto</option>
+						</select>
+					</div>
+					<?php if($type == "2" || $type == "3"){?>
+						<div class="col-lg-2" style="width:300px">
+								<?php if($token == null){?>
+							<button class="btn btn-primary" onClick="token_generate('<?php echo $event_id;?>')" style="margin-right:40px">Gerar Token</button>
+								<?php } else {?>
+							<label for="token" style="width:80px" class="col-lg-2 control-label">Token:</label>
+							<div class="col-lg-2" style="width:140px; padding-left:0px; padding-right:0px">
+							<input type="text" style="width:300px;" class="form-control" disabled value="<?php echo $token;?>" name="token" />	
+				<!-- 			<button class="btn btn-primary" onClick="token_regenerate('<?php // echo $event_id;?>')" style="margin-right:40px">Gerar Token</button> -->
+								</div>
+								<?php }?>
+						</div>
+					<?php }?>
+				</div>
+			</div>
+			<br />		
+			<div class="row">
+				<div class="form-group">
 					<table class="table table-bordered table-striped" style="max-width:800px; min-width:700px; table-layout: fixed;">
 						<tr>
 							<th></th>
@@ -238,7 +304,7 @@ $(document).ready(function (){
 			<input type="hidden" name="error" id="error" value="" />
 			<button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
 				<button  type="button" class="btn btn-warning"
-					onClick="history.back()">Voltar</button></a>
+					onClick="back()">Voltar</button></a>
 		</div>
 	</div>
 			

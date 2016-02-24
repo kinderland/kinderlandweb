@@ -20,6 +20,26 @@ class event_model extends CK_Model {
 
 		return $eventArray;
 	}
+	
+	public function getAllEventsTokens() {
+		$sql = "SELECT * FROM event_token";
+		$resultSet = $this -> executeRows($this -> db, $sql);
+	
+		if($resultSet)
+			return $resultSet;
+		else 
+			return null;
+	}
+	
+	public function getEventTokenById($event_id) {
+		$sql = "SELECT token FROM event_token WHERE event_id = ?";
+		$resultSet = $this -> executeRow($this -> db, $sql, array(intval($event_id)));
+	
+		if($resultSet)
+			return $resultSet;
+		else
+			return null;
+	}
 
 	public function getPublicOpenEvents() {
 		$sql = "SELECT * FROM open_public_events ORDER BY date_start ASC";
@@ -115,14 +135,14 @@ class event_model extends CK_Model {
 			return $yearsArray;
 	}
 
-	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper) {
+	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type) {
 
 		$this -> Logger -> info("Running: " . __METHOD__);
 
 		$sql = 'INSERT INTO event(event_name, description, date_created, date_start, date_finish, 
-            date_start_show, date_finish_show, enabled, capacity_male, capacity_female,capacity_nonsleeper) VALUES (?,?, current_timestamp,?,?,?,?,?,?,?,?)';
+            date_start_show, date_finish_show, enabled, capacity_male, capacity_female,capacity_nonsleeper,type_id) VALUES (?,?, current_timestamp,?,?,?,?,?,?,?,?,?)';
 
-		$returnId = $this -> executeReturningId($this -> db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper));
+		$returnId = $this -> executeReturningId($this -> db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper,intval($type)));
 
 		if ($returnId)
 			return $returnId;
@@ -130,13 +150,13 @@ class event_model extends CK_Model {
 		return false;
 	}
 	
-	public function updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper) {
+	public function updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		
-		$sql = 'UPDATE event SET event_name = ?,  description = ?, date_start = ?, date_finish = ?, date_start_show = ?, date_finish_show = ?, enabled = ?, capacity_male = ?, capacity_female = ?, capacity_nonsleeper = ?
+		$sql = 'UPDATE event SET event_name = ?,  description = ?, date_start = ?, date_finish = ?, date_start_show = ?, date_finish_show = ?, enabled = ?, capacity_male = ?, capacity_female = ?, capacity_nonsleeper = ?, type_id = ?
 				WHERE event_id = ?';
 		
-		$result = $this -> execute($this->db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $event_id));
+		$result = $this -> execute($this->db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, intval($type), $event_id));
 		
 		return $result;
 	}
@@ -154,6 +174,20 @@ class event_model extends CK_Model {
 
 		return false;
 
+	}
+	
+	public function insertToken($eventId,$token) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$sql = 'INSERT INTO event_token(event_id, token) VALUES (?,?)';
+	
+		$returnId = $this -> executeReturningId($this -> db, $sql, array($eventId, $token));
+	
+		if ($returnId)
+			return $returnId;
+	
+		return false;
+	
 	}
 	
 	public function deleteEventPaymentPeriods($eventId){
