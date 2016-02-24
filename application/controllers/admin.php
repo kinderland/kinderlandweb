@@ -317,6 +317,9 @@ class Admin extends CK_Controller {
         $associated_discount = $this->input->post("associated_discount", TRUE);
         $enabled = $this->input->post("enabled", TRUE);
         $error = $this->input->post("error", TRUE);
+        $type = $this->input->post("type", TRUE);
+        if($type == "")
+        	$type = null;
         $errors = array();
 
 
@@ -512,6 +515,34 @@ class Admin extends CK_Controller {
                     "associated_discount" => $payment['associated_discount'],
                 );
             }
+            
+            if ($date_start) {
+            	$date = explode("-",$date_start);
+		        $dateDay = explode(" ", $date[2]);
+		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+		        $date_start = $date;
+            }
+            
+            if ($date_finish) {
+            	$date = explode("-", $date_finish);
+		        $dateDay = explode(" ", $date[2]);
+		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+		        $date_finish = $date;
+            }
+            
+            if ($date_start_show) {
+            	$date = explode("-", $date_start_show);
+		        $dateDay = explode(" ", $date[2]);
+		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+		       	$date_start_show = $date;
+            }
+            
+            if ($date_finish_show) {
+            	$date = explode("-", $date_finish_show);
+		        $dateDay = explode(" ", $date[2]);
+		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+		        $date_finish_show = $date;
+            }            
 
             if ($error != "") {
                 $errors[] = $error;
@@ -521,7 +552,7 @@ class Admin extends CK_Controller {
                 $this->Logger->info("Error: " . $e);
             }
 
-            return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError);
+            return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError,$type);
         }
 
 
@@ -529,7 +560,7 @@ class Admin extends CK_Controller {
             $this->Logger->info("Inserting new event");
             $this->generic_model->startTransaction();
 
-            $eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper);
+            $eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper,$type);
 
             if ($eventId) {
                 foreach ($payments as $payment) {
@@ -550,7 +581,7 @@ class Admin extends CK_Controller {
         }
     }
 
-    public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array()) {
+    public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(),$type=null) {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
         $data["errors"] = $errors;
@@ -563,6 +594,7 @@ class Admin extends CK_Controller {
         $data["capacity_male"] = $capacity_male;
         $data["capacity_female"] = $capacity_female;
         $data["capacity_nonsleeper"] = $capacity_nonsleeper;
+        $data["type"] = $type;
         $data["payments"] = $payments;
 
         foreach ($errors as $e) {
@@ -572,11 +604,17 @@ class Admin extends CK_Controller {
         $this->loadReportView('admin/events/event_create', $data);
     }
 
-    public function editEvent($event_id = NULL, $errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array()) {
+    public function editEvent($event_id = NULL, $errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(),$type = NULL) {
         $eventId = $event_id;
 
         $event = $this->event_model->getEventById($eventId);
         $paymentPeriods = $this->event_model->getEventPaymentPeriods($eventId);
+        $token = $this -> event_model -> getEventTokenById($eventId);
+        
+        if($token)
+        	$data['token'] = $token -> token;
+        else 
+        	$data['token'] = null;
 
         $data['event_id'] = $eventId;
         $data['event_name'] = $event->getEventName();
@@ -604,6 +642,7 @@ class Admin extends CK_Controller {
         $data['date_finish_show'] = $date;
 
         $data['enabled'] = $event->isEnabled();
+        $data['type'] = $event->getType();
         $data['capacity_male'] = $event->getCapacityMale();
         $this->Logger->info("Capacity Male: " . $event->getCapacityMale());
         $data['capacity_female'] = $event->getCapacityFemale();
@@ -669,6 +708,7 @@ class Admin extends CK_Controller {
         $associated_discount = $this->input->post("associated_discount", TRUE);
         $enabled = $this->input->post("enabled", TRUE);
         $error = $this->input->post("error", TRUE);
+        $type = $this->input->post("type", TRUE);
         $errors = array();
 
 
@@ -821,7 +861,7 @@ class Admin extends CK_Controller {
 
         foreach ($events as $event) {
 
-            if ($event->getEventId() != $event_id && $date_start && $date_finish && ((Events::verifyAntecedence($event->getDateStart(), $date_start) && Events::verifyAntecedence($date_start, $event->getDateFinish())) || (Events::verifyAntecedence($date_start, $event->getDateStart()) && Events::verifyAntecedence($date_finish, $event->getDateFinish())))) {
+            if ($event->getEventId() != $event_id && $date_start && $date_finish && ((Events::verifyAntecedence($event->getDateStart(), $date_start) && Events::verifyAntecedence($date_start, $event->getDateFinish())) || (Events::verifyAntecedence($event->getDateStart(), $date_finish) && Events::verifyAntecedence($date_finish, $event->getDateFinish())))) {
                 $errors[] = "Há um evento nesse período\\n";
                 break;
             }
@@ -858,6 +898,34 @@ class Admin extends CK_Controller {
                     "associated_discount" => $payment['associated_discount'],
                 );
             }
+            
+            if ($date_start) {
+            	$date = explode("-",$date_start);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_start = $date;
+            }
+            
+            if ($date_finish) {
+            	$date = explode("-", $date_finish);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_finish = $date;
+            }
+            
+            if ($date_start_show) {
+            	$date = explode("-", $date_start_show);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_start_show = $date;
+            }
+            
+            if ($date_finish_show) {
+            	$date = explode("-", $date_finish_show);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_finish_show = $date;
+            }
 
             if ($error != "") {
                 $errors[] = $error;
@@ -867,14 +935,14 @@ class Admin extends CK_Controller {
                 $this->Logger->info("Error: " . $e);
             }
 
-            return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError);
+            return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError,$type);
         }
 
         try {
             $this->Logger->info("Updating event " . $event_name);
             $this->generic_model->startTransaction();
 
-            $eventId = $this->event_model->updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper);
+            $eventId = $this->event_model->updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper,$type);
 
             if ($eventId) {
                 $this->event_model->deleteEventPaymentPeriods($event_id);
@@ -898,6 +966,59 @@ class Admin extends CK_Controller {
 
 //$this->loadReportView('admin/events/event_edit', $data);
         }
+    }
+    
+    private function rand_string( $length ) {
+    	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    	$str = null;
+    	$size = strlen( $chars );
+    
+    	for ( $i = 0; $i < $length; $i++) {
+    		$str .= $chars[ rand( 0, $size - 1 ) ];
+    	}
+    
+    	return $str;
+    }
+    
+    public function token_generate(){
+    	$event_id = $this->input->post('event_id', TRUE);
+    	$token = $this -> rand_string(8);
+    	
+    	$events_token = $this -> event_model -> getAllEventsTokens();
+    	
+    	$same = 0;
+    	
+    //	foreach($events_token as $et){
+  //  		$token = explode("",$token);
+  //  		$event_token = explode("",$et->token);
+    		
+  //  		for($i=0; $i < $token.lenght; $i++){
+  //  			if($token[$i] == $event_token[$i]){
+  //  				$same = 1;
+   // 			} else {
+   // 				$same = 0;
+   // 				break;
+   // 			}
+  //  		}
+    		
+   // 		if($same == 1){
+   // 			$token = $this -> rand_string(8);
+   // 			$events_token = $this -> event_model -> getAllEventsTokens();
+   // 		}
+   // 	}
+    	
+  //  	$token = implode("",$token);
+    	
+    	$id = $this -> event_model -> insertToken($event_id,$token);
+    	
+    	if($id){
+    		echo true;
+    		return;
+    	} else {
+    		echo false;
+    		return;
+    	}
+    		
     }
 
     public function manageEvents($message = null) {
