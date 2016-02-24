@@ -105,36 +105,56 @@ class Admin extends CK_Controller {
                 $errors[] = 'Data de início deve proceder a data de fim.\n';
             }
         }
-        /*      if (is_array($full_price)) {
-          for ($i = 0; $i < count($full_price); $i++) {
-          if (!$prep_payment_start[$i])
-          $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio\\n";
-          if (!$prep_payment_end[$i])
-          $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim\\n";
-          if (!$full_price[$i])
-          $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor\\n";
-          if ($prep_payment_start[$i] && $prep_payment_end[$i] && !Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$i])) {
-          $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
-          }
-          if ($prep_payment_start[$i] && $prep_payment_end[$i] && (
-          !Events::verifyAntecedence($prep_payment_start[$i], $date_finish) ||
-          !Events::verifyAntecedence($prep_payment_end[$i], $date_finish) ||
-          !Events::verifyAntecedence($date_start, $prep_payment_start[$i]) )
-          )
-          $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições\\n";
-          for ($j = $i + 1; $j < count($full_price); $j++) {
-          if
-          (
-          (
-          Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j]) && Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
-          ) ||
-          (
-          Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) && Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
-          )
-          )
-          $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
-          }
-          }} */ //Fecha os erros dos pagamentos. Deixar isso aqui por enquanto.
+        if (is_array($price)) {
+            for ($i = 0; $i < $periods_count; $i++) {
+
+                if (!$prep_payment_start[$i])
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem data de inicio\\n";
+                if (!$prep_payment_end[$i])
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem data de fim\\n";
+                if (!$price[$i])
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem valor\\n";
+                if (!$portions[$i])
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem número de parcelas\\n";
+                if ($i === 0) {
+                    if ($prep_payment_start[$i] && $prep_payment_start[$i] !== $date_start)
+                        $errors[] = "O primeiro período de pagamento deve começar no mesmo dia de início da campanha\\n";
+                }
+                if ($i === ($periods_count - 1)) {
+                    if ($prep_payment_end[$i] && $prep_payment_end[$i] !== $date_finish)
+                        $errors[] = "O último período de pagamento deve terminar no mesmo dia de término da campanha\\n";
+                }
+                else if ($prep_payment_end[$i] && $prep_payment_start[$i + 1]) {
+                    $helper_finish = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_end[$i]))));
+                    $helper_start = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_start[$i + 1]))));
+                    $diff = $helper_finish->diff($helper_start)->days;
+                    if ($diff !== 1)
+                        $errors[] = "O periodo de pagamento de número " . ($i + 2) . " deve começar 1 dia após o término do período de pagamento de número " . ($i + 1) . "\\n";
+                }
+
+                if ($prep_payment_start[$i] && $prep_payment_end[$i] && !Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$i])) {
+                    $errors[] = "O pagamento de número " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
+                }
+                if ($prep_payment_start[$i] && $prep_payment_end[$i] && (
+                        !Events::verifyAntecedence($prep_payment_start[$i], $date_finish) ||
+                        !Events::verifyAntecedence($prep_payment_end[$i], $date_finish) ||
+                        !Events::verifyAntecedence($date_start, $prep_payment_start[$i]) )
+                )
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições\\n";
+                for ($j = $i + 1; $j < $periods_count; $j++) {
+                    if
+                    (
+                            (
+                            Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_start[$j]) && Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_end[$i])
+                            ) ||
+                            (
+                            Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_start[$i]) && Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$j])
+                            )
+                    )
+                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
+                }
+            }
+        }  //Fecha os erros dos pagamentos. Deixar isso aqui por enquanto.
         for ($i = 0; $i < $periods_count; $i++) {
             $helper = explode("/", $prep_payment_start[$i]);
             $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
