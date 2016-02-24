@@ -95,7 +95,7 @@ class campaign_model extends CK_Model {
 
     public function InsertNewPaymentPeriod($campaignId, $date_start, $date_finish, $price, $portions) {
         $sql = "INSERT INTO campaign_payment_period(campaign_id,date_start,date_finish,price,portions) VALUES (?,?,?,?,?)";
-        $resultSet = $this->executeReturningId($this->db, $sql, array(intval($campaignId), $date_start, $date_finish, $price, intval($portions)));
+        $resultSet = $this->execute($this->db, $sql, array(intval($campaignId), $date_start, $date_finish, $price, intval($portions)));
         if ($resultSet)
             return $resultSet;
         return false;

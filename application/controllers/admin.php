@@ -112,10 +112,14 @@ class Admin extends CK_Controller {
                     $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem data de inicio\\n";
                 if (!$prep_payment_end[$i])
                     $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem data de fim\\n";
-                if (!$price[$i])
+                if (!isset($price[$i]))
                     $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem valor\\n";
-                if (!$portions[$i])
+                if (!isset($portions[$i]))
                     $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem número de parcelas\\n";
+                if ($price && intval($price[$i]) <= 0)
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " precisa de um valor maior que zero\\n";
+                if ($portions && intval($price) <= 0)
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " precisa de número de parcelas maior que zero\\n";
                 if ($i === 0) {
                     if ($prep_payment_start[$i] && $prep_payment_start[$i] !== $date_start)
                         $errors[] = "O primeiro período de pagamento deve começar no mesmo dia de início da campanha\\n";
@@ -141,21 +145,29 @@ class Admin extends CK_Controller {
                         !Events::verifyAntecedence($date_start, $prep_payment_start[$i]) )
                 )
                     $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições\\n";
-                for ($j = $i + 1; $j < $periods_count; $j++) {
-                    if
-                    (
-                            (
-                            Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_start[$j]) && Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_end[$i])
-                            ) ||
-                            (
-                            Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_start[$i]) && Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$j])
-                            )
-                    )
-                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
-                }
+                /* for ($j = $i + 1; $j < $periods_count; $j++) {
+                  if
+                  (
+                  (
+                  Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_start[$j]) && Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_end[$i])
+                  ) ||
+                  (
+                  Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_start[$i]) && Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$j])
+                  )
+                  )
+                  $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
+                  } */
             }
         }  //Fecha os erros dos pagamentos. Deixar isso aqui por enquanto.
         for ($i = 0; $i < $periods_count; $i++) {
+
+            $payments_error[] = array(
+                "payment_date_start" => $prep_payment_start[$i],
+                "payment_date_end" => $prep_payment_end[$i],
+                "price" => $price[$i],
+                "portions" => $portions[$i]
+            );
+
             $helper = explode("/", $prep_payment_start[$i]);
             $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
             $helper = explode("/", $prep_payment_end[$i]);
@@ -169,14 +181,6 @@ class Admin extends CK_Controller {
             );
         }
 
-        for ($i = 0; $i < $periods_count; $i++) {
-            $payments_error[] = array(
-                "payment_date_start" => $prep_payment_start[$i],
-                "payment_date_end" => $prep_payment_end[$i],
-                "price" => $price[$i],
-                "portions" => $portions[$i]
-            );
-        }
         if (count($errors) > 0) {
             return $this->campaignCreate($errors, $date_start, $date_finish, $payments_error);
         }
@@ -246,11 +250,13 @@ class Admin extends CK_Controller {
         $date_start = $this->input->post('date_start', TRUE);
         $date_finish = $this->input->post('date_finish', TRUE);
         $price = $this->input->post('price', TRUE);
-        $payment_date_start = $this->input->post('payment_date_start', TRUE);
-        $payment_date_finish = $this->input->post('payment_date_finish', TRUE);
+        $prep_payment_start = $this->input->post('payment_date_start', TRUE);
+        $prep_payment_end = $this->input->post('payment_date_end', TRUE);
         $portions = $this->input->post('portions', TRUE);
         $campaign_id = $this->input->post('id', TRUE);
+        $current = $this->input->post('current', TRUE);
         $errors = array();
+        $periods_count = count($price);
         $payments = count($price);
         if (!isset($date_start) || empty($date_start))
             $errors[] = 'Campo Início é obrigatório.\n';
@@ -273,7 +279,71 @@ class Admin extends CK_Controller {
             if (!Events::verifyAntecedence($date_start, $date_finish)) {
                 $errors[] = 'Data de início deve proceder a data de fim.\n';
             }
+            if ($current) {
+                $current_campaign = $this->campaign_model->getCampaignById($campaign_id);
+                $current_date_finish = $current_campaign->getDateFinish();
+                $current_date_finish = explode(" ", $current_date_finish);
+
+                $current_date_finish = implode("/", array_reverse(explode("-", $current_date_finish[0])));
+
+                if (!Events::verifyAntecedence($current_date_finish, $date_finish))
+                    $errors[] = "Campanhas em andamento ou finalizadas não podem ser encurtadas\\n";
+            }
         }
+
+        if (is_array($price)) {
+            for ($i = 0; $i < $periods_count; $i++) {
+                if (!$prep_payment_start[$i])
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem data de inicio\\n";
+                if (!$prep_payment_end[$i])
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem data de fim\\n";
+                if (!isset($price[$i]))
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem valor\\n";
+                if (!isset($portions[$i]))
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " não tem número de parcelas\\n";
+                if ($price && intval($price[$i]) <= 0)
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " precisa de um valor maior que zero\\n";
+                if ($portions && intval($price) <= 0)
+                    $errors[] = "O periodo de pagamento de número " . ($i + 1) . " precisa de número de parcelas maior que zero\\n";
+                if ($i === 0) {
+                    if ($prep_payment_start[$i] && $prep_payment_start[$i] !== $date_start)
+                        $errors[] = "O primeiro período de pagamento deve começar no mesmo dia de início da campanha\\n";
+                }
+                if ($i === ($periods_count - 1)) {
+                    if ($prep_payment_end[$i] && $prep_payment_end[$i] !== $date_finish)
+                        $errors[] = "O último período de pagamento deve terminar no mesmo dia de término da campanha\\n";
+                }
+                else if ($prep_payment_end[$i] && $prep_payment_start[$i + 1]) {
+                    $helper_finish = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_end[$i]))));
+                    $helper_start = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_start[$i + 1]))));
+                    $diff = $helper_finish->diff($helper_start)->days;
+                    if ($diff !== 1)
+                        $errors[] = "O periodo de pagamento de número " . ($i + 2) . " deve começar 1 dia após o término do período de pagamento de número " . ($i + 1) . "\\n";
+                }
+
+                if ($prep_payment_start[$i] && $prep_payment_end[$i] && !Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$i])) {
+                    $errors[] = "O pagamento de número " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
+                }
+                if ($prep_payment_start[$i] && $prep_payment_end[$i] && (
+                        !Events::verifyAntecedence($prep_payment_start[$i], $date_finish) ||
+                        !Events::verifyAntecedence($prep_payment_end[$i], $date_finish) ||
+                        !Events::verifyAntecedence($date_start, $prep_payment_start[$i]) )
+                )
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " está fora do periodo de inscrições\\n";
+                /* for ($j = $i + 1; $j < $periods_count; $j++) {
+                  if
+                  (
+                  (
+                  Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_start[$j]) && Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_end[$i])
+                  ) ||
+                  (
+                  Events::verifyAntecedence($prep_payment_start[$j], $prep_payment_start[$i]) && Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$j])
+                  )
+                  )
+                  $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
+                  } */
+            }
+        }  //Fecha os erros dos pagamentos. Deixar isso aqui por enquanto.
         if (count($errors) > 0) {
             return $this->editCampaign($campaign_id, $errors);
         }
@@ -286,12 +356,11 @@ class Admin extends CK_Controller {
 
             if ($campaignId) {
                 $result = $this->campaign_model->DeleteOldPeriods($campaign_id);
-                for ($i = 0; $i < $payments; $i++) {
-                    $helper = explode("/", $payment_date_start[$i]);
+                for ($i = 0; $i < $periods_count; $i++) {
+                    $helper = explode("/", $prep_payment_start[$i]);
                     $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
-                    $helper = explode("/", $payment_date_finish[$i]);
+                    $helper = explode("/", $prep_payment_end[$i]);
                     $p_finish = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 23:59:59");
-
                     $paymentId = $this->campaign_model->InsertNewPaymentPeriod($campaign_id, $p_start, $p_finish, $price[$i], $portions[$i]);
                 }
                 $this->generic_model->commitTransaction();
