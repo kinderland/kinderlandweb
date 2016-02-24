@@ -39,9 +39,10 @@ class CK_Controller extends CI_Controller {
     public function sendPaymentConfirmationMail($donation, $payment) {
         if ($donation->getDonationType() == DONATION_TYPE_ASSOCIATE) {
             $person = $this->person_model->getPersonById($donation->getPersonId());
+            $year = date("Y");
             $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" .
                     "Sua doação para a Associação Kinderland foi recebida com sucesso. Estamos registrando seu
-			CPF em nossa base de associados do ano 2015.<br><br>" .
+			CPF em nossa base de associados do ano" . $year . ".<br><br>" .
                     "Esta contribuição é muito importante para nós, pois permite que façamos diversos investimentos
 			no patrimônio da Colônia para que as futuras gerações possam usufruir desta experiência única
 			que é a Kinderland.<br><br>
