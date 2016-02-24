@@ -34,13 +34,13 @@ class Campaigns extends CK_Controller {
             $date_start = $campaign->getDateStart();
             $helper = explode(" ", $date_start);
             $date_start = explode("-", $helper[0]);
-            $date_start = implode("/", array_reverse($date_start));
+            $date_start = implode("-", array_reverse($date_start));
             $data["date_start"] = $date_start;
 
             $date_finish = $campaign->getDateFinish();
             $helper = explode(" ", $date_finish);
             $date_finish = explode("-", $helper[0]);
-            $date_finish = implode("/", array_reverse($date_finish));
+            $date_finish = implode("-", array_reverse($date_finish));
             $data["date_finish"] = $date_finish;
 
             $userId = $this->session->userdata("user_id");
