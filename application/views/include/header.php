@@ -55,8 +55,9 @@
                         </span>
 
                     <?php } else { ?>
-
-                        <a href="<?= $this->config->item('url_link') ?>login/signup"><button class="btn btn-primary">Cadastre-se</button></a>
+                    
+                    <a href="<?= $this->config->item('url_link') ?>events/token"><button class="btn btn-primary">Eventos</button></a>
+                    <a href="<?= $this->config->item('url_link') ?>login/signup"><button class="btn btn-primary">Cadastre-se</button></a>
 
                     <?php } ?>
                 </div>

@@ -333,6 +333,12 @@ class Events extends CK_Controller {
             echo "0";
 		
     }
+    
+    public function token(){
+    	$data = null;    	
+    	
+    	$this->loadView("event/token", $data);    	
+    }
 
 }
 
