@@ -26,21 +26,21 @@ class Campaigns extends CK_Controller {
 
         $campaign = $this->campaign_model->getCurrentYearCampaign();
         if ($campaign) {
-        	$campaignId = $campaign->getCampaignId();
-        	$paymentPeriod = $this->campaign_model->GetCurrentPeriod($campaignId);
-        	$data['paymentPeriod'] = $paymentPeriod;
-        	
-        	
+            $campaignId = $campaign->getCampaignId();
+            $paymentPeriod = $this->campaign_model->GetCurrentPeriod($campaignId);
+            $data['paymentPeriod'] = $paymentPeriod;
+
+
             $date_start = $campaign->getDateStart();
             $helper = explode(" ", $date_start);
             $date_start = explode("-", $helper[0]);
-            $date_start = strval($date_start[2]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+            $date_start = implode("/", array_reverse($date_start));
             $data["date_start"] = $date_start;
 
             $date_finish = $campaign->getDateFinish();
             $helper = explode(" ", $date_finish);
             $date_finish = explode("-", $helper[0]);
-            $date_finish = strval($date_finish[2]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0]);
+            $date_finish = implode("/", array_reverse($date_finish));
             $data["date_finish"] = $date_finish;
 
             $userId = $this->session->userdata("user_id");
@@ -50,7 +50,7 @@ class Campaigns extends CK_Controller {
 
         $dataatual = date("d-m-Y");
         $year = date('Y');
-		
+
         $data['dataatual'] = $dataatual;
         $data['year'] = $year;
         $data["campaign"] = $campaign;

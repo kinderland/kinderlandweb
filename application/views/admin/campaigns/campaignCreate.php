@@ -7,17 +7,6 @@ function do_alert($errors) {
     }
 }
 
-function existing_info($payments) {
-    foreach ($payments as $payment) {
-        $p_start = Events::toMMDDYYYY($payment["payment_date_start"]);
-        $p_finish = Events::toMMDDYYYY($payment["payment_date_finish"]);
-        echo '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="' . $p_start . '"</td>
-                                                 <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="' . $p_finish . '"</td>
-                                                 <td><input type="text" class="form-control" placeholder="Preço" name="price[]" id="price" value="' . $payment["price"] . '"></td>
-                                                 <td><input type="number" class="form-control" name="portions[]" id="portions" value="' . $payment["portions"] . '" min="1" max="5"></td>
-                                                     <td><buttonstyle="cursor: pointer; cursor: hand;" class="delete btn btn-primary"">Excluir</button></td></tr>';
-    }
-}
 ?>
 
 <html lang="pt-br">
@@ -51,7 +40,7 @@ function existing_info($payments) {
                  <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>\n\
                  <td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price"></td>\n\
                  <td><input type="number" class="form-control" name="portions[]" id="portions" value="1" min="1" max="8"></td>			   		\n\
-                 <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td></tr>';
+                 <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete"></button></td></tr>';
             function addTableLine(linhaAAdicionar) {
                 if (!linhaAAdicionar)
                     $('#table > tbody:last').append(linha);
@@ -116,7 +105,14 @@ function existing_info($payments) {
                                 <div class="col-lg-12">
                                     <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Parcelas max</th></tr>
                                         <tbody>
-
+                                            <?php foreach ($payments as $payment) {?>
+                                   <tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td>
+                                       <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>
+                                       <td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="full_price" value="<?php echo $payment["price"]?>"></td>			   		
+                                       <td><input type="number" class="form-control" name="portions[]" id="payment_portions" value="<?php echo $payment["portions"]?>" min="1" max="5"></td>			   			   		
+                                       <td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	
+                                   </tr>
+                                            <?php } ?>
                                         </tbody>
                                     </table>
                                     <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
