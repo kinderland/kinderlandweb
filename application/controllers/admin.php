@@ -77,7 +77,7 @@ class Admin extends CK_Controller {
         $price = $this->input->post('price', TRUE);
         $prep_payment_start = $this->input->post('payment_date_start', TRUE);
         $prep_payment_end = $this->input->post('payment_date_end', TRUE);
-        $portions = $this->input->post('payment_portions', TRUE);
+        $portions = $this->input->post('portions', TRUE);
         $date_created = date("Y-m-d H:i:s");
         $errors = array();
         $payments = array();
@@ -152,7 +152,7 @@ class Admin extends CK_Controller {
         for ($i = 0; $i < $periods_count; $i++) {
             $payments_error[] = array(
                 "payment_date_start" => $prep_payment_start[$i],
-                "payment_date_finish" => $prep_payment_end[$i],
+                "payment_date_end" => $prep_payment_end[$i],
                 "price" => $price[$i],
                 "portions" => $portions[$i]
             );
