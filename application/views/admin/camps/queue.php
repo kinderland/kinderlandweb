@@ -167,7 +167,7 @@ div.scroll{
 		<div class="row">
 			<div class="col-lg-10">
 				<form method="GET">
-					<select name="ano_f" onchange="this.form.submit()" id="anos">
+					Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 					
 							<?php
 							foreach ( $years as $year ) {
@@ -178,7 +178,7 @@ div.scroll{
 							}
 							?>
 						</select>
-						<select name="colonia_f" onchange="this.form.submit()" id="colonia">
+						Colônia: <select name="colonia_f" onchange="this.form.submit()" id="colonia">
 							<?php
 							$index = 0;
 							foreach ( $camps as $camp ) {
@@ -190,7 +190,7 @@ div.scroll{
 							}
 							?>
 						</select>
-						<select name="opcao_f" onchange="this.form.submit()" id="opcao">
+						Associação: <select name="opcao_f" onchange="this.form.submit()" id="opcao">
 							<?php
 							$index = 0;
 							foreach ( $opcoes as $opcao ) {

@@ -43,7 +43,7 @@ function do_alert($errors) {
         <script type="text/javascript" charset="utf-8">
 
             var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td>\n\
-                 <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_finish[]"</td>\n\
+                 <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>\n\
                  <td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price"></td>\n\
                  <td><input type="number" class="form-control" name="portions[]" id="portions" value="1" min="1" max="8"></td>			   		\n\
                  <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td></tr>';
@@ -99,6 +99,7 @@ function do_alert($errors) {
                             <div class="form-group">
                                 <label for="date_start" class="col-lg-12 control-label"> Período da campanha: </label>
                                 <label for="date_start" class="col-lg-1 control-label"> Início*: </label>
+                                <input type="hidden" name="current" value="<?php echo $current; ?>"/>
                                 <?php if ($current) { ?>
                                     <div class="col-lg-2">
                                         <input type="text" class ="form-control required" readonly name="date_start" value="<?php echo $date_start; ?>"/>
