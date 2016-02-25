@@ -13,6 +13,7 @@ class Event {
 	private $capacityFemale;
 	private $capacityNonSleeper;
 	private $isValid;
+	private $type;
 
 	public function __construct($eventId, $eventName, $dateStart, $dateFinish, /*$price,*/$dateStartShow, $dateFinishShow, $description, $enabled, $capacityMale, $capacityFemale, $capacityNonSleeper,$type) {
 		$this -> eventId = $eventId;
@@ -28,7 +29,7 @@ class Event {
 		$this -> capacityFemale = $capacityFemale;
 		$this -> capacityNonSleeper = $capacityNonSleeper;
 		$this -> isValid = -1;
-		$this -> type_id = $type;
+		$this -> type = $type;
 	}
 
 	public static function createEventObject($resultRow) {
@@ -186,11 +187,11 @@ class Event {
 	}
 	
 	public function setType($type){
-		$this->type_id = $type;
+		$this->type = $type;
 	}
 	
 	public function getType() {
-		return $this -> type_id;
+		return $this -> type;
 	}
 
 }
