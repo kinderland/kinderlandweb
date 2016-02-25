@@ -1559,7 +1559,7 @@ class Admin extends CK_Controller {
         $data['years'] = $years;
 
         $this->Logger->info("Running: " . __METHOD__);
-        $data['colonists'] = $this->summercamp_model->getAllColonistsForDiscount();
+        $data['colonists'] = $this->summercamp_model->getAllColonistsForDiscount($year);
         $data['discountReasons'] = $this->summercamp_model->getDefaultDiscountReasons();
         $this->loadReportView("admin/camps/set_discount", $data);
     }

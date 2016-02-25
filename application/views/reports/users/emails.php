@@ -32,7 +32,7 @@
                 ?>
             </table>
         <?php } else { ?>
-            <h3> Nenhuma e-mail até o momento.</h3>
+            <h3> Nenhum e-mail até o momento.</h3>
         <?php } ?>
 
     </div>
