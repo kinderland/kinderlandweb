@@ -304,30 +304,22 @@ class Reports extends CK_Controller {
         $option = $this->input->get('option', TRUE);
         $year = $this->input->get('year', TRUE);
         $month = $this->input->get('month', TRUE);
+        $years = array();
+        $end = 2015;
+        $start = date('Y');
+        while ($start >= $end) {
+            $years[] = $start;
+            $start--;
+        }
+
         if ($year === FALSE) {
             $year = date("Y");
         } else if ($month == 0) {
             $month = FALSE;
         }
-        $current_year = date('Y');
-
-        $checker = 1;
         $data["year"] = $year;
         $data["month"] = $month;
-        $years = $this->campaign_model->getPastYearsCampaign();
-        $data["years"] = array();
-        foreach ($years as $a_year) {
-            if ($a_year->campaign_year === $current_year) {
-                $checker = 0;
-                break;
-            }
-        }
-        if ($checker) {
-            $data["years"][] = $current_year;
-        }
-        foreach ($years as $a_year) {
-            $data["years"][] = $a_year->campaign_year;
-        }
+        $data["years"] = $years;
         //Por enquanto só o tipo finalizado é pra ser mostrado.
         $type = "captured";
         $title_extra = "";
@@ -1658,75 +1650,75 @@ class Reports extends CK_Controller {
     }
 
     public function rooms() {
-    	$data = array();
-    	
-    	$years = array();
-    	$start = 2015;
-    	$date = date('Y');
-    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	$end = $date;
-    	while ($campsByYear != null) {
-    		$end = $date;
-    		$date++;
-    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
-    	}
-    	while ($start <= $end) {
-    		$years[] = $start;
-    		$start++;
-    	}
-    	$year = null;
-    	
-    	if (isset($_GET['ano_f']))
-    		$year = $_GET['ano_f'];
-    		else {
-    			$year = date('Y');
-    		}
-    	
-    		$data['ano_escolhido'] = $year;
-    		$data['years'] = $years;
-    	
-    		$allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
-    		$campsQtd = count($allCamps);
-    		$camps = array();
-    		$start = $campsQtd;
-    		$end = 1;
-    	
-    		$campChosen = null;
-    	
-    		if (isset($_GET['colonia_f']))
-    			$campChosen = $_GET['colonia_f'];
-    	
-    			$campChosenId = null;
-    			foreach ($allCamps as $camp) {
-    				$camps[] = $camp->getCampName();
-    				if ($camp->getCampName() == $campChosen)
-    					$campChosenId = $camp->getCampId();
-    			}
-    	
-    			$data['summer_camp_id'] = $campChosenId;
-    			$data['colonia_escolhida'] = $campChosen;
-    			$data['camps'] = $camps;
-    	
-    	
-    			if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
-    				$quarto = $_GET['quarto'];
-    				$data["quarto"] = $quarto;
-    				$pavilhao = $_GET['pavilhao'];
-    				$data["pavilhao"] = $pavilhao;
-    				$colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
-    	
-    				$colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
-    				
-    	
-    				$roomOccupation = [0,0,0,0,0,0,0];
-    				for($i = 0; $i < count($roomOccupation); $i++){
-    					$roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
-    					$roomOccupation[$i] = count($roomColonists);
-    				}
-    	
-    				$data["room_occupation"] = $roomOccupation;
-    				$data["colonists"] = $colonistsSelected;
-    			}
+        $data = array();
+
+        $years = array();
+        $start = 2015;
+        $date = date('Y');
+        $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        $end = $date;
+        while ($campsByYear != null) {
+            $end = $date;
+            $date++;
+            $campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+        }
+        while ($start <= $end) {
+            $years[] = $start;
+            $start++;
+        }
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = date('Y');
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+
+        $allCamps = $this->summercamp_model->getAllSummerCampsByYear($year);
+        $campsQtd = count($allCamps);
+        $camps = array();
+        $start = $campsQtd;
+        $end = 1;
+
+        $campChosen = null;
+
+        if (isset($_GET['colonia_f']))
+            $campChosen = $_GET['colonia_f'];
+
+        $campChosenId = null;
+        foreach ($allCamps as $camp) {
+            $camps[] = $camp->getCampName();
+            if ($camp->getCampName() == $campChosen)
+                $campChosenId = $camp->getCampId();
+        }
+
+        $data['summer_camp_id'] = $campChosenId;
+        $data['colonia_escolhida'] = $campChosen;
+        $data['camps'] = $camps;
+
+
+        if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
+            $quarto = $_GET['quarto'];
+            $data["quarto"] = $quarto;
+            $pavilhao = $_GET['pavilhao'];
+            $data["pavilhao"] = $pavilhao;
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
+
+            $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+
+
+            $roomOccupation = [0, 0, 0, 0, 0, 0, 0];
+            for ($i = 0; $i < count($roomOccupation); $i++) {
+                $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
+                $roomOccupation[$i] = count($roomColonists);
+            }
+
+            $data["room_occupation"] = $roomOccupation;
+            $data["colonists"] = $colonistsSelected;
+        }
 
         $this->loadReportView('reports/summercamps/rooms', $data);
     }
