@@ -21,7 +21,7 @@ class campaign_model extends CK_Model {
     }
 
     public function getAssociatedCount($year) {
-        $sql = "SELECT count(*)
+        $sql = "SELECT count(distinct(d.person_id))
                 FROM donation d
                 WHERE d.donation_type = 2
                 AND   d.donation_status = 2

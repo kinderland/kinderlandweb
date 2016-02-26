@@ -238,7 +238,7 @@ class personuser_model extends CK_Model {
 
     public function getAllContributorsByYearDetailed($year) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = " SELECT p.fullname,p.email,p.person_id,d.date_created as association_date
+        $sql = " SELECT DISTINCT ON (p.fullname)  p.fullname,p.email,p.person_id,d.date_created AS association_date
                  FROM donation d, person p
                  WHERE d.person_id = p.person_id
                  AND   d.donation_type=2 
