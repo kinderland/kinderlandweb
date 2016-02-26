@@ -1,19 +1,28 @@
 <?php
 
+
 require_once APPPATH . 'core/CK_Controller.php';
 require_once APPPATH . 'core/personuser.php';
+require_once APPPATH . 'core/summercamp.php';
+require_once APPPATH . 'core/summercampSubscription.php';
+require_once APPPATH . 'core/colonist.php';
+require_once APPPATH . 'core/event.php';
+require_once APPPATH . 'controllers/events.php';
+require_once APPPATH . 'core/campaign.php';
+
 
 class User extends CK_Controller {
 
     public function __construct() {
         parent::__construct();
         $this->load->helper('url');
+        $this->load->model('email_model');
         $this->load->model('person_model');
         $this->load->model('address_model');
         $this->load->model('generic_model');
         $this->load->model('telephone_model');
         $this->load->model('personuser_model');
-
+        $this->email_model->setLogger($this->Logger);
         $this->person_model->setLogger($this->Logger);
         $this->address_model->setLogger($this->Logger);
         $this->generic_model->setLogger($this->Logger);
@@ -132,8 +141,13 @@ class User extends CK_Controller {
 
     public function emails() {
         $this->Logger->info("Running: " . __METHOD__);
-        $userid = $this->session->userdata("user_id");
-        $data['emails'] = $this->personuser_model->getEmailsByUserId($userid);
+        $userId = $this->session->userdata("user_id");
+        $person = $this->person_model->getPersonById($userId);
+        $emails = $this->email_model->getEmailsSentToUserById($userId);
+        
+        $data['emails'] = $emails;
+        $data['person'] = $person;
+        $data['emails'] = $emails;
         $this->loadView("reports/users/emails", $data);
     }
 

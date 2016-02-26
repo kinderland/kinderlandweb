@@ -7,11 +7,11 @@ function renderMenu($permissions) {
     }
 
     if (in_array(DIRECTOR, $permissions)) {
-        return APPPATH . 'views/include/director_left_menu.php';
+        return APPPATH . 'views/include/director_upper_menu.php';
     }
 
     if (in_array(SECRETARY, $permissions)) {
-        return APPPATH . 'views/include/secretary_left_menu.php';
+        return APPPATH . 'views/include/secretary_upper_menu.php';
     }
 
     if (in_array(COORDINATOR, $permissions)) {
@@ -26,7 +26,7 @@ function renderMenu($permissions) {
         return APPPATH . 'views/include/monitor_left_menu.php';
     }
 
-    return APPPATH . 'views/include/secretary_left_menu.php';
+    return APPPATH . 'views/include/secretary_upper_menu.php';
 }
 
 ?>

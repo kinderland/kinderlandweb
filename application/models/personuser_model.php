@@ -238,7 +238,7 @@ class personuser_model extends CK_Model {
 
     public function getAllContributorsByYearDetailed($year) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = " SELECT p.fullname,p.email,p.person_id,d.date_created as association_date
+        $sql = " SELECT DISTINCT ON (p.fullname)  p.fullname,p.email,p.person_id,d.date_created AS association_date
                  FROM donation d, person p
                  WHERE d.person_id = p.person_id
                  AND   d.donation_type=2 
@@ -280,7 +280,14 @@ class personuser_model extends CK_Model {
 
     public function getEmailsByUserId($person_id) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "select * from v_report_emails where person_id = ?";
+        $sql = "SELECT c.communication_id, c.content, to_char(c.date_sent, 'YYYY-MM-DD HH:mm') as date_sent, 
+				c.successfully_sent, c.type FROM communication c 
+				INNER JOIN communication_recipient cr on cr.communication_id = c.communication_id
+				INNER JOIN person p on p.email = cr.recipient
+				WHERE p.person_id = ?
+				AND cr.recipient_type = 'recipient'
+				ORDER BY date_sent DESC
+				LIMIT 30";
         $rows = $this->executeRows($this->db, $sql, array(intval($person_id)));
         foreach ($rows as $row) {
             $row = $this->extractMessageEmail($row);
