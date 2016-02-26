@@ -1071,34 +1071,46 @@ class Admin extends CK_Controller {
     
     public function token_generate(){
     	$event_id = $this->input->post('event_id', TRUE);
+    	$type = $this -> input -> post('type', TRUE);
+    	
     	$token = $this -> rand_string(8);
     	
     	$events_token = $this -> event_model -> getAllEventsTokens();
     	
-    	$same = 0;
+    	$same = 1;
     	
-    //	foreach($events_token as $et){
-  //  		$token = explode("",$token);
-  //  		$event_token = explode("",$et->token);
-    		
-  //  		for($i=0; $i < $token.lenght; $i++){
-  //  			if($token[$i] == $event_token[$i]){
-  //  				$same = 1;
-   // 			} else {
-   // 				$same = 0;
-   // 				break;
-   // 			}
-  //  		}
-    		
-   // 		if($same == 1){
-   // 			$token = $this -> rand_string(8);
-   // 			$events_token = $this -> event_model -> getAllEventsTokens();
-   // 		}
-   // 	}
+    	while($same != 0)  {  	
+	    	foreach($events_token as $et){
+	    		$token = explode("",$token);
+	    		$event_token = explode("",$et->token);
+	    		
+	    		for($i=0; $i < $token.lenght; $i++){
+	    			if($token[$i] == $event_token[$i]){
+	    				$same = 1;
+	    			} else {
+	    				$same = 0;
+	    				break;
+	    			}
+	    		}
+	    		
+	    		if($same == 1){
+	    			$token = $this -> rand_string(8);
+	    		}
+	    		else 
+	    			break;
+	    	}
+    	}    	
     	
-  //  	$token = implode("",$token);
+    	$token = implode("",$token);
     	
-    	$id = $this -> event_model -> insertToken($event_id,$token);
+    	$id = null;
+    	
+    	if($type == "regenerate"){
+    		if($this -> event_model -> deleteToken($event_id))
+    			$id = $this -> event_model -> insertToken($event_id,$token);
+    	} else if($type == "generate"){
+    		$id = $this -> event_model -> insertToken($event_id,$token);
+    	}
     	
     	if($id){
     		echo true;
@@ -1106,8 +1118,7 @@ class Admin extends CK_Controller {
     	} else {
     		echo false;
     		return;
-    	}
-    		
+    	}    		
     }
 
     public function manageEvents($message = null) {
