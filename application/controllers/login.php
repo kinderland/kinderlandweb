@@ -45,7 +45,7 @@ class Login extends CK_Controller {
         $this->loadView('login/signup', $data);
     }
 
-    public function loginSuccessful() {
+ 	public function loginSuccessful() {
         $this->Logger->info("Starting " . __METHOD__);
         $login = $_POST['login'];
         $password = $_POST['password'];
@@ -67,6 +67,37 @@ class Login extends CK_Controller {
             $this->session->set_userdata("fullname", $user->getFullname());
             $this->session->set_userdata("gender", $user->getGender());
             $this->session->set_userdata("user_types", $permissions);
+            
+            $rows = $this -> personuser_model -> checkAllPermissionsByUserType($permissions);
+            
+            $old = "";
+            $new = "";
+            $r = "";
+            
+            foreach($rows as $row){
+            	$new = $row -> controller_name;
+            	
+            	if($new != $old && $old != ""){
+            		$this->session->set_userdata($old, $r);
+            		$n = $this->session->userdata($old);
+            		$this -> Logger -> info("RESULT: ".$old);
+            		$this -> Logger -> info("RESULT: ".$n);
+            		$r = "";            		
+            	}
+            	
+            	if($r){
+            		$r = $r.",";
+            	}
+            	
+            	$r = $r.$row -> method_name;
+            	$old = $row -> controller_name;
+            }
+            
+            $this->session->set_userdata($old, $r);
+            $n = $this->session->userdata($old);
+            $this -> Logger -> info("RESULT: ".$old);
+            $this -> Logger -> info("RESULT: ".$n);
+            
 
             if (count($permissions) == 1)
                 $this->redirectToSystemScreen($permissions[0]);

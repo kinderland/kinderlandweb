@@ -1070,6 +1070,7 @@ class Admin extends CK_Controller {
     }
     
     public function token_generate(){
+    	$this->Logger->info("TOKEN");
     	$event_id = $this->input->post('event_id', TRUE);
     	$type = $this -> input -> post('type', TRUE);
     	
@@ -1079,46 +1080,40 @@ class Admin extends CK_Controller {
     	
     	$same = 1;
     	
-    	while($same != 0)  {  	
-	    	foreach($events_token as $et){
-	    		$token = explode("",$token);
-	    		$event_token = explode("",$et->token);
-	    		
-	    		for($i=0; $i < $token.lenght; $i++){
-	    			if($token[$i] == $event_token[$i]){
-	    				$same = 1;
-	    			} else {
-	    				$same = 0;
-	    				break;
-	    			}
-	    		}
-	    		
-	    		if($same == 1){
-	    			$token = $this -> rand_string(8);
-	    		}
-	    		else 
-	    			break;
-	    	}
-    	}    	
-    	
-    	$token = implode("",$token);
-    	
-    	$id = null;
-    	
-    	if($type == "regenerate"){
-    		if($this -> event_model -> deleteToken($event_id))
-    			$id = $this -> event_model -> insertToken($event_id,$token);
-    	} else if($type == "generate"){
-    		$id = $this -> event_model -> insertToken($event_id,$token);
+    	foreach ($events_token as $et){
+    		while(strcmp($et->token,$token) == 0){
+    			$token = $this -> rand_string(8);
+    		}
     	}
     	
-    	if($id){
-    		echo true;
-    		return;
-    	} else {
+    	try {
+    		$this->Logger->info("Updating token of event_id: " . $event_id);
+    		$this->generic_model->startTransaction();
+    	
+	    	if($type == "regenerate"){
+	    		if($this -> event_model -> deleteToken($event_id)){
+	    			$id = $this -> event_model -> insertToken($event_id,$token);
+	    		}
+	    	} else if($type == "generate"){
+	    		$id = $this -> event_model -> insertToken($event_id,$token);
+	    	} 
+	    	
+	    	if($id){    	
+    			$this->generic_model->commitTransaction();
+    			$this->Logger->info("New token successfully inserted");
+    			echo true;
+    			return true;
+    		} else{
+    			echo false;
+    			return false;
+    		}
+    	} catch (Exception $ex) {
+    		$this->Logger->error("Failed to insert new token");
+    		$this->generic_model->rollbackTransaction();
     		echo false;
-    		return;
-    	}    		
+    	
+    		return false;
+    	}
     }
 
     public function manageEvents($message = null) {

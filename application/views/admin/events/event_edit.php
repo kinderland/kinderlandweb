@@ -100,14 +100,14 @@ function back(){
 	$.redirect("<?=$this->config->item('url_link');?>admin/manageEvents");
 }
 
-function token_generate(event_id){
-	$.post('<?= $this -> config -> item('url_link'); ?>admin/token_generate', {event_id: event_id},
+function token_generate(event_id,type){
+	$.post('<?= $this -> config -> item('url_link'); ?>admin/token_generate', {event_id: event_id, type: type},
 			function(data){
 				if(data == true){
 					alert("Token gerado com sucesso!");
 					location.reload();
 				} else {
-					alert("Occorreu um problema ao gerar o Token. Tente novamente!");
+					alert("Ocorreu um problema ao gerar o Token. Tente novamente!");
 					location.reload();
 				}				
 	});	
@@ -226,15 +226,15 @@ $(document).ready(function (){
 						</select>
 					</div>
 					<?php if($type == "2" || $type == "3"){?>
-						<div class="col-lg-2" style="width:300px">
+						<div class="col-lg-2" style="width:600px">
 								<?php if($token == null){?>
-							<button class="btn btn-primary" onClick="token_generate('<?php echo $event_id;?>')" style="margin-right:40px">Gerar Token</button>
+							<button type="button" class="btn btn-primary" onClick="token_generate('<?php echo $event_id;?>','generate')" style="margin-right:40px">Gerar Token</button>
 								<?php } else {?>
 							<label for="token" style="width:80px" class="col-lg-2 control-label">Token:</label>
-							<div class="col-lg-2" style="width:140px; padding-left:0px; padding-right:0px">
-							<input type="text" style="width:300px;" class="form-control" disabled value="<?php echo $token;?>" name="token" />	
-				<!-- 			<button class="btn btn-primary" onClick="token_regenerate('<?php // echo $event_id;?>')" style="margin-right:40px">Gerar Token</button> -->
-								</div>
+							<div class="col-lg-2" style="width:145px; padding-left:0px; padding-right:0px">
+								<input type="text" style="width:140px;" class="form-control" disabled value="<?php echo $token;?>" name="token" />	
+				 			</div>
+				 			<button type="button" class="btn btn-primary" onClick="token_generate('<?php echo $event_id;?>','regenerate')" style="margin-right:40px">Gerar Novo Token</button> 
 								<?php }?>
 						</div>
 					<?php }?>

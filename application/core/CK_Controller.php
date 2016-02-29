@@ -420,7 +420,42 @@ class CK_Controller extends CI_Controller {
     }
 
     public function checkPermission($class, $method) {
-        $permission = false;
+        $permission = '0';
+  //      $allPermissions = array();
+        
+  //      $allFreePermissions = $this -> personuser_model -> getMethodsAndClassesByUserType('0');
+        
+  //      if($allFreePermissions){
+//	        foreach ($allFreePermissions as $p){
+	//        	if(strcmp($class,$p->controller_name) == 0 && strcmp($method,$p->method_name) == 0){
+//	        		$permission = '1';
+//	        		break;
+	//        	}
+	//        }
+  //      }
+        
+   //     $i = 0;
+        
+  //      $this -> Logger -> info("PERMISSION: ".$permission);
+        
+  //      if($permission === '0'){
+   //     	$this -> Logger -> info("ENTROU EM PERMISSION!!!");
+	        
+	//        if($this->session->userdata($class)!== null){
+	//        	$methods = $this->session->userdata('admin');
+	//        	$this -> Logger -> info("CLASS: ".$class);
+	 //       	$this -> Logger -> info("METHODS: ".$methods);
+	        	
+	//        	$methods = explode(",",$methods);
+	        	
+	 //       	foreach($methods as $m){
+	//        		if($method == $m){
+	 //       			$permission = "1";
+	 //       			break;
+	 //       		}
+	  //      	}
+	 //       }
+     //   }
 
         if (!$this->session->userdata('user_types')) {
             $permission = $this->personuser_model->checkPermission($class, $method, array(0));
@@ -428,7 +463,7 @@ class CK_Controller extends CI_Controller {
             $permission = $this->personuser_model->checkPermission($class, $method, $this->session->userdata('user_types'));
         }
 
-        if (!$permission) {
+        if ($permission === '0') {
             $this->Logger->warn("Usuário com id =" . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
             return redirect("user/permissionNack");
         }
