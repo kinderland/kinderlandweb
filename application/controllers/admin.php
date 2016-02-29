@@ -1092,13 +1092,13 @@ class Admin extends CK_Controller {
     	
 	    	if($type == "regenerate"){
 	    		if($this -> event_model -> deleteToken($event_id)){
-	    			$id = $this -> event_model -> insertToken($event_id,$token);
+	    			$result = $this -> event_model -> insertToken($event_id,$token);
 	    		}
 	    	} else if($type == "generate"){
-	    		$id = $this -> event_model -> insertToken($event_id,$token);
+	    		$result = $this -> event_model -> insertToken($event_id,$token);
 	    	} 
 	    	
-	    	if($id){    	
+	    	if($result){    	
     			$this->generic_model->commitTransaction();
     			$this->Logger->info("New token successfully inserted");
     			echo true;

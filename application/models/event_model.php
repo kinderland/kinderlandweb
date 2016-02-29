@@ -40,6 +40,16 @@ class event_model extends CK_Model {
 		else
 			return null;
 	}
+	
+	public function getEventIdByToken($token) {
+		$sql = "SELECT event_id FROM event_token WHERE token = ?";
+		$resultSet = $this -> executeRow($this -> db, $sql, array($token));
+	
+		if($resultSet)
+			return $resultSet;
+		else
+			return null;
+	}
 
 	public function getPublicOpenEvents() {
 		$sql = "SELECT * FROM open_public_events ORDER BY date_start ASC";
@@ -181,12 +191,9 @@ class event_model extends CK_Model {
 	
 		$sql = 'INSERT INTO event_token(event_id, token) VALUES (?,?)';
 	
-		$returnId = $this -> executeReturningId($this -> db, $sql, array($eventId, $token));
+		$result = $this -> execute($this -> db, $sql, array(intval($eventId), $token));
 	
-		if ($returnId)
-			return true;
-	
-		return null;
+		return $result;
 	
 	}
 	
