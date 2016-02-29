@@ -21,8 +21,10 @@
                     <?php } ?>
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions)) { ?>
                         <option <?= $validation ?> value="<?= $this->config->item('url_link'); ?>admin/validateColonists">Validação</option>
-                    <?php } ?>
-                    <option value="<?= $this->config->item('url_link'); ?>admin/colonist_exclusion">Cancelamentos e Exclusões</option>
+                    <?php } ?> 
+                    <?php if (in_array(SYSTEM_ADMIN, $permissions)) { ?>
+                        <option value="<?= $this->config->item('url_link'); ?>admin/colonist_exclusion">Cancelamentos e Exclusões</option>
+                    <?php } ?> 
                 </select>
             </div>
         </div>

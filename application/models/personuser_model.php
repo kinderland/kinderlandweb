@@ -266,6 +266,43 @@ class personuser_model extends CK_Model {
         }
         return false;
     }
+    
+    public function checkAllPermissionsByUserType($userType) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$result = array();
+    	$list = "";
+    	
+    	foreach($userType as $typeUser) {
+    		if ($list) {
+    			$list .= ",";
+    		}
+    		$list .= $typeUser;
+    	}
+    		$sql = "select distinct controller_name,method_name from system_method where user_type in (".$list.") order by controller_name ASC";
+    		$rows = $this->executeRows($this->db, $sql);
+    		
+    	//	foreach ($rows as $row){
+    	//		$obj = new StdClass();
+    	//		$obj -> method_name = $row->method_name;
+    	//		$obj -> controller_name = $row->controller_name;
+    	//		$result[] = $obj;
+    	//	}
+    	
+    	return $rows;
+    }
+    
+    public function getMethodsAndClassesByUserType($userType){
+    	
+    	$sql = "select * from system_method where user_type = ?";
+    	
+    	$rows = $this->executeRows($this->db, $sql, array(intval($userType)));
+    	
+    	if($rows)
+    		return $rows;
+    	else 
+    		return null;
+    	
+    }
 
     public function isAssociate($person_id) {
         $this->Logger->info("Running: " . __METHOD__);

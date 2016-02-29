@@ -184,10 +184,18 @@ class event_model extends CK_Model {
 		$returnId = $this -> executeReturningId($this -> db, $sql, array($eventId, $token));
 	
 		if ($returnId)
-			return $returnId;
+			return true;
 	
-		return false;
+		return null;
 	
+	}
+	
+	public function deleteToken($eventId){
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$deleteSql = 'DELETE FROM event_token WHERE event_id = ?';
+	
+		return $this->execute($this->db, $deleteSql, array(intval($eventId)));
 	}
 	
 	public function deleteEventPaymentPeriods($eventId){
