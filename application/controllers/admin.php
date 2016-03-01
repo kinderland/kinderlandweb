@@ -7,7 +7,7 @@ require_once APPPATH . 'core/colonist.php';
 require_once APPPATH . 'core/event.php';
 require_once APPPATH . 'controllers/events.php';
 require_once APPPATH . 'core/campaign.php';
-
+require_once APPPATH . 'core/summerCampPaymentPeriod.php';
 class Admin extends CK_Controller {
 
     public function __construct() {
