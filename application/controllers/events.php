@@ -339,6 +339,99 @@ class Events extends CK_Controller {
     	
     	$this->loadView("event/token", $data);    	
     }
+    
+    public function validateToken(){
+    	$token = $this -> input -> post('token',TRUE);
+    	
+    	$event_id = $this -> event_model -> getEventIdByToken($token);
+    	
+    	if($event_id)
+    		return openEvent($event_id);
+    	else {
+    		echo false;
+    		return false;
+    	}   		
+    	
+    }
+    
+    public function openEvent($eventId, $error=false,$age_group=NULL,$nonsleeper=NULL,$gender=NULL){
+    	$this->Logger->info("Starting " . __METHOD__);
+    
+    	if(!$this->checkSession())
+    		redirect("login/index");
+    
+    	try{
+    		$this->Logger->info("Retrieving information about event with id: ". $eventId);
+    		$event = $this->event_model->getEventById($eventId);
+    
+    		// $subscriptions = $this->eventsubscription_model->getSubscriptionsForEventByUserId($this->session->userdata("user_id"), $eventId);
+    		$subscriptions = null;
+    		$p = $this->eventsubscription_model->getEventPrices($eventId,"all");
+    		$price = $this->eventsubscription_model->getEventPrices($eventId);
+    		$totalPrice = 0.00;
+    		$subtotalPrice = 0.00;
+    		$discount = 0.00;
+    		$qtd = 0;
+    		$singlePrice;
+    			
+    		foreach($subscriptions as $sub){
+    			if($sub->subscription_status == 2){
+    				if($sub->age_group_id == 1){
+    					$singlePrice = $price->children_price;
+    				} else if($sub->age_group_id == 2){
+    					$singlePrice = $price->middle_price;
+    				} else if($sub->age_group_id == 3){
+    					$singlePrice = $price->full_price;
+    				}
+    					
+    				$subtotalPrice += $singlePrice;
+    					
+    				if(!empty($sub->associate) && ($sub->associate === "t")){
+    					$discount += $singlePrice*$price->associate_discount;
+    					$singlePrice = $singlePrice - ($singlePrice*$price->associate_discount);
+    				}
+    					
+    				$totalPrice += $singlePrice;
+    				$qtd++;
+    			}
+    		}
+    			
+    		$data['totalPrice'] = $totalPrice;
+    		$data['subtotalPrice'] = $subtotalPrice;
+    		$data['discount'] = $discount;
+    		$data['qtd'] = $qtd;
+    		$data['event'] = $event;
+    		$data['subscriptions'] = $subscriptions;
+    		$data['prices'] = $p;
+    		$data['price'] = $price;
+    		$data['age_groups'] = $this->eventsubscription_model->getAgeGroups();
+    		$data['user_id'] = $this->session->userdata("user_id");
+    		$data['user_associate'] = $this->personuser_model->isAssociate($this->session->userdata("user_id"));
+    		$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($this->session->userdata("user_id"));
+    		$data['peoplejson'] = json_encode($data['people']);
+    		$data['age_group'] = $age_group;
+    		$data['nonsleeper'] = $nonsleeper;
+    		$data['gender'] = $gender;
+    		$data['name'] = "";
+    			
+    		$this->Logger->debug("People json: ".$data['peoplejson']);
+    
+    		$this->Logger->info("Loading screen");
+    
+    
+    		$this->Logger->debug("Subscriptions: ".print_r($subscriptions, true));
+    		$this->Logger->debug("Count subscriptions = ". count($subscriptions));
+    			
+    		if($error)
+    			$data['error'] = $error;
+    
+    		$this->loadView('event/info', $data);
+    	} catch (Exception $ex) {
+    		$this->Logger->error("No event found with id: ". $eventId);
+    		$this->index();
+    	}
+    
+    }
 
 }
 

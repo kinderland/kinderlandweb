@@ -70,35 +70,8 @@ class Login extends CK_Controller {
             
             $rows = $this -> personuser_model -> checkAllPermissionsByUserType($permissions);
             
-            $old = "";
-            $new = "";
-            $r = "";
+            $this->setPermissions($rows);
             
-            foreach($rows as $row){
-            	$new = $row -> controller_name;
-            	
-            	if($new != $old && $old != ""){
-            		$this->session->set_userdata($old, $r);
-            		$n = $this->session->userdata($old);
-            		$this -> Logger -> info("RESULT: ".$old);
-            		$this -> Logger -> info("RESULT: ".$n);
-            		$r = "";            		
-            	}
-            	
-            	if($r){
-            		$r = $r.",";
-            	}
-            	
-            	$r = $r.$row -> method_name;
-            	$old = $row -> controller_name;
-            }
-            
-            $this->session->set_userdata($old, $r);
-            $n = $this->session->userdata($old);
-            $this -> Logger -> info("RESULT: ".$old);
-            $this -> Logger -> info("RESULT: ".$n);
-            
-
             if (count($permissions) == 1)
                 $this->redirectToSystemScreen($permissions[0]);
             else

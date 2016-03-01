@@ -11,6 +11,67 @@ class CK_Controller extends CI_Controller {
 
     protected $pid;
     protected $Logger;
+    public static $pp = array();
+    
+
+    public function setPermissions($per){
+    	$old = null;
+    	$r = null;
+    	
+    	foreach($per as $row){
+    		$new = $row -> controller_name;
+    
+    		if($new != $old && $old != ""){
+    			$this->pp[$old] = $r;
+    			$this->Logger->info("PERMISSIONS DE CLASSE: ".$old." : ".$r);
+    			$this->Logger->info("PERMISSIONS obj: ".$this->pp[$old]);
+    			$r = "";
+    		}
+    
+    		if($r){
+    			$r = $r.",";
+    		}
+    
+    		$r = $r.$row -> method_name;
+    		$old = $row -> controller_name;
+    	}
+    
+    	$this->pp[$old] = $r;
+    	$this->Logger->info("PERMISSIONS DE CLASSE: ".$old." : ".$r);
+    	$this->Logger->info("PERMISSIONS obj: ".$this->pp[$old]); 
+    
+    	foreach ($this->pp as $row){
+    		$this->Logger->info("ROW tem: ".$row);
+    	}
+    }
+    
+    public function getPermission($controller, $method){
+    	$exist = false;
+    	$methods = null;
+    	
+    	if(empty($this -> perm))
+    		$this->Logger->info('$pp ESTÁ VAZIO');
+    
+    //	foreach ($this->pp as $key->$row){
+    //		$this->Logger->info("ROW DE ".$key. " tem: ".$row);
+    	if(strcmp($controller,'system')){	
+    		$row = $this -> system -> getPerm();
+    		
+    		$methods = explode(",",$row);  	
+    	}
+    		
+    		
+	    	foreach($methods as $m){
+	    		if($method == $m){
+	    			$this->Logger->info("METHOD: ".$m);
+	    			$exist = true;
+	    			break;
+	    		}
+	    	}
+ //   	}
+    
+    	return $exist;
+    }
 
     public function __construct() {
         parent::__construct();
@@ -20,6 +81,7 @@ class CK_Controller extends CI_Controller {
         $this->load->model('summercamp_model');
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
+        
     }
 
     public function __destruct() {
@@ -420,42 +482,23 @@ class CK_Controller extends CI_Controller {
     }
 
     public function checkPermission($class, $method) {
-        $permission = '0';
-  //      $allPermissions = array();
+        $permission = false;
+        $allPermissions = array();
         
-  //      $allFreePermissions = $this -> personuser_model -> getMethodsAndClassesByUserType('0');
+        $allFreePermissions = $this -> personuser_model -> getMethodsAndClassesByUserType('0');
         
-  //      if($allFreePermissions){
-//	        foreach ($allFreePermissions as $p){
-	//        	if(strcmp($class,$p->controller_name) == 0 && strcmp($method,$p->method_name) == 0){
-//	        		$permission = '1';
-//	        		break;
-	//        	}
-	//        }
-  //      }
+        if($allFreePermissions){
+	        foreach ($allFreePermissions as $p){
+	        	if(strcmp($class,$p->controller_name) == 0 && strcmp($method,$p->method_name) == 0){
+	        		$permission = true;
+	        		break;
+	        	}
+	        }
+        }
         
-   //     $i = 0;
+     //   if($permission === false)
+    //    	$permission = $this->getPermission($class,$method);
         
-  //      $this -> Logger -> info("PERMISSION: ".$permission);
-        
-  //      if($permission === '0'){
-   //     	$this -> Logger -> info("ENTROU EM PERMISSION!!!");
-	        
-	//        if($this->session->userdata($class)!== null){
-	//        	$methods = $this->session->userdata('admin');
-	//        	$this -> Logger -> info("CLASS: ".$class);
-	 //       	$this -> Logger -> info("METHODS: ".$methods);
-	        	
-	//        	$methods = explode(",",$methods);
-	        	
-	 //       	foreach($methods as $m){
-	//        		if($method == $m){
-	 //       			$permission = "1";
-	 //       			break;
-	 //       		}
-	  //      	}
-	 //       }
-     //   }
 
         if (!$this->session->userdata('user_types')) {
             $permission = $this->personuser_model->checkPermission($class, $method, array(0));
@@ -463,8 +506,8 @@ class CK_Controller extends CI_Controller {
             $permission = $this->personuser_model->checkPermission($class, $method, $this->session->userdata('user_types'));
         }
 
-        if ($permission === '0') {
-            $this->Logger->warn("Usuário com id =" . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
+        if ($permission === false) {
+            $this->Logger->warn("Usuário com id = " . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
             return redirect("user/permissionNack");
         }
     }
