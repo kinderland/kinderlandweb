@@ -242,6 +242,22 @@ class summercamp_model extends CK_Model {
         return $camp;
     }
 
+    public function updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate,$date_start_pre, $date_finish_pre, $capacity_male, $capacity_female){
+    	$this -> Logger -> info("Running: " . __METHOD__);
+    	
+    	$sql = 'UPDATE summer_camp SET camp_name = ?, date_start = ?, date_finish = ?, date_start_pre_subscriptions = ?, date_finish_pre_subscriptions = ?, 
+    			date_start_pre_subscriptions_associate = ?, date_finish_pre_subscriptions_associate =?,  capacity_male = ?, capacity_female = ?
+				WHERE summer_camp_id = ?';
+    	
+    	$result = $this -> execute($this->db, $sql, array($camp_name, $date_start, $date_finish, $date_start_pre, $date_finish_pre,
+    			$date_start_pre_associate, $date_finish_pre_associate, $capacity_male, $capacity_female, $camp_id));
+    	
+    	return $result;
+    	
+    	
+    	
+    }
+    
     public function getSummerCampSubscriptionsOfUser($userId) {
         $sql = "Select * from summer_camp sc
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
@@ -1195,6 +1211,32 @@ class summercamp_model extends CK_Model {
             $paymentPeriod = SummerCampPaymentPeriod::createSummerCampPaymentPeriodObject($resultSet);
 
         return $paymentPeriod;
+    }
+    
+    
+    public function getSummerCampPaymentPeriods($campId){
+    	$this->Logger->info("Running: " . __METHOD__);
+        $sql = "Select * from summer_camp_payment_period where summer_camp_id = ?";
+
+        
+
+        $payment_periods = $this -> executeRows($this -> db, $sql, array($campId));
+		
+		$retorno = array();
+		
+		foreach ($payment_periods as $payment_period) {
+			$retorno[] = SummerCampPaymentPeriod::createSummerCampPaymentPeriodObject($payment_period);
+		}
+		
+		return $retorno;
+    }
+    
+    public function deleteSummerCampPaymentPeriods($campId){
+    	$this -> Logger -> info("Running: " . __METHOD__);
+    
+    	$deleteSql = 'DELETE FROM summer_camp_payment_period WHERE summer_camp_id = ?';
+    
+    	return $this->execute($this->db, $deleteSql, array(intval($campId)));
     }
 
     public function associateDonation($campId, $colonistId, $donationId) {

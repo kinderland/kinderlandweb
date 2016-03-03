@@ -1154,8 +1154,9 @@ class Admin extends CK_Controller {
         $this->loadView("admin/camps/camp_admin_container", $data);
     }
 
-    public function manageCamps() {
+    public function manageCamps($message = null) {
         $data['camps'] = $this->summercamp_model->getAllSummerCamps();
+        $data['message'] = $message;
         $this->loadReportView("admin/camps/manage_camps", $data);
     }
 
@@ -1165,6 +1166,399 @@ class Admin extends CK_Controller {
         $this->loadView("admin/camps/insert_camp", $data);
     }
 
+    public function editCamp($camp_id = NULL, $errors = array(), $camp_name = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $payments = array(),$type = NULL){
+    	$campId = $camp_id;
+    
+    	$camp = $this->summercamp_model->getSummerCampById($campId);
+    	$paymentPeriods = $this->summercamp_model->getSummerCampPaymentPeriods($campId);
+    	$data['camp_id'] = $campId;
+    	$data['camp_name'] = $camp->getCampName();
+    	$data['errors'] = $errors;
+    
+    	 
+    	$date = explode("-", $camp->getDateStart());
+    	$dateDay = explode(" ", $date[2]);
+    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+    	$data['date_start'] = $date;
+    	 
+    	$date = explode("-", $camp->getDateFinish());
+    	$dateDay = explode(" ", $date[2]);
+    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+    	$data['date_finish'] = $date;
+    
+    	$date = explode("-", $camp->getDateStartPreAssociate());
+    	$dateDay = explode(" ", $date[2]);
+    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+    	$data['date_start_pre_associate'] = $date;
+    	 
+    	$date = explode("-", $camp->getDateFinishPreAssociate());
+    	$dateDay = explode(" ", $date[2]);
+    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+    	$data['date_finish_pre_associate'] = $date;
+    	 
+    	$date = explode("-", $camp->getDateStartPre());
+    	$dateDay = explode(" ", $date[2]);
+    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+    	$data['date_start_pre'] = $date;
+    	 
+    	$date = explode("-", $camp->getDateFinishPre());
+    	$dateDay = explode(" ", $date[2]);
+    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+    	$data['date_finish_pre'] = $date;
+    	 
+    	 
+    
+    	$data['enabled'] = $camp->isEnabled();
+    	$data['capacity_male'] = $camp->getCapacityMale();
+    	$this->Logger->info("Capacity Male: " . $camp->getCapacityMale());
+    	$data['capacity_female'] = $camp->getCapacityFemale();
+    	$this->Logger->info("Capacity Female: " . $camp->getCapacityFemale());
+    
+    	$paymentPeriods = $this->summercamp_model->getSummerCampPaymentPeriods($campId);
+    	$payments = array();
+    	
+   			if ($paymentPeriods) {
+    		foreach ($paymentPeriods as $payment) {
+    			$datePayment = explode("-", $payment->getDateStart());
+    			$dateDay = explode(" ", $datePayment[2]);
+    			$datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
+    			$datePaymentEnd = explode("-", $payment->getDateFinish());
+    			$dateDay = explode(" ", $datePaymentEnd[2]);
+    			$datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+    	
+    			$payments[] = array(
+    					"payment_date_start" => $datePayment,
+    					"payment_date_end" => $datePaymentEnd,
+    					"full_price" => $payment->getPrice(),
+    					"payment_portions" => $payment->getPortions(),
+    					"associated_price" => $payment->getAssociatedPrice(),
+    					
+    			);
+    		}
+    	}
+
+        $data['payments'] = $payments;
+    	$this->loadReportView('admin/camps/editCamp', $data);
+    }
+    
+	public function updateCamp($camp_id) {
+
+        $this->Logger->info("Starting " . __METHOD__);
+
+        $camp_name = $this->input->post('camp_name', TRUE);
+        
+        $date_start = $this->input->post('date_start', TRUE);
+        $date_finish = $this->input->post('date_finish', TRUE);
+        $date_start_pre_associate = $this->input->post('date_start_pre_associate', TRUE);
+        $date_finish_pre_associate = $this->input->post('date_finish_pre_associate', TRUE);
+        $date_start_pre = $this->input->post('date_start_pre', TRUE);
+        $date_finish_pre = $this->input->post('date_finish_pre', TRUE);
+        $capacity_male = $this->input->post('capacity_male', TRUE);
+        $capacity_female = $this->input->post('capacity_female', TRUE);
+        
+        $payments = array();
+        $payment_date_end = $this->input->post("payment_date_end", TRUE);
+        $payment_date_start = $this->input->post("payment_date_start", TRUE);
+        $full_price = $this->input->post("full_price", TRUE);
+        $payment_portions = $this->input->post("payment_portions", TRUE);
+        $associated_price = $this->input->post("associated_price", TRUE);
+        
+        $error = $this->input->post("error", TRUE);
+        
+        $errors = array();
+
+
+        if ($camp_name === "")
+            $errors[] = "O campo nome é obrigatório\n";
+        if (!$date_start)
+            $date_start = NULL;
+        if (!$date_start_pre_associate)
+            $date_start_pre_associate = NULL;
+        if(!$date_start_pre)
+        	$date_start_pre = NULL;
+        if (!$date_finish)
+            $date_finish = NULL;
+        if (!$date_finish_pre_associate)
+            $date_finish_pre_associate = NULL;
+        if(!$date_finish_pre)
+        	$date_finish_pre = NULL;
+        
+
+        if ($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
+            $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento\\n";
+
+        if ($date_start_pre_associate && $date_finish_pre_associate && !Events::verifyAntecedence($date_start_pre_associate, $date_finish_pre_associate))
+            $errors[] = "A data do ínicio do período de inscrições antecede a data de fim do periodo de inscrições\\n";
+
+        if ($date_start && $date_finish_pre_associate && Events::verifyAntecedence($date_start, $date_finish_pre_associate))
+            $errors[] = "A data do ínicio do período da colônia antecede a data de fim de inscrições para associados\\n";
+        
+     	if ($date_start && $date_finish_pre && Events::verifyAntecedence($date_start, $date_finish_pre))
+            	$errors[] = "A data do ínicio do período da colônia antecede a data de fim de inscrições\\n";
+		
+        if ($capacity_male === "")
+            $capacity_male = 0;
+        if ($capacity_female === "")
+            $capacity_female = 0;
+        
+        if (is_array($full_price)) {
+            for ($i = 0; $i < count($full_price); $i++) {
+                if (!$payment_date_start[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio\\n";
+                if (!$payment_date_end[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de fim\\n";
+                if (!$full_price[$i])
+                    $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor\\n";
+                if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
+                    $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
+                }
+                
+                for ($j = $i + 1; $j < count($full_price); $j++) {
+                    if
+                    (
+                            (
+                            Events::verifyAntecedence($payment_date_start[$i], $payment_date_start[$j]) && Events::verifyAntecedence($payment_date_start[$j], $payment_date_end[$i])
+                            ) ||
+                            (
+                            Events::verifyAntecedence($payment_date_start[$j], $payment_date_start[$i]) && Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$j])
+                            )
+                    )
+                        $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
+                }
+
+                if ($payment_date_start[$i]) {
+
+                    $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                    $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+                }
+
+                if ($payment_date_end[$i]) {
+                    $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                    $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+                }
+
+                $payments[] = array(
+                    "payment_date_start" => $payment_date_start[$i],
+                    "payment_date_end" => $payment_date_end[$i],
+                    "full_price" => $full_price[$i],
+                    "payment_portions" => $payment_portions[$i],
+                    "associated_price" => $associated_price[$i],
+                );
+            }
+        } else if ($full_price !== FALSE) {
+            if (!$payment_date_start)
+                $errors[] = "O pagamento não tem data de inicio\\n";
+            if (!$payment_date_end)
+                $errors[] = "O pagamento não tem data de fim\\n";
+            if (!$full_price)
+                $errors[] = "O pagamento não tem valor\\n";
+            if (!$middle_price)
+                $middle_price = $full_price;
+            if (!$children_price)
+                $children_price = $middle_price;
+            if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
+                $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
+            }
+
+            for ($i = 0; $i < count($full_price); $i++) {
+
+                if ($payment_date_start[$i]) {
+                    $payment_date_start[$i] = explode("/", $payment_date_start[$i]);
+                    $payment_date_start[$i] = strval($payment_date_start[$i][2]) . "-" . strval($payment_date_start[$i][1]) . "-" . strval($payment_date_start[$i][0]);
+                }
+
+                if ($payment_date_end[$i]) {
+                    $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
+                    $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
+                }
+            }
+
+            $payments[] = array(
+                "payment_date_start" => $payment_date_start,
+                "payment_date_end" => $payment_date_end,
+                "full_price" => $full_price,
+                "payment_portions" => $payment_portions,
+                "associated_price" => $associated_price,
+            );
+        }
+
+        if ($date_start) {
+            $date_start = explode("/", $date_start);
+            $date_x = explode(" ", $date_start[2]);
+            $date_start = strval($date_x[0]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
+        }
+        
+        $this->Logger->info("DATE START: ".$date_start);
+        
+        $this->Logger->info("$date_finish: ".$date_finish);
+
+        if ($date_finish) {
+            $date_finish = explode("/", $date_finish);
+            $date_x = explode(" ", $date_finish[2]);
+            $date_finish = strval($date_x[0]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
+        }
+        
+        $this->Logger->info("$date_finish: ".$date_finish);
+        
+        $this->Logger->info("$date_start_pre_associate: ".$date_start_pre_associate);
+
+        if ($date_start_pre_associate) {
+            $date_start_pre_associate = explode("/", $date_start_pre_associate);
+            $date_x = explode(" ", $date_start_pre_associate[2]);
+            $date_start_pre_associate = strval($date_x[0]) . "-" . strval($date_start_pre_associate[1]) . "-" . strval($date_start_pre_associate[0]);
+        }
+        
+        $this->Logger->info("$date_start_pre_associate: ".$date_start_pre_associate);
+        $this->Logger->info("$date_finish_pre_associate: ".$date_finish_pre_associate);
+
+        if ($date_finish_pre_associate) {
+            $date_finish_pre_associate = explode("/", $date_finish_pre_associate);
+            $date_x = explode(" ", $date_finish_pre_associate[2]);
+            $date_finish_pre_associate = strval($date_x[0]) . "-" . strval($date_finish_pre_associate[1]) . "-" . strval($date_finish_pre_associate[0] . " 23:59:59");
+        }
+        
+        $this->Logger->info("$date_finish_pre_associate: ".$date_finish_pre_associate);
+        $this->Logger->info("$date_start_pre: ".$date_start_pre);
+        
+        if ($date_start_pre) {
+        	$date_start_pre = explode("/", $date_start_pre);
+        	$date_x = explode(" ", $date_start_pre[2]);
+        	$date_start_pre = strval($date_x[0]) . "-" . strval($date_start_pre[1]) . "-" . strval($date_start_pre[0]);
+        }
+        
+        $this->Logger->info("$date_start_pre: ".$date_start_pre);
+        $this->Logger->info("$date_finish_pre: ".$date_finish_pre);
+        
+        if ($date_finish_pre) {
+        	$date_finish_pre = explode("/", $date_finish_pre);
+        	$date_x = explode(" ", $date_finish_pre[2]);
+        	$date_finish_pre = strval($date_x[0]) . "-" . strval($date_finish_pre[1]) . "-" . strval($date_finish_pre[0] . " 23:59:59");
+        }
+        $this->Logger->info("$date_finish_pre: ".$date_finish_pre);
+
+        $camps = $this->summercamp_model->getAllSummerCamps();
+
+        foreach ($camps as $camp) {
+
+            if ($camp->getCampId() != $camp_id && $date_start && $date_finish && ((Events::verifyAntecedence($camp->getDateStart(), $date_start) && Events::verifyAntecedence($date_start, $camp->getDateFinish())) || (Events::verifyAntecedence($camp->getDateStart(), $date_finish) && Events::verifyAntecedence($date_finish, $camp->getDateFinish())))) {
+                $errors[] = "Há um evento nesse período\\n";
+                break;
+            }
+        }
+
+        if (count($errors) > 0 || $error != "") {
+
+            $paymentsError = array();
+
+            foreach ($payments as $payment) {
+
+                $datePayment = null;
+                $datePaymentEnd = null;
+
+                if ($payment['payment_date_start']) {
+                    $datePayment = explode("-", $payment['payment_date_start']);
+                    $dateDay = explode(" ", $datePayment[2]);
+                    $datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
+                }
+
+                if ($payment['payment_date_end']) {
+                    $datePaymentEnd = explode("-", $payment['payment_date_end']);
+                    $dateDay = explode(" ", $datePaymentEnd[2]);
+                    $datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+                }
+
+                $paymentsError[] = array(
+                    "payment_date_start" => $datePayment,
+                    "payment_date_end" => $datePaymentEnd,
+                    "full_price" => $payment['full_price'],
+                    "payment_portions" => $payment['payment_portions'],
+                    "associated_price" => $payment['associated_price'],
+                );
+            }
+            
+            if ($date_start) {
+            	$date = explode("-",$date_start);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_start = $date;
+            }
+            
+            if ($date_finish) {
+            	$date = explode("-", $date_finish);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_finish = $date;
+            }
+            
+            if ($date_start_pre_associate) {
+            	$date = explode("-", $date_start_pre_associate);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_start_pre_associate = $date;
+            }
+            
+            if ($date_finish_pre_associate) {
+            	$date = explode("-", $date_finish_pre_associate);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_finish_pre_associate = $date;
+            }
+            
+            if ($date_start_pre) {
+            	$date = explode("-", $date_start_pre);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_start_pre = $date;
+            }
+            
+            if ($date_finish_pre) {
+            	$date = explode("-", $date_finish_pre);
+            	$dateDay = explode(" ", $date[2]);
+            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+            	$date_finish_pree = $date;
+            }
+
+            if ($error != "") {
+                $errors[] = $error;
+            }
+
+            foreach ($errors as $e) {
+                $this->Logger->info("Error: " . $e);
+            }
+
+            return $this->editCamp($camp_id, $errors, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate,$date_start_pre, $date_finish_pre, $capacity_male, $capacity_female);
+        }
+
+        try {
+            $this->Logger->info("Updating SummerCamp " . $camp_name);
+            $this->generic_model->startTransaction();
+
+            $campId = $this->summercamp_model->updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate,$date_start_pre, $date_finish_pre, $capacity_male, $capacity_female);
+
+            if ($campId) {
+                $this->summercamp_model->deleteSummerCampPaymentPeriods($camp_id);
+
+                foreach ($payments as $payment) {
+                    $this->summercamp_model->insertNewSummercampPaymentPeriod($camp_id, $payment["payment_date_start"], $payment["payment_date_end"], $payment["full_price"], $payment["payment_portions"], $payment["associated_price"]);
+                }
+
+                $this->generic_model->commitTransaction();
+                $this->Logger->info("New SummerCamp successfully inserted");
+                return $this->manageCamps('Colônia atualizada com sucesso!');
+
+            } else
+                return $this->manageCamps('Ocorreu um erro ao atualizar a colônia. Tente novamente.');
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new summercamp");
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+
+            return $this->manageCamps('Ocorreu um erro ao atualizar a colônia. Tente novamente.');
+
+//$this->loadReportView('admin/events/event_edit', $data);
+        }
+    }
+    
     public function queue() {
         $data = array();
         $years = array();

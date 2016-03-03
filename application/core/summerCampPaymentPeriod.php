@@ -6,18 +6,20 @@ class SummerCampPaymentPeriod {
 	private $dateFinish;
 	private $price;
 	private $portions;
+	private $associatedPrice;
 
-	public function __construct($paymentPeriodId, $summerCampId, $dateStart, $dateFinish, $price, $portions) {
+	public function __construct($paymentPeriodId, $summerCampId, $dateStart, $dateFinish, $price, $portions, $associatedPrice) {
 		$this -> paymentPeriodId = $paymentPeriodId;
 		$this -> summerCampId = $summerCampId;
 		$this -> dateStart = $dateStart;
 		$this -> dateFinish = $dateFinish;
 		$this -> price = $price;
 		$this -> portions = $portions;
+		$this -> associatedPrice = $associatedPrice;
 	}
 
 	public static function createSummerCampPaymentPeriodObject($resultRow) {
-		return new SummerCampPaymentPeriod($resultRow -> payment_period_id, $resultRow -> summer_camp_id, $resultRow -> date_start, $resultRow -> date_finish, $resultRow -> price, $resultRow -> portions);
+		return new SummerCampPaymentPeriod($resultRow -> payment_period_id, $resultRow -> summer_camp_id, $resultRow -> date_start, $resultRow -> date_finish, $resultRow -> price, $resultRow -> portions, $resultRow -> associate_price);
 	}
 
 	public function setPaymentPeriodId($paymentPeriodId) {
@@ -66,6 +68,14 @@ class SummerCampPaymentPeriod {
 
 	public function getPortions() {
 		return $this -> portions;
+	}
+	
+	public function setAssociatedPrice($associatedPrice) {
+		$this -> associatedPrice = $associatedPrice;
+	}
+	
+	public function getAssociatedPrice() {
+		return $this -> associatedPrice;
 	}
 
 }
