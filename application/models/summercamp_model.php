@@ -92,9 +92,22 @@ class summercamp_model extends CK_Model {
 
     public function getCountSubscriptionsbyAssociated($year) {
 
-        $sql = "SELECT * FROM v_socios_count_inscricoes";
+        $sql = "SELECT p.person_id,
+			    p.fullname,
+			    p.date_created,
+			    p.date_updated,
+			    p.gender,
+			    p.email,
+			    p.address_id,
+			    count(scs.colonist_id) AS total_inscritos
+			   FROM associates a
+			     JOIN person p ON p.person_id = a.person_id
+			     LEFT JOIN summer_camp_subscription scs ON scs.person_user_id = a.person_id AND scs.summer_camp_id IN ( SELECT summer_camp.summer_camp_id
+			           FROM summer_camp
+			          WHERE DATE_PART('YEAR',summer_camp.date_created) =  ?)
+			  GROUP BY p.person_id;";
 
-        $rows = $this->executeRows($this->db, $sql, array($year));
+        $rows = $this->executeRows($this->db, $sql, array(intval($year)));
         return $rows;
     }
 

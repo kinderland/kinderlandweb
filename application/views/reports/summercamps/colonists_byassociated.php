@@ -32,7 +32,11 @@
 			}
 
 		function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
-			return 'Apresentando ' + totalRow + ' sócios, de um total de ' + totalRowUnfiltered+ ' sócios';
+			var qtda = <?php echo $qtdAssoc;?>;
+			var qtdb = <?php echo $qtdBenemerits;?>;
+			return 'Apresentando ' + totalRow + ' sócios, de um total de ' + totalRowUnfiltered+ ' sócios.'
+			+ 'Sócios contribuintes com inscritos = ' + qtda + ". " +
+			'Sócios beneméritos com inscritos = '+  qtdb + '.';
 		}
 
 		function sortLowerCase(l, r) {

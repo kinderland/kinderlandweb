@@ -692,8 +692,33 @@ class Reports extends CK_Controller {
         $data['years'] = $years;
 
         $subscriptions = $this->summercamp_model->getCountSubscriptionsbyAssociated($year);
+        
+        $benemerits = $this -> personuser_model -> getPersonIdsBenemerits();
+        
+        $qtdBenemerits = 0;
+        $qtdAssoc = 0;
+        
+        foreach($subscriptions as $subs){
+        	$equal = false;
+        	if($subs -> total_inscritos > 0){
+        		foreach($benemerits as $b){
+        			if($b == $subs -> person_id){
+        				$equal = true;
+        				break;
+        			}
+        		}
+        		
+        		if($equal == false){
+        			$qtdAssoc++;
+        		}else{
+        			$qtdBenemerits++;
+        		}
+        	}
+        }
 
         $data['subscriptions'] = $subscriptions;
+        $data['qtdBenemerits'] = $qtdBenemerits;
+        $data['qtdAssoc'] = $qtdAssoc;
         $this->loadReportView("reports/summercamps/colonists_byassociated", $data);
     }
 

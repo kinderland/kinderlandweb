@@ -208,6 +208,23 @@ class personuser_model extends CK_Model {
         $rows = $this->executeRows($this->db, $sql);
         return $rows;
     }
+    
+    public function getPersonIdsBenemerits(){
+    	$sql = "select person_id from benemerits";
+    	
+    	$rows = $this -> executeRows($this->db,$sql);
+    	
+    	$resultArray = array();
+    	
+    	if($rows){
+    		foreach($rows as $row){
+    			$resultArray[] = $row->person_id;
+    		}
+    		
+    	}
+    	
+    	return $resultArray;
+    }
 
     public function getAllUsersDetailed() {
         $this->Logger->info("Running: " . __METHOD__);
