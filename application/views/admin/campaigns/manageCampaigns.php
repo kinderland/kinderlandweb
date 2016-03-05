@@ -69,36 +69,37 @@
         <div class="scroll">
             <div class="row">
                 <?php // require_once APPPATH.'views/include/common_user_left_menu.php'  ?>
-                <div class="col-lg-10 middle-content">
-                    <body onunload="window.opener.location.reload();"><a target='_blank' onclick="window.open('<?= $this->config->item("url_link") ?>admin/campaignCreate', 'dd');
-                            return false;" href=""><button id="create" class="btn btn-primary"  value="Criar nova campanha" >Criar nova campanha</button></a>
-                        <br /><br />
-                        <?php
-                        if (isset($campaigns) && count($campaigns) > 0) {
-                            ?>
-                            <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th></tr>
-                                        <?php
-                                        foreach ($campaigns as $campaign) {
-                                            ?><tr>
-                                    <body onunload="window.opener.location.reload();"><td><a target='_blank'  onclick="window.open('<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaign->getCampaignId() ?>', 'dd'); return false;" href="">
-                                            <?php echo $campaign->getCampaignYear(); ?></a></td>
-
-                                    <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
-                                    <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y'); ?> </td>
-                                    </tr>
-                                    <?php
-                                }
-                                ?> </table>
-                            <?php
-                        } else {
-                            ?>
-                            <h3>
-                                Nenhuma campanha registrada para acontecer nos próximos dias.
-                                <br />Continue acompanhando a Colônia Kinderland pelo nosso website.
-                            </h3>
-                            <?php
-                        }
+                <div class="col-lg-12 middle-content">
+                    <a href="<?= $this->config->item("url_link") ?>admin/campaignCreate" >
+                        <button id="create" class="btn btn-primary"  value="Criar nova campanha" >Criar nova campanha</button>
+                    </a>
+                    <br /><br />
+                    <?php
+                    if (isset($campaigns) && count($campaigns) > 0) {
                         ?>
+                        <table class="table"><tr><th>Ano</th><th>Data Inicio</th><th>Data Fim</th></tr>
+                                    <?php
+                                    foreach ($campaigns as $campaign) {
+                                        ?><tr>
+                                <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editCampaign/<?php echo $campaign->getCampaignId() ?>">
+                                        <?php echo $campaign->getCampaignYear(); ?></a></td>
+
+                                <td><?= date_format(date_create($campaign->getDateStart()), 'd/m/y'); ?> </td>
+                                <td><?= date_format(date_create($campaign->getDateFinish()), 'd/m/y'); ?> </td>
+                                </tr>
+                                <?php
+                            }
+                            ?> </table>
+                        <?php
+                    } else {
+                        ?>
+                        <h3>
+                            Nenhuma campanha registrada para acontecer nos próximos dias.
+                            <br />Continue acompanhando a Colônia Kinderland pelo nosso website.
+                        </h3>
+                        <?php
+                    }
+                    ?>
                 </div>
                 </body>
             </div>

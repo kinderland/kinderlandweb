@@ -42,11 +42,11 @@ function do_alert($errors) {
 
         <script type="text/javascript" charset="utf-8">
 
-            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td>\n\
-                 <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>\n\
-                 <td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price"></td>\n\
+            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" size="8"></td>\n\
+                 <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" size="6"></td>\n\
+                 <td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="price" size="6>"></td>\n\
                  <td><input type="number" class="form-control" name="portions[]" id="portions" value="1" min="1" max="8"></td>			   		\n\
-                 <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td></tr>';
+                 <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete></button></td></tr>';
 
             function addTableLine(linhaAAdicionar) {
                 if (!linhaAAdicionar)
@@ -76,24 +76,24 @@ function do_alert($errors) {
             });
             $(document).ready(function () {
 <?php foreach ($payments as $payment) { ?>
-                    addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"]) ?>"</td> \n\
-                                                                                                          <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_finish"]) ?>"</td> \n\
-                                                                                                          <td><input type="text" class="form-control" placeholder="Preço" name="price[]" id="price" value="<?php echo $payment["price"] ?>"></td> \n\
-                                                                                                          <td><input type="number" class="form-control" name="portions[]" id="portions" value="<?php echo $payment["portions"] ?>" min="1" max="5"></td> \n\
-                                                                                                          <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td></tr>	');
+                    addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"]) ?>" size="8"></td> \n\
+                                                                                                              <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_finish"]) ?>" size="8"></td> \n\
+                                                                                                              <td><input type="text" class="form-control" placeholder="Preço" name="price[]" id="price" value="<?php echo $payment["price"] ?>" size="6"></td> \n\
+                                                                                                              <td><input type="number" class="form-control" name="portions[]" id="portions" value="<?php echo $payment["portions"] ?>" min="1" max="5"></td> \n\
+                                                                                                              <td><img src="<?= $this->config->item('assets') ?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete></button></td></tr>	');
 <?php } ?>
             });
         </script>
         <?php do_alert($errors); ?>
         <form name="campaign_form" method="POST" action="<?= $this->config->item('url_link') ?>admin/updateCampaign/<?php echo $campaign_id; ?>" id="campaign_form">
-            <div class="row">
+            <div class="row" style="width:1000px">
                 <div class="col-lg-12 middle-content">
                     <div class="row">
                         <div class="col-lg-8"><h4>Edição de campanha</h4></div>
 
                     </div>
                     <hr />
-                    <div class="row">
+                    <div class="row" style="margin-left:60px">
 
                         <div class="row">
                             <div class="form-group">
@@ -104,45 +104,46 @@ function do_alert($errors) {
                                     <div class="col-lg-2">
                                         <input type="text" class ="form-control required" readonly name="date_start" value="<?php echo $date_start; ?>"/>
                                     </div>
-                                    <?php } else { ?>
+                                <?php } else { ?>
 
 
-                                        <div class="col-lg-2">
-                                            <input type="text" class="datepickers form-control required" placeholder="Data de Início"  name="date_start" value="<?php echo Admin::toMMDDYYYY($date_start); ?>"/>
-                                        </div>
-                                    <?php } ?>
-                                    <label for="date_finish" class="col-lg-1 control-label"> Fim*: </label>
-                                    <div class="col-lg-2">
-                                        <input type="text" class="datepickers form-control required" placeholder="Data de término" value="<?php echo Admin::toMMDDYYYY($date_finish); ?>" name="date_finish" />
+                                    <div class="col-lg-3">
+                                        <input type="text" class="datepickers form-control required" placeholder="Data de Início"  name="date_start" value="<?php echo Admin::toMMDDYYYY($date_start); ?>"/>
                                     </div>
+                                <?php } ?>
+                                <label for="date_finish" class="col-lg-1 control-label"> Fim*: </label>
+                                <div class="col-lg-3">
+                                    <input type="text" class="datepickers form-control required" placeholder="Data de término" value="<?php echo Admin::toMMDDYYYY($date_finish); ?>" name="date_finish" />
                                 </div>
-                                <br><br>
-                                <input type="hidden" name="id" value="<?php echo $campaign_id ?>"/>
-                                <br>
-                                <div style="padding-top:100px">
+                            </div>
+                            <br><br>
+                            <input type="hidden" name="id" value="<?php echo $campaign_id ?>"/>
+                            <br>
+                            <div style="padding-top:100px">
+                            </div>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <label class="col-lg-10 control-label"> Períodos para pagamento:                        <h5 style="color:red">Os períodos de pagamentos devem estar em ordem.</h5></label><br />
+                                <div class="col-lg-9">
+                                    <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Parcelas max</th></tr>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
                                 </div>
-                                <br />
-                                <br />
-                                <div class="row">
-                                    <label class="col-lg- control-label"> Períodos para pagamento:                        <h5 style="color:red">Os períodos de pagamentos devem estar em ordem.</h5></label><br />
-                                    <div class="col-lg-12">
-                                        <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Parcelas max</th></tr>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                        <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
-                                    </div>
-                                </div>
-                                <br /><br />
-                                <div class="form-group">
-                                    <div class="col-lg-10">
-                                        <button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
-                                        <button  type="button" class="btn btn-danger" onClick="window.close()">Fechar</button>
-                                    </div>
+                            </div>
+                            <br /><br />
+                            <div class="form-group">
+                                <div class="col-lg-10">
+                                    <button class="btn btn-primary" style="margin-right:40px">Confirmar</button>
+                                    <a href="<?= $this->config->item('url_link'); ?>admin/manageCampaigns"><button  type="button" class="btn btn-danger">Fechar</button></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    </form>
-                    </body>
-                    </html>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

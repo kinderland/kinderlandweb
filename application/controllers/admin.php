@@ -8,6 +8,7 @@ require_once APPPATH . 'core/event.php';
 require_once APPPATH . 'controllers/events.php';
 require_once APPPATH . 'core/campaign.php';
 require_once APPPATH . 'core/summerCampPaymentPeriod.php';
+
 class Admin extends CK_Controller {
 
     public function __construct() {
@@ -67,7 +68,7 @@ class Admin extends CK_Controller {
         $data["date_finish"] = $date_finish;
         $data["payments"] = $payments;
 
-        $this->loadView("admin/campaigns/campaignCreate", $data);
+        $this->loadReportView("admin/campaigns/campaignCreate", $data);
     }
 
     public function completeCampaign() {
@@ -158,28 +159,30 @@ class Admin extends CK_Controller {
                   $errors[] = "Os pagamentos de numero" . ($i + 1) . " e " . ($j + 1) . " se sobrepoem\\n";
                   } */
             }
-        }  //Fecha os erros dos pagamentos. Deixar isso aqui por enquanto.
-        for ($i = 0; $i < $periods_count; $i++) {
+            if (count($errors) === 0) {
+                for ($i = 0; $i < $periods_count; $i++) {
 
-            $payments_error[] = array(
-                "payment_date_start" => $prep_payment_start[$i],
-                "payment_date_end" => $prep_payment_end[$i],
-                "price" => $price[$i],
-                "portions" => $portions[$i]
-            );
+                    $payments_error[] = array(
+                        "payment_date_start" => $prep_payment_start[$i],
+                        "payment_date_end" => $prep_payment_end[$i],
+                        "price" => $price[$i],
+                        "portions" => $portions[$i]
+                    );
 
-            $helper = explode("/", $prep_payment_start[$i]);
-            $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
-            $helper = explode("/", $prep_payment_end[$i]);
-            $p_end = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 23:59:59");
+                    $helper = explode("/", $prep_payment_start[$i]);
+                    $p_start = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 00:00:00");
+                    $helper = explode("/", $prep_payment_end[$i]);
+                    $p_end = strval($helper[2]) . "-" . strval($helper[1]) . "-" . strval($helper[0] . " 23:59:59");
 
-            $payments[] = array(
-                "payment_date_start" => $p_start,
-                "payment_date_finish" => $p_end,
-                "price" => $price[$i],
-                "portions" => $portions[$i]
-            );
-        }
+                    $payments[] = array(
+                        "payment_date_start" => $p_start,
+                        "payment_date_finish" => $p_end,
+                        "price" => $price[$i],
+                        "portions" => $portions[$i]
+                    );
+                }
+            }
+        }//Fecha os erros dos pagamentos. Deixar isso aqui por enquanto.
 
         if (count($errors) > 0) {
             return $this->campaignCreate($errors, $date_start, $date_finish, $payments_error);
@@ -242,7 +245,7 @@ class Admin extends CK_Controller {
         $data['campaign_id'] = $campaign_id;
         $data['errors'] = $errors;
         $data['payments'] = $payments;
-        $this->loadView("admin/campaigns/editCampaign", $data);
+        $this->loadReportView("admin/campaigns/editCampaign", $data);
     }
 
     public function updateCampaign() {
@@ -407,8 +410,8 @@ class Admin extends CK_Controller {
         $enabled = $this->input->post("enabled", TRUE);
         $error = $this->input->post("error", TRUE);
         $type = $this->input->post("type", TRUE);
-        if($type == "")
-        	$type = null;
+        if ($type == "")
+            $type = null;
         $errors = array();
 
 
@@ -604,34 +607,34 @@ class Admin extends CK_Controller {
                     "associated_discount" => $payment['associated_discount'],
                 );
             }
-            
+
             if ($date_start) {
-            	$date = explode("-",$date_start);
-		        $dateDay = explode(" ", $date[2]);
-		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-		        $date_start = $date;
+                $date = explode("-", $date_start);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_start = $date;
             }
-            
+
             if ($date_finish) {
-            	$date = explode("-", $date_finish);
-		        $dateDay = explode(" ", $date[2]);
-		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-		        $date_finish = $date;
+                $date = explode("-", $date_finish);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_finish = $date;
             }
-            
+
             if ($date_start_show) {
-            	$date = explode("-", $date_start_show);
-		        $dateDay = explode(" ", $date[2]);
-		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-		       	$date_start_show = $date;
+                $date = explode("-", $date_start_show);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_start_show = $date;
             }
-            
+
             if ($date_finish_show) {
-            	$date = explode("-", $date_finish_show);
-		        $dateDay = explode(" ", $date[2]);
-		        $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-		        $date_finish_show = $date;
-            }            
+                $date = explode("-", $date_finish_show);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_finish_show = $date;
+            }
 
             if ($error != "") {
                 $errors[] = $error;
@@ -641,7 +644,7 @@ class Admin extends CK_Controller {
                 $this->Logger->info("Error: " . $e);
             }
 
-            return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError,$type);
+            return $this->eventCreate($errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError, $type);
         }
 
 
@@ -649,7 +652,7 @@ class Admin extends CK_Controller {
             $this->Logger->info("Inserting new event");
             $this->generic_model->startTransaction();
 
-            $eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper,$type);
+            $eventId = $this->event_model->insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type);
 
             if ($eventId) {
                 foreach ($payments as $payment) {
@@ -670,7 +673,7 @@ class Admin extends CK_Controller {
         }
     }
 
-    public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(),$type=null) {
+    public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(), $type = null) {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
         $data["errors"] = $errors;
@@ -693,17 +696,17 @@ class Admin extends CK_Controller {
         $this->loadReportView('admin/events/event_create', $data);
     }
 
-    public function editEvent($event_id = NULL, $errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(),$type = NULL) {
+    public function editEvent($event_id = NULL, $errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(), $type = NULL) {
         $eventId = $event_id;
 
         $event = $this->event_model->getEventById($eventId);
         $paymentPeriods = $this->event_model->getEventPaymentPeriods($eventId);
-        $token = $this -> event_model -> getEventTokenById($eventId);
-        
-        if($token)
-        	$data['token'] = $token -> token;
-        else 
-        	$data['token'] = null;
+        $token = $this->event_model->getEventTokenById($eventId);
+
+        if ($token)
+            $data['token'] = $token->token;
+        else
+            $data['token'] = null;
 
         $data['event_id'] = $eventId;
         $data['event_name'] = $event->getEventName();
@@ -987,33 +990,33 @@ class Admin extends CK_Controller {
                     "associated_discount" => $payment['associated_discount'],
                 );
             }
-            
+
             if ($date_start) {
-            	$date = explode("-",$date_start);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_start = $date;
+                $date = explode("-", $date_start);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_start = $date;
             }
-            
+
             if ($date_finish) {
-            	$date = explode("-", $date_finish);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_finish = $date;
+                $date = explode("-", $date_finish);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_finish = $date;
             }
-            
+
             if ($date_start_show) {
-            	$date = explode("-", $date_start_show);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_start_show = $date;
+                $date = explode("-", $date_start_show);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_start_show = $date;
             }
-            
+
             if ($date_finish_show) {
-            	$date = explode("-", $date_finish_show);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_finish_show = $date;
+                $date = explode("-", $date_finish_show);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_finish_show = $date;
             }
 
             if ($error != "") {
@@ -1024,14 +1027,14 @@ class Admin extends CK_Controller {
                 $this->Logger->info("Error: " . $e);
             }
 
-            return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError,$type);
+            return $this->editEvent($event_id, $errors, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $capacity_male, $capacity_female, $capacity_nonsleeper, $paymentsError, $type);
         }
 
         try {
             $this->Logger->info("Updating event " . $event_name);
             $this->generic_model->startTransaction();
 
-            $eventId = $this->event_model->updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper,$type);
+            $eventId = $this->event_model->updateEvent($event_id, $event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type);
 
             if ($eventId) {
                 $this->event_model->deleteEventPaymentPeriods($event_id);
@@ -1056,64 +1059,64 @@ class Admin extends CK_Controller {
 //$this->loadReportView('admin/events/event_edit', $data);
         }
     }
-    
-    private function rand_string( $length ) {
-    	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    	$str = null;
-    	$size = strlen( $chars );
-    
-    	for ( $i = 0; $i < $length; $i++) {
-    		$str .= $chars[ rand( 0, $size - 1 ) ];
-    	}
-    
-    	return $str;
+
+    private function rand_string($length) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $str = null;
+        $size = strlen($chars);
+
+        for ($i = 0; $i < $length; $i++) {
+            $str .= $chars[rand(0, $size - 1)];
+        }
+
+        return $str;
     }
-    
-    public function token_generate(){
-    	$this->Logger->info("TOKEN");
-    	$event_id = $this->input->post('event_id', TRUE);
-    	$type = $this -> input -> post('type', TRUE);
-    	
-    	$token = $this -> rand_string(8);
-    	
-    	$events_token = $this -> event_model -> getAllEventsTokens();
-    	
-    	$same = 1;
-    	
-    	foreach ($events_token as $et){
-    		while(strcmp($et->token,$token) == 0){
-    			$token = $this -> rand_string(8);
-    		}
-    	}
-    	
-    	try {
-    		$this->Logger->info("Updating token of event_id: " . $event_id);
-    		$this->generic_model->startTransaction();
-    	
-	    	if($type == "regenerate"){
-	    		if($this -> event_model -> deleteToken($event_id)){
-	    			$result = $this -> event_model -> insertToken($event_id,$token);
-	    		}
-	    	} else if($type == "generate"){
-	    		$result = $this -> event_model -> insertToken($event_id,$token);
-	    	} 
-	    	
-	    	if($result){    	
-    			$this->generic_model->commitTransaction();
-    			$this->Logger->info("New token successfully inserted");
-    			echo true;
-    			return true;
-    		} else{
-    			echo false;
-    			return false;
-    		}
-    	} catch (Exception $ex) {
-    		$this->Logger->error("Failed to insert new token");
-    		$this->generic_model->rollbackTransaction();
-    		echo false;
-    	
-    		return false;
-    	}
+
+    public function token_generate() {
+        $this->Logger->info("TOKEN");
+        $event_id = $this->input->post('event_id', TRUE);
+        $type = $this->input->post('type', TRUE);
+
+        $token = $this->rand_string(8);
+
+        $events_token = $this->event_model->getAllEventsTokens();
+
+        $same = 1;
+
+        foreach ($events_token as $et) {
+            while (strcmp($et->token, $token) == 0) {
+                $token = $this->rand_string(8);
+            }
+        }
+
+        try {
+            $this->Logger->info("Updating token of event_id: " . $event_id);
+            $this->generic_model->startTransaction();
+
+            if ($type == "regenerate") {
+                if ($this->event_model->deleteToken($event_id)) {
+                    $result = $this->event_model->insertToken($event_id, $token);
+                }
+            } else if ($type == "generate") {
+                $result = $this->event_model->insertToken($event_id, $token);
+            }
+
+            if ($result) {
+                $this->generic_model->commitTransaction();
+                $this->Logger->info("New token successfully inserted");
+                echo true;
+                return true;
+            } else {
+                echo false;
+                return false;
+            }
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new token");
+            $this->generic_model->rollbackTransaction();
+            echo false;
+
+            return false;
+        }
     }
 
     public function manageEvents($message = null) {
@@ -1166,87 +1169,86 @@ class Admin extends CK_Controller {
         $this->loadView("admin/camps/insert_camp", $data);
     }
 
-    public function editCamp($camp_id = NULL, $errors = array(), $camp_name = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $payments = array(),$type = NULL){
-    	$campId = $camp_id;
-    
-    	$camp = $this->summercamp_model->getSummerCampById($campId);
-    	$paymentPeriods = $this->summercamp_model->getSummerCampPaymentPeriods($campId);
-    	$data['camp_id'] = $campId;
-    	$data['camp_name'] = $camp->getCampName();
-    	$data['errors'] = $errors;
-    
-    	 
-    	$date = explode("-", $camp->getDateStart());
-    	$dateDay = explode(" ", $date[2]);
-    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
-    	$data['date_start'] = $date;
-    	 
-    	$date = explode("-", $camp->getDateFinish());
-    	$dateDay = explode(" ", $date[2]);
-    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
-    	$data['date_finish'] = $date;
-    
-    	$date = explode("-", $camp->getDateStartPreAssociate());
-    	$dateDay = explode(" ", $date[2]);
-    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
-    	$data['date_start_pre_associate'] = $date;
-    	 
-    	$date = explode("-", $camp->getDateFinishPreAssociate());
-    	$dateDay = explode(" ", $date[2]);
-    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
-    	$data['date_finish_pre_associate'] = $date;
-    	 
-    	$date = explode("-", $camp->getDateStartPre());
-    	$dateDay = explode(" ", $date[2]);
-    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
-    	$data['date_start_pre'] = $date;
-    	 
-    	$date = explode("-", $camp->getDateFinishPre());
-    	$dateDay = explode(" ", $date[2]);
-    	$date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
-    	$data['date_finish_pre'] = $date;
-    	 
-    	 
-    
-    	$data['enabled'] = $camp->isEnabled();
-    	$data['capacity_male'] = $camp->getCapacityMale();
-    	$this->Logger->info("Capacity Male: " . $camp->getCapacityMale());
-    	$data['capacity_female'] = $camp->getCapacityFemale();
-    	$this->Logger->info("Capacity Female: " . $camp->getCapacityFemale());
-    
-    	$paymentPeriods = $this->summercamp_model->getSummerCampPaymentPeriods($campId);
-    	$payments = array();
-    	
-   			if ($paymentPeriods) {
-    		foreach ($paymentPeriods as $payment) {
-    			$datePayment = explode("-", $payment->getDateStart());
-    			$dateDay = explode(" ", $datePayment[2]);
-    			$datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
-    			$datePaymentEnd = explode("-", $payment->getDateFinish());
-    			$dateDay = explode(" ", $datePaymentEnd[2]);
-    			$datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
-    	
-    			$payments[] = array(
-    					"payment_date_start" => $datePayment,
-    					"payment_date_end" => $datePaymentEnd,
-    					"full_price" => $payment->getPrice(),
-    					"payment_portions" => $payment->getPortions(),
-    					"associated_price" => $payment->getAssociatedPrice(),
-    					
-    			);
-    		}
-    	}
+    public function editCamp($camp_id = NULL, $errors = array(), $camp_name = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $payments = array(), $type = NULL) {
+        $campId = $camp_id;
+
+        $camp = $this->summercamp_model->getSummerCampById($campId);
+        $paymentPeriods = $this->summercamp_model->getSummerCampPaymentPeriods($campId);
+        $data['camp_id'] = $campId;
+        $data['camp_name'] = $camp->getCampName();
+        $data['errors'] = $errors;
+
+
+        $date = explode("-", $camp->getDateStart());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_start'] = $date;
+
+        $date = explode("-", $camp->getDateFinish());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_finish'] = $date;
+
+        $date = explode("-", $camp->getDateStartPreAssociate());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_start_pre_associate'] = $date;
+
+        $date = explode("-", $camp->getDateFinishPreAssociate());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_finish_pre_associate'] = $date;
+
+        $date = explode("-", $camp->getDateStartPre());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_start_pre'] = $date;
+
+        $date = explode("-", $camp->getDateFinishPre());
+        $dateDay = explode(" ", $date[2]);
+        $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
+        $data['date_finish_pre'] = $date;
+
+
+
+        $data['enabled'] = $camp->isEnabled();
+        $data['capacity_male'] = $camp->getCapacityMale();
+        $this->Logger->info("Capacity Male: " . $camp->getCapacityMale());
+        $data['capacity_female'] = $camp->getCapacityFemale();
+        $this->Logger->info("Capacity Female: " . $camp->getCapacityFemale());
+
+        $paymentPeriods = $this->summercamp_model->getSummerCampPaymentPeriods($campId);
+        $payments = array();
+
+        if ($paymentPeriods) {
+            foreach ($paymentPeriods as $payment) {
+                $datePayment = explode("-", $payment->getDateStart());
+                $dateDay = explode(" ", $datePayment[2]);
+                $datePayment = $dateDay[0] . "/" . $datePayment[1] . "/" . $datePayment[0];
+                $datePaymentEnd = explode("-", $payment->getDateFinish());
+                $dateDay = explode(" ", $datePaymentEnd[2]);
+                $datePaymentEnd = $dateDay[0] . "/" . $datePaymentEnd[1] . "/" . $datePaymentEnd[0];
+
+                $payments[] = array(
+                    "payment_date_start" => $datePayment,
+                    "payment_date_end" => $datePaymentEnd,
+                    "full_price" => $payment->getPrice(),
+                    "payment_portions" => $payment->getPortions(),
+                    "associated_price" => $payment->getAssociatedPrice(),
+                );
+            }
+        }
 
         $data['payments'] = $payments;
-    	$this->loadReportView('admin/camps/editCamp', $data);
+        $this->loadReportView('admin/camps/editCamp', $data);
     }
-    
-	public function updateCamp($camp_id) {
+
+    public function updateCamp($camp_id) {
 
         $this->Logger->info("Starting " . __METHOD__);
 
         $camp_name = $this->input->post('camp_name', TRUE);
-        
+
         $date_start = $this->input->post('date_start', TRUE);
         $date_finish = $this->input->post('date_finish', TRUE);
         $date_start_pre_associate = $this->input->post('date_start_pre_associate', TRUE);
@@ -1255,16 +1257,16 @@ class Admin extends CK_Controller {
         $date_finish_pre = $this->input->post('date_finish_pre', TRUE);
         $capacity_male = $this->input->post('capacity_male', TRUE);
         $capacity_female = $this->input->post('capacity_female', TRUE);
-        
+
         $payments = array();
         $payment_date_end = $this->input->post("payment_date_end", TRUE);
         $payment_date_start = $this->input->post("payment_date_start", TRUE);
         $full_price = $this->input->post("full_price", TRUE);
         $payment_portions = $this->input->post("payment_portions", TRUE);
         $associated_price = $this->input->post("associated_price", TRUE);
-        
+
         $error = $this->input->post("error", TRUE);
-        
+
         $errors = array();
 
 
@@ -1274,15 +1276,15 @@ class Admin extends CK_Controller {
             $date_start = NULL;
         if (!$date_start_pre_associate)
             $date_start_pre_associate = NULL;
-        if(!$date_start_pre)
-        	$date_start_pre = NULL;
+        if (!$date_start_pre)
+            $date_start_pre = NULL;
         if (!$date_finish)
             $date_finish = NULL;
         if (!$date_finish_pre_associate)
             $date_finish_pre_associate = NULL;
-        if(!$date_finish_pre)
-        	$date_finish_pre = NULL;
-        
+        if (!$date_finish_pre)
+            $date_finish_pre = NULL;
+
 
         if ($date_start && $date_finish && !Events::verifyAntecedence($date_start, $date_finish))
             $errors[] = "A data do ínicio do período do evento antecede a data de fim do evento\\n";
@@ -1292,15 +1294,15 @@ class Admin extends CK_Controller {
 
         if ($date_start && $date_finish_pre_associate && Events::verifyAntecedence($date_start, $date_finish_pre_associate))
             $errors[] = "A data do ínicio do período da colônia antecede a data de fim de inscrições para associados\\n";
-        
-     	if ($date_start && $date_finish_pre && Events::verifyAntecedence($date_start, $date_finish_pre))
-            	$errors[] = "A data do ínicio do período da colônia antecede a data de fim de inscrições\\n";
-		
+
+        if ($date_start && $date_finish_pre && Events::verifyAntecedence($date_start, $date_finish_pre))
+            $errors[] = "A data do ínicio do período da colônia antecede a data de fim de inscrições\\n";
+
         if ($capacity_male === "")
             $capacity_male = 0;
         if ($capacity_female === "")
             $capacity_female = 0;
-        
+
         if (is_array($full_price)) {
             for ($i = 0; $i < count($full_price); $i++) {
                 if (!$payment_date_start[$i])
@@ -1312,7 +1314,7 @@ class Admin extends CK_Controller {
                 if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
                     $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
                 }
-                
+
                 for ($j = $i + 1; $j < count($full_price); $j++) {
                     if
                     (
@@ -1387,54 +1389,54 @@ class Admin extends CK_Controller {
             $date_x = explode(" ", $date_start[2]);
             $date_start = strval($date_x[0]) . "-" . strval($date_start[1]) . "-" . strval($date_start[0]);
         }
-        
-        $this->Logger->info("DATE START: ".$date_start);
-        
-        $this->Logger->info("$date_finish: ".$date_finish);
+
+        $this->Logger->info("DATE START: " . $date_start);
+
+        $this->Logger->info("$date_finish: " . $date_finish);
 
         if ($date_finish) {
             $date_finish = explode("/", $date_finish);
             $date_x = explode(" ", $date_finish[2]);
             $date_finish = strval($date_x[0]) . "-" . strval($date_finish[1]) . "-" . strval($date_finish[0] . " 23:59:59");
         }
-        
-        $this->Logger->info("$date_finish: ".$date_finish);
-        
-        $this->Logger->info("$date_start_pre_associate: ".$date_start_pre_associate);
+
+        $this->Logger->info("$date_finish: " . $date_finish);
+
+        $this->Logger->info("$date_start_pre_associate: " . $date_start_pre_associate);
 
         if ($date_start_pre_associate) {
             $date_start_pre_associate = explode("/", $date_start_pre_associate);
             $date_x = explode(" ", $date_start_pre_associate[2]);
             $date_start_pre_associate = strval($date_x[0]) . "-" . strval($date_start_pre_associate[1]) . "-" . strval($date_start_pre_associate[0]);
         }
-        
-        $this->Logger->info("$date_start_pre_associate: ".$date_start_pre_associate);
-        $this->Logger->info("$date_finish_pre_associate: ".$date_finish_pre_associate);
+
+        $this->Logger->info("$date_start_pre_associate: " . $date_start_pre_associate);
+        $this->Logger->info("$date_finish_pre_associate: " . $date_finish_pre_associate);
 
         if ($date_finish_pre_associate) {
             $date_finish_pre_associate = explode("/", $date_finish_pre_associate);
             $date_x = explode(" ", $date_finish_pre_associate[2]);
             $date_finish_pre_associate = strval($date_x[0]) . "-" . strval($date_finish_pre_associate[1]) . "-" . strval($date_finish_pre_associate[0] . " 23:59:59");
         }
-        
-        $this->Logger->info("$date_finish_pre_associate: ".$date_finish_pre_associate);
-        $this->Logger->info("$date_start_pre: ".$date_start_pre);
-        
+
+        $this->Logger->info("$date_finish_pre_associate: " . $date_finish_pre_associate);
+        $this->Logger->info("$date_start_pre: " . $date_start_pre);
+
         if ($date_start_pre) {
-        	$date_start_pre = explode("/", $date_start_pre);
-        	$date_x = explode(" ", $date_start_pre[2]);
-        	$date_start_pre = strval($date_x[0]) . "-" . strval($date_start_pre[1]) . "-" . strval($date_start_pre[0]);
+            $date_start_pre = explode("/", $date_start_pre);
+            $date_x = explode(" ", $date_start_pre[2]);
+            $date_start_pre = strval($date_x[0]) . "-" . strval($date_start_pre[1]) . "-" . strval($date_start_pre[0]);
         }
-        
-        $this->Logger->info("$date_start_pre: ".$date_start_pre);
-        $this->Logger->info("$date_finish_pre: ".$date_finish_pre);
-        
+
+        $this->Logger->info("$date_start_pre: " . $date_start_pre);
+        $this->Logger->info("$date_finish_pre: " . $date_finish_pre);
+
         if ($date_finish_pre) {
-        	$date_finish_pre = explode("/", $date_finish_pre);
-        	$date_x = explode(" ", $date_finish_pre[2]);
-        	$date_finish_pre = strval($date_x[0]) . "-" . strval($date_finish_pre[1]) . "-" . strval($date_finish_pre[0] . " 23:59:59");
+            $date_finish_pre = explode("/", $date_finish_pre);
+            $date_x = explode(" ", $date_finish_pre[2]);
+            $date_finish_pre = strval($date_x[0]) . "-" . strval($date_finish_pre[1]) . "-" . strval($date_finish_pre[0] . " 23:59:59");
         }
-        $this->Logger->info("$date_finish_pre: ".$date_finish_pre);
+        $this->Logger->info("$date_finish_pre: " . $date_finish_pre);
 
         $camps = $this->summercamp_model->getAllSummerCamps();
 
@@ -1475,47 +1477,47 @@ class Admin extends CK_Controller {
                     "associated_price" => $payment['associated_price'],
                 );
             }
-            
+
             if ($date_start) {
-            	$date = explode("-",$date_start);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_start = $date;
+                $date = explode("-", $date_start);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_start = $date;
             }
-            
+
             if ($date_finish) {
-            	$date = explode("-", $date_finish);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_finish = $date;
+                $date = explode("-", $date_finish);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_finish = $date;
             }
-            
+
             if ($date_start_pre_associate) {
-            	$date = explode("-", $date_start_pre_associate);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_start_pre_associate = $date;
+                $date = explode("-", $date_start_pre_associate);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_start_pre_associate = $date;
             }
-            
+
             if ($date_finish_pre_associate) {
-            	$date = explode("-", $date_finish_pre_associate);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_finish_pre_associate = $date;
+                $date = explode("-", $date_finish_pre_associate);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_finish_pre_associate = $date;
             }
-            
+
             if ($date_start_pre) {
-            	$date = explode("-", $date_start_pre);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_start_pre = $date;
+                $date = explode("-", $date_start_pre);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_start_pre = $date;
             }
-            
+
             if ($date_finish_pre) {
-            	$date = explode("-", $date_finish_pre);
-            	$dateDay = explode(" ", $date[2]);
-            	$date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
-            	$date_finish_pree = $date;
+                $date = explode("-", $date_finish_pre);
+                $dateDay = explode(" ", $date[2]);
+                $date = $date[1] . "/" . $dateDay[0] . "/" . $date[0];
+                $date_finish_pree = $date;
             }
 
             if ($error != "") {
@@ -1526,14 +1528,14 @@ class Admin extends CK_Controller {
                 $this->Logger->info("Error: " . $e);
             }
 
-            return $this->editCamp($camp_id, $errors, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate,$date_start_pre, $date_finish_pre, $capacity_male, $capacity_female);
+            return $this->editCamp($camp_id, $errors, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female);
         }
 
         try {
             $this->Logger->info("Updating SummerCamp " . $camp_name);
             $this->generic_model->startTransaction();
 
-            $campId = $this->summercamp_model->updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate,$date_start_pre, $date_finish_pre, $capacity_male, $capacity_female);
+            $campId = $this->summercamp_model->updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female);
 
             if ($campId) {
                 $this->summercamp_model->deleteSummerCampPaymentPeriods($camp_id);
@@ -1545,7 +1547,6 @@ class Admin extends CK_Controller {
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New SummerCamp successfully inserted");
                 return $this->manageCamps('Colônia atualizada com sucesso!');
-
             } else
                 return $this->manageCamps('Ocorreu um erro ao atualizar a colônia. Tente novamente.');
         } catch (Exception $ex) {
@@ -1558,7 +1559,7 @@ class Admin extends CK_Controller {
 //$this->loadReportView('admin/events/event_edit', $data);
         }
     }
-    
+
     public function queue() {
         $data = array();
         $years = array();
