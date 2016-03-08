@@ -13,7 +13,8 @@
         <div class="col-lg-8">
             <select class="report-select" name="report_select" id="report_select">
                 <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions)) { ?>
-                    <option selected="selected" value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?= PAYMENT_REPORTBYCARD_QUANTITY ?>"> Doações por cartão (quantitativo)</option>
+                    <option selected ="selected" value="<?= $this->config->item('url_link'); ?>reports/donation_panel"> Painel de doações </option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?= PAYMENT_REPORTBYCARD_QUANTITY ?>"> Doações por cartão (quantitativo)</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?= PAYMENT_REPORTBYCARD_VALUES ?>">Doações por cartão(valores)</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/free_donations">Doações avulsas</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/associate_campaign_donations">Doações Campanha de Sócios</option>
@@ -29,7 +30,7 @@
         <br>
 
         <div class="row">
-            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>reports/payments_bycard/?option=<?= PAYMENT_REPORTBYCARD_QUANTITY ?>" />
+            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>reports/donation_panel" />
         </div>
     </div>
 

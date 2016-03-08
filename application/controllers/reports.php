@@ -299,6 +299,19 @@ class Reports extends CK_Controller {
         }
     }
 
+    public function donation_panel() {
+
+        $end = 2015;
+        $start = date('Y');
+        while ($start >= $end) {
+            $years[] = $start;
+            $start--;
+        }
+
+        $data['years'] = $years;
+        $this->loadReportView("reports/finances/donation_panel", $data);
+    }
+
     public function payments_bycard() {
         $type = $this->input->get('type', TRUE);
         $option = $this->input->get('option', TRUE);
@@ -692,28 +705,28 @@ class Reports extends CK_Controller {
         $data['years'] = $years;
 
         $subscriptions = $this->summercamp_model->getCountSubscriptionsbyAssociated($year);
-        
-        $benemerits = $this -> personuser_model -> getPersonIdsBenemerits();
-        
+
+        $benemerits = $this->personuser_model->getPersonIdsBenemerits();
+
         $qtdBenemerits = 0;
         $qtdAssoc = 0;
-        
-        foreach($subscriptions as $subs){
-        	$equal = false;
-        	if($subs -> total_inscritos > 0){
-        		foreach($benemerits as $b){
-        			if($b == $subs -> person_id){
-        				$equal = true;
-        				break;
-        			}
-        		}
-        		
-        		if($equal == false){
-        			$qtdAssoc++;
-        		}else{
-        			$qtdBenemerits++;
-        		}
-        	}
+
+        foreach ($subscriptions as $subs) {
+            $equal = false;
+            if ($subs->total_inscritos > 0) {
+                foreach ($benemerits as $b) {
+                    if ($b == $subs->person_id) {
+                        $equal = true;
+                        break;
+                    }
+                }
+
+                if ($equal == false) {
+                    $qtdAssoc++;
+                } else {
+                    $qtdBenemerits++;
+                }
+            }
         }
 
         $data['subscriptions'] = $subscriptions;
