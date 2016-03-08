@@ -106,8 +106,8 @@ function do_alert($errors) {
                                     <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Parcelas max</th></tr>
                                         <tbody>
                                             <?php foreach ($payments as $payment) {?>
-                                   <tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" size="8" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td>
-                                       <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" size="8" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>
+                                   <tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" size="8" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"></td>
+                                       <td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" size="8" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"></td>
                                        <td><input type="text" class="form-control" placeholder="Valor geral" name="price[]" id="full_price" size="6" value="<?php echo $payment["price"]?>"></td>			   		
                                        <td><input type="number" class="form-control" name="portions[]" id="payment_portions" value="<?php echo $payment["portions"]?>" min="1" max="5"></td>			   			   		
                                        <td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete"></button></td>				   	

@@ -352,7 +352,7 @@
                                     <?php 
                                     }else{
                                     ?>
-                                    <td><a href="" </a></td>
+                                    <td><a href="" ></a></td>
                                     <?php }?>
                                     
                                 </tr>                                
