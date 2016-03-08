@@ -65,7 +65,24 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
         echo "</td>";
     }
 }
+
+function soma_credito($creditos) {
+    $total = 0;
+    foreach ($creditos as $credito) {
+        $total+=$credito;
+    }
+    return $total;
+}
+
+function calcula_percentagem($num, $credito, $debito) {
+    $perc = 100 * $num / ($credito + $debito);
+    $perc = round($perc, 1);
+    return $perc;
+}
 ?>
+
+
+
 <body>
     <div class = "row">
 
@@ -86,7 +103,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                 </select>
 
                 Mês: <select name="month" onchange="this.form.submit()" id="month">
-                    <option value="0" <?php if (!isset($mes)) echo "selected"; ?>)>Todos</option>
+                    <option value="0" <?php if (!isset($mes)) echo "selected"; ?>>Todos</option>
                     <?php
 
                     function getMonthName($m) {
@@ -176,9 +193,7 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                     <tr>
                         <td style="text-align: right;"> Totais crédito </td>
                         <td style="text-align: right;"><?php
-                            $total = 0;
-                            foreach ($credito as $resultado)
-                                $total += $resultado;
+                            $total = soma_credito($credito);
                             formatarEMostrar($total, $option);
                             ?>
                         </td>
@@ -189,6 +204,25 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                             echo "</td>";
                         }
                         ?>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;"> Percentual </td>
+                        <td style ="text-align:right"> <?php
+                            $total = soma_credito($credito);
+                            $perc = calcula_percentagem($total, $total, $debito);
+                            formatarEMostrar($perc, $option);
+                            echo "%";
+                            ?>
+                            </td>
+                        <?php
+                        for ($i = 1; $i <= 8; $i++) {
+                            echo "<td style='text-align: right;'>";
+                            $perc = calcula_percentagem($credito[$i],$total,$debito);
+                            formatarEMostrar($perc, $option);
+                            echo "%</td>";
+                        }
+                        ?>  
+
                     </tr>
                 </table>
                 <table class="table table-bordered table-striped table-min-td-size" style="max-width: 600px;">
@@ -221,6 +255,14 @@ function imprimeDados($result, $tipo, $cartao, $opcao = 2) {
                     <tr>
                         <td style="text-align: right;"> Total débito </td>
                         <td style="text-align: right;"><?php echo formatarEMostrar($debito, $option); ?></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;"> Percentual </td>
+                        <td style="text-align:right;"> <?php
+                        $perc = calcula_percentagem($debito,$total,$debito);
+                        formatarEMostrar($perc, $option);
+                        echo "%";
+                         ?>
                     </tr>
                 </table>
             </div>
