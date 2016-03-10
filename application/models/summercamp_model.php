@@ -1649,7 +1649,7 @@ class summercamp_model extends CK_Model {
     }
 
     public function getSubscribersByPeriod($year, $month) {
-        $sql = "SELECT count(*)
+        $sql = "SELECT sum(d.donated_value)
               FROM donation d,summer_camp_subscription s
               WHERE  s.donation_id=d.donation_id
               AND s.situation=5
@@ -1660,11 +1660,13 @@ class summercamp_model extends CK_Model {
                                     FROM summer_camp ss
                                     WHERE camp_name like '%Turma%')";
         $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
-        return $result->count;
+        if (isset($result->sum) && !empty($result->sum))
+            return $result->sum;
+        return 0.0;
     }
 
     public function getMiniSubsByPeriod($year, $month) {
-        $sql = "SELECT count(*)
+        $sql = "SELECT sum(d.donated_value
               FROM donation d,summer_camp_subscription s
               WHERE  s.donation_id=d.donation_id
               AND s.situation=5
@@ -1676,7 +1678,9 @@ class summercamp_model extends CK_Model {
                                     WHERE camp_name like '%Mini%'
                                     AND camp_name not like '%Equipe%')";
         $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
-        return $result->count;
+        if (isset($result->sum) && !empty($result->sum))
+            return $result->sum;
+        return 0.0;
     }
 
 }

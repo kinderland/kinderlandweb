@@ -117,23 +117,24 @@ class campaign_model extends CK_Model {
         return false;
     }
 
-    public function DeleteOldPeriods($campaign_id)
-    {
-       $sql = "DELETE FROM campaign_payment_period WHERE campaign_id=?";
-       $result = $this->execute($this->db,$sql,array(intval($campaign_id)));
-       return $result;
+    public function DeleteOldPeriods($campaign_id) {
+        $sql = "DELETE FROM campaign_payment_period WHERE campaign_id=?";
+        $result = $this->execute($this->db, $sql, array(intval($campaign_id)));
+        return $result;
     }
-    
-    public function getContributorsByPeriod($year,$month){
-        $sql="SELECT count(*)
+
+    public function getContributorsByPeriod($year, $month) {
+        $sql = "SELECT sum(d.donated_value)
               FROM donation d
               WHERE d.donation_status=2
               AND d.donation_type=2
               AND EXTRACT(YEAR FROM d.date_created)='?'
               AND EXTRACT(MONTH FROM d.date_created)='?'";
-        
-        $result=$this->executeRow($this->db,$sql,array(intval($year),intval($month)));
-        return $result->count;
-    }
-}
 
+        $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
+        if (isset($result->sum) && !empty($result->sum))
+            return $result->sum;
+        return 0.0;
+    }
+
+}

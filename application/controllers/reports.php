@@ -359,13 +359,13 @@ class Reports extends CK_Controller {
         }
 
 
-        $total_campaign = 0;
-        $total_summercamp = 0;
-        $total_mini = 0;
-        $total_free = 0;
-        $total = 0;
+        $total_campaign = 0.0;
+        $total_summercamp = 0.0;
+        $total_mini = 0.0;
+        $total_free = 0.0;
+        $total = 0.0;
         for ($i = 0; $i < count($selected_years); $i++) {
-            $total_per_period[$i] = 0;
+            $total_per_period[$i] = 0.0;
             $campaign[$i] = $this->campaign_model->getContributorsByPeriod($selected_years[$i], $selected_months[$i]);
             $total_campaign+=$campaign[$i];
             $summercamp[$i] = $this->summercamp_model->getSubscribersByPeriod($selected_years[$i], $selected_months[$i]);

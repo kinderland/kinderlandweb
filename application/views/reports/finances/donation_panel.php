@@ -40,13 +40,18 @@
 <script>
 
 
-<?php if($error && !empty($error)) { ?>
-	alert("<?php echo $error; ?>");
+<?php if ($error && !empty($error)) { ?>
+        alert("<?php echo $error; ?>");
 <?php }
 ?>
 
 </script>
 <?php
+
+function formatarEMostrar($valor) {
+
+    echo number_format($valor, 0, ",", ".");
+}
 
 function getMonthName($m) {
     switch ($m) {
@@ -77,55 +82,55 @@ function month_and_year($year, $month) {
         <div class="col-lg-10" bgcolor="red">
 
             <form method="GET">
-                <h5> De: </h5>
+                <div style="padding-left:3px">
+                    <p> De: 
+                        Ano: <select name="year_start" onchange="this.form.submit()" id="year_start">
+                            <?php
+                            foreach ($years as $y) {
+                                $selected = "";
+                                if ($y == $year_start)
+                                    $selected = "selected";
+                                echo "<option $selected value='$y'>$y</option>";
+                            }
+                            ?>
+                        </select> 
 
-                Ano: <select name="year_start" onchange="this.form.submit()" id="year_start">
-                    <?php
-                    foreach ($years as $y) {
-                        $selected = "";
-                        if ($y == $year_start)
-                            $selected = "selected";
-                        echo "<option $selected value='$y'>$y</option>";
-                    }
-                    ?>
-                </select>
-                Mês: <select name="month_start" onchange="this.form.submit()" id="month_start">
-                    <?php
-                    for ($m = 1; $m <= 12; $m++) {
-                        $selected = "";
-                        if ($m == $month_start)
-                            $selected = "selected";
-                        echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
-                    }
-                    ?>
-                </select>
-                <br/>
-                <h5> Até: </h5>
-
-                Ano: <select name="year_finish" onchange="this.form.submit()" id="year_finish">
-                    <?php
-                    foreach ($years as $y) {
-                        $selected = "";
-                        if ($y == $year_finish)
-                            $selected = "selected";
-                        echo "<option $selected value='$y'>$y</option>";
-                    }
-                    ?>
-                </select>
-                Mês: <select name="month_finish" onchange="this.form.submit()" id="month_finish">
-                    <?php
-                    for ($m = 1; $m <= 12; $m++) {
-                        $selected = "";
-                        if ($m == $month_finish)
-                            $selected = "selected";
-                        echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
-                    }
-                    ?>
-                </select>
+                        Mês: <select name="month_start" onchange="this.form.submit()" id="month_start">
+                            <?php
+                            for ($m = 1; $m <= 12; $m++) {
+                                $selected = "";
+                                if ($m == $month_start)
+                                    $selected = "selected";
+                                echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
+                            }
+                            ?>
+                        </select> </p>
+                </div>
+                <br/> 
+                <p>                Até:  Ano: <select name="year_finish" onchange="this.form.submit()" id="year_finish">
+                        <?php
+                        foreach ($years as $y) {
+                            $selected = "";
+                            if ($y == $year_finish)
+                                $selected = "selected";
+                            echo "<option $selected value='$y'>$y</option>";
+                        }
+                        ?>
+                    </select>
+                    Mês: <select name="month_finish" onchange="this.form.submit()" id="month_finish">
+                        <?php
+                        for ($m = 1; $m <= 12; $m++) {
+                            $selected = "";
+                            if ($m == $month_finish)
+                                $selected = "selected";
+                            echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
+                        }
+                        ?>
+                    </select></p>
             </form>
 
             <div class="pad"> 
-                <h4 style="margin-top:30px;"> Total: <?php echo $total; ?> </h4>
+                <h4 style="margin-top:30px;"> Total do período: <?php echo formatarEMostrar(intval($total)); ?> </h4>
                 <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px;">
                     <tr>
                         <td style="text-align: center;"><h4> <b> Período </b></h4> </td>
@@ -135,23 +140,23 @@ function month_and_year($year, $month) {
                         <td style="text-align: center;"><h4> <b> MiniKinderland </b></h4> </td>
                         <td style="text-align: center;"><h4> <b> Total </b></h4> </td>
                     </tr>
-<?php for ($i = 0; $i < count($selected_years); $i++) { ?>
+                    <?php for ($i = 0; $i < count($selected_years); $i++) { ?>
                         <tr>
                             <td> <?php month_and_year($selected_years[$i], $selected_months[$i]); ?> </td>
-                            <td> <?php echo $free[$i]; ?></td>
-                            <td> <?php echo $campaign[$i]; ?></td>
-                            <td> <?php echo $summercamp[$i]; ?></td>
-                            <td> <?php echo $mini[$i]; ?></td>
-                            <td> <?php echo $total_per_period[$i]; ?></td>
+                            <td> <?php echo formatarEMostrar(intval($free[$i])); ?></td>
+                            <td> <?php echo formatarEMostrar(intval($campaign[$i])); ?></td>
+                            <td> <?php echo formatarEMostrar(intval($summercamp[$i]));; ?></td>
+                            <td> <?php echo formatarEMostrar(intval($mini[$i]));; ?></td>
+                            <td> <?php echo formatarEMostrar(intval($total_per_period[$i])); ?></td>
                         </tr>
-<?php } ?>
+                    <?php } ?>
                     <tr>
                         <td> Total </td>
-                        <td> <?php echo $total_free; ?></td>
-                        <td> <?php echo $total_campaign; ?></td>
-                        <td> <?php echo $total_summercamp; ?></td>
-                        <td> <?php echo $total_mini; ?></td>
-                        <td> <?php echo $total; ?></td>
+                        <td> <?php echo formatarEMostrar(intval($total_free)); ?></td>
+                        <td> <?php echo formatarEMostrar(intval($total_campaign)); ?></td>
+                        <td> <?php echo formatarEMostrar(intval($total_summercamp)); ?></td>
+                        <td> <?php echo formatarEMostrar(intval($total_mini)); ?></td>
+                        <td> <?php echo formatarEMostrar(intval($total)); ?></td>
                     </tr>
             </div>
         </div>
