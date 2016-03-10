@@ -300,14 +300,71 @@ class Reports extends CK_Controller {
     }
 
     public function donation_panel() {
-
+        $error = "";
         $end = 2015;
         $start = date('Y');
         while ($start >= $end) {
             $years[] = $start;
             $start--;
         }
+        $selected_years = array();
+        $selected_months = array();
+        $campaign = array();
+        $summercamp = array();
+        $mini = array();
+        $free = array();
+        $total_per_period = array();
+ 
 
+        $year_start = $this->input->get('year_start', TRUE);
+        $month_start = $this->input->get('month_start', TRUE);
+        $year_finish = $this->input->get('year_finish', TRUE);
+        $month_finish = $this->input->get('month_finish', TRUE);
+        if ($year_start > $year_finish || ($year_start == $year_finish && $month_start > $month_finish)) {
+            $error = "A data de término deve vir depois da data de início\n";
+        } else {
+            if ($year_finish > $year_start) { //O ano de término é exclusivamente maior que o ano de começo.
+                for ($j = $month_start; $j <= 12; $j++) {
+                    $selected_years[] = $year_start;
+                    $selected_months[] = $j;
+                }
+                for ($i = $year_start + 1; $i < $year_finish; $i++) {
+                    for ($j = 1; $j <= 12; $j++) {
+                        $selected_years[] = $i;
+                        $selected_months[] = $j;
+                    }
+                }
+                for ($j = 1; $j <= $month_finish; $j++) {
+                    $selected_years[] = $year_finish;
+                    $selected_months[] = $j;
+                }
+            } elseif ($year_start === $year_finish) {
+                for ($j = $month_start; $j <= $month_finish; $j++) {
+                    $selected_years[] = $year_start;
+                    $selected_months[] = $j;
+                }
+            }
+        }
+        for ($i = 0; $i < count($selected_years); $i++) {
+            $total_campaign = 0;
+            $total_summercamp = 0;
+            $total_mini = 0;
+            $total_free = 0;
+            $total_per_period = 0;
+            $total = 0;
+            
+            $campaign[$i]=$this->campaign_model->getContributorsByPeriod($selected_years[$i],$selected_months[$i]);
+            $total_campaign+=$campaign[$i];
+            $summercamp[$i]=$this->summercamp_model->getSubscribersByPeriod($selected_years[$i],$selected_months[$i]);
+            $total_summercamp+=$summercamp[$i];
+            $mini[$i]=$this->summercamp_model->getMiniSubsByPeriod($selected_years[$i],$selected_months[$i]);
+            $total_mini+=$mini[$i];
+            $free[$i]=$this->donation_model->getFreeDonationsByPeriod($selected_years[$i],$selected_months[$i]);
+            $total_free+=$free[$i];
+            
+            $total_per_period[$i]+=$campaign[$i]+$summercamp[$i]+$mini[$i]+$free[$i];
+            $total+=$total_per_period[$i];
+        }
         $data['years'] = $years;
         $this->loadReportView("reports/finances/donation_panel", $data);
     }

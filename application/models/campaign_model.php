@@ -123,6 +123,17 @@ class campaign_model extends CK_Model {
        $result = $this->execute($this->db,$sql,array(intval($campaign_id)));
        return $result;
     }
+    
+    public function getContributorsByPeriod($year,$month){
+        $sql="SELECT count(*)
+              FROM donation d
+              WHERE d.donation_status=2
+              AND d.donation_type=2
+              AND EXTRACT(YEAR FROM d.date_created)='?'
+              AND EXTRACT(MONTH FROM d.date_created)='?'";
+        
+        $result=$this->executeRow($this->db,$sql,array(intval($year),intval($month)));
+        return $result;
+    }
 }
 
-?>

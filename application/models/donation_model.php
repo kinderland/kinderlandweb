@@ -274,7 +274,18 @@ class donation_model extends CK_Model {
 
         return $resultSet;
     }
+    
+    public function getFreeDonationsByPeriod($year,$month){
+        $sql="
+              SELECT count(*)
+              FROM donation d
+              WHERE d.donation_type=1
+              AND d.donation_status=2
+              AND EXTRACT(YEAR FROM d.date_created) ='?'
+              AND EXTRACT(MONTH FROM d.date_created) = '?'";
+        $result = $this->executeRow($this->db,$sql,array(intval($year),intval($month)));
+        return $result;
+    }
 
 }
 
-?>

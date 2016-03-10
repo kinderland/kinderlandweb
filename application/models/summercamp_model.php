@@ -255,22 +255,19 @@ class summercamp_model extends CK_Model {
         return $camp;
     }
 
-    public function updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate,$date_start_pre, $date_finish_pre, $capacity_male, $capacity_female){
-    	$this -> Logger -> info("Running: " . __METHOD__);
-    	
-    	$sql = 'UPDATE summer_camp SET camp_name = ?, date_start = ?, date_finish = ?, date_start_pre_subscriptions = ?, date_finish_pre_subscriptions = ?, 
+    public function updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female) {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $sql = 'UPDATE summer_camp SET camp_name = ?, date_start = ?, date_finish = ?, date_start_pre_subscriptions = ?, date_finish_pre_subscriptions = ?, 
     			date_start_pre_subscriptions_associate = ?, date_finish_pre_subscriptions_associate =?,  capacity_male = ?, capacity_female = ?
 				WHERE summer_camp_id = ?';
-    	
-    	$result = $this -> execute($this->db, $sql, array($camp_name, $date_start, $date_finish, $date_start_pre, $date_finish_pre,
-    			$date_start_pre_associate, $date_finish_pre_associate, $capacity_male, $capacity_female, $camp_id));
-    	
-    	return $result;
-    	
-    	
-    	
+
+        $result = $this->execute($this->db, $sql, array($camp_name, $date_start, $date_finish, $date_start_pre, $date_finish_pre,
+            $date_start_pre_associate, $date_finish_pre_associate, $capacity_male, $capacity_female, $camp_id));
+
+        return $result;
     }
-    
+
     public function getSummerCampSubscriptionsOfUser($userId) {
         $sql = "Select * from summer_camp sc
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
@@ -1225,31 +1222,30 @@ class summercamp_model extends CK_Model {
 
         return $paymentPeriod;
     }
-    
-    
-    public function getSummerCampPaymentPeriods($campId){
-    	$this->Logger->info("Running: " . __METHOD__);
+
+    public function getSummerCampPaymentPeriods($campId) {
+        $this->Logger->info("Running: " . __METHOD__);
         $sql = "Select * from summer_camp_payment_period where summer_camp_id = ?";
 
-        
 
-        $payment_periods = $this -> executeRows($this -> db, $sql, array($campId));
-		
-		$retorno = array();
-		
-		foreach ($payment_periods as $payment_period) {
-			$retorno[] = SummerCampPaymentPeriod::createSummerCampPaymentPeriodObject($payment_period);
-		}
-		
-		return $retorno;
+
+        $payment_periods = $this->executeRows($this->db, $sql, array($campId));
+
+        $retorno = array();
+
+        foreach ($payment_periods as $payment_period) {
+            $retorno[] = SummerCampPaymentPeriod::createSummerCampPaymentPeriodObject($payment_period);
+        }
+
+        return $retorno;
     }
-    
-    public function deleteSummerCampPaymentPeriods($campId){
-    	$this -> Logger -> info("Running: " . __METHOD__);
-    
-    	$deleteSql = 'DELETE FROM summer_camp_payment_period WHERE summer_camp_id = ?';
-    
-    	return $this->execute($this->db, $deleteSql, array(intval($campId)));
+
+    public function deleteSummerCampPaymentPeriods($campId) {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $deleteSql = 'DELETE FROM summer_camp_payment_period WHERE summer_camp_id = ?';
+
+        return $this->execute($this->db, $deleteSql, array(intval($campId)));
     }
 
     public function associateDonation($campId, $colonistId, $donationId) {
@@ -1552,20 +1548,19 @@ class summercamp_model extends CK_Model {
 
         return $this->execute($this->db, $sql, array(intval($personId), intval($summerCampId), intval($staffFunction)));
     }
-    
+
     public function insertNewSummercampPaymentPeriod($camp_id, $date_start, $date_finish, $price, $portions, $associate_price) {
-		$this -> Logger -> info("Running: " . __METHOD__);
+        $this->Logger->info("Running: " . __METHOD__);
 
-		$sql = 'INSERT INTO summer_camp_payment_period(summer_camp_id, date_start, date_finish, price, portions, associate_price) VALUES (?,?,?,?,?,?)';
+        $sql = 'INSERT INTO summer_camp_payment_period(summer_camp_id, date_start, date_finish, price, portions, associate_price) VALUES (?,?,?,?,?,?)';
 
-		$returnId = $this -> executeReturningId($this -> db, $sql, array($camp_id, $date_start, $date_finish, $price, $portions, $associate_price));
+        $returnId = $this->executeReturningId($this->db, $sql, array($camp_id, $date_start, $date_finish, $price, $portions, $associate_price));
 
-		if ($returnId)
-			return $returnId;
+        if ($returnId)
+            return $returnId;
 
-		return false;
-
-	}
+        return false;
+    }
 
     public function updateAllCampStaffByFunction($summerCampId, $ids, $staffFunction) {
 
@@ -1650,6 +1645,37 @@ class summercamp_model extends CK_Model {
         if (!$result)
             return null;
 
+        return $result;
+    }
+
+    public function getSubscribersByPeriod($year, $month) {
+        $sql = "SELECT count(*)
+              FROM donation d,summer_camp_subscription s
+              WHERE  s.donation_id=d.donation_id
+              AND s.situation=5
+              AND d.donation_status=2
+              AND EXTRACT (YEAR FROM d.date_created)='?'
+              AND EXTRACT (MONTH FROM d.date_created)='?'
+              AND summer_camp_id IN(SELECT ss.summer_camp_id 
+                                    FROM summer_camp ss
+                                    WHERE camp_name like '%Turma%')";
+        $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
+        return $result;
+    }
+
+    public function getMiniSubsByPeriod($year, $month) {
+        $sql = "SELECT count(*)
+              FROM donation d,summer_camp_subscription s
+              WHERE  s.donation_id=d.donation_id
+              AND s.situation=5
+              AND d.donation_status=2
+              AND EXTRACT (YEAR FROM d.date_created)='?'
+              AND EXTRACT (MONTH FROM d.date_created)='?'
+              AND summer_camp_id IN(SELECT ss.summer_camp_id 
+                                    FROM summer_camp ss
+                                    WHERE camp_name like '%Mini%'
+                                    AND camp_and not like '%Equipe%')";
+        $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
         return $result;
     }
 
