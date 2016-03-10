@@ -314,58 +314,88 @@ class Reports extends CK_Controller {
         $mini = array();
         $free = array();
         $total_per_period = array();
- 
+
 
         $year_start = $this->input->get('year_start', TRUE);
         $month_start = $this->input->get('month_start', TRUE);
         $year_finish = $this->input->get('year_finish', TRUE);
         $month_finish = $this->input->get('month_finish', TRUE);
+        if (!isset($year_start) || empty($year_start))
+            $year_start = intval(date('Y'));
+        if (!isset($year_finish) || empty($year_finish))
+            $year_finish = intval(date('Y'));
+        if (!isset($month_start) || empty($month_start))
+            $month_start = intval(date('m'));
+        if (!isset($month_finish) || empty($month_finish))
+            $month_finish = intval(date('m'));
+
         if ($year_start > $year_finish || ($year_start == $year_finish && $month_start > $month_finish)) {
-            $error = "A data de término deve vir depois da data de início\n";
-        } else {
-            if ($year_finish > $year_start) { //O ano de término é exclusivamente maior que o ano de começo.
-                for ($j = $month_start; $j <= 12; $j++) {
-                    $selected_years[] = $year_start;
-                    $selected_months[] = $j;
-                }
-                for ($i = $year_start + 1; $i < $year_finish; $i++) {
-                    for ($j = 1; $j <= 12; $j++) {
-                        $selected_years[] = $i;
-                        $selected_months[] = $j;
-                    }
-                }
-                for ($j = 1; $j <= $month_finish; $j++) {
-                    $selected_years[] = $year_finish;
-                    $selected_months[] = $j;
-                }
-            } elseif ($year_start === $year_finish) {
-                for ($j = $month_start; $j <= $month_finish; $j++) {
-                    $selected_years[] = $year_start;
+            $error = 'A data de término deve vir depois da data de início\n';
+            $year_start = intval(date('Y'));
+            $year_finish = intval(date('Y'));
+            $month_start = intval(date('m'));
+            $month_finish = intval(date('m'));
+        }
+        if ($year_finish > $year_start) { //O ano de término é exclusivamente maior que o ano de começo.
+            for ($j = $month_start; $j <= 12; $j++) {
+                $selected_years[] = $year_start;
+                $selected_months[] = $j;
+            }
+            for ($i = $year_start + 1; $i < $year_finish; $i++) {
+                for ($j = 1; $j <= 12; $j++) {
+                    $selected_years[] = $i;
                     $selected_months[] = $j;
                 }
             }
+            for ($j = 1; $j <= $month_finish; $j++) {
+                $selected_years[] = $year_finish;
+                $selected_months[] = $j;
+            }
+        } elseif ($year_start === $year_finish) { //Os anos são iguais, o que deixa mais fácil.
+            for ($j = $month_start; $j <= $month_finish; $j++) {
+                $selected_years[] = $year_start;
+                $selected_months[] = $j;
+            }
         }
+
+
+        $total_campaign = 0;
+        $total_summercamp = 0;
+        $total_mini = 0;
+        $total_free = 0;
+        $total = 0;
         for ($i = 0; $i < count($selected_years); $i++) {
-            $total_campaign = 0;
-            $total_summercamp = 0;
-            $total_mini = 0;
-            $total_free = 0;
-            $total_per_period = 0;
-            $total = 0;
-            
-            $campaign[$i]=$this->campaign_model->getContributorsByPeriod($selected_years[$i],$selected_months[$i]);
+            $total_per_period[$i] = 0;
+            $campaign[$i] = $this->campaign_model->getContributorsByPeriod($selected_years[$i], $selected_months[$i]);
             $total_campaign+=$campaign[$i];
-            $summercamp[$i]=$this->summercamp_model->getSubscribersByPeriod($selected_years[$i],$selected_months[$i]);
+            $summercamp[$i] = $this->summercamp_model->getSubscribersByPeriod($selected_years[$i], $selected_months[$i]);
             $total_summercamp+=$summercamp[$i];
-            $mini[$i]=$this->summercamp_model->getMiniSubsByPeriod($selected_years[$i],$selected_months[$i]);
+            $mini[$i] = $this->summercamp_model->getMiniSubsByPeriod($selected_years[$i], $selected_months[$i]);
             $total_mini+=$mini[$i];
-            $free[$i]=$this->donation_model->getFreeDonationsByPeriod($selected_years[$i],$selected_months[$i]);
+            $free[$i] = $this->donation_model->getFreeDonationsByPeriod($selected_years[$i], $selected_months[$i]);
             $total_free+=$free[$i];
-            
-            $total_per_period[$i]+=$campaign[$i]+$summercamp[$i]+$mini[$i]+$free[$i];
+
+            $total_per_period[$i]+=$campaign[$i] + $summercamp[$i] + $mini[$i] + $free[$i];
             $total+=$total_per_period[$i];
         }
+        $data['error'] = $error;
+        $data['year_start'] = $year_start;
+        $data['year_finish'] = $year_finish;
+        $data['month_start'] = $month_start;
+        $data['month_finish'] = $month_finish;
         $data['years'] = $years;
+        $data['selected_years'] = $selected_years;
+        $data['selected_months'] = $selected_months;
+        $data['campaign'] = $campaign;
+        $data['summercamp'] = $summercamp;
+        $data['mini'] = $mini;
+        $data['free'] = $free;
+        $data['total_campaign'] = $total_campaign;
+        $data['total_summercamp'] = $total_summercamp;
+        $data['total_mini'] = $total_mini;
+        $data['total_free'] = $total_free;
+        $data['total_per_period'] = $total_per_period;
+        $data['total'] = $total;
         $this->loadReportView("reports/finances/donation_panel", $data);
     }
 

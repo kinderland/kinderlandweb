@@ -1660,7 +1660,7 @@ class summercamp_model extends CK_Model {
                                     FROM summer_camp ss
                                     WHERE camp_name like '%Turma%')";
         $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
-        return $result;
+        return $result->count;
     }
 
     public function getMiniSubsByPeriod($year, $month) {
@@ -1674,9 +1674,9 @@ class summercamp_model extends CK_Model {
               AND summer_camp_id IN(SELECT ss.summer_camp_id 
                                     FROM summer_camp ss
                                     WHERE camp_name like '%Mini%'
-                                    AND camp_and not like '%Equipe%')";
+                                    AND camp_name not like '%Equipe%')";
         $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
-        return $result;
+        return $result->count;
     }
 
 }

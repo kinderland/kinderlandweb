@@ -133,7 +133,7 @@ class campaign_model extends CK_Model {
               AND EXTRACT(MONTH FROM d.date_created)='?'";
         
         $result=$this->executeRow($this->db,$sql,array(intval($year),intval($month)));
-        return $result;
+        return $result->count;
     }
 }
 
