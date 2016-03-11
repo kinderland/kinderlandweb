@@ -1166,7 +1166,7 @@ class Admin extends CK_Controller {
     public function createCamp() {
         $data['payments'] = array();
 
-        $this->loadView("admin/camps/insert_camp", $data);
+        $this->loadReportView("admin/camps/insert_camp", $data);
     }
 
     public function editCamp($camp_id = NULL, $errors = array(), $camp_name = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $payments = array(), $type = NULL) {
