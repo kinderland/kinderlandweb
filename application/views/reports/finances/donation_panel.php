@@ -95,7 +95,7 @@ function month_and_year($year, $month) {
                             ?>
                         </select> 
 
-                        Mês: <select name="month_start" onchange="this.form.submit()" id="month_start">
+                        Mês: <select name="month_start"  onchange="this.form.submit()" id="month_start">
                             <?php
                             for ($m = 1; $m <= 12; $m++) {
                                 $selected = "";
@@ -136,8 +136,8 @@ function month_and_year($year, $month) {
                         <td style="text-align: center;"><h4> <b> Período </b></h4> </td>
                         <td style="text-align: center;"><h4> <b> Avulsa</b></h4> </td>
                         <td style="text-align: center;"><h4> <b> Campanha </b></h4> </td>
-                        <td style="text-align: center;"><h4> <b> Colônia Verão </b></h4> </td>
-                        <td style="text-align: center;"><h4> <b> MiniKinderland </b></h4> </td>
+                        <td style="text-align: center;"><h4> <b> Colônia </b></h4> </td>
+                       <!-- <td style="text-align: center;"><h4> <b> MiniKinderland </b></h4> </td> -->
                         <td style="text-align: center;"><h4> <b> Total </b></h4> </td>
                     </tr>
                     <?php for ($i = 0; $i < count($selected_years); $i++) { ?>
@@ -146,7 +146,7 @@ function month_and_year($year, $month) {
                             <td> <?php echo formatarEMostrar(intval($free[$i])); ?></td>
                             <td> <?php echo formatarEMostrar(intval($campaign[$i])); ?></td>
                             <td> <?php echo formatarEMostrar(intval($summercamp[$i]));; ?></td>
-                            <td> <?php echo formatarEMostrar(intval($mini[$i]));; ?></td>
+                            <!--<td> <?php echo formatarEMostrar(intval($mini[$i]));; ?></td>-->
                             <td> <?php echo formatarEMostrar(intval($total_per_period[$i])); ?></td>
                         </tr>
                     <?php } ?>
@@ -155,7 +155,7 @@ function month_and_year($year, $month) {
                         <td> <?php echo formatarEMostrar(intval($total_free)); ?></td>
                         <td> <?php echo formatarEMostrar(intval($total_campaign)); ?></td>
                         <td> <?php echo formatarEMostrar(intval($total_summercamp)); ?></td>
-                        <td> <?php echo formatarEMostrar(intval($total_mini)); ?></td>
+                       <!-- <td> <?php echo formatarEMostrar(intval($total_mini)); ?></td> -->
                         <td> <?php echo formatarEMostrar(intval($total)); ?></td>
                     </tr>
             </div>

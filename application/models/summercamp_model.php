@@ -1648,39 +1648,56 @@ class summercamp_model extends CK_Model {
         return $result;
     }
 
-    public function getSubscribersByPeriod($year, $month) {
-        $sql = "SELECT sum(d.donated_value)
-              FROM donation d,summer_camp_subscription s
-              WHERE  s.donation_id=d.donation_id
-              AND s.situation=5
-              AND d.donation_status=2
-              AND EXTRACT (YEAR FROM d.date_created)='?'
-              AND EXTRACT (MONTH FROM d.date_created)='?'
-              AND summer_camp_id IN(SELECT ss.summer_camp_id 
-                                    FROM summer_camp ss
-                                    WHERE camp_name like '%Turma%')";
-        $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
-        if (isset($result->sum) && !empty($result->sum))
-            return $result->sum;
-        return 0.0;
-    }
+    /*  Ver se isso aqui ainda pode ser útil no futuro. Código pronto, pegando por Mini e por Verão os valores.
+      public function getSubscribersByPeriod($year, $month) {
+      $sql = "SELECT sum(d.donated_value),ss.camp_name
+      FROM donation d,summer_camp ss, (SELECT DISTINCT ON (s.donation_id) *
+      FROM summer_camp_subscription s) a
+      WHERE d.donation_id=a.donation_id
+      AND d.donation_status=2
+      AND  EXTRACT(YEAR FROM d.date_created) = '?'
+      AND  EXTRACT(MONTH FROM d.date_created) = '?'
+      AND a.summer_camp_id = ss.summer_camp_id
+      AND ss.mini_camp=FALSE
+      GROUP BY ss.camp_name";
+      $result = $this->executeRows($this->db, $sql, array(intval($year), intval($month)));
+      $total = 0.0;
+      foreach ($result as $colony) {
+      if (isset($colony->sum) && !empty($colony->sum)) {
+      $total += $colony->sum;
+      }
+      }
+      return $total;
+      }
 
-    public function getMiniSubsByPeriod($year, $month) {
-        $sql = "SELECT sum(d.donated_value
-              FROM donation d,summer_camp_subscription s
-              WHERE  s.donation_id=d.donation_id
-              AND s.situation=5
-              AND d.donation_status=2
-              AND EXTRACT (YEAR FROM d.date_created)='?'
-              AND EXTRACT (MONTH FROM d.date_created)='?'
-              AND summer_camp_id IN(SELECT ss.summer_camp_id 
-                                    FROM summer_camp ss
-                                    WHERE camp_name like '%Mini%'
-                                    AND camp_name not like '%Equipe%')";
+      public function getMiniSubsByPeriod($year, $month) {
+      $sql = "SELECT sum(d.donated_value),ss.camp_name
+      FROM donation d,summer_camp ss, (SELECT DISTINCT ON (s.donation_id) *
+      FROM summer_camp_subscription s) a
+      WHERE d.donation_id=a.donation_id
+      AND d.donation_status=2
+      AND  EXTRACT(YEAR FROM d.date_created) = '?'
+      AND  EXTRACT(MONTH FROM d.date_created) = '?'
+      AND a.summer_camp_id = ss.summer_camp_id
+      AND ss.mini_camp=TRUE
+      GROUP BY ss.camp_name";
+      $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
+      if (isset($result->sum) && !empty($result->sum))
+      return $result->sum;
+      return 0.0;
+      } */
+
+    public function getSummerCampDonationsSum($year, $month) {
+        $sql = "SELECT sum(d.donated_value)
+                FROM donation d,summer_camp ss, (SELECT DISTINCT ON (s.donation_id) *
+                                                 FROM summer_camp_subscription s) a
+                WHERE d.donation_id=a.donation_id
+                AND d.donation_status=2
+                AND  EXTRACT(YEAR FROM d.date_created) = '?'
+                AND  EXTRACT(MONTH FROM d.date_created) = '?'
+                AND a.summer_camp_id = ss.summer_camp_id";
         $result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
-        if (isset($result->sum) && !empty($result->sum))
-            return $result->sum;
-        return 0.0;
+        return $result->sum;
     }
 
 }

@@ -368,14 +368,17 @@ class Reports extends CK_Controller {
             $total_per_period[$i] = 0.0;
             $campaign[$i] = $this->campaign_model->getContributorsByPeriod($selected_years[$i], $selected_months[$i]);
             $total_campaign+=$campaign[$i];
+           /*
             $summercamp[$i] = $this->summercamp_model->getSubscribersByPeriod($selected_years[$i], $selected_months[$i]);
             $total_summercamp+=$summercamp[$i];
             $mini[$i] = $this->summercamp_model->getMiniSubsByPeriod($selected_years[$i], $selected_months[$i]);
-            $total_mini+=$mini[$i];
+            $total_mini+=$mini[$i]; */
+            $summercamp[$i]=$this->summercamp_model->getSummerCampDonationsSum($selected_years[$i], $selected_months[$i]);
+            $total_summercamp+=$summercamp[$i];
             $free[$i] = $this->donation_model->getFreeDonationsByPeriod($selected_years[$i], $selected_months[$i]);
             $total_free+=$free[$i];
 
-            $total_per_period[$i]+=$campaign[$i] + $summercamp[$i] + $mini[$i] + $free[$i];
+            $total_per_period[$i]+=$campaign[$i] + $summercamp[$i] /*+ $mini[$i]*/ + $free[$i];
             $total+=$total_per_period[$i];
         }
         $data['error'] = $error;
