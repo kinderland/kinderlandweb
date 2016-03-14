@@ -1460,8 +1460,6 @@ class Reports extends CK_Controller {
         else if ($donationChosen == "Campanha de Sócios")
             $type = 2;
 
-
-
         $allTransactions = null;
         $transactions = new stdClass();
         $transactions->valueDay = array();
@@ -1478,28 +1476,33 @@ class Reports extends CK_Controller {
         $numDays = count($days);
 
         $end = strval($days[$numDays - 1]->year + 1) . "-" . strval($days[$numDays - 1]->month) . "-" . strval($days[$numDays - 1]->day);
-
+        
         $end = strtotime($end);
         $start = strtotime($start);
-        $transactions->qtdDays = ($end - $start) / (1 * 24 * 60 * 60);
+        $transactions->qtdDays = (($end - $start) / (1 * 24 * 60 * 60))*10;
 
         for ($i = 0; $i <= $transactions->qtdDays; $i++) {
             $transactions->day[$i] = date("Y-m-d", $start);
             $transactions->valueDay[$i] = 0.00;
             $start = $start + (1 * 24 * 60 * 60);
         }
-
-        $j = 0;
+        
+        $s = 0;
 
         foreach ($allTransactions as $trans) {
+        	$s++;
+        	
+        	$j = 0;
 
-            foreach ($days as $day) {
-                if (($trans->day != $day->day) && ($trans->month != $day->month) && ($trans->year != $day->year)) {
+            foreach ($transactions->day as $day) {
+            	$day = explode("-", $day);
+            	
+                if (($trans->day != $day[2]) || ($trans->month != $day[1]) || ($trans->year != $day[0])) {
                     $j++;
                 } else
                     break;
             }
-
+            
             if ($trans->type == "debito") {
                 $transactions->valueDay[$j + 1] += $trans->value - (3.4 * ($trans->value) / 100.0);
             } else if ($trans->type == "credito") {

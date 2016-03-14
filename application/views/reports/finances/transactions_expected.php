@@ -158,6 +158,7 @@
 	                    <div class="pad">
 	                    <button class="btn btn-primary" onclick="this.form.submit()">Gerar Tabela</button>
 	                </form>
+	                <br /> <br />
 	                <div class="counter"></div> <br>
 	                <?php if(isset($transactions)) {?>
 	                

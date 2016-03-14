@@ -155,7 +155,7 @@ class cielotransaction_model extends CK_Model {
         $sql = "SELECT *,DATE_PART('DAY',date_updated) as day, DATE_PART('MONTH',date_updated) as month,
 					DATE_PART('YEAR',date_updated) as year FROM v_captured_transactions
 					" . (($type !== null) ? "WHERE donation_type = ?" : "") . "
-					ORDER BY date_updated";
+					ORDER BY date_updated ASC";
 
         if ($type !== null)
             $resultSet = $this->executeRows($this->db, $sql, array($type));
@@ -170,7 +170,7 @@ class cielotransaction_model extends CK_Model {
 
     public function countTotalDaysCapturedTransaction() {
         $sql = "SELECT DISTINCT DATE_PART('DAY',date_updated) as day, DATE_PART('MONTH',date_updated) as month,
-					DATE_PART('YEAR',date_updated) as year FROM cielo_transaction ORDER BY DATE_PART('YEAR',date_updated),
+					DATE_PART('YEAR',date_updated) as year FROM cielo_transaction WHERE payment_status = 6 ORDER BY DATE_PART('YEAR',date_updated),
 					DATE_PART('MONTH',date_updated), DATE_PART('DAY',date_updated)";
 
         $resultSet = $this->executeRows($this->db, $sql);
