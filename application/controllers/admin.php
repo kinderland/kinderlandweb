@@ -1733,26 +1733,16 @@ class Admin extends CK_Controller {
         }
     }
 
-    public function changeCampEnabledStatus() {
+    public function changeCampEnabledStatus($campId) {
         $this->Logger->info("Running: " . __METHOD__);
-        $campId = $_POST['camp_id'];
-        $enabled = ($_POST['status'] == "t") ? true : false;
-
-        try {
-            $this->Logger->info("Updating enabled pre-subscriptions");
-            $this->generic_model->startTransaction();
-
-            $campId = $this->summercamp_model->updateCampPreEnabled($campId, $enabled);
-            /* inserir payment periods */
-
-            $this->generic_model->commitTransaction();
-            $this->Logger->info("Updated enabled pre-subscriptions");
-            echo "true";
-        } catch (Exception $ex) {
-            $this->Logger->error("Failed to update enabled pre-subscriptions");
-            $this->generic_model->rollbackTransaction();
-            echo "false";
-        }
+        
+        $camp = $this->summercamp_model->getSummerCampById($campId);
+		$payments = $this->summercamp_model->getSummerCampPaymentPeriods($camp->getCampId());
+		
+        if($payments)
+            echo $this->summercamp_model->updateCampPreEnabled($campId);
+        else
+            echo "0";
     }
 
     public function validateColonists() {

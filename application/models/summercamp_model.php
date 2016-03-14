@@ -330,8 +330,9 @@ class summercamp_model extends CK_Model {
         throw new ModelException("Insert object in the database");
     }
 
-    public function updateCampPreEnabled($campId, $enabled) {
-        $sql = "UPDATE summer_camp SET pre_subscriptions_enabled = " . (($enabled) ? "true" : "false") . " WHERE summer_camp_id = ?";
+    public function updateCampPreEnabled($campId) {
+    	
+        $sql = "UPDATE summer_camp SET pre_subscriptions_enabled = NOT pre_subscriptions_enabled WHERE summer_camp_id = ?";
         $result = $this->execute($this->db, $sql, array(intval($campId)));
 
         return $result;
