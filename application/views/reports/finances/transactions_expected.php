@@ -58,14 +58,15 @@
 			var valor = parseFloat(0);
 			var table = document.getElementById("tablebody");
 			var valores = document.getElementsByName("value");
+			var dias = document.getElementsByName("day");
 
         	for (var i = 0; i < valores.length; i++) {
                 valorAtual = parseFloat(valores[i].getAttribute("id"));
                 valor += valorAtual;
             }
 			
-           	valor = number_format(valor,2,',','');
-            return 'Valor Total: ' + valor;
+           	valor = number_format(valor,2,',','.');
+            return 'Total do período de ' + dias[0].innerHTML + ' a ' + dias[dias.length-1].innerHTML + ': R$ ' + valor;
         }
 
         function handlePeriodFields(){
@@ -93,8 +94,8 @@
 	        $(document).ready(function () {
 	            $('#sortable-table').datatable({
 	                pageSize: Number.MAX_VALUE,
-	                sort: [true, true],
-	                filters: [true, true],
+	                sort: [false, false],
+	                filters: [false, false],
 	                filterText: 'Escreva para filtrar... ',
 	                counterText: showCounter
 	            });
@@ -176,8 +177,8 @@
 	                        	if($transaction -> valueDay!=0){
 	                            ?>
 	                            <tr>
-	                                <td><?= $transaction -> day?></td>
-	                                <td name="value" id="<?php echo $transaction -> valueDay?>"><?= number_format($transaction -> valueDay,2,',','')?></td>
+	                                <td name="day"><?= $transaction -> day?></td>
+	                                <td name="value" id="<?php echo $transaction -> valueDay?>"><?= number_format($transaction -> valueDay,2,',','.')?></td>
 	                            </tr>
 	                            <?php
 	                        } }
