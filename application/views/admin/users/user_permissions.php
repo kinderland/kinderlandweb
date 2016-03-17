@@ -32,7 +32,32 @@
     }
     </style>
     <body>
-        <script>
+        <script type="text/javascript">
+
+
+        function post(path, params, method) {
+            method = method || "post"; // Set method to post by default if not specified.
+
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+                    form.appendChild(hiddenField);
+                }
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+                
 
         	function prepareModal(personId) {
 				var users = <?= print_r(json_encode($users), true) ?>;
@@ -67,6 +92,7 @@
 				$("#form_update_permissions").submit();
 			}
 
+
 			$( document ).ready(function() {
 				$('#sortable-table').datatable({
 						pageSize:         Number.MAX_VALUE,
@@ -75,13 +101,49 @@
 					filters: [true],
 					filterText: 'Escreva para filtrar... '
 				});
+				
 			});
+
+			function openDisposal(letra) {
+					
+				
+					$.post('<?= $this->config->item('url_link');?>admin/userPermissionsFilter',
+							{letra: letra});				
+					
+			}
 			
         </script>
         <div class="scroll">
         	<div class="main-container-report">
             	<div class = "row">
                 	<div class="col-lg-12">
+                	<div>
+                	
+                	
+                	<form id="form_selection" method="GET">
+						
+							<th><button name="letter_chosen" class "" id="letra">Todos</button>
+							<?php foreach($letters as $letter){
+								if(strcmp($letter,$letter_chosen) == 0) {?>
+									<th><button name="letter_chosen" class ="" id="letra<?php echo $letter?>" onClick="this.form.submit()" value="<?php echo $letter?>"> <?php echo $letter?></button></th>
+							<?php } else{ ?>
+								<th><button name="letter_chosen" class ="" id="letra<?php echo $letter?>" onClick="this.form.submit()"  value="<?php echo $letter?>"> <?php echo $letter?></button></th>
+								
+						<?php 	}}?>
+
+
+
+						
+					</form>
+						
+
+                	
+                	
+                	
+
+                	
+                	</div>
+                	</div>
                     <table class="table table-bordered table-striped table-min-td-size" style="width: 1000px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
@@ -112,7 +174,7 @@
                             ?>
                         </tbody>
                     </table>
-                    </div>
+                    
                 </div>
             
 

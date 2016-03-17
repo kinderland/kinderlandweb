@@ -88,9 +88,9 @@ class person_model extends CK_Model {
         return false;
     }
 
-    public function getUserPermissionsDetailed() {
+    public function getUserPermissionsDetailed($letra) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * FROM v_users_permissions";
+        $sql = "SELECT * FROM v_users_permissions WHERE lower(fullname) LIKE lower('$letra%')";
 
         $rows = $this->executeRows($this->db, $sql);
 
