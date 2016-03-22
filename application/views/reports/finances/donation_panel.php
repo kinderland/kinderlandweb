@@ -71,7 +71,7 @@
     $firstDate = getMonthName($selected_months[0]) . $selected_years[0];
     $i = count($selected_years) - 1;
     $lastDate = getMonthName($selected_months[$i]) . $selected_years[$i];
-    $date = date("Y-m-d H:i:s");
+    $date = date("[Y-m-d H:i:s]");
     ?>
 
     <body>
@@ -110,8 +110,7 @@
 
                 var nomePadrao = " receitas-";
                 nomePadrao = nomePadrao.concat("<?php echo $firstDate ?>-");
-                nomePadrao = nomePadrao.concat("<?php echo $lastDate ?>-");
-               // nomePadrao = nomePadrao.concat("<?php echo $date ?>");
+                nomePadrao = nomePadrao.concat("<?php echo $lastDate ?>");
                 return nomePadrao;
             }
 
@@ -149,7 +148,7 @@
             <div class="col-lg-10" bgcolor="red">
                 <button class="button" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
                 <form method="GET">
-                    <div style="padding-left:3px">
+                    <div style="padding-left:3px;padding-top:10px;">
                         <p> De: 
                             Ano: <select name="year_start" onchange="this.form.submit()" id="year_start">
                                 <?php
