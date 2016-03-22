@@ -67,11 +67,11 @@
         $name = getMonthName($month);
         echo $name . " / " . $year;
     }
-    
+
     $firstDate = getMonthName($selected_months[0]) . $selected_years[0];
     $i = count($selected_years) - 1;
     $lastDate = getMonthName($selected_months[$i]) . $selected_years[$i];
-    $date=date("Y-m-d H:i:s");
+    $date = date("Y-m-d H:i:s");
     ?>
 
     <body>
@@ -83,12 +83,35 @@
 <?php }
 ?>
 
+            function post(path, params, method) {
+                method = method || "post"; // Set method to post by default if not specified.
+
+                // The rest of this code assumes you are not using a library.
+                // It can be made less wordy if you use one.
+                var form = document.createElement("form");
+                form.setAttribute("method", method);
+                form.setAttribute("action", path);
+
+                for (var key in params) {
+                    if (params.hasOwnProperty(key)) {
+                        var hiddenField = document.createElement("input");
+                        hiddenField.setAttribute("type", "hidden");
+                        hiddenField.setAttribute("name", key);
+                        hiddenField.setAttribute("value", params[key]);
+                        form.appendChild(hiddenField);
+                    }
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+
             function getCSVName() {
-                
+
                 var nomePadrao = " receitas-";
-                nomePadrao=nomePadrao.concat("<?php echo $firstDate ?>-");
-                nomePadrao=nomePadrao.concat("<?php echo $lastDate ?>-");
-                nomePadrao=nomePadrao.concat("<?php echo $date ?>");
+                nomePadrao = nomePadrao.concat("<?php echo $firstDate ?>-");
+                nomePadrao = nomePadrao.concat("<?php echo $lastDate ?>-");
+               // nomePadrao = nomePadrao.concat("<?php echo $date ?>");
                 return nomePadrao;
             }
 
@@ -98,23 +121,26 @@
                 var table = document.getElementById("tablebody");
                 var name = getCSVName();
                 var tablehead = document.getElementsByTagName("thead")[0];
-                //alert(tablehead.rows[0].cells[1].innerHTML);
-                //Isso aqui chega até a informação que eu quero.
-                for (var i = 0, row; row = table.rows[i]; i++) {
-                    var data2 = [];
-                    //Nome, retira pega o que esta entre um <> e outro <>
-                    data2.push(row.cells[0].innerHTML.split("<")[1].split(">")[1]);
-                    data2.push(row.cells[1].innerHTML);
-                    data.push(data2);
+                for (var i = 0, row; row = table.rows[i] && table.rows[i].cells[0].innerHTML != "Total"; i++) {
+                
+                    for (var j = 1; j < 4; j++) {
+                        var data2 = [];
+                        if (table.rows[i].cells[j].innerHTML > 0)
+                        {
+                            data2.push(tablehead.rows[0].cells[j].innerHTML.split("<")[2].split(">")[1]);
+                            data2.push(table.rows[i].cells[j].innerHTML);
+                            data2.push(table.rows[i].cells[0].innerHTML.split("/")[0]);
+                            data2.push(table.rows[i].cells[0].innerHTML.split("/")[1]);
+                        }
+                        data.push(data2);
+                    }
+          
                 }
-                if (i == 0) {
-                    alert('Não há dados para geração da planilha');
-                    return;
-                }
-                var dataToSend = JSON.stringify(data);
-                var columName = ["Receita", "Valor", "Mes", "Ano"]
-                var columnNameToSend = JSON.stringify(columName);
 
+
+                var dataToSend = JSON.stringify(data);
+                var columName = ["Receita", "Valor", "Mes", "Ano"];
+                var columnNameToSend = JSON.stringify(columName);
                 post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
             }
         </script>
@@ -174,14 +200,14 @@
                     <h4 style="margin-top:30px;"> Total do período: <?php echo formatarEMostrar(intval($total)); ?> </h4>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px;"id="sortable-table" >
                         <thead>
-                        <tr>
-                            <td style="text-align: center;"><h4> <b> Período </b></h4> </td>
-                            <td style="text-align: center;"><h4> <b> Avulsa</b></h4> </td>
-                            <td style="text-align: center;"><h4> <b> Campanha </b></h4> </td>
-                            <td style="text-align: center;"><h4> <b> Colônia </b></h4> </td>
-                           <!-- <td style="text-align: center;"><h4> <b> MiniKinderland </b></h4> </td> -->
-                            <td style="text-align: center;"><h4> <b> Total </b></h4> </td>
-                        </tr>
+                            <tr>
+                                <td style="text-align: center;"><h4> <b>Período</b></h4> </td>
+                                <td style="text-align: center;"><h4> <b>Avulsa</b></h4> </td>
+                                <td style="text-align: center;"><h4> <b>Campanha</b></h4> </td>
+                                <td style="text-align: center;"><h4> <b>Colônia</b></h4> </td>
+                               <!-- <td style="text-align: center;"><h4> <b> MiniKinderland </b></h4> </td> -->
+                                <td style="text-align: center;"><h4> <b>Total</b></h4> </td>
+                            </tr>
                         </thead>
                         <tbody id="tablebody">
                             <?php for ($i = 0; $i < count($selected_years); $i++) { ?>
@@ -201,7 +227,7 @@
                                 </tr>
                             <?php } ?>
                             <tr>
-                                <td> Total </td>
+                                <td>Total</td>
                                 <td> <?php echo formatarEMostrar(intval($total_free)); ?></td>
                                 <td> <?php echo formatarEMostrar(intval($total_campaign)); ?></td>
                                 <td> <?php echo formatarEMostrar(intval($total_summercamp)); ?></td>
