@@ -121,19 +121,19 @@
                 var name = getCSVName();
                 var tablehead = document.getElementsByTagName("thead")[0];
                 for (var i = 0, row; row = table.rows[i] && table.rows[i].cells[0].innerHTML != "Total"; i++) {
-                
+
                     for (var j = 1; j < 4; j++) {
                         var data2 = [];
                         if (table.rows[i].cells[j].innerHTML > 0)
                         {
                             data2.push(tablehead.rows[0].cells[j].innerHTML.split("<")[2].split(">")[1]);
-                            data2.push(table.rows[i].cells[j].innerHTML);
+                            data2.push(table.rows[i].cells[j].innerHTML.replace(".",""));
                             data2.push(table.rows[i].cells[0].innerHTML.split("/")[0]);
                             data2.push(table.rows[i].cells[0].innerHTML.split("/")[1]);
                         }
                         data.push(data2);
                     }
-          
+
                 }
 
 
@@ -146,22 +146,9 @@
         <div class = "row">
 
             <div class="col-lg-10" bgcolor="red">
-                <button class="button" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
                 <form method="GET">
                     <div style="padding-left:3px;padding-top:10px;">
-                        <p> De: 
-                            Ano: <select name="year_start" onchange="this.form.submit()" id="year_start">
-                                <?php
-                                foreach ($years as $y) {
-                                    $selected = "";
-                                    if ($y == $year_start)
-                                        $selected = "selected";
-                                    echo "<option $selected value='$y'>$y</option>";
-                                }
-                                ?>
-                            </select> 
-
-                            Mês: <select name="month_start"  onchange="this.form.submit()" id="month_start">
+                        <p> De:  Mês:<select name="month_start"  onchange="this.form.submit()" id="month_start">
                                 <?php
                                 for ($m = 1; $m <= 12; $m++) {
                                     $selected = "";
@@ -170,20 +157,21 @@
                                     echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
                                 }
                                 ?>
+                            </select> 
+
+                            Ano:<select name="year_start" onchange="this.form.submit()" id="year_start">
+                                <?php
+                                foreach ($years as $y) {
+                                    $selected = "";
+                                    if ($y == $year_start)
+                                        $selected = "selected";
+                                    echo "<option $selected value='$y'>$y</option>";
+                                }
+                                ?>
                             </select> </p>
                     </div>
                     <br/> 
-                    <p>                Até:  Ano: <select name="year_finish" onchange="this.form.submit()" id="year_finish">
-                            <?php
-                            foreach ($years as $y) {
-                                $selected = "";
-                                if ($y == $year_finish)
-                                    $selected = "selected";
-                                echo "<option $selected value='$y'>$y</option>";
-                            }
-                            ?>
-                        </select>
-                        Mês: <select name="month_finish" onchange="this.form.submit()" id="month_finish">
+                    <p>Até:  Mês:<select name="month_finish" onchange="this.form.submit()" id="month_finish">
                             <?php
                             for ($m = 1; $m <= 12; $m++) {
                                 $selected = "";
@@ -192,11 +180,24 @@
                                 echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
                             }
                             ?>
+                        </select>
+                        
+                        Ano:<select name="year_finish" onchange="this.form.submit()" id="year_finish">
+                            <?php
+                            foreach ($years as $y) {
+                                $selected = "";
+                                if ($y == $year_finish)
+                                    $selected = "selected";
+                                echo "<option $selected value='$y'>$y</option>";
+                            }
+                            ?>
                         </select></p>
                 </form>
-
                 <div class="pad"> 
-                    <h4 style="margin-top:30px;"> Total do período: <?php echo formatarEMostrar(intval($total)); ?> </h4>
+                         <div style="margin-top:30px;margin-bottom:10px">
+                    <h4 class="col-lg-3"> Total do período: <?php echo formatarEMostrar(intval($total)); ?> </h4>
+                    <button class="button btn btn-primary col-lg-2" style="margin-left:50%" onclick="sendTableToCSV()" value="">Exportar</button>
+                </div>
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 800px; font-size:15px;"id="sortable-table" >
                         <thead>
                             <tr>
