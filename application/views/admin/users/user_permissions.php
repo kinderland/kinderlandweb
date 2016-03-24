@@ -30,6 +30,27 @@
     	overflow-x:hidden;
     
     }
+    
+    .botao {
+	    background-color: #428bca;
+	    border: none;
+	    color: white;
+	    padding: 8px 8px;
+	    text-align: center;
+	    text-decoration: none;
+	    display: inline-block;
+	    font-size: 10px;
+	    margin: 4px 2px;
+	    cursor: pointer;
+	}
+
+	
+	.disabled {
+	    opacity: 0.6;
+	    
+	}
+
+    
     </style>
     <body>
         <script type="text/javascript">
@@ -90,6 +111,7 @@
 
 			function updatePersonPermissions() {
 				$("#form_update_permissions").submit();
+				<meta http-equiv='refresh' content='0'>;
 			}
 
 
@@ -104,13 +126,6 @@
 				
 			});
 
-			function openDisposal(letra) {
-					
-				
-					$.post('<?= $this->config->item('url_link');?>admin/userPermissionsFilter',
-							{letra: letra});				
-					
-			}
 			
         </script>
         <div class="scroll">
@@ -121,13 +136,16 @@
                 	
                 	
                 	<form id="form_selection" method="GET">
-						
-							<th><button name="letter_chosen" class "" id="letra">Todos</button>
+							<?php if($letter_chosen == ""){?>
+							<th><button name="letter_chosen" class = "botao" onchange="this.form.submit()" value=""id="letra">Todos</button>
+							<?php }else{ ?>
+								<th><button name="letter_chosen" class = "botao disabled" onchange="this.form.submit()" value=""id="letra">Todos</button>
+							<?php }?>
 							<?php foreach($letters as $letter){
 								if(strcmp($letter,$letter_chosen) == 0) {?>
-									<th><button name="letter_chosen" class ="" id="letra<?php echo $letter?>" onClick="this.form.submit()" value="<?php echo $letter?>"> <?php echo $letter?></button></th>
+									<th><button name="letter_chosen" class ="botao" id="letra<?php echo $letter?>" onchange="this.form.submit()" value="<?php echo $letter?>"> <?php echo $letter?></button></th>
 							<?php } else{ ?>
-								<th><button name="letter_chosen" class ="" id="letra<?php echo $letter?>" onClick="this.form.submit()"  value="<?php echo $letter?>"> <?php echo $letter?></button></th>
+								<th><button name="letter_chosen" class ="botao disabled" id="letra<?php echo $letter?>" onchange="this.form.submit()"  value="<?php echo $letter?>"> <?php echo $letter?></button></th>
 								
 						<?php 	}}?>
 
