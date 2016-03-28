@@ -1505,10 +1505,13 @@ class Reports extends CK_Controller {
             
             if ($trans->type == "debito") {
                 $transactions->valueDay[$j + 1] += $trans->value - (3.4 * ($trans->value) / 100.0);
+                $p = $trans->value - (3.4 * ($trans->value) / 100.0);
+                $this -> Logger -> info("VALOR TOTAL: ". $p);
             } else if ($trans->type == "credito") {
-
                 if ($trans->portions == 1) {
                     $transactions->valueDay[$j + 30] += $trans->value - (3.8 * ($trans->value) / 100.0);
+                    $p = $trans->value - (3.8 * ($trans->value) / 100.0);
+                    $this -> Logger -> info("VALOR TOTAL: ". $p);
                 } else {
 
                     $portions = $trans->portions;
@@ -1519,11 +1522,14 @@ class Reports extends CK_Controller {
                         $value = $trans->value - (4.80 * ($trans->value) / 100.0);
                     else
                         $value = $trans->value - (4.90 * ($trans->value) / 100.0);
+                    
+                    $this -> Logger -> info("VALOR TOTAL: ". $value);
 
                     $i = 1;
 
                     while ($i <= $portions) {
                         $transactions->valueDay[$j + 30 * $i] += $value / $portions;
+                        $p = $value / $portions;
                         $i++;
                     }
                 }

@@ -172,8 +172,12 @@
 	                    </thead>
 	                    <tbody id="tablebody">
 	                        <?php
+	                        
+	                        $value = 0.0;
 	
 	                        foreach ($transactions as $transaction) {
+	                        	
+	                        	$value += $transaction -> valueDay;
 	                        	if($transaction -> valueDay!=0){
 	                            ?>
 	                            <tr>
