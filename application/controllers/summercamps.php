@@ -624,6 +624,7 @@ class SummerCamps extends CK_Controller {
         $campId = $this->input->post('camp_id', TRUE);
         $colonistId = $this->input->post('colonist_id', TRUE);
         $userId = $this->session->userdata("user_id");
+        $price = $this->input->post('price',TRUE);
         $donationValue = 0;
         try {
             if (count($campId) == count($colonistId)) {
@@ -647,7 +648,7 @@ class SummerCamps extends CK_Controller {
                 $donationId = $this->donation_model->createDonation($userId, $donationValue, DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
                 $this->Logger->info("Created donation with id: " . $donationId);
                 for ($i = 0; $i < count($campId); $i++) {
-                    $this->summercamp_model->associateDonation($campId[$i], $colonistId[$i], $donationId);
+                    $this->summercamp_model->associateDonation($campId[$i], $colonistId[$i], $donationId,$price[$i]);
                     $this->Logger->info("Associated donation with id: " . $donationId . " to colonist with id/campId " . $colonistId[$i] . "/" . $campId[$i]);
                 }
                 $this->generic_model->commitTransaction();
@@ -666,7 +667,6 @@ class SummerCamps extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
         $campId = $this->input->get('camp_id', TRUE);
         $colonistId = $this->input->get('colonist_id', TRUE);
-
         if (!$this->checkSession())
             redirect("login/index");
 
@@ -687,7 +687,7 @@ class SummerCamps extends CK_Controller {
                 } else {
                     $donationId = $this->donation_model->createDonation($userId, floor($summerCampPayment->getPrice() * $discount), DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION);
                     $this->Logger->info("Created donation with id: " . $donationId);
-                    $this->summercamp_model->associateDonation($campId, $colonistId, $donationId);
+                    $this->summercamp_model->associateDonation($campId, $colonistId, $donationId,floor($summerCampPayment->getPrice() * $discount));
                     $this->Logger->info("Associated donation with id: " . $donationId . " to colonist with id/campId" . $colonistId . "/" . $campId);
                     $this->generic_model->commitTransaction();
                     redirect("payments/checkout/" . $donationId);

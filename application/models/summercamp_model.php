@@ -1249,12 +1249,12 @@ class summercamp_model extends CK_Model {
         return $this->execute($this->db, $deleteSql, array(intval($campId)));
     }
 
-    public function associateDonation($campId, $colonistId, $donationId) {
+    public function associateDonation($campId, $colonistId, $donationId,$price) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "UPDATE summer_camp_subscription
-                SET donation_id = ?
+                SET donation_id = ?,individual_price= ?
                 WHERE colonist_id = ? AND summer_camp_id = ?";
-        return $this->execute($this->db, $sql, array(intval($donationId), intval($colonistId), intval($campId)));
+        return $this->execute($this->db, $sql, array(intval($donationId), intval($price),intval($colonistId), intval($campId)));
     }
 
     public function paidDonation($donation_id) {

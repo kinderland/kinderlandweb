@@ -18,7 +18,7 @@
     var colonistsToDonate = 0;
 
     function donation(colonistId, summerCampId, colonistName) {
-        var url = "<?= $this->config->item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=" + summerCampId + "&colonist_id=" + colonistId
+        var url = "<?= $this->config->item('url_link'); ?>summercamps/paySummerCampSubscription?camp_id=" + summerCampId + "&colonist_id=" + colonistId;
         if (colonistsToDonate > 1) {
             $("#buttonOneDonation").attr("onclick", "window.location = '" + url + "'")
             $("#buttonOneDonation").text("Doar e inscrever somente o colonista: " + colonistName)
@@ -274,16 +274,17 @@
                                 if ($summerCampInscription->getDiscount() < 100) {
                                     $discount = 1 - ($summerCampInscription->getDiscount() / 100);
                                     $total += floor($summerCampPayment->getPrice() * $discount);
+                                    $total_now= floor($summerCampPayment->getPrice() * $discount);
                                     ?>
                                     <script>
                                         colonistsToDonate++;
                                         $('#bodyPopup').append("<tr><td><?= $summerCampInscription->getFullname() ?></td><td>R$ <?= floor($summerCampPayment->getPrice() * $discount) ?>,00</td><td><?= $summerCampInscription->getDatePaymentLimitFormatted() ?></td></tr>");
-                                        $('#formMultipleDonations').append("<input type='hidden' name='camp_id[]' value='<?= $summerCampInscription->getSummerCampId() ?>' /> <input type='hidden' name='colonist_id[]' value='<?= $summerCampInscription->getColonistId() ?>' />");
+                                        $('#formMultipleDonations').append("<input type='hidden' name='camp_id[]' value='<?= $summerCampInscription->getSummerCampId() ?>' /> <input type='hidden' name='colonist_id[]' value='<?= $summerCampInscription->getColonistId() ?>' /> <input type='hidden' name='price[]' value='<?php echo $total_now; ?>' />");
                                     </script>
 
                                     <a onclick="donation(<?= $summerCampInscription->getColonistId() ?>, <?= $summerCampInscription->getSummerCampId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>')">
                                         <button class="btn btn-primary">
-                                            Doar R$ <?= floor($summerCampPayment->getPrice() * $discount) ?>,00
+                                            Doar R$ <?php echo $total_now; ?>,00
                                             <br>
                                             Prazo: <?= $summerCampInscription->getDatePaymentLimitFormatted() ?>
                                         </button> </a>
