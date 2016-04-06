@@ -2260,7 +2260,6 @@ class Admin extends CK_Controller {
 
         $this->Logger->info("Array POST: " . print_r($_POST, true));
         $personId = $_POST['person_id'];
-
         $arrNewPermissions = array(
             'system_admin' => isset($_POST['system_admin']),
             'director' => isset($_POST['director']),
@@ -2279,12 +2278,14 @@ class Admin extends CK_Controller {
 
             $this->generic_model->commitTransaction();
             $this->Logger->info("Updated user's permissions");
+            echo "true";
         } catch (Exception $ex) {
             $this->Logger->error("Failed to update user's permissions");
             $this->generic_model->rollbackTransaction();
+            echo "false";
         }
-
-        redirect("admin/userPermissions");
+		
+        
     }
 
     public function viewColonistInfo() {

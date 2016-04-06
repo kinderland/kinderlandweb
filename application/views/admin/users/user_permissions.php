@@ -1,7 +1,7 @@
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
-        <title>Colônia Kinderland</title>
+        <title>ColÃ´nia Kinderland</title>
 
         <link href="<?= $this -> config -> item('assets'); ?>css/basic.css" rel="stylesheet" />
         <link href="<?= $this -> config -> item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
@@ -89,7 +89,7 @@
 			        	admins++;
 
 			        if (user['person_id'] == personId){
-			        	$("#modal_title").text("Permissões concedidas a " + user['fullname']);
+			        	$("#modal_title").text("PermissÃµes concedidas a " + user['fullname']);
 
 			        	$("#person_id").val(user['person_id']);
 			        	$("#system_admin").prop('checked', user['system_admin']==1);
@@ -110,8 +110,41 @@
 			}
 
 			function updatePersonPermissions() {
-				$("#form_update_permissions").submit();
-				<meta http-equiv='refresh' content='0'>;
+				var person_id = document.getElementById("person_id").value;	
+				if(document.getElementById("system_admin").checked)
+					var system_admin = document.getElementById("system_admin").value;
+				//alert(system_admin);
+				if(document.getElementById("director").checked)
+					var director = document.getElementById("director").value;
+				//alert(director);
+				if(document.getElementById("doctor").checked)
+					var doctor = document.getElementById("doctor").value;
+				//alert(doctor);
+				if(document.getElementById("monitor_instructor").checked)
+					var monitor_instructor = document.getElementById("monitor_instructor").value;
+				//alert(monitor_instructor);
+				if(document.getElementById("secretary").checked)
+					var secretary = document.getElementById("secretary").value;
+				//alert(secretary);
+				if(document.getElementById("coordinator").checked)
+					var coordinator = document.getElementById("coordinator").value;
+				//alert(coordinator);
+				$.post("<?= $this->config->item('url_link'); ?>admin/updatePersonPermissions",
+                        {person_id: person_id, system_admin: system_admin, director: director, doctor: doctor, monitor_instructor: monitor_instructor, secretary: secretary, coordinator: coordinator},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Permissão atualizada");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Erro na atualização da permissão");
+                                location.reload();
+                            }
+
+                        }
+                        
+                );
+				
+				
 			}
 
 
@@ -168,7 +201,7 @@
                                 <th> Nome </th>
                                 <th> Administrador </th>
                                 <th> Diretor </th>
-                                <th> Secretária </th>
+                                <th> SecretÃ¡ria </th>
                                 <th> Coordenador </th>
                                 <th> Médico </th>
                                 <th> Monitor </th>
@@ -213,11 +246,11 @@
 											<div class="form-group">
 												<div class="col-lg-6">
 													<input type="hidden" id="person_id" name="person_id" value="" />
-													<input type="checkbox" id="system_admin" name="system_admin" <?=($user->system_admin)?"checked":""?> /> Administrador <br /><br />
+													<input type="checkbox" id="system_admin" name="system_admin" <?= ($user->system_admin)?"checked":""?> /> Administrador <br /><br />
 				                                    <input type="checkbox" id="director" name="director" <?=($user->director)?"checked":""?> /> Diretor <br /><br />
-				                                    <input type="checkbox" id="secretary" name="secretary" <?=($user->secretary)?"checked":""?> /> Secretária <br /><br />
+				                                    <input type="checkbox" id="secretary" name="secretary" <?=($user->secretary)?"checked":""?> /> SecretÃ¡ria <br /><br />
 				                                    <input type="checkbox" id="coordinator" name="coordinator" <?=($user->coordinator)?"checked":""?> /> Coordenador <br /><br />
-				                                    <input type="checkbox" id="doctor" name="doctor" <?=($user->doctor)?"checked":""?> /> Médico <br /><br />
+				                                    <input type="checkbox" id="doctor" name="doctor"  <?=($user->doctor)?"checked":""?> /> MÃ©dico <br /><br />
 				                                    <input type="checkbox" id="monitor_instructor" name="monitor_instructor" <?=($user->monitor_instructor)?"checked":""?>/> Monitor/Instrutor
 												</div>
 											</div>
