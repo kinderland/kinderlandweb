@@ -113,22 +113,16 @@
 				var person_id = document.getElementById("person_id").value;	
 				if(document.getElementById("system_admin").checked)
 					var system_admin = document.getElementById("system_admin").value;
-				//alert(system_admin);
 				if(document.getElementById("director").checked)
 					var director = document.getElementById("director").value;
-				//alert(director);
 				if(document.getElementById("doctor").checked)
 					var doctor = document.getElementById("doctor").value;
-				//alert(doctor);
 				if(document.getElementById("monitor_instructor").checked)
 					var monitor_instructor = document.getElementById("monitor_instructor").value;
-				//alert(monitor_instructor);
 				if(document.getElementById("secretary").checked)
 					var secretary = document.getElementById("secretary").value;
-				//alert(secretary);
 				if(document.getElementById("coordinator").checked)
 					var coordinator = document.getElementById("coordinator").value;
-				//alert(coordinator);
 				$.post("<?= $this->config->item('url_link'); ?>admin/updatePersonPermissions",
                         {person_id: person_id, system_admin: system_admin, director: director, doctor: doctor, monitor_instructor: monitor_instructor, secretary: secretary, coordinator: coordinator},
                         function (data) {
