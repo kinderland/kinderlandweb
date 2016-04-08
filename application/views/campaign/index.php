@@ -75,6 +75,9 @@
                                     O valor da colaboração do associado pode ser doado em pagamento por cartão de crédito, em uma ou até 3 (três) parcelas iguais sem acréscimo, em função da quantidade de meses restantes até o final do mês de junho. Também há a opção de doação por cartão de débito. <i>Por questões de segurança e controle administrativo, não é possível receber doações por outros meios (transferência bancária, DOC), cheque ou dinheiro</i>.
                                 </p>
                                 <p align="left">
+                                    Associados <strong>NÃO PODEM SOLICITAR DESCONTOS</strong> no valor da inscrição de colonistas para a temporada de verão, mesmo que tenham descontos em escolas ou similares. Somente os descontos habituais no caso de inscrição de dois ou mais filhos se aplicam também aos sócios.
+                                </p>
+                                <p align="left">
                                     Se você <span style="font-weight:bold"> concorda com as condições </span>para ser um associado Kinderland, basta confirmar abaixo em “Quero ser Sócio” e escolher como realizar sua doação. Ao final do processo, e com a devida autorização da administradora do seu cartão, um email será enviado automaticamente, confirmando a condição de associado. A doação também aparecerá em seu “Histórico de Doações” uma vez confirmada.
                                 </p>
                                 <p align="left">
@@ -120,6 +123,9 @@
                                             </p>
                                             <p align="left">
                                                 O valor da colaboração do associado pode ser doado em pagamento por cartão de crédito, em uma ou até 3 (três) parcelas iguais sem acréscimo, em função da quantidade de meses restantes até o final do mês de junho. Também há a opção de doação por cartão de débito. <i>Por questões de segurança e controle administrativo, não é possível receber doações por outros meios (transferência bancária, DOC), cheque ou dinheiro</i>.
+                                            </p>
+                                            <p align="left">
+                                            	Associados <strong>NÃO PODEM SOLICITAR DESCONTOS</strong> no valor da inscrição de colonistas para a temporada de verão, mesmo que tenham descontos em escolas ou similares. Somente os descontos habituais no caso de inscrição de dois ou mais filhos se aplicam também aos sócios.
                                             </p>
                                             <p align="left">
                                                 Se você <span style="font-weight:bold"> concorda com as condições </span>para ser um associado Kinderland, basta confirmar abaixo em “Quero ser Sócio” e escolher como realizar sua doação. Ao final do processo, e com a devida autorização da administradora do seu cartão, um email será enviado automaticamente, confirmando a condição de associado. A doação também aparecerá em seu “Histórico de Doações” uma vez confirmada.
