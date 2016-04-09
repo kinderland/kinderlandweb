@@ -483,29 +483,44 @@ class CK_Controller extends CI_Controller {
 
     public function checkPermission($class, $method) {
         $permission = false;
-        $allPermissions = array();
         
-        $allFreePermissions = $this -> personuser_model -> getMethodsAndClassesByUserType('0');
+        $types = $this->session->userdata('user_types');
         
-        if($allFreePermissions){
-	        foreach ($allFreePermissions as $p){
-	        	if(strcmp($class,$p->controller_name) == 0 && strcmp($method,$p->method_name) == 0){
-	        		$permission = true;
-	        		break;
-	        	}
-	        }
-        }
-        
-     //   if($permission === false)
-    //    	$permission = $this->getPermission($class,$method);
-        
-
-        if (!$this->session->userdata('user_types')) {
-            $permission = $this->personuser_model->checkPermission($class, $method, array(0));
+        if (!$types) {
+        	$permission = $this->personuser_model->checkPermission($class, $method, array(0));
         } else {
-            $permission = $this->personuser_model->checkPermission($class, $method, $this->session->userdata('user_types'));
-        }
-
+        	$allPermissions = fopen("docs/system_method.txt","r");
+        	$line = null;
+        	
+        	while(!feof($allPermissions)){
+        		$line = fgets($allPermissions);
+        		
+        		if($line != ""){
+	        		$line = explode(";",$line);
+	        		
+	        		$line[0] = explode('"', $line[0]);
+	        		$line[1] = explode('"', $line[1]);
+	        		
+	        		foreach($types as $type){
+	        				        					
+	        			if(intval($type) == intval($line[2])){
+	        				$this->Logger->info("ENTREI!!!!!!!");
+	        				if(strcasecmp($method, $line[0][1]) == 0 && strcasecmp($class,$line[1][1]) == 0){
+	        					$permission = true;
+	        					break;
+	        				}
+	        			}
+	        		}
+	        		
+	        		if($permission === true){
+	        			break;
+	        		}
+        		}
+        	}
+        	
+        	fclose($allPermissions);
+        } 
+        
         if ($permission === false) {
             $this->Logger->warn("Usuário com id = " . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
             return redirect("user/permissionNack");
