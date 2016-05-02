@@ -109,6 +109,7 @@
                         ?>  navbar-brand <?php echo $extra ?> data-toggle = "dropdown" href = "#" > Financeiro
                             <span class = "caret" > </span></a >
                         <ul class = "dropdown-menu" >
+                        	<li > <a href = "<?= $this->config->item('url_link'); ?>admin/finance_admin" > Administração </a></li >
                             <li > <a href = "<?= $this->config->item('url_link'); ?>reports/finance_reports" > Relatórios </a></li >
                         </ul>
                     </li>
