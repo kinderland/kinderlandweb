@@ -8,6 +8,8 @@ require_once APPPATH . 'core/event.php';
 require_once APPPATH . 'controllers/events.php';
 require_once APPPATH . 'core/campaign.php';
 require_once APPPATH . 'core/summerCampPaymentPeriod.php';
+require_once APPPATH . 'core/document_expense.php';
+
 
 class Admin extends CK_Controller {
 
@@ -27,6 +29,8 @@ class Admin extends CK_Controller {
         $this->load->model('event_model');
         $this->load->model('eventsubscription_model');
         $this->load->model('campaign_model');
+        $this->load->model('documentexpense_model');
+
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
@@ -39,7 +43,9 @@ class Admin extends CK_Controller {
         $this->email_model->setLogger($this->Logger);
         $this->event_model->setLogger($this->Logger);
         $this->eventsubscription_model->setLogger($this->Logger);
+		
         $this->campaign_model->setLogger($this->Logger);
+        $this->documentexpense_model->setLogger($this->Logger);
     }
 
     public function campaign_admin() {
@@ -672,7 +678,19 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/events/event_create', $data);
         }
     }
+	
+    public function finance_admin() {
+    	$this->loadView("admin/finances/finance_admin_container");
+    }
+    
+    public function manageDocuments(){
+    	$data['documents'] = $this->documentexpense_model->getAllDocumentsExpense();
+    	$data['message'] = $message;
+    	$this->loadReportView("admin/finances/manage_documents", $data);
+    }
 
+    
+    
     public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(), $type = null) {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();

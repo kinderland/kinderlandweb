@@ -101,7 +101,7 @@
                     </li>
                     <li class="dropdown">
                         <a  <?php
-                        if ($paginaLink == "/index.php/reports/finance_reports") {
+                        if ($paginaLink == "/index.php/admin/finance_admin" || $paginaLink == "/index.php/reports/finance_reports") {
                             echo 'class="link active';
                         } else {
                             echo 'class="';
