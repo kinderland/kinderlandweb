@@ -360,3 +360,5 @@
 "donation_panel";"reports";3
 "camps_donations";"reports";3
 "userPermissionsFilter";"admin";2
+"finance_admin";"admin";2
+"manageDocuments";"admin";2
