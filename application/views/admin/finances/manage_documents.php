@@ -93,14 +93,16 @@ $( document ).ready(function() {
                         <table class="table"><tr><th>Data</th><th>Tipo</th><th>Valor</th><th>Update de imagem</th><th>Forma de pagamento</th></tr>
                                     <?php
                                     foreach ($documents as $document) {
-                                        ?><tr>
-                                <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->getDocumentId() ?>">
-                                       <?= date_format(date_create($document->getDocumentExpenseDate()), 'd/m/y'); ?></a></td>
+                                        ?>
+                                        
+                            <tr>
+                                <td>
+                                       <?= date_format(date_create($document->getDocumentExpenseDate()), 'd/m/y'); ?></td>
 
                                 <td><?php echo $document->getDocumentExpenseType(); ?> </td>
                                 <td><?php echo $document->getDocumentExpenseValue(); ?> </td>
                                 <td><?php echo $document->getDocumentExpenseUploadId(); ?> </td>
-                                <td><button class="btn btn-primary" onclick="sendInfoToModal()" data-toggle="modal" data-target="#myModal">Cancelar</button></td>
+                                <td><button class="btn btn-primary" onclick="sendInfoToModal()" data-toggle="modal" data-target="#myModal">Pagar</button></td>
                                 </tr>
                                 <?php
                             }
