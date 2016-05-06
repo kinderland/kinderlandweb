@@ -78,6 +78,20 @@ class Admin extends CK_Controller {
     	
     	$this->loadReportView("admin/finances/credit_operation", $data);
     }
+    
+    public function newOperation(){
+    	$secretary_id = $this->input->post("secretary_id", true);
+    	$value = $this->input->post("value", true);
+    	
+    	if($this->personuser_model->newOperation($secretary_id,$value)){
+    		echo "true";
+    		return;
+    	}
+    	else{
+    		echo "false";
+    		return;
+    	}
+    }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
         $this->Logger->info("Starting " . __METHOD__);

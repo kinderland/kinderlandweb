@@ -417,14 +417,38 @@ class personuser_model extends CK_Model {
         foreach ($rows as $row) {
             $personUser[] = Person:: createPersonObjectSimple($row, false);
         }
-        return $personUser
-
-
-
-
-
-
-        ;
+        return $personUser;
+    }
+    
+    public function getSecretariesBalances(){
+    	$sql = "SELECT p.fullname as fullname, p.person_id as person_id, sum(vos.operation_value) as balance 
+    			FROM v_operation_secretary vos
+    			INNER JOIN person p ON p.person_id = vos.person_id
+    			GROUP BY p.fullname,p.person_id";
+    	
+    	$rows = $this->executeRows($this->db, $sql);
+    	
+    	if($rows != NULL)
+    		return $rows;
+    	
+    }
+    
+    public function getAllSecretariesWithBalances(){
+    	$sql = "SELECT DISTINCT p.fullname
+    			FROM v_operation_secretary vos
+    			INNER JOIN person p ON p.person_id = vos.person_id";
+    	 
+    	$rows = $this->executeRows($this->db, $sql);
+    	 
+    	if($rows != NULL)
+    		return $rows;
+    }
+    
+    public function newOperation($person_id, $value){
+    	$sql = "INSERT INTO credit_secretary (person_id, date_created, value) VALUES (?,NOW(),?)";
+            
+            if ($this->execute($this->db, $sql, array(intval($person_id), $value)))
+                return true;
     }
 
 }
