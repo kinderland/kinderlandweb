@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
-                    <option value="<?= $this->config->item('url_link'); ?>reports/user_registered">Painel de usuário</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/user_registered">Painel de usuários</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/all_users">Cadastros Kinderland</option>
                 </select>
             </div>

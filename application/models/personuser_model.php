@@ -209,6 +209,52 @@ class personuser_model extends CK_Model {
         return $rows;
     }
     
+    public function getAllUserRegisteredUpdated() {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "
+        SELECT count_users.count_users,
+        count_associates.count_associates AS count_associates,
+        count_benemerit.count_benemerit,
+        count_non_benemerit.count_non_associate
+    
+        FROM
+        ( SELECT count(*) AS count_users
+               FROM person_user) count_users,
+    
+        ( SELECT count(*) AS count_associates
+          FROM  donation d, person p, campaign c
+          WHERE d.donation_type=2
+          AND d.donation_status=2
+          AND c.campaign_year in( SELECT max(c.campaign_year)
+				  FROM campaign c
+				  WHERE NOW() >= c.date_start)
+	  AND d.date_created >= c.date_start			  
+          AND d.person_id=p.person_id
+          AND d.person_id not in ( SELECT b.person_id
+                                   FROM   benemerits b )) count_associates,
+    
+        ( SELECT count(*) AS count_benemerit
+          FROM benemerits b
+          WHERE b.date_finished IS NULL) count_benemerit,
+    
+        ( SELECT count(*) AS count_non_associate
+          FROM person_user
+          WHERE NOT (person_user.person_id IN ( SELECT d.person_id
+                                                FROM   donation d, campaign c
+                                                WHERE  d.donation_type = 2
+                                                AND d.donation_status = 2
+                                                AND c.campaign_year in( SELECT max(c.campaign_year)
+									  FROM campaign c
+									  WHERE NOW() >= c.date_start)
+						AND d.date_created >= c.date_start
+                                                UNION
+                                                SELECT b.person_id
+                                                FROM   benemerits b))) count_non_benemerit";
+    
+    	$rows = $this->executeRows($this->db, $sql);
+    	return $rows;
+    }
+    
     public function getPersonIdsBenemerits(){
     	$sql = "select person_id from benemerits";
     	

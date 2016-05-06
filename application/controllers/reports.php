@@ -41,7 +41,7 @@ class Reports extends CK_Controller {
     }
 
     public function user_registered() {
-        $data['users'] = $this->personuser_model->getAllUserRegistered();
+        $data['users'] = $this->personuser_model->getAllUserRegisteredUpdated();
         $this->loadReportView("reports/users/user_registered", $data);
     }
 
