@@ -65,6 +65,19 @@ class Admin extends CK_Controller {
 
         $this->loadReportView("admin/campaigns/manageCampaigns", $data);
     }
+    
+    public function credit_operation(){
+    	$secretaries = $this -> personuser_model -> getUsersByUserType('4');
+    	$secretariesWithBalance = $this -> personuser_model -> getAllSecretariesWithBalances();
+    	
+    	$balances = $this -> personuser_model -> getSecretariesBalances();
+    	
+    	$data['secretaries'] = $secretaries;
+    	$data['secretariesWithBalance'] = $secretariesWithBalance;
+    	$data['balances'] = $balances;
+    	
+    	$this->loadReportView("admin/finances/credit_operation", $data);
+    }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
         $this->Logger->info("Starting " . __METHOD__);

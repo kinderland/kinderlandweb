@@ -360,3 +360,4 @@
 "donation_panel";"reports";3
 "camps_donations";"reports";3
 "userPermissionsFilter";"admin";2
+"credit_operation";"admin";2
