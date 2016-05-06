@@ -13,18 +13,27 @@ class DocumentExpense {
 
     public function __construct($documentExpenseId, $documentExpenseNumber, $beneficiaryId, $documentExpenseValue, $documentExpenseDate, $documentExpenseUploadId, $documentExpenseType, $documentExpenseDescription) {
         $this->documentExpenseId = $documentExpenseId;
-        $this->documentExpenseNumber = documentExpenseNumber;
+        $this->documentExpenseNumber = $documentExpenseNumber;
         $this->beneficiaryId = $beneficiaryId;
         $this->documentExpenseValue = $documentExpenseValue;
         $this->documentExpenseDate = $documentExpenseDate;
-        $this->documentExpenseUploadId = $documentExpenseUploadId;documentType;
+        $this->documentExpenseUploadId = $documentExpenseUploadId;
         $this->documentExpenseType = $documentExpenseType;
         $this->documentExpenseDescription = $documentExpenseDescription;
         
     }
 
     public static function createDocumentExpenseObject($resultRow) {
-        return new Document($resultRow->document_expense_id, $resultRow->document_number, $resultRow->beneficiary_id, $resultRow->document_value, $resultRow->document_expense_upload_id, $resultRow->document_type, $resultRow->description);
+        return new DocumentExpense(
+        		$resultRow->document_expense_id,
+        		$resultRow->document_number,
+        		$resultRow->beneficiary_id,
+        		$resultRow->document_value,
+        		$resultRow->document_date,
+        		$resultRow->document_expense_upload_id,
+        		$resultRow->document_type,
+        		$resultRow->description
+        		);
     }
 
     public function setDocumentExpenseId($documentExpenseId) {
@@ -35,12 +44,12 @@ class DocumentExpense {
         return $this->documentExpenseId;
     }
 
-    public function setDocumentExpenseNumber($DocumentExpenseNumber) {
-        $this->DocumentExpenseNumber = $DocumentExpenseNumber;
+    public function setDocumentExpenseNumber($documentExpenseNumber) {
+        $this->documentExpenseNumber = $documentExpenseNumber;
     }
 
     public function getDocumentExpenseNumber() {
-        return $this->DocumentExpenseNumber;
+        return $this->documentExpenseNumber;
     }
 
     public function setBeneficiaryId($beneficiaryId) {

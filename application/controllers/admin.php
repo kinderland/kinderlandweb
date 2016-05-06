@@ -698,7 +698,6 @@ class Admin extends CK_Controller {
     
     public function manageDocuments(){
     	$data['documents'] = $this->documentexpense_model->getAllDocumentsExpense();
-    	$data['message'] = $message;
     	$this->loadReportView("admin/finances/manage_documents", $data);
     }
 
