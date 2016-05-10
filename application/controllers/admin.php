@@ -48,6 +48,14 @@ class Admin extends CK_Controller {
         $this->documentexpense_model->setLogger($this->Logger);
     }
 
+    
+    
+    public function create_document(){
+        $selected_option=$this->post();
+      $this->loadReportView("admin/finances/create_document");
+    }
+    
+    
     public function campaign_admin() {
         $this->loadView("admin/campaigns/campaign_admin_container");
     }

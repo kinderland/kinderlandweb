@@ -13,7 +13,7 @@
                 <select class="report-select" name="report_select" id="report_select">
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions)) { ?>
                         <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/manageDocuments"> Criar Documento </option>
-                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/credit_operation"> Caixinha </option>
+                        <option value="<?= $this->config->item('url_link'); ?>admin/credit_operation"> Caixinha </option>
                     <?php } ?>
                 </select>
             </div>
