@@ -450,6 +450,34 @@ class personuser_model extends CK_Model {
             if ($this->execute($this->db, $sql, array(intval($person_id), $value)))
                 return true;
     }
+    
+    public function checkSecretaryOperation($person_id){
+    	$sql = "SELECT DISTINCT person_id FROM v_operation_secretary WHERE person_id = ?";
+    
+    	if ($this->executeRow($this->db, $sql, array(intval($person_id))))
+    		return true;
+    	else 
+    		return NULL;
+    }
+    
+    public function getBalanceBySecretaryIdAndDate($person_id,$year,$month = null){
+    	$sql = "SELECT * FROM v_operation_secretary WHERE person_id = ? AND DATE_PART('YEAR',date_created) = ?";
+    	
+    	if($month){
+    		$sql = $sql."AND DATE_PART('MONTH',date_created) = ? ORDER BY date_created ASC";
+    		
+    		$result = $this->executeRows($this->db, $sql, array(intval($person_id),intval($year),intval($month)));
+    	}else {
+    		$sql = $sql."ORDER BY date_created ASC";
+    		$result = $this->executeRows($this->db, $sql, array(intval($person_id),intval($year)));
+    	}
+    	
+    	if($result)
+    		return $result;
+    	else
+    		return NULL;
+    }
+    
 
 }
 

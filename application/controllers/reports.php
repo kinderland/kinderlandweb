@@ -53,6 +53,42 @@ class Reports extends CK_Controller {
     public function event_reports() {
         $this->loadView("reports/events/event_reports_container");
     }
+    
+    public function secretaryOperation() {
+    	$option = $this->input->get('option', TRUE);
+    	$year = $this->input->get('year', TRUE);
+    	$month = $this->input->get('month', TRUE);
+    	$years = array();
+    	$end = 2015;
+    	$start = date('Y');
+    	while ($start >= $end) {
+    		$years[] = $start;
+    		$start--;
+    	}
+    	
+    	if ($year === FALSE) {
+    		$year = date("Y");
+    	} else if ($month == 0) {
+    		$month = FALSE;
+    	}
+    	$data["year"] = $year;
+    	$data["month"] = $month;
+    	$data["years"] = $years;
+    	$data["option"] = $option;
+    	
+    	$balance = $this ->personuser_model -> getBalanceBySecretaryIdAndDate($this->session->userdata("user_id"),$year,$month);
+    	
+    	if($balance){
+	    	foreach($balance as $b){
+	    		$r = explode(" ",$b->date_created);
+	    		$r = explode("-", $r[0]);
+	    		$b->date_created = $r[2]."/".$r[1]."/".$r[0];
+	    	}
+    	}
+    	
+    	$data['balance'] = $balance;
+    	$this->loadReportView("reports/users/secretaryOperation", $data);
+    }
 
     public function reportPanel() {
         $data = array();

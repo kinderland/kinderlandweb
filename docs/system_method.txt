@@ -366,3 +366,4 @@
 "newOperation";"admin";2
 "create_document";"admin";2
 "create_document";"admin";4
+"secretaryOperation";"reports";4
