@@ -144,44 +144,40 @@ $( document ).ready(function() {
                                                     <input type="hidden" id="summer_camp_id" name="summer_camp_id" value="" />
                                                     													
 													<tr>
-                                                        <td> Forma de pagamento</td> 
+                                                        <td> Forma de pagamento:</td> 
                                                           <form method="GET">
-                   											 <select name="formapagamento_f" onchange="this.form.submit()" id="formaspagamento">
+                   											 <select name="formapagamento_f" id="formaspagamento">
 									
 									                            <?php
-									                            foreach ($years as $year) {
+									                            foreach ($formaspagamento as $formapagamento) {
 									                                $selected = "";
-									                                if ($ano_escolhido == $year)
+									                                if ($formapagamento_escolhido == $formapagamento)
 									                                    $selected = "selected";
-									                                echo "<option $selected value='$year'>$year</option>";
+									                                echo "<option $selected value='$formapagamento'>$formapagamento</option>";
 									                            }
 									                            ?>
 	                       									</select>
                                                     </tr>                                        
-                                                    
+                                                    <br><br>
                                                     <tr>
                                                         <td> Beneficiário: </td>
-                                                        <span id='beneficiary_name'></span> <br><br>
+                                                    </tr>
+                                                     <tr>
+                                                        <td> Nome: </td>
+                                                        <input id='beneficiary_name'></input> <br>
                                                     </tr>
 
                                                     <tr>
                                                         <td> CNPJ/CPF: </td>
-                                                        <span id='beneficiary_dnumber' name="beneficiary_dnumber"></span> <br><br>
+                                                        <input id='beneficiary_dnumber' name="beneficiary_dnumber"></input> <br>
                                                     </tr>
 
                                                     <tr>
                                                         <td> Telefone: </td>
-                                                        <span id='beneficiary_phone'></span> <br><br>
-                                                    </tr>
-                                                   
-                                                    <tr>
-                                                        <td> Senha: </td>
-                                                        <td>
-                                                            <input type="text" id="password" name="senha" /> <br><br>
-                                                        </td>
-                                                    </tr>                                                    
+                                                        <input id='beneficiary_phone'></input> <br><br>
+                                                  
                                                     
-                        <table class="table"><tr><th>Banco</th><th>Agência</th><th>Conta</th><th>Update de imagem</th></tr>
+                        <table class="table"><tr><th>Banco</th><th>Agência</th><th>Conta</th><th> X </th></tr>
                                     <?php
                                     foreach ($documents as $document) {
                                         ?><tr>

@@ -698,6 +698,16 @@ class Admin extends CK_Controller {
     
     public function manageDocuments(){
     	$data['documents'] = $this->documentexpense_model->getAllDocumentsExpense();
+    	$formaspagamento = array("Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
+
+    	if (isset($_GET['formapagamento_f']))
+    		$formapagamento = $_GET['formapagamento_f'];
+    		else {
+    			$formapagamento = "Dinheiro";
+    		}
+    	
+    		$data['formapagemento_escolhido'] = $formapagamento;
+    		$data['formaspagamento'] = $formaspagamento;
     	$this->loadReportView("admin/finances/manage_documents", $data);
     }
 
