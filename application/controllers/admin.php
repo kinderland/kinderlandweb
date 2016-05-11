@@ -48,6 +48,14 @@ class Admin extends CK_Controller {
         $this->documentexpense_model->setLogger($this->Logger);
     }
 
+    
+    
+    public function create_document(){
+        $selected_option=$this->post();
+      $this->loadReportView("admin/finances/create_document");
+    }
+    
+    
     public function campaign_admin() {
         $this->loadView("admin/campaigns/campaign_admin_container");
     }
@@ -77,6 +85,20 @@ class Admin extends CK_Controller {
     	$data['balances'] = $balances;
     	
     	$this->loadReportView("admin/finances/credit_operation", $data);
+    }
+    
+    public function newOperation(){
+    	$secretary_id = $this->input->post("secretary_id", true);
+    	$value = $this->input->post("value", true);
+    	
+    	if($this->personuser_model->newOperation($secretary_id,$value)){
+    		echo "true";
+    		return;
+    	}
+    	else{
+    		echo "false";
+    		return;
+    	}
     }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {

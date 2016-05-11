@@ -363,3 +363,6 @@
 "credit_operation";"admin";2
 "finance_admin";"admin";2
 "manageDocuments";"admin";2
+"newOperation";"admin";2
+"create_document";"admin";2
+"create_document";"admin";4

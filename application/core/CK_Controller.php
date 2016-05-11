@@ -504,7 +504,6 @@ class CK_Controller extends CI_Controller {
 	        		foreach($types as $type){
 	        				        					
 	        			if(intval($type) == intval($line[2])){
-	        				$this->Logger->info("ENTREI!!!!!!!");
 	        				if(strcasecmp($method, $line[0][1]) == 0 && strcasecmp($class,$line[1][1]) == 0){
 	        					$permission = true;
 	        					break;

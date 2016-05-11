@@ -83,7 +83,7 @@ $( document ).ready(function() {
             <div class="row">
                 <?php // require_once APPPATH.'views/include/common_user_left_menu.php'  ?>
                 <div class="col-lg-12 middle-content">
-                    <a href="<?= $this->config->item("url_link") ?>admin/documentCreate" >
+                    <a href="<?= $this->config->item("url_link") ?>admin/create_document" >
                         <button id="create" class="btn btn-primary"  value="Criar novo documento" >Criar novo documento</button>
                     </a>
                     <br /><br />
