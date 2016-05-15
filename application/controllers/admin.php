@@ -50,11 +50,14 @@ class Admin extends CK_Controller {
 
     
     
-    public function create_document(){
-        $selected_option=$this->post();
-      $this->loadReportView("admin/finances/create_document");
+    public function createDocument(){
+        $selected_option=$this->input->post("document_type",TRUE);
+        if(empty($selected_option) || !isset($selected_option))
+            $data['selected']="no_select";
+        else
+            $data['selected']=$selected_option;
+        $this->loadReportView("admin/finances/createDocument",$data);
     }
-    
     
     public function campaign_admin() {
         $this->loadView("admin/campaigns/campaign_admin_container");
