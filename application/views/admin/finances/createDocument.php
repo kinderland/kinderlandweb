@@ -64,6 +64,7 @@
          </form>
     
     <form method ="POST" action="<?= $this->config->item('url_link') ?>admin/completeDocument">
+        <input type="hidden" value="<?php echo $selected; ?>" name="document_type" >
        <?php if ($selected!="no_select") { ?>
        Numero: <input  type="text" name="document_number" >
        </br>
@@ -71,7 +72,9 @@
        </br>
        Data <?php echo dataSwitch($selected); ?> : <input type="text" class="datepickers required" name="document_date">
        </br>
-       Descrição <input type="text" name="description" maxlength="50">
+       Descrição :<input type="text" name="description" maxlength="50">
+       </br>
+       Valor :<input type="number" step="0.01" size="6" name="document_value">
        </br>
     <button class="btn btn-primary" type="submit">Salvar</button>
     <?php } ?>

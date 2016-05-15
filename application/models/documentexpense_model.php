@@ -20,6 +20,13 @@ class documentexpense_model extends CK_Model {
 	
 				return $documentArray;
 	}
+        
+        public function InsertNewDocument($date,$number,$description,$type,$value){
+            $sql="INSERT INTO document_expense (document_number,document_date,document_type,description,document_value)
+                  VALUES (?,?,?,?,?)";
+            $Id=$this->executeReturningId($this->db,$sql,array($number,$date,$type,$description,$value));
+            return $Id;
+        }
 }
 
 ?>
