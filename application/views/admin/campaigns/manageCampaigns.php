@@ -33,26 +33,6 @@
         src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
         <script type="text/javascript"
         src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
-        <script>$(document).ready(function () {
-                $("[name='my-checkbox']").bootstrapSwitch();
-                $("[name='my-checkbox']").each(function (index) {
-                    if ($(this).attr("checkedInDatabase") != undefined)
-                        $(this).bootstrapSwitch('state', true, true);
-                });
-                $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                    var string = "<?= $this->config->item("url_link") ?>events/toggleEnable/".concat($(this).attr("id"));
-                    var recarrega = "<?= $this->config->item("url_link") ?>admin/manageEvents/";
-                    $.post(string).done(function (data) {
-                        if (data == 1)
-                            alert("Campanha modificada com sucesso");
-                        else {
-                            alert("Problema ao modificar o estado da campanha");
-                            window.location = recarrega;
-                        }
-                    });
-                });
-            });
-        </script>
         <style>
 
             div.scroll{

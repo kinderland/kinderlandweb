@@ -97,7 +97,7 @@ class DocumentExpense {
     }
     
     public function getDocumentExpenseDescription() {
-    	return $this->getDocumentExpenseDescription;
+    	return $this->documentExpenseDescription;
     }
 
 }

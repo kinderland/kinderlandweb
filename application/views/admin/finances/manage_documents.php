@@ -67,14 +67,11 @@ $( document ).ready(function() {
 		<?php }?>
 
 
-		function sendInfoToModal(colonistName, campName, userName, situation, colonistId, summerCampId, discount){
-    		$("#colonist_name").html(colonistName);
-    		$("#camp_name").html(campName);
-    		$("#user_name").html(userName);
-    		$("#situation").html(situation);
-    		$("#colonist_id").html(colonistId);
-    		$("#summer_camp_id").html(summerCampId);
-    		$("#discount").html(discount);
+		function sendInfoToModal(documentExpenseId, documentExpenseType, documentExpenseValue){
+			$("#document_expense_id").html(documentExpenseId);
+    		$("#document_expense_value").html(documentExpenseValue);
+    		$("#document_expense_value").html(documentExpenseId);
+    		$("#document_expense_type").html(documentExpenseType);
         }
 </script>
 
@@ -83,7 +80,11 @@ $( document ).ready(function() {
             <div class="row">
                 <?php // require_once APPPATH.'views/include/common_user_left_menu.php'  ?>
                 <div class="col-lg-12 middle-content">
+
                     <a href="<?= $this->config->item("url_link") ?>admin/documentCreate" >
+
+                    <a href="<?= $this->config->item("url_link") ?>admin/createDocument" >
+
                         <button id="create" class="btn btn-primary"  value="Criar novo documento" >Criar novo documento</button>
                     </a>
                     <br /><br />
@@ -99,7 +100,8 @@ $( document ).ready(function() {
                                 <td>
                                        <?= date_format(date_create($document->getDocumentExpenseDate()), 'd/m/y'); ?></td>
 
-                                <td><?php echo $document->getDocumentExpenseType(); ?> </td>
+                                <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->getDocumentExpenseId() ?>">
+                                    <?php echo $document->getDocumentExpenseType(); ?></a> </td>
                                 <td><?php echo $document->getDocumentExpenseValue(); ?> </td>
                                 <td><?php echo $document->getDocumentExpenseUploadId(); ?> </td>
                                 <td><button class="btn btn-primary" onclick="sendInfoToModal()" data-toggle="modal" data-target="#myModal">Pagar</button></td>
