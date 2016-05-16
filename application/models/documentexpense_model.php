@@ -20,6 +20,24 @@ class documentexpense_model extends CK_Model {
 	
 				return $documentArray;
 	}
+	
+	public function getAllDocumentsExpensePayed($documentexpenseId){
+		$sql = "select distinct document_expense_id
+				from document_expense
+				where document_expense_id = documentexpenseId and document_expense_id in(
+					select document_expense_id
+					from posting_expense
+				)
+				";
+		$resultSet = $this->executeRows($this->db, $sql, array($documentexpenseId));
+		
+	
+        if ($resultSet)
+            return $resultSet;
+        else
+            return null;
+    }
+	
 }
 
 ?>
