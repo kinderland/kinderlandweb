@@ -37,6 +37,17 @@ class documentexpense_model extends CK_Model {
             $Id=$this->executeReturningId($this->db,$sql,array($number,$date,$type,$description,$value));
             return $Id;
         }
+        
+        public function updateDocument($id, $date,$number,$description,$value){
+         $sql = "UPDATE document_expense SET "
+                 . "document_date = ?, "
+                 . "document_number=?, "
+                 . "description=?, "
+                 . "document_value=? "      
+                 . "WHERE document_expense_id='?'";
+         $resultSet = $this->execute($this->db, $sql, array($date,$number,$description,$value,intval($id)));
+         return $resultSet;
+        }
 }
 
 ?>

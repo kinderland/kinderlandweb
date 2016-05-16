@@ -63,14 +63,14 @@ class Admin extends CK_Controller {
         $description = $this->input->post("description", TRUE);
         $type = $this->input->post("document_type", TRUE);
         $value = $this->input->post("document_value", TRUE);
-        $value=str_replace(",",".",$value);
+        $value = str_replace(",", ".", $value);
         $date = explode("/", $date);
         $db_date = implode("-", array_reverse($date));
         try {
             $this->generic_model->startTransaction();
-            $documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type,$value);
+            $documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value);
             $this->generic_model->commitTransaction();
-            $this->Logger->info("New campaign successfully inserted");
+            $this->Logger->info("New document successfully inserted");
             $url = $this->config->item('url_link') . "admin/manageDocuments";
             if ($documentId) {
                 echo "<SCRIPT LANGUAGE='JavaScript'>
@@ -88,23 +88,56 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/finances/createDocument', $data);
         }
     }
-    public function editDocument($document_id=NULL){
-        $document=$this->documentexpense_model->getDocumentById($document_id);
-        $date=$document->getDocumentExpenseDate();
-        $number=$document->getDocumentExpenseNumber();
-        $description=$document->getDocumentExpenseDescription();
-        $value=$document->getDocumentExpenseValue();
-        $type=$document->getDocumentExpenseType();
-        $date=explode("-",$date);
-        $date=implode("/",array_reverse($date));
-        $data['id']=$document_id;
-        $data['date']=$date;
-        $data['number']=$number;
-        $data['description']=$description;
-        $data['value']=$value;
-        $data['type']=$type;
-        $this->loadReportView("admin/finances/editDocument",$data);
-        
+
+    public function editDocument($document_id = NULL) {
+        $document = $this->documentexpense_model->getDocumentById($document_id);
+        $date = $document->getDocumentExpenseDate();
+        $number = $document->getDocumentExpenseNumber();
+        $description = $document->getDocumentExpenseDescription();
+        $value = $document->getDocumentExpenseValue();
+        $type = $document->getDocumentExpenseType();
+        $date = explode("-", $date);
+        $date = implode("/", array_reverse($date));
+        $data['id'] = $document_id;
+        $data['date'] = $date;
+        $data['number'] = $number;
+        $data['description'] = $description;
+        $data['value'] = $value;
+        $data['type'] = $type;
+        $this->loadReportView("admin/finances/editDocument", $data);
+    }
+
+    public function updateDocument($document_id = NULL) {
+        $name = $this->input->post("document_name", TRUE);
+        $date = $this->input->post("document_date", TRUE);
+        $number = $this->input->post("document_number", TRUE);
+        $description = $this->input->post("description", TRUE);
+        $type = $this->input->post("document_type", TRUE);
+        $value = $this->input->post("document_value", TRUE);
+        $value = str_replace(",", ".", $value);
+        $date = explode("/", $date);
+        $db_date = implode("-", array_reverse($date));
+
+        try {
+            $this->generic_model->startTransaction();
+            $documentId = $this->documentexpense_model->updateDocument($document_id, $db_date,$number, $description, $value);
+            $this->generic_model->commitTransaction();
+            $this->Logger->info("Document successfully updated");
+            $url = $this->config->item('url_link') . "admin/manageDocuments";
+            if ($documentId) {
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+                      window.alert('Documento alterado com sucesso')
+                      window.location.href='" . $url . "'</SCRIPT>";
+            } else
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+                      window.alert('Ocorreu um erro ao alterar o documento. Tente novamente mais tarde')
+                      window.location.href='" . $url . "'</SCRIPT>";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to update document" . $document_id);
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+            $this->loadReportView('admin/finances/editDocument', $data);
+        }
     }
 
     public function campaign_admin() {
@@ -459,7 +492,7 @@ class Admin extends CK_Controller {
                 }
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New campaign successfully inserted");
-                $url=$this->config->item('url_link') . "admin/manageCampaigns";
+                $url = $this->config->item('url_link') . "admin/manageCampaigns";
                 echo "<SCRIPT LANGUAGE='JavaScript'>
                       window.alert('Campanha atualizada com sucesso')
                       window.location.href='" . $url . "'</SCRIPT>";

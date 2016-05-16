@@ -65,7 +65,7 @@
             </form>
             <form name="document_form" method="POST" action="<?= $this->config->item('url_link') ?>admin/updateDocument/<?php echo $id; ?>" id="document_form">
                 </br>
-                Tipo do documento: <input type="text" disabled="disabled" value="<?php echo ucwords($type); ?>" >
+                Tipo do documento: <input type="text" disabled="disabled" name="document_type" value="<?php echo ucwords($type); ?>" >
                 </br>
                 Numero: <input  type="text" name="document_number" value="<?php echo $number; ?>">
                 </br>
