@@ -368,8 +368,8 @@
 "createDocument";"admin";4
 "secretaryOperation";"reports";4
 "editDocument";"admin";2
-"editDocument";"admin;4
+"editDocument";"admin";4
 "completeDocument";"admin";2
 "completeDocument";"admin";4
 "updateDocument";"admin";2
-"updateDocument";"admin;4
+"updateDocument";"admin";4
