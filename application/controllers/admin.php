@@ -88,6 +88,24 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/finances/createDocument', $data);
         }
     }
+    public function editDocument($document_id=NULL){
+        $document=$this->documentexpense_model->getDocumentById($document_id);
+        $date=$document->getDocumentExpenseDate();
+        $number=$document->getDocumentExpenseNumber();
+        $description=$document->getDocumentExpenseDescription();
+        $value=$document->getDocumentExpenseValue();
+        $type=$document->getDocumentExpenseType();
+        $date=explode("-",$date);
+        $date=implode("/",array_reverse($date));
+        $data['id']=$document_id;
+        $data['date']=$date;
+        $data['number']=$number;
+        $data['description']=$description;
+        $data['value']=$value;
+        $data['type']=$type;
+        $this->loadReportView("admin/finances/editDocument",$data);
+        
+    }
 
     public function campaign_admin() {
         $this->loadView("admin/campaigns/campaign_admin_container");
@@ -441,10 +459,14 @@ class Admin extends CK_Controller {
                 }
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New campaign successfully inserted");
-                echo "<script>alert('Campanha atualizada com sucesso!');opener.location.reload(); window.close();</script>";
-//redirect("events/manageEvents");
+                $url=$this->config->item('url_link') . "admin/manageCampaigns";
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+                      window.alert('Campanha atualizada com sucesso')
+                      window.location.href='" . $url . "'</SCRIPT>";
             } else
-                echo "<script>alert('Ocorreu um erro ao atualizar a campanha. tente novamente.');window.history.back();</script>";
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+                      window.alert('Falha ao atualizar a campanha. Tente novamente mais tarde')
+                      window.location.href='" . $url . "'</SCRIPT>";
         } catch (Exception $ex) {
             $this->Logger->error("Failed to insert new campaign");
             $this->generic_model->rollbackTransaction();

@@ -367,7 +367,7 @@
 "createDocument";"admin";2
 "createDocument";"admin";4
 "secretaryOperation";"reports";4
-"choose_document_type";"admin";2
-"choose_document_type";"admin;4
+"editDocument";"admin";2
+"editDocument";"admin;4
 "completeDocument";"admin";2
 "completeDocument";"admin";4

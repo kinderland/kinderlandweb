@@ -21,6 +21,16 @@ class documentexpense_model extends CK_Model {
 				return $documentArray;
 	}
         
+        public function getDocumentById($id){
+            $sql="SELECT * FROM document_expense WHERE document_expense_id=?";
+            $document=$this->executeRow($this->db,$sql,$id);
+            if ($document){
+                $documentObject=DocumentExpense::createDocumentExpenseObject($document);
+                return $documentObject;
+            }
+            return false;
+        }
+        
         public function InsertNewDocument($date,$number,$description,$type,$value){
             $sql="INSERT INTO document_expense (document_number,document_date,document_type,description,document_value)
                   VALUES (?,?,?,?,?)";

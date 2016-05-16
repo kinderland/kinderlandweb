@@ -99,7 +99,8 @@ $( document ).ready(function() {
                                 <td>
                                        <?= date_format(date_create($document->getDocumentExpenseDate()), 'd/m/y'); ?></td>
 
-                                <td><?php echo $document->getDocumentExpenseType(); ?> </td>
+                                <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->getDocumentExpenseId() ?>">
+                                    <?php echo $document->getDocumentExpenseType(); ?></a> </td>
                                 <td><?php echo $document->getDocumentExpenseValue(); ?> </td>
                                 <td><?php echo $document->getDocumentExpenseUploadId(); ?> </td>
                                 <td><button class="btn btn-primary" onclick="sendInfoToModal()" data-toggle="modal" data-target="#myModal">Pagar</button></td>
