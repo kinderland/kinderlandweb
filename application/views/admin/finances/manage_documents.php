@@ -98,13 +98,17 @@ $( document ).ready(function() {
                                         
                             <tr>
                                 <td>
-                                       <?= date_format(date_create($document->getDocumentExpenseDate()), 'd/m/y'); ?></td>
+                                       <?= date_format(date_create($document->documentexpenseDate), 'd/m/y'); ?></td>
 
-                                <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->getDocumentExpenseId() ?>">
-                                    <?php echo $document->getDocumentExpenseType(); ?></a> </td>
-                                <td><?php echo $document->getDocumentExpenseValue(); ?> </td>
-                                <td><?php echo $document->getDocumentExpenseUploadId(); ?> </td>
+                                <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->documentexpenseId ?>">
+                                    <?php echo $document->documentexpenseType; ?></a> </td>
+                                <td><?php echo $document->documentexpenseValue; ?> </td>
+                                <td><?php echo $document->documentexpenseUploadId; ?> </td>
+                                <?php if($document->paid == false){?>
                                 <td><button class="btn btn-primary" onclick="sendInfoToModal()" data-toggle="modal" data-target="#myModal">Pagar</button></td>
+                                <?php } else {?>
+                                <td> Pago </td>
+                                <?php }?>
                                 </tr>
                                 <?php
                             }
