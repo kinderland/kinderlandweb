@@ -1,7 +1,7 @@
 <?php
 require_once APPPATH . 'core/CK_Model.php';
 require_once APPPATH . 'core/document_expense.php';
-
+require_once APPPATH . 'core/bankdata.php';
 class documentexpense_model extends CK_Model {
 
 	public function __construct() {
@@ -33,6 +33,20 @@ class documentexpense_model extends CK_Model {
             return $resultSet;
         else
             return null;
+    }
+    
+    public function getAllBankData(){
+    	$sql = "SELECT * FROM bank_data";
+    	$resultSet = $this->executeRows($this->db, $sql);
+    	
+    	$bankdataArray = array();
+    	
+    	if ($resultSet)
+    		foreach ($resultSet as $row)
+    			$bankdataArray[] = BankData::createBankDataObject($row);
+    	
+    			return $bankdataArray;
+    	
     }
     	
 
