@@ -852,7 +852,7 @@ class Admin extends CK_Controller {
     public function manageDocuments(){
     	$documents = $this->documentexpense_model->getAllDocumentsExpense();
     	$data['banks'] = $this->documentexpense_model->getAllBankData();
-    	$formaspagamento = array("Boleto", "Cheque", "Crédito", "Débito", "Transferência");
+    	$formaspagamento = array("Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
     	 
     	$doc = array();
     	 
