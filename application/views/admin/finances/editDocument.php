@@ -25,6 +25,7 @@
         <link rel="text/javascript" href="<?= $this->config->item('assets'); ?>js/datepicker.less.js" />
         <?php
         $exclusionUrl = $this->config->item('url_link') . "admin/manageDocuments/" . $id;
+        echo $date;
 
         function dataSwitch($option) {
             switch ($option) {
@@ -35,6 +36,15 @@
                 case "boleto": return "processamento";
                     break;
             }
+        }
+        
+        function transform_date($date){
+            $newDate=explode("/",$date);
+            $temp=$newDate[0];
+            $newDate[0]=$newDate[1];
+            $newDate[1]=$temp;
+            $newDate=implode("/",$newDate);
+            return $newDate;
         }
         ?>
         <style>
@@ -69,9 +79,9 @@
                 </br>
                 Numero: <input  type="text" name="document_number" value="<?php echo $number; ?>">
                 </br>
-                Nome <?php if ($type != "recibo") { ?> empresa <?php } ?>: <input type="text" name="document_name" value="">
+                Nome <?php if ($type != "recibo") { ?> empresa <?php } ?>: <input type="text" name="document_name" value="<?php echo $name; ?>">
                 </br>
-                Data <?php echo dataSwitch($type); ?> : <input type="text" class="datepickers required" name="document_date" value="<?php echo $date; ?>">
+                Data <?php echo dataSwitch($type); ?> : <input type="text" class="datepickers" name="document_date" value="<?php echo transform_date($date); ?>">
                 </br>
                 Descrição :<input type="text" name="description" maxlength="50" value="<?php echo $description; ?>">
                 </br>

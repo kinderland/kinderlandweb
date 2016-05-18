@@ -33,21 +33,6 @@
         <div class="scroll">
         	<form method="GET">
                 <input type="hidden" name="option" value="<?= $option ?>"/>
-                <?php if(isset($admin)){?>
-                Secretário: <select name="secretary" onchange="this.form.submit()" id="secretary">
-                	<?php if (!isset($secretary)){?>
-                		<option value='0' selected >- Selecione -</option>
-                    <?php }
-                    foreach ($secretaries as $s) {
-                        $selected = "";
-                        if ($s->person_id == $secretary)
-                            $selected = "selected";
-                        echo "<option $selected value='$s->person_id'>$s->fullname</option>";
-                    }
-                    ?>
-                </select>
-                <br /> <br />
-                <?php }?>
                 Ano: <select name="year" onchange="this.form.submit()" id="year">
                     <?php
                     foreach ($years as $y) {
@@ -93,43 +78,48 @@
            
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
-                   <?php  if (isset($secretary) || !isset($admin)){ ?>
-                        <table class="table table-bordered table-striped table-min-td-size" style="width:1000px" id="sortable-table">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width:1030px" id="sortable-table">
                             <thead>
                                 <tr>
-                                    <th style="width:100px" > Data </th>
-                                    <th> Descrição </th>
-                                    <th style="width:100px"> Crédito </th>
-                                    <th style="width:100px"> Débito </th>
-                                    <th style="width:100px"> Saldo </th>
+                                    <th style="width:100px; text-align: center" > Data </th>
+                                    <th style="width:170px; text-align: center" > Documento </th>
+                                    <th style="width:170px; text-align: center"> Tipo </th>
+                                    <th style="width:80px; text-align: center"> Parcela </th>
+                                    <th style="width:100px; text-align: center"> Valor </th>
+                                    <th colspan=3 style="width:400px; text-align: center"> Conta </th>
+                                </tr>
+                                <tr>
+                                	<th></th>
+                                	<th></th>
+                                	<th></th>
+                                	<th></th>
+                                	<th></th>
+                                	<th style="width:100px; text-align: center"> Nome </th>
+                                	<th style="width:200px; text-align: center"> Descrição </th>
+                                	<th style="width:100px; text-align: center"> Tipo </th>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
                                 <?php
                                 
-                                $sum = number_format(0,2,",",".");
-                                
-                                if($balance){
-                                foreach ($balance as $b) {
+                                if($info){
+                                foreach ($info as $i) {
                                     ?>
                                     <tr>
-                                        <td><?= $b->date_created ?></td>
-                                        <td><?php if(isset($b->description)) echo $b->description; else echo "Operação Efetuada pelo Administrador" ; ?></td>
-                                        <?php if($b->operation_value > 0) {?>
-	                                        <td><?= number_format($b->operation_value,2,",","."); ?></td>
-	                                        <td> - </td>
-	                                    <?php } else {?>
-	                                    	<td> - </td>
-	                                        <td><?= number_format($b->operation_value*(-1),2,",","."); ?></td>
-                                        <?php } $sum += $b->operation_value; ?>
-                                        <td><?= number_format($sum,2,",","."); ?></td>
+                                        <td><?= $i->posting_date ?></td>
+                                        <td><?= $i->document_type ?></td>
+                                        <td><?= $i->posting_type ?></td>
+                                        <td><?= $i->portion ?>/<?= $portions[$i->document_expense_id]?></td>
+                                        <td><?= $i->posting_value ?></td>
+                                        <td><?= $i->account_name ?></td>
+                                        <td><?= $i->account_description ?></td>
+                                        <td><?= $i->account_type ?></td>
                                     </tr>
                                     <?php
                                 }}
                                 ?>
                             </tbody>
                         </table>
-                        <?php }?>
                     </div>
                 </div>
             </div>

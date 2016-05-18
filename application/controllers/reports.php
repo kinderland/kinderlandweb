@@ -17,6 +17,7 @@ class Reports extends CK_Controller {
         $this->load->model('telephone_model');
         $this->load->model('event_model');
         $this->load->model('eventsubscription_model');
+        $this->load->model('finance_model');
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
@@ -26,6 +27,7 @@ class Reports extends CK_Controller {
         $this->telephone_model->setLogger($this->Logger);
         $this->event_model->setLogger($this->Logger);
         $this->eventsubscription_model->setLogger($this->Logger);
+        $this->finance_model->setLogger($this->Logger);
     }
 
     public function user_reports() {
@@ -76,18 +78,101 @@ class Reports extends CK_Controller {
     	$data["years"] = $years;
     	$data["option"] = $option;
     	
-    	$balance = $this ->personuser_model -> getBalanceBySecretaryIdAndDate($this->session->userdata("user_id"),$year,$month);
+    	
+    	if($this -> personuser_model -> checkIfUserIsAdmin($this->session->userdata("user_id"))){
+    		$secretary = $this->input->get('secretary', TRUE);
+    		$data["secretaries"] = $this -> personuser_model -> getAllSecretariesWithBalances();
+    		
+    		if ($secretary == 0) {
+    			$secretary = FALSE;
+    			$balance = FALSE;
+    		}else{
+    			$data["secretary"] = $secretary;
+    			$balance = $this ->personuser_model -> getBalanceBySecretaryIdAndDate($secretary,$year,$month);
+    		}
+    		
+    		$data["admin"] = true;
+    	}else{
+    		$balance = $this ->personuser_model -> getBalanceBySecretaryIdAndDate($this->session->userdata("user_id"),$year,$month);
+    	}
+    	
+    	$balances = array();
     	
     	if($balance){
 	    	foreach($balance as $b){
+	    		$obj = new StdClass();
+	    		
 	    		$r = explode(" ",$b->date_created);
 	    		$r = explode("-", $r[0]);
-	    		$b->date_created = $r[2]."/".$r[1]."/".$r[0];
+	    		$obj->date_created = $r[2]."/".$r[1]."/".$r[0];
+	    		
+	    		if($b->person_id != $b->document_id)
+	    		{
+	    			$document = $this -> finance_model -> getDocumentInformationsById($b->document_id);
+	    			$obj->description = $document->description;
+	    		}
+	    		
+	    		$obj->operation_value = $b->operation_value;
+	    		
+	    		$balances[] = $obj;
 	    	}
     	}
     	
-    	$data['balance'] = $balance;
+    	$data['balance'] = $balances;
     	$this->loadReportView("reports/finances/secretaryOperation", $data);
+    }
+    
+    public function postingExpenses(){
+    	$option = $this->input->get('option', TRUE);
+    	$year = $this->input->get('year', TRUE);
+    	$month = $this->input->get('month', TRUE);
+    	$years = array();
+    	$end = 2015;
+    	$start = date('Y');
+    	while ($start >= $end) {
+    		$years[] = $start;
+    		$start--;
+    	}
+    	 
+    	if ($year === FALSE) {
+    		$year = date("Y");
+    	} else if ($month == 0) {
+    		$month = FALSE;
+    	}
+    	$data["year"] = $year;
+    	$data["month"] = $month;
+    	$data["years"] = $years;
+    	$data["option"] = $option;
+    	
+    	$postingExpenses = $this -> finance_model -> getPostingsExpensesByDate($year,$month);
+    	
+    	$info = array();
+    	$portions = array();
+    	
+    	if($postingExpenses){
+	    	foreach($postingExpenses as $pe){
+	    		$obj = new StdClass();
+	    		$obj = $pe;
+	    		
+	    			if(array_key_exists($pe->document_expense_id,$portions)){
+	    				$portions[$pe->document_expense_id]++;
+	    			}else{
+	    				$portions[$pe->document_expense_id] = 1;
+	    			}
+	    			
+	    		$obj -> portion = $portions[$pe->document_expense_id];
+	    		
+	    		$r = explode("-", $pe->posting_date);
+	    		$obj->posting_date = $r[2]."/".$r[1]."/".$r[0];
+	    		
+	    		$info[] = $obj;
+	    	}
+    	}
+    	
+    	$data["info"] = $info;
+    	$data["portions"] = $portions;
+    	
+    	$this->loadReportView("reports/finances/postingExpenses", $data);
     }
 
     public function reportPanel() {

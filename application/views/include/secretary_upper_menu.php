@@ -84,6 +84,20 @@
                         <a  class="navbar-brand"  data-toggle = "dropdown" href = "#" > Eventos
                             <span class = "caret" > </span></a >
                     </li>
+                    <li class="dropdown">
+                        <a  <?php
+                        if ($paginaLink == "/index.php/admin/finance_admin" || $paginaLink == "/index.php/reports/finance_reports") {
+                            echo 'class="link active';
+                        } else {
+                            echo 'class="';
+                        }
+                        ?>  navbar-brand <?php echo $extra ?> data-toggle = "dropdown" href = "#" > Financeiro
+                            <span class = "caret" > </span></a >
+                        <ul class = "dropdown-menu" >
+                        	<li > <a href = "<?= $this->config->item('url_link'); ?>admin/finance_cashoutflows" > Saídas </a></li >
+                            <li > <a href = "<?= $this->config->item('url_link'); ?>reports/finance_reports" > Relatórios </a></li >
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

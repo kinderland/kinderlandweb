@@ -50,6 +50,9 @@ class Admin extends CK_Controller {
         $this->documentexpense_model->setLogger($this->Logger);
     }
 
+    public function finance_cashoutflows(){
+    	$this->loadView("finances/finance_cashoutflows_container");
+    }
     
     
     public function create_document(){
@@ -741,7 +744,7 @@ class Admin extends CK_Controller {
         $db_date = implode("-", array_reverse($date));
         try {
         	$this->generic_model->startTransaction();
-         	$documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value);
+         	$documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value,$name);
             $this->generic_model->commitTransaction();
             $this->Logger->info("New document successfully inserted");
             $url = $this->config->item('url_link') . "admin/manageDocuments";
@@ -770,14 +773,16 @@ class Admin extends CK_Controller {
  		$description = $document->getDocumentExpenseDescription();
  		$value = $document->getDocumentExpenseValue();
  		$type = $document->getDocumentExpenseType();
+                $name = $document->getDocumentExpenseName();
  		$date = explode("-", $date);
- 		$date = implode("/", array_reverse($date));
+ 		$date = implode("/", array_reverse($date)); 
  		$data['id'] = $document_id;
  		$data['date'] = $date;
  		$data['number'] = $number;
  		$data['description'] = $description;
  		$data['value'] = $value;
  		$data['type'] = $type;
+                $data['name'] = $name;
  		$this->loadReportView("admin/finances/editDocument", $data);
  	}
  	
@@ -794,7 +799,7 @@ class Admin extends CK_Controller {
 
  		try {
  			$this->generic_model->startTransaction();
- 			$documentId = $this->documentexpense_model->updateDocument($document_id, $db_date,$number, $description, $value);
+ 			$documentId = $this->documentexpense_model->updateDocument($document_id, $db_date,$number, $description, $value,$name);
  			$this->generic_model->commitTransaction();
  			$this->Logger->info("Document successfully updated");
  			$url = $this->config->item('url_link') . "admin/manageDocuments";
