@@ -149,23 +149,28 @@ class Reports extends CK_Controller {
     	$info = array();
     	$portions = array();
     	
-    	foreach($postingExpenses as $pe){
-    		$obj = new StdClass();
-    		$obj = $pe;
-    		
-    			if(array_key_exists($pe->document_id,$portions)){
-    				$portions[$pe->document_id]++;
-    			}else{
-    				$portions[$pe->document_id] = 1;
-    			}
-    			
-    		$obj -> portion = $portions[$pe->document_id];
-    		
-    		$info[] = $obj;
+    	if($postingExpenses){
+	    	foreach($postingExpenses as $pe){
+	    		$obj = new StdClass();
+	    		$obj = $pe;
+	    		
+	    			if(array_key_exists($pe->document_expense_id,$portions)){
+	    				$portions[$pe->document_expense_id]++;
+	    			}else{
+	    				$portions[$pe->document_expense_id] = 1;
+	    			}
+	    			
+	    		$obj -> portion = $portions[$pe->document_expense_id];
+	    		
+	    		$r = explode("-", $pe->posting_date);
+	    		$obj->posting_date = $r[2]."/".$r[1]."/".$r[0];
+	    		
+	    		$info[] = $obj;
+	    	}
     	}
     	
     	$data["info"] = $info;
-    	$data["portions"] = $$portions;
+    	$data["portions"] = $portions;
     	
     	$this->loadReportView("reports/finances/postingExpenses", $data);
     }

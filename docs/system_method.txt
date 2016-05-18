@@ -375,3 +375,4 @@
 "updateDocument";"admin";4
 "finance_cashoutflows";"admin";2
 "finance_cashoutflows";"admin";4
+"postingExpenses";"reports";2

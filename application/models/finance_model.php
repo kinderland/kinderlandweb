@@ -29,13 +29,13 @@ class finance_model extends CK_Model{
 	
 			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($month)));
 		}else {
-			$sql = $sql."ORDER BY date_created ASC";
+			$sql = $sql."ORDER BY posting_date ASC";
 			$result = $this->executeRows($this->db, $sql, array(intval($year)));
 		}
 		 
 		if($result)
 			return $result;
-			else
-				return NULL;
+		else
+			return NULL;
 	}
 }
