@@ -12,8 +12,9 @@
             <div class ="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions)) { ?>
-                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/manageDocuments"> Criar Documento </option>
-                        <option value="<?= $this->config->item('url_link'); ?>admin/credit_operation"> Caixinha </option>
+                        <option selected="selected" value="<?php // $this->config->item('url_link'); ?>"> Nome de Contas </option>
+                        <option value="<?= $this->config->item('url_link'); ?>admin/credit_operation"> Crédito de Caixinha </option>
+                        <option value="<?= $this->config->item('url_link'); ?>admin/manageDocuments"> Documentos </option>
                     <?php } ?>
                 </select>
             </div>
@@ -21,7 +22,7 @@
         <br>
 
         <div class="row">
-            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>admin/manageDocuments" />
+            <iframe class="frame-section" src="<?= $this->config->item('url_link'); ?>admin/credit_operation" />
         </div>
 
     </div>

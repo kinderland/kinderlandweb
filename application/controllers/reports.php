@@ -87,7 +87,7 @@ class Reports extends CK_Controller {
     	}
     	
     	$data['balance'] = $balance;
-    	$this->loadReportView("reports/users/secretaryOperation", $data);
+    	$this->loadReportView("reports/finances/secretaryOperation", $data);
     }
 
     public function reportPanel() {

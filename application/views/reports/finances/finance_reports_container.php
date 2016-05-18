@@ -24,7 +24,15 @@
                     <option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/failed_transactions">Transações Cielo sem sucesso</option>
                     <option value="<?php echo $this->config->item('url_link'); ?>reports/transactions_expected">Cielo a Receber</option>
-                <?php } ?>
+                    
+                <?php } 
+                
+                		$checkSecretaryOperation = $this->personuser_model -> checkSecretaryOperation($this->session->userdata("user_id"));
+                    	
+                    	if($checkSecretaryOperation){
+                    ?>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/secretaryOperation">Caixinha</option>
+                    <?php }?>
             </select>
         </div>
         <br>

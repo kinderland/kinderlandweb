@@ -13,13 +13,7 @@
                 <select class="report-select" name="report_select" id="report_select">
                     <option value="<?= $this->config->item('url_link'); ?>reports/user_registered">Painel de usuários</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/all_users">Cadastros Kinderland</option>
-                    <?php 
-                    	$checkSecretaryOperation = $this->personuser_model -> checkSecretaryOperation($this->session->userdata("user_id"));
-                    	
-                    	if($checkSecretaryOperation){
-                    ?>
-                    <option value="<?= $this->config->item('url_link'); ?>reports/secretaryOperation">Caixinha</option>
-                    <?php }?>
+                    
                 </select>
             </div>
         </div>
