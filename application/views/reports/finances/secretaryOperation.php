@@ -22,17 +22,6 @@
 
 
     </head>
-    <style>
-
-        div.scroll{
-    	
-    	width:100%;
-    	height:100%;
-    	overflow-x:hidden;
-    	padding-left:25%;
-    }
-
-    </style>
     <body>
         <script>
         $(function() {
@@ -40,9 +29,25 @@
             $(".datepicker").datepicker();
         });
         </script>
+        <br />
         <div class="scroll">
         	<form method="GET">
                 <input type="hidden" name="option" value="<?= $option ?>"/>
+                <?php if(isset($admin)){?>
+                Secretário: <select name="secretary" onchange="this.form.submit()" id="secretary">
+                	<?php if (!isset($secretary)){?>
+                		<option value='0' selected >- Selecione -</option>
+                    <?php }
+                    foreach ($secretaries as $s) {
+                        $selected = "";
+                        if ($s->person_id == $secretary)
+                            $selected = "selected";
+                        echo "<option $selected value='$s->person_id'>$s->fullname</option>";
+                    }
+                    ?>
+                </select>
+                <br /> <br />
+                <?php }?>
                 Ano: <select name="year" onchange="this.form.submit()" id="year">
                     <?php
                     foreach ($years as $y) {
@@ -84,16 +89,19 @@
                     ?>
                 </select>
             </form>
-            <br /> <br />
-            <div class="main-container-report">
+            <br /> 
+           
                 <div class = "row">
-                    <div class="col-lg-12">
-                        <table class="table table-bordered table-striped table-min-td-size" style="width:400px" id="sortable-table">
+                    <div class="col-lg-12 middle-content">
+                   <?php  if (isset($secretary) || !isset($admin)){ ?>
+                        <table class="table table-bordered table-striped table-min-td-size" style="width:1000px" id="sortable-table">
                             <thead>
                                 <tr>
-                                    <th> Data </th>
-                                    <th> Valor da Operação </th>
-                                    <th> Saldo </th>
+                                    <th style="width:100px" > Data </th>
+                                    <th> Descrição </th>
+                                    <th style="width:100px"> Crédito </th>
+                                    <th style="width:100px"> Débito </th>
+                                    <th style="width:100px"> Saldo </th>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
@@ -106,12 +114,14 @@
                                     ?>
                                     <tr>
                                         <td><?= $b->date_created ?></td>
-                                        <?php if ($b->operation_value >= 0)
-					                                $color = "style='color:green'";
-					                            else
-					                                $color = "style='color:red'";?>
-                                        <td><?php // echo "<p $color>"; ?><?= number_format($b->operation_value,2,",","."); ?></td>
-                                        <?php $sum += $b->operation_value; ?>
+                                        <td><?php if(isset($b->description)) echo $b->description; else echo "Operação Efetuada pelo Administrador" ; ?></td>
+                                        <?php if($b->operation_value > 0) {?>
+	                                        <td><?= number_format($b->operation_value,2,",","."); ?></td>
+	                                        <td> - </td>
+	                                    <?php } else {?>
+	                                    	<td> - </td>
+	                                        <td><?= number_format($b->operation_value*(-1),2,",","."); ?></td>
+                                        <?php } $sum += $b->operation_value; ?>
                                         <td><?= number_format($sum,2,",","."); ?></td>
                                     </tr>
                                     <?php
@@ -119,9 +129,9 @@
                                 ?>
                             </tbody>
                         </table>
+                        <?php }?>
                     </div>
                 </div>
             </div>
-        </div>
     </body>
 </html>

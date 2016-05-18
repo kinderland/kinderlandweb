@@ -434,7 +434,7 @@ class personuser_model extends CK_Model {
     }
     
     public function getAllSecretariesWithBalances(){
-    	$sql = "SELECT DISTINCT p.fullname
+    	$sql = "SELECT DISTINCT p.fullname, p.person_id
     			FROM v_operation_secretary vos
     			INNER JOIN person p ON p.person_id = vos.person_id";
     	 
@@ -474,6 +474,15 @@ class personuser_model extends CK_Model {
     	
     	if($result)
     		return $result;
+    	else
+    		return NULL;
+    }
+    
+    public function checkIfUserIsAdmin($person_id){
+    	$sql = "SELECT DISTINCT * FROM person_user_type WHERE user_type = 2 AND person_id = ?";
+    
+    	if ($this->executeRow($this->db, $sql, array(intval($person_id))))
+    		return true;
     	else
     		return NULL;
     }

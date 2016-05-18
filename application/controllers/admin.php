@@ -50,6 +50,9 @@ class Admin extends CK_Controller {
         $this->documentexpense_model->setLogger($this->Logger);
     }
 
+    public function finance_cashoutflows(){
+    	$this->loadView("finances/finance_cashoutflows_container");
+    }
     
     
     public function create_document(){

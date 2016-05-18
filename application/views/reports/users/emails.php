@@ -27,7 +27,7 @@
 			</div>
 			<div class="col-lg-2">
 				<a href="<?=$this->config->item('url_link');?>admin/writeEmail/<?=$person->getPersonId()?>">
-					<button class="btn btn-primary" style="float:right"> Escrever e-mail </button>
+			<!-- 		<button class="btn btn-primary" style="float:right"> Escrever e-mail </button> -->
 				</a>
 			</div>
 		</div>
