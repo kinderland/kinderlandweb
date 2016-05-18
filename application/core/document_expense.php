@@ -10,8 +10,9 @@ class DocumentExpense {
     private $documentExpenseUploadId;
     private $documentExpenseType;
     private $documentExpenseDescription;
+    private $documentExpenseName;
 
-    public function __construct($documentExpenseId, $documentExpenseNumber, $beneficiaryId, $documentExpenseValue, $documentExpenseDate, $documentExpenseUploadId, $documentExpenseType, $documentExpenseDescription) {
+    public function __construct($documentExpenseId, $documentExpenseNumber, $beneficiaryId, $documentExpenseValue, $documentExpenseDate, $documentExpenseUploadId, $documentExpenseType, $documentExpenseDescription, $documentExpenseName) {
         $this->documentExpenseId = $documentExpenseId;
         $this->documentExpenseNumber = $documentExpenseNumber;
         $this->beneficiaryId = $beneficiaryId;
@@ -20,20 +21,13 @@ class DocumentExpense {
         $this->documentExpenseUploadId = $documentExpenseUploadId;
         $this->documentExpenseType = $documentExpenseType;
         $this->documentExpenseDescription = $documentExpenseDescription;
-        
+        $this->documentExpenseName = $documentExpenseName;
     }
 
     public static function createDocumentExpenseObject($resultRow) {
         return new DocumentExpense(
-        		$resultRow->document_expense_id,
-        		$resultRow->document_number,
-        		$resultRow->beneficiary_id,
-        		$resultRow->document_value,
-        		$resultRow->document_date,
-        		$resultRow->document_expense_upload_id,
-        		$resultRow->document_type,
-        		$resultRow->description
-        		);
+                $resultRow->document_expense_id, $resultRow->document_number, $resultRow->beneficiary_id, $resultRow->document_value, $resultRow->document_date, $resultRow->document_expense_upload_id, $resultRow->document_type, $resultRow->description, $resultRow->document_name
+        );
     }
 
     public function setDocumentExpenseId($documentExpenseId) {
@@ -67,37 +61,45 @@ class DocumentExpense {
     public function getDocumentExpenseValue() {
         return $this->documentExpenseValue;
     }
-    
+
     public function setDocumentExpenseDate($documentExpenseDate) {
-    	$this->documentExpenseDate = $documentExpenseDate;
+        $this->documentExpenseDate = $documentExpenseDate;
     }
-    
+
     public function getDocumentExpenseDate() {
-    	return $this->documentExpenseDate;
+        return $this->documentExpenseDate;
     }
-    
-	public function setDocumentExpenseUploadId($documentExpenseUploadId) {
-    	$this->documentExpenseUploadId = $documentExpenseUploadId;
+
+    public function setDocumentExpenseUploadId($documentExpenseUploadId) {
+        $this->documentExpenseUploadId = $documentExpenseUploadId;
     }
-    
+
     public function getDocumentExpenseUploadId() {
-    	return $this->documentExpenseUploadId;
+        return $this->documentExpenseUploadId;
     }
-    
+
     public function setDocumentExpenseType($documentExpenseType) {
-    	$this->documentExpenseType = $documentExpenseType;
+        $this->documentExpenseType = $documentExpenseType;
     }
-    
+
     public function getDocumentExpenseType() {
-    	return $this->documentExpenseType;
+        return $this->documentExpenseType;
     }
-    
+
     public function setdocumentExpenseDescription($documentExpenseDescription) {
-    	$this->documentExpenseDescription = $documentExpenseDescription;
+        $this->documentExpenseDescription = $documentExpenseDescription;
     }
-    
+
     public function getDocumentExpenseDescription() {
-    	return $this->documentExpenseDescription;
+        return $this->documentExpenseDescription;
+    }
+
+    public function setDocumentExpenseName($documentExpenseName) {
+        $this->documentExpenseNumber = $documentExpenseName;
+    }
+
+    public function getDocumentExpenseName() {
+        return $this->documentExpenseName;
     }
 
 }
