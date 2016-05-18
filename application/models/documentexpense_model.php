@@ -61,6 +61,45 @@ class documentexpense_model extends CK_Model {
             return false;
         }
         
+        public function insertNewPostingExpense($documentexpenseId,$postingDate,$postingValue,$postingType,$accountName){
+        	$sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, account_name)
+					VALUES (?,?,?,?,?)";
+        	$Id=$this->executeReturningId($this->db,$sql,array($documentexpenseId,$postingDate,$postingValue,$postingType,$accountName));
+        	return $Id;
+        }
+        
+        public function insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue){
+        	$sql = "INSERT into posting_credit_card (portions, document_expense_id, posting_date, posting_value)
+					VALUES (?,?,?,?)";
+        	$Id=$this->executeReturningId($this->db,$sql,array($portions,$documentexpenseId,$postingDate,$postingValue));
+        	return $Id;
+        	
+        }
+        
+        public function insertNewBankTransferPayment($bankDataId,$documentexpenseId,$postingDate,$postingValue){
+        	$sql = "INSERT into posting_bank_transfer(bank_data_id, document_expense_id, posting_date, posting_value)
+					VALUES (?,?,?,?)";
+        	$Id=$this->executeReturningId($this->db,$sql,array($bankDataId,$documentexpenseId,$postingDate,$postingValue));
+        	return $Id;
+        	
+        }
+        
+        public function insertNewBankSlipPayment($portionNumber,$documentexpenseId,$postingDate,$postingValue){
+        	$sql = "INSERT into posting_bank_slip (portion_number, document_expense_id, posting_date, posting_value)
+					VALUES (?,?,?,?)";
+        	$Id=$this->executeReturningId($this->db,$sql,array($portionNumber,$documentexpenseId,$postingDate,$postingValue));
+        	return $Id;
+        	
+        }
+        
+        public function inserNewBankCheckPayment($check_number,$documentexpenseId,$postingDate,$postingValue){
+        	$sql = "INSERT into posting_bank_check(check_number, document_expense_id, posting_date, posting_value)
+					VALUES (?,?,?,?)";
+        	$Id=$this->executeReturningId($this->db,$sql,array($check_number,$documentexpenseId,$postingDate,$postingValue));
+        	return $Id;        	
+        	
+        }
+        
         public function InsertNewDocument($date,$number,$description,$type,$value){
             $sql="INSERT INTO document_expense (document_number,document_date,document_type,description,document_value)
                   VALUES (?,?,?,?,?)";

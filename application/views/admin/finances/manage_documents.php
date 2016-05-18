@@ -68,9 +68,8 @@ $( document ).ready(function() {
 
 
 		function sendInfoToModal(documentExpenseId, documentExpenseType, documentExpenseValue){
-			$("#document_expense_id").html(documentExpenseId);
+			$("#documentexpenseId").html(documentExpenseId);
     		$("#document_expense_value").html(documentExpenseValue);
-    		$("#document_expense_value").html(documentExpenseId);
     		$("#document_expense_type").html(documentExpenseType);
         }
 </script>
@@ -105,7 +104,7 @@ $( document ).ready(function() {
                                 <td><?php echo $document->documentexpenseValue; ?> </td>
                                 <td><?php echo $document->documentexpenseUploadId; ?> </td>
                                 <?php if($document->paid == false){?>
-                                <td><button class="btn btn-primary" onclick="sendInfoToModal()" data-toggle="modal" data-target="#myModal">Pagar</button></td>
+                                <td><button class="btn btn-primary" onclick="sendInfoToModal('<?= $document->documentexpenseId ?>', '<?= $document->documentexpenseValue ?>', '<?= $document->documentexpenseType ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
                                 <?php } else {?>
                                 <td> Pago </td>
                                 <?php }?>
@@ -145,7 +144,7 @@ $( document ).ready(function() {
 												<div class="col-lg-6">
 												
 												
-													<input type="hidden" id="colonist_id" name="colonist_id" value="" />
+													<input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
                                                     <input type="hidden" id="discount" name="discount" value="" />
                                                     <input type="hidden" id="summer_camp_id" name="summer_camp_id" value="" />
                                                     													
@@ -170,30 +169,29 @@ $( document ).ready(function() {
                                                     </tr>
                                                      <tr>
                                                         <td> Nome: </td>
-                                                        <input id='beneficiary_name'></input> <br>
+                                                        <input type="text" id='beneficiary_name'></input> <br>
                                                     </tr>
 
                                                     <tr>
                                                         <td> CNPJ/CPF: </td>
-                                                        <input id='beneficiary_dnumber' name="beneficiary_dnumber"></input> <br>
+                                                        <input type="text" id='beneficiary_dnumber' name="beneficiary_dnumber"></input> <br>
                                                     </tr>
 
                                                     <tr>
                                                         <td> Telefone: </td>
-                                                        <input id='beneficiary_phone'></input> <br><br>
+                                                        <input type="text" id='beneficiary_phone'></input> <br><br>
                                                   
                                                     
                         <table class="table"><tr><th>Banco</th><th>Agência</th><th>Conta</th><th> X </th></tr>
                                     <?php
-                                    foreach ($documents as $document) {
+                                    foreach ($banks as $bank) {
                                         ?><tr>
-                                <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->getDocumentId() ?>">
-                                       <?= date_format(date_create($document->getDocumentExpenseDate()), 'd/m/y'); ?></a></td>
+								<input type="hidden" id="person_id" name="person_id" value="" />
+                                <td><?php echo $bank->getBankNumber(); ?> </td>
+                                <td><?php echo $bank->getBankAgency(); ?> </td>
+                                <td><?php echo $bank->getAccountNumber(); ?> </td>
+                                <td><input type="checkbox" id="account_selected" name="account_selected" <?= ($bank->getBankDataId())?"checked":""?> /></td>
 
-                                <td><?php echo $document->getDocumentExpenseType(); ?> </td>
-                                <td><?php echo $document->getDocumentExpenseValue(); ?> </td>
-                                <td><?php echo $document->getDocumentExpenseUploadId(); ?> </td>
-                                <td><button class="btn btn-primary" onclick="sendInfoToModal()" data-toggle="modal" data-target="#myModal">Cancelar</button></td>
                                 </tr>
                                 <?php
                             }	

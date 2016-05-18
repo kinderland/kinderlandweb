@@ -813,11 +813,46 @@ class Admin extends CK_Controller {
  						$this->loadReportView('admin/finances/editDocument', $data);
  					}
  		}
+ 		
+ 		
+ 	public function postingExpense(){
+ 		$this->Logger->info("Running: " . __METHOD__);
+ 		
+ 		$documentexpenseId = $_POST['document_expense_id'];
+ 		$postingDate = $_POST['posting_date'];
+ 		$postingValue = $_POST['posting_value'];
+ 		$postingType = $_POST['posting_type'];
+ 		$accountName = $_POST['account_name'];
+ 		
+ 		$this->documentexpense_model->insertNewPostingExpense(documentexpenseId, postingDate, postingValue, postingType, accountName);
+ 		
+ 		if($postingType == "Crédito" ){
+ 			$portions = $_POST['portions'];
+ 			$this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
+ 		}
+ 		else if($postingType == "Dinheiro"){
+ 			$portionNumber = $_POST['portion_number'];
+ 			$this->documentexpense_model->insertNewBankSlipPayment($portionNumber,$documentexpenseId,$postingDate,$postingValue);
+ 		}
+ 		else if($postingType == "Cheque"){
+ 			$checkNumber = $_POST['check_number'];
+ 			$this->documentexpense_model->inserNewBankCheckPayment($check_number,$documentexpenseId,$postingDate,$postingValue);
+ 		}
+ 		else if($postingType == "Débito"){
+ 			$portionNumber = $_POST['portion_number'];
+ 			$this->documentexpense_model->insertNewBankSlipPayment($portionNumber,$documentexpenseId,$postingDate,$postingValue);		
+ 		}
+ 		else{ //transferência
+ 			$bankDataId = $_POST['bank_data_id'];
+ 			$this->documentexpense_model->insertNewBankTransferPayment($bankDataId,$documentexpenseId,$postingDate,$postingValue);
+ 		}
+ 		
+ 	}
     
     public function manageDocuments(){
     	$documents = $this->documentexpense_model->getAllDocumentsExpense();
     	$data['banks'] = $this->documentexpense_model->getAllBankData();
-    	$formaspagamento = array("Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
+    	$formaspagamento = array("Boleto", "Cheque", "Crédito", "Débito", "Transferência");
     	 
     	$doc = array();
     	 
