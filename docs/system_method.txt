@@ -379,3 +379,6 @@
 "postingExpense";"admin";2
 "postingExpense";"admin";4
 "password";"admin";2
+"deleteDocument";"admin";2
+"deleteDocument";"admin";4
+
