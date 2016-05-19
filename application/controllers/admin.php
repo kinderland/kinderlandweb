@@ -50,9 +50,6 @@ class Admin extends CK_Controller {
         $this->documentexpense_model->setLogger($this->Logger);
     }
 
-    public function finance_cashoutflows(){
-    	$this->loadView("finances/finance_cashoutflows_container");
-    }
     
     
     public function create_document(){
@@ -744,7 +741,7 @@ class Admin extends CK_Controller {
         $db_date = implode("-", array_reverse($date));
         try {
         	$this->generic_model->startTransaction();
-         	$documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value,$name);
+         	$documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value, $name);
             $this->generic_model->commitTransaction();
             $this->Logger->info("New document successfully inserted");
             $url = $this->config->item('url_link') . "admin/manageDocuments";
@@ -773,16 +770,14 @@ class Admin extends CK_Controller {
  		$description = $document->getDocumentExpenseDescription();
  		$value = $document->getDocumentExpenseValue();
  		$type = $document->getDocumentExpenseType();
-                $name = $document->getDocumentExpenseName();
  		$date = explode("-", $date);
- 		$date = implode("/", array_reverse($date)); 
+ 		$date = implode("/", array_reverse($date));
  		$data['id'] = $document_id;
  		$data['date'] = $date;
  		$data['number'] = $number;
  		$data['description'] = $description;
  		$data['value'] = $value;
  		$data['type'] = $type;
-                $data['name'] = $name;
  		$this->loadReportView("admin/finances/editDocument", $data);
  	}
  	
@@ -799,7 +794,7 @@ class Admin extends CK_Controller {
 
  		try {
  			$this->generic_model->startTransaction();
- 			$documentId = $this->documentexpense_model->updateDocument($document_id, $db_date,$number, $description, $value,$name);
+ 			$documentId = $this->documentexpense_model->updateDocument($document_id, $db_date,$number, $description, $value, $name);
  			$this->generic_model->commitTransaction();
  			$this->Logger->info("Document successfully updated");
  			$url = $this->config->item('url_link') . "admin/manageDocuments";
@@ -822,18 +817,24 @@ class Admin extends CK_Controller {
  		
  	public function postingExpense(){
  		$this->Logger->info("Running: " . __METHOD__);
- 		
- 		$documentexpenseId = $_POST['document_expense_id'];
- 		$postingDate = $_POST['posting_date'];
- 		$postingValue = $_POST['posting_value'];
- 		$postingType = $_POST['posting_type'];
- 		$accountName = $_POST['account_name'];
+ 		$documentexpenseId = $_POST['documentexpenseId'];
+ 		$postingDate = $_POST['postingDate'];
+ 		$postingValue = $_POST['postingValue'];
+ 		$postingType = $_POST['postingType'];
+ 		$accountName = $_POST['accountName'];
  		
  		$this->documentexpense_model->insertNewPostingExpense(documentexpenseId, postingDate, postingValue, postingType, accountName);
  		
+ 		echo "true";
+ 		return;
+ 		
  		if($postingType == "Crédito" ){
  			$portions = $_POST['portions'];
- 			$this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
+ 			$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
+ 			if ($result != null)
+ 				echo "true";
+ 			else
+ 					echo "false";
  		}
  		else if($postingType == "Dinheiro"){
  			$portionNumber = $_POST['portion_number'];
@@ -857,7 +858,7 @@ class Admin extends CK_Controller {
     public function manageDocuments(){
     	$documents = $this->documentexpense_model->getAllDocumentsExpense();
     	$data['banks'] = $this->documentexpense_model->getAllBankData();
-    	$formaspagamento = array("Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
+    	$formaspagamento = array("Boleto", "Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
     	 
     	$doc = array();
     	 
@@ -892,6 +893,12 @@ class Admin extends CK_Controller {
     		$data['documents'] = $doc;
     		$this->loadReportView("admin/finances/manage_documents", $data);
     }
+    
+    public function finance_cashoutflows(){
+    	    $this->loadView("finances/finance_cashoutflows_container");
+    	}
+    	 
+    
     
 
     

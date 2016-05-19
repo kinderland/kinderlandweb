@@ -62,15 +62,34 @@ $( document ).ready(function() {
 	  });
 	});
 
-	<?php if($message){?>
-		alert('<?php echo $message;?>');
-		<?php }?>
 
 
-		function sendInfoToModal(documentExpenseId, documentExpenseType, documentExpenseValue){
+        function post(path, params, method) {
+            method = method || "post"; // Set method to post by default if not specified.
+            
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+                    form.appendChild(hiddenField);
+                }
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+		
+		function sendInfoToModal(documentExpenseId){
+			alert("Oi");
 			$("#documentexpenseId").html(documentExpenseId);
-    		$("#document_expense_value").html(documentExpenseValue);
-    		$("#document_expense_type").html(documentExpenseType);
         }
 </script>
 
@@ -91,6 +110,40 @@ $( document ).ready(function() {
                     if (isset($documents) && count($documents) > 0) {
                         ?>
                         <table class="table"><tr><th>Data</th><th>Tipo</th><th>Valor</th><th>Update de imagem</th><th>Forma de pagamento</th></tr>
+                        
+                        
+                         		<script>
+									function formaPagamento(){
+										
+										var documentexpenseId = document.getElementById("documentexpenseId").textContent;
+								 		var postingDate = "2016-05-30";
+								 		var postingValue = document.getElementById("postingValue").value;
+								 		var postingType = "Crédito";
+								 		var accountName = "Aluguel";
+								 		var portions = 1;
+								 		
+
+								 		$.post('<?= $this->config->item('url_link');?>admin/postingExpense',
+			            						{documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions},
+			            						function(data){
+			            							if(data=="true"){
+			            								alert("Colonista excluído com sucesso");
+			            								location.reload();
+			            							}
+			            							else if(data=="false") {
+			            								alert("Não foi possível excluir o colonista. Tente novamente!");
+			            								location.reload();
+			            							}
+			            						}
+			            				);		
+
+
+
+									}
+
+                        		</script>                       	
+                        
+
                                     <?php
                                     foreach ($documents as $document) {
                                         ?>
@@ -104,7 +157,7 @@ $( document ).ready(function() {
                                 <td><?php echo $document->documentexpenseValue; ?> </td>
                                 <td><?php echo $document->documentexpenseUploadId; ?> </td>
                                 <?php if($document->paid == false){?>
-                                <td><button class="btn btn-primary" onclick="sendInfoToModal('<?= $document->documentexpenseId ?>', '<?= $document->documentexpenseValue ?>', '<?= $document->documentexpenseType ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
+                                <td><button class="btn btn-primary" onclick="sendInfoToModal('<?= $document->documentexpenseId ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
                                 <?php } else {?>
                                 <td> Pago </td>
                                 <?php }?>
@@ -138,15 +191,13 @@ $( document ).ready(function() {
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-lg-6 middle-content">
-								<form name="form_password" method="POST" action="<?=$this->config->item('url_link')?>admin/password" id="form_password">	                                         
+								<form name="form_postingExpense" method="POST" action="<?=$this->config->item('url_link')?>admin/postingExpense" id="form_postingExpense">	                                         
 										<div class="row">
 											<div class="form-group">
 												<div class="col-lg-6">
 												
 												
 													<input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
-                                                    <input type="hidden" id="discount" name="discount" value="" />
-                                                    <input type="hidden" id="summer_camp_id" name="summer_camp_id" value="" />
                                                     													
 													<tr>
                                                         <td> Forma de pagamento:</td> 
@@ -164,22 +215,27 @@ $( document ).ready(function() {
 	                       									</select>
                                                     </tr>                                        
                                                     <br><br>
+                                                    <tr> 
+                                                    	<td> Valor: </td>
+                                                    	<input type="text" id="postingValue" name="postingValue" ></input> <br>
+                                                    </tr>
+                                                    
                                                     <tr>
                                                         <td> Beneficiário: </td>
                                                     </tr>
                                                      <tr>
                                                         <td> Nome: </td>
-                                                        <input type="text" id='beneficiary_name'></input> <br>
+                                                        <input type="text" id="beneficiary_name"></input> <br>
                                                     </tr>
 
                                                     <tr>
                                                         <td> CNPJ/CPF: </td>
-                                                        <input type="text" id='beneficiary_dnumber' name="beneficiary_dnumber"></input> <br>
+                                                        <input type="text" id="beneficiary_dnumber" name="beneficiary_dnumber"></input> <br>
                                                     </tr>
 
                                                     <tr>
                                                         <td> Telefone: </td>
-                                                        <input type="text" id='beneficiary_phone'></input> <br><br>
+                                                        <input type="text" id="beneficiary_phone"></input> <br><br>
                                                   
                                                     
                         <table class="table"><tr><th>Banco</th><th>Agência</th><th>Conta</th><th> X </th></tr>
