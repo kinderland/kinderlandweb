@@ -815,6 +815,30 @@ class Admin extends CK_Controller {
  		}
  		
  		
+ 	public function deleteDocument($document_id = NULL) {
+ 		try {
+ 			$url = $this->config->item('url_link') . "admin/manageDocuments";
+ 			if ($document_id) {
+ 					$this->generic_model->startTransaction();
+ 					$this->documentexpense_model->deleteAllExpenses($document_id);
+ 					$this->documentexpense_model->deleteDocument($document_id);
+ 					$this->generic_model->commitTransaction();
+ 					echo "<SCRIPT LANGUAGE='JavaScript'>
+                     window.alert('Documento excluído com sucesso')
+                     window.location.href='" . $url . "'</SCRIPT>";
+ 			} else {
+ 					echo "<SCRIPT LANGUAGE='JavaScript'>
+                     window.alert('Ocorreu um erro ao excluir o documento. Tente novamente mais tarde')
+                     window.location.href='" . $url . "'</SCRIPT>";
+ 				}
+ 				} catch (Exception $ex) {
+ 							$this->Logger->error("Failed to delete document" . $document_id);
+ 							 $this->generic_model->rollbackTransaction();
+ 							$data['error'] = true;
+ 							$this->loadReportView('admin/finances/editDocument', $data);
+ 					}
+ 	}
+ 		
  	public function postingExpense(){
  		$this->Logger->info("Running: " . __METHOD__);
  		$documentexpenseId = $_POST['documentexpenseId'];
