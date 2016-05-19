@@ -846,35 +846,35 @@ class Admin extends CK_Controller {
  		$postingValue = $_POST['postingValue'];
  		$postingType = $_POST['postingType'];
  		$accountName = $_POST['accountName'];
- 		
- 		$this->documentexpense_model->insertNewPostingExpense(documentexpenseId, postingDate, postingValue, postingType, accountName);
- 		
- 		echo "true";
- 		return;
- 		
- 		if($postingType == "Crédito" ){
- 			$portions = $_POST['portions'];
- 			$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
- 			if ($result != null)
- 				echo "true";
- 			else
- 					echo "false";
- 		}
- 		else if($postingType == "Dinheiro"){
- 			$portionNumber = $_POST['portion_number'];
- 			$this->documentexpense_model->insertNewBankSlipPayment($portionNumber,$documentexpenseId,$postingDate,$postingValue);
- 		}
- 		else if($postingType == "Cheque"){
- 			$checkNumber = $_POST['check_number'];
- 			$this->documentexpense_model->inserNewBankCheckPayment($check_number,$documentexpenseId,$postingDate,$postingValue);
- 		}
- 		else if($postingType == "Débito"){
- 			$portionNumber = $_POST['portion_number'];
- 			$this->documentexpense_model->insertNewBankSlipPayment($portionNumber,$documentexpenseId,$postingDate,$postingValue);		
- 		}
- 		else{ //transferência
- 			$bankDataId = $_POST['bank_data_id'];
- 			$this->documentexpense_model->insertNewBankTransferPayment($bankDataId,$documentexpenseId,$postingDate,$postingValue);
+
+ 		$result = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
+ 		if($result != null){
+		 		if($postingType == "Cartão de crédito" ){
+		 			$portions = $_POST['portions'];
+		 			$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
+		 			if ($result != null){
+		 				echo "true";
+		 			}
+		 			else{
+		 					echo "false";
+		 			}
+		 		}
+		 		else if($postingType == "Dinheiro"){
+		 			$portionNumber = $_POST['portion_number'];
+		 			$this->documentexpense_model->insertNewBankSlipPayment($portionNumber,$documentexpenseId,$postingDate,$postingValue);
+		 		}
+		 		else if($postingType == "Cheque"){
+		 			$checkNumber = $_POST['check_number'];
+		 			$this->documentexpense_model->inserNewBankCheckPayment($check_number,$documentexpenseId,$postingDate,$postingValue);
+		 		}
+		 		else if($postingType == "Débito"){
+		 			$portionNumber = $_POST['portion_number'];
+		 			$this->documentexpense_model->insertNewBankSlipPayment($portionNumber,$documentexpenseId,$postingDate,$postingValue);		
+		 		}
+		 		else{ //transferência
+		 			$bankDataId = $_POST['bank_data_id'];
+		 			$this->documentexpense_model->insertNewBankTransferPayment($bankDataId,$documentexpenseId,$postingDate,$postingValue);
+ 				}
  		}
  		
  	}

@@ -118,8 +118,8 @@ $( document ).ready(function() {
 										var documentexpenseId = document.getElementById("documentexpenseId").textContent;
 								 		var postingDate = "2016-05-30";
 								 		var postingValue = document.getElementById("postingValue").value;
-								 		var postingType = "Crédito";
-								 		var accountName = "Aluguel";
+								 		var postingType = "Cartão de crédito";
+								 		var accountName = "aluguel";
 								 		var portions = 1;
 								 		
 
