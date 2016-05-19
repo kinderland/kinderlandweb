@@ -101,7 +101,7 @@ class documentexpense_model extends CK_Model {
         }
         
         public function InsertNewDocument($date,$number,$description,$type,$value,$name){
-            $sql="INSERT INTO document_expense (document_number,document_date,document_type,description,document_value,document_name)
+            $sql="INSERT INTO document_expense (document_number,document_date,document_type,description,document_value, document_name)
                   VALUES (?,?,?,?,?,?)";
             $Id=$this->executeReturningId($this->db,$sql,array($number,$date,$type,$description,$value,$name));
             return $Id;
@@ -112,8 +112,8 @@ class documentexpense_model extends CK_Model {
                  . "document_date = ?, "
                  . "document_number=?, "
                  . "description=?, "
-                 . "document_value=?, "
-                 . "document_name=? "      
+                 . "document_value=? "
+                 . "document_name=? "
                  . "WHERE document_expense_id='?'";
          $resultSet = $this->execute($this->db, $sql, array($date,$number,$description,$value,$name,intval($id)));
          return $resultSet;
