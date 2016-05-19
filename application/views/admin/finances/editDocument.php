@@ -24,8 +24,7 @@
         <link href="<?= $this->config->item('assets'); ?>css/datepicker.css" rel="stylesheet" />
         <link rel="text/javascript" href="<?= $this->config->item('assets'); ?>js/datepicker.less.js" />
         <?php
-        $exclusionUrl = $this->config->item('url_link') . "admin/manageDocuments/" . $id;
-        echo $date;
+        $exclusionUrl = $this->config->item('url_link') . "admin/deleteDocument/" . $id;
 
         function dataSwitch($option) {
             switch ($option) {

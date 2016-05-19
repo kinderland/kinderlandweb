@@ -376,3 +376,5 @@
 "finance_cashoutflows";"admin";2
 "finance_cashoutflows";"admin";4
 "postingExpenses";"reports";2
+"deleteDocument";"admin";2
+"deleteDocument";"admin";4
