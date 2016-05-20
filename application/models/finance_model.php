@@ -39,6 +39,18 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
+	public function getAllPostingExpenses(){
+		$sql = "SELECT *
+				FROM posting_expense";
+		
+		$result = $this->executeRows($this->db, $sql);		
+			
+		if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
 	public function getAllAccountsInformations(){
 		$sql = "SELECT a.account_name as account_name, a.description as account_description, at.name as account_type 
 				FROM account a
@@ -65,6 +77,15 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
+	public function getAllAccountNames(){
+		$sql = "SELECT account_name FROM account";
+		 $result = $this->executeRows($this->db, $sql);
+		 if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
 	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type) {
 	
 		$this -> Logger -> info("Running: " . __METHOD__);
@@ -79,7 +100,7 @@ class finance_model extends CK_Model{
 	
 		return false;
 	}
-	
+
 	public function insertNewAccount($account_name, $account_type, $account_description) {
 
 		$sql = 'INSERT INTO account(account_name, description, account_type_id) VALUES (?,?,?)';
@@ -90,5 +111,13 @@ class finance_model extends CK_Model{
 			return $returnId;
 
 		return false;
+	}
+	
+	public function deleteAccount($account_name){
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$deleteSql = 'DELETE FROM account WHERE account_name = ?';
+	
+		return $this->execute($this->db, $deleteSql, array($account_name));
 	}
 }

@@ -127,6 +127,22 @@ class Admin extends CK_Controller {
     	return;    	
     }
     
+    public function checkIfAccountNameIsInUse(){
+    	$account_name = $this->input->post("account_name", true);
+    	
+    	$postingExpenses = $this -> finance_model -> getAllPostingExpenses();
+    	
+    	foreach($postingExpenses as $pe){
+    		if(strcmp(mb_strtoupper($pe->account_name, 'UTF-8'),mb_strtoupper($account_name, 'UTF-8')) == 0){
+    			echo false;
+    			return;
+    		}
+    	}
+    	
+    	echo true;
+    	return; 
+    }
+    
     public function newAccountName(){
     	$account_name = $this->input->post("account_name", true);
     	$account_type = $this->input->post("account_type", true);
@@ -140,6 +156,19 @@ class Admin extends CK_Controller {
     		return;
     	}    		
     	
+    }
+    
+    public function deleteAccountName(){
+    	$account_name = $this->input->post("account_name", true);
+    	 
+    	if($this->finance_model->deleteAccount($account_name)){
+    		echo true;
+    		return;
+    	}else{
+    		echo false;
+    		return;
+    	}
+    	 
     }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
@@ -901,7 +930,7 @@ class Admin extends CK_Controller {
 
  		$resultado = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
  		if($resultado != null){
-		 		if($postingType == "Cartão de crédito" ){
+		 		if($postingType == "Crédito" ){
 		 			$portions = $_POST['portions'];
 		 			$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
 		 			if ($result != null){
@@ -951,6 +980,7 @@ class Admin extends CK_Controller {
 		 				echo "false";
 		 			}
  				}
+ 				echo "false";
  		}
  		
  	}
@@ -982,11 +1012,8 @@ class Admin extends CK_Controller {
     			$doc[] = $obj;
     				
     	}
-    	$selected_option = $this->input->post("postingType", TRUE);
-    	if (empty($selected_option) || !isset($selected_option))
-    		$data['selected'] = "no_select";
-		else
-		$data['selected'] = $selected_option;
+			$accountNames = $this -> finance_model -> getAllAccountNames();
+			$data['accountNames'] = $accountNames;
     		$data['documents'] = $doc;
 		
     		$this->loadReportView("admin/finances/manage_documents", $data);
