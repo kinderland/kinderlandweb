@@ -88,7 +88,6 @@ $( document ).ready(function() {
         }
 		
 		function sendInfoToModal(documentExpenseId, dateNow){
-			alert("Oi");
 			$("#documentexpenseId").html(documentExpenseId);
 			$("#dateNow").html(dateNow);
         }
@@ -120,8 +119,7 @@ $( document ).ready(function() {
 										
 								 		var postingDate = document.getElementById("dateNow").textContent;
 								 		var postingValue = document.getElementById("postingValue").value;
-								 		var postingType = document.getElementById("postingType").textContent;
-								 		alert(postingType);
+								 		var postingType = document.getElementById("postingType").value;
 								 		var accountName = "aluguel";
 								 		var portions = 1;
 								 		
@@ -203,16 +201,18 @@ $( document ).ready(function() {
                                                           <form method="GET">
                    											 <select name="postingType" id="postingType">
 									
-									                            <option <?php if ($selected == "Crédito") { ?>selected <?php } ?> value="Crédito"  >Crédito</option>
-											                    <option <?php if ($selected == "Dinheiro") { ?>selected <?php } ?> value="Dinheiro" >Dinheiro</option>  
-											                    <option <?php if ($selected == "Débito") { ?>selected <?php } ?> value="Débito">Débito</option>  
-											                    <option <?php if ($selected == "boleto") { ?>selected <?php } ?> value="boleto">Boleto</option> 
-											                    <option <?php if ($selected == "no_select") { ?>selected <?php } ?> value="no_select">--Selecione-- </option>
+									                            <option value="Crédito"  >Crédito</option>
+											                    <option value="Dinheiro" >Dinheiro</option>  
+											                    <option  value="Débito">Débito</option>  
+											                    <option value="Boleto">Boleto</option> 
+											                    <option value="Transferência">Transferência</option>
+											                    <option value="Cheque">Cheque</option>
+											                    
 											                </select>
 												
 													<input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
                                                     <input type="hidden" id="dateNow" name="dateNow" value="" />	
-                                                    <input type="hidden" id="postingType" name="postingType" value="<?php echo $selected; ?>" >												
+                                                    <input type="hidden" id="postingType" name="postingType" value="" >												
 													<tr>
                                                                                                
                                                     <br><br>
@@ -220,6 +220,13 @@ $( document ).ready(function() {
                                                     	<td> Valor: </td>
                                                     	<input type="text" id="postingValue" name="postingValue" ></input> <br>
                                                     </tr>
+                                                    <tr>
+                                                    <td>
+                                                    <form action="demo_form.asp" autocomplete="on">
+                                                    	Conta: <input type="text" id="account_name">
+                                                    	</form>
+                                                    	</td>
+                                                    	</tr> <br>
                                                     
                                                     <tr>
                                                         <td> Beneficiário: </td>

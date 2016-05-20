@@ -931,7 +931,7 @@ class Admin extends CK_Controller {
 
  		$resultado = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
  		if($resultado != null){
-		 		if($postingType == "Cartão de crédito" ){
+		 		if($postingType == "Crédito" ){
 		 			$portions = $_POST['portions'];
 		 			$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
 		 			if ($result != null){
@@ -981,6 +981,7 @@ class Admin extends CK_Controller {
 		 				echo "false";
 		 			}
  				}
+ 				echo "false";
  		}
  		
  	}
@@ -1012,11 +1013,7 @@ class Admin extends CK_Controller {
     			$doc[] = $obj;
     				
     	}
-    	$selected_option = $this->input->post("postingType", TRUE);
-    	if (empty($selected_option) || !isset($selected_option))
-    		$data['selected'] = "no_select";
-		else
-		$data['selected'] = $selected_option;
+
     		$data['documents'] = $doc;
 		
     		$this->loadReportView("admin/finances/manage_documents", $data);
