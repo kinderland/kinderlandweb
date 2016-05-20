@@ -882,7 +882,7 @@ class Admin extends CK_Controller {
                 echo "<SCRIPT LANGUAGE='JavaScript'>
                      window.alert('Ocorreu um erro ao excluir o documento. Tente novamente mais tarde')
                      window.location.href='" . $url . "'</SCRIPT>";
-<<<<<<< HEAD
+
  				}
  				} catch (Exception $ex) {
  							$this->Logger->error("Failed to delete document" . $document_id);
@@ -989,111 +989,14 @@ class Admin extends CK_Controller {
 		else
 		$data['selected'] = $selected_option;
     		$data['documents'] = $doc;
+		
     		$this->loadReportView("admin/finances/manage_documents", $data);
-=======
-            }
-        } catch (Exception $ex) {
-            $this->Logger->error("Failed to delete document" . $document_id);
-            $this->generic_model->rollbackTransaction();
-            $data['error'] = true;
-            $this->loadReportView('admin/finances/editDocument', $data);
-        }
-    }
 
-    public function postingExpense() {
-        $this->Logger->info("Running: " . __METHOD__);
-        $documentexpenseId = $_POST['documentexpenseId'];
-        $postingDate = $_POST['postingDate'];
-        $postingValue = $_POST['postingValue'];
-        $postingType = $_POST['postingType'];
-        $accountName = $_POST['accountName'];
-
-        $result = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
-        if ($result != null) {
-            if ($postingType == "Cartão de crédito") {
-                $portions = $_POST['portions'];
-                $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
-                if ($result != null) {
-                    echo "true";
-                } else {
-                    echo "false";
-                }
-            } else if ($postingType == "Dinheiro") {
-                $portionNumber = $_POST['portion_number'];
-                $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
-                if ($result != null) {
-                    echo "true";
-                } else {
-                    echo "false";
-                }
-            } else if ($postingType == "Cheque") {
-                $checkNumber = $_POST['check_number'];
-                $result = $this->documentexpense_model->inserNewBankCheckPayment($check_number, $documentexpenseId, $postingDate, $postingValue);
-                if ($result != null) {
-                    echo "true";
-                } else {
-                    echo "false";
-                }
-            } else if ($postingType == "Débito") {
-                $portionNumber = $_POST['portion_number'];
-                $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
-                if ($result != null) {
-                    echo "true";
-                } else {
-                    echo "false";
-                }
-            } else { //transferência
-                $bankDataId = $_POST['bank_data_id'];
-                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue);
-                if ($result != null) {
-                    echo "true";
-                } else {
-                    echo "false";
-                }
-            }
-        }
-    }
-
-    public function manageDocuments() {
-        $documents = $this->documentexpense_model->getAllDocumentsExpense();
-        $data['banks'] = $this->documentexpense_model->getAllBankData();
-        $formaspagamento = array("Boleto", "Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
-
-        $doc = array();
-
-        foreach ($documents as $document) {
-            $obj = new StdClass();
-            $documentexpenseId = $document->getDocumentExpenseId();
-            $obj->documentexpenseId = $document->getDocumentExpenseId();
-            $obj->documentexpenseNumber = $document->getDocumentExpenseNumber();
-            $obj->documentexpenseValue = $document->getDocumentExpenseValue();
-            $obj->documentexpenseDate = $document->getDocumentExpenseDate();
-            $obj->documentexpenseUploadId = $document->getDocumentExpenseUploadId();
-            $obj->documentexpenseType = $document->getDocumentExpenseType();
-            $obj->documentexpenseDescription = $document->getDocumentExpenseDescription();
-            $obj->beneficiaryId = $document->getBeneficiaryId();
-            if ($this->documentexpense_model->getDocumentExpensePaidById($documentexpenseId) != null) {
-                $obj->paid = true;
-            } else
-                $obj->paid = false;
-
-            $doc[] = $obj;
-        }
-        if (isset($_GET['formapagamento_f']))
-            $formapagamento = $_GET['formapagamento_f'];
-        else {
-            $formapagamento = "Dinheiro";
-        }
-
-        $data['formapagemento_escolhido'] = $formapagamento;
-        $data['formaspagamento'] = $formaspagamento;
-        $data['documents'] = $doc;
-        $this->loadReportView("admin/finances/manage_documents", $data);
     }
 
     public function finance_cashoutflows() {
         $this->loadView("finances/finance_cashoutflows_container");
->>>>>>> b252226c5ecbc663ca78a788a33f4ac3394a2e5c
+
     }
 
     public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(), $type = null) {
