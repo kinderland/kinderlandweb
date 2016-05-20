@@ -12,7 +12,7 @@
             <div class ="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions)) { ?>
-                        <option selected="selected" value="<?php // $this->config->item('url_link'); ?>"> Nome de Contas </option>
+                        <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/manage_accounts"> Nome de Contas </option>
                         <option value="<?= $this->config->item('url_link'); ?>admin/credit_operation"> Crédito de Caixinha </option>
                     <?php } ?>
                 </select>

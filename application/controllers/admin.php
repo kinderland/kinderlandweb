@@ -32,6 +32,7 @@ class Admin extends CK_Controller {
         $this->load->model('eventsubscription_model');
         $this->load->model('campaign_model');
         $this->load->model('documentexpense_model');
+        $this->load->model('finance_model');
 
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
@@ -48,6 +49,7 @@ class Admin extends CK_Controller {
 		
         $this->campaign_model->setLogger($this->Logger);
         $this->documentexpense_model->setLogger($this->Logger);
+        $this->finance_model->setLogger($this->Logger);
     }
 
     
@@ -101,6 +103,49 @@ class Admin extends CK_Controller {
     		echo "false";
     		return;
     	}
+    }
+    
+    public function manage_accounts(){
+    	$accounts = $this -> finance_model -> getAllAccountsInformations();
+    	
+    	$accountTypes = $this -> finance_model -> getAllAccountTypes();
+    	
+    	$data['accounts'] = $accounts;
+    	$data['account_name'] = "";
+    	$data['account_description'] = "";
+    	$data['accountTypes'] = $accountTypes;
+    	$this->loadReportView("admin/finances/manage_accounts", $data);
+    }
+    
+    public function checkIfAccountNameExists(){
+    	$account_name = $this->input->post("account_name", true);
+    	
+    	$accounts = $this -> finance_model -> getAllAccountsInformations();
+    	
+    	foreach($accounts as $account){
+    		if(strcmp(mb_strtoupper($account->account_name, 'UTF-8'),mb_strtoupper($account_name, 'UTF-8')) == 0){
+    			echo false;
+    			return;
+    		}
+    	}
+    	
+    	echo true;
+    	return;    	
+    }
+    
+    public function newAccountName(){
+    	$account_name = $this->input->post("account_name", true);
+    	$account_type = $this->input->post("account_type", true);
+    	$account_description = $this->input->post("account_description", true);
+    	
+    	if($this->finance_model->insertNewAccount($account_name,$account_type,$account_description)){
+    		echo true;
+    		return;
+    	}else{
+    		echo false;
+    		return;
+    	}    		
+    	
     }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
