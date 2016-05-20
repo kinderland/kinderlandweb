@@ -90,6 +90,29 @@
 				});
 			}
 		}
+
+		function deleteAccountName(account_name){
+			
+			$.post("<?php  echo $this->config->item('url_link');?>admin/checkIfAccountNameIsInUse", {account_name: account_name}, 
+					function(data){
+						if(data==true){						
+							$.post("<?= $this->config->item('url_link');?>admin/deleteAccountName",{account_name: account_name},
+								function(data){
+									if(data){
+										alert("Nome de Conta excluído com sucesso!");
+										location.reload();	
+									}
+									else{
+										alert("Houve um erro na exclusão do Nome de Conta. Tente novamente!");	
+									}
+								});
+						}
+						else{
+							
+							alert("O Nome de Conta já está sendo usado. Ele não pode ser excluído.");
+						}
+					});
+		}
 		
         </script>
         <div class="scroll">
@@ -104,6 +127,7 @@
                                     <th> Nome </th>
                                     <th> Descrição </th>
                                     <th> Categoria </th>
+                                    <th> Ação </th>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
@@ -115,6 +139,7 @@
                                         <td><?= $a->account_name ?></td>
                                         <td><?= $a->account_description ?></td>
                                         <td><?= $a->account_type ?></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="deleteAccountName('<?= $a->account_name?>')">Excluir</button></td>
                                     </tr>
                                     <?php
                                 }}

@@ -376,6 +376,8 @@
 "finance_cashoutflows";"admin";2
 "finance_cashoutflows";"admin";4
 "postingExpenses";"reports";2
+"checkIfAccountNameIsInUse";"admin";2
+"deleteAccountName";"admin";2
 "postingExpense";"admin";2
 "postingExpense";"admin";4
 "password";"admin";2
