@@ -386,4 +386,5 @@
 "manage_accounts";"admin";2
 "checkIfAccountNameExists";"admin";2
 "newAccountName";"admin";2
-
+"verifyDocumentExpense";"admin";2
+"verifyDocumentExpense";"admin";4

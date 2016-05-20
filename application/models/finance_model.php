@@ -76,8 +76,31 @@ class finance_model extends CK_Model{
 		else
 			return NULL;
 	}
-
 	
+	public function getAllAccountNames(){
+		$sql = "SELECT account_name FROM account";
+		 $result = $this->executeRows($this->db, $sql);
+		 if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
+	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type) {
+	
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$sql = 'INSERT INTO event(event_name, description, date_created, date_start, date_finish,
+            date_start_show, date_finish_show, enabled, capacity_male, capacity_female,capacity_nonsleeper,type_id) VALUES (?,?, current_timestamp,?,?,?,?,?,?,?,?,?)';
+	
+		$returnId = $this -> executeReturningId($this -> db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper,intval($type)));
+	
+		if ($returnId)
+			return $returnId;
+	
+		return false;
+	}
+
 	public function insertNewAccount($account_name, $account_type, $account_description) {
 
 		$sql = 'INSERT INTO account(account_name, description, account_type_id) VALUES (?,?,?)';

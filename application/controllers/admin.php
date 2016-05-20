@@ -804,7 +804,7 @@ class Admin extends CK_Controller {
         $description = $this->input->post("description", TRUE);
         $type = $this->input->post("document_type", TRUE);
         $value = $this->input->post("document_value", TRUE);
-
+        $operation="create";
         $fileName = $_FILES['uploadedfile']['name'];
         $alert=0;
         if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name'])){
@@ -817,8 +817,7 @@ class Admin extends CK_Controller {
         $db_date = implode("-", array_reverse($date));
         try {
             $this->generic_model->startTransaction();
-            $uploadId = $this->documentexpense_model->uploadDocument($fileName, $file);
-            $this->Logger->info("TESTE DO DOCUMENTO: " . $fileName);
+            $uploadId = $this->documentexpense_model->uploadDocument($fileName, $file,$operation);
             if ($_FILES['uploadedfile'] ['error'] > 0 || !$uploadId) {
                 echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB. ". $alert . "');
             window.location.replace('" . $this->config->item('url_link') . "admin/finances/manageDocuments');</script>";
@@ -1013,7 +1012,8 @@ class Admin extends CK_Controller {
     			$doc[] = $obj;
     				
     	}
-
+			$accountNames = $this -> finance_model -> getAllAccountNames();
+			$data['accountNames'] = $accountNames;
     		$data['documents'] = $doc;
 		
     		$this->loadReportView("admin/finances/manage_documents", $data);
@@ -2718,6 +2718,21 @@ class Admin extends CK_Controller {
         $colonist_id = $this->input->get('colonist_id', TRUE);
         $document_type = $this->input->get('document_type', TRUE);
         $document = $this->summercamp_model->getNewestDocument($camp_id, $colonist_id, $document_type);
+        if ($document) {
+            if (strtolower($document["extension"]) == "pdf")
+                header("Content-type: application/pdf");
+            else
+                header("Content-type: image/jpeg");
+            echo pg_unescape_bytea($document["data"]);
+        } else {
+            $this->loadView("admin/users/documentNotFound");
+        }
+    }
+    
+        public function verifyDocumentExpense() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $upload_id = $this->input->get('upload_id', TRUE);
+       $document=$this->documentexpense_model->getUploadById($upload_id);
         if ($document) {
             if (strtolower($document["extension"]) == "pdf")
                 header("Content-type: application/pdf");

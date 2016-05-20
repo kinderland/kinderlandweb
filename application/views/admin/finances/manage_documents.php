@@ -1,4 +1,3 @@
-
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -41,7 +40,6 @@ $(function() {
     $("#sortable-table").tablesorter({widgets: ['zebra']});
     $(".datepicker").datepicker();
 });
-
 $( document ).ready(function() {
 	  $("[name='my-checkbox']").bootstrapSwitch();
 	  $("[name='my-checkbox']").each(function( index ) {
@@ -61,9 +59,6 @@ $( document ).ready(function() {
 			});
 	  });
 	});
-
-
-
         function post(path, params, method) {
             method = method || "post"; // Set method to post by default if not specified.
             
@@ -72,7 +67,6 @@ $( document ).ready(function() {
             var form = document.createElement("form");
             form.setAttribute("method", method);
             form.setAttribute("action", path);
-
             for (var key in params) {
                 if (params.hasOwnProperty(key)) {
                     var hiddenField = document.createElement("input");
@@ -82,7 +76,6 @@ $( document ).ready(function() {
                     form.appendChild(hiddenField);
                 }
             }
-
             document.body.appendChild(form);
             form.submit();
         }
@@ -90,6 +83,8 @@ $( document ).ready(function() {
 		function sendInfoToModal(documentExpenseId, dateNow){
 			$("#documentexpenseId").html(documentExpenseId);
 			$("#dateNow").html(dateNow);
+			
+			alert("Oi");
         }
 </script>
 
@@ -123,7 +118,6 @@ $( document ).ready(function() {
 								 		var accountName = "aluguel";
 								 		var portions = 1;
 								 		
-
 								 		$.post('<?= $this->config->item('url_link');?>admin/postingExpense',
 			            						{documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions},
 			            						function(data){
@@ -137,11 +131,7 @@ $( document ).ready(function() {
 			            							}
 			            						}
 			            				);		
-
-
-
 									}
-
                         		</script>                       	
                         
 
@@ -180,6 +170,7 @@ $( document ).ready(function() {
                     
                 </div>
                 </div>
+                <div id="thisdiv">
                             	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -197,7 +188,7 @@ $( document ).ready(function() {
 												
 												<td> Forma de pagamento:</td> 
                                                           <form method="GET">
-                   											 <select name="postingType" id="postingType">
+                   											 <select name="postingType" id="postingType" onchange="this.load(document.URL +  ' #thisdiv')>
 									
 									                            <option value="Crédito"  >Crédito</option>
 											                    <option value="Dinheiro" >Dinheiro</option>  
@@ -233,12 +224,10 @@ $( document ).ready(function() {
                                                         <td> Nome: </td>
                                                         <input type="text" id="beneficiary_name"></input> <br>
                                                     </tr>
-
                                                     <tr>
                                                         <td> CNPJ/CPF: </td>
                                                         <input type="text" id="beneficiary_dnumber" name="beneficiary_dnumber"></input> <br>
                                                     </tr>
-
                                                     <tr>
                                                         <td> Telefone: </td>
                                                         <input type="text" id="beneficiary_phone"></input> <br><br>
@@ -253,7 +242,6 @@ $( document ).ready(function() {
                                 <td><?php echo $bank->getBankAgency(); ?> </td>
                                 <td><?php echo $bank->getAccountNumber(); ?> </td>
                                 <td><input type="checkbox" id="account_selected" name="account_selected" <?= ($bank->getBankDataId())?"checked":""?> /></td>
-
                                 </tr>
                                 <?php
                             }	
@@ -269,10 +257,10 @@ $( document ).ready(function() {
 						<div class="modal-footer">
 							<button class="btn btn-warning" data-dismiss="modal">Fechar</button>
 							<button class="btn btn-warning" onClick="formaPagamento()">Confirmar</button>
-
 					</div>
 				</div>
 			</div>
+        </div>
         </div>
                 </body>
             </div>
@@ -280,4 +268,3 @@ $( document ).ready(function() {
     </div>
 </body>
 </html>
-
