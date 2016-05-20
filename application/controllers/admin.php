@@ -984,11 +984,7 @@ class Admin extends CK_Controller {
     			$doc[] = $obj;
     				
     	}
-    	$selected_option = $this->input->post("postingType", TRUE);
-    	if (empty($selected_option) || !isset($selected_option))
-    		$data['selected'] = "no_select";
-		else
-		$data['selected'] = $selected_option;
+
     		$data['documents'] = $doc;
 		
     		$this->loadReportView("admin/finances/manage_documents", $data);
