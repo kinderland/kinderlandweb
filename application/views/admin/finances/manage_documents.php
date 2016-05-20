@@ -90,6 +90,8 @@ $( document ).ready(function() {
 		function sendInfoToModal(documentExpenseId, dateNow){
 			$("#documentexpenseId").html(documentExpenseId);
 			$("#dateNow").html(dateNow);
+			
+			alert("Oi");
         }
 </script>
 
@@ -182,6 +184,7 @@ $( document ).ready(function() {
                     
                 </div>
                 </div>
+                <div id="thisdiv">
                             	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -199,7 +202,7 @@ $( document ).ready(function() {
 												
 												<td> Forma de pagamento:</td> 
                                                           <form method="GET">
-                   											 <select name="postingType" id="postingType">
+                   											 <select name="postingType" id="postingType" onchange="this.load(document.URL +  ' #thisdiv')>
 									
 									                            <option value="Crédito"  >Crédito</option>
 											                    <option value="Dinheiro" >Dinheiro</option>  
@@ -275,6 +278,7 @@ $( document ).ready(function() {
 					</div>
 				</div>
 			</div>
+        </div>
         </div>
                 </body>
             </div>

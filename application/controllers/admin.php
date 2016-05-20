@@ -984,7 +984,8 @@ class Admin extends CK_Controller {
     			$doc[] = $obj;
     				
     	}
-
+			$accountNames = $this -> finance_model -> getAllAccountNames();
+			$data['accountNames'] = $accountNames;
     		$data['documents'] = $doc;
 		
     		$this->loadReportView("admin/finances/manage_documents", $data);

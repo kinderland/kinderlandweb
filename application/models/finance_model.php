@@ -65,6 +65,15 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
+	public function getAllAccountNames(){
+		$sql = "SELECT account_name FROM account";
+		 $result = $this->executeRows($this->db, $sql);
+		 if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
 	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type) {
 	
 		$this -> Logger -> info("Running: " . __METHOD__);
