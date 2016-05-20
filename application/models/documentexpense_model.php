@@ -126,20 +126,41 @@ class documentexpense_model extends CK_Model {
         return $resultSet;
     }
 
-    public function uploadDocument($fileName, $file) {
+    public function uploadDocument($fileName, $file,$operation) {
+        $this->Logger->info("Running: " . __METHOD__);
+
         $splitByDot = explode(".", $fileName);
         $extension = $splitByDot[count($splitByDot) - 1];
-        $fileUp= bin2hex( $file );
-        if (!(strcasecmp("jpg", $extension) == 0 || strcasecmp("jpeg", $extension) == 0 || strcasecmp("png", $extension) == 0 || strcasecmp("pdf", $extension) == 0)) {
-            return 1;
+        if (!
+                (strcasecmp("jpg", $extension) == 0 || strcasecmp("jpeg", $extension) == 0 || strcasecmp("png", $extension) == 0 || strcasecmp("pdf", $extension) == 0)
+        )
+            return FALSE;
+        $sql = 'INSERT INTO document_expense_upload (filename,extension,operation,file) VALUES (?, ?, ?, ?)';
+        $returnId = $this->execute($this->db, $sql, array($fileName, $extension, $operation, pg_escape_bytea($file)));
+        if ($returnId) {
+            $this->Logger->info("Documento inserido com sucesso");
+            return TRUE;
         }
-        $sql = "INSERT INTO document_expense_upload (file,filename,extension) VALUES(?,?,?)";
-        $returnId=$this->executeReturningId($this->db,$sql,array(pg_escape_bytea($file),$fileName,$extension));
-        if($returnId)
-            return $returnId;
+        $this->Logger->error("Problema ao inserir documento");
         return FALSE;
     }
+    
+        public function getUploadById($id) {
+        $this->Logger->info("Running: " . __METHOD__);
 
+        $sql = 'Select * from document_expense_upload where document_expense_upload_id = ?';
+        $row = $this->executeRow($this->db, $sql, array($id));
+
+        $document = FALSE;
+
+        if ($row){
+                $this->Logger->info("Documento encontrado com sucesso, criando array");
+                $document = array("data" => $row->file, "name" => $row->filename, "extension" => $row->extension);
+                return $document;
+            }
+        $this->Logger->info("Nao achei o documento");
+        return $document;
+    }
 }
 
 ?>
