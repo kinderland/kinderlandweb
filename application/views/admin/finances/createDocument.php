@@ -67,7 +67,7 @@
     </div> 
 </form>
 
-<form method ="POST" action="<?= $this->config->item('url_link') ?>admin/completeDocument">
+<form enctype="multipart/form-data" action="<?= $this->config->item('url_link') ?>admin/completeDocument" method ="POST">
     <input type="hidden" value="<?php echo $selected; ?>" name="document_type" >
 <?php if ($selected != "no_select") { ?>
         Numero: <input  type="text" name="document_number" >
@@ -80,6 +80,9 @@
         </br>
         Valor :<input type="number" step="0.01" size="6" name="document_value">
         </br>
+        <input  type="file" name="uploadedfile" class="btn btn-primary"/> 
+        <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+		<br />
         <div class="col-lg-1" style="margin-top:15px">
         <button class="btn btn-primary" type="submit">Salvar</button>
         </div>

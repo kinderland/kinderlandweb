@@ -381,4 +381,7 @@
 "password";"admin";2
 "deleteDocument";"admin";2
 "deleteDocument";"admin";4
+"manage_accounts";"admin";2
+"checkIfAccountNameExists";"admin";2
+"newAccountName";"admin";2
 

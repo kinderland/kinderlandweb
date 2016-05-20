@@ -11,8 +11,6 @@ require_once APPPATH . 'core/summerCampPaymentPeriod.php';
 require_once APPPATH . 'core/document_expense.php';
 require_once APPPATH . 'core/bankdata.php';
 
-
-
 class Admin extends CK_Controller {
 
     public function __construct() {
@@ -32,6 +30,7 @@ class Admin extends CK_Controller {
         $this->load->model('eventsubscription_model');
         $this->load->model('campaign_model');
         $this->load->model('documentexpense_model');
+        $this->load->model('finance_model');
 
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
@@ -45,19 +44,17 @@ class Admin extends CK_Controller {
         $this->email_model->setLogger($this->Logger);
         $this->event_model->setLogger($this->Logger);
         $this->eventsubscription_model->setLogger($this->Logger);
-		
+
         $this->campaign_model->setLogger($this->Logger);
         $this->documentexpense_model->setLogger($this->Logger);
+        $this->finance_model->setLogger($this->Logger);
     }
 
-    
-    
-    public function create_document(){
-        $selected_option=$this->post();
-      $this->loadReportView("admin/finances/create_document");
+    public function create_document() {
+        $selected_option = $this->post();
+        $this->loadReportView("admin/finances/create_document");
     }
-    
-    
+
     public function campaign_admin() {
         $this->loadView("admin/campaigns/campaign_admin_container");
     }
@@ -75,32 +72,74 @@ class Admin extends CK_Controller {
 
         $this->loadReportView("admin/campaigns/manageCampaigns", $data);
     }
-    
-    public function credit_operation(){
-    	$secretaries = $this -> personuser_model -> getUsersByUserType('4');
-    	$secretariesWithBalance = $this -> personuser_model -> getAllSecretariesWithBalances();
-    	
-    	$balances = $this -> personuser_model -> getSecretariesBalances();
-    	
-    	$data['secretaries'] = $secretaries;
-    	$data['secretariesWithBalance'] = $secretariesWithBalance;
-    	$data['balances'] = $balances;
-    	
-    	$this->loadReportView("admin/finances/credit_operation", $data);
+
+    public function credit_operation() {
+        $secretaries = $this->personuser_model->getUsersByUserType('4');
+        $secretariesWithBalance = $this->personuser_model->getAllSecretariesWithBalances();
+
+        $balances = $this->personuser_model->getSecretariesBalances();
+
+        $data['secretaries'] = $secretaries;
+        $data['secretariesWithBalance'] = $secretariesWithBalance;
+        $data['balances'] = $balances;
+
+        $this->loadReportView("admin/finances/credit_operation", $data);
+    }
+
+    public function newOperation() {
+        $secretary_id = $this->input->post("secretary_id", true);
+        $value = $this->input->post("value", true);
+
+        if ($this->personuser_model->newOperation($secretary_id, $value)) {
+            echo "true";
+            return;
+        } else {
+            echo "false";
+            return;
+        }
     }
     
-    public function newOperation(){
-    	$secretary_id = $this->input->post("secretary_id", true);
-    	$value = $this->input->post("value", true);
+    public function manage_accounts(){
+    	$accounts = $this -> finance_model -> getAllAccountsInformations();
     	
-    	if($this->personuser_model->newOperation($secretary_id,$value)){
-    		echo "true";
-    		return;
+    	$accountTypes = $this -> finance_model -> getAllAccountTypes();
+    	
+    	$data['accounts'] = $accounts;
+    	$data['account_name'] = "";
+    	$data['account_description'] = "";
+    	$data['accountTypes'] = $accountTypes;
+    	$this->loadReportView("admin/finances/manage_accounts", $data);
+    }
+    
+    public function checkIfAccountNameExists(){
+    	$account_name = $this->input->post("account_name", true);
+    	
+    	$accounts = $this -> finance_model -> getAllAccountsInformations();
+    	
+    	foreach($accounts as $account){
+    		if(strcmp(mb_strtoupper($account->account_name, 'UTF-8'),mb_strtoupper($account_name, 'UTF-8')) == 0){
+    			echo false;
+    			return;
+    		}
     	}
-    	else{
-    		echo "false";
+    	
+    	echo true;
+    	return;    	
+    }
+    
+    public function newAccountName(){
+    	$account_name = $this->input->post("account_name", true);
+    	$account_type = $this->input->post("account_type", true);
+    	$account_description = $this->input->post("account_description", true);
+    	
+    	if($this->finance_model->insertNewAccount($account_name,$account_type,$account_description)){
+    		echo true;
     		return;
-    	}
+    	}else{
+    		echo false;
+    		return;
+    	}    		
+    	
     }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
@@ -715,121 +754,135 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/events/event_create', $data);
         }
     }
-	
+
     public function finance_admin() {
-    	$this->loadView("admin/finances/finance_admin_container");
+        $this->loadView("admin/finances/finance_admin_container");
     }
-   
+
     public function createDocument() {
-    	$selected_option = $this->input->post("document_type", TRUE);
-    	if (empty($selected_option) || !isset($selected_option))
-    		$data['selected'] = "no_select";
-		else
-		$data['selected'] = $selected_option;
-     	$this->loadReportView("admin/finances/createDocument", $data);
- 	}
- 	
- 	public function completeDocument() {
-    	$name = $this->input->post("document_name", TRUE);
-    	$date = $this->input->post("document_date", TRUE);
+        $selected_option = $this->input->post("document_type", TRUE);
+        if (empty($selected_option) || !isset($selected_option))
+            $data['selected'] = "no_select";
+        else
+            $data['selected'] = $selected_option;
+        $this->loadReportView("admin/finances/createDocument", $data);
+    }
+
+    public function completeDocument() {
+        $name = $this->input->post("document_name", TRUE);
+        $date = $this->input->post("document_date", TRUE);
         $number = $this->input->post("document_number", TRUE);
-    	$description = $this->input->post("description", TRUE);
+        $description = $this->input->post("description", TRUE);
+        $type = $this->input->post("document_type", TRUE);
+        $value = $this->input->post("document_value", TRUE);
+
+        $fileName = $_FILES['uploadedfile']['name'];
+        $alert=0;
+        if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name'])){
+            $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+            $alert=1;
+        }
+        $userId = $this->session->userdata("user_id");
+        $value = str_replace(",", ".", $value);
+        $date = explode("/", $date);
+        $db_date = implode("-", array_reverse($date));
+        try {
+            $this->generic_model->startTransaction();
+            $uploadId = $this->documentexpense_model->uploadDocument($fileName, $file);
+            $this->Logger->info("TESTE DO DOCUMENTO: " . $fileName);
+            if ($_FILES['uploadedfile'] ['error'] > 0 || !$uploadId) {
+                echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB. ". $alert . "');
+            window.location.replace('" . $this->config->item('url_link') . "admin/finances/manageDocuments');</script>";
+            }
+
+            $documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value, $name);
+            $this->generic_model->commitTransaction();
+            $this->Logger->info("New document successfully inserted");
+            $url = $this->config->item('url_link') . "admin/manageDocuments";
+            if ($documentId) {
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+           		window.alert('Documento criado com sucesso')
+            	window.location.href='" . $url . "'</SCRIPT>";
+            } else
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+          			window.alert('Ocorreu um erro ao criar o documento. Tente novamente mais tarde')
+           			 window.location.href='" . $url . "'</SCRIPT>";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new document");
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+            $data['selected'] = "no_select";
+            $this->loadReportView('admin/finances/createDocument', $data);
+        }
+    }
+
+    public function editDocument($document_id = NULL) {
+        $document = $this->documentexpense_model->getDocumentById($document_id);
+        $date = $document->getDocumentExpenseDate();
+        $number = $document->getDocumentExpenseNumber();
+        $description = $document->getDocumentExpenseDescription();
+        $value = $document->getDocumentExpenseValue();
+        $type = $document->getDocumentExpenseType();
+        $date = explode("-", $date);
+        $date = implode("/", array_reverse($date));
+        $data['id'] = $document_id;
+        $data['date'] = $date;
+        $data['number'] = $number;
+        $data['description'] = $description;
+        $data['value'] = $value;
+        $data['type'] = $type;
+        $this->loadReportView("admin/finances/editDocument", $data);
+    }
+
+    public function updateDocument($document_id = NULL) {
+        $name = $this->input->post("document_name", TRUE);
+        $date = $this->input->post("document_date", TRUE);
+        $number = $this->input->post("document_number", TRUE);
+        $description = $this->input->post("description", TRUE);
         $type = $this->input->post("document_type", TRUE);
         $value = $this->input->post("document_value", TRUE);
         $value = str_replace(",", ".", $value);
         $date = explode("/", $date);
         $db_date = implode("-", array_reverse($date));
+
         try {
-        	$this->generic_model->startTransaction();
-         	$documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value, $name);
+            $this->generic_model->startTransaction();
+            $documentId = $this->documentexpense_model->updateDocument($document_id, $db_date, $number, $description, $value, $name);
             $this->generic_model->commitTransaction();
-            $this->Logger->info("New document successfully inserted");
+            $this->Logger->info("Document successfully updated");
             $url = $this->config->item('url_link') . "admin/manageDocuments";
             if ($documentId) {
-            	echo "<SCRIPT LANGUAGE='JavaScript'>
-           		window.alert('Documento criado com sucesso')
-            	window.location.href='" . $url . "'</SCRIPT>";
-            } else
-              		echo "<SCRIPT LANGUAGE='JavaScript'>
-          			window.alert('Ocorreu um erro ao criar o documento. Tente novamente mais tarde')
-           			 window.location.href='" . $url . "'</SCRIPT>";
- 			} catch (Exception $ex) {
- 		           $this->Logger->error("Failed to insert new document");
- 	               $this->generic_model->rollbackTransaction();
- 	          	   $data['error'] = true;
- 		           $data['selected'] = "no_select";
- 	               $this->loadReportView('admin/finances/createDocument', $data);
-     		}
- 		
- 	}
- 	
- 	public function editDocument($document_id = NULL) {
- 		$document = $this->documentexpense_model->getDocumentById($document_id);
- 		$date = $document->getDocumentExpenseDate();
- 		$number = $document->getDocumentExpenseNumber();
- 		$description = $document->getDocumentExpenseDescription();
- 		$value = $document->getDocumentExpenseValue();
- 		$type = $document->getDocumentExpenseType();
- 		$date = explode("-", $date);
- 		$date = implode("/", array_reverse($date));
- 		$data['id'] = $document_id;
- 		$data['date'] = $date;
- 		$data['number'] = $number;
- 		$data['description'] = $description;
- 		$data['value'] = $value;
- 		$data['type'] = $type;
- 		$this->loadReportView("admin/finances/editDocument", $data);
- 	}
- 	
- 	public function updateDocument($document_id = NULL) {
- 		$name = $this->input->post("document_name", TRUE);
- 		$date = $this->input->post("document_date", TRUE);
- 		$number = $this->input->post("document_number", TRUE);
- 		$description = $this->input->post("description", TRUE);
- 		$type = $this->input->post("document_type", TRUE);
- 		$value = $this->input->post("document_value", TRUE);
- 		$value = str_replace(",", ".", $value);
- 		$date = explode("/", $date);
- 		$db_date = implode("-", array_reverse($date));
-
- 		try {
- 			$this->generic_model->startTransaction();
- 			$documentId = $this->documentexpense_model->updateDocument($document_id, $db_date,$number, $description, $value, $name);
- 			$this->generic_model->commitTransaction();
- 			$this->Logger->info("Document successfully updated");
- 			$url = $this->config->item('url_link') . "admin/manageDocuments";
- 			if ($documentId) {
- 				echo "<SCRIPT LANGUAGE='JavaScript'>
+                echo "<SCRIPT LANGUAGE='JavaScript'>
                      window.alert('Documento alterado com sucesso')
                      window.location.href='" . $url . "'</SCRIPT>";
-             } else
- 					echo "<SCRIPT LANGUAGE='JavaScript'>
+            } else
+                echo "<SCRIPT LANGUAGE='JavaScript'>
                     window.alert('Ocorreu um erro ao alterar o documento. Tente novamente mais tarde')
                     window.location.href='" . $url . "'</SCRIPT>";
- 				} catch (Exception $ex) {
- 						$this->Logger->error("Failed to update document" . $document_id);
- 						$this->generic_model->rollbackTransaction();
- 						$data['error'] = true;
- 						$this->loadReportView('admin/finances/editDocument', $data);
- 					}
- 		}
- 		
- 		
- 	public function deleteDocument($document_id = NULL) {
- 		try {
- 			$url = $this->config->item('url_link') . "admin/manageDocuments";
- 			if ($document_id) {
- 					$this->generic_model->startTransaction();
- 					$this->documentexpense_model->deleteAllExpenses($document_id);
- 					$this->documentexpense_model->deleteDocument($document_id);
- 					$this->generic_model->commitTransaction();
- 					echo "<SCRIPT LANGUAGE='JavaScript'>
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to update document" . $document_id);
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+            $this->loadReportView('admin/finances/editDocument', $data);
+        }
+    }
+
+    public function deleteDocument($document_id = NULL) {
+        try {
+            $url = $this->config->item('url_link') . "admin/manageDocuments";
+            if ($document_id) {
+                $this->generic_model->startTransaction();
+                $this->documentexpense_model->deleteAllExpenses($document_id);
+                $this->documentexpense_model->deleteDocument($document_id);
+                $this->generic_model->commitTransaction();
+                echo "<SCRIPT LANGUAGE='JavaScript'>
                      window.alert('Documento excluído com sucesso')
                      window.location.href='" . $url . "'</SCRIPT>";
- 			} else {
- 					echo "<SCRIPT LANGUAGE='JavaScript'>
+            } else {
+                echo "<SCRIPT LANGUAGE='JavaScript'>
                      window.alert('Ocorreu um erro ao excluir o documento. Tente novamente mais tarde')
                      window.location.href='" . $url . "'</SCRIPT>";
+<<<<<<< HEAD
  				}
  				} catch (Exception $ex) {
  							$this->Logger->error("Failed to delete document" . $document_id);
@@ -937,17 +990,112 @@ class Admin extends CK_Controller {
 		$data['selected'] = $selected_option;
     		$data['documents'] = $doc;
     		$this->loadReportView("admin/finances/manage_documents", $data);
+=======
+            }
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to delete document" . $document_id);
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+            $this->loadReportView('admin/finances/editDocument', $data);
+        }
     }
-    
-    public function finance_cashoutflows(){
-    	    $this->loadView("finances/finance_cashoutflows_container");
-    	}
-    	 
-    
-    
 
-    
-    
+    public function postingExpense() {
+        $this->Logger->info("Running: " . __METHOD__);
+        $documentexpenseId = $_POST['documentexpenseId'];
+        $postingDate = $_POST['postingDate'];
+        $postingValue = $_POST['postingValue'];
+        $postingType = $_POST['postingType'];
+        $accountName = $_POST['accountName'];
+
+        $result = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
+        if ($result != null) {
+            if ($postingType == "Cartão de crédito") {
+                $portions = $_POST['portions'];
+                $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
+                if ($result != null) {
+                    echo "true";
+                } else {
+                    echo "false";
+                }
+            } else if ($postingType == "Dinheiro") {
+                $portionNumber = $_POST['portion_number'];
+                $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
+                if ($result != null) {
+                    echo "true";
+                } else {
+                    echo "false";
+                }
+            } else if ($postingType == "Cheque") {
+                $checkNumber = $_POST['check_number'];
+                $result = $this->documentexpense_model->inserNewBankCheckPayment($check_number, $documentexpenseId, $postingDate, $postingValue);
+                if ($result != null) {
+                    echo "true";
+                } else {
+                    echo "false";
+                }
+            } else if ($postingType == "Débito") {
+                $portionNumber = $_POST['portion_number'];
+                $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
+                if ($result != null) {
+                    echo "true";
+                } else {
+                    echo "false";
+                }
+            } else { //transferência
+                $bankDataId = $_POST['bank_data_id'];
+                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue);
+                if ($result != null) {
+                    echo "true";
+                } else {
+                    echo "false";
+                }
+            }
+        }
+    }
+
+    public function manageDocuments() {
+        $documents = $this->documentexpense_model->getAllDocumentsExpense();
+        $data['banks'] = $this->documentexpense_model->getAllBankData();
+        $formaspagamento = array("Boleto", "Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
+
+        $doc = array();
+
+        foreach ($documents as $document) {
+            $obj = new StdClass();
+            $documentexpenseId = $document->getDocumentExpenseId();
+            $obj->documentexpenseId = $document->getDocumentExpenseId();
+            $obj->documentexpenseNumber = $document->getDocumentExpenseNumber();
+            $obj->documentexpenseValue = $document->getDocumentExpenseValue();
+            $obj->documentexpenseDate = $document->getDocumentExpenseDate();
+            $obj->documentexpenseUploadId = $document->getDocumentExpenseUploadId();
+            $obj->documentexpenseType = $document->getDocumentExpenseType();
+            $obj->documentexpenseDescription = $document->getDocumentExpenseDescription();
+            $obj->beneficiaryId = $document->getBeneficiaryId();
+            if ($this->documentexpense_model->getDocumentExpensePaidById($documentexpenseId) != null) {
+                $obj->paid = true;
+            } else
+                $obj->paid = false;
+
+            $doc[] = $obj;
+        }
+        if (isset($_GET['formapagamento_f']))
+            $formapagamento = $_GET['formapagamento_f'];
+        else {
+            $formapagamento = "Dinheiro";
+        }
+
+        $data['formapagemento_escolhido'] = $formapagamento;
+        $data['formaspagamento'] = $formaspagamento;
+        $data['documents'] = $doc;
+        $this->loadReportView("admin/finances/manage_documents", $data);
+    }
+
+    public function finance_cashoutflows() {
+        $this->loadView("finances/finance_cashoutflows_container");
+>>>>>>> b252226c5ecbc663ca78a788a33f4ac3394a2e5c
+    }
+
     public function eventCreate($errors = array(), $event_name = NULL, $description = NULL, $date_start = NULL, $date_finish = NULL, $date_start_show = NULL, $date_finish_show = NULL, $capacity_male = NULL, $capacity_female = NULL, $capacity_nonsleeper = NULL, $payments = array(), $type = null) {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
@@ -2010,11 +2158,11 @@ class Admin extends CK_Controller {
 
     public function changeCampEnabledStatus($campId) {
         $this->Logger->info("Running: " . __METHOD__);
-        
+
         $camp = $this->summercamp_model->getSummerCampById($campId);
-		$payments = $this->summercamp_model->getSummerCampPaymentPeriods($camp->getCampId());
-		
-        if($payments)
+        $payments = $this->summercamp_model->getSummerCampPaymentPeriods($camp->getCampId());
+
+        if ($payments)
             echo $this->summercamp_model->updateCampPreEnabled($campId);
         else
             echo "0";
@@ -2502,33 +2650,32 @@ class Admin extends CK_Controller {
 
     public function userPermissions() {
         $this->Logger->info("Running: " . __METHOD__);
-    		$i='A';
-        	for($j=0; $j<26; $j++){
-        		$letters[] = $i;
-        		$i++;
-        	}
-        	$letter = null;
-        	
-        	if (isset($_GET['letter_chosen']))
-        		$letter = $_GET['letter_chosen'];
-        		else {
-        			$letter = 'A';
-        		}
-        		
-        	$data['letter_chosen'] = $letter;
-        	$data['letters'] = $letters;
-        	$data['users'] = $this->person_model->getUserPermissionsDetailed($letter);
-       		 $this->loadReportView("admin/users/user_permissions", $data);
-    }   
-    
-    public function userPermissionsFilter() {
-    	$this->Logger->info("Running: " . __METHOD__);
-    	$letra = $this->input->post('letra',TRUE);
-    	
-    	$data['users'] = $this->person_model->getUserPermissionsDetailed($letra);
-    	$this->loadReportView("admin/users/user_permissions", $data);
+        $i = 'A';
+        for ($j = 0; $j < 26; $j++) {
+            $letters[] = $i;
+            $i++;
+        }
+        $letter = null;
+
+        if (isset($_GET['letter_chosen']))
+            $letter = $_GET['letter_chosen'];
+        else {
+            $letter = 'A';
+        }
+
+        $data['letter_chosen'] = $letter;
+        $data['letters'] = $letters;
+        $data['users'] = $this->person_model->getUserPermissionsDetailed($letter);
+        $this->loadReportView("admin/users/user_permissions", $data);
     }
 
+    public function userPermissionsFilter() {
+        $this->Logger->info("Running: " . __METHOD__);
+        $letra = $this->input->post('letra', TRUE);
+
+        $data['users'] = $this->person_model->getUserPermissionsDetailed($letra);
+        $this->loadReportView("admin/users/user_permissions", $data);
+    }
 
     public function updatePersonPermissions() {
         $this->Logger->info("Running: " . __METHOD__);
@@ -2559,8 +2706,6 @@ class Admin extends CK_Controller {
             $this->generic_model->rollbackTransaction();
             echo "false";
         }
-		
-        
     }
 
     public function viewColonistInfo() {

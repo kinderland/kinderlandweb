@@ -91,30 +91,28 @@ class documentexpense_model extends CK_Model {
         $sql = "INSERT into posting_bank_check(check_number, document_expense_id, posting_date, posting_value)
 					VALUES (?,?,?,?)";
 
-        	$Id=$this->executeReturningId($this->db,$sql,array($check_number,$documentexpenseId,$postingDate,$postingValue));
-        	return $Id;        	
-        	
-        }
-        
-        public function InsertNewDocument($date,$number,$description,$type,$value,$name){
-            $sql="INSERT INTO document_expense (document_number,document_date,document_type,description,document_value, document_name)
-                  VALUES (?,?,?,?,?,?)";
-            $Id=$this->executeReturningId($this->db,$sql,array($number,$date,$type,$description,$value,$name));
-            return $Id;
-        }
-        
-        public function updateDocument($id, $date,$number,$description,$value,$name){
-         $sql = "UPDATE document_expense SET "
-                 . "document_date = ?, "
-                 . "document_number=?, "
-                 . "description=?, "
-                 . "document_value=? "
-                 . "document_name=? "
-                 . "WHERE document_expense_id='?'";
-         $resultSet = $this->execute($this->db, $sql, array($date,$number,$description,$value,$name,intval($id)));
-         return $resultSet;
-        }
+        $Id = $this->executeReturningId($this->db, $sql, array($check_number, $documentexpenseId, $postingDate, $postingValue));
+        return $Id;
+    }
 
+    public function InsertNewDocument($date, $number, $description, $type, $value, $name) {
+        $sql = "INSERT INTO document_expense (document_number,document_date,document_type,description,document_value, document_name)
+                  VALUES (?,?,?,?,?,?)";
+        $Id = $this->executeReturningId($this->db, $sql, array($number, $date, $type, $description, $value, $name));
+        return $Id;
+    }
+
+    public function updateDocument($id, $date, $number, $description, $value, $name) {
+        $sql = "UPDATE document_expense SET "
+                . "document_date = ?, "
+                . "document_number=?, "
+                . "description=?, "
+                . "document_value=? "
+                . "document_name=? "
+                . "WHERE document_expense_id='?'";
+        $resultSet = $this->execute($this->db, $sql, array($date, $number, $description, $value, $name, intval($id)));
+        return $resultSet;
+    }
 
     public function deleteAllExpenses($id) {
         $sql = "DELETE FROM posting_expense WHERE document_expense_id='?'";
@@ -128,6 +126,19 @@ class documentexpense_model extends CK_Model {
         return $resultSet;
     }
 
+    public function uploadDocument($fileName, $file) {
+        $splitByDot = explode(".", $fileName);
+        $extension = $splitByDot[count($splitByDot) - 1];
+        $fileUp= bin2hex( $file );
+        if (!(strcasecmp("jpg", $extension) == 0 || strcasecmp("jpeg", $extension) == 0 || strcasecmp("png", $extension) == 0 || strcasecmp("pdf", $extension) == 0)) {
+            return 1;
+        }
+        $sql = "INSERT INTO document_expense_upload (file,filename,extension) VALUES(?,?,?)";
+        $returnId=$this->executeReturningId($this->db,$sql,array(pg_escape_bytea($file),$fileName,$extension));
+        if($returnId)
+            return $returnId;
+        return FALSE;
+    }
 
 }
 
