@@ -120,7 +120,7 @@ $( document ).ready(function() {
 										
 								 		var postingDate = document.getElementById("dateNow").textContent;
 								 		var postingValue = document.getElementById("postingValue").value;
-								 		var postingType = document.getElementById("postingType").textContent;
+								 		var postingType = document.getElementById("postingType").value;
 								 		alert(postingType);
 								 		var accountName = "aluguel";
 								 		var portions = 1;
@@ -203,11 +203,11 @@ $( document ).ready(function() {
                                                           <form method="GET">
                    											 <select name="postingType" id="postingType">
 									
-									                            <option <?php if ($selected == "Crédito") { ?>selected <?php } ?> value="Crédito"  >Crédito</option>
-											                    <option <?php if ($selected == "Dinheiro") { ?>selected <?php } ?> value="Dinheiro" >Dinheiro</option>  
-											                    <option <?php if ($selected == "Débito") { ?>selected <?php } ?> value="Débito">Débito</option>  
-											                    <option <?php if ($selected == "boleto") { ?>selected <?php } ?> value="boleto">Boleto</option> 
-											                    <option <?php if ($selected == "no_select") { ?>selected <?php } ?> value="no_select">--Selecione-- </option>
+									                            <option value="Crédito"  >Crédito</option>
+											                    <option value="Dinheiro" >Dinheiro</option>  
+											                    <option  value="Débito">Débito</option>  
+											                    <option value="boleto">Boleto</option> 
+											                    <option value="no_select">--Selecione-- </option>
 											                </select>
 												
 													<input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
