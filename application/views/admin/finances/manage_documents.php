@@ -87,9 +87,10 @@ $( document ).ready(function() {
             form.submit();
         }
 		
-		function sendInfoToModal(documentExpenseId){
+		function sendInfoToModal(documentExpenseId, dateNow){
 			alert("Oi");
 			$("#documentexpenseId").html(documentExpenseId);
+			$("#dateNow").html(dateNow);
         }
 </script>
 
@@ -114,11 +115,13 @@ $( document ).ready(function() {
                         
                          		<script>
 									function formaPagamento(){
-										
+									
 										var documentexpenseId = document.getElementById("documentexpenseId").textContent;
-								 		var postingDate = "2016-05-30";
+										
+								 		var postingDate = document.getElementById("dateNow").textContent;
 								 		var postingValue = document.getElementById("postingValue").value;
-								 		var postingType = "Cartão de crédito";
+								 		var postingType = document.getElementById("postingType").textContent;
+								 		alert(postingType);
 								 		var accountName = "aluguel";
 								 		var portions = 1;
 								 		
@@ -127,11 +130,11 @@ $( document ).ready(function() {
 			            						{documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions},
 			            						function(data){
 			            							if(data=="true"){
-			            								alert("Colonista excluído com sucesso");
+			            								alert("Pagamento cadastrado com sucesso!");
 			            								location.reload();
 			            							}
-			            							else if(data=="false") {
-			            								alert("Não foi possível excluir o colonista. Tente novamente!");
+			            							else if(data == "false"){
+			            								alert("Não foi possível cadastrar o pagamento!");
 			            								location.reload();
 			            							}
 			            						}
@@ -157,7 +160,7 @@ $( document ).ready(function() {
                                 <td><?php echo $document->documentexpenseValue; ?> </td>
                                 <td><?php echo $document->documentexpenseUploadId; ?> </td>
                                 <?php if($document->paid == false){?>
-                                <td><button class="btn btn-primary" onclick="sendInfoToModal('<?= $document->documentexpenseId ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
+                                <td><button class="btn btn-primary" onclick="sendInfoToModal('<?= $document->documentexpenseId ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
                                 <?php } else {?>
                                 <td> Pago </td>
                                 <?php }?>
@@ -196,24 +199,22 @@ $( document ).ready(function() {
 											<div class="form-group">
 												<div class="col-lg-6">
 												
+												<td> Forma de pagamento:</td> 
+                                                          <form method="GET">
+                   											 <select name="postingType" id="postingType">
+									
+									                            <option <?php if ($selected == "Crédito") { ?>selected <?php } ?> value="Crédito"  >Crédito</option>
+											                    <option <?php if ($selected == "Dinheiro") { ?>selected <?php } ?> value="Dinheiro" >Dinheiro</option>  
+											                    <option <?php if ($selected == "Débito") { ?>selected <?php } ?> value="Débito">Débito</option>  
+											                    <option <?php if ($selected == "boleto") { ?>selected <?php } ?> value="boleto">Boleto</option> 
+											                    <option <?php if ($selected == "no_select") { ?>selected <?php } ?> value="no_select">--Selecione-- </option>
+											                </select>
 												
 													<input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
-                                                    													
+                                                    <input type="hidden" id="dateNow" name="dateNow" value="" />	
+                                                    <input type="hidden" id="postingType" name="postingType" value="<?php echo $selected; ?>" >												
 													<tr>
-                                                        <td> Forma de pagamento:</td> 
-                                                          <form method="GET">
-                   											 <select name="formapagamento_f" id="formaspagamento">
-									
-									                            <?php
-									                            foreach ($formaspagamento as $formapagamento) {
-									                                $selected = "";
-									                                if ($formapagamento_escolhido == $formapagamento)
-									                                    $selected = "selected";
-									                                echo "<option $selected value='$formapagamento'>$formapagamento</option>";
-									                            }
-									                            ?>
-	                       									</select>
-                                                    </tr>                                        
+                                                                                               
                                                     <br><br>
                                                     <tr> 
                                                     	<td> Valor: </td>

@@ -847,8 +847,8 @@ class Admin extends CK_Controller {
  		$postingType = $_POST['postingType'];
  		$accountName = $_POST['accountName'];
 
- 		$result = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
- 		if($result != null){
+ 		$resultado = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
+ 		if($resultado != null){
 		 		if($postingType == "Cartão de crédito" ){
 		 			$portions = $_POST['portions'];
 		 			$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
@@ -906,7 +906,7 @@ class Admin extends CK_Controller {
     public function manageDocuments(){
     	$documents = $this->documentexpense_model->getAllDocumentsExpense();
     	$data['banks'] = $this->documentexpense_model->getAllBankData();
-    	$formaspagamento = array("Boleto", "Dinheiro", "Cheque", "Crédito", "Débito", "Transferência");
+    	
     	 
     	$doc = array();
     	 
@@ -930,14 +930,11 @@ class Admin extends CK_Controller {
     			$doc[] = $obj;
     				
     	}
-    	if (isset($_GET['formapagamento_f']))
-    		$formapagamento = $_GET['formapagamento_f'];
-    		else {
-    			$formapagamento = "Dinheiro";
-    		}
-    		 
-    		$data['formapagemento_escolhido'] = $formapagamento;
-    		$data['formaspagamento'] = $formaspagamento;
+    	$selected_option = $this->input->post("postingType", TRUE);
+    	if (empty($selected_option) || !isset($selected_option))
+    		$data['selected'] = "no_select";
+		else
+		$data['selected'] = $selected_option;
     		$data['documents'] = $doc;
     		$this->loadReportView("admin/finances/manage_documents", $data);
     }
