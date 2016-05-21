@@ -168,7 +168,7 @@
                                     <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->documentexpenseId ?>">
                                             <?php echo $document->documentexpenseType; ?></a> </td>
                                     <td><?php echo $document->documentexpenseValue; ?> </td>
-                                    <td><a target="blank" href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $document->documentexpenseId;?>">
+                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $document->documentexpenseId;?>">
                                         <button class="btn btn-primary"><?php
                                         if ($document->documentexpenseUploadId) {
                                             echo "Visualizar";
