@@ -390,3 +390,5 @@
 "verifyDocumentExpense";"admin";4
 "viewDocumentUpload";"admin";2
 "viewDocumentUpload";"admin";4
+"updateDocumentUpload";"admin";2
+"updateDocumentUpload";"admin";4

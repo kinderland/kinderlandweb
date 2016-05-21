@@ -145,6 +145,27 @@ class documentexpense_model extends CK_Model {
         return FALSE;
     }
     
+        public function updateUploadDocument($upload_id,$fileName, $file,$operation) {
+        $this->Logger->info("Running: " . __METHOD__);
+$this->Logger->info("O ID AQUI: " . $upload_id);
+        $splitByDot = explode(".", $fileName);
+        $extension = $splitByDot[count($splitByDot) - 1];
+        if (!
+                (strcasecmp("jpg", $extension) == 0 || strcasecmp("jpeg", $extension) == 0 || strcasecmp("png", $extension) == 0 || strcasecmp("pdf", $extension) == 0)
+        )
+            return FALSE;
+        $sql = 'UPDATE document_expense_upload '
+                . 'SET filename=?, extension=?, operation=?, file=? '
+                . 'WHERE document_expense_upload_id=?';
+        $returnId = $this->execute($this->db, $sql, array($fileName, $extension, $operation, pg_escape_bytea($file),intval($upload_id)));
+        if ($returnId) {
+            $this->Logger->info("Documento modificado com sucesso");
+            return TRUE;
+        }
+        $this->Logger->error("Problema ao modificado documento");
+        return FALSE;
+    }
+    
         public function getUploadById($id) {
         $this->Logger->info("Running: " . __METHOD__);
 
