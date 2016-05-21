@@ -53,8 +53,7 @@
             </form>
             <br>
             <br>
-
-            <?php if ($upload_id) { ?>
+            <?php if ($upload_id->document_expense_upload_id>0) { ?>
                 <a target="_blank" href="<?= $this->config->item('url_link'); ?>admin/verifyDocumentExpense?upload_id=<?php echo $upload_id->document_expense_upload_id; ?>">
                     <button class="btn btn-primary">
                         Visualizar último documento enviado
