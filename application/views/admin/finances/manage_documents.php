@@ -115,9 +115,17 @@
                                     var postingDate = document.getElementById("dateNow").textContent;
                                     var postingValue = document.getElementById("postingValue").value;
                                     var postingType = document.getElementById("postingType").value;
+                                    
+                                    alert(postingType);
                                     var accountName = "aluguel";
-                                    var portions = 1;
+                                    if(postingType == "Crédito"){
+                                    	var portions = document.getElementById("atributoChave").value;
+                                    	alert(portions);
+                                    }
 
+                                    
+                                    	
+	
                                     $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                                             {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions},
                                             function (data) {
@@ -131,6 +139,21 @@
                                             }
                                     );
                                 }
+
+
+                                function myFunction() {
+                                    var x = document.getElementById("postingType").value;
+                                    if(x == "Débito"){
+                                    	document.getElementById("demo").innerHTML = "Qual é o número da parcela?";
+                                    	document.getElementById("atributoChave").innerHTML = "<input></input>";
+                                    }
+                                    if(x == "Crédito"){
+                                    	document.getElementById("demo").innerHTML = "Quantas parcelas?";
+                                    	document.getElementById("atributoChave").innerHTML = "";
+                                    }
+                                    
+                                }
+                                                                
                             </script>                       	
 
 
@@ -178,7 +201,7 @@
 
                 </div>
             </div>
-            <div id="thisdiv">
+            
                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -196,8 +219,9 @@
 
                                                         <td> Forma de pagamento:</td> 
                                                         <form method="GET">
-                                                                <select name="postingType" id="postingType" onchange="this.load(document.URL + ' #thisdiv') >
-                                                                                                                         < option value ="Crédito"  >Crédito</option>
+                                                                <select name="postingType" id="postingType" onchange="myFunction()" >
+                                                                <option>Selecione</option>
+                                                                <option value="Crédito" >Crédito</option>
                                                                 <option value="Dinheiro" >Dinheiro</option>  
                                                                 <option  value="Débito">Débito</option>  
                                                                 <option value="Boleto">Boleto</option> 
@@ -208,10 +232,14 @@
 
                                                             <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
                                                             <input type="hidden" id="dateNow" name="dateNow" value="" />	
-                                                            <input type="hidden" id="postingType" name="postingType" value="" >												
+                                                            <input type="hidden" id="postingType" name="postingType" value="" >		
+                                                            <br><br>										
                                                             <tr>
+                                                            	<p id="demo"></p>
+                                                            	<input type="text" id="atributoChave"></input>
 
-                                                            <br><br>
+                                                            	</tr>
+
                                                             <tr> 
                                                                 <td> Valor: </td>
                                                             <input type="text" id="postingValue" name="postingValue" ></input> <br>

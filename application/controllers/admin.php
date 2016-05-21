@@ -929,7 +929,7 @@ class Admin extends CK_Controller {
  		$accountName = $_POST['accountName'];
 
  		$resultado = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
- 		if($resultado != null){
+ 		
 		 		if($postingType == "Crédito" ){
 		 			$portions = $_POST['portions'];
 		 			$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions,$documentexpenseId,$postingDate,$postingValue);
@@ -980,8 +980,7 @@ class Admin extends CK_Controller {
 		 				echo "false";
 		 			}
  				}
- 				echo "false";
- 		}
+
  		
  	}
     
