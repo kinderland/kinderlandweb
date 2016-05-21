@@ -204,6 +204,12 @@ $this->Logger->info("O ID AQUI: " . $upload_id);
         $sql="UPDATE document_expense SET document_expense_upload_id=? WHERE document_expense_id=?";
         $result=$this->execute($this->db,$sql,array(intval($upload_id),intval($document_id)));
     }
+    
+    public function deleteUpload($upload_id){
+        $sql="DELETE FROM document_expense_upload WHERE document_expense_upload_id=?";
+        $result=$this->execute($this->db,$sql,array(intval($upload_id)));
+        return $result;
+    }
 }
 
 ?>

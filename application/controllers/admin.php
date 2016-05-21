@@ -902,7 +902,10 @@ class Admin extends CK_Controller {
             if ($document_id) {
                 $this->generic_model->startTransaction();
                 $this->documentexpense_model->deleteAllExpenses($document_id);
+                $upload_id=$this->documentexpense_model->getUploadId($document_id);
+                $id=$upload_id->document_expense_upload_id;
                 $this->documentexpense_model->deleteDocument($document_id);
+                $this->documentexpense_model->deleteUpload($id);
                 $this->generic_model->commitTransaction();
                 echo "<SCRIPT LANGUAGE='JavaScript'>
                      window.alert('Documento excluído com sucesso')
