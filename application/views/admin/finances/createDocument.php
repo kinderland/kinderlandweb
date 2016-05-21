@@ -87,8 +87,9 @@
         <button class="btn btn-primary" type="submit">Salvar</button>
         </div>
     </form>
-<div class="col-lg-1">
-    <button style="padding-left:20px" class="btn btn-danger" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Fechar</button>
-</div>
 <?php } ?>
+<div class="col-lg-1">
+    <button style="padding-left:20px;margin-top:2px" class="btn btn-warning" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Voltar</button>
+</div>
+
 </head>

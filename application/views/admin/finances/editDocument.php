@@ -91,7 +91,7 @@
                 </div>
             </form>
             <div class="col-lg-1">
-                <button style="padding-left:20px" class="btn btn-danger" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Fechar</button>
+                <button style="padding-left:20px" class="btn btn-warning" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Voltar</button>
             </div>
         </div>
         <hr />

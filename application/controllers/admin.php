@@ -804,10 +804,8 @@ class Admin extends CK_Controller {
         $value = $this->input->post("document_value", TRUE);
         $operation = "create";
         $fileName = $_FILES['uploadedfile']['name'];
-        $alert = 0;
         if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name'])) {
             $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
-            $alert = 1;
         }
         $userId = $this->session->userdata("user_id");
         $value = str_replace(",", ".", $value);
@@ -815,13 +813,16 @@ class Admin extends CK_Controller {
         $db_date = implode("-", array_reverse($date));
         try {
             $this->generic_model->startTransaction();
-            $uploadId = $this->documentexpense_model->uploadDocument($fileName, $file, $operation);
-            if ($_FILES['uploadedfile'] ['error'] > 0 || !$uploadId) {
-                echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB. " . $alert . "');
-            window.location.replace('" . $this->config->item('url_link') . "admin/finances/manageDocuments');</script>";
-            }
-
             $documentId = $this->documentexpense_model->InsertNewDocument($db_date, $number, $description, $type, $value, $name);
+            if ($fileName) {
+                $uploadId = $this->documentexpense_model->uploadDocument($fileName, $file, $operation);
+                if ($_FILES['uploadedfile'] ['error'] > 0 || !$uploadId) {
+                    echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB.');
+            window.location.replace('" . $this->config->item('url_link') . "admin/finances/manageDocuments');</script>";
+                }
+                $new_id = $this->documentexpense_model->getNewUpload();
+                $result = $this->documentexpense_model->attatchUploadId($documentId, $new_id);
+            }
             $this->generic_model->commitTransaction();
             $this->Logger->info("New document successfully inserted");
             $url = $this->config->item('url_link') . "admin/manageDocuments";
@@ -849,6 +850,7 @@ class Admin extends CK_Controller {
         $description = $document->getDocumentExpenseDescription();
         $value = $document->getDocumentExpenseValue();
         $type = $document->getDocumentExpenseType();
+        $name = $document->getDocumentExpenseName();
         $date = explode("-", $date);
         $date = implode("/", array_reverse($date));
         $data['id'] = $document_id;
@@ -857,6 +859,7 @@ class Admin extends CK_Controller {
         $data['description'] = $description;
         $data['value'] = $value;
         $data['type'] = $type;
+        $data['name'] = $name;
         $this->loadReportView("admin/finances/editDocument", $data);
     }
 
@@ -2735,6 +2738,8 @@ class Admin extends CK_Controller {
 
     public function updateDocumentUpload() {
         $id = $this->input->get('upload_id', TRUE);
+        $upload = $this->input->post('has_document', TRUE);
+        $document_id = $this->input->post('document_id', TRUE);
         $operation = "create";
         $fileName = $_FILES['uploadedfile']['name'];
         if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name'])) {
@@ -2742,7 +2747,13 @@ class Admin extends CK_Controller {
         }
         try {
             $this->generic_model->startTransaction();
-            $uploadId = $this->documentexpense_model->updateUploadDocument($id, $fileName, $file, $operation);
+            if ($upload) {
+                $uploadId = $this->documentexpense_model->updateUploadDocument($id, $fileName, $file, $operation);
+            } else {
+                $uploadId = $this->documentexpense_model->uploadDocument($fileName, $file, $operation);
+                $new_id = $this->documentexpense_model->getNewUpload();
+                $result = $this->documentexpense_model->attatchUploadId($document_id, $new_id);
+            }
             if ($_FILES['uploadedfile'] ['error'] > 0 || !$uploadId) {
                 echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB.');
             window.location.replace('" . $this->config->item('url_link') . "admin/manageDocuments');</script>";

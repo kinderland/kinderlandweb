@@ -107,7 +107,7 @@ class documentexpense_model extends CK_Model {
                 . "document_date = ?, "
                 . "document_number=?, "
                 . "description=?, "
-                . "document_value=? "
+                . "document_value=?, "
                 . "document_name=? "
                 . "WHERE document_expense_id='?'";
         $resultSet = $this->execute($this->db, $sql, array($date, $number, $description, $value, $name, intval($id)));
@@ -189,9 +189,20 @@ $this->Logger->info("O ID AQUI: " . $upload_id);
         if ($uploadId){
             return $uploadId;
         }
-        return FALSE;
-            
-            
+        return FALSE;     
+    }
+    
+    public function getNewUpload(){
+        $sql="SELECT document_expense_upload_id FROM document_expense_upload ORDER BY date_created DESC LIMIT 1";
+        $new=$this->executeRow($this->db,$sql);
+        if($new)
+            return $new->document_expense_upload_id;
+        return FALSE;   
+    }
+    
+    public function attatchUploadId($document_id,$upload_id){
+        $sql="UPDATE document_expense SET document_expense_upload_id=? WHERE document_expense_id=?";
+        $result=$this->execute($this->db,$sql,array(intval($upload_id),intval($document_id)));
     }
 }
 
