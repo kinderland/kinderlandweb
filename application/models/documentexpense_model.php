@@ -161,6 +161,17 @@ class documentexpense_model extends CK_Model {
         $this->Logger->info("Nao achei o documento");
         return $document;
     }
+    
+    public function getUploadId($document_id){
+        $sql = "SELECT document_expense_upload_id FROM document_expense WHERE document_expense_id=?";
+        $uploadId=$this->executeRow($this->db,$sql,array(intval($document_id)));
+        if ($uploadId){
+            return $uploadId;
+        }
+        return FALSE;
+            
+            
+    }
 }
 
 ?>

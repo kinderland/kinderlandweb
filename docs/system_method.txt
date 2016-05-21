@@ -388,3 +388,5 @@
 "newAccountName";"admin";2
 "verifyDocumentExpense";"admin";2
 "verifyDocumentExpense";"admin";4
+"viewDocumentUpload";"admin";2
+"viewDocumentUpload";"admin";4
