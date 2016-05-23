@@ -109,23 +109,49 @@
                                 function formaPagamento() {
 
                                     var documentexpenseId = document.getElementById("documentexpenseId").textContent;
-
-                                    var postingDate = document.getElementById("dateNow").textContent;
-                                    var postingValue = document.getElementById("postingValue").value;
+                                    alert(documentexpenseId);
                                     var postingType = document.getElementById("postingType").value;
-                                    
-                                    alert(postingType);
+									alert(postingType);  
+									if(postingType ==  "Crédito"){
+										var portions = document.getElementById("postingPortionsCredito").value;
+                                		alert(portions);                                  
+                                    	var postingValue = document.getElementById("postingValueCredito").value;
+                                    	alert(postingValue);
+                                   		var postingDate = document.getElementById("postingDateCredito").value;
+                                   		alert(postingDate);
+									}
+									if(postingType ==  "Débito"){
+										var portions = document.getElementById("postingPortionsCredito").value;
+                                		alert(portions);                                  
+                                    	var postingValue = document.getElementById("postingValueDebito").value;
+                                    	alert(postingValue);
+                                   		var postingDate = document.getElementById("postingDateDebito").value;
+                                   		alert(postingDate);
+									}
+									if(postingType ==  "Cheque"){
+										var numberCheque = document.getElementById("postingNumberCheque").value;
+                                		alert(numberCheque);                                  
+                                    	var postingValue = document.getElementById("postingValueCheque").value;
+                                    	alert(postingValue);
+                                   		var postingDate = document.getElementById("postingDateCheque").value;
+                                   		alert(postingDate);
+									}
+									if(postingType ==  "Transferência"){
+										var numberCheque = document.getElementById("postingValueTransferencia").value;
+                                		alert(numberCheque);                                  
+                                    	var postingDate = document.getElementById("postingDateTransferecia").value;
+                                    	alert(postingDate);
+                                   		var postingDate = document.getElementById("postingDateCheque").value;
+                                   		alert(postingDate);
+									}
                                     var accountName = "aluguel";
-                                    if(postingType == "Crédito"){
-                                    	var portions = document.getElementById("atributoChave").value;
-                                    	alert(portions);
-                                    }
+
 
                                     
                                     	
 	
                                     $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions},
+                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions, numberCheque: numberCheque},
                                             function (data) {
                                                 if (data == "true") {
                                                     alert("Pagamento cadastrado com sucesso!");
@@ -290,11 +316,12 @@
                                                             	<div id = "Boleto1">
                                                             		
 	                                                            	<tr> 
-		                                                                <td> Valor: </td>
-		                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueBoleto1" name="postingValueBoleto1" ></input> 
-	                                                            		<td> Data de Vencimento: </td>
-		                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateBoleto1" name="postingDateBoleto1" ></input>  
-		                                                            	<button class="btn btn-primary" onClick="boleto('1')">Salvar</button>                                                           	
+		                                                                <td> Valor: </td><br>
+		                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueBoleto1" name="postingValueBoleto1" ></input> <br><br>
+	                                                            		<td> Data de Vencimento: </td><br>
+		                                                            	<input style="width: 200x" class="form-control" type="text" id="postingDateBoleto1" name="postingDateBoleto1" ></input> <br><br>
+		                                                            	<button class="btn btn-primary" onClick="boleto('1')">Salvar</button>  
+		                                                            	<button class="btn btn-danger" data-dismiss="modal">Fechar</button>                                                         	
 	                                                            	</tr>
 	                                                            </div>
 
@@ -302,86 +329,93 @@
                                                             
                                                             <div id = "Cheque" style="display: none">
                                                             	<tr> 
-	                                                                <td> Número do Cheque: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input>
+	                                                                <td> Número do Cheque: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input> <br><br>
                                                             	</tr>
                                                             	<tr> 
-	                                                                <td> Valor: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> 
+	                                                                <td> Valor: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
-                                                            		<td> Data: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br>
-                                                            	
+                                                            		<td> Data: </td><br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br><br>
+                                                            		<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
+                                                            		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
                                                             	</tr>
 
                                                             </div>
                                                             
                                                             <div id = "Crédito" style="display: none">
                                                             	<tr> 
-	                                                                <td> Valor: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> 
+	                                                                <td> Valor: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> <br><br>
                                                             	</tr>
                                                             	<tr> 
-	                                                                <td> Número de Parcelas: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingPortionsCredito" name="postingPortionsCredito" ></input>
+	                                                                <td> Número de Parcelas: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingPortionsCredito" name="postingPortionsCredito" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
-                                                            		<td> Data: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br>
-                                                            	
+                                                            		<td> Data: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br><br>
+                                                            		<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
+                                                            		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
                                                             	</tr>
 
                                                             </div>
                                                             
                                                             <div id = "Débito" style="display: none">
                                                             	<tr> 
-	                                                                <td> Valor: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueDebito" name="postingValueDebito" ></input> 
+	                                                                <td> Valor: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueDebito" name="postingValueDebito" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
-                                                            		<td> Data: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateDebito" name="postingDateDebito" ></input> <br>
-                                                            	
+                                                            		<td> Data: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateDebito" name="postingDateDebito" ></input> <br><br>
+                                                            		<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
+                                                            		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
                                                             	</tr>
 
                                                             </div>
                                                             
-                                                            <div id = "Dinheiro" style="display: none">
+                                                            <div id = "Dinheiro" style="display: none"> 
                                                             	<tr> 
-	                                                                <td> Valor: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> 
+	                                                                <td> Valor: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
-                                                            		<td> Data: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br>
-                                                            	
+                                                            		<td> Data: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br><br>
+                                                            		<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
+                                                            		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
                                                             	</tr>
 
                                                             </div>
                                                             
-                                                            <div id = "Transferência" style="display: none">
+                                                            <div id = "Transferência" style="display: none"> 
                                                             	<tr> 
-	                                                                <td> Valor: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> 
+	                                                                <td> Valor: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
-                                                            		<td> Data: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateTransferencia" name="postingDateTransferencia" ></input> <br>
+                                                            		<td> Data: </td><br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateTransferencia" name="postingDateTransferencia" ></input> <br><br>
                                                             	
                                                             	</tr>
                                                             	<tr> 
-	                                                                <td> Banco: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingBankNumberTransferencia" name="postingBankNumberTransferencia" ></input> 
+	                                                                <td> Banco: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingBankNumberTransferencia" name="postingBankNumberTransferencia" ></input> <br><br>
                                                             	</tr>
                                                             	<tr> 
-	                                                                <td> Agência: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingAgencyTransferencia" name="postingAgencyTransferencia" ></input> 
+	                                                                <td> Agência: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingAgencyTransferencia" name="postingAgencyTransferencia" ></input> <br><br>
                                                             	</tr>
                                                             	<tr> 
-	                                                                <td> Conta: </td>
-	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingAccountTransferencia" name="postingAccountTransferencia" ></input> 
+	                                                                <td> Conta: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingAccountTransferencia" name="postingAccountTransferencia" ></input> <br><br>
+                                                            		<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
+                                                            		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
                                                             	</tr>
+                                                            	
 
                                                             </div>
 
@@ -390,10 +424,6 @@
                                             </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                            	<button class="btn btn-primary" onClick="formaPagamento()">Confirmar</button>
-                                <button class="btn btn-danger" data-dismiss="modal">Fechar</button>
                             </div>
                         </div>
                     </div>
