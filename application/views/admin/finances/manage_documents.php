@@ -137,12 +137,17 @@
                                    		alert(postingDate);
 									}
 									if(postingType ==  "Transferência"){
-										var numberCheque = document.getElementById("postingValueTransferencia").value;
-                                		alert(numberCheque);                                  
+										var postingValue = document.getElementById("postingValueTransferencia").value;
+                                		alert(postingValue);                                  
                                     	var postingDate = document.getElementById("postingDateTransferecia").value;
                                     	alert(postingDate);
-                                   		var postingDate = document.getElementById("postingDateCheque").value;
-                                   		alert(postingDate);
+									}
+									if(postingType ==  "Boleto"){
+										var postingPortionsBoleto = document.getElementById("postingPortionsBoleto").value;
+										var postingValue = document.getElementById("postingValueBoleto1").value;
+                                		alert(postingValue);                                  
+                                    	var postingDate = document.getElementById("postingDateBoleto1").value;
+                                    	alert(postingDate);
 									}
                                     var accountName = "aluguel";
 
@@ -151,7 +156,7 @@
                                     	
 	
                                     $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions, numberCheque: numberCheque},
+                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions, numberCheque: numberCheque, },
                                             function (data) {
                                                 if (data == "true") {
                                                     alert("Pagamento cadastrado com sucesso!");
@@ -225,7 +230,13 @@
                                     }
                                     
                                 }
-                                                                
+
+							function postingPortions(){
+								var portions = document.getElementById("postingPortionsBoleto").value;
+								alert(portions);
+								
+								
+                                                                    
                             </script>                       	
 
 
@@ -314,14 +325,23 @@
                                                             										
                                                             <div id = "Boleto" style="display: none">
                                                             	<div id = "Boleto1">
-                                                            		
-	                                                            	<tr> 
+                                                            		<br>
+	                                                            	<tr>
+	                                                            		Número de parcelas<select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" onchange="postingPortions()" >
+                                                                <option> - Selecione - </option>
+                                                                <?php for ($i = 0; $i <= 10; $i++){?>
+                                                                <option value="<?= $i ?>"> <?php echo $i ?> </option>
+                                                                <?php }?>
+                                                               </select><br><br>
 		                                                                <td> Valor: </td><br>
 		                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueBoleto1" name="postingValueBoleto1" ></input> <br><br>
 	                                                            		<td> Data de Vencimento: </td><br>
 		                                                            	<input style="width: 200x" class="form-control" type="text" id="postingDateBoleto1" name="postingDateBoleto1" ></input> <br><br>
+		                                                            	<td> Número de parcelas: </td><br>
+		                                                            	<input style="width: 200x" class="form-control" type="text" id="postingPortionsBoleto" name="postingPortionsBoleto" ></input> <br><br>
 		                                                            	<button class="btn btn-primary" onClick="boleto('1')">Salvar</button>  
-		                                                            	<button class="btn btn-danger" data-dismiss="modal">Fechar</button>                                                         	
+		                                                            	<button class="btn btn-danger" data-dismiss="modal">Fechar</button>   
+		                                                            	                                                      	
 	                                                            	</tr>
 	                                                            </div>
 
