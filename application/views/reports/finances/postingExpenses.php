@@ -24,6 +24,118 @@
     </head>
     <body>
         <script>
+
+        function post(path, params, method) {
+            method = method || "post"; // Set method to post by default if not specified.
+
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+            var form = document.createElement("form");
+            form.setAttribute("method", method);
+            form.setAttribute("action", path);
+
+            for (var key in params) {
+                if (params.hasOwnProperty(key)) {
+                    var hiddenField = document.createElement("input");
+                    hiddenField.setAttribute("type", "hidden");
+                    hiddenField.setAttribute("name", key);
+                    hiddenField.setAttribute("value", params[key]);
+                    form.appendChild(hiddenField);
+                }
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function getCSVName() {
+
+            var nomePadrao = "lancamentos-";
+            var mes = $("#month").val();
+            var ano = $("#year").val();
+            var mesReal = "";
+
+            switch(mes) {
+	            case "0":
+	            	mesReal = "todos-os-meses-";
+	                break;
+	            case "1":
+	            	mesReal="janeiro-";
+	                break;
+	            case "2":
+	            	mesReal="fevereiro-";
+	                break;
+	            case "3":
+	            	mesReal="março-";
+	                break;
+	            case "4":
+	            	mesReal="abril-";
+	                break;
+	            case "5":
+	            	mesReal="maio-";
+	                break;
+	            case "6":
+	            	mesReal="junho-";
+	                break;
+	            case "7":
+	            	mesReal="julho-";
+	                break;
+	            case "8":
+	            	mesReal="agosto-";
+	                break;
+	            case "9":
+	            	mesReal="setembro-";
+	                break;
+	            case "10":
+	            	mesReal="outubro-";
+	                break;
+	            case "11":
+	            	mesReal="novembro-";
+	                break;
+	            case "12":
+	            	mesReal="dezembro-";
+	                break;
+	        }
+            
+            nomePadrao = nomePadrao.concat(mesReal);
+            nomePadrao = nomePadrao.concat(ano);
+            
+            return nomePadrao;
+        }
+
+
+        function sendTableToCSV() {
+            var data = [];
+            var table = document.getElementById("tablebody");
+            var name = getCSVName();
+            var elements = document.getElementsByName('document_description');
+            var tablehead = document.getElementsByTagName("thead")[0];
+            
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                var data2 = []
+                //Nome, retira pega o que esta entre um <> e outro <>
+                var description = elements[i].getAttribute('id');
+
+                data2.push(row.cells[0].innerHTML);
+                data2.push(description);
+                data2.push(row.cells[5].innerHTML);
+                data2.push(row.cells[4].innerHTML);
+                data.push(data2)
+            }
+            if (i == 0) {
+                alert('Não há dados para geração da planilha');
+                return;
+            }
+
+
+            var dataToSend = JSON.stringify(data);
+            var columName = ["Data", "Descrição", "Nome da Conta", "Valor"];
+            var columnNameToSend = JSON.stringify(columName);
+            post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
+        }
+
+
+        
         $(function() {
             $(".sortable-table").tablesorter();
             $(".datepicker").datepicker();
@@ -74,7 +186,8 @@
                     ?>
                 </select>
             </form>
-            <br /> 
+             <button class="button btn btn-primary col-lg-2" onclick="sendTableToCSV()" value="">Exportar</button>
+            <br /> <br />
            
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
@@ -106,6 +219,7 @@
                                 foreach ($info as $i) {
                                     ?>
                                     <tr>
+                                    	<input type="hidden" id="<?= $i->document_description?>" name="document_description" />
                                         <td><?= $i->posting_date ?></td>
                                         <td><?= $i->document_type ?></td>
                                         <td><?= $i->posting_type ?></td>

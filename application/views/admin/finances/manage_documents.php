@@ -83,8 +83,6 @@
         function sendInfoToModal(documentExpenseId, dateNow) {
             $("#documentexpenseId").html(documentExpenseId);
             $("#dateNow").html(dateNow);
-
-            alert("Oi");
         }
     </script>
 
@@ -102,7 +100,7 @@
              
                     <br /><br />
                     <?php
-                    if (isset($documents) && count($documents) > 0) {
+                    if (isset($documents)) {
                         ?>
                         <table class="table"><tr><th>Data</th><th>Tipo</th><th>Valor</th><th>Imagem</th><th>Forma de pagamento</th></tr>
 
@@ -141,15 +139,63 @@
                                 }
 
 
-                                function myFunction() {
-                                    var x = document.getElementById("postingType").value;
-                                    if(x == "Débito"){
-                                    	document.getElementById("demo").innerHTML = "Qual é o número da parcela?";
-                                    	document.getElementById("atributoChave").innerHTML = "<input></input>";
-                                    }
-                                    if(x == "Crédito"){
-                                    	document.getElementById("demo").innerHTML = "Quantas parcelas?";
-                                    	document.getElementById("atributoChave").innerHTML = "";
+                                function paymentType() {
+                                    var type = document.getElementById("postingType").value;
+                                    
+                                    if(type == "Boleto"){
+                                    	document.getElementById("Cheque").style.display = "none";
+                                    	document.getElementById("Crédito").style.display = "none";
+                                    	document.getElementById("Débito").style.display = "none";
+                                    	document.getElementById("Dinheiro").style.display = "none";
+                                    	document.getElementById("Transferência").style.display = "none";
+                                    	
+                                    	document.getElementById("Boleto").style.display = ""; 
+                                    	                                   	
+                                    }else if(type == "Cheque"){
+                                    	document.getElementById("Boleto").style.display = "none";
+                                    	document.getElementById("Crédito").style.display = "none";
+                                    	document.getElementById("Débito").style.display = "none";
+                                    	document.getElementById("Dinheiro").style.display = "none";
+                                    	document.getElementById("Transferência").style.display = "none";
+                                    	
+                                    	document.getElementById("Cheque").style.display = ""; 
+                                    	
+                                    }else if(type == "Crédito"){
+                                    	document.getElementById("Boleto").style.display = "none";
+                                    	document.getElementById("Cheque").style.display = "none";
+                                    	document.getElementById("Débito").style.display = "none";
+                                    	document.getElementById("Dinheiro").style.display = "none";
+                                    	document.getElementById("Transferência").style.display = "none";
+                                    	
+                                    	document.getElementById("Crédito").style.display = ""; 
+                                    	
+                                    }else if(type == "Débito"){
+                                    	document.getElementById("Boleto").style.display = "none";
+                                    	document.getElementById("Cheque").style.display = "none";
+                                    	document.getElementById("Crédito").style.display = "none";
+                                    	document.getElementById("Dinheiro").style.display = "none";
+                                    	document.getElementById("Transferência").style.display = "none";
+                                    	
+                                    	document.getElementById("Débito").style.display = ""; 
+                                    	
+                                    }else if(type == "Dinheiro"){
+                                    	document.getElementById("Boleto").style.display = "none";
+                                    	document.getElementById("Cheque").style.display = "none";
+                                    	document.getElementById("Crédito").style.display = "none";
+                                    	document.getElementById("Débito").style.display = "none";
+                                    	document.getElementById("Transferência").style.display = "none";
+                                    	
+                                    	document.getElementById("Dinheiro").style.display = ""; 
+                                    	
+                                    }else if(type == "Transferência"){
+                                    	document.getElementById("Boleto").style.display = "none";
+                                    	document.getElementById("Cheque").style.display = "none";
+                                    	document.getElementById("Crédito").style.display = "none";
+                                    	document.getElementById("Débito").style.display = "none";
+                                    	document.getElementById("Dinheiro").style.display = "none";
+                                    	
+                                    	document.getElementById("Transferência").style.display = ""; 
+                                    	
                                     }
                                     
                                 }
@@ -207,91 +253,147 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="modal_title"></h4>
+                                <h4 class="modal-title" id="modal_title">Forma de Pagamento</h4>
                             </div>
                             <div class="modal-body">
                                 <div class="row">
-                                    <div class="col-lg-6 middle-content">
-                                        <form name="form_postingExpense" method="POST" action="<?= $this->config->item('url_link') ?>admin/postingExpense" id="form_postingExpense">	                                         
+                                    <div class="col-lg-12 middle-content">
+                                        	                                         
                                             <div class="row">
                                                 <div class="form-group">
-                                                    <div class="col-lg-6">
-
-                                                        <td> Forma de pagamento:</td> 
-                                                        <form method="GET">
-                                                                <select name="postingType" id="postingType" onchange="myFunction()" >
-                                                                <option>Selecione</option>
-                                                                <option value="Crédito" >Crédito</option>
-                                                                <option value="Dinheiro" >Dinheiro</option>  
-                                                                <option  value="Débito">Débito</option>  
+                                                    <div class="col-lg-12">
+                                                    	<label for="postingType" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Tipo de Pagamento: </label>
+                                                          <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">    
+                                                              <select style="width: 190px" class="form-control" name="postingType" id="postingType" onchange="paymentType()" >
+                                                                <option> - Selecione - </option>
                                                                 <option value="Boleto">Boleto</option> 
-                                                                <option value="Transferência">Transferência</option>
                                                                 <option value="Cheque">Cheque</option>
+                                                                <option value="Crédito" >Crédito</option>
+                                                                <option value="Débito">Débito</option>  
+                                                                <option value="Dinheiro" >Dinheiro</option>  
+                                                                <option value="Transferência">Transferência</option>
 
-                                                            </select>
+                                                               </select>
+                                                             </div>
+                                                     </div>
+                                                  </div>
+                                               </div>          
+                                                           
 
                                                             <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
                                                             <input type="hidden" id="dateNow" name="dateNow" value="" />	
                                                             <input type="hidden" id="postingType" name="postingType" value="" >		
-                                                            <br><br>										
-                                                            <tr>
-                                                            	<p id="demo"></p>
-                                                            	<input type="text" id="atributoChave"></input>
+                                                            <br><br>
+                                                            
+                                                            										
+                                                            <div id = "Boleto" style="display: none">
+                                                            	<div id = "Boleto1">
+                                                            		
+	                                                            	<tr> 
+		                                                                <td> Valor: </td>
+		                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueBoleto1" name="postingValueBoleto1" ></input> 
+	                                                            		<td> Data de Vencimento: </td>
+		                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateBoleto1" name="postingDateBoleto1" ></input>  
+		                                                            	<button class="btn btn-primary" onClick="boleto('1')">Salvar</button>                                                           	
+	                                                            	</tr>
+	                                                            </div>
 
+                                                            </div>
+                                                            
+                                                            <div id = "Cheque" style="display: none">
+                                                            	<tr> 
+	                                                                <td> Número do Cheque: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input>
+                                                            	</tr>
+                                                            	<tr> 
+	                                                                <td> Valor: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> 
+                                                            	</tr>
+                                                            	<tr>
+                                                            		<td> Data: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br>
+                                                            	
                                                             	</tr>
 
-                                                            <tr> 
-                                                                <td> Valor: </td>
-                                                            <input type="text" id="postingValue" name="postingValue" ></input> <br>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>
-                                                                    <form action="demo_form.asp" autocomplete="on">
-                                                                        Conta: <input type="text" id="account_name">
-                                                                    </form>
-                                                                </td>
-                                                            </tr> <br>
+                                                            </div>
+                                                            
+                                                            <div id = "Crédito" style="display: none">
+                                                            	<tr> 
+	                                                                <td> Valor: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> 
+                                                            	</tr>
+                                                            	<tr> 
+	                                                                <td> Número de Parcelas: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingPortionsCredito" name="postingPortionsCredito" ></input>
+                                                            	</tr>
+                                                            	<tr>
+                                                            		<td> Data: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br>
+                                                            	
+                                                            	</tr>
 
-                                                            <tr>
-                                                                <td> Beneficiário: </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td> Nome: </td>
-                                                            <input type="text" id="beneficiary_name"></input> <br>
-                                                            </tr>
-                                                            <tr>
-                                                                <td> CNPJ/CPF: </td>
-                                                            <input type="text" id="beneficiary_dnumber" name="beneficiary_dnumber"></input> <br>
-                                                            </tr>
-                                                            <tr>
-                                                                <td> Telefone: </td>
-                                                            <input type="text" id="beneficiary_phone"></input> <br><br>
+                                                            </div>
+                                                            
+                                                            <div id = "Débito" style="display: none">
+                                                            	<tr> 
+	                                                                <td> Valor: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueDebito" name="postingValueDebito" ></input> 
+                                                            	</tr>
+                                                            	<tr>
+                                                            		<td> Data: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateDebito" name="postingDateDebito" ></input> <br>
+                                                            	
+                                                            	</tr>
 
+                                                            </div>
+                                                            
+                                                            <div id = "Dinheiro" style="display: none">
+                                                            	<tr> 
+	                                                                <td> Valor: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> 
+                                                            	</tr>
+                                                            	<tr>
+                                                            		<td> Data: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br>
+                                                            	
+                                                            	</tr>
 
-                                                            <table class="table"><tr><th>Banco</th><th>Agência</th><th>Conta</th><th> X </th></tr>
-<?php
-foreach ($banks as $bank) {
-    ?><tr>
-                                                                    <input type="hidden" id="person_id" name="person_id" value="" />
-                                                                    <td><?php echo $bank->getBankNumber(); ?> </td>
-                                                                    <td><?php echo $bank->getBankAgency(); ?> </td>
-                                                                    <td><?php echo $bank->getAccountNumber(); ?> </td>
-                                                                    <td><input type="checkbox" id="account_selected" name="account_selected" <?= ($bank->getBankDataId()) ? "checked" : "" ?> /></td>
-                                                                    </tr>
-    <?php
-}
-?> </table>
+                                                            </div>
+                                                            
+                                                            <div id = "Transferência" style="display: none">
+                                                            	<tr> 
+	                                                                <td> Valor: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> 
+                                                            	</tr>
+                                                            	<tr>
+                                                            		<td> Data: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingDateTransferencia" name="postingDateTransferencia" ></input> <br>
+                                                            	
+                                                            	</tr>
+                                                            	<tr> 
+	                                                                <td> Banco: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingBankNumberTransferencia" name="postingBankNumberTransferencia" ></input> 
+                                                            	</tr>
+                                                            	<tr> 
+	                                                                <td> Agência: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingAgencyTransferencia" name="postingAgencyTransferencia" ></input> 
+                                                            	</tr>
+                                                            	<tr> 
+	                                                                <td> Conta: </td>
+	                                                            	<input style="width: 360px" class="form-control" type="text" id="postingAccountTransferencia" name="postingAccountTransferencia" ></input> 
+                                                            	</tr>
+
+                                                            </div>
 
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-warning" data-dismiss="modal">Fechar</button>
-                                <button class="btn btn-warning" onClick="formaPagamento()">Confirmar</button>
+                            	<button class="btn btn-primary" onClick="formaPagamento()">Confirmar</button>
+                                <button class="btn btn-danger" data-dismiss="modal">Fechar</button>
                             </div>
                         </div>
                     </div>

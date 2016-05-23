@@ -994,10 +994,12 @@ class Admin extends CK_Controller {
             $obj->documentexpenseType = $document->getDocumentExpenseType();
             $obj->documentexpenseDescription = $document->getDocumentExpenseDescription();
             $obj->beneficiaryId = $document->getBeneficiaryId();
+            
             if ($this->documentexpense_model->getDocumentExpensePaidById($documentexpenseId) != null) {
                 $obj->paid = true;
-            } else
+            } else{
                 $obj->paid = false;
+            }
 
             $doc[] = $obj;
         }
