@@ -112,6 +112,7 @@
                                     alert(documentexpenseId);
                                     var postingType = document.getElementById("postingType").value;
 									alert(postingType);  
+									var accountName = "aluguel";
 									if(postingType ==  "Crédito"){
 										var portions = document.getElementById("postingPortionsCredito").value;
                                 		alert(portions);                                  
@@ -119,6 +120,18 @@
                                     	alert(postingValue);
                                    		var postingDate = document.getElementById("postingDateCredito").value;
                                    		alert(postingDate);
+                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
+	                                            function (data) {
+	                                                if (data == "true") {
+	                                                    alert("Pagamento cadastrado com sucesso!");
+	                                                    location.reload();
+	                                                } else if (data == "false") {
+	                                                    alert("Não foi possível cadastrar o pagamento!");
+	                                                    location.reload();
+	                                                }
+	                                            }
+	                                    );
 									}
 									if(postingType ==  "Débito"){
 										var portions = document.getElementById("postingPortionsCredito").value;
@@ -127,6 +140,18 @@
                                     	alert(postingValue);
                                    		var postingDate = document.getElementById("postingDateDebito").value;
                                    		alert(postingDate);
+                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+	                                            function (data) {
+	                                                if (data == "true") {
+	                                                    alert("Pagamento cadastrado com sucesso!");
+	                                                    location.reload();
+	                                                } else if (data == "false") {
+	                                                    alert("Não foi possível cadastrar o pagamento!");
+	                                                    location.reload();
+	                                                }
+	                                            }
+	                                    );
 									}
 									if(postingType ==  "Cheque"){
 										var numberCheque = document.getElementById("postingNumberCheque").value;
@@ -135,6 +160,18 @@
                                     	alert(postingValue);
                                    		var postingDate = document.getElementById("postingDateCheque").value;
                                    		alert(postingDate);
+                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, numberCheque: numberCheque },
+	                                            function (data) {
+	                                                if (data == "true") {
+	                                                    alert("Pagamento cadastrado com sucesso!");
+	                                                    location.reload();
+	                                                } else if (data == "false") {
+	                                                    alert("Não foi possível cadastrar o pagamento!");
+	                                                    location.reload();
+	                                                }
+	                                            }
+	                                    );
 									}
 									if(postingType ==  "Transferência"){
 										var postingValue = document.getElementById("postingValueTransferencia").value;
@@ -143,31 +180,30 @@
                                     	alert(postingDate);
 									}
 									if(postingType ==  "Boleto"){
-										var postingPortionsBoleto = document.getElementById("postingPortionsBoleto").value;
-										var postingValue = document.getElementById("postingValueBoleto1").value;
-                                		alert(postingValue);                                  
-                                    	var postingDate = document.getElementById("postingDateBoleto1").value;
-                                    	alert(postingDate);
+										var portions = document.getElementById("postingPortionsBoleto").value;
+										var postingValue = "";
+										var postingDate = "";
+										for (var i = 1; i <= portions; i++){
+											
+											postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value).concat("/");                   
+                                    		postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value).concat("/");
+										}
+										$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
+	                                            function (data) {
+	                                                if (data == "true") {
+	                                                    alert("Pagamento cadastrado com sucesso!");
+	                                                    location.reload();
+	                                                } else if (data == "false") {
+	                                                    alert("Não foi possível cadastrar o pagamento!");
+	                                                    location.reload();
+	                                                }
+	                                            }
+	                                    );
+
 									}
-                                    var accountName = "aluguel";
-
-
-                                    
-                                    	
-	
-                                    $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions, numberCheque: numberCheque, },
-                                            function (data) {
-                                                if (data == "true") {
-                                                    alert("Pagamento cadastrado com sucesso!");
-                                                    location.reload();
-                                                } else if (data == "false") {
-                                                    alert("Não foi possível cadastrar o pagamento!");
-                                                    location.reload();
-                                                }
-                                            }
-                                    );
                                 }
+                                    
 
 
                                 function paymentType() {
@@ -233,9 +269,16 @@
 
 							function postingPortions(){
 								var portions = document.getElementById("postingPortionsBoleto").value;
-								alert(portions);
+								for(var i = 1; i <= 10; i++){
+									if(i <= portions){
+										document.getElementById("Boleto".concat(i)).style.display = "";
+									}
+									else{
+										document.getElementById("Boleto".concat(i)).style.display = "none";
+									}
+								}
 								
-								
+							}
                                                                     
                             </script>                       	
 
@@ -320,32 +363,57 @@
                                                             <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
                                                             <input type="hidden" id="dateNow" name="dateNow" value="" />	
                                                             <input type="hidden" id="postingType" name="postingType" value="" >		
-                                                            <br><br>
+                                                            <br/>
                                                             
                                                             										
                                                             <div id = "Boleto" style="display: none">
-                                                            	<div id = "Boleto1">
-                                                            		<br>
+
+                                                            		
 	                                                            	<tr>
-	                                                            		Número de parcelas<select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" onchange="postingPortions()" >
-                                                                <option> - Selecione - </option>
-                                                                <?php for ($i = 0; $i <= 10; $i++){?>
-                                                                <option value="<?= $i ?>"> <?php echo $i ?> </option>
-                                                                <?php }?>
-                                                               </select><br><br>
-		                                                                <td> Valor: </td><br>
-		                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueBoleto1" name="postingValueBoleto1" ></input> <br><br>
-	                                                            		<td> Data de Vencimento: </td><br>
-		                                                            	<input style="width: 200x" class="form-control" type="text" id="postingDateBoleto1" name="postingDateBoleto1" ></input> <br><br>
-		                                                            	<td> Número de parcelas: </td><br>
-		                                                            	<input style="width: 200x" class="form-control" type="text" id="postingPortionsBoleto" name="postingPortionsBoleto" ></input> <br><br>
-		                                                            	<button class="btn btn-primary" onClick="boleto('1')">Salvar</button>  
-		                                                            	<button class="btn btn-danger" data-dismiss="modal">Fechar</button>   
+	                                                            	<label for="postingPortionsBoleto" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Número de parcelas: </label>
+		                                                            <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
+	                                                            		<select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" onchange="postingPortions()" >
+                                                                			<option> - Selecione - </option>
+                                                               				 <?php for ($i = 1; $i <= 10; $i++){?>
+                                                                			<option value="<?= $i ?>"> <?php echo $i ?> </option>
+                                                               				 <?php }?>
+                                                              		   </select>
+                                                               		</div>
+                                                               		</tr>
+                                                               		<br/><br/><br/>
+                                                               <?php for($i = 1; $i <= 10; $i++){?>
+                                                               <tr>
+                                                               <div class="col-lg-12 control_label" id="Boleto<?php echo $i ?>" style="display: none; padding-left:0px" >
+                                                               		<div class="row">
+                                                               			<div class="col-lg-12">
+		                                                                <label for="postingValueBoleto<?php echo $i?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
+		                                                            	<div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
+		                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i?>" name="postingValueBoleto<?php echo $i?>" ></input> 
+	                                                            		</div>
+	                                                            		 <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
+	                                                            		<div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
+		                                                            	<input style="width: 200x" class="form-control" type="text" id="postingDateBoleto<?php echo $i ?>" name="postingDateBoleto<?php echo $i ?>" ></input> 
+		                                                            	<br/><br/>
+		                                                        </div>
+		                                                        </div>
+		                                                        </div>
+		                                                        </div>
+		                                                        </tr>
+		                                                        
+		                                                        <?php } ?>
+		                                                        <br>
+		                                                        	<tr>
+		                                                        		<div class="row">
+		                                                        		<div class="col-lg-7 control_label">
+		                                                            	<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button>  
+		                                                            	<button class="btn btn-danger" data-dismiss="modal">Fechar</button> 
+		                                                            	</div>  
+		                                                            	</div>
 		                                                            	                                                      	
 	                                                            	</tr>
 	                                                            </div>
 
-                                                            </div>
+                                                           
                                                             
                                                             <div id = "Cheque" style="display: none">
                                                             	<tr> 
