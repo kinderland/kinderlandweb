@@ -931,22 +931,15 @@ class Admin extends CK_Controller {
         $postingType = $_POST['postingType'];
         $accountName = $_POST['accountName'];
 		
-        $resultado = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName);
+        if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName)){
+        if($postingType == "Dinheiro" || $postingType == "Débito"){
+        	echo "true";
+        	return;
         
-        if ($postingType == "Crédito") {
+        } else if ($postingType == "Crédito") {
             $portions = $_POST['portions'];
             $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
             if ($result != null) {
-                echo "true";
-                return;
-            } else {
-                echo "false";
-                return;
-            }
-        } else if ($postingType == "Dinheiro") {
-            $portionNumber = $_POST['portion_number'];
-            $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
-                        if ($result != null) {
                 echo "true";
                 return;
             } else {
@@ -963,17 +956,8 @@ class Admin extends CK_Controller {
                 echo "false";
                 return;
             }
-        } else if ($postingType == "Débito") {
-            $portionNumber = $_POST['portion_number'];
-            $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
-        if ($result != null) {
-                echo "true";
-                return;
-            } else {
-                echo "false";
-                return;
-            }
-        } else { //transferência
+
+        } else if($postingType == "Transferência"){ //transferência
             $bankDataId = $_POST['bank_data_id'];
             $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue);
         if ($result != null) {
@@ -983,6 +967,7 @@ class Admin extends CK_Controller {
                 echo "false";
                 return;
             }
+        }
         }
       
 	}

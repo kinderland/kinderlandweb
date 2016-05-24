@@ -112,8 +112,10 @@
                                     alert(documentexpenseId);
                                     var postingType = document.getElementById("postingType").value;
 									alert(postingType);  
-									var accountName = "aluguel";
+									
 									if(postingType ==  "Crédito"){
+										var accountName = document.getElementById("accountNameCredito").value;
+										alert(accountName);
 										var portions = document.getElementById("postingPortionsCredito").value;
                                 		alert(portions);                                  
                                     	var postingValue = document.getElementById("postingValueCredito").value;
@@ -133,9 +135,11 @@
 	                                            }
 	                                    );
 									}
-									if(postingType ==  "Débito"){
-										var portions = document.getElementById("postingPortionsCredito").value;
-                                		alert(portions);                                  
+
+									
+									if(postingType ==  "Débito"){                       
+										var accountName = document.getElementById("accountNameDebito").value;
+										alert(accountName);
                                     	var postingValue = document.getElementById("postingValueDebito").value;
                                     	alert(postingValue);
                                    		var postingDate = document.getElementById("postingDateDebito").value;
@@ -153,7 +157,30 @@
 	                                            }
 	                                    );
 									}
+
+									if(postingType ==  "Dinheiro"){  
+										var accountName = document.getElementById("accountNameDinheiro").value;
+										alert(accountName);                     
+                                    	var postingValue = document.getElementById("postingValueDinheiro").value;
+                                    	alert(postingValue);
+                                   		var postingDate = document.getElementById("postingDateDinheiro").value;
+                                   		alert(postingDate);
+                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+	                                            function (data) {
+	                                                if (data == "true") {
+	                                                    alert("Pagamento cadastrado com sucesso!");
+	                                                    location.reload();
+	                                                } else if (data == "false") {
+	                                                    alert("Não foi possível cadastrar o pagamento!");
+	                                                    location.reload();
+	                                                }
+	                                            }
+	                                    );
+									}
 									if(postingType ==  "Cheque"){
+										var accountName = document.getElementById("accountNameCheque").value;
+										alert(accountName);
 										var numberCheque = document.getElementById("postingNumberCheque").value;
                                 		alert(numberCheque);                                  
                                     	var postingValue = document.getElementById("postingValueCheque").value;
@@ -174,6 +201,8 @@
 	                                    );
 									}
 									if(postingType ==  "Transferência"){
+										var accountName = document.getElementById("accountNameTransferencia").value;
+										alert(accountName);
 										var postingValue = document.getElementById("postingValueTransferencia").value;
                                 		alert(postingValue);                                  
                                     	var postingDate = document.getElementById("postingDateTransferecia").value;
@@ -183,6 +212,8 @@
 										var portions = document.getElementById("postingPortionsBoleto").value;
 										var postingValue = "";
 										var postingDate = "";
+										alert(portions);
+										alert(postingValue);
 										for (var i = 1; i <= portions; i++){
 											
 											postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value).concat("/");                   
@@ -379,6 +410,10 @@
                                                                				 <?php }?>
                                                               		   </select>
                                                                		</div>
+                                                               		</tr> <br/><br/><br/>
+                                                               		<tr>
+                                                               		<td><b> Nome da conta: </b></td>
+                                                               		<input type="text" id="accountNameTransferencia" name="accountNameTranseferencia" ></input>
                                                                		</tr>
                                                                		<br/><br/><br/>
                                                                <?php for($i = 1; $i <= 10; $i++){?>
@@ -420,6 +455,10 @@
 	                                                                <td> Número do Cheque: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input> <br><br>
                                                             	</tr>
+                                                            	<tr>
+                                                               		<td> Nome da conta: </td> <br>
+                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameCheque" name="accountNameCheque" ></input><br><br>
+                                                               		</tr>
                                                             	<tr> 
 	                                                                <td> Valor: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
@@ -434,12 +473,16 @@
                                                             </div>
                                                             
                                                             <div id = "Crédito" style="display: none">
+                                                            	<tr>
+                                                               		<td> Nome da conta: </td><br>
+                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameCredito" name="accountNameCredito" ></input><br><br>
+                                                               		</tr>
                                                             	<tr> 
-	                                                                <td> Valor: </td> <br>
+	                                                                <td> Valor: </td><br> 
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> <br><br>
                                                             	</tr>
                                                             	<tr> 
-	                                                                <td> Número de Parcelas: </td> <br>
+	                                                                <td> Número de Parcelas: </td><br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingPortionsCredito" name="postingPortionsCredito" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
@@ -452,8 +495,12 @@
                                                             </div>
                                                             
                                                             <div id = "Débito" style="display: none">
+                                                            	<tr>
+                                                               		<td> Nome da conta: </td><br>
+                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameDebito" name="accountNameDebito" ></input><br><br>
+                                                               		</tr>
                                                             	<tr> 
-	                                                                <td> Valor: </td> <br>
+	                                                                <td> Valor: </td><br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueDebito" name="postingValueDebito" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
@@ -466,12 +513,16 @@
                                                             </div>
                                                             
                                                             <div id = "Dinheiro" style="display: none"> 
+                                                            	<tr>
+                                                               		<td>Nome da conta: </td><br>
+                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameDinheiro" name="accountNameDinheiro" ></input><br><br>
+                                                               		</tr>
                                                             	<tr> 
-	                                                                <td> Valor: </td> <br>
+	                                                                <td> Valor: </td><br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> <br><br>
                                                             	</tr>
                                                             	<tr>
-                                                            		<td> Data: </td> <br>
+                                                            		<td> Data: </td><br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br><br>
                                                             		<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
                                                             		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
@@ -480,6 +531,10 @@
                                                             </div>
                                                             
                                                             <div id = "Transferência" style="display: none"> 
+                                                            	<tr>
+                                                               		<td>Nome da conta: </td><br>
+                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameTransferencia" name="accountNameTransferencia" ></input><br><br>
+                                                               		</tr>
                                                             	<tr> 
 	                                                                <td> Valor: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> <br><br>
