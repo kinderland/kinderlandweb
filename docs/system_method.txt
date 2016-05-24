@@ -392,3 +392,4 @@
 "viewDocumentUpload";"admin";4
 "updateDocumentUpload";"admin";2
 "updateDocumentUpload";"admin";4
+"toggleDocumentPayed";"admin";4

@@ -78,7 +78,7 @@ class finance_model extends CK_Model{
 	}
 	
 	public function getAllAccountNames(){
-		$sql = "SELECT account_name FROM account";
+		$sql = "SELECT account_name FROM account ORDER BY account_name ASC";
 		 $result = $this->executeRows($this->db, $sql);
 		 if($result)
 			return $result;

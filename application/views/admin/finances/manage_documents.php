@@ -47,11 +47,11 @@
                     $(this).bootstrapSwitch('state', true, true);
             });
             $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                var string = "<?= $this->config->item("url_link") ?>finances/toggleEnable/".concat($(this).attr("id"));
-                var recarrega = "<?= $this->config->item("url_link") ?>admin/manageDocuments/";
+                var string = "<?= $this->config->item("url_link") ?>admin/toggleDocumentPayed/".concat($(this).attr("id"));
+                var recarrega = "<?= $this->config->item("url_link") ?>admin/manage_documents/";
                 $.post(string).done(function (data) {
                     if (data == 1)
-                        alert("Documento modificado com sucesso");
+                        alert("Estado do documento modificado com sucesso");
                     else {
                         alert("Problema ao modificar o estado do documento");
                         window.location = recarrega;
@@ -84,15 +84,274 @@
             $("#documentexpenseId").html(documentExpenseId);
             $("#dateNow").html(dateNow);
         }
+
+        function formaPagamento() {
+
+            var documentexpenseId = document.getElementById("documentexpenseId").textContent;
+            alert(documentexpenseId);
+            var postingType = document.getElementById("postingType").value;
+			alert(postingType);  
+			
+			if(postingType ==  "Crédito"){
+				var accountName = document.getElementById("accountNameCredito").value;
+				alert(accountName);
+				var portions = document.getElementById("postingPortionsCredito").value;
+        		alert(portions);                                  
+            	var postingValue = document.getElementById("postingValueCredito").value;
+            	alert(postingValue);
+           		var postingDate = document.getElementById("postingDateCredito").value;
+           		alert(postingDate);
+           		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
+                        function (data) {
+                            if (data == "true") {
+                                alert("Pagamento cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível cadastrar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+			}
+
+			
+			if(postingType ==  "Débito"){                       
+				var accountName = document.getElementById("accountNameDebito").value;
+				alert(accountName);
+            	var postingValue = document.getElementById("postingValueDebito").value;
+            	alert(postingValue);
+           		var postingDate = document.getElementById("postingDateDebito").value;
+           		alert(postingDate);
+           		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+                        function (data) {
+                            if (data == "true") {
+                                alert("Pagamento cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível cadastrar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+			}
+
+			if(postingType ==  "Dinheiro"){  
+				var accountName = document.getElementById("accountNameDinheiro").value;
+				alert(accountName);                     
+            	var postingValue = document.getElementById("postingValueDinheiro").value;
+            	alert(postingValue);
+           		var postingDate = document.getElementById("postingDateDinheiro").value;
+           		alert(postingDate);
+           		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+                        function (data) {
+                            if (data == "true") {
+                                alert("Pagamento cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível cadastrar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+			}
+			if(postingType ==  "Cheque"){
+				var accountName = document.getElementById("accountNameCheque").value;
+				alert(accountName);
+				var numberCheque = document.getElementById("postingNumberCheque").value;
+        		alert(numberCheque);                                  
+            	var postingValue = document.getElementById("postingValueCheque").value;
+            	alert(postingValue);
+           		var postingDate = document.getElementById("postingDateCheque").value;
+           		alert(postingDate);
+           		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, numberCheque: numberCheque },
+                        function (data) {
+                            if (data == "true") {
+                                alert("Pagamento cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível cadastrar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+			}
+			if(postingType ==  "Transferência"){
+				var accountName = document.getElementById("accountNameTransferencia").value;
+				alert(accountName);
+				var postingValue = document.getElementById("postingValueTransferencia").value;
+        		alert(postingValue);                                  
+            	var postingDate = document.getElementById("postingDateTransferecia").value;
+            	alert(postingDate);
+			}
+			if(postingType ==  "Boleto"){
+				var portions = document.getElementById("postingPortionsBoleto").value;
+				var postingValue = "";
+				var postingDate = "";
+				alert(portions);
+				alert(postingValue);
+				for (var i = 1; i <= portions; i++){
+					
+					postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value).concat("/");                   
+            		postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value).concat("/");
+				}
+				$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
+                        function (data) {
+                            if (data == "true") {
+                                alert("Pagamento cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível cadastrar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+
+			}
+        }
+            
+
+
+        function paymentType() {
+            var type = document.getElementById("postingType").value;
+            
+            if(type == "Boleto"){
+            	document.getElementById("Cheque").style.display = "none";
+            	document.getElementById("Crédito").style.display = "none";
+            	document.getElementById("Débito").style.display = "none";
+            	document.getElementById("Dinheiro").style.display = "none";
+            	document.getElementById("Transferência").style.display = "none";
+            	
+            	document.getElementById("Boleto").style.display = ""; 
+            	                                   	
+            }else if(type == "Cheque"){
+            	document.getElementById("Boleto").style.display = "none";
+            	document.getElementById("Crédito").style.display = "none";
+            	document.getElementById("Débito").style.display = "none";
+            	document.getElementById("Dinheiro").style.display = "none";
+            	document.getElementById("Transferência").style.display = "none";
+            	
+            	document.getElementById("Cheque").style.display = ""; 
+            	
+            }else if(type == "Crédito"){
+            	document.getElementById("Boleto").style.display = "none";
+            	document.getElementById("Cheque").style.display = "none";
+            	document.getElementById("Débito").style.display = "none";
+            	document.getElementById("Dinheiro").style.display = "none";
+            	document.getElementById("Transferência").style.display = "none";
+            	
+            	document.getElementById("Crédito").style.display = ""; 
+            	
+            }else if(type == "Débito"){
+            	document.getElementById("Boleto").style.display = "none";
+            	document.getElementById("Cheque").style.display = "none";
+            	document.getElementById("Crédito").style.display = "none";
+            	document.getElementById("Dinheiro").style.display = "none";
+            	document.getElementById("Transferência").style.display = "none";
+            	
+            	document.getElementById("Débito").style.display = ""; 
+            	
+            }else if(type == "Dinheiro"){
+            	document.getElementById("Boleto").style.display = "none";
+            	document.getElementById("Cheque").style.display = "none";
+            	document.getElementById("Crédito").style.display = "none";
+            	document.getElementById("Débito").style.display = "none";
+            	document.getElementById("Transferência").style.display = "none";
+            	
+            	document.getElementById("Dinheiro").style.display = ""; 
+            	
+            }else if(type == "Transferência"){
+            	document.getElementById("Boleto").style.display = "none";
+            	document.getElementById("Cheque").style.display = "none";
+            	document.getElementById("Crédito").style.display = "none";
+            	document.getElementById("Débito").style.display = "none";
+            	document.getElementById("Dinheiro").style.display = "none";
+            	
+            	document.getElementById("Transferência").style.display = ""; 
+            	
+            }
+            
+        }
+
+		function postingPortions(){
+			var portions = document.getElementById("postingPortionsBoleto").value;
+			for(var i = 1; i <= 10; i++){
+				if(i <= portions){
+					document.getElementById("Boleto".concat(i)).style.display = "";
+				}
+				else{
+					document.getElementById("Boleto".concat(i)).style.display = "none";
+				}
+			}
+			
+		}
+
+		$(function() {
+		    var availableTags = document.getElementById("accountsNames").value;
+		    availableTags = availableTags.split("/");
+		    
+		    $( "#accounts" ).autocomplete({
+		      source: availableTags
+		    });
+		  });		
+        
     </script>
 
     <body>
         <div class="scroll">
+        		<form method="GET">
+                <input type="hidden" name="option" value="<?= $option ?>"/>
+                Ano: <select name="year" onchange="this.form.submit()" id="year">
+                    <?php
+                    foreach ($years as $y) {
+                        $selected = "";
+                        if ($y == $year)
+                            $selected = "selected";
+                        echo "<option $selected value='$y'>$y</option>";
+                    }
+                    ?>
+                </select>
+
+                Mês: <select name="month" onchange="this.form.submit()" id="month">
+                    <option value="0" <?php if (!isset($mes)) echo "selected"; ?>>Todos</option>
+                    <?php
+
+                    function getMonthName($m) {
+                        switch ($m) {
+                            case 1: return "Janeiro";
+                            case 2: return "Fevereiro";
+                            case 3: return "Março";
+                            case 4: return "Abril";
+                            case 5: return "Maio";
+                            case 6: return "Junho";
+                            case 7: return "Julho";
+                            case 8: return "Agosto";
+                            case 9: return "Setembro";
+                            case 10: return "Outubro";
+                            case 11: return "Novembro";
+                            case 12: return "Dezembro";
+                        }
+                    }
+
+                    for ($m = 1; $m <= 12; $m++) {
+                        $selected = "";
+                        if ($m == $month)
+                            $selected = "selected";
+                        echo "<option $selected value='$m'>" . getMonthName($m) . "</option>";
+                    }
+                    ?>
+                </select>
+            </form>
             <div class="row">
                 <?php // require_once APPPATH.'views/include/common_user_left_menu.php'  ?>
                 <div class="col-lg-12 middle-content">
 
                     <a href="<?= $this->config->item("url_link") ?>admin/createDocument" >
+                    <input style="display:none" id="accountsNames" value="<?php echo $accountNames;?>">
 
                         <button id="create" class="btn btn-primary"  value="Criar novo documento" >Novo lançamento</button>
                     </a>
@@ -102,246 +361,78 @@
                     <?php
                     if (isset($documents)) {
                         ?>
-                        <table class="table"><tr><th>Data</th><th>Tipo</th><th>Valor</th><th>Imagem</th><th>Forma de pagamento</th></tr>
-
-
-                            <script>
-                                function formaPagamento() {
-
-                                    var documentexpenseId = document.getElementById("documentexpenseId").textContent;
-                                    alert(documentexpenseId);
-                                    var postingType = document.getElementById("postingType").value;
-									alert(postingType);  
-									
-									if(postingType ==  "Crédito"){
-										var accountName = document.getElementById("accountNameCredito").value;
-										alert(accountName);
-										var portions = document.getElementById("postingPortionsCredito").value;
-                                		alert(portions);                                  
-                                    	var postingValue = document.getElementById("postingValueCredito").value;
-                                    	alert(postingValue);
-                                   		var postingDate = document.getElementById("postingDateCredito").value;
-                                   		alert(postingDate);
-                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
-	                                            function (data) {
-	                                                if (data == "true") {
-	                                                    alert("Pagamento cadastrado com sucesso!");
-	                                                    location.reload();
-	                                                } else if (data == "false") {
-	                                                    alert("Não foi possível cadastrar o pagamento!");
-	                                                    location.reload();
-	                                                }
-	                                            }
-	                                    );
-									}
-
-									
-									if(postingType ==  "Débito"){                       
-										var accountName = document.getElementById("accountNameDebito").value;
-										alert(accountName);
-                                    	var postingValue = document.getElementById("postingValueDebito").value;
-                                    	alert(postingValue);
-                                   		var postingDate = document.getElementById("postingDateDebito").value;
-                                   		alert(postingDate);
-                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
-	                                            function (data) {
-	                                                if (data == "true") {
-	                                                    alert("Pagamento cadastrado com sucesso!");
-	                                                    location.reload();
-	                                                } else if (data == "false") {
-	                                                    alert("Não foi possível cadastrar o pagamento!");
-	                                                    location.reload();
-	                                                }
-	                                            }
-	                                    );
-									}
-
-									if(postingType ==  "Dinheiro"){  
-										var accountName = document.getElementById("accountNameDinheiro").value;
-										alert(accountName);                     
-                                    	var postingValue = document.getElementById("postingValueDinheiro").value;
-                                    	alert(postingValue);
-                                   		var postingDate = document.getElementById("postingDateDinheiro").value;
-                                   		alert(postingDate);
-                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
-	                                            function (data) {
-	                                                if (data == "true") {
-	                                                    alert("Pagamento cadastrado com sucesso!");
-	                                                    location.reload();
-	                                                } else if (data == "false") {
-	                                                    alert("Não foi possível cadastrar o pagamento!");
-	                                                    location.reload();
-	                                                }
-	                                            }
-	                                    );
-									}
-									if(postingType ==  "Cheque"){
-										var accountName = document.getElementById("accountNameCheque").value;
-										alert(accountName);
-										var numberCheque = document.getElementById("postingNumberCheque").value;
-                                		alert(numberCheque);                                  
-                                    	var postingValue = document.getElementById("postingValueCheque").value;
-                                    	alert(postingValue);
-                                   		var postingDate = document.getElementById("postingDateCheque").value;
-                                   		alert(postingDate);
-                                   		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, numberCheque: numberCheque },
-	                                            function (data) {
-	                                                if (data == "true") {
-	                                                    alert("Pagamento cadastrado com sucesso!");
-	                                                    location.reload();
-	                                                } else if (data == "false") {
-	                                                    alert("Não foi possível cadastrar o pagamento!");
-	                                                    location.reload();
-	                                                }
-	                                            }
-	                                    );
-									}
-									if(postingType ==  "Transferência"){
-										var accountName = document.getElementById("accountNameTransferencia").value;
-										alert(accountName);
-										var postingValue = document.getElementById("postingValueTransferencia").value;
-                                		alert(postingValue);                                  
-                                    	var postingDate = document.getElementById("postingDateTransferecia").value;
-                                    	alert(postingDate);
-									}
-									if(postingType ==  "Boleto"){
-										var portions = document.getElementById("postingPortionsBoleto").value;
-										var postingValue = "";
-										var postingDate = "";
-										alert(portions);
-										alert(postingValue);
-										for (var i = 1; i <= portions; i++){
-											
-											postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value).concat("/");                   
-                                    		postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value).concat("/");
-										}
-										$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-	                                            {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
-	                                            function (data) {
-	                                                if (data == "true") {
-	                                                    alert("Pagamento cadastrado com sucesso!");
-	                                                    location.reload();
-	                                                } else if (data == "false") {
-	                                                    alert("Não foi possível cadastrar o pagamento!");
-	                                                    location.reload();
-	                                                }
-	                                            }
-	                                    );
-
-									}
-                                }
-                                    
-
-
-                                function paymentType() {
-                                    var type = document.getElementById("postingType").value;
-                                    
-                                    if(type == "Boleto"){
-                                    	document.getElementById("Cheque").style.display = "none";
-                                    	document.getElementById("Crédito").style.display = "none";
-                                    	document.getElementById("Débito").style.display = "none";
-                                    	document.getElementById("Dinheiro").style.display = "none";
-                                    	document.getElementById("Transferência").style.display = "none";
-                                    	
-                                    	document.getElementById("Boleto").style.display = ""; 
-                                    	                                   	
-                                    }else if(type == "Cheque"){
-                                    	document.getElementById("Boleto").style.display = "none";
-                                    	document.getElementById("Crédito").style.display = "none";
-                                    	document.getElementById("Débito").style.display = "none";
-                                    	document.getElementById("Dinheiro").style.display = "none";
-                                    	document.getElementById("Transferência").style.display = "none";
-                                    	
-                                    	document.getElementById("Cheque").style.display = ""; 
-                                    	
-                                    }else if(type == "Crédito"){
-                                    	document.getElementById("Boleto").style.display = "none";
-                                    	document.getElementById("Cheque").style.display = "none";
-                                    	document.getElementById("Débito").style.display = "none";
-                                    	document.getElementById("Dinheiro").style.display = "none";
-                                    	document.getElementById("Transferência").style.display = "none";
-                                    	
-                                    	document.getElementById("Crédito").style.display = ""; 
-                                    	
-                                    }else if(type == "Débito"){
-                                    	document.getElementById("Boleto").style.display = "none";
-                                    	document.getElementById("Cheque").style.display = "none";
-                                    	document.getElementById("Crédito").style.display = "none";
-                                    	document.getElementById("Dinheiro").style.display = "none";
-                                    	document.getElementById("Transferência").style.display = "none";
-                                    	
-                                    	document.getElementById("Débito").style.display = ""; 
-                                    	
-                                    }else if(type == "Dinheiro"){
-                                    	document.getElementById("Boleto").style.display = "none";
-                                    	document.getElementById("Cheque").style.display = "none";
-                                    	document.getElementById("Crédito").style.display = "none";
-                                    	document.getElementById("Débito").style.display = "none";
-                                    	document.getElementById("Transferência").style.display = "none";
-                                    	
-                                    	document.getElementById("Dinheiro").style.display = ""; 
-                                    	
-                                    }else if(type == "Transferência"){
-                                    	document.getElementById("Boleto").style.display = "none";
-                                    	document.getElementById("Cheque").style.display = "none";
-                                    	document.getElementById("Crédito").style.display = "none";
-                                    	document.getElementById("Débito").style.display = "none";
-                                    	document.getElementById("Dinheiro").style.display = "none";
-                                    	
-                                    	document.getElementById("Transferência").style.display = ""; 
-                                    	
-                                    }
-                                    
-                                }
-
-							function postingPortions(){
-								var portions = document.getElementById("postingPortionsBoleto").value;
-								for(var i = 1; i <= 10; i++){
-									if(i <= portions){
-										document.getElementById("Boleto".concat(i)).style.display = "";
-									}
-									else{
-										document.getElementById("Boleto".concat(i)).style.display = "none";
-									}
-								}
-								
-							}
-                                                                    
-                            </script>                       	
-
-
-                            <?php
+                        <table class="table table-bordered table-striped table-min-td-size" style="width:1200px" id="sortable-table">
+                        	<tr>
+                        		<th style="width:70px; text-align: center">Data</th>
+                        		<th style="width:20px; text-align: center">Tipo</th>
+                        		<th style="width:70px; text-align: center">Valor</th>
+                        		<th style="width:140px; text-align: center">Descrição</th>
+                        		<th style="width:70px; text-align: center">Imagem</th>
+                        		<th style="width:100px; text-align:center">Forma de Pagamento</th>
+                        		<th style="width:70px; text-align: center">Pago</th>
+                        		<th colspan=2 style="width:300px; text-align: center">Nome de Conta</th>
+                        	</tr>
+                        	<tr>
+                        		<th></th>
+                        		<th></th>
+                        		<th></th>
+                        		<th></th>
+                        		<th></th>
+                        		<th></th>
+                        		<th></th>
+                        		<th style="width:200px; text-align: center">Nome</th>
+                        		<th style="width:100px; text-align: center">Ação</th>
+                        	</tr>
+             	          <?php
                             foreach ($documents as $document) {
                                 ?>
 
                                 <tr>
                                     <td>
-                                        <?= date_format(date_create($document->documentexpenseDate), 'd/m/y'); ?></td>
+                                        <?= date_format(date_create($document->document_date), 'd/m/y'); ?></td>
 
-                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->documentexpenseId ?>">
-                                            <?php echo $document->documentexpenseType; ?></a> </td>
-                                    <td><?php echo $document->documentexpenseValue; ?> </td>
-                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $document->documentexpenseId;?>">
-                                        <button class="btn btn-primary"><?php
-                                        if ($document->documentexpenseUploadId) {
-                                            echo "Visualizar";
+                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->document_expense_id ?>">
+                                            <?php switch($document->document_type){
+                                            	case "nota fiscal":
+                                            		echo "NF";
+                                            		break;
+                                            	case "cupom fiscal":
+                                            		echo "CF";
+                                            		break;
+                                            	case "recibo":
+                                            		echo "rec";
+                                            		break;
+                                            	case "boleto":
+                                            		echo "bol";
+                                            		break; 
+                                            }                                         
+                                            
+                                            ?></a> </td>
+                                    <td><?php echo $document->document_value; ?> </td>
+                                    <td><?php echo $document -> document_description;?></td>
+                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $document->document_expense_id;?>">
+                                        <button <?php
+                                        if ($document->document_expense_upload_id) {
+                                            echo "class='btn btn-success'>Atualizar";
                                         } else {
-                                            echo "Upload";
+                                            echo "class='btn btn-danger'>Upload";
                                         }
                                         ?> 
                                         </button>
                                         </a>
                                     </td>
-                                    <?php if ($document->paid == false) { ?>
-                                        <td><button class="btn btn-primary" onclick="sendInfoToModal('<?= $document->documentexpenseId ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
+                                    <?php if ($document->hasPaymentType == false) { ?>
+                                        <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                     <?php } else { ?>
-                                        <td> Pago </td>
+                                        <td><button class="btn btn-success">Tipo</button> </td>
                                     <?php } ?>
+                                    <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$document->document_expense_id?>" 
+        							<?php if($document->payed) echo "checkedInDatabase='true'";?> /> </td>
+                                	<td><input type="text" name="accounts" id="accounts" value="<?php if($document->account_name) echo $document->account_name; else echo ""; ?>">
+									</td>
+									<td></td>
                                 </tr>
+                                
                                 <?php
                             }
                             ?> </table>

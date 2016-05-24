@@ -971,36 +971,59 @@ class Admin extends CK_Controller {
         }
       
 	}
+	
+	public function toggleDocumentPayed($documentId){
+    	$document = $this->documentexpense_model->getDocumentById($documentId);
+		
+    	echo $this->documentexpense_model->toggleDocumentPayed($documentId);		
+    }
 
     public function manageDocuments() {
-        $documents = $this->documentexpense_model->getAllDocumentsExpense();
+    	$option = $this->input->get('option', TRUE);
+    	$year = $this->input->get('year', TRUE);
+    	$month = $this->input->get('month', TRUE);
+    	$years = array();
+    	$end = 2015;
+    	$start = date('Y');
+    	while ($start >= $end) {
+    		$years[] = $start;
+    		$start--;
+    	}
+    	
+    	if ($year === FALSE) {
+    		$year = date("Y");
+    	} else if ($month == 0) {
+    		$month = FALSE;
+    	}
+    	$data["year"] = $year;
+    	$data["month"] = $month;
+    	$data["years"] = $years;
+    	$data["option"] = $option;
+    	
+        $documents = $this->finance_model->getPostingsExpensesByDate($year,$month);
         $data['banks'] = $this->documentexpense_model->getAllBankData();
 
-
         $doc = array();
-
-        foreach ($documents as $document) {
-            $obj = new StdClass();
-            $documentexpenseId = $document->getDocumentExpenseId();
-            $obj->documentexpenseId = $document->getDocumentExpenseId();
-            $obj->documentexpenseNumber = $document->getDocumentExpenseNumber();
-            $obj->documentexpenseValue = $document->getDocumentExpenseValue();
-            $obj->documentexpenseDate = $document->getDocumentExpenseDate();
-            $obj->documentexpenseUploadId = $document->getDocumentExpenseUploadId();
-            $obj->documentexpenseType = $document->getDocumentExpenseType();
-            $obj->documentexpenseDescription = $document->getDocumentExpenseDescription();
-            $obj->beneficiaryId = $document->getBeneficiaryId();
-            
-            if ($this->documentexpense_model->getDocumentExpensePaidById($documentexpenseId) != null) {
-                $obj->paid = true;
-            } else{
-                $obj->paid = false;
-            }
-
-            $doc[] = $obj;
-        }
+		if($documents){
+	        foreach ($documents as $document) {
+	            $obj = new StdClass();
+	            $obj = $document;
+	            
+	            if ($this->documentexpense_model->getDocumentExpensePaidById($document->document_expense_id) != null) {
+	                $obj->hasPaymentType = true;
+	            } else{
+	                $obj->hasPaymentType = false;
+	            }
+	
+	            $doc[] = $obj;
+	        }
+		}
         $accountNames = $this->finance_model->getAllAccountNames();
-        $data['accountNames'] = $accountNames;
+        $answer = "";
+        foreach($accountNames as $an){
+        	$answer = $answer."/".$an->account_name;
+        }
+        $data['accountNames'] = $answer;
         $data['documents'] = $doc;
 
         $this->loadReportView("admin/finances/manage_documents", $data);
