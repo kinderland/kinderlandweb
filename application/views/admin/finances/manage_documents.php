@@ -391,7 +391,7 @@
                                     <td>
                                         <?= date_format(date_create($document->document_date), 'd/m/y'); ?></td>
 
-                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->document_expense_id ?>">
+                                    <td>
                                             <?php switch($document->document_type){
                                             	case "nota fiscal":
                                             		echo "NF";
@@ -407,9 +407,9 @@
                                             		break; 
                                             }                                         
                                             
-                                            ?></a> </td>
+                                            ?> </td>
                                     <td><?php echo $document->document_value; ?> </td>
-                                    <td><?php echo $document -> document_description;?></td>
+                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->document_expense_id ?>"><?php echo $document -> document_description;?></a></td>
                                     <td><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $document->document_expense_id;?>">
                                         <button <?php
                                         if ($document->document_expense_upload_id) {
