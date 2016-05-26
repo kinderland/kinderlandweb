@@ -1000,33 +1000,34 @@ class Admin extends CK_Controller {
     	$data["years"] = $years;
     	$data["option"] = $option;
     	
-        $documents = $this->finance_model->getPostingsExpensesByDate($year,$month);
+        $documents = $this->finance_model->getPostingsExpensesByDate($year,"document",$month);
         $data['banks'] = $this->documentexpense_model->getAllBankData();
-
-        $doc = array();
-		if($documents){
-	        foreach ($documents as $document) {
-	            $obj = new StdClass();
-	            $obj = $document;
-	            
-	            if ($this->documentexpense_model->getDocumentExpensePaidById($document->document_expense_id) != null) {
-	                $obj->hasPaymentType = true;
-	            } else{
-	                $obj->hasPaymentType = false;
-	            }
-	
-	            $doc[] = $obj;
-	        }
-		}
         $accountNames = $this->finance_model->getAllAccountNames();
         $answer = "";
+        
         foreach($accountNames as $an){
         	$answer = $answer."/".$an->account_name;
         }
+        
         $data['accountNames'] = $answer;
-        $data['documents'] = $doc;
+        $data['documents'] = $documents;
 
         $this->loadReportView("admin/finances/manage_documents", $data);
+    }
+    
+    public function updateAccountName(){
+    	$id = $this->input->post("id", TRUE);
+    	$value = $this->input->post("value", TRUE);
+    	$date = $this->input->post("date", TRUE);
+    	$account_name = $this->input->post("account_name", TRUE);
+    	
+    	if($this -> finance_model->updateAccountName($id,$value,$date,$account_name)){
+    		echo "true";
+    		return;
+    	}else{
+    		echo "false";
+    		return;
+    	}
     }
 
     public function finance_cashoutflows() {

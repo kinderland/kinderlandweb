@@ -144,7 +144,7 @@ class Reports extends CK_Controller {
     	$data["years"] = $years;
     	$data["option"] = $option;
     	
-    	$postingExpenses = $this -> finance_model -> getPostingsExpensesByDate($year,$month);
+    	$postingExpenses = $this -> finance_model -> getPostingsExpensesByDate($year,"posting",$month);
     	
     	$info = array();
     	$portions = array();

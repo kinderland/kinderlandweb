@@ -290,13 +290,46 @@
 			
 		}
 
+		function accountUpdate(id,date,value){
+			var account_name = document.getElementById("accounts_".concat(id)).value;
+
+			var names = document.getElementById("accountsNames").value;
+			names = names.split("/");
+
+			var ok = 0;
+
+			for(var i = 0; i < names.length; i++){
+				if(account_name.localeCompare(names[i]) == 0){
+					ok = 1;
+					break;
+				}
+			}	
+
+			if(ok == 1){
+				$.post('<?= $this->config->item('url_link'); ?>admin/updateAccountName',
+                        {id: id, date: date, value: value, account_name: account_name},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Nome de Conta atribuído com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Ocorreu um erro na atribuição de Nome de Conta!");
+                                location.reload();
+                            }
+                        }
+                );
+			}else{
+				alert("Nome de conta inválido. Insira um nome existente!");
+			}		
+		}
+
 		$(function() {
 		    var availableTags = document.getElementById("accountsNames").value;
 		    availableTags = availableTags.split("/");
-		    
-		    $( "#accounts" ).autocomplete({
-		      source: availableTags
-		    });
+
+		    $(".accounts").autocomplete({
+			      source: availableTags
+			});
 		  });		
         
     </script>
@@ -421,16 +454,20 @@
                                         </button>
                                         </a>
                                     </td>
-                                    <?php if ($document->hasPaymentType == false) { ?>
+                                    <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
                                         <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                     <?php } else { ?>
                                         <td><button class="btn btn-success">Tipo</button> </td>
                                     <?php } ?>
                                     <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$document->document_expense_id?>" 
-        							<?php if($document->payed) echo "checkedInDatabase='true'";?> /> </td>
-                                	<td><input type="text" name="accounts" id="accounts" value="<?php if($document->account_name) echo $document->account_name; else echo ""; ?>">
+        							<?php if($document->payed == "t") echo "checkedInDatabase='true'"; if ($document->posting_value == "" && $document->posting_date == "") echo "disabled";?> /> </td>
+                                	<td><input <?php if ($document->posting_value == "" && $document->posting_date == "") echo "disabled" ?> type="text" class="accounts" id="accounts_<?= $document->document_expense_id ?>" value="<?php if($document->account_name) echo $document->account_name; else echo ""; ?>">
 									</td>
-									<td></td>
+									<?php if ($document->account_name == "") { ?>
+                                        <td><button <?php if ($document->posting_value == "" && $document->posting_date == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $document->document_expense_id ?>', '<?= $document->posting_date ?>','<?= $document->posting_value ?>')">Salvar</button></td>
+                                    <?php } else { ?>
+                                        <td><button <?php if ($document->posting_value == "" && $document->posting_date == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $document->document_expense_id ?>', '<?= $document->posting_date ?>','<?= $document->posting_value ?>')">Atualizar</button> </td>
+                                    <?php } ?>
                                 </tr>
                                 
                                 <?php

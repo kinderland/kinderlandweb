@@ -19,17 +19,19 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
-	public function getPostingsExpensesByDate($year,$month = null){
+	public function getPostingsExpensesByDate($year,$type,$month = null){
 		$sql = "SELECT *
 				FROM v_all_posting_expenses_info 
-				WHERE DATE_PART('YEAR',posting_date) = ?";
+				WHERE DATE_PART('YEAR',".$type."_date) = ?";
 		 
 		if($month){
-			$sql = $sql."AND DATE_PART('MONTH',posting_date) = ? ORDER BY posting_date ASC";
+			$sql = $sql."AND DATE_PART('MONTH',".$type."_date) = ?
+						ORDER BY ".$type."_date ASC"; 
 	
 			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($month)));
 		}else {
-			$sql = $sql."ORDER BY posting_date ASC";
+			$sql = $sql."ORDER BY ".$type."_date ASC";
+			
 			$result = $this->executeRows($this->db, $sql, array(intval($year)));
 		}
 		 
@@ -86,14 +88,16 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
-	public function insertNewEvent($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper, $type) {
+	public function updateAccountName($document_id, $posting_value, $posting_date, $account_name) {
 	
 		$this -> Logger -> info("Running: " . __METHOD__);
 	
-		$sql = 'INSERT INTO event(event_name, description, date_created, date_start, date_finish,
-            date_start_show, date_finish_show, enabled, capacity_male, capacity_female,capacity_nonsleeper,type_id) VALUES (?,?, current_timestamp,?,?,?,?,?,?,?,?,?)';
+		$sql = 'UPDATE posting_expense SET account_name = ?
+				WHERE document_expense_id = ?
+				AND posting_value = ?
+				AND posting_date = ?';
 	
-		$returnId = $this -> executeReturningId($this -> db, $sql, array($event_name, $description, $date_start, $date_finish, $date_start_show, $date_finish_show, $enabled, $capacity_male, $capacity_female, $capacity_nonsleeper,intval($type)));
+		$returnId = $this -> execute($this -> db, $sql, array($account_name, $document_id, $posting_value, $posting_date));
 	
 		if ($returnId)
 			return $returnId;
