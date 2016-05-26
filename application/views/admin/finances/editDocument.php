@@ -24,6 +24,10 @@
         <link href="<?= $this->config->item('assets'); ?>css/datepicker.css" rel="stylesheet" />
         <link rel="text/javascript" href="<?= $this->config->item('assets'); ?>js/datepicker.less.js" />
         <?php
+        if (count($errors) > 0) {
+            $all_errors = implode('', $errors);
+            echo '<script type="text/javascript">alert("Os seguintes erros foram encontrados: \n' . $all_errors . '"); </script>';
+        }
         $exclusionUrl = $this->config->item('url_link') . "admin/deleteDocument/" . $id;
 
         function dataSwitch($option) {
@@ -36,13 +40,13 @@
                     break;
             }
         }
-        
-        function transform_date($date){
-            $newDate=explode("/",$date);
-            $temp=$newDate[0];
-            $newDate[0]=$newDate[1];
-            $newDate[1]=$temp;
-            $newDate=implode("/",$newDate);
+
+        function transform_date($date) {
+            $newDate = explode("/", $date);
+            $temp = $newDate[0];
+            $newDate[0] = $newDate[1];
+            $newDate[1] = $temp;
+            $newDate = implode("/", $newDate);
             return $newDate;
         }
         ?>
@@ -70,7 +74,7 @@
         <div class="col-lg-12 middle-content">
             <div class="col-lg-8"><strong><h4>Edição de Documento</h4></strong></div>
             <form method="POST" action="<?php echo $exclusionUrl; ?>">
-            <button class="btn btn-danger" type="submit" onclick="return confirm('Você tem certeza que quer excluir esse documento?\nUma vez excluído, não poderá ser recuperado.')">Excluir documento </button> 
+                <button class="btn btn-danger" type="submit" onclick="return confirm('Você tem certeza que quer excluir esse documento?\nUma vez excluído, não poderá ser recuperado.')">Excluir documento </button> 
             </form>
             <form name="document_form" method="POST" action="<?= $this->config->item('url_link') ?>admin/updateDocument/<?php echo $id; ?>" id="document_form">
                 </br>

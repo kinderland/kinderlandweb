@@ -35,7 +35,12 @@
 
     </head>
 
-
+    <?php
+    if (count($errors) > 0) {
+        $all_errors = implode('', $errors);
+        echo '<script type="text/javascript">alert("Os seguintes erros foram encontrados: \n' . $all_errors . '"); </script>';
+    }
+    ?>
 
     <div class="col-lg-10">
         <h4>Se algum documento já foi enviado, um novo envio de documento substituirá o anterior. 
@@ -58,7 +63,7 @@
             <input  type="file" name="uploadedfile" class="btn btn-primary"/> 
             <br />
             <div class="col-lg-2" >
-            <input type="submit"  value="Enviar documento" class="btn btn-primary"/>
+                <input type="submit"  value="Enviar documento" class="btn btn-primary"/>
             </div>
         </form>
         <button style="margin-top:-15px" class="btn btn-warning" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Voltar</button>

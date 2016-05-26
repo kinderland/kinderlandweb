@@ -27,6 +27,10 @@
         input {margin-top:10px;margin-left:10px}
     </style>
     <?php
+    if (count($errors) > 0) {
+        $all_errors = implode('', $errors);
+        echo '<script type="text/javascript">alert("Os seguintes erros foram encontrados: \n' . $all_errors . '"); </script>';
+    }
 
     function dataSwitch($option) {
         switch ($option) {
@@ -38,6 +42,15 @@
                 break;
         }
     }
+    
+            function transform_date($date){
+            $newDate=explode("/",$date);
+            $temp=$newDate[0];
+            $newDate[0]=$newDate[1];
+            $newDate[1]=$temp;
+            $newDate=implode("/",$newDate);
+            return $newDate;
+        }
     ?>
     <script type="text/javascript">
         function datepickers() {
@@ -66,25 +79,24 @@
         </div>
     </div> 
 </form>
-
 <form enctype="multipart/form-data" action="<?= $this->config->item('url_link') ?>admin/completeDocument" method ="POST">
     <input type="hidden" value="<?php echo $selected; ?>" name="document_type" >
 <?php if ($selected != "no_select") { ?>
-        Numero: <input  type="text" name="document_number" >
+        Numero: <input  type="text" name="document_number" value="<?php echo $number; ?>">
         </br>
-        Nome <?php if ($selected != "recibo") { ?> empresa <?php } ?>: <input type="text" name="document_name">
+        Nome <?php if ($selected != "recibo") { ?> empresa <?php } ?>: <input type="text" name="document_name" value="<?php echo $name; ?>">
         </br>
-        Data <?php echo dataSwitch($selected); ?> : <input type="text" class="datepickers required" name="document_date">
+        Data <?php echo dataSwitch($selected); ?> : <input type="text" class="datepickers required" name="document_date" value="<?php echo transform_date($date); ?>">
         </br>
-        Descrição :<input type="text" name="description" maxlength="50">
+        Descrição :<input type="text" name="description" maxlength="50" value="<?php echo $description; ?>">
         </br>
-        Valor :<input type="number" step="0.01" size="6" name="document_value">
+        Valor :<input type="number" step="0.01" size="6" name="document_value" value="<?php echo $value; ?>"> 
         </br>
         <input  type="file" name="uploadedfile" class="btn btn-primary"/> 
         <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
-		<br />
+        <br />
         <div class="col-lg-1" style="margin-top:15px">
-        <button class="btn btn-primary" type="submit">Salvar</button>
+            <button class="btn btn-primary" type="submit">Salvar</button>
         </div>
     </form>
 <?php } ?>
