@@ -62,8 +62,8 @@ class documentexpense_model extends CK_Model {
     public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName) {
         $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, account_name)
 					VALUES (?,?,?,?,?)";
-        $Id = $this->executeReturningId($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName));
-        return $Id;
+        $this->executeReturningId($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName));
+        return;
     }
 
     public function insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue) {
@@ -85,6 +85,14 @@ class documentexpense_model extends CK_Model {
 					VALUES (?,?,?,?)";
         $Id = $this->executeReturningId($this->db, $sql, array($portionNumber, $documentexpenseId, $postingDate, $postingValue));
         return $Id;
+    }
+    
+    public function insertNewBankData($bankNumber, $bankAgency, $accountNumber){
+    	
+    	$sql = "INSERT into bank_data (bank_number, bank_agency, account_number)
+					VALUES (?,?,?,?)";
+    	$Id = $this->executeReturningId($this->db, $sql, array($bankNumber, $bankAgency, $accountNumber));
+    	return $Id;
     }
 
     public function inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue) {

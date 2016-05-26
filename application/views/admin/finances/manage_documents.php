@@ -184,8 +184,23 @@
 				alert(accountName);
 				var postingValue = document.getElementById("postingValueTransferencia").value;
         		alert(postingValue);                                  
-            	var postingDate = document.getElementById("postingDateTransferecia").value;
+            	var postingDate = document.getElementById("postingDateTransferencia").value;
             	alert(postingDate);
+            	var bankNumber = document.getElementById("postingBankNumberTransferencia").value;
+            	var bankAgency = document.getElementById("postingAgencyTransferencia").value;
+            	var accounNumber = document.getElementById("postingAccountTransferencia").value;
+            	$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+                        function (data) {
+                            if (data == "true") {
+                                alert("Pagamento cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível cadastrar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );            	
 			}
 			if(postingType ==  "Boleto"){
 				var portions = document.getElementById("postingPortionsBoleto").value;
@@ -455,7 +470,7 @@
                                         </a>
                                     </td>
                                     <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
-                                        <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
+                                        <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
                                     <?php } else { ?>
                                         <td><button class="btn btn-success">Tipo</button> </td>
                                     <?php } ?>
@@ -541,7 +556,7 @@
                                                                		</tr> <br/><br/><br/>
                                                                		<tr>
                                                                		<td><b> Nome da conta: </b></td>
-                                                               		<input type="text" id="accountNameTransferencia" name="accountNameTranseferencia" ></input>
+                                                               		<input type="text" id="accountNameBoleto" name="accountNameBoleto" ></input>
                                                                		</tr>
                                                                		<br/><br/><br/>
                                                                <?php for($i = 1; $i <= 10; $i++){?>
