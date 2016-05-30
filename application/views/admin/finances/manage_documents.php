@@ -365,7 +365,7 @@
                 </select>
 
                 Mês: <select name="month" onchange="this.form.submit()" id="month">
-                    <option value="0" >Todos</option>
+                    <option value="0" <?php if (!isset($mes)) echo "selected"; ?>>Todos</option>
                     <?php
 
                     function getMonthName($m) {
@@ -593,10 +593,7 @@
 	                                                                <td> Número do Cheque: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input> <br><br>
                                                             	</tr>
-                                                            	<tr>
-                                                               		<td> Nome da conta: </td> <br>
-                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameCheque" name="accountNameCheque" ></input><br><br>
-                                                               		</tr>
+
                                                             	<tr> 
 	                                                                <td> Valor: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
@@ -605,10 +602,7 @@
                                                             </div>
                                                             
                                                             <div id = "Crédito" style="display: none">
-                                                            	<tr>
-                                                               		<td> Nome da conta: </td><br>
-                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameCredito" name="accountNameCredito" ></input><br><br>
-                                                               		</tr>
+
                                                             	<tr> 
 	                                                                <td> Valor: </td><br> 
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> <br><br>
