@@ -365,7 +365,7 @@
                 </select>
 
                 Mês: <select name="month" onchange="this.form.submit()" id="month">
-                    <option value="0" <?php if (!isset($mes)) echo "selected"; ?>>Todos</option>
+                    <option value="0" >Todos</option>
                     <?php
 
                     function getMonthName($m) {
@@ -470,7 +470,7 @@
                                         </a>
                                     </td>
                                     <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
-                                        <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Pagar</button></td>
+                                        <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                     <?php } else { ?>
                                         <td><button class="btn btn-success">Tipo</button> </td>
                                     <?php } ?>

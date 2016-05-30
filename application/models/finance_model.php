@@ -25,12 +25,12 @@ class finance_model extends CK_Model{
 				WHERE DATE_PART('YEAR',".$type."_date) = ?";
 		 
 		if($month){
-			$sql = $sql."AND DATE_PART('MONTH',".$type."_date) = ?
-						ORDER BY ".$type."_date ASC"; 
+			$sql = $sql." AND DATE_PART('MONTH',".$type."_date) = ?
+						 ORDER BY ".$type."_date ASC"; 
 	
 			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($month)));
 		}else {
-			$sql = $sql."ORDER BY ".$type."_date ASC";
+			$sql = $sql." ORDER BY ".$type."_date ASC";
 			
 			$result = $this->executeRows($this->db, $sql, array(intval($year)));
 		}
