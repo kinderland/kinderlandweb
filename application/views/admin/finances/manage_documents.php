@@ -554,11 +554,6 @@
                                                               		   </select>
                                                                		</div>
                                                                		</tr> <br/><br/><br/>
-                                                               		<tr>
-                                                               		<td><b> Nome da conta: </b></td>
-                                                               		<input type="text" id="accountNameBoleto" name="accountNameBoleto" ></input>
-                                                               		</tr>
-                                                               		<br/><br/><br/>
                                                                <?php for($i = 1; $i <= 10; $i++){?>
                                                                <tr>
                                                                <div class="col-lg-12 control_label" id="Boleto<?php echo $i ?>" style="display: none; padding-left:0px" >
@@ -606,12 +601,6 @@
 	                                                                <td> Valor: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
                                                             	</tr>
-                                                            	<tr>
-                                                            		<td> Data: </td><br>
-	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br><br>
-                                                            		<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
-                                                            		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
-                                                            	</tr>
 
                                                             </div>
                                                             
@@ -638,11 +627,6 @@
                                                             </div>
                                                             
                                                             <div id = "Débito" style="display: none">
-                                                            	<tr>
-                                                               		<td> Nome da conta: </td><br>
-                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameDebito" name="accountNameDebito" ></input><br><br>
-                                                               		</tr>
-                                                            	<tr> 
 	                                                                <td> Valor: </td><br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueDebito" name="postingValueDebito" ></input> <br><br>
                                                             	</tr>
@@ -656,11 +640,6 @@
                                                             </div>
                                                             
                                                             <div id = "Dinheiro" style="display: none"> 
-                                                            	<tr>
-                                                               		<td>Nome da conta: </td><br>
-                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameDinheiro" name="accountNameDinheiro" ></input><br><br>
-                                                               		</tr>
-                                                            	<tr> 
 	                                                                <td> Valor: </td><br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> <br><br>
                                                             	</tr>
@@ -674,11 +653,6 @@
                                                             </div>
                                                             
                                                             <div id = "Transferência" style="display: none"> 
-                                                            	<tr>
-                                                               		<td>Nome da conta: </td><br>
-                                                               		<input style="width: 200px" class="form-control" type="text" id="accountNameTransferencia" name="accountNameTransferencia" ></input><br><br>
-                                                               		</tr>
-                                                            	<tr> 
 	                                                                <td> Valor: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> <br><br>
                                                             	</tr>
