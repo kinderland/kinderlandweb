@@ -987,8 +987,9 @@ class Admin extends CK_Controller {
                 }
             } else if ($postingType == "Boleto") {
                 $portions = $_POST['portions'];
-                for ($i = 0; $i < $portions; $i++) {
-
+                for ($i = 1; $i < $portions; $i++) {
+					$portionNumber = $i;
+					
                     $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
                 }
                 if ($result != null) {
