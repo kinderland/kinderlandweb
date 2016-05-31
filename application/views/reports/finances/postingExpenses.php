@@ -108,19 +108,35 @@
             var data = [];
             var table = document.getElementById("tablebody");
             var name = getCSVName();
-            var elements = document.getElementsByName('document_description');
+            var elements = document.getElementsByName("document_type");
             var tablehead = document.getElementsByTagName("thead")[0];
-            
-            for (var i = 0, row; row = table.rows[i]; i++) {
-                var data2 = []
-                //Nome, retira pega o que esta entre um <> e outro <>
-                var description = elements[i].getAttribute('id');
+            var document_type;
+            var payed = document.getElementById("qtdpayed");
+            var payeds = document.getElementsByName("payeds");
+            var description = document.getElementsByName("document_description");
+            var document_description;
 
-                data2.push(row.cells[0].innerHTML);
-                data2.push(description);
-                data2.push(row.cells[5].innerHTML);
-                data2.push(row.cells[4].innerHTML);
-                data.push(data2)
+            if(payed.getAttribute("name") > 0){
+	            for (var i = 0, row; row = table.rows[i]; i++) {
+
+		            if(payeds[i].getAttribute('id') == 't'){
+		            
+		                var data2 = []
+		                //Nome, retira pega o que esta entre um <> e outro <>
+		                document_type = elements[i].getAttribute('id');
+		                document_description = description[i].getAttribute('id');
+		                
+		                data2.push(row.cells[7].innerHTML);
+		                data2.push(row.cells[8].innerHTML);
+		                data2.push(document_description);
+		                data2.push(row.cells[0].innerHTML);
+		                data2.push(row.cells[5].innerHTML);
+		                data2.push(document_type);
+		                data.push(data2);
+		            }
+	            }
+            } else {
+                var i = 0;
             }
             if (i == 0) {
                 alert('Não há dados para geração da planilha');
@@ -129,7 +145,7 @@
 
 
             var dataToSend = JSON.stringify(data);
-            var columName = ["Data", "Descrição", "Nome da Conta", "Valor"];
+            var columName = ["Nome de Conta","Categoria","Descrição","Data", "Valor", "Tipo de Documento"];
             var columnNameToSend = JSON.stringify(columName);
             post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
         }
@@ -191,42 +207,63 @@
            
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
-                        <table class="table table-bordered table-striped table-min-td-size" style="width:1030px" id="sortable-table">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width:1200px" id="sortable-table">
                             <thead>
                                 <tr>
                                     <th style="width:100px; text-align: center" > Data </th>
-                                    <th style="width:170px; text-align: center" > Documento </th>
-                                    <th style="width:170px; text-align: center"> Tipo </th>
+                                    <th style="width:100px; text-align: center" > Documento </th>
+                                    <th style="width:150px; text-align: center"> Tipo </th>
+                                    <th style="width:160px; text-align: center"> Descrição </th>
                                     <th style="width:80px; text-align: center"> Parcela </th>
                                     <th style="width:100px; text-align: center"> Valor </th>
-                                    <th colspan=3 style="width:400px; text-align: center"> Conta </th>
+                                    <th style="width:80px; text-align: center"> Status </th>
+                                    <th colspan=2 style="width:400px; text-align: center"> Conta </th>
                                 </tr>
                                 <tr>
+                                	<th></th>
+                                	<th></th>
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
                                 	<th style="width:100px; text-align: center"> Nome </th>
-                                	<th style="width:200px; text-align: center"> Descrição </th>
-                                	<th style="width:100px; text-align: center"> Tipo </th>
+                                	<th style="width:100px; text-align: center"> Categoria </th>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
                                 <?php
                                 
                                 if($info){
-                                foreach ($info as $i) {
+                                ?>	<input style="display:none" id="qtdpayed" name="<?= $qtdpayed;?>">
+                                <?php foreach ($info as $i) {
                                     ?>
                                     <tr>
-                                    	<input type="hidden" id="<?= $i->document_description?>" name="document_description" />
+                                    	<input style="display:none" id="<?= $i -> payed;?>" name="payeds">
                                         <td><?= $i->posting_date ?></td>
-                                        <td><?= $i->document_type ?></td>
+                                        <td id="<?php echo $i->document_type;?>" name="document_type">
+                                            <?php switch($i->document_type){
+                                            	case "nota fiscal":
+                                            		echo "NF";
+                                            		break;
+                                            	case "cupom fiscal":
+                                            		echo "CF";
+                                            		break;
+                                            	case "recibo":
+                                            		echo "rec";
+                                            		break;
+                                            	case "boleto":
+                                            		echo "bol";
+                                            		break; 
+                                            }                                         
+                                            
+                                            ?> </td>
                                         <td><?= $i->posting_type ?></td>
+                                        <td id="<?= $i->document_description ?>" name="document_description"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>"><?= $i->document_description ?></a></td>
                                         <td><?= $i->portion ?>/<?= $portions[$i->document_expense_id]?></td>
                                         <td><?= $i->posting_value ?></td>
+                                        <td><?php if($i->payed == "t") echo "Pago"; else echo "Pendente"; ?></td>
                                         <td><?= $i->account_name ?></td>
-                                        <td><?= $i->account_description ?></td>
                                         <td><?= $i->account_type ?></td>
                                     </tr>
                                     <?php

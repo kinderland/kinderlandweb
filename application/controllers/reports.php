@@ -136,7 +136,11 @@ class Reports extends CK_Controller {
     	 
     	if ($year === FALSE) {
     		$year = date("Y");
-    	} else if ($month == 0) {
+    	} 
+    	
+    	if($month == null){
+    		$month = date("m");    		
+    	}else if ($month == 0) {
     		$month = FALSE;
     	}
     	$data["year"] = $year;
@@ -148,11 +152,15 @@ class Reports extends CK_Controller {
     	
     	$info = array();
     	$portions = array();
+    	$qtdpayed = 0;
     	
     	if($postingExpenses){
 	    	foreach($postingExpenses as $pe){
 	    		$obj = new StdClass();
 	    		$obj = $pe;
+	    		if($pe->payed == "t"){
+	    			$qtdpayed++;
+	    		}
 	    		
 	    			if(array_key_exists($pe->document_expense_id,$portions)){
 	    				$portions[$pe->document_expense_id]++;
@@ -170,6 +178,7 @@ class Reports extends CK_Controller {
     	}
     	
     	$data["info"] = $info;
+    	$data["qtdpayed"] = $qtdpayed;
     	$data["portions"] = $portions;
     	
     	$this->loadReportView("reports/finances/postingExpenses", $data);

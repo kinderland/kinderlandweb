@@ -395,3 +395,4 @@
 "updateDocumentUpload";"admin";4
 "toggleDocumentPayed";"admin";2
 "updateAccountName";"admin";2
+"viewDocument";"admin";2

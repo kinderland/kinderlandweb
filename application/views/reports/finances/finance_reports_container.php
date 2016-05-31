@@ -30,7 +30,7 @@
                 
                 		$checkSecretaryOperation = $this->personuser_model -> checkSecretaryOperation($this->session->userdata("user_id"));
                     	
-                    	if($checkSecretaryOperation){
+                    	if(in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions) || $checkSecretaryOperation){
                     ?>
                     <option value="<?= $this->config->item('url_link'); ?>reports/secretaryOperation">Caixinha</option>
                     <?php }?>
