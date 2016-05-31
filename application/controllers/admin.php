@@ -1040,7 +1040,11 @@ class Admin extends CK_Controller {
 
         if ($year === FALSE) {
             $year = date("Y");
-        } else if ($month == 0) {
+        } 
+        
+        if($month == null){
+        	$month = date("m");        	
+        }else if ($month == 0) {
             $month = FALSE;
         }
         $data["year"] = $year;
