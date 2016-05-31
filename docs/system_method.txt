@@ -368,6 +368,7 @@
 "createDocument";"admin";2
 "createDocument";"admin";4
 "secretaryOperation";"reports";4
+"secretaryOperation";"reports";2
 "editDocument";"admin";2
 "editDocument";"admin";4
 "completeDocument";"admin";2
