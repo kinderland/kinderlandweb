@@ -991,8 +991,8 @@ class Admin extends CK_Controller {
                 $bankNumber = $_POST['bankNumber'];
                 $bankAgency = $_POST['bankAgency'];
                 $accountNumber = $_POST['accountNumber'];
-                $this->documentexpense_model->insertNewBankData($bankNumber, $bankAgency, $accountNumber);
-                $bankDataId = 1; //$_POST['bank_data_id'];
+                $resulado = $this->documentexpense_model->insertNewBankData($bankNumber, $bankAgency, $accountNumber);
+                $bankDataId = 4; //$_POST['bank_data_id'];
                 $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue);
 
                 if ($result != null) {

@@ -90,7 +90,7 @@ class documentexpense_model extends CK_Model {
     public function insertNewBankData($bankNumber, $bankAgency, $accountNumber){
     	
     	$sql = "INSERT into bank_data (bank_number, bank_agency, account_number)
-					VALUES (?,?,?,?)";
+					VALUES (?,?,?)";
     	$Id = $this->execute($this->db, $sql, array($bankNumber, $bankAgency, $accountNumber));
     	return $Id;
     }

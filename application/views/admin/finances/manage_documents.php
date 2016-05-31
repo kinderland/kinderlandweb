@@ -181,10 +181,13 @@
             	var postingDate = document.getElementById("postingDateTransferencia").value;
             	alert(postingDate);
             	var bankNumber = document.getElementById("postingBankNumberTransferencia").value;
+            	alert(bankNumber);
             	var bankAgency = document.getElementById("postingAgencyTransferencia").value;
-            	var accounNumber = document.getElementById("postingAccountTransferencia").value;
+            	alert(bankAgency);
+            	var accountNumber = document.getElementById("postingAccountTransferencia").value;
+            	alert(accountNumber);
             	$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType },
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, bankNumber: bankNumber, bankAgency: bankAgency, accountNumber: accountNumber },
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -586,6 +589,11 @@
                                                             	<tr> 
 	                                                                <td> Número do Cheque: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input> <br><br>
+                                                            	</tr>
+                                                            	<tr>
+                                                            		<td> Data: </td> <br>
+	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br><br>
+
                                                             	</tr>
 
                                                             	<tr> 
