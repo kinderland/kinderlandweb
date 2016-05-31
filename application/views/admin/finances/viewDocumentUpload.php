@@ -1,3 +1,4 @@
+
 <html lang="pt-br">
     <head>
         <meta charset="UTF-8">
@@ -43,8 +44,9 @@
     ?>
 
     <div class="col-lg-10">
-        <h4>Se algum documento já foi enviado, um novo envio de documento substituirá o anterior. 
-            Apenas o último documento enviado será considerado para validação</h4>
+        <h4>Se algum documento já foi enviado, um novo envio de documento substituirá o anterior.
+            </br>
+            Apenas o último documento enviado será considerado.</h4>
         <form enctype="multipart/form-data" action="<?= $this->config->item('url_link'); ?>admin/updateDocumentUpload?upload_id=<?php echo $upload_id->document_expense_upload_id; ?>" method="POST">
             <br>
             <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />

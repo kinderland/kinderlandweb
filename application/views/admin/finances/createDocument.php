@@ -1,3 +1,5 @@
+	
+
 <head>
     <meta charset="UTF-8">
     <title>Colônia Kinderland</title>
@@ -42,15 +44,18 @@
                 break;
         }
     }
-    
-            function transform_date($date){
-            $newDate=explode("/",$date);
-            $temp=$newDate[0];
-            $newDate[0]=$newDate[1];
-            $newDate[1]=$temp;
-            $newDate=implode("/",$newDate);
-            return $newDate;
+
+    function transform_date($date) {
+        $newDate = "";
+        if (isset($date) && !empty($date)) {
+            $newDate = explode("/", $date);
+            $temp = $newDate[0];
+            $newDate[0] = $newDate[1];
+            $newDate[1] = $temp;
+            $newDate = implode("/", $newDate);
         }
+        return $newDate;
+    }
     ?>
     <script type="text/javascript">
         function datepickers() {
@@ -79,29 +84,69 @@
         </div>
     </div> 
 </form>
-<form enctype="multipart/form-data" action="<?= $this->config->item('url_link') ?>admin/completeDocument" method ="POST">
-    <input type="hidden" value="<?php echo $selected; ?>" name="document_type" >
-<?php if ($selected != "no_select") { ?>
-        Numero: <input  type="text" name="document_number" value="<?php echo $number; ?>">
-        </br>
-        Nome <?php if ($selected != "recibo") { ?> empresa <?php } ?>: <input type="text" name="document_name" value="<?php echo $name; ?>">
-        </br>
-        Data <?php echo dataSwitch($selected); ?> : <input type="text" class="datepickers required" name="document_date" value="<?php echo transform_date($date); ?>">
-        </br>
-        Descrição :<input type="text" name="description" maxlength="50" value="<?php echo $description; ?>">
-        </br>
-        Valor :<input type="number" step="0.01" size="6" name="document_value" value="<?php echo $value; ?>"> 
-        </br>
-        <input  type="file" name="uploadedfile" class="btn btn-primary"/> 
-        <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
-        <br />
-        <div class="col-lg-1" style="margin-top:15px">
-            <button class="btn btn-primary" type="submit">Salvar</button>
-        </div>
-    </form>
-<?php } ?>
-<div class="col-lg-1">
-    <button style="padding-left:20px;margin-top:2px" class="btn btn-warning" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Voltar</button>
+<div class="middle-content">
+    <form enctype="multipart/form-data" action="<?= $this->config->item('url_link') ?>admin/completeDocument" method ="POST">
+        <input type="hidden" value="<?php echo $selected; ?>" name="document_type" >
+        <?php if ($selected != "no_select") { ?>
+            <div class="row">
+                <label for="document_number" class="col-lg-1" style="padding-top:15px">Número: </label>
+                <div class="col-lg-2">
+                    <input  type="number" name="document_number" style="margin-left:-20px" value="<?php echo $number; ?>" class="form-control required"/>
+                </div>
+            </div>
+            <div class="row">
+                <label for="document_name" class="col-lg-2" style="padding-top:15px;width:12%;padding-right:-15px">Nome <?php if ($selected != "recibo") { ?>empresa <?php } ?>: </label>
+                <div class="col-lg-3">
+                    <input type="text" name="document_name" class="form-control" style="margin-left:-20px" value="<?php echo $name; ?>"/>
+                </div>
+            </div>
+            <div class="row">
+                <label for="document_date" class="col-lg-2" style="padding-top:15px;width:15%"> Data <?php echo dataSwitch($selected); ?> : </label>
+                <div class="col-lg-2">
+                    <input type="text" class="datepickers required form-control" style="margin-left:-20px" name="document_date" value="<?php echo transform_date($date); ?>">
+                </div>
+            </div>
+            <div class="row">
+                <label for="description" class="col-lg-2" style="padding-top:15px;width:15%"> Descrição: </label>
+                <div class="col-lg-5">
+                    <input type="text" name="description" maxlength="50" class="form-control" style="margin-left:-90px" value="<?php echo $description; ?>">   
+                </div>
+            </div>
+            <div class="row">
+                <label for="document_value" class="col-lg-2" style="padding-top:15px;width:15%"> Valor: </label>
+                <div class="col-lg-2">
+                    <input class="form-control" type="number" size="6" name="document_value" style="margin-left:-100px" value="<?php echo $value; ?>"> 
+                </div>
+            </div>
+            <div class="row">
+                <label for="uploadedfile" class="col-lg-2" style="padding-top:15px;width:15%"> Upload de imagem: </label>
+                <div class="col-lg-2">
+                    <input  type="file" style="margin-left:-50px" name="uploadedfile" class="btn btn-primary"/> 
+                    <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+                </div>
+            </div>
+            </br>
+            <div class="col-lg-1" style="margin-top:15px">
+                <button class="btn btn-primary" type="submit">Salvar</button>
+            </div>
+        </form>
+    <?php } ?>
+    <div class="col-lg-1">
+        <a href = "<?= $this->config->item('url_link') ?>admin/manageDocuments" style="padding-left:20px;margin-top:2px" class="btn btn-warning">Voltar</a>
+    </div>
 </div>
-
 </head>
+<!--
+    <input type="hidden" value="<?php echo $selected; ?>" name="document_type" >
+        Numero: <input  type="text" name="document_number" value="<?php echo $number; ?>">
+  Nome <?php if ($selected != "recibo") { ?> empresa <?php } ?>: <input type="text" name="document_name" value="<?php echo $name; ?>">
+
+        Data <?php echo dataSwitch($selected); ?> : <input type="text" class="datepickers required" name="document_date" value="<?php echo transform_date($date); ?>">
+ <input type="text" name="description" maxlength="50" class="form-control" value="<?php echo $description; ?>">   
+                <input  type="file" name="uploadedfile" class="btn btn-primary"/> 
+            <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+                <input class="form-control" type="number" step="0.01" size="6" name="document_value" value="<?php echo $value; ?>"> 
+
+-->
+
+

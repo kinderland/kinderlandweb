@@ -860,6 +860,7 @@ class Admin extends CK_Controller {
         $name = $document->getDocumentExpenseName();
         $date = explode("-", $date);
         $date = implode("/", array_reverse($date));
+        $upload = $this->documentexpense_model->getUploadId($document_id);
         $data['id'] = $document_id;
         $data['date'] = $date;
         $data['number'] = $number;
@@ -868,6 +869,7 @@ class Admin extends CK_Controller {
         $data['type'] = $type;
         $data['name'] = $name;
         $data['errors'] = $errors;
+        $data['upload_id'] = $upload->document_expense_upload_id;
         $this->loadReportView("admin/finances/editDocument", $data);
     }
 
@@ -879,6 +881,12 @@ class Admin extends CK_Controller {
         $type = $this->input->post("document_type", TRUE);
         $value = $this->input->post("document_value", TRUE);
         $errors = array();
+        $operation = "create";
+        $fileName = $_FILES['uploadedfile']['name'];
+        if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name'])) {
+            $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+        }
+        $errors = array();
         if (empty($description) || !isset($description)) {
             $errors[] = 'Campo descrição é de preenchimento obrigatório.\n';
         }
@@ -888,10 +896,19 @@ class Admin extends CK_Controller {
         $value = str_replace(",", ".", $value);
         $date = explode("/", $date);
         $db_date = implode("-", array_reverse($date));
-
+        $upload = $this->documentexpense_model->getUploadId($document_id);
         try {
             $this->generic_model->startTransaction();
             $documentId = $this->documentexpense_model->updateDocument($document_id, $db_date, $number, $description, $value, $name);
+            if (!empty($file) && isset($file)) {
+                if ($upload->document_expense_upload_id > 0) {
+                    $uploadId = $this->documentexpense_model->updateUploadDocument($upload->document_expense_upload_id, $fileName, $file, $operation);
+                } else {
+                    $uploadId = $this->documentexpense_model->uploadDocument($fileName, $file, $operation);
+                    $new_id = $this->documentexpense_model->getNewUpload();
+                    $result = $this->documentexpense_model->attatchUploadId($document_id, $new_id);
+                }
+            }
             $this->generic_model->commitTransaction();
             $this->Logger->info("Document successfully updated");
             $url = $this->config->item('url_link') . "admin/manageDocuments";
@@ -950,7 +967,7 @@ class Admin extends CK_Controller {
                 echo "true";
                 return;
             } else if ($postingType == "Crédito") {
-            	$this->Logger->info("ENTROU CRÉDITO");
+                $this->Logger->info("ENTROU CRÉDITO");
                 $portions = $_POST['portions'];
                 $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
                 if ($result != null) {
@@ -988,8 +1005,8 @@ class Admin extends CK_Controller {
             } else if ($postingType == "Boleto") {
                 $portions = $_POST['portions'];
                 for ($i = 1; $i < $portions; $i++) {
-					$portionNumber = $i;
-					
+                    $portionNumber = $i;
+
                     $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
                 }
                 if ($result != null) {
