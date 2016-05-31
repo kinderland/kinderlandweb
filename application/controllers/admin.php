@@ -962,62 +962,78 @@ class Admin extends CK_Controller {
         $postingDate = $_POST['postingDate'];
         $postingValue = $_POST['postingValue'];
         $postingType = $_POST['postingType'];
-        if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)) {
             if ($postingType == "Débito" || $postingType == "Dinheiro") {
-                echo "true";
-                return;
+            	if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)){
+            		echo "true";
+                	return;
+            	} else {
+            		echo "false";
+            		return;
+            	}
             } else if ($postingType == "Crédito") {
                 $this->Logger->info("ENTROU CRÉDITO");
                 $portions = $_POST['portions'];
-                $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
-                if ($result != null) {
-                    echo "true";
-                    return;
-                } else {
-                    echo "false";
-                    return;
+                if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)){
+                	$result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
+                	if ($result != null) {
+                  		echo "true";
+                    	return;
+                	} else {
+                    	echo "false";
+                    	return;
+                	}
                 }
             } else if ($postingType == "Cheque") {
                 $numberCheque = $_POST['numberCheque'];
-                $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue);
-                if ($result != null) {
-                    echo "true";
-                    return;
-                } else {
-                    echo "false";
-                    return;
+                if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)){
+	                $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue);
+	                if ($result != null) {
+	                    echo "true";
+	                    return;
+	                } else {
+	                    echo "false";
+	                    return;
+	                }
                 }
             } else if ($postingType == "Transferência") {
-                $bankNumber = $_POST['bankNumber'];
-                $bankAgency = $_POST['bankAgency'];
-                $accountNumber = $_POST['accountNumber'];
-                $resulado = $this->documentexpense_model->insertNewBankData($bankNumber, $bankAgency, $accountNumber);
-                $bankDataId = 4; //$_POST['bank_data_id'];
-                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue);
-
-                if ($result != null) {
-                    echo "true";
-                    return;
-                } else {
-                    echo "false";
-                    return;
-                }
+            	if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)){
+	                $bankNumber = $_POST['bankNumber'];
+	                $bankAgency = $_POST['bankAgency'];
+	                $accountNumber = $_POST['accountNumber'];
+	                $resulado = $this->documentexpense_model->insertNewBankData($bankNumber, $bankAgency, $accountNumber);
+	                $bankDataId = 4; //$_POST['bank_data_id'];
+	                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue);
+	
+	                if ($result != null) {
+	                    echo "true";
+	                    return;
+	                } else {
+	                    echo "false";
+	                    return;
+	                }
+            	}
             } else if ($postingType == "Boleto") {
                 $portions = $_POST['portions'];
-                for ($i = 1; $i < $portions; $i++) {
-                    $portionNumber = $i;
-
-                    $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
-                }
-                if ($result != null) {
-                    echo "true";
-                    return;
-                } else {
-                    echo "false";
-                    return;
-                }
+                $j = 0;
+                $postingValuePortion = explode ("/", $postingValue);
+                $postingDatePortion = explode("/", $postingDate);
+	                for ($i = 1; $i <= $portions; $i++) {
+	                    $portionNumber = $i;
+						$postingValue = $postingValuePortion[$j];
+						$postingDate = $postingDatePortion[$j];
+						$reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType);
+	                    $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
+	                	$j++;
+	                }
+	                if ($result != null) {
+	                    echo "true";
+	                    return;
+	                } else {
+	                    echo "false";
+	                    return;
+	                }
+	            
             }
-        }
     }
 
     public function toggleDocumentPayed($documentId) {

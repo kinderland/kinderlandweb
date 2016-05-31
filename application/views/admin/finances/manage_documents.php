@@ -204,12 +204,18 @@
 				var postingValue = "";
 				var postingDate = "";
 				alert(portions);
-				alert(postingValue);
 				for (var i = 1; i <= portions; i++){
-					
-					postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value).concat("/");                   
-            		postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value).concat("/");
+					if(i != portions){
+						postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value).concat("/");                   
+            			postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value).concat("/");
+					} else {
+						postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value);                
+            			postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value);
+					}
 				}
+				console.log(postingValue);
+				alert(postingValue);
+				alert(postingDate);
 				$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions },
                         function (data) {
