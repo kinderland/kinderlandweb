@@ -37,7 +37,7 @@
                     break;
                 case "recibo": return "assinatura";
                     break;
-                case "boleto": return "vencimento";
+                case "boleto": return "processamento";
                     break;
             }
         }
