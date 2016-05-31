@@ -93,8 +93,7 @@
 			alert(postingType);  
 			
 			if(postingType ==  "Crédito"){
-				var accountName = document.getElementById("accountNameCredito").value;
-				alert(accountName);
+
 				var portions = document.getElementById("postingPortionsCredito").value;
         		alert(portions);                                  
             	var postingValue = document.getElementById("postingValueCredito").value;
@@ -102,7 +101,7 @@
            		var postingDate = document.getElementById("postingDateCredito").value;
            		alert(postingDate);
            		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions },
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -117,14 +116,13 @@
 
 			
 			if(postingType ==  "Débito"){                       
-				var accountName = document.getElementById("accountNameDebito").value;
-				alert(accountName);
+
             	var postingValue = document.getElementById("postingValueDebito").value;
             	alert(postingValue);
            		var postingDate = document.getElementById("postingDateDebito").value;
            		alert(postingDate);
            		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -138,14 +136,13 @@
 			}
 
 			if(postingType ==  "Dinheiro"){  
-				var accountName = document.getElementById("accountNameDinheiro").value;
-				alert(accountName);                     
+               
             	var postingValue = document.getElementById("postingValueDinheiro").value;
             	alert(postingValue);
            		var postingDate = document.getElementById("postingDateDinheiro").value;
            		alert(postingDate);
            		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType },
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -158,8 +155,7 @@
                 );
 			}
 			if(postingType ==  "Cheque"){
-				var accountName = document.getElementById("accountNameCheque").value;
-				alert(accountName);
+
 				var numberCheque = document.getElementById("postingNumberCheque").value;
         		alert(numberCheque);                                  
             	var postingValue = document.getElementById("postingValueCheque").value;
@@ -167,7 +163,7 @@
            		var postingDate = document.getElementById("postingDateCheque").value;
            		alert(postingDate);
            		$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, numberCheque: numberCheque },
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, numberCheque: numberCheque },
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -180,8 +176,6 @@
                 );
 			}
 			if(postingType ==  "Transferência"){
-				var accountName = document.getElementById("accountNameTransferencia").value;
-				alert(accountName);
 				var postingValue = document.getElementById("postingValueTransferencia").value;
         		alert(postingValue);                                  
             	var postingDate = document.getElementById("postingDateTransferencia").value;
@@ -190,7 +184,7 @@
             	var bankAgency = document.getElementById("postingAgencyTransferencia").value;
             	var accounNumber = document.getElementById("postingAccountTransferencia").value;
             	$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName },
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType },
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -214,7 +208,7 @@
             		postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value).concat("/");
 				}
 				$.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, accountName: accountName, portions: portions },
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions },
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -365,7 +359,7 @@
                 </select>
 
                 Mês: <select name="month" onchange="this.form.submit()" id="month">
-                    <option value="0" <?php if (!isset($mes)) echo "selected"; ?>>Todos</option>
+                    <option value="0" >Todos</option>
                     <?php
 
                     function getMonthName($m) {
@@ -597,6 +591,9 @@
                                                             	<tr> 
 	                                                                <td> Valor: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
+	                                                            	<button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
+                                                            		<button class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                                                            	
                                                             	</tr>
 
                                                             </div>

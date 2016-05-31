@@ -945,12 +945,12 @@ class Admin extends CK_Controller {
         $postingDate = $_POST['postingDate'];
         $postingValue = $_POST['postingValue'];
         $postingType = $_POST['postingType'];
-        $accountName = $_POST['accountName'];
-        if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $accountName)) {
+        if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)) {
             if ($postingType == "Débito" || $postingType == "Dinheiro") {
                 echo "true";
                 return;
             } else if ($postingType == "Crédito") {
+            	$this->Logger->info("ENTROU CRÉDITO");
                 $portions = $_POST['portions'];
                 $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
                 if ($result != null) {
@@ -1023,16 +1023,9 @@ class Admin extends CK_Controller {
 
         if ($year === FALSE) {
             $year = date("Y");
-        } 
-        
-        if($month == NULL){
-        	$month = date("m");
-        }
-        
-        if ($month == 0) {
+        } else if ($month == 0) {
             $month = FALSE;
-        } 
-        
+        }
         $data["year"] = $year;
         $data["month"] = $month;
         $data["years"] = $years;
