@@ -975,12 +975,14 @@ class Admin extends CK_Controller {
                 $portions = $_POST['portions'];
                 
                 $postingValue = $postingValue/$portions;
-                $periodo = 1;
+                $postingDatePortion = explode("-", $postingDate);
                 for($i = 1; $i <= $portions; $i++){
+                	$postingDatePortion[1] = $postingDatePortion[1]+1;
+                	
                 	
 	                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType);
 	                $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
-	                $postingDate = strtotime($postingDate('%d/%m/%Y', strtotime('+ '.$periodo.' months')));
+
 	                		
                 }
 	                if ($result != null) {

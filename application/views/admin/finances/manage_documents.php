@@ -633,13 +633,20 @@
                                                             <div id = "Crédito" style="display: none">
 
                                                             	<tr> 
-	                                                                <td> Valor: </td><br> 
+	                                                                <td> Valor: </td><br/>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> <br><br>
-                                                            	</tr>
-                                                            	<tr> 
-	                                                                <td> Número de Parcelas: </td><br>
-	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingPortionsCredito" name="postingPortionsCredito" ></input> <br><br>
-                                                            	</tr>
+                                                            	</tr><br/>
+	                                                            	<tr>
+	                                                            	<td> Número de parcelas: </td><br/>
+		                                                            <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
+	                                                            		<select style="width: 190px" class="form-control" name="postingPortionsCredito" id="postingPortionsCredito"  >
+                                                                			<option> - Selecione - </option>
+                                                               				 <?php for ($i = 1; $i <= 10; $i++){?>
+                                                                			<option value="<?= $i ?>"> <?php echo $i ?> </option>
+                                                               				 <?php }?>
+                                                              		   </select>
+                                                               		</div>
+                                                               		</tr> <br/><br/><br/>
                                                             	<tr>
                                                             		<td> Data: </td> <br>
 	                                                            	<input style="width: 200px" class="form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br><br>
