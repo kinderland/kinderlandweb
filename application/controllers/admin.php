@@ -980,10 +980,10 @@ class Admin extends CK_Controller {
                 	$mês = $postingDatePortion[1];
                 	$ano = $postingDatePortion[0];
                 for($i = 1; $i <= $portions; $i++){
+                	$postingPortion = $i;
                 	$postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $meses, $dia, $ano) );
                 	
-	                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType);
-	                $result = $this->documentexpense_model->insertNewPostingCreditCardPayment($portions, $documentexpenseId, $postingDate, $postingValue);
+	                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
 
 	                		
                 }
@@ -1030,11 +1030,10 @@ class Admin extends CK_Controller {
                 $postingValuePortion = explode ("/", $postingValue);
                 $postingDatePortion = explode("/", $postingDate);
 	                for ($i = 1; $i <= $portions; $i++) {
-	                    $portionNumber = $i;
+	                    $postingPortion = $i;
 						$postingValue = $postingValuePortion[$j];
 						$postingDate = $postingDatePortion[$j];
-						$reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType);
-	                    $result = $this->documentexpense_model->insertNewBankSlipPayment($portionNumber, $documentexpenseId, $postingDate, $postingValue);
+						$reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
 	                	$j++;
 	                }
 	                if ($result != null) {
