@@ -205,15 +205,7 @@ $this->Logger->info("O ID AQUI: " . $upload_id);
         $result=$this->execute($this->db,$sql,array(intval($upload_id)));
         return $result;
     }
-    
-    public function toggleDocumentPayed($documentId) {
-    	$this -> Logger -> info("Running: " . __METHOD__);
-    
-    	$sql = 'update document_expense set payed = NOT payed where document_expense_id = ?;';
-    
-    	return $this -> execute($this -> db, $sql, array($documentId));
-    
-    }
+   
 }
 
 ?>

@@ -11,9 +11,8 @@ class DocumentExpense {
     private $documentExpenseType;
     private $documentExpenseDescription;
     private $documentExpenseName;
-    private $documentPayed;
 
-    public function __construct($documentExpenseId, $documentExpenseNumber, $beneficiaryId, $documentExpenseValue, $documentExpenseDate, $documentExpenseUploadId, $documentExpenseType, $documentExpenseDescription, $documentExpenseName, $documentPayed) {
+    public function __construct($documentExpenseId, $documentExpenseNumber, $beneficiaryId, $documentExpenseValue, $documentExpenseDate, $documentExpenseUploadId, $documentExpenseType, $documentExpenseDescription, $documentExpenseName) {
         $this->documentExpenseId = $documentExpenseId;
         $this->documentExpenseNumber = $documentExpenseNumber;
         $this->beneficiaryId = $beneficiaryId;
@@ -23,12 +22,11 @@ class DocumentExpense {
         $this->documentExpenseType = $documentExpenseType;
         $this->documentExpenseDescription = $documentExpenseDescription;
         $this->documentExpenseName = $documentExpenseName;
-        $this->documentPayed = $documentPayed;
     }
 
     public static function createDocumentExpenseObject($resultRow) {
         return new DocumentExpense(
-                $resultRow->document_expense_id, $resultRow->document_number, $resultRow->beneficiary_id, $resultRow->document_value, $resultRow->document_date, $resultRow->document_expense_upload_id, $resultRow->document_type, $resultRow->description, $resultRow->document_name, $resultRow->payed
+                $resultRow->document_expense_id, $resultRow->document_number, $resultRow->beneficiary_id, $resultRow->document_value, $resultRow->document_date, $resultRow->document_expense_upload_id, $resultRow->document_type, $resultRow->description, $resultRow->document_name
         );
     }
 
@@ -102,16 +100,6 @@ class DocumentExpense {
 
     public function getDocumentExpenseName() {
         return $this->documentExpenseName;
-    }
-    
-    public function setDocumentPayed($documentPayed) {
-    	$this->documentPayed = $documentPayed;
-    }
-    
-    public function getDocumentPayed() {
-    	if ($this->documentPayed == "t")
-    		return TRUE;
-    	return FALSE;
     }
 
 }

@@ -19,6 +19,32 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
+	public function getPostingExpenseById($document_id,$posting_value,$posting_portions){
+		$sql = "SELECT * FROM posting_expense 
+				WHERE document_expense_id = ?
+				AND posting_value = ?
+				AND posting_portions = ?";
+			
+		$result = $this->executeRow($this->db, $sql, array(intval($document_id),$posting_value,$posting_portions));
+			
+		if($result)
+			return $result;
+			else
+				return NULL;
+	}
+	
+	public function togglePostingExpensePayed($document_id,$posting_value,$posting_portions,$posting_date) {
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$sql = 'update posting_expense set payed = NOT payed, posting_date = ? 
+				WHERE document_expense_id = ?
+				AND posting_value = ?
+				AND posting_portions = ?';
+	
+		return $this -> execute($this -> db, $sql, array($posting_date,intval($document_id),$posting_value,$posting_portions));
+	
+	}
+	
 	public function getPostingsExpensesByDate($year,$type,$month = null){
 		$sql = "SELECT *
 				FROM v_all_posting_expenses_info 
@@ -39,6 +65,19 @@ class finance_model extends CK_Model{
 			return $result;
 		else
 			return NULL;
+	}
+	
+	public function getPostingsExpensesWithoutDate(){
+		$sql = "SELECT *
+				FROM v_all_posting_expenses_info
+				WHERE posting_date is null";
+				
+		$result = $this->executeRows($this->db, $sql);
+			
+		if($result)
+			return $result;
+			else
+				return NULL;
 	}
 	
 	public function getAllPostingExpenses(){
@@ -88,16 +127,16 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
-	public function updateAccountName($document_id, $posting_value, $posting_date, $account_name) {
+	public function updateAccountName($document_id, $posting_value, $posting_portions, $account_name) {
 	
 		$this -> Logger -> info("Running: " . __METHOD__);
 	
 		$sql = 'UPDATE posting_expense SET account_name = ?
 				WHERE document_expense_id = ?
 				AND posting_value = ?
-				AND posting_date = ?';
+				AND posting_portions = ?';
 	
-		$returnId = $this -> execute($this -> db, $sql, array($account_name, $document_id, $posting_value, $posting_date));
+		$returnId = $this -> execute($this -> db, $sql, array($account_name, $document_id, $posting_value, $posting_portions));
 	
 		if ($returnId)
 			return $returnId;

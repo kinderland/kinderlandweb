@@ -8,11 +8,12 @@
     <div class="col-lg-12">
         <h3><strong>Saídas</strong></h3>
         <hr/>
-        <div style="display:none" class="row">
+        <div class="row">
             <div class ="col-lg-8">
                 <select class="report-select" name="report_select" id="report_select">
                     <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions) || in_array(SECRETARY, $permissions)) { ?>
                         <option selected="selected" value="<?= $this->config->item('url_link'); ?>admin/manageDocuments"> Documentos </option>
+                        <option value="<?= $this->config->item('url_link'); ?>reports/postingExpenses"> Lançamentos </option>
                     <?php } ?>
                 </select>
             </div>

@@ -486,7 +486,7 @@
                                     <td>
                                         <?= date_format(date_create($document->document_date), 'd/m/y'); ?></td>
 
-                                    <td>
+                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->document_expense_id ?>">
                                             <?php switch($document->document_type){
                                             	case "nota fiscal":
                                             		echo "NF";
@@ -502,9 +502,9 @@
                                             		break; 
                                             }                                         
                                             
-                                            ?> </td>
+                                            ?></a> </td>
                                     <td><?php echo $document->document_value; ?> </td>
-                                    <td><a href="<?php echo $this->config->item("url_link"); ?>admin/editDocument/<?php echo $document->document_expense_id ?>"><?php echo $document -> document_description;?></a></td>
+                                    <td><?php echo $document -> document_description;?></td>
                                     <td><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $document->document_expense_id;?>">
                                         <button <?php
                                         if ($document->document_expense_upload_id) {
@@ -519,7 +519,7 @@
                                     <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
                                         <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                     <?php } else { ?>
-                                        <td><button class="btn btn-success" onclick="sendInfoToModal('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->posting_bank_number ?>', '<?= $document->posting_agency ?>', '<?= $document->posting_account ?>', '<?= $document->posting_number_cheque ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button> </td>
+                                        <td><button class="btn btn-success" onclick="sendInfoToModal('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button> </td>
                                     <?php } ?>
                                     <?php if(!$secretary){?>
                                     <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$document->document_expense_id?>" 

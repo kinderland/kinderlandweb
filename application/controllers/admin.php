@@ -872,6 +872,29 @@ class Admin extends CK_Controller {
         $data['upload_id'] = $upload->document_expense_upload_id;
         $this->loadReportView("admin/finances/editDocument", $data);
     }
+    
+    public function viewDocument($document_id = NULL, $errors = array()) {
+    	    	$document = $this->documentexpense_model->getDocumentById($document_id);
+    	    	$date = $document->getDocumentExpenseDate();
+    	    	$number = $document->getDocumentExpenseNumber();
+    	    	$description = $document->getDocumentExpenseDescription();
+    	    	$value = $document->getDocumentExpenseValue();
+    	    	$type = $document->getDocumentExpenseType();
+    	    	$name = $document->getDocumentExpenseName();
+    	    	$date = explode("-", $date);
+    	    	$date = implode("/", array_reverse($date));
+    	    	$upload = $this->documentexpense_model->getUploadId($document_id);
+    	    	$data['id'] = $document_id;
+    	    	$data['date'] = $date;
+    	    	$data['number'] = $number;
+    	    	$data['description'] = $description;
+    	    	$data['value'] = $value;
+    	    	$data['type'] = $type;
+    	    	$data['name'] = $name;
+    	    	$data['errors'] = $errors;
+    	    	$data['upload_id'] = $upload->document_expense_upload_id;
+    	    	$this->loadReportView("admin/finances/viewDocument", $data);
+    	    }
 
     public function updateDocument($document_id = NULL) {
         $name = $this->input->post("document_name", TRUE);
@@ -1047,10 +1070,17 @@ class Admin extends CK_Controller {
             }
     }
 
-    public function toggleDocumentPayed($documentId) {
-        $document = $this->documentexpense_model->getDocumentById($documentId);
+    public function togglePostingExpensePayed($documentId,$posting_value,$posting_portions,$day,$month,$year) {
+    	
+    	if($day != null){
+    		$posting_date = $year."-".$month."-".$day;
+    	}else{
+    		$posting_date = "";
+    	}
+    	
+        $document = $this->finance_model->getPostingExpenseById($documentId,$posting_value,$posting_portions);
 
-        echo $this->documentexpense_model->toggleDocumentPayed($documentId);
+        echo $this->finance_model->togglePostingExpensePayed($documentId,$posting_value,$posting_portions,$posting_date);
     }
 
     public function manageDocuments($date = NULL) {
@@ -1080,7 +1110,6 @@ class Admin extends CK_Controller {
         $data["option"] = $option;
 
         $documents = $this->finance_model->getPostingsExpensesByDate($year, "document", $month);
-        $data['banks'] = $this->documentexpense_model->getAllBankData();
         $accountNames = $this->finance_model->getAllAccountNames();
         $answer = "";
 
@@ -1096,11 +1125,11 @@ class Admin extends CK_Controller {
 
     public function updateAccountName() {
         $id = $this->input->post("id", TRUE);
+        $portions = $this->input->post("portions", TRUE);
         $value = $this->input->post("value", TRUE);
-        $date = $this->input->post("date", TRUE);
         $account_name = $this->input->post("account_name", TRUE);
 
-        if ($this->finance_model->updateAccountName($id, $value, $date, $account_name)) {
+        if ($this->finance_model->updateAccountName($id, $value, $portions, $account_name)) {
             echo "true";
             return;
         } else {

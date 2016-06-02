@@ -3,27 +3,67 @@
         <meta charset="UTF-8">
         <title>Colônia Kinderland</title>
 
-        <link href="<?= $this->config->item('assets'); ?>css/basic.css" rel="stylesheet" />
-        <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
-        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
-        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
-        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
-        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
-
+        <link href="<?= $this->config->item('assets'); ?>css/basic.css"
+              rel="stylesheet" />
+      <!--<link href="<?= $this->config->item('assets'); ?>css/old/screen.css" rel="stylesheet" />-->
+        <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css"
+              rel="stylesheet" />
+        <link rel="stylesheet"
+              href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
+        <link rel="stylesheet"
+              href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
+        <link rel="stylesheet"
+              href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
+        <script type="text/javascript"
+        src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 
     </head>
-    <body>
         <script>
+        function datepickers() {
+            $('.datepickers').datepicker();
+            $(".datepickers").datepicker("option", "dateFormat", "dd/mm/yy");
+        }
+        $(function () {
+            $("#sortable-table").tablesorter({widgets: ['zebra']});
+            $(".datepicker").datepicker();
+            $("#sortable-table").removeClass("tablesorter tablesorter-default");
+        });
+        $(document).ready(function () {
+            $("[name='my-checkbox']").bootstrapSwitch();
+            $("[name='my-checkbox']").each(function (index) {
+                if ($(this).attr("checkedInDatabase") != undefined)
+                    $(this).bootstrapSwitch('state', true, true);
+            });
+            datepickers();
+            $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
+                var string = "<?= $this->config->item("url_link") ?>admin/togglePostingExpensePayed/".concat($(this).attr("id")).concat("/").concat($("#value_".concat($(this).attr("id"))).attr("name")).concat("/").concat($("#portions_".concat($(this).attr("id"))).attr("name")).concat("/").concat($("#date_".concat($(this).attr("id"))).attr("value"));
+                var recarrega = "<?= $this->config->item("url_link") ?>reports/postingExpenses/";
+                $.post(string).done(function (data) {
+                    if (data == 1)
+                        alert("Estado do documento modificado com sucesso");
+                    else {
+                        alert("Problema ao modificar o estado do documento");
+                        window.location = recarrega;
+                    }
+                });
+            });
+        });
 
         function post(path, params, method) {
             method = method || "post"; // Set method to post by default if not specified.
@@ -150,13 +190,49 @@
             post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
         }
 
+        function accountUpdate(id,portions,value){
+			var account_name = document.getElementById("accounts_".concat(id)).value;
 
-        
-        $(function() {
-            $(".sortable-table").tablesorter();
-            $(".datepicker").datepicker();
-        });
+			var names = document.getElementById("accountsNames").value;
+			names = names.split("/");
+
+			var ok = 0;
+
+			for(var i = 0; i < names.length; i++){
+				if(account_name.localeCompare(names[i]) == 0){
+					ok = 1;
+					break;
+				}
+			}	
+
+			if(ok == 1){
+				$.post('<?= $this->config->item('url_link'); ?>admin/updateAccountName',
+                        {id: id, portions: portions, value: value, account_name: account_name},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Nome de Conta atribuído com sucesso!");
+                            } else if (data == "false") {
+                                alert("Ocorreu um erro na atribuição de Nome de Conta!");
+                                location.reload();
+                            }
+                        }
+                );
+			}else{
+				alert("Nome de conta inválido. Insira um nome existente!");
+			}		
+		}
+
+		$(function() {
+		    var availableTags = document.getElementById("accountsNames").value;
+		    availableTags = availableTags.split("/");
+
+		    $(".accounts").autocomplete({
+			      source: availableTags
+			});
+		  });
+
         </script>
+        <body>
         <br />
         <div class="scroll">
         	<form method="GET">
@@ -202,6 +278,7 @@
                     ?>
                 </select>
             </form>
+            <input style="display:none" id="accountsNames" value="<?php echo $accountNames;?>">
              <button class="button btn btn-primary col-lg-2" onclick="sendTableToCSV()" value="">Exportar</button>
             <br /> <br />
            
@@ -210,25 +287,28 @@
                         <table class="table table-bordered table-striped table-min-td-size" style="width:1200px" id="sortable-table">
                             <thead>
                                 <tr>
-                                    <th style="width:100px; text-align: center" > Data </th>
-                                    <th style="width:100px; text-align: center" > Documento </th>
+                                    <th style="width:100px; text-align: center" > Data Venc. </th>
+                                    <th style="width:20px; text-align: center" > Doc </th>
                                     <th style="width:150px; text-align: center"> Tipo </th>
-                                    <th style="width:160px; text-align: center"> Descrição </th>
+                                <!--<th style="width:160px; text-align: center"> Descrição </th> -->
                                     <th style="width:80px; text-align: center"> Parcela </th>
                                     <th style="width:100px; text-align: center"> Valor </th>
-                                    <th style="width:80px; text-align: center"> Status </th>
-                                    <th colspan=2 style="width:400px; text-align: center"> Conta </th>
+                                    <th style="width:70px; text-align: center">Boleto</th>
+                                    <th colspan=2 style="width:300px; text-align: center">Nome de Conta</th>
+                                    <th colspan=2 style="width:300px; text-align: center">Pagamento</th>
                                 </tr>
                                 <tr>
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
+                                <!-- <th></th> -->
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
-                                	<th></th>
-                                	<th style="width:100px; text-align: center"> Nome </th>
-                                	<th style="width:100px; text-align: center"> Categoria </th>
+                                	<th style="width:200px; text-align: center">Nome</th>
+                        			<th style="width:100px; text-align: center">Ação</th>
+                        			<th style="width:150px; text-align: center">Data</th>
+                        			<th style="width:100px; text-align: center">Pago</th>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
@@ -240,8 +320,8 @@
                                     ?>
                                     <tr>
                                     	<input style="display:none" id="<?= $i -> payed;?>" name="payeds">
-                                        <td><?= $i->posting_date ?></td>
-                                        <td id="<?php echo $i->document_type;?>" name="document_type">
+                                        <td><?php if($i->posting_date != "") echo date("d/m/Y",strtotime($i->posting_date)) ?></td>
+                                        <td id="<?php echo $i->document_type;?>" name="document_type"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>">
                                             <?php switch($i->document_type){
                                             	case "nota fiscal":
                                             		echo "NF";
@@ -257,14 +337,37 @@
                                             		break; 
                                             }                                         
                                             
-                                            ?> </td>
+                                            ?> </a></td>
                                         <td><?= $i->posting_type ?></td>
-                                        <td id="<?= $i->document_description ?>" name="document_description"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>"><?= $i->document_description ?></a></td>
-                                        <td><?= $i->portion ?>/<?= $portions[$i->document_expense_id]?></td>
-                                        <td><?= $i->posting_value ?></td>
-                                        <td><?php if($i->payed == "t") echo "Pago"; else echo "Pendente"; ?></td>
-                                        <td><?= $i->account_name ?></td>
-                                        <td><?= $i->account_type ?></td>
+                                    <!-- <td id="<?php // $i->document_description ?>" name="document_description"><?php // $i->document_description ?></td> -->
+                                        <td id="portions_<?=$i->document_expense_id?>" name = "<?= $i->posting_portions ?>"><?= $i->posting_portions ?>/<?= $portions[$i->document_expense_id]?></td>
+                                        <td id="value_<?=$i->document_expense_id?>" name = "<?= $i->posting_value ?>"><?= $i->posting_value ?></td>
+                                        <td>
+                                        <?php if($i->posting_type == "Boleto"){?>
+                                        	<a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $i->document_expense_id;?>">
+                                        <button <?php
+                                     //   if ($i->document_expense_upload_id) {
+                                     //       echo "class='btn btn-success'>Atualizar";
+                                     //   } else {
+                                            echo "class='btn btn-danger'>Upload";
+                                      //  }
+                                        ?> 
+                                        </button>
+                                        </a>
+                                        <?php } ?>
+                                    </td>
+                                        <td><input <?php if ($i->posting_value == "" && $i->posting_value == "") echo "disabled" ?> type="text" class="accounts" id="accounts_<?= $i->document_expense_id ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
+									</td>
+									<?php if ($i->account_name == "") { ?>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Salvar</button></td>
+                                    <?php } else { ?>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Atualizar</button> </td>
+                                    <?php } ?>
+                                    <div style="text-align: center">
+                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>" value="<?php echo $i->posting_date; ?>"></td>
+                                    	</div>
+                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>" 
+        							<?php if($i->payed == "t") echo "checkedInDatabase='true'";?> /> </td>
                                     </tr>
                                     <?php
                                 }}

@@ -393,6 +393,6 @@
 "viewDocumentUpload";"admin";4
 "updateDocumentUpload";"admin";2
 "updateDocumentUpload";"admin";4
-"toggleDocumentPayed";"admin";2
+"togglePostingExpensePayed";"admin";2
 "updateAccountName";"admin";2
 "viewDocument";"admin";2

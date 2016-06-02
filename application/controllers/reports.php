@@ -149,6 +149,7 @@ class Reports extends CK_Controller {
     	$data["option"] = $option;
     	
     	$postingExpenses = $this -> finance_model -> getPostingsExpensesByDate($year,"posting",$month);
+    	$postingExpensesWithoutDate = $this -> finance_model -> getPostingsExpensesWithoutDate();
     	
     	$info = array();
     	$portions = array();
@@ -167,16 +168,38 @@ class Reports extends CK_Controller {
 	    			}else{
 	    				$portions[$pe->document_expense_id] = 1;
 	    			}
-	    			
-	    		$obj -> portion = $portions[$pe->document_expense_id];
 	    		
 	    		$r = explode("-", $pe->posting_date);
-	    		$obj->posting_date = $r[2]."/".$r[1]."/".$r[0];
+	    		$obj->posting_date = $r[1]."/".$r[2]."/".$r[0];
 	    		
 	    		$info[] = $obj;
 	    	}
     	}
     	
+    	if($postingExpensesWithoutDate){
+    		foreach($postingExpensesWithoutDate as $pe){
+    			$obj = new StdClass();
+    			$obj = $pe;
+    			if($pe->payed == "t"){
+    				$qtdpayed++;
+    			}
+    			 
+    			if(array_key_exists($pe->document_expense_id,$portions)){
+    				$portions[$pe->document_expense_id]++;
+    			}else{
+    				$portions[$pe->document_expense_id] = 1;
+    			}
+    			$info[] = $obj;
+    		}
+    	}
+    	
+    	$accountNames = $this->finance_model->getAllAccountNames();
+    	$answer = "";
+    	 
+    	foreach ($accountNames as $an) {
+    		$answer = $answer . "/" . $an->account_name;
+    	}
+    	$data['accountNames'] = $answer;    	
     	$data["info"] = $info;
     	$data["qtdpayed"] = $qtdpayed;
     	$data["portions"] = $portions;
