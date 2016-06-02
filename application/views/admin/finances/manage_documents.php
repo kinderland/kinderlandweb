@@ -80,9 +80,36 @@
             form.submit();
         }
 
-        function sendInfoToModal(documentExpenseId, dateNow) {
+        function sendInfoToModal(postingValue, postingDate, postingType, postingPortions, postingBankNumber,postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
             $("#documentexpenseId").html(documentExpenseId);
-            $("#dateNow").html(dateNow);
+            $("#postingType").html(postingType);
+            if(postingType == "Boleto"){
+            	$("#postingDateBoleto").html(postingDate);
+            	$("#postingValueBoleto").html(postingValue);
+            	$("#postingPortionsBoleto").html(postingPortions);
+           	}
+            if(postingType == "Crédito"){
+            	$("#postingDateCredito").html(postingDate);
+            	$("#postingValueCredito").html(postingValue);
+            	$("#postingPortionsCredito").html(postingPortions);
+           	}
+            if(postingType == "Transferência"){
+            	$("#postingDateTransferencia").html(postingDate);
+            	$("#postingValueTransferencia").html(postingValue);
+            	$("#postingBankNumberTransferencia").html(postingBankNumber);
+            	$("#postingAgencyTransferencia").html(postingAgency);
+            	$("#postingAccountTransferencia").html(postingAccount);
+           	}
+            if(postingType == "Cheque"){
+            	$("#postingDateCheque").html(postingDate);
+            	$("#postingValueCheque").html(postingValue);
+            	$("#postingNumberCheque").html(postingNumberCheque);
+           	}
+            if(postingType == "Dinheiro"){
+            	$("#postingDateDinheiro").html(postingDate);
+            	$("#postingValueDinheiro").html(postingValue);
+           	}
+            
         }
 
         function formaPagamento() {
@@ -490,9 +517,9 @@
                                         </a>
                                     </td>
                                     <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
-                                        <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>', '<?= date('Y-m-d') ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
+                                        <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                     <?php } else { ?>
-                                        <td><button class="btn btn-success">Tipo</button> </td>
+                                        <td><button class="btn btn-success" onclick="sendInfoToModal('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->posting_bank_number ?>', '<?= $document->posting_agency ?>', '<?= $document->posting_account ?>', '<?= $document->posting_number_cheque ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button> </td>
                                     <?php } ?>
                                     <?php if(!$secretary){?>
                                     <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$document->document_expense_id?>" 

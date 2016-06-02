@@ -954,7 +954,7 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/finances/editDocument', $data);
         }
     }
-
+    
     public function postingExpense() {
 
         $this->Logger->info("Running: " . __METHOD__);
