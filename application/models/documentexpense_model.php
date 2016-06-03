@@ -60,18 +60,25 @@ class documentexpense_model extends CK_Model {
     }
 
     public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion) {
-        $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, posting_portion)
+        $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, posting_portions)
 					VALUES (?,?,?,?,?)";
         $result = $this->execute($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion));
         return $result;
     }
 
 
-    public function insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue) {
-        $sql = "INSERT into posting_bank_transfer(bank_data_id, document_expense_id, posting_date, posting_value)
-					VALUES (?,?,?,?)";
-        $Id = $this->execute($this->db, $sql, array($bankDataId, $documentexpenseId, $postingDate, $postingValue));
+    public function insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue, $postingPortion) {
+        $sql = "INSERT into posting_bank_transfer(bank_data_id, document_expense_id, posting_date, posting_value, posting_portions)
+					VALUES (?,?,?,?,?)";
+        $Id = $this->execute($this->db, $sql, array($bankDataId, $documentexpenseId, $postingDate, $postingValue, $postingPortion));
         return $Id;
+    }
+    
+    public function insertNewBankSlip($postingDate, $documentexpenseId, $postingValue, $postingPortion) {
+    	$sql = "INSERT into posting_bank_slip(bank_slip_date, document_expense_id, posting_value, posting_portions)
+					VALUES (?,?,?,?)";
+    	$Id = $this->execute($this->db, $sql, array($postingDate, $documentexpenseId, $postingValue, $postingPortion));
+    	return $Id;
     }
     
     public function insertNewBankData($bankNumber, $bankAgency, $accountNumber){

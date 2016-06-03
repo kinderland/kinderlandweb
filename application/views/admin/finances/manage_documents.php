@@ -271,28 +271,22 @@
             if(type == "Boleto"){
             	document.getElementById("Cheque").style.display = "none";
             	document.getElementById("Crédito").style.display = "none";
-            	document.getElementById("Débito").style.display = "none";
             	document.getElementById("Dinheiro").style.display = "none";
-            	document.getElementById("Transferência").style.display = "none";
-            	
+            	document.getElementById("Transferência").style.display = "none";            	
             	document.getElementById("Boleto").style.display = ""; 
             	                                   	
             }else if(type == "Cheque"){
             	document.getElementById("Boleto").style.display = "none";
             	document.getElementById("Crédito").style.display = "none";
-            	document.getElementById("Débito").style.display = "none";
             	document.getElementById("Dinheiro").style.display = "none";
-            	document.getElementById("Transferência").style.display = "none";
-            	
+            	document.getElementById("Transferência").style.display = "none";            	
             	document.getElementById("Cheque").style.display = ""; 
             	
             }else if(type == "Crédito"){
             	document.getElementById("Boleto").style.display = "none";
             	document.getElementById("Cheque").style.display = "none";
-            	document.getElementById("Débito").style.display = "none";
             	document.getElementById("Dinheiro").style.display = "none";
-            	document.getElementById("Transferência").style.display = "none";
-            	
+            	document.getElementById("Transferência").style.display = "none";            	
             	document.getElementById("Crédito").style.display = ""; 
             	
             }else if(type == "Débito"){
@@ -300,26 +294,21 @@
             	document.getElementById("Cheque").style.display = "none";
             	document.getElementById("Crédito").style.display = "none";
             	document.getElementById("Dinheiro").style.display = "none";
-            	document.getElementById("Transferência").style.display = "none";
-            	
+            	document.getElementById("Transferência").style.display = "none";            	
             	document.getElementById("Débito").style.display = ""; 
             	
             }else if(type == "Dinheiro"){
             	document.getElementById("Boleto").style.display = "none";
             	document.getElementById("Cheque").style.display = "none";
             	document.getElementById("Crédito").style.display = "none";
-            	document.getElementById("Débito").style.display = "none";
-            	document.getElementById("Transferência").style.display = "none";
-            	
+            	document.getElementById("Transferência").style.display = "none";            	
             	document.getElementById("Dinheiro").style.display = ""; 
             	
             }else if(type == "Transferência"){
             	document.getElementById("Boleto").style.display = "none";
             	document.getElementById("Cheque").style.display = "none";
             	document.getElementById("Crédito").style.display = "none";
-            	document.getElementById("Débito").style.display = "none";
             	document.getElementById("Dinheiro").style.display = "none";
-            	
             	document.getElementById("Transferência").style.display = ""; 
             	
             }

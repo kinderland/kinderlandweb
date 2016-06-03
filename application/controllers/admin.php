@@ -985,8 +985,9 @@ class Admin extends CK_Controller {
         $postingDate = $_POST['postingDate'];
         $postingValue = $_POST['postingValue'];
         $postingType = $_POST['postingType'];
-            if ($postingType == "Débito" || $postingType == "Dinheiro") {
-            	if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)){
+            if ($postingType == "Dinheiro") {
+            	$postingPortion = 1;
+            	if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)){
             		echo "true";
                 	return;
             	} else {
@@ -1002,15 +1003,15 @@ class Admin extends CK_Controller {
                 	$dia = $postingDatePortion[2];
                 	$mês = $postingDatePortion[1];
                 	$ano = $postingDatePortion[0];
-                for($i = 1; $i <= $portions; $i++){
+                for($i = 0; $i < $portions; $i++){
                 	$postingPortion = $i;
-                	$postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $meses, $dia, $ano) );
+                	$postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $i, $dia, $ano) );
                 	
 	                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
 
 	                		
                 }
-	                if ($result != null) {
+	                if ($resultad != null) {
 	                  	echo "true";
 	                    return;
 	                } else {
@@ -1021,7 +1022,8 @@ class Admin extends CK_Controller {
             	
             } else if ($postingType == "Cheque") {
                 $numberCheque = $_POST['numberCheque'];
-                if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)){
+                $postingPortion = 1;
+                if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)){
 	                $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue);
 	                if ($result != null) {
 	                    echo "true";
@@ -1032,12 +1034,13 @@ class Admin extends CK_Controller {
 	                }
                 }
             } else if ($postingType == "Transferência") {
-            	if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType)){
+            	$postingPortion = 1;
+            	if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)){
 	                $bankNumber = $_POST['bankNumber'];
 	                $bankAgency = $_POST['bankAgency'];
 	                $accountNumber = $_POST['accountNumber'];
 	                $bankDataId = $this->documentexpense_model->insertNewBankData($bankNumber, $bankAgency, $accountNumber); //$_POST['bank_data_id'];
-	                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue);
+	                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingDate, $postingValue, $postingPortion);
 	
 	                if ($result != null) {
 	                    echo "true";
@@ -1057,7 +1060,8 @@ class Admin extends CK_Controller {
 						$postingValue = $postingValuePortion[$j];
 						$postingDate = $postingDatePortion[$j];
 						$reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
-	                	$j++;
+	                	$result = $this->documentexpense_model->insertNewBankSlip($postingDate, $documentexpenseId, $postingValue, $postingPortion);
+						$j++;
 	                }
 	                if ($result != null) {
 	                    echo "true";
