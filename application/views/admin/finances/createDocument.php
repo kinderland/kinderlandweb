@@ -125,6 +125,7 @@
                     <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
                 </div>
             </div>
+            <label style="padding-top:15px">Documento sendo inserido por: <?php echo $user_name; ?></label>
             </br>
             <div class="col-lg-1" style="margin-top:15px">
                 <button class="btn btn-primary" type="submit">Salvar</button>

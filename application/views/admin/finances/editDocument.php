@@ -90,7 +90,9 @@
                     <div class="row">
                         <label for="document_number" class="col-lg-1" style="padding-top:15px">Número: </label>
                         <div class="col-lg-2">
-                            <input  type="number" name="document_number" style="margin-left:-20px" value="<?php echo $number; ?>" class="form-control required"/>
+                            <input  type="number" name="document_number" style="margin-left:-20px" value="<?php echo $number; ?>" class="form-control required" <?php if ($paid === TRUE) {
+            echo "disabled";
+        } ?>/>
                         </div>
                     </div>
                     <div class="row">
@@ -128,7 +130,7 @@
                     </br>
                 </form>
 
-                <?php if ($upload_id > 0) { ?>
+<?php if ($upload_id > 0) { ?>
                     <div class="row">
                         <a target="_blank" href="<?= $this->config->item('url_link'); ?>admin/verifyDocumentExpense?upload_id=<?php echo $upload_id; ?>">
                             <button class="btn btn-primary">
@@ -136,6 +138,17 @@
                             </button> </a>
                     </div>
                 <?php } ?>
+                <?php if ($creator) { ?>
+                    <label style="padding-top:5px">Documento criado por: <?php echo $creator; ?>.</label>
+                <?php } else { ?>
+                    <label style="padding-top:5px">Sem registros de quem criou esse documento. </label>
+                <?php } ?>
+                </br>
+                <?php if ($lastEdit) { ?>
+                    <label style="padding-top:5px">Documento editado pela última vez por: <?php echo $lastEdit; ?>.</label>
+                <?php } else { ?>
+                    <label style="padding-top:5px">Documento nunca foi editado. </label>
+<?php } ?>
                 <div style="margin-top:20px">
                     <div class="col-lg-1">
                         <button class="btn btn-primary" type="submit" form="document_form">Salvar</button>
