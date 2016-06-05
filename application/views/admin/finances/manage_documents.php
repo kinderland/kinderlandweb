@@ -445,31 +445,14 @@
                     <?php
                     if (isset($documents)) {
                         ?>
-                        <table class="table table-bordered table-striped table-min-td-size" style="width:1200px" id="sortable-table">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width:900px" id="sortable-table">
                         	<tr>
                         		<th style="width:70px; text-align: center">Data</th>
                         		<th style="width:20px; text-align: center">Tipo</th>
                         		<th style="width:70px; text-align: center">Valor</th>
-                        		<th style="width:140px; text-align: center">Descrição</th>
+                        		<th style="width:200px; text-align: center">Descrição</th>
                         		<th style="width:70px; text-align: center">Imagem</th>
-                        		<th style="width:100px; text-align:center">Forma de Pagamento</th>
-                        		<?php if(!$secretary){?>
-                        		<th style="width:70px; text-align: center">Pago</th>
-                        		<th colspan=2 style="width:300px; text-align: center">Nome de Conta</th>
-                        		<?php }?>
-                        	</tr>
-                        	<tr>
-                        		<th></th>
-                        		<th></th>
-                        		<th></th>
-                        		<th></th>
-                        		<th></th>
-                        		<th></th>
-                        		<?php if(!$secretary){?>
-                        		<th></th>
-                        		<th style="width:200px; text-align: center">Nome</th>
-                        		<th style="width:100px; text-align: center">Ação</th>
-                        		<?php }?>
+                        		<th style="width:200px; text-align:center">Forma de Pagamento</th>
                         	</tr>
              	          <?php
                             foreach ($documents as $document) {
@@ -514,16 +497,6 @@
                                     <?php } else { ?>
                                         <td><button class="btn btn-success" onclick="sendInfoToModal('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button> </td>
                                     <?php } ?>
-                                    <?php if(!$secretary){?>
-                                    <td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$document->document_expense_id?>" 
-        							<?php if($document->payed == "t") echo "checkedInDatabase='true'"; if ($document->posting_value == "" && $document->posting_date == "") echo "disabled";?> /> </td>
-                                	<td><input <?php if ($document->posting_value == "" && $document->posting_date == "") echo "disabled" ?> type="text" class="accounts" id="accounts_<?= $document->document_expense_id ?>" value="<?php if($document->account_name) echo $document->account_name; else echo ""; ?>">
-									</td>
-									<?php if ($document->account_name == "") { ?>
-                                        <td><button <?php if ($document->posting_value == "" && $document->posting_date == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $document->document_expense_id ?>', '<?= $document->posting_date ?>','<?= $document->posting_value ?>')">Salvar</button></td>
-                                    <?php } else { ?>
-                                        <td><button <?php if ($document->posting_value == "" && $document->posting_date == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $document->document_expense_id ?>', '<?= $document->posting_date ?>','<?= $document->posting_value ?>')">Atualizar</button> </td>
-                                    <?php } }?>
                                 </tr>
                                 
                                 <?php

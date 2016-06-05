@@ -1074,7 +1074,11 @@ class Admin extends CK_Controller {
             }
     }
 
-    public function togglePostingExpensePayed($documentId,$posting_value,$posting_portions,$day,$month,$year) {
+     public function togglePostingExpensePayed($documentId_portions,$posting_value,$day,$month,$year) {
+    	
+    	$r = explode("_",$documentId_portions);
+    	$documentId = $r[0];
+    	$posting_portions = $r[1];
     	
     	if($day != null){
     		$posting_date = $year."-".$month."-".$day;
@@ -1113,7 +1117,7 @@ class Admin extends CK_Controller {
         $data["years"] = $years;
         $data["option"] = $option;
 
-        $documents = $this->finance_model->getPostingsExpensesByDate($year, "document", $month);
+        $documents = $this->finance_model->getDocumentsByDate($year, $month);
         $accountNames = $this->finance_model->getAllAccountNames();
         $answer = "";
 
