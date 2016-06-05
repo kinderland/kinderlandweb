@@ -35,32 +35,69 @@ class finance_model extends CK_Model{
 	
 	public function togglePostingExpensePayed($document_id,$posting_value,$posting_portions,$posting_date) {
 		$this -> Logger -> info("Running: " . __METHOD__);
+		
+		$payed = 'select payed from posting_expense
+				  WHERE document_expense_id = ?
+				  AND posting_value = ?
+				  AND posting_portions = ?';
+		
+		$result = $this -> executeRow($this -> db, $payed, array(intval($document_id),$posting_value,$posting_portions));
 	
 		$sql = 'update posting_expense set payed = NOT payed, posting_date = ? 
 				WHERE document_expense_id = ?
 				AND posting_value = ?
 				AND posting_portions = ?';
+		
+		if($result->payed == 't'){
+			$posting_date = null;
+		}
 	
 		return $this -> execute($this -> db, $sql, array($posting_date,intval($document_id),$posting_value,$posting_portions));
 	
 	}
 	
-	public function getPostingsExpensesByDate($year,$type,$month = null){
+	public function getPostingsExpensesByBankSlipDate($year,$month = null){
 		$sql = "SELECT *
 				FROM v_all_posting_expenses_info 
-				WHERE DATE_PART('YEAR',".$type."_date) = ?";
+				WHERE DATE_PART('YEAR',bank_slip_date) = ?
+				AND DATE_PART('YEAR',posting_date) = ?";
 		 
 		if($month){
-			$sql = $sql." AND DATE_PART('MONTH',".$type."_date) = ?
-						 ORDER BY ".$type."_date ASC"; 
+			$sql = $sql." AND DATE_PART('MONTH',bank_slip_date) = ?
+						  AND DATE_PART('MONTH',posting_date) = ?
+						  ORDER BY bank_slip_date ASC
+						  ORDER BY posting_date ASC"; 
+	
+			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($year),intval($month),intval($month)));
+		}else {
+			$sql = $sql." ORDER BY bank_slip_date ASC
+						  ORDER BY posting_date ASC";
+			
+			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($year)));
+		}
+		 
+		if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
+	public function getDocumentsByDate($year,$month = null){
+		$sql = "SELECT *
+				FROM v_all_posting_expenses_info
+				WHERE DATE_PART('YEAR',log_date) = ?";
+			
+		if($month){
+			$sql = $sql." AND DATE_PART('MONTH',log_date) = ?
+						 ORDER BY log_date ASC";
 	
 			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($month)));
 		}else {
-			$sql = $sql." ORDER BY ".$type."_date ASC";
-			
+			$sql = $sql." ORDER BY log_date ASC";
+				
 			$result = $this->executeRows($this->db, $sql, array(intval($year)));
 		}
-		 
+			
 		if($result)
 			return $result;
 		else
@@ -70,7 +107,9 @@ class finance_model extends CK_Model{
 	public function getPostingsExpensesWithoutDate(){
 		$sql = "SELECT *
 				FROM v_all_posting_expenses_info
-				WHERE posting_date is null";
+				WHERE posting_date is null
+				AND posting_value is not null
+				AND posting_portions is not null";
 				
 		$result = $this->executeRows($this->db, $sql);
 			

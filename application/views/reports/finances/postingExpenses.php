@@ -52,11 +52,13 @@
             });
             datepickers();
             $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                var string = "<?= $this->config->item("url_link") ?>admin/togglePostingExpensePayed/".concat($(this).attr("id")).concat("/").concat($("#value_".concat($(this).attr("id"))).attr("name")).concat("/").concat($("#portions_".concat($(this).attr("id"))).attr("name")).concat("/").concat($("#date_".concat($(this).attr("id"))).attr("value"));
+                var string = "<?= $this->config->item("url_link") ?>admin/togglePostingExpensePayed/".concat($(this).attr("id")).concat("/").concat($("#value_".concat($(this).attr("id"))).attr("name")).concat("/").concat($("#date_".concat($(this).attr("id"))).val());
                 var recarrega = "<?= $this->config->item("url_link") ?>reports/postingExpenses/";
                 $.post(string).done(function (data) {
-                    if (data == 1)
+                    if (data == 1){
                         alert("Estado do documento modificado com sucesso");
+						window.location = recarrega;
+                    }
                     else {
                         alert("Problema ao modificar o estado do documento");
                         window.location = recarrega;
@@ -154,7 +156,11 @@
             var payed = document.getElementById("qtdpayed");
             var payeds = document.getElementsByName("payeds");
             var description = document.getElementsByName("document_description");
+            var account_types = document.getElementsByName("account_types");
+            var names = document.getElementsByName("names");
+            var account_type;
             var document_description;
+            var document_name;
 
             if(payed.getAttribute("name") > 0){
 	            for (var i = 0, row; row = table.rows[i]; i++) {
@@ -165,13 +171,15 @@
 		                //Nome, retira pega o que esta entre um <> e outro <>
 		                document_type = elements[i].getAttribute('id');
 		                document_description = description[i].getAttribute('id');
+		                account_type = account_types[i].getAttribute('id');
+		                document_name = names[i].getAttribute('id');
 		                
-		                data2.push(row.cells[7].innerHTML);
-		                data2.push(row.cells[8].innerHTML);
+		                data2.push(row.cells[6].innerHTML);
+		                data2.push(account_type);
 		                data2.push(document_description);
-		                data2.push(row.cells[0].innerHTML);
-		                data2.push(row.cells[5].innerHTML);
-		                data2.push(document_type);
+		                data2.push(row.cells[8].innerHTML);
+		                data2.push(row.cells[4].innerHTML);
+		                data2.push(document_name);
 		                data.push(data2);
 		            }
 	            }
@@ -185,13 +193,13 @@
 
 
             var dataToSend = JSON.stringify(data);
-            var columName = ["Nome de Conta","Categoria","Descrição","Data", "Valor", "Tipo de Documento"];
+            var columName = ["Conta","Categoria","Descrição do Pagamento","Data do Pagamento", "Valor", "Nome"];
             var columnNameToSend = JSON.stringify(columName);
             post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
         }
 
         function accountUpdate(id,portions,value){
-			var account_name = document.getElementById("accounts_".concat(id)).value;
+			var account_name = document.getElementById("accounts_".concat(id).concat("_").concat(portions)).value;
 
 			var names = document.getElementById("accountsNames").value;
 			names = names.split("/");
@@ -211,6 +219,7 @@
                         function (data) {
                             if (data == "true") {
                                 alert("Nome de Conta atribuído com sucesso!");
+                                location.reload();
                             } else if (data == "false") {
                                 alert("Ocorreu um erro na atribuição de Nome de Conta!");
                                 location.reload();
@@ -312,15 +321,18 @@
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
+                            	<input style="display:none" id="qtdpayed" name="<?= $qtdpayed;?>">
                                 <?php
                                 
                                 if($info){
-                                ?>	<input style="display:none" id="qtdpayed" name="<?= $qtdpayed;?>">
+                                ?>	
                                 <?php foreach ($info as $i) {
                                     ?>
                                     <tr>
                                     	<input style="display:none" id="<?= $i -> payed;?>" name="payeds">
-                                        <td><?php if($i->posting_date != "") echo date("d/m/Y",strtotime($i->posting_date)) ?></td>
+                                    	<input style="display:none" id="<?= $i -> document_name;?>" name="names">
+                                    	<input style="display:none" id="<?= $i -> account_type;?>" name="account_types">
+                                        <td><?php if($i->bank_slip_date != "") echo date("d/m/Y",strtotime($i->bank_slip_date)) ?></td>
                                         <td id="<?php echo $i->document_type;?>" name="document_type"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>">
                                             <?php switch($i->document_type){
                                             	case "nota fiscal":
@@ -340,8 +352,8 @@
                                             ?> </a></td>
                                         <td><?= $i->posting_type ?></td>
                                     <!-- <td id="<?php // $i->document_description ?>" name="document_description"><?php // $i->document_description ?></td> -->
-                                        <td id="portions_<?=$i->document_expense_id?>" name = "<?= $i->posting_portions ?>"><?= $i->posting_portions ?>/<?= $portions[$i->document_expense_id]?></td>
-                                        <td id="value_<?=$i->document_expense_id?>" name = "<?= $i->posting_value ?>"><?= $i->posting_value ?></td>
+                                        <td id="portions_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_portions ?>"><?= $i->posting_portions ?>/<?= $portions[$i->document_expense_id]?></td>
+                                        <td id="value_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_value ?>"><?= $i->posting_value ?></td>
                                         <td>
                                         <?php if($i->posting_type == "Boleto"){?>
                                         	<a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $i->document_expense_id;?>">
@@ -356,7 +368,7 @@
                                         </a>
                                         <?php } ?>
                                     </td>
-                                        <td><input <?php if ($i->posting_value == "" && $i->posting_value == "") echo "disabled" ?> type="text" class="accounts" id="accounts_<?= $i->document_expense_id ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
+                                        <td><input <?php if ($i->posting_value == "" && $i->posting_value == "") echo "disabled" ?> type="text" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
 									</td>
 									<?php if ($i->account_name == "") { ?>
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Salvar</button></td>
@@ -364,9 +376,9 @@
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
-                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>" 
+                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" 
         							<?php if($i->payed == "t") echo "checkedInDatabase='true'";?> /> </td>
                                     </tr>
                                     <?php
