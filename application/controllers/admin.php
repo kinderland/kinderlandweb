@@ -783,6 +783,8 @@ class Admin extends CK_Controller {
 
     public function createDocument($errors = array(), $name = NULL, $date = NULL, $description = NULL, $value = NULL, $number = NULL) {
         $selected_option = $this->input->post("document_type", TRUE);
+        $userId = $this->session->userdata("user_id");
+        $user = $this->person_model->getPersonById($userId);
         if (empty($selected_option) || !isset($selected_option))
             $data['selected'] = "no_select";
         else
@@ -793,6 +795,7 @@ class Admin extends CK_Controller {
         $data['description'] = $description;
         $data['value'] = $value;
         $data['number'] = $number;
+        $data['user_name'] = $user->fullname;
         $this->loadReportView("admin/finances/createDocument", $data);
     }
 
@@ -831,6 +834,12 @@ class Admin extends CK_Controller {
                 $new_id = $this->documentexpense_model->getNewUpload();
                 $result = $this->documentexpense_model->attatchUploadId($documentId, $new_id);
             }
+
+            $logId = $this->documentexpense_model->InsertDocumentLog($userId, $documentId, $db_date, $value, "criacao");
+            if ($type === "boleto") {
+                $this->documentexpense_model->insertNewPostingExpense($documentId, $db_date, $value, "Boleto", 1);
+                $this->documentexpense_model->switchPaidStatusOffToOn($documentId, 1);
+            }
             $this->generic_model->commitTransaction();
             $this->Logger->info("New document successfully inserted");
             $url = $this->config->item('url_link');
@@ -861,6 +870,20 @@ class Admin extends CK_Controller {
         $date = explode("-", $date);
         $date = implode("/", array_reverse($date));
         $upload = $this->documentexpense_model->getUploadId($document_id);
+        $creator = $this->documentexpense_model->getDocumentCreationLog($document_id);
+        if ($creator) {
+            $creatorId = $this->person_model->getPersonById($creator);
+            $data['creator'] = $creatorId->fullname;
+        } else {
+            $data['creator'] = FALSE;
+        }
+        $lastEdit = $this->documentexpense_model->getDocumentEditLog($document_id);
+        if ($lastEdit) {
+            $lastEditId = $this->person_model->getPersonById($lastEdit);
+            $data['lastEdit'] = $lastEditId->fullname;
+        } else {
+            $data['lastEdit'] = FALSE;
+        }
         $data['id'] = $document_id;
         $data['date'] = $date;
         $data['number'] = $number;
@@ -870,31 +893,9 @@ class Admin extends CK_Controller {
         $data['name'] = $name;
         $data['errors'] = $errors;
         $data['upload_id'] = $upload->document_expense_upload_id;
+        $data['paid'] = $this->documentexpense_model->getPaymentStatus($document_id);
         $this->loadReportView("admin/finances/editDocument", $data);
     }
-    
-    public function viewDocument($document_id = NULL, $errors = array()) {
-    	    	$document = $this->documentexpense_model->getDocumentById($document_id);
-    	    	$date = $document->getDocumentExpenseDate();
-    	    	$number = $document->getDocumentExpenseNumber();
-    	    	$description = $document->getDocumentExpenseDescription();
-    	    	$value = $document->getDocumentExpenseValue();
-    	    	$type = $document->getDocumentExpenseType();
-    	    	$name = $document->getDocumentExpenseName();
-    	    	$date = explode("-", $date);
-    	    	$date = implode("/", array_reverse($date));
-    	    	$upload = $this->documentexpense_model->getUploadId($document_id);
-    	    	$data['id'] = $document_id;
-    	    	$data['date'] = $date;
-    	    	$data['number'] = $number;
-    	    	$data['description'] = $description;
-    	    	$data['value'] = $value;
-    	    	$data['type'] = $type;
-    	    	$data['name'] = $name;
-    	    	$data['errors'] = $errors;
-    	    	$data['upload_id'] = $upload->document_expense_upload_id;
-    	    	$this->loadReportView("admin/finances/viewDocument", $data);
-    	    }
 
     public function updateDocument($document_id = NULL) {
         $name = $this->input->post("document_name", TRUE);
@@ -904,6 +905,7 @@ class Admin extends CK_Controller {
         $type = $this->input->post("document_type", TRUE);
         $value = $this->input->post("document_value", TRUE);
         $errors = array();
+        $userId = $this->session->userdata("user_id");
         $operation = "create";
         $fileName = $_FILES['uploadedfile']['name'];
         if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name'])) {
@@ -932,6 +934,7 @@ class Admin extends CK_Controller {
                     $result = $this->documentexpense_model->attatchUploadId($document_id, $new_id);
                 }
             }
+            $logId = $this->documentexpense_model->InsertDocumentLog($userId, $document_id, $db_date, $value, "edicao");
             $this->generic_model->commitTransaction();
             $this->Logger->info("Document successfully updated");
             $url = $this->config->item('url_link') . "admin/manageDocuments";
@@ -977,7 +980,7 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/finances/editDocument', $data);
         }
     }
-    
+
     public function postingExpense() {
 
         $this->Logger->info("Running: " . __METHOD__);
@@ -985,110 +988,105 @@ class Admin extends CK_Controller {
         $postingDate = $_POST['postingDate'];
         $postingValue = $_POST['postingValue'];
         $postingType = $_POST['postingType'];
-            if ($postingType == "Dinheiro") {
-            	$postingPortion = 1;
-            	if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)){
-            		echo "true";
-                	return;
-            	} else {
-            		echo "false";
-            		return;
-            	}
-            } else if ($postingType == "Crédito") {
-                
-                $portions = $_POST['portions'];
-                $meses = 1;
-                $postingValue = $postingValue/$portions;
-                $postingDatePortion = explode("-", $postingDate);
-                	$dia = $postingDatePortion[2];
-                	$mês = $postingDatePortion[1];
-                	$ano = $postingDatePortion[0];
-                for($i = 0; $i < $portions; $i++){
-                	$postingPortion = $i;
-                	$postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $i, $dia, $ano) );
-                	
-	                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
-
-	                		
-                }
-	                if ($resultad != null) {
-	                  	echo "true";
-	                    return;
-	                } else {
-	                    echo "false";
-	                    return;
-	                }
-	                
-            	
-            } else if ($postingType == "Cheque") {
-                $numberCheque = $_POST['numberCheque'];
-                $postingPortion = 1;
-                if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)){
-	                $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue);
-	                if ($result != null) {
-	                    echo "true";
-	                    return;
-	                } else {
-	                    echo "false";
-	                    return;
-	                }
-                }
-            } else if ($postingType == "Transferência") {
-            	$postingPortion = 1;
-            	if($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)){
-	                $bankNumber = $_POST['bankNumber'];
-	                $bankAgency = $_POST['bankAgency'];
-	                $accountNumber = $_POST['accountNumber'];
-	                $bankDataId = $this->documentexpense_model->insertNewBankData($bankNumber, $bankAgency, $accountNumber); //$_POST['bank_data_id'];
-	                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingValue, $postingPortion);
-	
-	                if ($result != null) {
-	                    echo "true";
-	                    return;
-	                } else {
-	                    echo "false";
-	                    return;
-	                }
-            	}
-            } else if ($postingType == "Boleto") {
-                $portions = $_POST['portions'];
-                $j = 0;
-                $postingValuePortion = explode ("/", $postingValue);
-                $postingDatePortion = explode("/", $postingDate);
-	                for ($i = 1; $i <= $portions; $i++) {
-	                    $postingPortion = $i;
-						$postingValue = $postingValuePortion[$j];
-						$postingDate = $postingDatePortion[$j];
-						$reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
-	                	$result = $this->documentexpense_model->insertNewBankSlip($postingDate, $documentexpenseId, $postingValue, $postingPortion);
-						$j++;
-	                }
-	                if ($result != null) {
-	                    echo "true";
-	                    return;
-	                } else {
-	                    echo "false";
-	                    return;
-	                }
-	            
+        if ($postingType == "Dinheiro") {
+            $postingPortion = 1;
+            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)) {
+                echo "true";
+                return;
+            } else {
+                echo "false";
+                return;
             }
+        } else if ($postingType == "Crédito") {
+
+            $portions = $_POST['portions'];
+            $meses = 1;
+            $postingValue = $postingValue / $portions;
+            $postingDatePortion = explode("-", $postingDate);
+            $dia = $postingDatePortion[2];
+            $mês = $postingDatePortion[1];
+            $ano = $postingDatePortion[0];
+            for ($i = 0; $i < $portions; $i++) {
+                $postingPortion = $i;
+                $postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $i, $dia, $ano));
+
+                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
+            }
+            if ($resultad != null) {
+                echo "true";
+                return;
+            } else {
+                echo "false";
+                return;
+            }
+        } else if ($postingType == "Cheque") {
+            $numberCheque = $_POST['numberCheque'];
+            $postingPortion = 1;
+            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)) {
+                $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue);
+                if ($result != null) {
+                    echo "true";
+                    return;
+                } else {
+                    echo "false";
+                    return;
+                }
+            }
+        } else if ($postingType == "Transferência") {
+            $postingPortion = 1;
+            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)) {
+                $bankNumber = $_POST['bankNumber'];
+                $bankAgency = $_POST['bankAgency'];
+                $accountNumber = $_POST['accountNumber'];
+                $bankDataId = $this->documentexpense_model->insertNewBankData($bankNumber, $bankAgency, $accountNumber); //$_POST['bank_data_id'];
+                $result = $this->documentexpense_model->insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingValue, $postingPortion);
+
+                if ($result != null) {
+                    echo "true";
+                    return;
+                } else {
+                    echo "false";
+                    return;
+                }
+            }
+        } else if ($postingType == "Boleto") {
+            $portions = $_POST['portions'];
+            $j = 0;
+            $postingValuePortion = explode("/", $postingValue);
+            $postingDatePortion = explode("/", $postingDate);
+            for ($i = 1; $i <= $portions; $i++) {
+                $postingPortion = $i;
+                $postingValue = $postingValuePortion[$j];
+                $postingDate = $postingDatePortion[$j];
+                $reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
+                $result = $this->documentexpense_model->insertNewBankSlip($postingDate, $documentexpenseId, $postingValue, $postingPortion);
+                $j++;
+            }
+            if ($result != null) {
+                echo "true";
+                return;
+            } else {
+                echo "false";
+                return;
+            }
+        }
     }
 
-     public function togglePostingExpensePayed($documentId_portions,$posting_value,$day,$month,$year) {
-    	
-    	$r = explode("_",$documentId_portions);
-    	$documentId = $r[0];
-    	$posting_portions = $r[1];
-    	
-    	if($day != null){
-    		$posting_date = $year."-".$month."-".$day;
-    	}else{
-    		$posting_date = "";
-    	}
-    	
-        $document = $this->finance_model->getPostingExpenseById($documentId,$posting_value,$posting_portions);
+    public function togglePostingExpensePayed($documentId_portions, $posting_value, $day, $month, $year) {
 
-        echo $this->finance_model->togglePostingExpensePayed($documentId,$posting_value,$posting_portions,$posting_date);
+        $r = explode("_", $documentId_portions);
+        $documentId = $r[0];
+        $posting_portions = $r[1];
+
+        if ($day != null) {
+            $posting_date = $year . "-" . $month . "-" . $day;
+        } else {
+            $posting_date = "";
+        }
+
+        $document = $this->finance_model->getPostingExpenseById($documentId, $posting_value, $posting_portions);
+
+        echo $this->finance_model->togglePostingExpensePayed($documentId, $posting_value, $posting_portions, $posting_date);
     }
 
     public function manageDocuments($date = NULL) {
@@ -1105,11 +1103,11 @@ class Admin extends CK_Controller {
 
         if ($year === FALSE) {
             $year = date("Y");
-        } 
-        
-        if($month == null){
-        	$month = date("m");        	
-        }else if ($month == 0) {
+        }
+
+        if ($month == null) {
+            $month = date("m");
+        } else if ($month == 0) {
             $month = FALSE;
         }
         $data["year"] = $year;
@@ -1124,7 +1122,7 @@ class Admin extends CK_Controller {
         foreach ($accountNames as $an) {
             $answer = $answer . "/" . $an->account_name;
         }
-		$data['date'] = $date;
+        $data['date'] = $date;
         $data['accountNames'] = $answer;
         $data['documents'] = $documents;
 
