@@ -897,6 +897,29 @@ class Admin extends CK_Controller {
         $this->loadReportView("admin/finances/editDocument", $data);
     }
 
+    public function viewDocument($document_id = NULL, $errors = array()) {
+        $document = $this->documentexpense_model->getDocumentById($document_id);
+        $date = $document->getDocumentExpenseDate();
+        $number = $document->getDocumentExpenseNumber();
+        $description = $document->getDocumentExpenseDescription();
+        $value = $document->getDocumentExpenseValue();
+        $type = $document->getDocumentExpenseType();
+        $name = $document->getDocumentExpenseName();
+        $date = explode("-", $date);
+        $date = implode("/", array_reverse($date));
+        $upload = $this->documentexpense_model->getUploadId($document_id);
+        $data['id'] = $document_id;
+        $data['date'] = $date;
+        $data['number'] = $number;
+        $data['description'] = $description;
+        $data['value'] = $value;
+        $data['type'] = $type;
+        $data['name'] = $name;
+        $data['errors'] = $errors;
+        $data['upload_id'] = $upload->document_expense_upload_id;
+        $this->loadReportView("admin/finances/viewDocument", $data);
+    }
+
     public function updateDocument($document_id = NULL) {
         $name = $this->input->post("document_name", TRUE);
         $date = $this->input->post("document_date", TRUE);
