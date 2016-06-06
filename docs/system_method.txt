@@ -396,3 +396,4 @@
 "togglePostingExpensePayed";"admin";2
 "updateAccountName";"admin";2
 "viewDocument";"admin";2
+"postingExpenses";"reports";4

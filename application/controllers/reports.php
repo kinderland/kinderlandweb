@@ -159,7 +159,7 @@ class Reports extends CK_Controller {
 	    	foreach($postingExpenses as $pe){
 	    		$obj = new StdClass();
 	    		$obj = $pe;
-	    		if($pe->payed == "t"){
+	    		if($pe->payed == true){
 	    			$qtdpayed++;
 	    		}
 	    		
@@ -180,7 +180,7 @@ class Reports extends CK_Controller {
     		foreach($postingExpensesWithoutDate as $pe){
     			$obj = new StdClass();
     			$obj = $pe;
-    			if($pe->payed == "t"){
+    			if($pe->payed == 't'){
     				$qtdpayed++;
     			}
     			 
@@ -422,6 +422,7 @@ class Reports extends CK_Controller {
 
     public function toCSV() {
         $data = $this->input->post('data', TRUE);
+        $this -> Logger -> info($data);
         $name = $this->input->post('name', TRUE);
         $columnNames = $this->input->post('columName', TRUE);
         $dataArray = json_decode($data);

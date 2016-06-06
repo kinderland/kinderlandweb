@@ -158,11 +158,15 @@
             var description = document.getElementsByName("document_description");
             var account_types = document.getElementsByName("account_types");
             var names = document.getElementsByName("names");
+            var accounts_name = document.getElementsByName("accounts_name");
+            var posting_dates = document.getElementsByName("posting_dates");
             var account_type;
             var document_description;
             var document_name;
+            var account_name;
+            var posting_date;
 
-            if(payed.getAttribute("name") > 0){
+            if(payed.getAttribute("value") > 0){
 	            for (var i = 0, row; row = table.rows[i]; i++) {
 
 		            if(payeds[i].getAttribute('id') == 't'){
@@ -173,11 +177,13 @@
 		                document_description = description[i].getAttribute('id');
 		                account_type = account_types[i].getAttribute('id');
 		                document_name = names[i].getAttribute('id');
+		                account_name = accounts_name[i].getAttribute('value');
+		                posting_date = posting_dates[i].getAttribute('value');
 		                
-		                data2.push(row.cells[6].innerHTML);
+		                data2.push(account_name);
 		                data2.push(account_type);
 		                data2.push(document_description);
-		                data2.push(row.cells[8].innerHTML);
+		                data2.push(posting_date);
 		                data2.push(row.cells[4].innerHTML);
 		                data2.push(document_name);
 		                data.push(data2);
@@ -245,6 +251,17 @@
         <br />
         <div class="scroll">
         	<form method="GET">
+        		<?php
+				    $secretary = false;
+				    foreach ($this->session->userdata('user_types') as $type) {
+				        if ($type == 4) {
+				            $secretary = true;
+				        } else if ($type == 2) {
+				            $secretary = false;
+				            break;
+				        }
+				    }
+				 ?>
                 <input type="hidden" name="option" value="<?= $option ?>"/>
                 Ano: <select name="year" onchange="this.form.submit()" id="year">
                     <?php
@@ -293,7 +310,7 @@
            
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
-                        <table class="table table-bordered table-striped table-min-td-size" style="width:1200px" id="sortable-table">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "1200px"; else echo"800px";?>" id="sortable-table">
                             <thead>
                                 <tr>
                                     <th style="width:100px; text-align: center" > Data Venc. </th>
@@ -303,8 +320,10 @@
                                     <th style="width:80px; text-align: center"> Parcela </th>
                                     <th style="width:100px; text-align: center"> Valor </th>
                                     <th style="width:70px; text-align: center">Boleto</th>
+                                    <?php if(!$secretary){?>
                                     <th colspan=2 style="width:300px; text-align: center">Nome de Conta</th>
                                     <th colspan=2 style="width:300px; text-align: center">Pagamento</th>
+                               		<?php }?>
                                 </tr>
                                 <tr>
                                 	<th></th>
@@ -314,14 +333,16 @@
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
+                                	<?php if(!$secretary){?>
                                 	<th style="width:200px; text-align: center">Nome</th>
                         			<th style="width:100px; text-align: center">Ação</th>
                         			<th style="width:150px; text-align: center">Data</th>
                         			<th style="width:100px; text-align: center">Pago</th>
+                        			<?php }?>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
-                            	<input style="display:none" id="qtdpayed" name="<?= $qtdpayed;?>">
+                            	<input style="display:none" id="qtdpayed" value="<?= $qtdpayed;?>">
                                 <?php
                                 
                                 if($info){
@@ -332,6 +353,7 @@
                                     	<input style="display:none" id="<?= $i -> payed;?>" name="payeds">
                                     	<input style="display:none" id="<?= $i -> document_name;?>" name="names">
                                     	<input style="display:none" id="<?= $i -> account_type;?>" name="account_types">
+                                    	<input style="display:none" id="<?= $i -> document_description;?>" name="document_description">
                                         <td><?php if($i->bank_slip_date != "") echo date("d/m/Y",strtotime($i->bank_slip_date)) ?></td>
                                         <td id="<?php echo $i->document_type;?>" name="document_type"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>">
                                             <?php switch($i->document_type){
@@ -366,9 +388,9 @@
                                         ?> 
                                         </button>
                                         </a>
-                                        <?php } ?>
+                                        <?php } if(!$secretary){ ?>
                                     </td>
-                                        <td><input <?php if ($i->posting_value == "" && $i->posting_value == "") echo "disabled" ?> type="text" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
+                                        <td><input <?php if ($i->posting_value == "" && $i->posting_value == "") echo "disabled" ?> type="text" name = "accounts_name" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
 									</td>
 									<?php if ($i->account_name == "") { ?>
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Salvar</button></td>
@@ -376,10 +398,13 @@
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td><input <?php if ($i->account_name == "" || $i -> document_type == "boleto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
-                                    	<td><input <?php if ($i->account_name == "") echo "disabled" ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" 
-        							<?php if($i->payed == "t") echo "checkedInDatabase='true'";?> /> </td>
+                                    	<?php if($i -> document_type == "boleto"){?>
+                                    	<td> Pago </td>
+                                    	<?php } else{?>
+                                    	<td><input <?php if($i->payed == "t") echo "checkedInDatabase='true'";  if ($i->account_name == "") echo "disabled"; ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>_<?= $i->posting_portions ?>"/> </td>
+                                    	<?php } }?>
                                     </tr>
                                     <?php
                                 }}
