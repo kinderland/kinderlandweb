@@ -267,7 +267,14 @@
 
         function paymentType() {
             var type = document.getElementById("postingType").value;
-
+            var rads = document.getElementsByName("formadepagamento");
+            var tipo;
+            for(var i = 0; i < rads.length; i++){
+             if(rads[i].checked){
+              tipo = rads[i].value;
+             }
+            
+			alert(tipo);
             if (type == "Boleto") {
                 document.getElementById("Cheque").style.display = "none";
                 document.getElementById("Crédito").style.display = "none";
@@ -525,10 +532,10 @@ if (isset($documents)) {
                             <div class="col-lg-12 middle-content">
 
                                 <div class="row">
-                                    <form action="">
-                                        <input type="radio" name="gender" value="male"> Caixinha
-                                        <input type="radio" name="gender" value="female"> Débito automático
-                                        <input type="radio" name="gender" value="other" checked> A pagar
+                                    <form method="GET" onchange="paymentType()">
+                                        <input type="radio" name="formadepagamento" value="apagar" checked> A pagar
+                                        <input type="radio" name="formadepagamento" value="caixinha"> Caixinha
+                                        <input type="radio" name="formadepagamento"  value="debitoa"> Débito automático
                                     </form>
                                     <div class="form-group">
                                         <div class="col-lg-12">
