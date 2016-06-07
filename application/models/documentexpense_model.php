@@ -112,10 +112,10 @@ class documentexpense_model extends CK_Model {
         return $Id;
     }
 
-    public function insertNewBankSlip($postingDate, $documentexpenseId, $postingValue, $postingPortion) {
-        $sql = "INSERT into posting_bank_slip(bank_slip_date, document_expense_id, posting_value, posting_portions)
-					VALUES (?,?,?,?)";
-        $Id = $this->execute($this->db, $sql, array($postingDate, $documentexpenseId, $postingValue, $postingPortion));
+    public function insertNewBankSlip($postingDate, $documentexpenseId, $postingPortion) {
+        $sql = "INSERT into posting_bank_slip(bank_slip_date, document_expense_id, posting_portions)
+					VALUES (?,?,?)";
+        $Id = $this->execute($this->db, $sql, array($postingDate, $documentexpenseId, $postingPortion));
         return $Id;
     }
 
