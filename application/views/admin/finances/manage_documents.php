@@ -265,16 +265,24 @@
 
 
 
+
         function paymentType() {
-            var type = document.getElementById("postingType").value;
-            var rads = document.getElementsByName("formadepagamento");
-            var tipo;
-            for(var i = 0; i < rads.length; i++){
-             if(rads[i].checked){
-              tipo = rads[i].value;
-             }
-            
-			alert(tipo);
+        	var rads = document.getElementsByName("formadepagamento");
+      	  	var tipo;
+      	  	var type;
+      	  	for(var i = 0; i < rads.length; i++){
+      	   		if(rads[i].checked){
+      	    		tipo = rads[i].value;
+      	   		}
+      	   	}
+     	   if(tipo == "caixinha"){
+         	   type = "Dinheiro");
+     	   }
+     	   else{
+            	var type = document.getElementById("postingType").value;
+            	alert(type);
+     	   }
+           	   
             if (type == "Boleto") {
                 document.getElementById("Cheque").style.display = "none";
                 document.getElementById("Crédito").style.display = "none";
@@ -532,10 +540,10 @@ if (isset($documents)) {
                             <div class="col-lg-12 middle-content">
 
                                 <div class="row">
-                                    <form method="GET" onchange="paymentType()">
-                                        <input type="radio" name="formadepagamento" value="apagar" checked> A pagar
-                                        <input type="radio" name="formadepagamento" value="caixinha"> Caixinha
-                                        <input type="radio" name="formadepagamento"  value="debitoa"> Débito automático
+                                    <form method="GET">
+                                        <input type="radio" name="formadepagamento" value="apagar" onclick="paymentType()" checked> A pagar
+                                        <input type="radio" name="formadepagamento" value="caixinha" onclick="paymentType()"> Caixinha
+                                        <input type="radio" name="formadepagamento"  value="debitoa" onclick="paymentType()"> Débito automático
                                     </form>
                                     <div class="form-group">
                                         <div class="col-lg-12">
