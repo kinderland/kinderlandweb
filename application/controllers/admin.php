@@ -1030,7 +1030,7 @@ class Admin extends CK_Controller {
             $dia = $postingDatePortion[2];
             $mês = $postingDatePortion[1];
             $ano = $postingDatePortion[0];
-            for ($i = 0; $i < $portions; $i++) {
+            for ($i = 1; $i < $portions; $i++) {
                 $postingPortion = $i;
                 $postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $i, $dia, $ano));
 
@@ -1086,7 +1086,7 @@ class Admin extends CK_Controller {
                 $postingValue = $postingValuePortion[$j];
                 $postingDate = $postingDatePortion[$j];
                 $reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus);
-                $result = $this->documentexpense_model->insertNewBankSlip($postingDate, $documentexpenseId, $postingValue, $postingPortion);
+                $result = $this->documentexpense_model->insertNewBankSlip($postingDate, $documentexpenseId, $postingPortion);
                 $j++;
             }
             if ($result != null) {
