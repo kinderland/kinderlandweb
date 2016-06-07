@@ -275,13 +275,18 @@
       	    		tipo = rads[i].value;
       	   		}
       	   	}
-     	   if(tipo == "caixinha"){
-         	   type = "Dinheiro");
-     	   }
-     	   else{
-            	var type = document.getElementById("postingType").value;
-            	alert(type);
-     	   }
+      	   	
+      	   	if(tipo == "caixinha"){
+          	   	type = "Dinheiro";
+      	   	}
+      	   	else if(tipo == "debitoa"){
+          	   	type = "Crédito";
+      	   	}
+      	   	else{
+      	   		var type = document.getElementById("postingType").value;
+      	   	}
+			alert(type);
+			alert(tipo);
            	   
             if (type == "Boleto") {
                 document.getElementById("Cheque").style.display = "none";

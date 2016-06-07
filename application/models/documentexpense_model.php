@@ -84,14 +84,14 @@ class documentexpense_model extends CK_Model {
     		return NULL;
     }
 
-    public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion) {
-        $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, posting_portions)
-					VALUES (?,?,?,?,?)";
+    public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus) {
+        $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, posting_portions, payment_status)
+					VALUES (?,?,?,?,?,?)";
         
-        $result = $this->execute($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion));
+        $result = $this->execute($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus));
         
         if($result)
-        	$postingExpense = $this -> getPostingExpenseById($document_id,$posting_portions);
+        	$postingExpense = $this -> getPostingExpenseById($documentexpenseId,$postingPortion);
         
         if($postingExpense){
         	$person_id = $this -> session -> userdata('user_id');

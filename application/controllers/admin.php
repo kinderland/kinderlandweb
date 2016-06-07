@@ -1013,7 +1013,8 @@ class Admin extends CK_Controller {
         $postingType = $_POST['postingType'];
         if ($postingType == "Dinheiro") {
             $postingPortion = 1;
-            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)) {
+            $paymentStatus = "caixinha";
+            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus)) {
                 echo "true";
                 return;
             } else {
@@ -1033,7 +1034,7 @@ class Admin extends CK_Controller {
                 $postingPortion = $i;
                 $postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $i, $dia, $ano));
 
-                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
+                $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus);
             }
             if ($resultad != null) {
                 echo "true";
@@ -1045,7 +1046,8 @@ class Admin extends CK_Controller {
         } else if ($postingType == "Cheque") {
             $numberCheque = $_POST['numberCheque'];
             $postingPortion = 1;
-            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)) {
+            $paymentStatus = "a pagar";
+            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus)) {
                 $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue);
                 if ($result != null) {
                     echo "true";
@@ -1057,7 +1059,8 @@ class Admin extends CK_Controller {
             }
         } else if ($postingType == "Transferência") {
             $postingPortion = 1;
-            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion)) {
+            $paymentStatus = "a pagar";
+            if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus)) {
                 $bankNumber = $_POST['bankNumber'];
                 $bankAgency = $_POST['bankAgency'];
                 $accountNumber = $_POST['accountNumber'];
@@ -1074,6 +1077,7 @@ class Admin extends CK_Controller {
             }
         } else if ($postingType == "Boleto") {
             $portions = $_POST['portions'];
+            $paymentStatus = "a pagar";
             $j = 0;
             $postingValuePortion = explode("/", $postingValue);
             $postingDatePortion = explode("/", $postingDate);
@@ -1081,7 +1085,7 @@ class Admin extends CK_Controller {
                 $postingPortion = $i;
                 $postingValue = $postingValuePortion[$j];
                 $postingDate = $postingDatePortion[$j];
-                $reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion);
+                $reultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus);
                 $result = $this->documentexpense_model->insertNewBankSlip($postingDate, $documentexpenseId, $postingValue, $postingPortion);
                 $j++;
             }
