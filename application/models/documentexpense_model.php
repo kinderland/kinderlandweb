@@ -127,11 +127,11 @@ class documentexpense_model extends CK_Model {
         return $Id;
     }
 
-    public function inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingValue) {
-        $sql = "INSERT into posting_bank_check(check_number, document_expense_id, posting_value)
+    public function inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingPortion) {
+        $sql = "INSERT into posting_bank_check(check_number, document_expense_id, posting_portions)
 					VALUES (?,?,?)";
 
-        $Id = $this->execute($this->db, $sql, array($numberCheque, $documentexpenseId, $postingValue));
+        $Id = $this->execute($this->db, $sql, array($numberCheque, $documentexpenseId, $postingPortion));
         return $Id;
     }
 

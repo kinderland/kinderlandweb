@@ -1048,7 +1048,7 @@ class Admin extends CK_Controller {
             $postingPortion = 1;
             $paymentStatus = "a pagar";
             if ($this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus)) {
-                $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingDate, $postingValue);
+                $result = $this->documentexpense_model->inserNewBankCheckPayment($numberCheque, $documentexpenseId, $postingPortion);
                 if ($result != null) {
                     echo "true";
                     return;
