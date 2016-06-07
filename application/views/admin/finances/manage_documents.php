@@ -119,18 +119,13 @@
         function formaPagamento() {
 
             var documentexpenseId = document.getElementById("documentexpenseId").textContent;
-            alert(documentexpenseId);
             var postingType = document.getElementById("postingType").value;
-            alert(postingType);
 
             if (postingType == "Crédito") {
 
                 var portions = document.getElementById("postingPortionsCredito").value;
-                alert(portions);
                 var postingValue = document.getElementById("postingValueCredito").value;
-                alert(postingValue);
                 var postingDate = document.getElementById("postingDateCredito").value;
-                alert(postingDate);
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions},
                         function (data) {
@@ -149,9 +144,7 @@
             if (postingType == "Débito") {
 
                 var postingValue = document.getElementById("postingValueDebito").value;
-                alert(postingValue);
                 var postingDate = document.getElementById("postingDateDebito").value;
-                alert(postingDate);
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
                         function (data) {
@@ -169,9 +162,7 @@
             if (postingType == "Dinheiro") {
 
                 var postingValue = document.getElementById("postingValueDinheiro").value;
-                alert(postingValue);
                 var postingDate = document.getElementById("postingDateDinheiro").value;
-                alert(postingDate);
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
                         function (data) {
@@ -188,11 +179,8 @@
             if (postingType == "Cheque") {
 
                 var numberCheque = document.getElementById("postingNumberCheque").value;
-                alert(numberCheque);
                 var postingValue = document.getElementById("postingValueCheque").value;
-                alert(postingValue);
                 var postingDate = document.getElementById("postingDateCheque").value;
-                alert(postingDate);
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, numberCheque: numberCheque},
                         function (data) {
@@ -234,7 +222,6 @@
                 var portions = document.getElementById("postingPortionsBoleto").value;
                 var postingValue = "";
                 var postingDate = "";
-                alert(portions);
                 for (var i = 1; i <= portions; i++) {
                     if (i != portions) {
                         postingValue = postingValue.concat(document.getElementById("postingValueBoleto".concat(i)).value).concat("/");
@@ -244,9 +231,6 @@
                         postingDate = postingDate.concat(document.getElementById("postingDateBoleto".concat(i)).value);
                     }
                 }
-                console.log(postingValue);
-                alert(postingValue);
-                alert(postingDate);
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions},
                         function (data) {
@@ -285,8 +269,6 @@
       	   	else{
       	   		var type = document.getElementById("postingType").value;
       	   	}
-			alert(type);
-			alert(tipo);
            	   
             if (type == "Boleto") {
                 document.getElementById("Cheque").style.display = "none";
