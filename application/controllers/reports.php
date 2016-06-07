@@ -159,7 +159,7 @@ class Reports extends CK_Controller {
 	    	foreach($postingExpenses as $pe){
 	    		$obj = new StdClass();
 	    		$obj = $pe;
-	    		if($pe->payed == true){
+	    		if($pe->payment_status == 'pago' || $pe->payment_status == 'caixinha' || $pe->payment_status == 'deb auto'){
 	    			$qtdpayed++;
 	    		}
 	    		
@@ -180,7 +180,7 @@ class Reports extends CK_Controller {
     		foreach($postingExpensesWithoutDate as $pe){
     			$obj = new StdClass();
     			$obj = $pe;
-    			if($pe->payed == 't'){
+    			if($pe->payment_status == 'pago' || $pe->payment_status == 'caixinha' || $pe->payment_status == 'deb auto'){
     				$qtdpayed++;
     			}
     			 

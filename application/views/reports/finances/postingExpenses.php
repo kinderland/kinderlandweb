@@ -52,7 +52,7 @@
             });
             datepickers();
             $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                var string = "<?= $this->config->item("url_link") ?>admin/togglePostingExpensePayed/".concat($(this).attr("id")).concat("/").concat($("#value_".concat($(this).attr("id"))).attr("name")).concat("/").concat($("#date_".concat($(this).attr("id"))).val());
+                var string = "<?= $this->config->item("url_link") ?>admin/togglePostingExpensePayed/".concat($(this).attr("id")).concat("/").concat($("#date_".concat($(this).attr("id"))).val());
                 var recarrega = "<?= $this->config->item("url_link") ?>reports/postingExpenses/";
                 $.post(string).done(function (data) {
                     if (data == 1){
@@ -169,7 +169,7 @@
             if(payed.getAttribute("value") > 0){
 	            for (var i = 0, row; row = table.rows[i]; i++) {
 
-		            if(payeds[i].getAttribute('id') == 't'){
+		            if(payeds[i].getAttribute('id') == 'pago' || payeds[i].getAttribute('id') == 'caixinha' || payeds[i].getAttribute('id') == 'deb auto'){
 		            
 		                var data2 = []
 		                //Nome, retira pega o que esta entre um <> e outro <>
@@ -179,6 +179,8 @@
 		                document_name = names[i].getAttribute('id');
 		                account_name = accounts_name[i].getAttribute('value');
 		                posting_date = posting_dates[i].getAttribute('value');
+		                date_post = posting_date.split("/");
+		                posting_date = date_post[1].concat("/").concat(date_post[0]).concat("/").concat(date_post[2]);
 		                
 		                data2.push(account_name);
 		                data2.push(account_type);
@@ -204,7 +206,7 @@
             post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
         }
 
-        function accountUpdate(id,portions,value){
+        function accountUpdate(id,portions){
 			var account_name = document.getElementById("accounts_".concat(id).concat("_").concat(portions)).value;
 
 			var names = document.getElementById("accountsNames").value;
@@ -221,7 +223,7 @@
 
 			if(ok == 1){
 				$.post('<?= $this->config->item('url_link'); ?>admin/updateAccountName',
-                        {id: id, portions: portions, value: value, account_name: account_name},
+                        {id: id, portions: portions, account_name: account_name},
                         function (data) {
                             if (data == "true") {
                                 alert("Nome de Conta atribuído com sucesso!");
@@ -326,6 +328,7 @@
                                		<?php }?>
                                 </tr>
                                 <tr>
+                                	<?php if(!$secretary){?>
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
@@ -333,7 +336,6 @@
                                 	<th></th>
                                 	<th></th>
                                 	<th></th>
-                                	<?php if(!$secretary){?>
                                 	<th style="width:200px; text-align: center">Nome</th>
                         			<th style="width:100px; text-align: center">Ação</th>
                         			<th style="width:150px; text-align: center">Data</th>
@@ -350,7 +352,7 @@
                                 <?php foreach ($info as $i) {
                                     ?>
                                     <tr>
-                                    	<input style="display:none" id="<?= $i -> payed;?>" name="payeds">
+                                    	<input style="display:none" id="<?= $i -> payment_status;?>" name="payeds">
                                     	<input style="display:none" id="<?= $i -> document_name;?>" name="names">
                                     	<input style="display:none" id="<?= $i -> account_type;?>" name="account_types">
                                     	<input style="display:none" id="<?= $i -> document_description;?>" name="document_description">
@@ -390,20 +392,22 @@
                                         </a>
                                         <?php } if(!$secretary){ ?>
                                     </td>
-                                        <td><input <?php if ($i->posting_value == "" && $i->posting_value == "") echo "disabled" ?> type="text" name = "accounts_name" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
+                                        <td><input <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> type="text" name = "accounts_name" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
 									</td>
 									<?php if ($i->account_name == "") { ?>
-                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Salvar</button></td>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Salvar</button></td>
                                     <?php } else { ?>
-                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>','<?= $i->posting_value ?>')">Atualizar</button> </td>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td><input <?php if ($i->account_name == "" || $i -> document_type == "boleto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
-                                    	<?php if($i -> document_type == "boleto"){?>
-                                    	<td> Pago </td>
+                                    	<?php if($i -> payment_status == "caixinha"){?>
+                                    	<td> Caixinha </td>
+                                    	<?php } else if($i -> payment_status == "deb auto"){?>
+                                    	<td> Débito Automático </td>
                                     	<?php } else{?>
-                                    	<td><input <?php if($i->payed == "t") echo "checkedInDatabase='true'";  if ($i->account_name == "") echo "disabled"; ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>_<?= $i->posting_portions ?>"/> </td>
+                                    	<td><input <?php if($i->payment_status == "pago") echo "checkedInDatabase='true'";  if ($i->account_name == "") echo "disabled"; ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>_<?= $i->posting_portions ?>"/> </td>
                                     	<?php } }?>
                                     </tr>
                                     <?php
