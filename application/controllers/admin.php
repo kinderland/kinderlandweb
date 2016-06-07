@@ -1030,8 +1030,8 @@ class Admin extends CK_Controller {
             $dia = $postingDatePortion[2];
             $mês = $postingDatePortion[1];
             $ano = $postingDatePortion[0];
-            for ($i = 1; $i < $portions; $i++) {
-                $postingPortion = $i;
+            for ($i = 0; $i < $portions; $i++) {
+                $postingPortion = $i+1;
                 $postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $i, $dia, $ano));
 
                 $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus);
