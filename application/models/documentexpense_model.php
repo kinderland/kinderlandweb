@@ -58,12 +58,51 @@ class documentexpense_model extends CK_Model {
         }
         return false;
     }
+    
+    public function insertNewLog($person_id, $document_expense_id, $posting_date, $posting_value, $posting_portions, $log_type) {
+    
+    	$log = 'INSERT INTO posting_expense_log(person_id, document_expense_id, posting_date, posting_value, log_date, posting_portions, log_type) VALUES (?,?,?,?,current_timestamp,?,?)';
+    
+    	$result = $this -> execute($this -> db, $log, array(intval($person_id), intval($document_expense_id), $posting_date, $posting_value, $posting_portions, $log_type));
+    
+    	if ($result)
+    		return $result;
+    
+    	return false;
+    }
+    
+    public function getPostingExpenseById($document_id,$posting_portions){
+    	$sql = "SELECT * FROM posting_expense
+				WHERE document_expense_id = ?
+				AND posting_portions = ?";
+    		
+    	$result = $this->executeRow($this->db, $sql, array(intval($document_id),$posting_portions));
+    		
+    	if($result)
+    		return $result;
+    	else
+    		return NULL;
+    }
 
     public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion) {
         $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, posting_portions)
 					VALUES (?,?,?,?,?)";
+        
         $result = $this->execute($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion));
-        return $result;
+        
+        if($result)
+        	$postingExpense = $this -> getPostingExpenseById($document_id,$posting_portions);
+        
+        if($postingExpense){
+        	$person_id = $this -> session -> userdata('user_id');
+        	$log = $this -> insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'criou forma de pag');
+        	if($log)
+        		return $log;
+        	else 
+        		return null;
+        }else{
+        	return null;
+        }
     }
 
     public function insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingValue, $postingPortion) {

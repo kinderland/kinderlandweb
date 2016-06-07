@@ -1095,7 +1095,7 @@ class Admin extends CK_Controller {
         }
     }
 
-    public function togglePostingExpensePayed($documentId_portions, $posting_value, $day, $month, $year) {
+    public function togglePostingExpensePayed($documentId_portions, $day, $month, $year) {
 
         $r = explode("_", $documentId_portions);
         $documentId = $r[0];
@@ -1107,9 +1107,9 @@ class Admin extends CK_Controller {
             $posting_date = "";
         }
 
-        $document = $this->finance_model->getPostingExpenseById($documentId, $posting_value, $posting_portions);
+        $document = $this->finance_model->getPostingExpenseById($documentId, $posting_portions);
 
-        echo $this->finance_model->togglePostingExpensePayed($documentId, $posting_value, $posting_portions, $posting_date);
+        echo $this->finance_model->togglePostingExpensePayed($documentId, $posting_portions, $posting_date);
     }
 
     public function manageDocuments($date = NULL) {
@@ -1155,10 +1155,9 @@ class Admin extends CK_Controller {
     public function updateAccountName() {
         $id = $this->input->post("id", TRUE);
         $portions = $this->input->post("portions", TRUE);
-        $value = $this->input->post("value", TRUE);
         $account_name = $this->input->post("account_name", TRUE);
 
-        if ($this->finance_model->updateAccountName($id, $value, $portions, $account_name)) {
+        if ($this->finance_model->updateAccountName($id, $portions, $account_name)) {
             echo "true";
             return;
         } else {
