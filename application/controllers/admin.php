@@ -1022,7 +1022,7 @@ class Admin extends CK_Controller {
                 return;
             }
         } else if ($postingType == "Crédito") {
-
+        	$paymentStatus = "a pagar";
             $portions = $_POST['portions'];
             $meses = 1;
             $postingValue = $postingValue / $portions;
