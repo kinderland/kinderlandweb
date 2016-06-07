@@ -105,10 +105,10 @@ class documentexpense_model extends CK_Model {
         }
     }
 
-    public function insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingValue, $postingPortion) {
-        $sql = "INSERT into posting_bank_transfer(bank_data_id, document_expense_id, posting_value, posting_portions)
-					VALUES (?,?,?,?)";
-        $Id = $this->execute($this->db, $sql, array($bankDataId, $documentexpenseId, $postingValue, $postingPortion));
+    public function insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingPortion) {
+        $sql = "INSERT into posting_bank_transfer(bank_data_id, document_expense_id, posting_portions)
+					VALUES (?,?,?)";
+        $Id = $this->execute($this->db, $sql, array($bankDataId, $documentexpenseId, $postingPortion));
         return $Id;
     }
 
