@@ -312,12 +312,12 @@
            
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
-                        <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "1200px"; else echo"800px";?>" id="sortable-table">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "1120px"; else echo"800px";?>" id="sortable-table">
                             <thead>
                                 <tr>
                                     <th style="width:100px; text-align: center" > Data Venc. </th>
                                     <th style="width:20px; text-align: center" > Doc </th>
-                                    <th style="width:150px; text-align: center"> Tipo </th>
+                                    <th style="width:100px; text-align: center"> Tipo </th>
                                 <!--<th style="width:160px; text-align: center"> Descrição </th> -->
                                     <th style="width:80px; text-align: center"> Parcela </th>
                                     <th style="width:100px; text-align: center"> Valor </th>
@@ -374,7 +374,7 @@
                                             }                                         
                                             
                                             ?> </a></td>
-                                        <td><?= $i->posting_type ?></td>
+                                        <td><?php if($i->posting_type == "Transferência") echo "Transf."; else echo $i->posting_type; ?></td>
                                     <!-- <td id="<?php // $i->document_description ?>" name="document_description"><?php // $i->document_description ?></td> -->
                                         <td id="portions_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_portions ?>"><?= $i->posting_portions ?>/<?= $portions[$i->document_expense_id]?></td>
                                         <td id="value_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_value ?>"><?= $i->posting_value ?></td>
@@ -400,7 +400,7 @@
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
                                     	<?php if($i -> payment_status == "caixinha"){?>
                                     	<td> Caixinha </td>

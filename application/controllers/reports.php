@@ -169,8 +169,11 @@ class Reports extends CK_Controller {
 	    				$portions[$pe->document_expense_id] = 1;
 	    			}
 	    		
-	    		$r = explode("-", $pe->posting_date);
-	    		$obj->posting_date = $r[1]."/".$r[2]."/".$r[0];
+	    		if($pe->posting_date){
+		    		$r = explode("-", $pe->posting_date);
+		    		$obj->posting_date = $r[1]."/".$r[2]."/".$r[0];
+	    		}else
+	    			$obj->posting_date = null;
 	    		
 	    		$info[] = $obj;
 	    	}
