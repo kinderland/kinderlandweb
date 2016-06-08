@@ -82,13 +82,65 @@
 
         function sendInfoToModalEdit(postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
             $("#documentexpenseId").html(documentExpenseId);
-                $("#postingTipo").html(postingType);
-                $("#postingData").html(postingDate);
-                $("#postingValor").html(postingValue);
-                $("#postingBanco").html(postingBankNumber);
-                $("#postingAgencencia").html(postingAgency);
-                $("#postingConta").html(postingAccount);
+            $("#postingType").html(postingType);
+            if (postingType == "Crédito") {
+            	document.getElementById("Cheque").style.display = "none";
+                document.getElementById("Dinheiro").style.display = "none";
+                document.getElementById("Transferência").style.display = "none";
+                document.getElementById("Boleto").style.display = "none";
+                document.getElementById("Crédito").style.display = "";
+
+                document.getElementById("postingPortionsCredito").value = postingPortions;
+                document.getElementById("postingValueCredito").value = postingValue;
+                document.getElementById("postingDateCredito").value = postingDate;
             }
+
+            if (postingType == "Dinheiro") {
+            	document.getElementById("Cheque").style.display = "none";
+                document.getElementById("Transferência").style.display = "none";
+                document.getElementById("Boleto").style.display = "none";
+                document.getElementById("Crédito").style.display = "none";
+                document.getElementById("Dinheiro").style.display = "";
+
+                document.getElementById("postingValueDinheiro").value = postingValue;
+                document.getElementById("postingDateDinheiro").value = postingDate;
+            }
+            if(postingType == "Cheque"){
+                document.getElementById("Dinheiro").style.display = "none";
+                document.getElementById("Transferência").style.display = "none";
+                document.getElementById("Boleto").style.display = "none";
+                document.getElementById("Crédito").style.display = "none";
+                document.getElementById("Cheque").style.display = "";
+
+	            document.getElementById("postingNumberCheque").value = postingNumberCheque;
+	            document.getElementById("postingValueCheque").value = postingValue;
+	            document.getElementById("postingDateCheque").value = postingDate; 
+            }          
+
+            if (postingType == "Transferência") {
+            	document.getElementById("Cheque").style.display = "none";
+                document.getElementById("Dinheiro").style.display = "none";
+                document.getElementById("Boleto").style.display = "none";
+                document.getElementById("Crédito").style.display = "none";
+                document.getElementById("Transferência").style.display = "";
+                
+                document.getElementById("postingValueTransferencia").value = postingValue;
+                document.getElementById("postingDateTransferencia").value = postingDate;
+                document.getElementById("postingBankNumberTransferencia").value = postingBankNumber;
+                document.getElementById("postingAgencyTransferencia").value = postingAgency;
+                document.getElementById("postingAccountTransferencia").value = postingAccount;
+            }
+
+            if(postingType == "Boleto"){
+            	document.getElementById("Cheque").style.display = "none";
+                document.getElementById("Dinheiro").style.display = "none";
+                document.getElementById("Crédito").style.display = "none";
+                document.getElementById("Transferência").style.display = "none";
+                document.getElementById("Boleto").style.display = "";
+
+            }
+
+        }
 
 
         
@@ -227,10 +279,15 @@
 		function limpaDiv(){
 			
 			document.getElementById("postingType").selectedIndex = 0;
+			document.getElementById("Cheque").style.display = "none";
+            document.getElementById("Crédito").style.display = "none";
+            document.getElementById("Dinheiro").style.display = "none";
+            document.getElementById("Transferência").style.display = "none";
+            document.getElementById("Boleto").style.display = "none";
 
 			document.getElementById("postingValueCredito").value = null;
 			document.getElementById("postingDateCredito").value = null;
-			document.getElementById("postingPortionsCredito").value = 0;
+			document.getElementById("postingPortionsCredito").value = "Selecione";
 			
 			document.getElementById("postingValueCheque").value = null;
 			document.getElementById("postingDateCheque").value = null;
@@ -239,25 +296,25 @@
 			document.getElementById("postingValueDinheiro").value = null;
 			document.getElementById("postingDateDinheiro").value = null;
 
-			document.getElementById("postingValueBoleto").value = null;
-			document.getElementById("postingDateBoleto").value = null;
-			document.getElementById("postingPortionsBoleto").value = 0;
+			document.getElementById("postingValueTransferencia").value = null;
+			document.getElementById("postingDateTransferencia").value = null;
+			document.getElementById("postingBankNumberTransferencia").value = null;
+			document.getElementById("postingAgencyTransferencia").value = null;
+			document.getElementById("postingAccountTransferencia").value = null;					
 			
+			document.getElementById("postingPortionsBoleto").value = "Selecione";
             for (var i = 1; i <= 10; i++) {
-            	document.getElementById("postingValueBoleto.concat(i)").value = null;
-    			document.getElementById("postingDateBoleto.concat(i)").value = null;
-                    document.getElementById("Boleto".concat(i)).style.display = "none";
+            	document.getElementById("Boleto".concat(i)).style.display = "none";
+            	document.getElementById("postingValueBoleto".concat(i)).value = null;
+    			document.getElementById("postingDateBoleto".concat(i)).value = null;
+                
             }
-			document.getElementById("postingPortionsBoleto").value = 0;
+			
 
 
 
 			
-                document.getElementById("Cheque").style.display = "none";
-                document.getElementById("Crédito").style.display = "none";
-                document.getElementById("Dinheiro").style.display = "none";
-                document.getElementById("Transferência").style.display = "none";
-                document.getElementById("Boleto").style.display = "none";
+                
 
             
 
@@ -576,7 +633,7 @@ if (isset($documents)) {
                                     <label for="postingPortionsBoleto" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Número de parcelas: </label>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
                                         <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" onchange="postingPortions()" >
-                                            <option> - Selecione - </option>
+                                            <option value="Selecione"> - Selecione - </option>
 <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
                                             <?php } ?>
@@ -640,7 +697,7 @@ if (isset($documents)) {
                                         <td> Número de parcelas: </td><br/>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
                                         <select style="width: 190px" class="form-control" name="postingPortionsCredito" id="postingPortionsCredito"  >
-                                            <option> - Selecione - </option>
+                                            <option value="Selecione"> - Selecione - </option>
 <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
                                             <?php } ?>
@@ -698,7 +755,7 @@ if (isset($documents)) {
                                         </div>  
                                     </div>
 
-                                    </tr>
+                                    
 
                             </div>
                         </div>
@@ -734,7 +791,7 @@ if (isset($documents)) {
                                         <div class="col-lg-12">
                                             <label for="postingType" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Tipo de Pagamento: </label>
                                             <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">    
-                                                <select style="width: 190px" class="form-control" name="postingType" id="postingType" onchange="paymentType()" >
+                                                <select style="width: 190px" class="form-control" name="postingType" id="postingType" value="" onchange="paymentType()" >
                                                     <option> - Selecione - </option>
                                                     <option value="Boleto">Boleto</option> 
                                                     <option value="Cheque">Cheque</option>
@@ -759,7 +816,7 @@ if (isset($documents)) {
                                     <tr>
                                     <label for="postingPortionsBoleto" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Número de parcelas: </label>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
-                                        <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" onchange="postingPortions()" >
+                                        <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" value="" onchange="postingPortions()" >
                                             <option> - Selecione - </option>
 <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
@@ -774,11 +831,11 @@ if (isset($documents)) {
                                                 <div class="col-lg-12">
                                                     <label for="postingValueBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" name="postingValueBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" value="" name="postingValueBoleto<?php echo $i ?>" ></input> 
                                                     </div>
                                                     <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200x" class="form-control" type="text" id="postingDateBoleto<?php echo $i ?>" name="postingDateBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200x" class="form-control" type="text" id="postingDateBoleto<?php echo $i ?>" value="" name="postingDateBoleto<?php echo $i ?>" ></input> 
                                                         <br/><br/>
                                                     </div>
                                                 </div>
@@ -788,15 +845,7 @@ if (isset($documents)) {
 
 <?php } ?>
                                     <br>
-                                    <tr>
-                                    <div class="row">
-                                        <div class="col-lg-7 control_label">
-                                            <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button>  
-                                            <button class="btn btn-danger" data-dismiss="modal">Fechar</button> 
-                                        </div>  
-                                    </div>
-
-                                    </tr>
+                                    
                                 </div>
 
 
@@ -804,19 +853,18 @@ if (isset($documents)) {
                                 <div id = "Cheque" style="display: none">
                                     <tr> 
                                         <td> Número do Cheque: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" value="" name="postingNumberCheque" ></input> <br><br>
                                     </tr>
                                     <tr>
                                         <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCheque" value="" name="postingDateCheque" ></input> <br><br>
 
                                     </tr>
 
                                     <tr> 
                                         <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
-                                    <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
-                                    <button class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCheque" value="" name="postingValueCheque" ></input> <br><br>
+                                    
 
                                     </tr>
 
@@ -826,12 +874,12 @@ if (isset($documents)) {
 
                                     <tr> 
                                         <td> Valor: </td><br/>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCredito" value="" name="postingValueCredito" ></input> <br><br>
                                     </tr><br/>
                                     <tr>
                                         <td> Número de parcelas: </td><br/>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
-                                        <select style="width: 190px" class="form-control" name="postingPortionsCredito" id="postingPortionsCredito"  >
+                                        <select style="width: 190px" class="form-control" name="postingPortionsCredito" value="" id="postingPortionsCredito"  >
                                             <option> - Selecione - </option>
 <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
@@ -841,51 +889,54 @@ if (isset($documents)) {
                                     </tr> <br/><br/><br/>
                                     <tr>
                                         <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br><br>
-                                    <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
-                                    <button class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCredito" value="" name="postingDateCredito" ></input> <br><br>
+                                    
                                     </tr>
 
                                 </div>                                                            
                                 <div id = "Dinheiro" style="display: none"> 
                                     <td> Valor: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" value="" name="postingValueDinheiro" ></input> <br><br>
                                     </tr>
                                     <tr>
                                         <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br><br>
-                                    <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
-                                    <button class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateDinheiro" value="" name="postingDateDinheiro" ></input> <br><br>
+                                    
                                     </tr>
 
                                 </div>
 
                                 <div id = "Transferência" style="display: none"> 
                                     <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" value="" name="postingValueTransferencia" ></input> <br><br>
                                     </tr>
                                     <tr>
                                         <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateTransferencia" name="postingDateTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateTransferencia" value="" name="postingDateTransferencia" ></input> <br><br>
 
                                     </tr>
                                     <tr> 
                                         <td> Banco: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingBankNumberTransferencia" name="postingBankNumberTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingBankNumberTransferencia" value="" name="postingBankNumberTransferencia" ></input> <br><br>
                                     </tr>
                                     <tr> 
                                         <td> Agência: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingAgencyTransferencia" name="postingAgencyTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingAgencyTransferencia" value="" name="postingAgencyTransferencia" ></input> <br><br>
                                     </tr>
                                     <tr> 
                                         <td> Conta: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingAccountTransferencia" name="postingAccountTransferencia" ></input> <br><br>
-                                    <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button> 
-                                    <button class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingAccountTransferencia" value="" name="postingAccountTransferencia" ></input> <br><br>
+                                    
                                     </tr>
 
 
                                 </div>
+                                <div class="modal-footer">
+                                        <div class="col-lg-7 control_label">
+                                            <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button>  
+                                            <button class="btn btn-warning" data-dismiss="modal" onClick="limpaDiv()">Fechar</button> 
+                                        </div>  
+                                    </div>
 
                             </div>
                         </div>
