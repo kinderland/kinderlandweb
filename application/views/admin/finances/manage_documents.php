@@ -82,61 +82,75 @@
 
         function sendInfoToModalEdit(postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
             $("#documentexpenseId").html(documentExpenseId);
-            $("#postingType").html(postingType);
-            if (postingType == "Crédito") {
-            	document.getElementById("Cheque").style.display = "none";
-                document.getElementById("Dinheiro").style.display = "none";
-                document.getElementById("Transferência").style.display = "none";
-                document.getElementById("Boleto").style.display = "none";
-                document.getElementById("Crédito").style.display = "";
 
-                document.getElementById("postingPortionsCredito").value = postingPortions;
-                document.getElementById("postingValueCredito").value = postingValue;
-                document.getElementById("postingDateCredito").value = postingDate;
+            alert(postingType);
+			alert(postingPortions);
+            if(postingType == "Transferência")
+            	$("#posting_Type").prop('selectedIndex', '5');
+            else if(postingType == "Dinheiro")
+            	$("#posting_Type").prop('selectedIndex', '4');
+            else if(postingType == "Boleto")
+            	$("#posting_Type").prop('selectedIndex', '1');
+            else if(postingType == "Crédito")
+            	$("#posting_Type").prop('selectedIndex', '3');
+            else if(postingType == "Cheque")
+            	$("#posting_Type").prop('selectedIndex', '2');
+            
+            if (postingType == "Crédito") {
+            	document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "";
+                
+                document.getElementById("postingValueCreditoEdit").value = postingValue;
+                document.getElementById("postingDateCreditoEdit").value = postingDate;
+                document.getElementById("postingPortionsCreditoEdit").value = postingPortions;                
+                
             }
 
             if (postingType == "Dinheiro") {
-            	document.getElementById("Cheque").style.display = "none";
-                document.getElementById("Transferência").style.display = "none";
-                document.getElementById("Boleto").style.display = "none";
-                document.getElementById("Crédito").style.display = "none";
-                document.getElementById("Dinheiro").style.display = "";
+            	document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "";
 
-                document.getElementById("postingValueDinheiro").value = postingValue;
-                document.getElementById("postingDateDinheiro").value = postingDate;
+                document.getElementById("postingValueDinheiroEdit").value = postingValue;
+                document.getElementById("postingDateDinheiroEdit").value = postingDate;
             }
             if(postingType == "Cheque"){
-                document.getElementById("Dinheiro").style.display = "none";
-                document.getElementById("Transferência").style.display = "none";
-                document.getElementById("Boleto").style.display = "none";
-                document.getElementById("Crédito").style.display = "none";
-                document.getElementById("Cheque").style.display = "";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "";
 
-	            document.getElementById("postingNumberCheque").value = postingNumberCheque;
-	            document.getElementById("postingValueCheque").value = postingValue;
-	            document.getElementById("postingDateCheque").value = postingDate; 
+	            document.getElementById("postingNumberChequeEdit").value = postingNumberCheque;
+	            document.getElementById("postingValueChequeEdit").value = postingValue;
+	            document.getElementById("postingDateChequeEdit").value = postingDate; 
             }          
 
             if (postingType == "Transferência") {
-            	document.getElementById("Cheque").style.display = "none";
-                document.getElementById("Dinheiro").style.display = "none";
-                document.getElementById("Boleto").style.display = "none";
-                document.getElementById("Crédito").style.display = "none";
-                document.getElementById("Transferência").style.display = "";
+            	document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "";
                 
-                document.getElementById("postingValueTransferencia").value = postingValue;
-                document.getElementById("postingDateTransferencia").value = postingDate;
-                document.getElementById("postingBankNumberTransferencia").value = postingBankNumber;
-                document.getElementById("postingAgencyTransferencia").value = postingAgency;
-                document.getElementById("postingAccountTransferencia").value = postingAccount;
+                document.getElementById("postingValueTransferenciaEdit").value = postingValue;
+                document.getElementById("postingDateTransferenciaEdit").value = postingDate;
+                document.getElementById("postingBankNumberTransferenciaEdit").value = postingBankNumber;
+                document.getElementById("postingAgencyTransferenciaEdit").value = postingAgency;
+                document.getElementById("postingAccountTransferenciaEdit").value = postingAccount;
             }
 
             if(postingType == "Boleto"){
-            	document.getElementById("Cheque").style.display = "none";
-                document.getElementById("Dinheiro").style.display = "none";
-                document.getElementById("Crédito").style.display = "none";
-                document.getElementById("Transferência").style.display = "none";
-                document.getElementById("Boleto").style.display = "";
+            	document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("BoletoEdit").style.display = "";
 
             }
 
@@ -791,7 +805,7 @@ if (isset($documents)) {
                                         <div class="col-lg-12">
                                             <label for="postingType" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Tipo de Pagamento: </label>
                                             <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">    
-                                                <select style="width: 190px" class="form-control" name="postingType" id="postingType" value="" onchange="paymentType()" >
+                                                <select style="width: 190px" class="form-control" name="postingType" id="posting_Type" onchange="paymentType()" >
                                                     <option> - Selecione - </option>
                                                     <option value="Boleto">Boleto</option> 
                                                     <option value="Cheque">Cheque</option>
@@ -812,11 +826,11 @@ if (isset($documents)) {
 
 
 
-                                <div id = "Boleto" style="display: none">                                                            		
+                                <div id = "BoletoEdit" style="display: none">                                                            		
                                     <tr>
                                     <label for="postingPortionsBoleto" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Número de parcelas: </label>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
-                                        <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" value="" onchange="postingPortions()" >
+                                        <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoletoEdit" value="" onchange="postingPortions()" >
                                             <option> - Selecione - </option>
 <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
@@ -831,11 +845,11 @@ if (isset($documents)) {
                                                 <div class="col-lg-12">
                                                     <label for="postingValueBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" value="" name="postingValueBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoletoEdit<?php echo $i ?>" value="" name="postingValueBoleto<?php echo $i ?>" ></input> 
                                                     </div>
                                                     <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200x" class="form-control" type="text" id="postingDateBoleto<?php echo $i ?>" value="" name="postingDateBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200x" class="form-control" type="text" id="postingDateBoletoEdit<?php echo $i ?>" value="" name="postingDateBoleto<?php echo $i ?>" ></input> 
                                                         <br/><br/>
                                                     </div>
                                                 </div>
@@ -850,36 +864,36 @@ if (isset($documents)) {
 
 
 
-                                <div id = "Cheque" style="display: none">
+                                <div id = "ChequeEdit" style="display: none">
                                     <tr> 
                                         <td> Número do Cheque: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" value="" name="postingNumberCheque" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingNumberChequeEdit" value="" name="postingNumberCheque" ></input> <br><br>
                                     </tr>
                                     <tr>
                                         <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCheque" value="" name="postingDateCheque" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateChequeEdit" value="" name="postingDateCheque" ></input> <br><br>
 
                                     </tr>
 
                                     <tr> 
                                         <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCheque" value="" name="postingValueCheque" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueChequeEdit" value="" name="postingValueCheque" ></input> <br><br>
                                     
 
                                     </tr>
 
                                 </div>
 
-                                <div id = "Crédito" style="display: none">
+                                <div id = "CréditoEdit" style="display: none">
 
                                     <tr> 
                                         <td> Valor: </td><br/>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCredito" value="" name="postingValueCredito" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCreditoEdit" value="" name="postingValueCredito" ></input> <br><br>
                                     </tr><br/>
                                     <tr>
                                         <td> Número de parcelas: </td><br/>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
-                                        <select style="width: 190px" class="form-control" name="postingPortionsCredito" value="" id="postingPortionsCredito"  >
+                                        <select style="width: 190px" class="form-control" name="postingPortionsCreditoEdit" value="" id="postingPortionsCredito"  >
                                             <option> - Selecione - </option>
 <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
@@ -889,43 +903,43 @@ if (isset($documents)) {
                                     </tr> <br/><br/><br/>
                                     <tr>
                                         <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCredito" value="" name="postingDateCredito" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCreditoEdit" value="" name="postingDateCredito" ></input> <br><br>
                                     
                                     </tr>
 
                                 </div>                                                            
-                                <div id = "Dinheiro" style="display: none"> 
+                                <div id = "DinheiroEdit" style="display: none"> 
                                     <td> Valor: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" value="" name="postingValueDinheiro" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiroEdit" value="" name="postingValueDinheiro" ></input> <br><br>
                                     </tr>
                                     <tr>
                                         <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateDinheiro" value="" name="postingDateDinheiro" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateDinheiroEdit" value="" name="postingDateDinheiro" ></input> <br><br>
                                     
                                     </tr>
 
                                 </div>
 
-                                <div id = "Transferência" style="display: none"> 
+                                <div id = "TransferênciaEdit" style="display: none"> 
                                     <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" value="" name="postingValueTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferenciaEdit" value="" name="postingValueTransferencia" ></input> <br><br>
                                     </tr>
                                     <tr>
                                         <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateTransferencia" value="" name="postingDateTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateTransferenciaEdit" value="" name="postingDateTransferencia" ></input> <br><br>
 
                                     </tr>
                                     <tr> 
                                         <td> Banco: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingBankNumberTransferencia" value="" name="postingBankNumberTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingBankNumberTransferenciaEdit" value="" name="postingBankNumberTransferencia" ></input> <br><br>
                                     </tr>
                                     <tr> 
                                         <td> Agência: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingAgencyTransferencia" value="" name="postingAgencyTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingAgencyTransferenciaEdit" value="" name="postingAgencyTransferencia" ></input> <br><br>
                                     </tr>
                                     <tr> 
                                         <td> Conta: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingAccountTransferencia" value="" name="postingAccountTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingAccountTransferenciaEdit" value="" name="postingAccountTransferencia" ></input> <br><br>
                                     
                                     </tr>
 
