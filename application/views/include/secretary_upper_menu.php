@@ -95,7 +95,12 @@
                             <span class = "caret" > </span></a >
                         <ul class = "dropdown-menu" >
                         	<li > <a href = "<?= $this->config->item('url_link'); ?>admin/finance_cashoutflows" > Saídas </a></li >
+                        	<?php 	$checkSecretaryOperation = $this->personuser_model -> checkSecretaryOperation($this->session->userdata("user_id"));
+                    	
+                    	if(in_array(SYSTEM_ADMIN, $permissions) || in_array(DIRECTOR, $permissions) || $checkSecretaryOperation){
+                    ?>
                             <li > <a href = "<?= $this->config->item('url_link'); ?>reports/finance_reports" > Relatórios </a></li >
+                            <?php }?>
                         </ul>
                     </li>
                 </ul>
