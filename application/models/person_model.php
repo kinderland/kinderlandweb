@@ -43,9 +43,33 @@ class person_model extends CK_Model {
 
     public function updatePerson($fullname, $gender, $email, $person_id, $address_id) {
         $this->Logger->info("Running: " . __METHOD__);
-        if (!empty($fullname) && !empty($gender) && !empty($adress_id) && !empty($person_id)) {
-            $sql = "UPDATE person SET fullname=?, gender=?, email=?, address_id=? WHERE person_id=?";
-            if ($this->execute($this->db, $sql, array($fullname, $gender, $email, $address_id, intval($person_id))))
+        
+        $arrayList = array();
+        
+        if (!empty($person_id)) {
+            $sql = "UPDATE person SET";
+            
+            if(!empty($fullname)){
+            	$sql = $sql." fullname=?";
+            	$arrayList[] = $fullname;
+            }
+            if(!empty($gender)){
+            	$sql = $sql.", gender=?";
+            	$arrayList[] = $gender;
+            }
+            
+            $sql = $sql.", email=?";
+            $arrayList[] = $email;
+            
+            if(!empty($adress_id)){
+            	$sql = $sql.", address_id=?";
+            	$arrayList[] = $address_id;
+            }
+            	
+            $sql = $sql." WHERE person_id=?";
+            $arrayList[] = intval($person_id);
+            
+            if ($this->execute($this->db, $sql, $arrayList))
                 return true;
         }
         return false;
