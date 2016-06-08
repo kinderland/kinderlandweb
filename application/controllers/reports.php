@@ -154,6 +154,7 @@ class Reports extends CK_Controller {
     	$info = array();
     	$portions = array();
     	$qtdpayed = 0;
+    	$peopleWithOperation = $this -> finance_model -> getPeopleOperationByPostingExpense();
     	
     	if($postingExpenses){
 	    	foreach($postingExpenses as $pe){
@@ -174,6 +175,16 @@ class Reports extends CK_Controller {
 		    		$obj->posting_date = $r[1]."/".$r[2]."/".$r[0];
 	    		}else
 	    			$obj->posting_date = null;
+	    		
+	    		if($pe->payment_status == 'caixinha'){
+	    			foreach($peopleWithOperation as $p){
+	    				if($p->document_expense_id == $pe->document_expense_id && $p->posting_portions == $pe->posting_portions){
+	    					$person = $this -> person_model -> getPersonById($p->person_id);
+	    					$obj->person_operation = $person-> getFullname();
+	    				}
+	    			}
+	    			
+	    		}
 	    		
 	    		$info[] = $obj;
 	    	}

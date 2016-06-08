@@ -32,6 +32,23 @@ class finance_model extends CK_Model{
 				return NULL;
 	}
 	
+	public function getPeopleOperationByPostingExpense(){
+		
+		$sql = "SELECT *
+				FROM posting_expense pe
+				INNER JOIN posting_expense_log pel ON pe.document_expense_id = pel.document_expense_id AND pe.posting_portions = pel.posting_portions
+				WHERE pel.log_type = 'criou forma de pag'
+				AND pe.payment_status = 'caixinha'";
+		
+		$result = $this->executeRows($this->db,$sql);
+		
+		if($result)
+			return $result;
+		else 
+			return null;
+		
+	}
+	
 	public function togglePostingExpensePayed($document_id,$posting_portions,$posting_date) {
 		$this -> Logger -> info("Running: " . __METHOD__);
 		
@@ -166,7 +183,7 @@ class finance_model extends CK_Model{
 	}
 	
 	public function getAllAccountsInformations(){
-		$sql = "SELECT a.account_name as account_name, a.description as account_description, at.name as account_type 
+		$sql = "SELECT a.account_name as account_name, a.description as account_description, a.account_type_id as account_type_id, at.name as account_type 
 				FROM account a
 				INNER JOIN account_type at ON a.account_type_id = at.account_type_id
 				ORDER BY a.account_name ASC";
@@ -181,7 +198,8 @@ class finance_model extends CK_Model{
 	
 	public function getAllAccountTypes(){
 		$sql = "SELECT *
-				FROM account_type";
+				FROM account_type
+				ORDER BY name ASC";
 			
 		$result = $this->executeRows($this->db, $sql);
 			
@@ -220,11 +238,23 @@ class finance_model extends CK_Model{
 
 		$sql = 'INSERT INTO account(account_name, description, account_type_id) VALUES (?,?,?)';
 
-		$returnId = $this -> executeReturningId($this -> db, $sql, array($account_name, $account_description, intval($account_type)));
+		$returnId = $this -> execute($this -> db, $sql, array($account_name, $account_description, intval($account_type)));
 
 		if ($returnId)
 			return $returnId;
 
+		return null;
+	}
+	
+	public function insertNewAccountType($account_type_name) {
+	
+		$sql = 'INSERT INTO account_type(name) VALUES (?)';
+	
+		$returnId = $this -> executeReturningId($this -> db, $sql, array($account_type_name));
+	
+		if ($returnId)
+			return $returnId;
+	
 		return false;
 	}
 	
@@ -234,5 +264,13 @@ class finance_model extends CK_Model{
 		$deleteSql = 'DELETE FROM account WHERE account_name = ?';
 	
 		return $this->execute($this->db, $deleteSql, array($account_name));
+	}
+	
+	public function deleteAccountType($account_type_id){
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$deleteSql = 'DELETE FROM account_type WHERE account_type_id = ?';
+	
+		return $this->execute($this->db, $deleteSql, array($account_type_id));
 	}
 }

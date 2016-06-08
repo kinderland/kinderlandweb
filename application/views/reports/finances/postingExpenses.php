@@ -307,8 +307,10 @@
                 </select>
             </form>
             <input style="display:none" id="accountsNames" value="<?php echo $accountNames;?>">
+             <?php if(!$secretary){?>
              <button class="button btn btn-primary col-lg-2" onclick="sendTableToCSV()" value="">Exportar</button>
-            <br /> <br />
+           <br /> <br />
+           <?php }?>
            
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
@@ -403,7 +405,7 @@
                                     	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
                                     	<?php if($i -> payment_status == "caixinha"){?>
-                                    	<td> Caixinha </td>
+                                    	<td><span title="<?php echo $i->person_operation;?>" > Caixinha </span></td>
                                     	<?php } else if($i -> payment_status == "deb auto"){?>
                                     	<td> Débito Automático </td>
                                     	<?php } else{?>

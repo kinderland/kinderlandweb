@@ -397,3 +397,9 @@
 "updateAccountName";"admin";2
 "viewDocument";"admin";2
 "postingExpenses";"reports";4
+"viewDocument";"admin";4
+"checkIfAccountTypeNameIsInUse";"admin";2
+"manage_account_types";"admin";2
+"deleteAccountTypeName";"admin";2
+"checkIfAccountTypeNameExists";"admin";2
+"newAccountTypeName";"admin";2

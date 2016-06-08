@@ -30,46 +30,17 @@
         });
 
         function validateFormInfo(){
-			var account_name = $("#account_name").val();
-			var account_type = $("#account_type").val();
-			var account_description = $("#account_description").val();
-			var availableTags = document.getElementById("accountTypes").value;
+			var account_type_name = $("#account_type_name").val();
 			var missing = "";
 			var error = ""; 
 
-			if(account_name == "")
-				missing = missing.concat("Nome de Conta\n");
-			if(account_type == "")
-				missing = missing.concat("Categoria\n");
-			if(account_description == "")
-				missing = missing.concat("Descrição\n");
+			if(account_type_name == "")
+				missing = missing.concat("Nome da Categoria\n");
 
-			if(account_name != ""){
-				var name = account_name.split("");
-				if(name.length > 30){
-					error = error.concat("Nome de Conta não pode ter mais que 30 caracteres\n");
-				}
-			}
-
-			if(account_type != ""){
-				var type = availableTags.split("/");
-				var ok = 0;
-
-				for(var i = 0; i < type.length; i++){
-					if(type[i].localeCompare(account_type) == 0){
-						ok = 1;
-						break;
-					}					
-				}
-
-				if(!ok)
-					error = error.concat("Categoria não existe. Escolha uma categoria existente.");
-			}
-
-			if(account_description != ""){
-				var description = account_description.split("");
-				if(description.length > 50){
-					error = error.concat("Descrição não pode ter mais que 50 caracteres\n");
+			if(account_type_name != ""){
+				var name = account_type_name.split("");
+				if(name.length > 50){
+					error = error.concat("Nome da Categoria não pode ter mais que 50 caracteres\n");
 				}
 			}	
 
@@ -85,95 +56,73 @@
 						
 			else{
 				
-				$.post("<?php  echo $this->config->item('url_link');?>admin/checkIfAccountNameExists", {account_name: account_name}, 
+				$.post("<?php  echo $this->config->item('url_link');?>admin/checkIfAccountTypeNameExists", {account_type_name: account_type_name}, 
 				function(data){
 					if(data==true){						
-						$.post("<?= $this->config->item('url_link');?>admin/newAccountName",{account_name: account_name, account_type: account_type, account_description: account_description},
+						$.post("<?= $this->config->item('url_link');?>admin/newAccountTypeName",{account_type_name: account_type_name},
 							function(data){
-								if(data == true){
-									alert("Nome de Conta criado com sucesso!");
+								if(data){
+									alert("Categoria criada com sucesso!");
 									location.reload();	
 								}
 								else{
-									alert("Houve um erro na criação do Nome de Conta. Tente novamente!");	
+									alert("Houve um erro na criação da Categoria. Tente novamente!");	
 								}
 							});
 					}
 					else{
 						
-						alert("O Nome de Conta já existe. Tente Novamente com outro nome.");
+						alert("A Categoria já existe. Tente Novamente com outro nome.");
 					}
 				});
 			}
 		}
 
-		function deleteAccountName(account_name){
+		function deleteAccountTypeName(account_type_id){
 			
-			$.post("<?php  echo $this->config->item('url_link');?>admin/checkIfAccountNameIsInUse", {account_name: account_name}, 
+			$.post("<?php  echo $this->config->item('url_link');?>admin/checkIfAccountTypeNameIsInUse", {account_type_id: account_type_id}, 
 					function(data){
 						if(data==true){						
-							$.post("<?= $this->config->item('url_link');?>admin/deleteAccountName",{account_name: account_name},
+							$.post("<?= $this->config->item('url_link');?>admin/deleteAccountTypeName",{account_type_id: account_type_id},
 								function(data){
 									if(data){
-										alert("Nome de Conta excluído com sucesso!");
+										alert("Categoria excluída com sucesso!");
 										location.reload();	
 									}
 									else{
-										alert("Houve um erro na exclusão do Nome de Conta. Tente novamente!");	
+										alert("Houve um erro na exclusão da Categoria. Tente novamente!");	
 									}
 								});
 						}
 						else{
 							
-							alert("O Nome de Conta já está sendo usado. Ele não pode ser excluído.");
+							alert("Categoria já está sendo usada. Ela não pode ser excluída.");
 						}
 					});
 		}
-
-		$(function() {
-		    var availableTags = document.getElementById("accountTypes").value;
-		    availableTags = availableTags.split("/");
-
-		    $(".accountType").autocomplete({
-			      source: availableTags
-			});
-
-		    $( ".accountType" ).autocomplete( "option", "appendTo", ".eventInsForm" );
-		  });
-
-		$(document).ready(function(){
-		    $( document ).on( 'focus', ':input', function(){
-		        $( this ).attr( 'autocomplete', 'on' );
-		    });
-		});
 		
         </script>
         <div class="scroll">
         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
-								Novo Nome de Conta
+								Nova Categoria
 							</button>
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
-                    <input style="display:none" id="accountTypes" value="<?php echo $accountTypes;?>">
-                        <table class="table table-bordered table-striped table-min-td-size" style="width:600px" id="sortable-table">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width:300px" id="sortable-table">
                             <thead>
                                 <tr>
                                     <th> Nome </th>
-                                    <th> Descrição </th>
-                                    <th> Categoria </th>
                                     <th> Ação </th>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
                                 <?php                                
-                                if($accounts){
-                                foreach ($accounts as $a) {
+                                if($accountTypes){
+                                foreach ($accountTypes as $a) {
                                     ?>
                                     <tr>
-                                        <td><?= $a->account_name ?></td>
-                                        <td><?= $a->account_description ?></td>
-                                        <td><?= $a->account_type ?></td>
-                                        <td><button type="button" class="btn btn-danger" onclick="deleteAccountName('<?= $a->account_name?>')">Excluir</button></td>
+                                        <td><?= $a->name ?></td>
+                                        <td><button type="button" class="btn btn-danger" onclick="deleteAccountTypeName('<?= $a->account_type_id?>')">Excluir</button></td>
                                     </tr>
                                     <?php
                                 }}
@@ -190,7 +139,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="create_account_name">Criar Nome de Conta</h4>
+					<h4 class="modal-title" id="create_account_type_name">Criar Categoria</h4>
 					</div>
 					<div class="modal-body">
 						<div class="row">
@@ -202,33 +151,14 @@
 								<div>
 								</div>
 																
-								<div class="eventInsForm" name="form_subscribe" id="form_subscribe">
+								<div name="form_subscribe" id="form_subscribe">
 									<div class="row">
 										<div class="form-group">
-											<label for="account_name" style="width: 150px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Nome da Conta*: </label>
+											<label for="account_type_name" style="width: 170px; margin-bottom:0px; margin-top:7px; padding-right:0px" class="col-lg-1 control-label"> Nome da Categoria*: </label>
 											<div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
-												<input  style="width: 360px" type="text" class="form-control" placeholder="Nome da Conta"
-													name="account_name" value="<?php echo $account_name; ?>" id="account_name" />
+												<input  style="width: 360px" type="text" class="form-control" placeholder="Nome da Categoria"
+													name="account_type_name" value="<?php echo $account_type_name; ?>" id="account_type_name" />
 											</div>
-											</div>
-											</div>
-											<br />
-											<div class="row">
-											<div class="form-group">
-											<label style="width: 100px;margin-bottom:0px; margin-top:7px; padding-right:0px" for="account_type" class="col-lg-1 control-label"> Categoria*: </label>
-											<div  class="col-lg-2 control-label" style="width: 360px; padding-right:0px">
-												<input placeholder="Categoria" type="text" id="account_type" class="accountType form-control" style="z-index: 5000" autocomplete="on">
-											</div>
-										</div>
-									</div>
-									<br />
-
-									<div class="row">
-										<div class="form-group">
-											<label for="account_description" style="width: 100px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Descrição*: </label>
-											
-												<input  style="width: 300px" type="text" class="form-control" placeholder="Descrição"
-													name="account_description" value="<?php echo $account_description; ?>" id="account_description" />
 											</div>
 											</div>
 								</div>

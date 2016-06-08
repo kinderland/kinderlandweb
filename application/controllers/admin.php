@@ -93,17 +93,31 @@ class Admin extends CK_Controller {
             return;
         }
     }
-
+    
     public function manage_accounts() {
         $accounts = $this->finance_model->getAllAccountsInformations();
 
         $accountTypes = $this->finance_model->getAllAccountTypes();
+        
+        $typeAccounts = "";
+        
+        foreach($accountTypes as $a){
+        	$typeAccounts = $typeAccounts.$a->name."/";
+        }
 
         $data['accounts'] = $accounts;
         $data['account_name'] = "";
         $data['account_description'] = "";
-        $data['accountTypes'] = $accountTypes;
+        $data['accountTypes'] = $typeAccounts;
         $this->loadReportView("admin/finances/manage_accounts", $data);
+    }
+    
+    public function manage_account_types() {    
+    	$accountTypes = $this->finance_model->getAllAccountTypes();
+    
+    	$data['account_type_name'] = "";
+    	$data['accountTypes'] = $accountTypes;
+    	$this->loadReportView("admin/finances/manage_account_type", $data);
     }
 
     public function checkIfAccountNameExists() {
@@ -121,6 +135,22 @@ class Admin extends CK_Controller {
         echo true;
         return;
     }
+    
+    public function checkIfAccountTypeNameExists() {
+    	$account_type_name = $this->input->post("account_type_name", true);
+    	    
+    	$accounts = $this->finance_model->getAllAccountTypes();
+    
+    	foreach ($accounts as $account) {
+    		if (strcmp(mb_strtoupper($account->name, 'UTF-8'), mb_strtoupper($account_type_name, 'UTF-8')) == 0) {
+    			echo false;
+    			return;
+    		}
+    	}
+    
+    	echo true;
+    	return;
+    }
 
     public function checkIfAccountNameIsInUse() {
         $account_name = $this->input->post("account_name", true);
@@ -137,19 +167,55 @@ class Admin extends CK_Controller {
         echo true;
         return;
     }
+    
+    public function checkIfAccountTypeNameIsInUse() {
+    	$account_type_id = $this->input->post("account_type_id", true);
+    
+    	$accounts = $this->finance_model->getAllAccountsInformations();
+    
+    	foreach ($accounts as $a) {
+    		if ($a->account_type_id == $account_type_id) {
+    			echo false;
+    			return;
+    		}
+    	}
+    
+    	echo true;
+    	return;
+    }
 
     public function newAccountName() {
         $account_name = $this->input->post("account_name", true);
         $account_type = $this->input->post("account_type", true);
         $account_description = $this->input->post("account_description", true);
+        $this->Logger->info("TIPO DE CONTA: ".$account_type);
+        $accounts = $this->finance_model->getAllAccountTypes();
+        
+        foreach ($accounts as $account) {
+        	if (strcmp(mb_strtoupper($account->name, 'UTF-8'), mb_strtoupper($account_type, 'UTF-8')) == 0) {
+        		$account_type_id = $account->account_type_id;
+        	}
+        }        
 
-        if ($this->finance_model->insertNewAccount($account_name, $account_type, $account_description)) {
+        if ($this->finance_model->insertNewAccount($account_name, $account_type_id, $account_description)) {
             echo true;
             return;
         } else {
             echo false;
             return;
         }
+    }
+    
+    public function newAccountTypeName() {
+    	$account_type_name = $this->input->post("account_type_name", true);
+    
+    	if ($this->finance_model->insertNewAccountType($account_type_name)) {
+    		echo true;
+    		return;
+    	} else {
+    		echo false;
+    		return;
+    	}
     }
 
     public function deleteAccountName() {
@@ -162,6 +228,18 @@ class Admin extends CK_Controller {
             echo false;
             return;
         }
+    }
+    
+    public function deleteAccountTypeName() {
+    	$account_type_id = $this->input->post("account_type_id", true);
+    
+    	if ($this->finance_model->deleteAccountType($account_type_id)) {
+    		echo true;
+    		return;
+    	} else {
+    		echo false;
+    		return;
+    	}
     }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
