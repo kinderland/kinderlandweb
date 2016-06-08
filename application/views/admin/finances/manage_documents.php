@@ -80,42 +80,23 @@
             form.submit();
         }
 
-        function sendInfoToModal(postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
+        function sendInfoToModalEdit(postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
             $("#documentexpenseId").html(documentExpenseId);
-            if (postingType == "Boleto") {
-                $("#postingType").html(postingType);
-                $("#postingDateBoleto").html(postingDate);
-                $("#postingValueBoleto").html(postingValue);
-                $("#postingPortionsBoleto").html(postingPortions);
-            }
-            if (postingType == "Crédito") {
-                $("#postingType").html(postingType);
-                $("#postingDateCredito").html(postingDate);
-                $("#postingValueCredito").html(postingValue);
-                $("#postingPortionsCredito").html(postingPortions);
-            }
-            if (postingType == "Transferência") {
-                $("#postingType").html(postingType);
-                $("#postingDateTransferencia").html(postingDate);
-                $("#postingValueTransferencia").html(postingValue);
-                $("#postingBankNumberTransferencia").html(postingBankNumber);
-                $("#postingAgencyTransferencia").html(postingAgency);
-                $("#postingAccountTransferencia").html(postingAccount);
-            }
-            if (postingType == "Cheque") {
-                $("#postingType").html(postingType);
-                $("#postingDateCheque").html(postingDate);
-                $("#postingValueCheque").html(postingValue);
-                $("#postingNumberCheque").html(postingNumberCheque);
-            }
-            if (postingType == "Dinheiro") {
-                $("#postingType").html(postingType);
-                $("#postingDateDinheiro").html(postingDate);
-                $("#postingValueDinheiro").html(postingValue);
+                $("#postingTipo").html(postingType);
+                $("#postingData").html(postingDate);
+                $("#postingValor").html(postingValue);
+                $("#postingBanco").html(postingBankNumber);
+                $("#postingAgencencia").html(postingAgency);
+                $("#postingConta").html(postingAccount);
             }
 
-        }
 
+        
+
+		function sendInfoToModal(documentExpenseId){
+			$("#documentexpenseId").html(documentExpenseId);
+		}
+		
         function formaPagamento() {
 
             var documentexpenseId = document.getElementById("documentexpenseId").textContent;
@@ -196,15 +177,10 @@
             }
             if (postingType == "Transferência") {
                 var postingValue = document.getElementById("postingValueTransferencia").value;
-                alert(postingValue);
                 var postingDate = document.getElementById("postingDateTransferencia").value;
-                alert(postingDate);
                 var bankNumber = document.getElementById("postingBankNumberTransferencia").value;
-                alert(bankNumber);
                 var bankAgency = document.getElementById("postingAgencyTransferencia").value;
-                alert(bankAgency);
                 var accountNumber = document.getElementById("postingAccountTransferencia").value;
-                alert(accountNumber);
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, bankNumber: bankNumber, bankAgency: bankAgency, accountNumber: accountNumber},
                         function (data) {
@@ -248,7 +224,44 @@
         }
 
 
+		function limpaDiv(){
+			
+			document.getElementById("postingType").selectedIndex = 0;
 
+			document.getElementById("postingValueCredito").value = null;
+			document.getElementById("postingDateCredito").value = null;
+			document.getElementById("postingPortionsCredito").value = 0;
+			
+			document.getElementById("postingValueCheque").value = null;
+			document.getElementById("postingDateCheque").value = null;
+			document.getElementById("postingNumberCheque").value = null;
+
+			document.getElementById("postingValueDinheiro").value = null;
+			document.getElementById("postingDateDinheiro").value = null;
+
+			document.getElementById("postingValueBoleto").value = null;
+			document.getElementById("postingDateBoleto").value = null;
+			document.getElementById("postingPortionsBoleto").value = 0;
+			
+            for (var i = 1; i <= 10; i++) {
+            	document.getElementById("postingValueBoleto.concat(i)").value = null;
+    			document.getElementById("postingDateBoleto.concat(i)").value = null;
+                    document.getElementById("Boleto".concat(i)).style.display = "none";
+            }
+			document.getElementById("postingPortionsBoleto").value = 0;
+
+
+
+			
+                document.getElementById("Cheque").style.display = "none";
+                document.getElementById("Crédito").style.display = "none";
+                document.getElementById("Dinheiro").style.display = "none";
+                document.getElementById("Transferência").style.display = "none";
+                document.getElementById("Boleto").style.display = "none";
+
+            
+
+		}
 
         function paymentType() {
         	var rads = document.getElementsByName("formadepagamento");
@@ -492,9 +505,9 @@ if (isset($documents)) {
                                     </a>
                                 </td>
         <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
-                                    <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
+                                    <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                 <?php } else { ?>
-                                    <td><button class="btn btn-success" onclick="sendInfoToModal('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button> </td>
+                                    <td><button class="btn btn-success" onclick="sendInfoToModalEdit('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#meuModalEditar">Tipo</button> </td>
                                 <?php } ?>
                             </tr>
 
@@ -514,8 +527,192 @@ if (isset($documents)) {
 
             </div>
         </div>
-
+		<div id="thisdiv">
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal_title">Forma de Pagamento</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12 middle-content">
+                            
+
+                                <div class="row">
+                                    <form method="GET">
+                                        <input type="radio" name="formadepagamento" value="apagar" onclick="paymentType()" checked> A pagar
+                                        <input type="radio" name="formadepagamento" value="caixinha" onclick="paymentType()"> Caixinha
+                                        <input type="radio" name="formadepagamento"  value="debitoa" onclick="paymentType()"> Débito automático
+                                    </form>
+                                    <div class="form-group">
+                                        <div class="col-lg-12">
+                                            <label for="postingType" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Tipo de Pagamento: </label>
+                                            <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">    
+                                                <select style="width: 190px" class="form-control" name="postingType" id="postingType" onchange="paymentType()" >
+                                                    <option value="Selecione" selected> - Selecione - </option>
+                                                    <option value="Boleto">Boleto</option> 
+                                                    <option value="Cheque">Cheque</option>
+                                                    <option value="Crédito" >Crédito</option>
+                                                    <option value="Dinheiro" >Dinheiro</option>  
+                                                    <option value="Transferência">Transferência</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>          
+
+
+                                <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />	
+                                <input type="hidden" id="postingType" name="postingType" value="" >		
+                                <br/>
+
+
+
+                                <div id = "Boleto" style="display: none">                                                            		
+                                    <tr>
+                                    <label for="postingPortionsBoleto" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Número de parcelas: </label>
+                                    <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
+                                        <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" onchange="postingPortions()" >
+                                            <option> - Selecione - </option>
+<?php for ($i = 1; $i <= 10; $i++) { ?>
+                                                <option value="<?= $i ?>"> <?php echo $i ?> </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    </tr> <br/><br/><br/>
+<?php for ($i = 1; $i <= 10; $i++) { ?>
+                                        <tr>
+                                        <div class="col-lg-12 control_label" id="Boleto<?php echo $i ?>" style="display: none; padding-left:0px" >
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <label for="postingValueBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
+                                                    <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
+                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" name="postingValueBoleto<?php echo $i ?>" ></input> 
+                                                    </div>
+                                                    <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
+                                                    <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
+                                                        <input style="width: 200x" class="form-control" type="text" id="postingDateBoleto<?php echo $i ?>" name="postingDateBoleto<?php echo $i ?>" ></input> 
+                                                        <br/><br/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </tr>
+
+<?php } ?>
+                                    <br>
+                                    <tr>
+                                    
+                                </div>
+
+
+
+                                <div id = "Cheque" style="display: none">
+                                    <tr> 
+                                        <td> Número do Cheque: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input> <br><br>
+                                    </tr>
+                                    <tr>
+                                        <td> Data: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br><br>
+
+                                    </tr>
+
+                                    <tr> 
+                                        <td> Valor: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
+                                    
+
+                                    </tr>
+
+                                </div>
+
+                                <div id = "Crédito" style="display: none">
+
+                                    <tr> 
+                                        <td> Valor: </td><br/>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> <br><br>
+                                    </tr><br/>
+                                    <tr>
+                                        <td> Número de parcelas: </td><br/>
+                                    <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
+                                        <select style="width: 190px" class="form-control" name="postingPortionsCredito" id="postingPortionsCredito"  >
+                                            <option> - Selecione - </option>
+<?php for ($i = 1; $i <= 10; $i++) { ?>
+                                                <option value="<?= $i ?>"> <?php echo $i ?> </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    </tr> <br/><br/><br/>
+                                    <tr>
+                                        <td> Data: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br><br>
+                                    
+                                    </tr>
+
+                                </div>                                                            
+                                <div id = "Dinheiro" style="display: none"> 
+                                    <td> Valor: </td><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> <br><br>
+                                    </tr>
+                                    <tr>
+                                        <td> Data: </td><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br><br>
+                                    
+                                    </tr>
+
+                                </div>
+
+                                <div id = "Transferência" style="display: none"> 
+                                    <td> Valor: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> <br><br>
+                                    </tr>
+                                    <tr>
+                                        <td> Data: </td><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingDateTransferencia" name="postingDateTransferencia" ></input> <br><br>
+
+                                    </tr>
+                                    <tr> 
+                                        <td> Banco: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingBankNumberTransferencia" name="postingBankNumberTransferencia" ></input> <br><br>
+                                    </tr>
+                                    <tr> 
+                                        <td> Agência: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingAgencyTransferencia" name="postingAgencyTransferencia" ></input> <br><br>
+                                    </tr>
+                                    <tr> 
+                                        <td> Conta: </td> <br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingAccountTransferencia" name="postingAccountTransferencia" ></input> <br><br>
+                                    
+                                    </tr>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                        <div class="col-lg-7 control_label">
+                                            <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button>  
+                                            <button class="btn btn-warning" data-dismiss="modal" onClick="limpaDiv()">Fechar</button> 
+                                        </div>  
+                                    </div>
+
+                                    </tr>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+        
+        
+        
+        
+       <div class="modal fade" id="meuModalEditar" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -532,6 +729,7 @@ if (isset($documents)) {
                                         <input type="radio" name="formadepagamento" value="caixinha" onclick="paymentType()"> Caixinha
                                         <input type="radio" name="formadepagamento"  value="debitoa" onclick="paymentType()"> Débito automático
                                     </form>
+                                    
                                     <div class="form-group">
                                         <div class="col-lg-12">
                                             <label for="postingType" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Tipo de Pagamento: </label>
@@ -548,11 +746,10 @@ if (isset($documents)) {
                                             </div>
                                         </div>
                                     </div>
-                                </div>          
+                                    </div>
 
 
-                                <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
-                                <input type="hidden" id="dateNow" name="dateNow" value="" />	
+                                <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />	
                                 <input type="hidden" id="postingType" name="postingType" value="" >		
                                 <br/>
 
@@ -696,13 +893,11 @@ if (isset($documents)) {
                 </div>
             </div>
         </div>
-    </div>
+        
+       
 </div>
-</div>
-</div>
+
 </body>
-</div>
-</div>
-</div>
-</body>
+
+
 </html>
