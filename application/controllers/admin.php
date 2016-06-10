@@ -1081,6 +1081,25 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/finances/editDocument', $data);
         }
     }
+    
+    public function updatePostingExpense(){
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$documentexpenseId = $_POST['documentexpenseId'];
+    	$postingDate = $_POST['postingDate'];
+    	$postingValue = $_POST['postingValue'];
+    	$postingType = $_POST['postingType'];
+    	if ($postingType == "Dinheiro") {
+    		$postingPortion = 1;
+    		$paymentStatus = "caixinha";
+    		if ($this->documentexpense_model->updatePostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus)) {
+    			echo "true";
+    			return;
+    		} else {
+    			echo "false";
+    			return;
+    		}
+    	}    	
+    }
 
     public function postingExpense() {
 

@@ -141,6 +141,18 @@ class documentexpense_model extends CK_Model {
         $Id = $this->executeReturningId($this->db, $sql, array($number, $date, $type, $description, $value, $name));
         return $Id;
     }
+    
+    public function updatePostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus){
+    	$sql = "UPDATE posting_expense SET "
+    			. "posting_date=?, "
+    			. "posting_value=?, "
+    			. "posting_type=?, "
+    			. "payment_status=? "
+    			. "WHERE document_expense_id=? and posting_portions=?";
+    	$resultSet = $this->execute($this->db, $sql, array($postingDate, $postingValue, $postingType, $paymentStatus, intval($documentexpenseId), $postingPortion));
+    	return $resultSet;
+    	
+    }
 
     public function updateDocument($id, $date, $number, $description, $value, $name) {
         $sql = "UPDATE document_expense SET "

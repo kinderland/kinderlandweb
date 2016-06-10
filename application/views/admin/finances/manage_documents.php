@@ -162,7 +162,31 @@
 		function sendInfoToModal(documentExpenseId){
 			$("#documentexpenseId").html(documentExpenseId);
 		}
-		
+
+		function editarFormaPagamento(){
+			var documentexpenseId = document.getElementById("documentexpenseId").textContent;
+            var postingType = "Dinheiro";
+            alert(documentexpenseId);
+            alert(postingType);
+            if (postingType == "Dinheiro") {
+
+                var postingValue = document.getElementById("postingValueDinheiroEdit").value;
+                var postingDate = document.getElementById("postingDateDinheiroEdit").value;
+                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Edição cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível editar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+            }
+
+		}
         function formaPagamento() {
 
             var documentexpenseId = document.getElementById("documentexpenseId").textContent;
@@ -947,7 +971,7 @@ if (isset($documents)) {
                                 </div>
                                 <div class="modal-footer">
                                         <div class="col-lg-7 control_label">
-                                            <button class="btn btn-primary" onClick="formaPagamento()">Salvar</button>  
+                                            <button class="btn btn-primary" onClick="editarFormaPagamento()">Salvar</button>  
                                             <button class="btn btn-warning" data-dismiss="modal" onClick="limpaDiv()">Fechar</button> 
                                         </div>  
                                     </div>
