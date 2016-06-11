@@ -273,4 +273,13 @@ class finance_model extends CK_Model{
 	
 		return $this->execute($this->db, $deleteSql, array($account_type_id));
 	}
+        
+        public function hasPostingUpload($id,$portions){
+            $sql = "SELECT posting_expense_upload_id FROM posting_expense WHERE document_expense_id=? AND posting_portions=?";
+            $result=$this->executeRow($this->db,$sql,array($id,$portions));
+            if (!(empty($result->posting_expense_upload_id)) && isset($result->posting_expense_upload_id)){
+                return $result->posting_expense_upload_id;
+            }
+            return 0;
+        }
 }

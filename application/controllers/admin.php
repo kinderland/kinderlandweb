@@ -93,16 +93,16 @@ class Admin extends CK_Controller {
             return;
         }
     }
-    
+
     public function manage_accounts() {
         $accounts = $this->finance_model->getAllAccountsInformations();
 
         $accountTypes = $this->finance_model->getAllAccountTypes();
-        
+
         $typeAccounts = "";
-        
-        foreach($accountTypes as $a){
-        	$typeAccounts = $typeAccounts.$a->name."/";
+
+        foreach ($accountTypes as $a) {
+            $typeAccounts = $typeAccounts . $a->name . "/";
         }
 
         $data['accounts'] = $accounts;
@@ -111,13 +111,13 @@ class Admin extends CK_Controller {
         $data['accountTypes'] = $typeAccounts;
         $this->loadReportView("admin/finances/manage_accounts", $data);
     }
-    
-    public function manage_account_types() {    
-    	$accountTypes = $this->finance_model->getAllAccountTypes();
-    
-    	$data['account_type_name'] = "";
-    	$data['accountTypes'] = $accountTypes;
-    	$this->loadReportView("admin/finances/manage_account_type", $data);
+
+    public function manage_account_types() {
+        $accountTypes = $this->finance_model->getAllAccountTypes();
+
+        $data['account_type_name'] = "";
+        $data['accountTypes'] = $accountTypes;
+        $this->loadReportView("admin/finances/manage_account_type", $data);
     }
 
     public function checkIfAccountNameExists() {
@@ -135,21 +135,21 @@ class Admin extends CK_Controller {
         echo true;
         return;
     }
-    
+
     public function checkIfAccountTypeNameExists() {
-    	$account_type_name = $this->input->post("account_type_name", true);
-    	    
-    	$accounts = $this->finance_model->getAllAccountTypes();
-    
-    	foreach ($accounts as $account) {
-    		if (strcmp(mb_strtoupper($account->name, 'UTF-8'), mb_strtoupper($account_type_name, 'UTF-8')) == 0) {
-    			echo false;
-    			return;
-    		}
-    	}
-    
-    	echo true;
-    	return;
+        $account_type_name = $this->input->post("account_type_name", true);
+
+        $accounts = $this->finance_model->getAllAccountTypes();
+
+        foreach ($accounts as $account) {
+            if (strcmp(mb_strtoupper($account->name, 'UTF-8'), mb_strtoupper($account_type_name, 'UTF-8')) == 0) {
+                echo false;
+                return;
+            }
+        }
+
+        echo true;
+        return;
     }
 
     public function checkIfAccountNameIsInUse() {
@@ -167,35 +167,35 @@ class Admin extends CK_Controller {
         echo true;
         return;
     }
-    
+
     public function checkIfAccountTypeNameIsInUse() {
-    	$account_type_id = $this->input->post("account_type_id", true);
-    
-    	$accounts = $this->finance_model->getAllAccountsInformations();
-    
-    	foreach ($accounts as $a) {
-    		if ($a->account_type_id == $account_type_id) {
-    			echo false;
-    			return;
-    		}
-    	}
-    
-    	echo true;
-    	return;
+        $account_type_id = $this->input->post("account_type_id", true);
+
+        $accounts = $this->finance_model->getAllAccountsInformations();
+
+        foreach ($accounts as $a) {
+            if ($a->account_type_id == $account_type_id) {
+                echo false;
+                return;
+            }
+        }
+
+        echo true;
+        return;
     }
 
     public function newAccountName() {
         $account_name = $this->input->post("account_name", true);
         $account_type = $this->input->post("account_type", true);
         $account_description = $this->input->post("account_description", true);
-        $this->Logger->info("TIPO DE CONTA: ".$account_type);
+        $this->Logger->info("TIPO DE CONTA: " . $account_type);
         $accounts = $this->finance_model->getAllAccountTypes();
-        
+
         foreach ($accounts as $account) {
-        	if (strcmp(mb_strtoupper($account->name, 'UTF-8'), mb_strtoupper($account_type, 'UTF-8')) == 0) {
-        		$account_type_id = $account->account_type_id;
-        	}
-        }        
+            if (strcmp(mb_strtoupper($account->name, 'UTF-8'), mb_strtoupper($account_type, 'UTF-8')) == 0) {
+                $account_type_id = $account->account_type_id;
+            }
+        }
 
         if ($this->finance_model->insertNewAccount($account_name, $account_type_id, $account_description)) {
             echo true;
@@ -205,17 +205,17 @@ class Admin extends CK_Controller {
             return;
         }
     }
-    
+
     public function newAccountTypeName() {
-    	$account_type_name = $this->input->post("account_type_name", true);
-    
-    	if ($this->finance_model->insertNewAccountType($account_type_name)) {
-    		echo true;
-    		return;
-    	} else {
-    		echo false;
-    		return;
-    	}
+        $account_type_name = $this->input->post("account_type_name", true);
+
+        if ($this->finance_model->insertNewAccountType($account_type_name)) {
+            echo true;
+            return;
+        } else {
+            echo false;
+            return;
+        }
     }
 
     public function deleteAccountName() {
@@ -229,17 +229,17 @@ class Admin extends CK_Controller {
             return;
         }
     }
-    
+
     public function deleteAccountTypeName() {
-    	$account_type_id = $this->input->post("account_type_id", true);
-    
-    	if ($this->finance_model->deleteAccountType($account_type_id)) {
-    		echo true;
-    		return;
-    	} else {
-    		echo false;
-    		return;
-    	}
+        $account_type_id = $this->input->post("account_type_id", true);
+
+        if ($this->finance_model->deleteAccountType($account_type_id)) {
+            echo true;
+            return;
+        } else {
+            echo false;
+            return;
+        }
     }
 
     public function campaignCreate($errors = array(), $date_start = NULL, $date_finish = NULL, $payments = array()) {
@@ -1081,24 +1081,24 @@ class Admin extends CK_Controller {
             $this->loadReportView('admin/finances/editDocument', $data);
         }
     }
-    
-    public function updatePostingExpense(){
-    	$this->Logger->info("Running: " . __METHOD__);
-    	$documentexpenseId = $_POST['documentexpenseId'];
-    	$postingDate = $_POST['postingDate'];
-    	$postingValue = $_POST['postingValue'];
-    	$postingType = $_POST['postingType'];
-    	if ($postingType == "Dinheiro") {
-    		$postingPortion = 1;
-    		$paymentStatus = "caixinha";
-    		if ($this->documentexpense_model->updatePostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus)) {
-    			echo "true";
-    			return;
-    		} else {
-    			echo "false";
-    			return;
-    		}
-    	}    	
+
+    public function updatePostingExpense() {
+        $this->Logger->info("Running: " . __METHOD__);
+        $documentexpenseId = $_POST['documentexpenseId'];
+        $postingDate = $_POST['postingDate'];
+        $postingValue = $_POST['postingValue'];
+        $postingType = $_POST['postingType'];
+        if ($postingType == "Dinheiro") {
+            $postingPortion = 1;
+            $paymentStatus = "caixinha";
+            if ($this->documentexpense_model->updatePostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus)) {
+                echo "true";
+                return;
+            } else {
+                echo "false";
+                return;
+            }
+        }
     }
 
     public function postingExpense() {
@@ -1119,7 +1119,7 @@ class Admin extends CK_Controller {
                 return;
             }
         } else if ($postingType == "Crédito") {
-        	$paymentStatus = "a pagar";
+            $paymentStatus = "a pagar";
             $portions = $_POST['portions'];
             $meses = 1;
             $postingValue = $postingValue / $portions;
@@ -1128,7 +1128,7 @@ class Admin extends CK_Controller {
             $mês = $postingDatePortion[1];
             $ano = $postingDatePortion[0];
             for ($i = 0; $i < $portions; $i++) {
-                $postingPortion = $i+1;
+                $postingPortion = $i + 1;
                 $postingDate = date("Y-m-d", mktime(0, 0, 0, $mês + $i, $dia, $ano));
 
                 $resultad = $this->documentexpense_model->insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus);
@@ -2988,6 +2988,21 @@ class Admin extends CK_Controller {
         } else {
             $this->loadView("admin/users/documentNotFound");
         }
+    }
+
+    public function viewPostingUpload($document_id = NULL, $portions = NULL, $errors = array()) {
+        if (!isset($document_id) || empty($document_id)) {
+            $document_id = $this->input->get('document_id', TRUE);
+        }
+        if (!isset($portions) || empty($portions)) {
+            $document_id = $this->input->get('document_id', TRUE);
+        }
+        $upload=$this->finance_model->hasPostingUpload($document_id,$portions);
+        $data['document_id']=$document_id;
+        $data['portions']=$portions;
+        $data['upload_id']=$upload;
+        $data['errors']=$errors;
+        $this->loadReportView("admin/finances/viewPostingUpload",$data);
     }
 
     public function viewDocumentUpload($document_id = NULL, $errors = array()) {

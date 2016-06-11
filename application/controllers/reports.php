@@ -185,7 +185,7 @@ class Reports extends CK_Controller {
 	    			}
 	    			
 	    		}
-	    		
+	    		$obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
 	    		$info[] = $obj;
 	    	}
     	}
@@ -203,6 +203,7 @@ class Reports extends CK_Controller {
     			}else{
     				$portions[$pe->document_expense_id] = 1;
     			}
+                        $obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
     			$info[] = $obj;
     		}
     	}

@@ -47,11 +47,12 @@
         <h4>Se algum documento já foi enviado, um novo envio de documento substituirá o anterior.
             </br>
             Apenas o último documento enviado será considerado.</h4>
-        <form enctype="multipart/form-data" action="<?= $this->config->item('url_link'); ?>admin/updateDocumentUpload?upload_id=<?php echo $upload_id->document_expense_upload_id; ?>" method="POST">
+        <form enctype="multipart/form-data" action="<?= $this->config->item('url_link'); ?>admin/updatePostingUpload?upload_id=<?php echo $upload_id; ?>" method="POST">
             <br>
             <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
             <input type="hidden" name="has_document" value="<?php
-            if ($upload_id->document_expense_upload_id > 0) {
+            if ($upload_id> 0)
+             {
                 echo "1";
             } else {
 
@@ -70,7 +71,7 @@
         <button style="margin-top:-15px" class="btn btn-warning" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Voltar</button>
         <br>
         <br>
-        <?php if ($upload_id->document_expense_upload_id > 0) { ?>
+        <?php if ($upload_id > 0) { ?>
             <a target="_blank" href="<?= $this->config->item('url_link'); ?>admin/verifyDocumentExpense?upload_id=<?php echo $upload_id->document_expense_upload_id; ?>">
                 <button class="btn btn-primary">
                     Visualizar último documento enviado

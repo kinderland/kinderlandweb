@@ -405,3 +405,5 @@
 "checkIfAccountTypeNameExists";"admin";2
 "newAccountTypeName";"admin";2
 "updatePostingExpense";"admin";2
+"viewPostingUpload";"admin";2
+"viewPostingUpload";"admin";4

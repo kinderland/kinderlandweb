@@ -311,7 +311,6 @@
              <button class="button btn btn-primary col-lg-2" onclick="sendTableToCSV()" value="">Exportar</button>
            <br /> <br />
            <?php }?>
-           
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
                         <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "1120px"; else echo"800px";?>" id="sortable-table">
@@ -382,13 +381,13 @@
                                         <td id="value_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_value ?>"><?= $i->posting_value ?></td>
                                         <td>
                                         <?php if($i->posting_type == "Boleto"){?>
-                                        	<a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $i->document_expense_id;?>">
+                                        	<a href="<?php echo $this->config->item("url_link"); ?>admin/viewPostingUpload?document_id=<?php echo $i->document_expense_id;?>&portions=<?php echo $i->posting_portions; ?>">
                                         <button <?php
-                                     //   if ($i->document_expense_upload_id) {
-                                     //       echo "class='btn btn-success'>Atualizar";
-                                     //   } else {
+                                        if ($i->posting_expense_upload_id) {
+                                            echo "class='btn btn-success'>Atualizar";
+                                       } else {
                                             echo "class='btn btn-danger'>Upload";
-                                      //  }
+                                        }
                                         ?> 
                                         </button>
                                         </a>

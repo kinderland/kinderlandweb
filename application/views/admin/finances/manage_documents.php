@@ -544,7 +544,7 @@ for ($m = 1; $m <= 12; $m++) {
                     <a href="<?= $this->config->item("url_link") ?>admin/createDocument" >
                         <input style="display:none" id="accountsNames" value="<?php echo $accountNames; ?>">
 
-                        <button id="create" class="btn btn-primary"  value="Criar novo documento" >Novo lançamento</button>
+                        <button id="create" class="btn btn-primary"  value="Criar novo documento" >Novo documento</button>
                     </a>
 
 
