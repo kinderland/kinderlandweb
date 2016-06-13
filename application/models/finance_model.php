@@ -112,21 +112,58 @@ class finance_model extends CK_Model{
 	public function getPostingsExpensesByBankSlipDate($year,$month = null){
 		$sql = "SELECT *
 				FROM v_all_posting_expenses_info 
-				WHERE DATE_PART('YEAR',bank_slip_date) = ?
-				OR DATE_PART('YEAR',posting_date) = ?";
+				WHERE DATE_PART('YEAR',bank_slip_date) = ?";
 		 
 		if($month){
 			$sql = $sql." AND DATE_PART('MONTH',bank_slip_date) = ?
-						  OR DATE_PART('MONTH',posting_date) = ?
-						  ORDER BY bank_slip_date,posting_date ASC"; 
+						  ORDER BY bank_slip_date ASC"; 
 	
-			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($year),intval($month),intval($month)));
+			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($month)));
 		}else {
-			$sql = $sql." ORDER BY bank_slip_date,posting_date ASC";
+			$sql = $sql." ORDER BY bank_slip_date ASC";
 			
-			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($year)));
+			$result = $this->executeRows($this->db, $sql, array(intval($year)));
 		}
 		 
+		if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
+	public function getPostingsExpensesNotPayed($year,$month){
+		$sql = "SELECT *
+				FROM v_all_posting_expenses_info
+				WHERE payment_status = 'a pagar'
+				AND (DATE_PART('YEAR',posting_date) = ? OR DATE_PART('YEAR',bank_slip_date) = ?)
+				AND (DATE_PART('MONTH',posting_date) < ? OR DATE_PART('MONTH',bank_slip_date) < ?)
+				ORDER BY bank_slip_date,posting_date ASC";
+	
+		$result = $this->executeRows($this->db, $sql, array(intval($year),intval($year),intval($month),intval($month)));
+		
+		if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
+	public function getPostingsExpensesByPostingDate($year,$month = null){
+		$sql = "SELECT *
+				FROM v_all_posting_expenses_info
+				WHERE posting_type != 'Boleto'
+				AND DATE_PART('YEAR',posting_date) = ?";
+			
+		if($month){
+			$sql = $sql." AND DATE_PART('MONTH',posting_date) = ?
+						  ORDER BY posting_date ASC";
+	
+			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($month)));
+		}else {
+			$sql = $sql." ORDER BY posting_date ASC";
+				
+			$result = $this->executeRows($this->db, $sql, array(intval($year)));
+		}
+			
 		if($result)
 			return $result;
 		else
@@ -160,7 +197,8 @@ class finance_model extends CK_Model{
 				FROM v_all_posting_expenses_info
 				WHERE posting_date is null
 				AND posting_value is not null
-				AND posting_portions is not null";
+				AND posting_portions is not null
+				AND posting_type != 'Boleto'";
 				
 		$result = $this->executeRows($this->db, $sql);
 			

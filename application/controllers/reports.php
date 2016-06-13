@@ -148,7 +148,8 @@ class Reports extends CK_Controller {
     	$data["years"] = $years;
     	$data["option"] = $option;
     	
-    	$postingExpenses = $this -> finance_model -> getPostingsExpensesByBankSlipDate($year,$month);
+    	$postingExpensesBankSlip = $this -> finance_model -> getPostingsExpensesByBankSlipDate($year,$month);
+    	$postingExpensesWithPostingDate = $this -> finance_model -> getPostingsExpensesByPostingDate($year,$month);
     	$postingExpensesWithoutDate = $this -> finance_model -> getPostingsExpensesWithoutDate();
     	
     	$info = array();
@@ -156,8 +157,70 @@ class Reports extends CK_Controller {
     	$qtdpayed = 0;
     	$peopleWithOperation = $this -> finance_model -> getPeopleOperationByPostingExpense();
     	
-    	if($postingExpenses){
-	    	foreach($postingExpenses as $pe){
+    	if($month != 0){
+    		$postingExpensesNotPayed = $this -> finance_model -> getPostingsExpensesNotPayed($year,$month);
+    		if($postingExpensesNotPayed){
+	    		foreach($postingExpensesNotPayed as $pe){
+	    			$obj = new StdClass();
+	    			$obj = $pe;
+	    			
+	    			if(array_key_exists($pe->document_expense_id,$portions)){
+	    				$portions[$pe->document_expense_id]++;
+	    			}else{
+	    				$portions[$pe->document_expense_id] = 1;
+	    			}
+	    			
+	    			if($pe->posting_date){
+	    				$r = explode("-", $pe->posting_date);
+	    				$obj->posting_date = $r[1]."/".$r[2]."/".$r[0];
+	    			}else
+	    				$obj->posting_date = null;
+	    			
+	    			$obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
+	    			
+	    			$info[] = $obj;
+	    		}
+    		}
+    	}
+    	
+    	if($postingExpensesBankSlip){
+    		foreach($postingExpensesBankSlip as $pe){
+    			$obj = new StdClass();
+    			$obj = $pe;
+    			
+    			if($pe->payment_status == 'pago' || $pe->payment_status == 'caixinha' || $pe->payment_status == 'deb auto'){
+    				$qtdpayed++;
+    			}
+    	
+    			if(array_key_exists($pe->document_expense_id,$portions)){
+    				$portions[$pe->document_expense_id]++;
+    			}else{
+    				$portions[$pe->document_expense_id] = 1;
+    			}
+    			
+    			if($pe->posting_date){
+    				$r = explode("-", $pe->posting_date);
+    				$obj->posting_date = $r[1]."/".$r[2]."/".$r[0];
+    			}else
+    				$obj->posting_date = null;
+    			
+    			if($pe->payment_status == 'caixinha'){
+    				foreach($peopleWithOperation as $p){
+    					if($p->document_expense_id == $pe->document_expense_id && $p->posting_portions == $pe->posting_portions){
+    						$person = $this -> person_model -> getPersonById($p->person_id);
+    						$obj->person_operation = $person-> getFullname();
+    					}
+    				}
+    			
+    			}
+    			
+    			$obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
+    			$info[] = $obj;
+    		}
+    	}
+    	
+    	if($postingExpensesWithPostingDate){
+	    	foreach($postingExpensesWithPostingDate as $pe){
 	    		$obj = new StdClass();
 	    		$obj = $pe;
 	    		if($pe->payment_status == 'pago' || $pe->payment_status == 'caixinha' || $pe->payment_status == 'deb auto'){
@@ -194,16 +257,13 @@ class Reports extends CK_Controller {
     		foreach($postingExpensesWithoutDate as $pe){
     			$obj = new StdClass();
     			$obj = $pe;
-    			if($pe->payment_status == 'pago' || $pe->payment_status == 'caixinha' || $pe->payment_status == 'deb auto'){
-    				$qtdpayed++;
-    			}
     			 
     			if(array_key_exists($pe->document_expense_id,$portions)){
     				$portions[$pe->document_expense_id]++;
     			}else{
     				$portions[$pe->document_expense_id] = 1;
     			}
-                        $obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
+                $obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
     			$info[] = $obj;
     		}
     	}

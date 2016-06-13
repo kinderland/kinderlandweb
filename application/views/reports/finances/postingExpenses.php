@@ -313,7 +313,7 @@
            <?php }?>
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
-                        <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "1120px"; else echo"800px";?>" id="sortable-table">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "1150px"; else echo"800px";?>" id="sortable-table">
                             <thead>
                                 <tr>
                                     <th style="width:100px; text-align: center" > Data Venc. </th>
@@ -339,7 +339,7 @@
                                 	<th></th>
                                 	<th style="width:200px; text-align: center">Nome</th>
                         			<th style="width:100px; text-align: center">Ação</th>
-                        			<th style="width:150px; text-align: center">Data</th>
+                        			<th style="width:160px; text-align: center">Data</th>
                         			<th style="width:100px; text-align: center">Pago</th>
                         			<?php }?>
                                 </tr>
