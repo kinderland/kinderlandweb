@@ -407,3 +407,7 @@
 "updatePostingExpense";"admin";2
 "viewPostingUpload";"admin";2
 "viewPostingUpload";"admin";4
+"updatePostingUpload";"admin";2
+"updatePostingUpload";"admin";4
+"verifyPostingExpense";"admin";2
+"verifyPostingExpense";"admin";4

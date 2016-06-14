@@ -3002,20 +3002,34 @@ class Admin extends CK_Controller {
             $this->loadView("admin/users/documentNotFound");
         }
     }
+	
+	   public function verifyPostingExpense() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $upload_id = $this->input->get('upload_id', TRUE);
+        $document = $this->documentexpense_model->getPostingUploadById($upload_id);
+        if ($document) {
+            if (strtolower($document["extension"]) == "pdf")
+                header("Content-type: application/pdf");
+            else
+                header("Content-type: image/jpeg");
+            echo pg_unescape_bytea($document["data"]);
+        } else {
+            $this->loadView("admin/users/documentNotFound");
+        }
+    }
+    
 
-    public function viewPostingUpload($document_id = NULL, $portions = NULL, $errors = array()) {
+    public function viewPostingUpload($document_id = NULL, $errors = array()) {
         if (!isset($document_id) || empty($document_id)) {
             $document_id = $this->input->get('document_id', TRUE);
         }
-        if (!isset($portions) || empty($portions)) {
-            $document_id = $this->input->get('document_id', TRUE);
-        }
-        $upload=$this->finance_model->hasPostingUpload($document_id,$portions);
-        $data['document_id']=$document_id;
-        $data['portions']=$portions;
-        $data['upload_id']=$upload;
-        $data['errors']=$errors;
-        $this->loadReportView("admin/finances/viewPostingUpload",$data);
+        $portions = 1;
+        $upload = $this->finance_model->hasPostingUpload($document_id, $portions);
+        $data['document_id'] = $document_id;
+        $data['portions'] = $portions;
+        $data['upload_id'] = $upload;
+        $data['errors'] = $errors;
+        $this->loadReportView("admin/finances/viewPostingUpload", $data);
     }
 
     public function viewDocumentUpload($document_id = NULL, $errors = array()) {
@@ -3073,6 +3087,52 @@ class Admin extends CK_Controller {
             $this->generic_model->rollbackTransaction();
             $data['error'] = true;
             $this->loadReportView('admin/finances/manage_documents', $data);
+        }
+    }
+	
+	   public function updatePostingUpload() {
+        $id = $this->input->get('upload_id', TRUE);
+        $upload = $this->input->post('has_upload', TRUE);
+        $document_id = $this->input->post('document_id', TRUE);
+        $portions = $this->input->post('portions', TRUE);
+        $fileName = $_FILES['uploadedfile']['name'];
+        if (isset($_FILES['uploadedfile']['tmp_name']) && !empty($_FILES['uploadedfile']['tmp_name'])) {
+            $file = file_get_contents($_FILES['uploadedfile']['tmp_name']);
+        }
+        $errors = array();
+        if (empty($file) || !isset($file))
+            $errors[] = 'Não foi passado nenhum arquivo para upload\n';
+        if (count($errors) > 0)
+            return $this->viewDocumentUpload($document_id, $portions, $errors);
+        try {
+            $this->generic_model->startTransaction();
+            if ($upload) {
+                $uploadId = $this->documentexpense_model->updateUploadPosting($id, $fileName, $file);
+            } else {
+                $uploadId = $this->documentexpense_model->uploadPosting($fileName, $file);
+                $new_id = $this->documentexpense_model->getNewUploadPosting();
+                $result = $this->documentexpense_model->attatchPostingUploadId($document_id, $portions, $new_id);
+            }
+            if ($_FILES['uploadedfile'] ['error'] > 0 || !$uploadId) {
+                echo "<script>alert('Erro ao enviar documento, verifique se ele se adequa as regras de envio e tente novamente. Lembramos que somente aceitamos arquivos até 2MB.');
+            window.location.replace('" . $this->config->item('url_link') . "reports/postingExpenses');</script>";
+            }
+            $this->generic_model->commitTransaction();
+            $this->Logger->info("Document successfully updated");
+            $url = $this->config->item('url_link') . "admin/manageDocuments";
+            if ($uploadId) {
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+           		window.alert('Documento modificado com sucesso.')
+            	window.location.href='" . $url . "'</SCRIPT>";
+            } else
+                echo "<SCRIPT LANGUAGE='JavaScript'>
+          			window.alert('Ocorreu um erro ao modificar o documento. Tente novamente mais tarde')
+           			 window.location.href='" . $url . "'</SCRIPT>";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to update posting upload" . $id);
+            $this->generic_model->rollbackTransaction();
+            $data['error'] = true;
+            $this->loadReportView('reports/finances/postingExpenses', $data);
         }
     }
 
