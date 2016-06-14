@@ -1099,6 +1099,19 @@ class Admin extends CK_Controller {
                 return;
             }
         }
+        
+        if ($postingType == "Cheque") {
+        	$postingPortion = 1;
+        	$paymentStatus = "a pagar";
+        	$postingNumberCheque = $_POST['postingNumberCheque'];
+        	if ($this->documentexpense_model->updatePostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus, $postingNumberCheque)) {
+        		echo "true";
+        		return;
+        	} else {
+        		echo "false";
+        		return;
+        	}
+        }
     }
 
     public function postingExpense() {

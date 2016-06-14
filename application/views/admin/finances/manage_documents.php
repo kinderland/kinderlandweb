@@ -165,13 +165,72 @@
 
 		function editarFormaPagamento(){
 			var documentexpenseId = document.getElementById("documentexpenseId").textContent;
-            var postingType = "Dinheiro";
+            var postingType = "Crédito";
             alert(documentexpenseId);
             alert(postingType);
             if (postingType == "Dinheiro") {
 
                 var postingValue = document.getElementById("postingValueDinheiroEdit").value;
                 var postingDate = document.getElementById("postingDateDinheiroEdit").value;
+                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Edição cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível editar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+            }
+
+            if (postingType == "Cheque") {
+
+                var postingValue = document.getElementById("postingValueChequeEdit").value;
+                var postingDate = document.getElementById("postingDateChequeEdit").value;
+                var postingNumberCheque = document.getElementById("postingNumberChequeEdit").value;
+                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Edição cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível editar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+            }
+
+            if (postingType == "Transferência") {
+
+                var postingValue = document.getElementById("postingValueTransferenciaEdit").value;
+                var postingDate = document.getElementById("postingDateTransferenciaEdit").value;
+                var postingBankNumber = document.getElementById("postingBankNumberTransferenciaEdit").value;
+                var postingAgency = document.getElementById("postingAgencyTransferenciaEdit").value;
+                var postingAccount = document.getElementById("postingAccountTransferenciaEdit").value;
+                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Edição cadastrado com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível editar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+            }
+
+            if (postingType == "Crédito") {
+				
+                var postingValue = document.getElementById("postingValueCreditoEdit").value;
+                var postingDate = document.getElementById("postingDateCreditoEdit").value;
+                alert(postingValue);
                 $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
                         function (data) {
