@@ -58,50 +58,50 @@ class documentexpense_model extends CK_Model {
         }
         return false;
     }
-    
+
     public function insertNewLog($person_id, $document_expense_id, $posting_date, $posting_value, $posting_portions, $log_type) {
-    
-    	$log = 'INSERT INTO posting_expense_log(person_id, document_expense_id, posting_date, posting_value, log_date, posting_portions, log_type) VALUES (?,?,?,?,current_timestamp,?,?)';
-    
-    	$result = $this -> execute($this -> db, $log, array(intval($person_id), intval($document_expense_id), $posting_date, $posting_value, $posting_portions, $log_type));
-    
-    	if ($result)
-    		return $result;
-    
-    	return false;
+
+        $log = 'INSERT INTO posting_expense_log(person_id, document_expense_id, posting_date, posting_value, log_date, posting_portions, log_type) VALUES (?,?,?,?,current_timestamp,?,?)';
+
+        $result = $this->execute($this->db, $log, array(intval($person_id), intval($document_expense_id), $posting_date, $posting_value, $posting_portions, $log_type));
+
+        if ($result)
+            return $result;
+
+        return false;
     }
-    
-    public function getPostingExpenseById($document_id,$posting_portions){
-    	$sql = "SELECT * FROM posting_expense
+
+    public function getPostingExpenseById($document_id, $posting_portions) {
+        $sql = "SELECT * FROM posting_expense
 				WHERE document_expense_id = ?
 				AND posting_portions = ?";
-    		
-    	$result = $this->executeRow($this->db, $sql, array(intval($document_id),$posting_portions));
-    		
-    	if($result)
-    		return $result;
-    	else
-    		return NULL;
+
+        $result = $this->executeRow($this->db, $sql, array(intval($document_id), $posting_portions));
+
+        if ($result)
+            return $result;
+        else
+            return NULL;
     }
 
     public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus) {
         $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, posting_portions, payment_status)
 					VALUES (?,?,?,?,?,?)";
-        
+
         $result = $this->execute($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus));
-        
-        if($result)
-        	$postingExpense = $this -> getPostingExpenseById($documentexpenseId,$postingPortion);
-        
-        if($postingExpense){
-        	$person_id = $this -> session -> userdata('user_id');
-        	$log = $this -> insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'criou forma de pag');
-        	if($log)
-        		return $log;
-        	else 
-        		return null;
-        }else{
-        	return null;
+
+        if ($result)
+            $postingExpense = $this->getPostingExpenseById($documentexpenseId, $postingPortion);
+
+        if ($postingExpense) {
+            $person_id = $this->session->userdata('user_id');
+            $log = $this->insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'criou forma de pag');
+            if ($log)
+                return $log;
+            else
+                return null;
+        }else {
+            return null;
         }
     }
 
@@ -141,17 +141,16 @@ class documentexpense_model extends CK_Model {
         $Id = $this->executeReturningId($this->db, $sql, array($number, $date, $type, $description, $value, $name));
         return $Id;
     }
-    
-    public function updatePostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus){
-    	$sql = "UPDATE posting_expense SET "
-    			. "posting_date=?, "
-    			. "posting_value=?, "
-    			. "posting_type=?, "
-    			. "payment_status=? "
-    			. "WHERE document_expense_id=? and posting_portions=?";
-    	$resultSet = $this->execute($this->db, $sql, array($postingDate, $postingValue, $postingType, $paymentStatus, intval($documentexpenseId), $postingPortion));
-    	return $resultSet;
-    	
+
+    public function updatePostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus) {
+        $sql = "UPDATE posting_expense SET "
+                . "posting_date=?, "
+                . "posting_value=?, "
+                . "posting_type=?, "
+                . "payment_status=? "
+                . "WHERE document_expense_id=? and posting_portions=?";
+        $resultSet = $this->execute($this->db, $sql, array($postingDate, $postingValue, $postingType, $paymentStatus, intval($documentexpenseId), $postingPortion));
+        return $resultSet;
     }
 
     public function updateDocument($id, $date, $number, $description, $value, $name) {
@@ -234,6 +233,25 @@ class documentexpense_model extends CK_Model {
         $this->Logger->info("Nao achei o documento");
         return $document;
     }
+    
+     public function getPostingUploadById($id) {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $sql = 'Select * from posting_expense_upload where posting_expense_upload_id = ?';
+        $row = $this->executeRow($this->db, $sql, array($id));
+
+        $document = FALSE;
+
+        if ($row) {
+            $this->Logger->info("Documento encontrado com sucesso, criando array");
+            $document = array("data" => $row->file, "name" => $row->filename, "extension" => $row->extension);
+            return $document;
+        }
+        $this->Logger->info("Nao achei o documento");
+        return $document;
+    }
+    
+    
 
     public function getUploadId($document_id) {
         $sql = "SELECT document_expense_upload_id FROM document_expense WHERE document_expense_id=?";
@@ -302,14 +320,72 @@ class documentexpense_model extends CK_Model {
         }
         return FALSE;
     }
-    public function switchPaidStatusOffToOn($docId,$portions){
+
+    public function switchPaidStatusOffToOn($docId, $portions) {
         $sql = "UPDATE posting_expense "
                 . "SET payed=TRUE WHERE document_expense_id=? AND posting_portions=?";
-        $result=$this->execute($this->db,$sql,array($docId,$portions));
+        $result = $this->execute($this->db, $sql, array($docId, $portions));
+        return $result;
     }
-        public function switchPaidStatusOnToOff($docId,$portions){
+
+    public function switchPaidStatusOnToOff($docId, $portions) {
         $sql = "UPDATE posting_expense "
                 . "SET payed=FALSE WHERE document_expense_id=? AND posting_portions=?";
-        $result=$this->execute($this->db,$sql,array($docId,$portions));
+        $result = $this->execute($this->db, $sql, array($docId, $portions));
+        return $result;
+    }
+
+    public function getNewUploadPosting() {
+        $sql = "SELECT posting_expense_upload_id FROM posting_expense_upload ORDER BY date_created DESC LIMIT 1";
+        $new = $this->executeRow($this->db, $sql);
+        if ($new){
+            return $new->posting_expense_upload_id;
+        }
+        return FALSE;
+    }
+
+    public function attatchPostingUploadId($document_id, $portions, $upload_id) {
+        $sql = "UPDATE posting_expense SET posting_expense_upload_id=? WHERE document_expense_id=? AND posting_portions=?";
+        $result = $this->execute($this->db, $sql, array($upload_id, intval($document_id), intval($portions)));
+        return $result;
+    }
+
+        public function uploadPosting($fileName, $file) {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $splitByDot = explode(".", $fileName);
+        $extension = $splitByDot[count($splitByDot) - 1];
+        if (!
+                (strcasecmp("jpg", $extension) == 0 || strcasecmp("jpeg", $extension) == 0 || strcasecmp("png", $extension) == 0 || strcasecmp("pdf", $extension) == 0)
+        )
+            return FALSE;
+        $sql = 'INSERT INTO posting_expense_upload (filename,extension,file) VALUES (?, ?, ?)';
+        $returnId = $this->execute($this->db, $sql, array($fileName, $extension, pg_escape_bytea($file)));
+        if ($returnId) {
+            $this->Logger->info("Documento inserido com sucesso");
+            return TRUE;
+        }
+        $this->Logger->error("Problema ao inserir documento");
+        return FALSE;
+    }
+    
+        public function updateUploadPosting($upload_id, $fileName, $file) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $splitByDot = explode(".", $fileName);
+        $extension = $splitByDot[count($splitByDot) - 1];
+        if (!
+                (strcasecmp("jpg", $extension) == 0 || strcasecmp("jpeg", $extension) == 0 || strcasecmp("png", $extension) == 0 || strcasecmp("pdf", $extension) == 0)
+        )
+            return FALSE;
+        $sql = 'UPDATE posting_expense_upload '
+                . 'SET filename=?, extension=?, file=? '
+                . 'WHERE posting_expense_upload_id=?';
+        $returnId = $this->execute($this->db, $sql, array($fileName, $extension, pg_escape_bytea($file), intval($upload_id)));
+        if ($returnId) {
+            $this->Logger->info("Documento modificado com sucesso");
+            return TRUE;
+        }
+        $this->Logger->error("Problema ao modificado documento");
+        return FALSE;
     }
 }
