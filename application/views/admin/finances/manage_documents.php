@@ -82,7 +82,7 @@
 
         function sendInfoToModalEdit(postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
             $("#documentexpenseId").html(documentExpenseId);
-
+			
             alert(postingType);
 			alert(postingPortions);
             if(postingType == "Transferência")
@@ -91,7 +91,7 @@
             	$("#posting_Type").prop('selectedIndex', '4');
             else if(postingType == "Boleto")
             	$("#posting_Type").prop('selectedIndex', '1');
-            else if(postingType == "Crédito")
+            else if(postingType == "Crédito")            	
             	$("#posting_Type").prop('selectedIndex', '3');
             else if(postingType == "Cheque")
             	$("#posting_Type").prop('selectedIndex', '2');
@@ -165,7 +165,7 @@
 
 		function editarFormaPagamento(){
 			var documentexpenseId = document.getElementById("documentexpenseId").textContent;
-            var postingType = "Crédito";
+			var postingType = document.getElementById("posting_Type").value;
             alert(documentexpenseId);
             alert(postingType);
             if (postingType == "Dinheiro") {
@@ -373,6 +373,44 @@
         }
 
 
+function limpaDivEdit(){
+			
+			document.getElementById("posting_Type").selectedIndex = 0;
+			document.getElementById("ChequeEdit").style.display = "none";
+            document.getElementById("CréditoEdit").style.display = "none";
+            document.getElementById("DinheiroEdit").style.display = "none";
+            document.getElementById("TransferênciaEdit").style.display = "none";
+            document.getElementById("BoletoEdit").style.display = "none";
+
+			document.getElementById("postingValueCreditoEdit").value = null;
+			document.getElementById("postingDateCreditoEdit").value = null;
+			document.getElementById("postingPortionsCreditoEdit").value = "Selecione";
+			
+			document.getElementById("postingValueChequeEdit").value = null;
+			document.getElementById("postingDateChequeEdit").value = null;
+			document.getElementById("postingNumberChequeEdit").value = null;
+
+			document.getElementById("postingValueDinheiroEdit").value = null;
+			document.getElementById("postingDateDinheiroEdit").value = null;
+
+			document.getElementById("postingValueTransferenciaEdit").value = null;
+			document.getElementById("postingDateTransferenciaEdit").value = null;
+			document.getElementById("postingBankNumberTransferenciaEdit").value = null;
+			document.getElementById("postingAgencyTransferenciaEdit").value = null;
+			document.getElementById("postingAccountTransferenciaEdit").value = null;					
+			
+			document.getElementById("postingPortionsBoletoEdit").value = "Selecione";
+            for (var i = 1; i <= 10; i++) {
+            	document.getElementById("BoletoEdit".concat(i)).style.display = "none";
+            	document.getElementById("postingValueBoletoEdit".concat(i)).value = null;
+    			document.getElementById("postingDateBoletoEdit".concat(i)).value = null;
+                
+            }           
+
+            
+
+		}
+
 		function limpaDiv(){
 			
 			document.getElementById("postingType").selectedIndex = 0;
@@ -416,6 +454,60 @@
             
 
 		}
+
+		function paymentTypeEdit() {
+        	
+      	  	var type;
+      	  	
+      	   		type = document.getElementById("posting_Type").value;
+
+           	   
+            if (type == "Boleto") {
+                document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("BoletoEdit").style.display = "";
+
+            } else if (type == "Cheque") {
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "";
+
+            } else if (type == "Crédito") {
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "";
+
+            } else if (type == "Débito") {
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("DébitoEdit").style.display = "";
+
+            } else if (type == "Dinheiro") {
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "";
+
+            } else if (type == "Transferência") {
+                document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "";
+
+            }
+
+        }
 
         function paymentType() {
         	var rads = document.getElementsByName("formadepagamento");
@@ -495,6 +587,18 @@
             }
 
         }
+        function postingPortionsEdit() {
+            var portions = document.getElementById("postingPortionsBoletoEdit").value;
+            for (var i = 1; i <= 10; i++) {
+                if (i <= portions) {
+                    document.getElementById("BoletoEdit".concat(i)).style.display = "";
+                } else {
+                    document.getElementById("BoletoEdit".concat(i)).style.display = "none";
+                }
+            }
+
+        }
+        
 
         function accountUpdate(id, date, value) {
             var account_name = document.getElementById("accounts_".concat(id)).value;
@@ -731,20 +835,20 @@ if (isset($documents)) {
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
                                         <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoleto" onchange="postingPortions()" >
                                             <option value="Selecione"> - Selecione - </option>
-<?php for ($i = 1; $i <= 10; $i++) { ?>
+												<?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
                                             <?php } ?>
                                         </select>
                                     </div>
                                     </tr> <br/><br/><br/>
-<?php for ($i = 1; $i <= 10; $i++) { ?>
+										<?php for ($i = 1; $i <= 10; $i++) { ?>
                                         <tr>
                                         <div class="col-lg-12 control_label" id="Boleto<?php echo $i ?>" style="display: none; padding-left:0px" >
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <label for="postingValueBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" name="postingValueBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" name="postingValueBoleto<?php echo $i ?>Edit" ></input> 
                                                     </div>
                                                     <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
@@ -888,8 +992,8 @@ if (isset($documents)) {
                                         <div class="col-lg-12">
                                             <label for="postingType" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Tipo de Pagamento: </label>
                                             <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">    
-                                                <select style="width: 190px" class="form-control" name="postingType" id="posting_Type" onchange="paymentType()" >
-                                                    <option> - Selecione - </option>
+                                                <select style="width: 190px" class="form-control" name="postingType" id="posting_Type" onchange="paymentTypeEdit()" >
+                                                    <option selected> - Selecione - </option>
                                                     <option value="Boleto">Boleto</option> 
                                                     <option value="Cheque">Cheque</option>
                                                     <option value="Crédito" >Crédito</option>
@@ -913,17 +1017,17 @@ if (isset($documents)) {
                                     <tr>
                                     <label for="postingPortionsBoleto" style="width: 170px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Número de parcelas: </label>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
-                                        <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoletoEdit" value="" onchange="postingPortions()" >
-                                            <option> - Selecione - </option>
-<?php for ($i = 1; $i <= 10; $i++) { ?>
+                                        <select style="width: 190px" class="form-control" name="postingPortionsBoleto" id="postingPortionsBoletoEdit" value="" onchange="postingPortionsEdit()" >
+                                            <option value="Selecione"> - Selecione - </option>
+											<?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
                                             <?php } ?>
                                         </select>
                                     </div>
                                     </tr> <br/><br/><br/>
-<?php for ($i = 1; $i <= 10; $i++) { ?>
+											<?php for ($i = 1; $i <= 10; $i++) { ?>
                                         <tr>
-                                        <div class="col-lg-12 control_label" id="Boleto<?php echo $i ?>" style="display: none; padding-left:0px" >
+                                        <div class="col-lg-12 control_label" id="BoletoEdit<?php echo $i ?>" style="display: none; padding-left:0px" >
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <label for="postingValueBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
@@ -976,7 +1080,7 @@ if (isset($documents)) {
                                     <tr>
                                         <td> Número de parcelas: </td><br/>
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
-                                        <select style="width: 190px" class="form-control" name="postingPortionsCreditoEdit" value="" id="postingPortionsCredito"  >
+                                        <select style="width: 190px" class="form-control" name="postingPortionsCreditoEdit" value="" id="postingPortionsCreditoEdit"  >
                                             <option> - Selecione - </option>
 <?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
@@ -1031,7 +1135,7 @@ if (isset($documents)) {
                                 <div class="modal-footer">
                                         <div class="col-lg-7 control_label">
                                             <button class="btn btn-primary" onClick="editarFormaPagamento()">Salvar</button>  
-                                            <button class="btn btn-warning" data-dismiss="modal" onClick="limpaDiv()">Fechar</button> 
+                                            <button class="btn btn-warning" data-dismiss="modal" onClick="limpaDivEdit()">Fechar</button> 
                                         </div>  
                                     </div>
 
