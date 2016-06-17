@@ -3119,7 +3119,7 @@ class Admin extends CK_Controller {
             }
             $this->generic_model->commitTransaction();
             $this->Logger->info("Document successfully updated");
-            $url = $this->config->item('url_link') . "admin/manageDocuments";
+            $url = $this->config->item('url_link') . "reports/postingExpenses";
             if ($uploadId) {
                 echo "<SCRIPT LANGUAGE='JavaScript'>
            		window.alert('Documento modificado com sucesso.')

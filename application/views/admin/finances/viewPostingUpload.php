@@ -68,7 +68,7 @@
                 <input type="submit"  value="Enviar documento" class="btn btn-primary"/>
             </div>
         </form>
-        <button style="margin-top:-15px" class="btn btn-warning" onclick="window.location.href = '<?= $this->config->item('url_link') ?>admin/manageDocuments'"> Voltar</button>
+        <button style="margin-top:-15px" class="btn btn-warning" onclick="window.location.href = '<?= $this->config->item('url_link') ?>reports/postingExpenses'"> Voltar</button>
         <br>
         <br>
         <?php if ($upload_id > 0) { ?>
