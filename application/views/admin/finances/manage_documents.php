@@ -238,10 +238,10 @@
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
                         {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions},
                         function (data) {
-                            if (data == "true") {
+                            if (data.localeCompare("true") == 0) {
                                 alert("Pagamento cadastrado com sucesso!");
                                 location.reload();
-                            } else if (data == "false") {
+                            } else if (data.localeCompare("false") == 0) {
                                 alert("Não foi possível cadastrar o pagamento!");
                                 location.reload();
                             }
