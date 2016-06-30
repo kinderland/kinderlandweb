@@ -170,18 +170,33 @@ class finance_model extends CK_Model{
 			return NULL;
 	}
 	
+	public function getNumberOfPortionsByDocumentExpenseId($documentExpenseId){
+		$sql = "SELECT document_expense_id, max(posting_portions) as portions
+				FROM v_all_posting_expenses_info
+				WHERE document_expense_id = ?
+				GROUP BY document_expense_id";
+		
+		$result = $this->executeRow($this->db,$sql,array(intval($documentExpenseId)));
+		
+		if($result)
+			return $result;
+		else 
+			return null;		
+	}
+	
 	public function getDocumentsByDate($year,$month = null){
 		$sql = "SELECT *
 				FROM v_all_posting_expenses_info
-				WHERE DATE_PART('YEAR',log_date) = ?";
+				WHERE (posting_portions = 1 or posting_portions is null)
+				AND DATE_PART('YEAR',document_date) = ?";
 			
 		if($month){
-			$sql = $sql." AND DATE_PART('MONTH',log_date) = ?
-						 ORDER BY log_date ASC";
+			$sql = $sql." AND DATE_PART('MONTH',document_date) = ?
+						 ORDER BY document_date DESC";
 	
 			$result = $this->executeRows($this->db, $sql, array(intval($year),intval($month)));
 		}else {
-			$sql = $sql." ORDER BY log_date ASC";
+			$sql = $sql." ORDER BY document_date DESC";
 				
 			$result = $this->executeRows($this->db, $sql, array(intval($year)));
 		}

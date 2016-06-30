@@ -148,18 +148,26 @@
 
         function sendTableToCSV() {
             var data = [];
-            var table = document.getElementById("tablebody");
+            var table2 = document.getElementById("tablebody2");
+            var table3 = document.getElementById("tablebody3");
             var name = getCSVName();
-            var elements = document.getElementsByName("document_type");
             var tablehead = document.getElementsByTagName("thead")[0];
             var document_type;
             var payed = document.getElementById("qtdpayed");
-            var payeds = document.getElementsByName("payeds");
-            var description = document.getElementsByName("document_description");
-            var account_types = document.getElementsByName("account_types");
-            var names = document.getElementsByName("names");
-            var accounts_name = document.getElementsByName("accounts_name");
-            var posting_dates = document.getElementsByName("posting_dates");
+            var payeds2 = document.getElementsByName("payeds2");
+            var payeds3 = document.getElementsByName("payeds3");
+            var description2 = document.getElementsByName("document_description2");
+            var account_types2 = document.getElementsByName("account_types2");
+            var names2 = document.getElementsByName("names2");
+            var accounts_name2 = document.getElementsByName("accounts_name2");
+            var posting_dates2 = document.getElementsByName("posting_dates2");
+            var elements2 = document.getElementsByName("document_type2");
+            var description3 = document.getElementsByName("document_description3");
+            var account_types3 = document.getElementsByName("account_types3");
+            var names3 = document.getElementsByName("names3");
+            var accounts_name3 = document.getElementsByName("accounts_name3");
+            var posting_dates3 = document.getElementsByName("posting_dates3");
+            var elements3 = document.getElementsByName("document_type3");
             var account_type;
             var document_description;
             var document_name;
@@ -167,18 +175,18 @@
             var posting_date;
 
             if(payed.getAttribute("value") > 0){
-	            for (var i = 0, row; row = table.rows[i]; i++) {
+	            for (var i = 0, row; row = table2.rows[i]; i++) {
 
-		            if(payeds[i].getAttribute('id') == 'pago' || payeds[i].getAttribute('id') == 'caixinha' || payeds[i].getAttribute('id') == 'deb auto'){
+		            if(payeds2[i].getAttribute('id') == 'pago' || payeds2[i].getAttribute('id') == 'caixinha' || payeds2[i].getAttribute('id') == 'deb auto'){
 		            
 		                var data2 = []
 		                //Nome, retira pega o que esta entre um <> e outro <>
-		                document_type = elements[i].getAttribute('id');
-		                document_description = description[i].getAttribute('id');
-		                account_type = account_types[i].getAttribute('id');
-		                document_name = names[i].getAttribute('id');
-		                account_name = accounts_name[i].getAttribute('value');
-		                posting_date = posting_dates[i].getAttribute('value');
+		                document_type = elements2[i].getAttribute('id');
+		                document_description = description2[i].getAttribute('id');
+		                account_type = account_types2[i].getAttribute('id');
+		                document_name = names2[i].getAttribute('id');
+		                account_name = accounts_name2[i].getAttribute('value');
+		                posting_date = posting_dates2[i].getAttribute('value');
 		                date_post = posting_date.split("/");
 		                posting_date = date_post[1].concat("/").concat(date_post[0]).concat("/").concat(date_post[2]);
 		                
@@ -187,6 +195,31 @@
 		                data2.push(document_description);
 		                data2.push(posting_date);
 		                data2.push(row.cells[4].innerHTML);
+		                data2.push(document_name);
+		                data.push(data2);
+		            }
+	            }
+
+	            for (var i = 0, row; row = table3.rows[i]; i++) {
+
+		            if(payeds3[i].getAttribute('id') == 'pago' || payeds3[i].getAttribute('id') == 'caixinha' || payeds3[i].getAttribute('id') == 'deb auto'){
+		            
+		                var data2 = []
+		                //Nome, retira pega o que esta entre um <> e outro <>
+		                document_type = elements3[i].getAttribute('id');
+		                document_description = description3[i].getAttribute('id');
+		                account_type = account_types3[i].getAttribute('id');
+		                document_name = names3[i].getAttribute('id');
+		                account_name = accounts_name3[i].getAttribute('value');
+		                posting_date = posting_dates3[i].getAttribute('value');
+		                date_post = posting_date.split("/");
+		                posting_date = date_post[1].concat("/").concat(date_post[0]).concat("/").concat(date_post[2]);
+		                
+		                data2.push(account_name);
+		                data2.push(account_type);
+		                data2.push(document_description);
+		                data2.push(posting_date);
+		                data2.push(row.cells[3].innerHTML);
 		                data2.push(document_name);
 		                data.push(data2);
 		            }
@@ -307,10 +340,108 @@
                 </select>
             </form>
             <input style="display:none" id="accountsNames" value="<?php echo $accountNames;?>">
-             <?php if(!$secretary){?>
+            
+            <?php if(!$secretary){?>
              <button class="button btn btn-primary col-lg-2" onclick="sendTableToCSV()" value="">Exportar</button>
            <br /> <br />
            <?php }?>
+            <!-- VENCIDOS DE MESES ANTERIORES -->
+                
+                <h2>Vencidos de Meses Anteriores</h2>
+                <div class = "row">
+                    <div class="col-lg-12 middle-content">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "980px"; else echo"630px";?>" id="sortable-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px; text-align: center" > Doc </th>
+                                    <th style="width:100px; text-align: center"> Tipo </th>
+                                <!--<th style="width:160px; text-align: center"> Descrição </th> -->
+                                    <th style="width:80px; text-align: center"> Parcela </th>
+                                    <th style="width:100px; text-align: center"> Valor </th>
+                                    <?php if(!$secretary){?>
+                                    <th colspan=2 style="width:300px; text-align: center">Nome de Conta</th>
+                                    <th colspan=2 style="width:300px; text-align: center">Pagamento</th>
+                               		<?php }?>
+                                </tr>
+                                <tr>
+                                	<?php if(!$secretary){?>
+                                	<th></th>
+                                	<th></th>
+                                <!-- <th></th> -->
+                                	<th></th>
+                                	<th></th>
+                                	<th style="width:200px; text-align: center">Nome</th>
+                        			<th style="width:100px; text-align: center">Ação</th>
+                        			<th style="width:160px; text-align: center">Data</th>
+                        			<th style="width:100px; text-align: center">Pago</th>
+                        			<?php }?>
+                                </tr>
+                            </thead>
+                            <tbody id="tablebody1">
+                            	<input style="display:none" id="qtdpayed" value="<?= $qtdpayed;?>">
+                                <?php
+                                
+                                if($info1){
+                                ?>	
+                                <?php foreach ($info1 as $i) {
+                                    ?>
+                                    <tr>
+                                    	<input style="display:none" id="<?= $i -> payment_status;?>" name="payeds1">
+                                    	<input style="display:none" id="<?= $i -> document_name;?>" name="names1">
+                                    	<input style="display:none" id="<?= $i -> account_type;?>" name="account_types1">
+                                    	<input style="display:none" id="<?= $i -> document_description;?>" name="document_description1">
+                                        <td id="<?php echo $i->document_type;?>" name="document_type1"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>">
+                                            <?php switch($i->document_type){
+                                            	case "nota fiscal":
+                                            		echo "NF";
+                                            		break;
+                                            	case "cupom fiscal":
+                                            		echo "CF";
+                                            		break;
+                                            	case "recibo":
+                                            		echo "rec";
+                                            		break;
+                                            	case "boleto":
+                                            		echo "bol";
+                                            		break; 
+                                            }                                         
+                                            
+                                            ?> </a></td>
+                                        <td><?php if($i->posting_type == "Transferência") echo "Transf."; else echo $i->posting_type; ?></td>
+                                    <!-- <td id="<?php // $i->document_description ?>" name="document_description"><?php // $i->document_description ?></td> -->
+                                        <td id="portions_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_portions ?>"><?= $i->posting_portions ?>/<?= $portions[$i->document_expense_id]?></td>
+                                        <td id="value_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_value ?>"><?= $i->posting_value ?></td>
+                                        <?php if(!$secretary){ ?>
+                                        <td><input <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> type="text" name = "accounts_name1" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
+									</td>
+									<?php if ($i->account_name == "") { ?>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Salvar</button></td>
+                                    <?php } else { ?>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
+                                    <?php } ?>
+                                    <div style="text-align: center">
+                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates1" value="<?php echo $i->posting_date; ?>"></td>
+                                    	</div>
+                                    	<?php if($i -> payment_status == "caixinha"){?>
+                                    	<td><span title="<?php echo $i->person_operation;?>" > Caixinha </span></td>
+                                    	<?php } else if($i -> payment_status == "deb auto"){?>
+                                    	<td> Débito Automático </td>
+                                    	<?php } else{?>
+                                    	<td><input <?php if($i->payment_status == "pago") echo "checkedInDatabase='true'";  if ($i->account_name == "") echo "disabled"; ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>_<?= $i->posting_portions ?>"/> </td>
+                                    	<?php } }?>
+                                    </tr>
+                                    <?php
+                                }}
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- BOLETOS DO MÊS -->
+                <br/>
+                
+                <h2>Boletos do Mês</h2>
                 <div class = "row">
                     <div class="col-lg-12 middle-content">
                         <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "1150px"; else echo"800px";?>" id="sortable-table">
@@ -344,21 +475,21 @@
                         			<?php }?>
                                 </tr>
                             </thead>
-                            <tbody id="tablebody">
+                            <tbody id="tablebody2">
                             	<input style="display:none" id="qtdpayed" value="<?= $qtdpayed;?>">
                                 <?php
                                 
-                                if($info){
+                                if($info2){
                                 ?>	
-                                <?php foreach ($info as $i) {
+                                <?php foreach ($info2 as $i) {
                                     ?>
                                     <tr>
-                                    	<input style="display:none" id="<?= $i -> payment_status;?>" name="payeds">
-                                    	<input style="display:none" id="<?= $i -> document_name;?>" name="names">
-                                    	<input style="display:none" id="<?= $i -> account_type;?>" name="account_types">
-                                    	<input style="display:none" id="<?= $i -> document_description;?>" name="document_description">
+                                    	<input style="display:none" id="<?= $i -> payment_status;?>" name="payeds2">
+                                    	<input style="display:none" id="<?= $i -> document_name;?>" name="names2">
+                                    	<input style="display:none" id="<?= $i -> account_type;?>" name="account_types2">
+                                    	<input style="display:none" id="<?= $i -> document_description;?>" name="document_description2">
                                         <td><?php if($i->bank_slip_date != "") echo date("d/m/Y",strtotime($i->bank_slip_date)) ?></td>
-                                        <td id="<?php echo $i->document_type;?>" name="document_type"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>">
+                                        <td id="<?php echo $i->document_type;?>" name="document_type2"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>">
                                             <?php switch($i->document_type){
                                             	case "nota fiscal":
                                             		echo "NF";
@@ -393,7 +524,7 @@
                                         </a>
                                         <?php } if(!$secretary){ ?>
                                     </td>
-                                        <td><input <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> type="text" name = "accounts_name" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
+                                        <td><input <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> type="text" name = "accounts_name2" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
 									</td>
 									<?php if ($i->account_name == "") { ?>
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Salvar</button></td>
@@ -401,7 +532,7 @@
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates2" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
                                     	<?php if($i -> payment_status == "caixinha"){?>
                                     	<td><span title="<?php echo $i->person_operation;?>" > Caixinha </span></td>
@@ -418,6 +549,104 @@
                         </table>
                     </div>
                 </div>
+                
+                
+                <!-- OUTROS LANÇAMENTOS DO MÊS -->  
+                <br/>
+                
+                <h2>Outros Lançamentos do Mês</h2>
+                
+                <div class = "row">
+                    <div class="col-lg-12 middle-content">
+                        <table class="table table-bordered table-striped table-min-td-size" style="width: <?php if(!$secretary) echo "980px"; else echo"630px";?>" id="sortable-table">
+                            <thead>
+                                <tr>
+                                    <th style="width:20px; text-align: center" > Doc </th>
+                                    <th style="width:100px; text-align: center"> Tipo </th>
+                                <!--<th style="width:160px; text-align: center"> Descrição </th> -->
+                                    <th style="width:80px; text-align: center"> Parcela </th>
+                                    <th style="width:100px; text-align: center"> Valor </th>
+                                    <?php if(!$secretary){?>
+                                    <th colspan=2 style="width:300px; text-align: center">Nome de Conta</th>
+                                    <th colspan=2 style="width:300px; text-align: center">Pagamento</th>
+                               		<?php }?>
+                                </tr>
+                                <tr>
+                                	<?php if(!$secretary){?>
+                                	<th></th>
+                                	<th></th>
+                                <!-- <th></th> -->
+                                	<th></th>
+                                	<th></th>
+                                	<th style="width:200px; text-align: center">Nome</th>
+                        			<th style="width:100px; text-align: center">Ação</th>
+                        			<th style="width:160px; text-align: center">Data</th>
+                        			<th style="width:100px; text-align: center">Pago</th>
+                        			<?php }?>
+                                </tr>
+                            </thead>
+                            <tbody id="tablebody3">
+                            	<input style="display:none" id="qtdpayed" value="<?= $qtdpayed;?>">
+                                <?php
+                                
+                                if($info3){
+                                ?>	
+                                <?php foreach ($info3 as $i) {
+                                    ?>
+                                    <tr>
+                                    	<input style="display:none" id="<?= $i -> payment_status;?>" name="payeds3">
+                                    	<input style="display:none" id="<?= $i -> document_name;?>" name="names3">
+                                    	<input style="display:none" id="<?= $i -> account_type;?>" name="account_types3">
+                                    	<input style="display:none" id="<?= $i -> document_description;?>" name="document_description3">
+                                        <td id="<?php echo $i->document_type;?>" name="document_type3"><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocument/<?php echo $i->document_expense_id ?>">
+                                            <?php switch($i->document_type){
+                                            	case "nota fiscal":
+                                            		echo "NF";
+                                            		break;
+                                            	case "cupom fiscal":
+                                            		echo "CF";
+                                            		break;
+                                            	case "recibo":
+                                            		echo "rec";
+                                            		break;
+                                            	case "boleto":
+                                            		echo "bol";
+                                            		break; 
+                                            }                                         
+                                            
+                                            ?> </a></td>
+                                        <td><?php if($i->posting_type == "Transferência") echo "Transf."; else echo $i->posting_type; ?></td>
+                                    <!-- <td id="<?php // $i->document_description ?>" name="document_description"><?php // $i->document_description ?></td> -->
+                                        <td id="portions_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_portions ?>"><?= $i->posting_portions ?>/<?= $portions[$i->document_expense_id]?></td>
+                                        <td id="value_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "<?= $i->posting_value ?>"><?= $i->posting_value ?></td>
+                                        <?php if(!$secretary){ ?>
+                                        <td><input <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> type="text" name = "accounts_name3" class="accounts" id="accounts_<?= $i->document_expense_id ?>_<?= $i->posting_portions ?>" value="<?php if($i->account_name) echo $i->account_name; else echo ""; ?>">
+									</td>
+									<?php if ($i->account_name == "") { ?>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-danger" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Salvar</button></td>
+                                    <?php } else { ?>
+                                        <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
+                                    <?php } ?>
+                                    <div style="text-align: center">
+                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates3" value="<?php echo $i->posting_date; ?>"></td>
+                                    	</div>
+                                    	<?php if($i -> payment_status == "caixinha"){?>
+                                    	<td><span title="<?php echo $i->person_operation;?>" > Caixinha </span></td>
+                                    	<?php } else if($i -> payment_status == "deb auto"){?>
+                                    	<td> Débito Automático </td>
+                                    	<?php } else{?>
+                                    	<td><input <?php if($i->payment_status == "pago") echo "checkedInDatabase='true'";  if ($i->account_name == "") echo "disabled"; ?> type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$i->document_expense_id?>_<?= $i->posting_portions ?>"/> </td>
+                                    	<?php } }?>
+                                    </tr>
+                                    <?php
+                                }}
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>              
+                
+                
             </div>
     </body>
 </html>

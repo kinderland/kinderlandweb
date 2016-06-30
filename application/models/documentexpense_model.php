@@ -89,20 +89,21 @@ class documentexpense_model extends CK_Model {
 					VALUES (?,?,?,?,?,?)";
 
         $result = $this->execute($this->db, $sql, array($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus));
-
+        
         if ($result)
-            $postingExpense = $this->getPostingExpenseById($documentexpenseId, $postingPortion);
-
+        	$postingExpense = $this->getPostingExpenseById($documentexpenseId, $postingPortion);
+        
         if ($postingExpense) {
-            $person_id = $this->session->userdata('user_id');
-            $log = $this->insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'criou forma de pag');
-            if ($log)
-                return $log;
-            else
-                return null;
+        	$person_id = $this->session->userdata('user_id');
+        	$log = $this->insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'criou forma de pag');
+        	if ($log)
+        		return $log;
+        	else
+        		return null;
         }else {
-            return null;
+        	return null;
         }
+        
     }
 
     public function insertNewBankTransferPayment($bankDataId, $documentexpenseId, $postingPortion) {

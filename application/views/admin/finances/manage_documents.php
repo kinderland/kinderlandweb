@@ -3,62 +3,45 @@
         <meta charset="UTF-8">
         <title>Colônia Kinderland</title>
 
-        <link href="<?= $this->config->item('assets'); ?>css/basic.css"
-              rel="stylesheet" />
-      <!--<link href="<?= $this->config->item('assets'); ?>css/old/screen.css" rel="stylesheet" />-->
-        <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css"
-              rel="stylesheet" />
-        <link rel="stylesheet"
-              href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
-        <link rel="stylesheet"
-              href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
-        <link rel="stylesheet"
-              href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
-        <script type="text/javascript"
-        src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+        <link href="<?= $this->config->item('assets'); ?>css/basic.css" rel="stylesheet" />
+        <link href="<?= $this->config->item('assets'); ?>css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/bootstrap-switch.min.css">
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>css/theme.default.css" />
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery-2.0.3.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/ui/jquery-ui.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquerysettings.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.redirect.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/formValidationFunctions.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/bootstrap-switch.min.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery/jquery.mask.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
+        <script type="text/javascript" src="<?= $this->config->item('assets'); ?>datatable/js/datatable.min.js"></script>
+        <link rel="stylesheet" href="<?= $this->config->item('assets'); ?>datatable/css/datatable-bootstrap.min.css" />
 
     </head>
 
     <script>
+	    function datepickers() {
+	        $('.datepickers').datepicker();
+	        $(".datepickers").datepicker("option", "dateFormat", "dd/mm/yy");
+	    }
+	    
         $(function () {
             $("#sortable-table").tablesorter({widgets: ['zebra']});
             $(".datepicker").datepicker();
         });
+        
         $(document).ready(function () {
-            $("[name='my-checkbox']").bootstrapSwitch();
-            $("[name='my-checkbox']").each(function (index) {
-                if ($(this).attr("checkedInDatabase") != undefined)
-                    $(this).bootstrapSwitch('state', true, true);
-            });
-            $('input[name="my-checkbox"]').on('switchChange.bootstrapSwitch', function (event, state) {
-                var string = "<?= $this->config->item("url_link") ?>admin/toggleDocumentPayed/".concat($(this).attr("id"));
-                var recarrega = "<?= $this->config->item("url_link") ?>admin/manage_documents/";
-                $.post(string).done(function (data) {
-                    if (data == 1)
-                        alert("Estado do documento modificado com sucesso");
-                    else {
-                        alert("Problema ao modificar o estado do documento");
-                        window.location = recarrega;
-                    }
-                });
-            });
+        	datepickers();
+        	$('#sortable-table').datatable({
+				pageSize : Number.MAX_VALUE,
+				sort : [true, false, false, false, false, false]			
+			});
         });
+
+        
         function post(path, params, method) {
             method = method || "post"; // Set method to post by default if not specified.
 
@@ -83,8 +66,6 @@
         function sendInfoToModalEdit(postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
             $("#documentexpenseId").html(documentExpenseId);
 			
-            alert(postingType);
-			alert(postingPortions);
             if(postingType == "Transferência")
             	$("#posting_Type").prop('selectedIndex', '5');
             else if(postingType == "Dinheiro")
@@ -103,7 +84,7 @@
                 document.getElementById("BoletoEdit").style.display = "none";
                 document.getElementById("CréditoEdit").style.display = "";
                 
-                document.getElementById("postingValueCreditoEdit").value = postingValue;
+                document.getElementById("postingValueCreditoEdit").value = postingValue*postingPortions;
                 document.getElementById("postingDateCreditoEdit").value = postingDate;
                 document.getElementById("postingPortionsCreditoEdit").value = postingPortions;                
                 
@@ -156,9 +137,6 @@
 
         }
 
-
-        
-
 		function sendInfoToModal(documentExpenseId){
 			$("#documentexpenseId").html(documentExpenseId);
 		}
@@ -166,14 +144,11 @@
 		function editarFormaPagamento(){
 			var documentexpenseId = document.getElementById("documentexpenseId").textContent;
 			var postingType = document.getElementById("posting_Type").value;
-            alert(documentexpenseId);
-            alert(postingType);
             if (postingType == "Dinheiro") {
 
                 var postingValue = document.getElementById("postingValueDinheiroEdit").value;
-                var postingDate = document.getElementById("postingDateDinheiroEdit").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType},
                         function (data) {
                             if (data == "true") {
                                 alert("Edição cadastrado com sucesso!");
@@ -189,10 +164,9 @@
             if (postingType == "Cheque") {
 
                 var postingValue = document.getElementById("postingValueChequeEdit").value;
-                var postingDate = document.getElementById("postingDateChequeEdit").value;
                 var postingNumberCheque = document.getElementById("postingNumberChequeEdit").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
                         function (data) {
                             if (data == "true") {
                                 alert("Edição cadastrado com sucesso!");
@@ -208,12 +182,11 @@
             if (postingType == "Transferência") {
 
                 var postingValue = document.getElementById("postingValueTransferenciaEdit").value;
-                var postingDate = document.getElementById("postingDateTransferenciaEdit").value;
                 var postingBankNumber = document.getElementById("postingBankNumberTransferenciaEdit").value;
                 var postingAgency = document.getElementById("postingAgencyTransferenciaEdit").value;
                 var postingAccount = document.getElementById("postingAccountTransferenciaEdit").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
                         function (data) {
                             if (data == "true") {
                                 alert("Edição cadastrado com sucesso!");
@@ -247,7 +220,13 @@
 
 		}
         function formaPagamento() {
-
+        	var rads = document.getElementsByName("formadepagamento");
+      	  	var payment_type;
+      	  	for(var i = 0; i < rads.length; i++){
+      	   		if(rads[i].checked){
+      	   			payment_type = rads[i].value;
+      	   		}
+      	   	}
             var documentexpenseId = document.getElementById("documentexpenseId").textContent;
             var postingType = document.getElementById("postingType").value;
 
@@ -269,32 +248,19 @@
                         }
                 );
             }
-
-
-            if (postingType == "Débito") {
-
-                var postingValue = document.getElementById("postingValueDebito").value;
-                var postingDate = document.getElementById("postingDateDebito").value;
-                $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
-                        function (data) {
-                            if (data == "true") {
-                                alert("Pagamento cadastrado com sucesso!");
-                                location.reload();
-                            } else if (data == "false") {
-                                alert("Não foi possível cadastrar o pagamento!");
-                                location.reload();
-                            }
-                        }
-                );
-            }
-
-            if (postingType == "Dinheiro") {
+                
+            else if (postingType == "Dinheiro") {
 
                 var postingValue = document.getElementById("postingValueDinheiro").value;
-                var postingDate = document.getElementById("postingDateDinheiro").value;
+                var postingDate;
+                if(document.getElementById("postingDateDinheiro")){
+                	postingDate = document.getElementById("postingDateDinheiro").value;
+                }
+                else{
+                	postingDate = null;
+                }
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, payment_type: payment_type},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -306,13 +272,12 @@
                         }
                 );
             }
-            if (postingType == "Cheque") {
+            else if (postingType == "Cheque") {
 
                 var numberCheque = document.getElementById("postingNumberCheque").value;
                 var postingValue = document.getElementById("postingValueCheque").value;
-                var postingDate = document.getElementById("postingDateCheque").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, numberCheque: numberCheque},
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, numberCheque: numberCheque},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -324,14 +289,13 @@
                         }
                 );
             }
-            if (postingType == "Transferência") {
+            else if (postingType == "Transferência") {
                 var postingValue = document.getElementById("postingValueTransferencia").value;
-                var postingDate = document.getElementById("postingDateTransferencia").value;
                 var bankNumber = document.getElementById("postingBankNumberTransferencia").value;
                 var bankAgency = document.getElementById("postingAgencyTransferencia").value;
                 var accountNumber = document.getElementById("postingAccountTransferencia").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, bankNumber: bankNumber, bankAgency: bankAgency, accountNumber: accountNumber},
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, bankNumber: bankNumber, bankAgency: bankAgency, accountNumber: accountNumber},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -343,7 +307,7 @@
                         }
                 );
             }
-            if (postingType == "Boleto") {
+            else if (postingType == "Boleto") {
                 var portions = document.getElementById("postingPortionsBoleto").value;
                 var postingValue = "";
                 var postingDate = "";
@@ -373,7 +337,7 @@
         }
 
 
-function limpaDivEdit(){
+		function limpaDivEdit(){
 			
 			document.getElementById("posting_Type").selectedIndex = 0;
 			document.getElementById("ChequeEdit").style.display = "none";
@@ -405,9 +369,7 @@ function limpaDivEdit(){
             	document.getElementById("postingValueBoletoEdit".concat(i)).value = null;
     			document.getElementById("postingDateBoletoEdit".concat(i)).value = null;
                 
-            }           
-
-            
+            }   
 
 		}
 
@@ -419,20 +381,19 @@ function limpaDivEdit(){
             document.getElementById("Dinheiro").style.display = "none";
             document.getElementById("Transferência").style.display = "none";
             document.getElementById("Boleto").style.display = "none";
+            document.getElementById("DinheiroDate").style.display = "none";
 
 			document.getElementById("postingValueCredito").value = null;
 			document.getElementById("postingDateCredito").value = null;
 			document.getElementById("postingPortionsCredito").value = "Selecione";
 			
 			document.getElementById("postingValueCheque").value = null;
-			document.getElementById("postingDateCheque").value = null;
 			document.getElementById("postingNumberCheque").value = null;
 
 			document.getElementById("postingValueDinheiro").value = null;
 			document.getElementById("postingDateDinheiro").value = null;
 
 			document.getElementById("postingValueTransferencia").value = null;
-			document.getElementById("postingDateTransferencia").value = null;
 			document.getElementById("postingBankNumberTransferencia").value = null;
 			document.getElementById("postingAgencyTransferencia").value = null;
 			document.getElementById("postingAccountTransferencia").value = null;					
@@ -443,15 +404,7 @@ function limpaDivEdit(){
             	document.getElementById("postingValueBoleto".concat(i)).value = null;
     			document.getElementById("postingDateBoleto".concat(i)).value = null;
                 
-            }
-			
-
-
-
-			
-                
-
-            
+            }            
 
 		}
 
@@ -459,7 +412,7 @@ function limpaDivEdit(){
         	
       	  	var type;
       	  	
-      	   		type = document.getElementById("posting_Type").value;
+      	   	type = document.getElementById("posting_Type").value;
 
            	   
             if (type == "Boleto") {
@@ -509,7 +462,7 @@ function limpaDivEdit(){
 
         }
 
-        function paymentType() {
+        function paymentRadioType(){
         	var rads = document.getElementsByName("formadepagamento");
       	  	var tipo;
       	  	var type;
@@ -521,14 +474,36 @@ function limpaDivEdit(){
       	   	
       	   	if(tipo == "caixinha"){
           	   	type = "Dinheiro";
+          	  	$("#postingType").prop('selectedIndex', '4');
+          		document.getElementById("DinheiroDate").style.display = "";
+          		document.getElementById("Boleto").style.display = "none";
+                document.getElementById("Cheque").style.display = "none";
+                document.getElementById("Crédito").style.display = "none";
+                document.getElementById("Transferência").style.display = "none";
+                document.getElementById("Dinheiro").style.display = "";
       	   	}
-      	   	else if(tipo == "debitoa"){
-          	   	type = "Crédito";
+      	   	else if(tipo == "deb auto"){
+          	   	type = "Dinheiro";
+          	  	$("#postingType").prop('selectedIndex', '4');
+          		document.getElementById("DinheiroDate").style.display = "";
+          		document.getElementById("Boleto").style.display = "none";
+                document.getElementById("Cheque").style.display = "none";
+                document.getElementById("Crédito").style.display = "none";
+                document.getElementById("Transferência").style.display = "none";
+                document.getElementById("Dinheiro").style.display = "";
       	   	}
       	   	else{
-      	   		var type = document.getElementById("postingType").value;
+      	   		limpaDiv();
+      	   		var type = document.getElementById("postingType").value;      	   		
       	   	}
-           	   
+
+      	   	
+        }
+
+        function paymentType() {
+
+        	var type = document.getElementById("postingType").value;  
+            
             if (type == "Boleto") {
                 document.getElementById("Cheque").style.display = "none";
                 document.getElementById("Crédito").style.display = "none";
@@ -598,48 +573,6 @@ function limpaDivEdit(){
             }
 
         }
-        
-
-        function accountUpdate(id, date, value) {
-            var account_name = document.getElementById("accounts_".concat(id)).value;
-
-            var names = document.getElementById("accountsNames").value;
-            names = names.split("/");
-
-            var ok = 0;
-
-            for (var i = 0; i < names.length; i++) {
-                if (account_name.localeCompare(names[i]) == 0) {
-                    ok = 1;
-                    break;
-                }
-            }
-
-            if (ok == 1) {
-                $.post('<?= $this->config->item('url_link'); ?>admin/updateAccountName',
-                        {id: id, date: date, value: value, account_name: account_name},
-                        function (data) {
-                            if (data == "true") {
-                                alert("Nome de Conta atribuído com sucesso!");
-                            } else if (data == "false") {
-                                alert("Ocorreu um erro na atribuição de Nome de Conta!");
-                                location.reload();
-                            }
-                        }
-                );
-            } else {
-                alert("Nome de conta inválido. Insira um nome existente!");
-            }
-        }
-
-        $(function () {
-            var availableTags = document.getElementById("accountsNames").value;
-            availableTags = availableTags.split("/");
-
-            $(".accounts").autocomplete({
-                source: availableTags
-            });
-        });
 
     </script>
 
@@ -705,7 +638,6 @@ for ($m = 1; $m <= 12; $m++) {
                 <div class="col-lg-12 middle-content">
 
                     <a href="<?= $this->config->item("url_link") ?>admin/createDocument" >
-                        <input style="display:none" id="accountsNames" value="<?php echo $accountNames; ?>">
 
                         <button id="create" class="btn btn-primary"  value="Criar novo documento" >Novo documento</button>
                     </a>
@@ -749,7 +681,7 @@ if (isset($documents)) {
                 break;
         }
         ?></a> </td>
-                                    <td><?php echo $document->document_value; ?> </td>
+                                    <td><?= number_format($document->document_value,2,',','') ?> </td>
                                     <td><?php echo $document->document_description; ?></td>
                                     <td><a href="<?php echo $this->config->item("url_link"); ?>admin/viewDocumentUpload?document_id=<?php echo $document->document_expense_id; ?>">
                                             <button <?php
@@ -800,9 +732,9 @@ if (isset($documents)) {
 
                                 <div class="row">
                                     <form method="GET">
-                                        <input type="radio" name="formadepagamento" value="apagar" onclick="paymentType()" checked> A pagar
-                                        <input type="radio" name="formadepagamento" value="caixinha" onclick="paymentType()"> Caixinha
-                                        <input type="radio" name="formadepagamento"  value="debitoa" onclick="paymentType()"> Débito automático
+                                        <input type="radio" name="formadepagamento" value="a pagar" onclick="paymentRadioType()" checked> A pagar </input>
+                                        <input type="radio" name="formadepagamento" value="caixinha" onclick="paymentRadioType()"> Caixinha </input>
+                                        <input type="radio" name="formadepagamento"  value="deb auto" onclick="paymentRadioType()"> Débito automático </input>
                                     </form>
                                     <div class="form-group">
                                         <div class="col-lg-12">
@@ -852,7 +784,7 @@ if (isset($documents)) {
                                                     </div>
                                                     <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200x" class="form-control" type="text" id="postingDateBoleto<?php echo $i ?>" name="postingDateBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200x" class="datepickers form-control" type="text" id="postingDateBoleto<?php echo $i ?>" name="postingDateBoleto<?php echo $i ?>" ></input> 
                                                         <br/><br/>
                                                     </div>
                                                 </div>
@@ -873,12 +805,6 @@ if (isset($documents)) {
                                         <td> Número do Cheque: </td> <br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingNumberCheque" name="postingNumberCheque" ></input> <br><br>
                                     </tr>
-                                    <tr>
-                                        <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCheque" name="postingDateCheque" ></input> <br><br>
-
-                                    </tr>
-
                                     <tr> 
                                         <td> Valor: </td> <br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
@@ -899,7 +825,7 @@ if (isset($documents)) {
                                     <div style="width: 350px; padding-left:0px" class="col-lg-2 control-label">
                                         <select style="width: 190px" class="form-control" name="postingPortionsCredito" id="postingPortionsCredito"  >
                                             <option value="Selecione"> - Selecione - </option>
-<?php for ($i = 1; $i <= 10; $i++) { ?>
+											<?php for ($i = 1; $i <= 10; $i++) { ?>
                                                 <option value="<?= $i ?>"> <?php echo $i ?> </option>
                                             <?php } ?>
                                         </select>
@@ -907,31 +833,31 @@ if (isset($documents)) {
                                     </tr> <br/><br/><br/>
                                     <tr>
                                         <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br><br>
+                                    <input style="width: 200px" class="datepickers form-control" type="text" id="postingDateCredito" name="postingDateCredito" ></input> <br><br>
                                     
                                     </tr>
 
                                 </div>                                                            
                                 <div id = "Dinheiro" style="display: none"> 
+                                <tr>
                                     <td> Valor: </td><br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> <br><br>
                                     </tr>
+                                    
+                                 <div id="DinheiroDate" style="display: none"> 
                                     <tr>
                                         <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br><br>
+                                    <input style="width: 200px" class="datepickers form-control" type="text" id="postingDateDinheiro" name="postingDateDinheiro" ></input> <br><br>
                                     
                                     </tr>
+                                    </div>
+                                    
 
                                 </div>
 
                                 <div id = "Transferência" style="display: none"> 
                                     <td> Valor: </td> <br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> <br><br>
-                                    </tr>
-                                    <tr>
-                                        <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateTransferencia" name="postingDateTransferencia" ></input> <br><br>
-
                                     </tr>
                                     <tr> 
                                         <td> Banco: </td> <br>
@@ -983,9 +909,9 @@ if (isset($documents)) {
 
                                 <div class="row">
                                     <form method="GET">
-                                        <input type="radio" name="formadepagamento" value="apagar" onclick="paymentType()" checked> A pagar
-                                        <input type="radio" name="formadepagamento" value="caixinha" onclick="paymentType()"> Caixinha
-                                        <input type="radio" name="formadepagamento"  value="debitoa" onclick="paymentType()"> Débito automático
+                                        <input type="radio" name="formadepagamentoEdit" value="apagar" onclick="paymentType()" checked> A pagar
+                                        <input type="radio" name="formadepagamentoEdit" value="caixinha" onclick="paymentType()"> Caixinha
+                                        <input type="radio" name="formadepagamentoEdit"  value="debitoa" onclick="paymentType()"> Débito automático
                                     </form>
                                     
                                     <div class="form-group">
@@ -1036,7 +962,7 @@ if (isset($documents)) {
                                                     </div>
                                                     <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200x" class="form-control" type="text" id="postingDateBoletoEdit<?php echo $i ?>" value="" name="postingDateBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200x" class="datepickers form-control" type="text" id="postingDateBoletoEdit<?php echo $i ?>" value="" name="postingDateBoleto<?php echo $i ?>" ></input> 
                                                         <br/><br/>
                                                     </div>
                                                 </div>
@@ -1055,11 +981,6 @@ if (isset($documents)) {
                                     <tr> 
                                         <td> Número do Cheque: </td> <br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingNumberChequeEdit" value="" name="postingNumberCheque" ></input> <br><br>
-                                    </tr>
-                                    <tr>
-                                        <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateChequeEdit" value="" name="postingDateCheque" ></input> <br><br>
-
                                     </tr>
 
                                     <tr> 
@@ -1090,7 +1011,7 @@ if (isset($documents)) {
                                     </tr> <br/><br/><br/>
                                     <tr>
                                         <td> Data: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateCreditoEdit" value="" name="postingDateCredito" ></input> <br><br>
+                                    <input style="width: 200px" class="datepickers form-control" type="text" id="postingDateCreditoEdit" value="" name="postingDateCredito" ></input> <br><br>
                                     
                                     </tr>
 
@@ -1099,22 +1020,12 @@ if (isset($documents)) {
                                     <td> Valor: </td><br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiroEdit" value="" name="postingValueDinheiro" ></input> <br><br>
                                     </tr>
-                                    <tr>
-                                        <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateDinheiroEdit" value="" name="postingDateDinheiro" ></input> <br><br>
-                                    
-                                    </tr>
 
                                 </div>
 
                                 <div id = "TransferênciaEdit" style="display: none"> 
                                     <td> Valor: </td> <br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingValueTransferenciaEdit" value="" name="postingValueTransferencia" ></input> <br><br>
-                                    </tr>
-                                    <tr>
-                                        <td> Data: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingDateTransferenciaEdit" value="" name="postingDateTransferencia" ></input> <br><br>
-
                                     </tr>
                                     <tr> 
                                         <td> Banco: </td> <br>

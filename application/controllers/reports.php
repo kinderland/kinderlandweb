@@ -152,7 +152,9 @@ class Reports extends CK_Controller {
     	$postingExpensesWithPostingDate = $this -> finance_model -> getPostingsExpensesByPostingDate($year,$month);
     	$postingExpensesWithoutDate = $this -> finance_model -> getPostingsExpensesWithoutDate();
     	
-    	$info = array();
+    	$info1 = array();
+    	$info2 = array();
+    	$info3 = array();
     	$portions = array();
     	$qtdpayed = 0;
     	$peopleWithOperation = $this -> finance_model -> getPeopleOperationByPostingExpense();
@@ -164,10 +166,8 @@ class Reports extends CK_Controller {
 	    			$obj = new StdClass();
 	    			$obj = $pe;
 	    			
-	    			if(array_key_exists($pe->document_expense_id,$portions)){
-	    				$portions[$pe->document_expense_id]++;
-	    			}else{
-	    				$portions[$pe->document_expense_id] = 1;
+	    			if(!array_key_exists($pe->document_expense_id,$portions)){
+	    				$portions[$pe->document_expense_id] = $this->finance_model->getNumberOfPortionsByDocumentExpenseId($pe->document_expense_id)->portions;
 	    			}
 	    			
 	    			if($pe->posting_date){
@@ -178,7 +178,7 @@ class Reports extends CK_Controller {
 	    			
 	    			$obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
 	    			
-	    			$info[] = $obj;
+	    			$info1[] = $obj;
 	    		}
     		}
     	}
@@ -192,11 +192,9 @@ class Reports extends CK_Controller {
     				$qtdpayed++;
     			}
     	
-    			if(array_key_exists($pe->document_expense_id,$portions)){
-    				$portions[$pe->document_expense_id]++;
-    			}else{
-    				$portions[$pe->document_expense_id] = 1;
-    			}
+    			if(!array_key_exists($pe->document_expense_id,$portions)){
+	    				$portions[$pe->document_expense_id] = $this->finance_model->getNumberOfPortionsByDocumentExpenseId($pe->document_expense_id)->portions;
+	    		}
     			
     			if($pe->posting_date){
     				$r = explode("-", $pe->posting_date);
@@ -215,7 +213,7 @@ class Reports extends CK_Controller {
     			}
     			
     			$obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
-    			$info[] = $obj;
+    			$info2[] = $obj;
     		}
     	}
     	
@@ -227,11 +225,9 @@ class Reports extends CK_Controller {
 	    			$qtdpayed++;
 	    		}
 	    		
-	    			if(array_key_exists($pe->document_expense_id,$portions)){
-	    				$portions[$pe->document_expense_id]++;
-	    			}else{
-	    				$portions[$pe->document_expense_id] = 1;
-	    			}
+	    		if(!array_key_exists($pe->document_expense_id,$portions)){
+	    				$portions[$pe->document_expense_id] = $this->finance_model->getNumberOfPortionsByDocumentExpenseId($pe->document_expense_id)->portions;
+	    		}
 	    		
 	    		if($pe->posting_date){
 		    		$r = explode("-", $pe->posting_date);
@@ -249,7 +245,7 @@ class Reports extends CK_Controller {
 	    			
 	    		}
 	    		$obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
-	    		$info[] = $obj;
+	    		$info3[] = $obj;
 	    	}
     	}
     	
@@ -258,13 +254,12 @@ class Reports extends CK_Controller {
     			$obj = new StdClass();
     			$obj = $pe;
     			 
-    			if(array_key_exists($pe->document_expense_id,$portions)){
-    				$portions[$pe->document_expense_id]++;
-    			}else{
-    				$portions[$pe->document_expense_id] = 1;
-    			}
+    			if(!array_key_exists($pe->document_expense_id,$portions)){
+	    				$portions[$pe->document_expense_id] = $this->finance_model->getNumberOfPortionsByDocumentExpenseId($pe->document_expense_id)->portions;
+	    		}
+	    		
                 $obj->posting_expense_upload_id=$this->finance_model->hasPostingUpload($obj->document_expense_id,$obj->posting_portions);
-    			$info[] = $obj;
+    			$info3[] = $obj;
     		}
     	}
     	
@@ -275,7 +270,9 @@ class Reports extends CK_Controller {
     		$answer = $answer . "/" . $an->account_name;
     	}
     	$data['accountNames'] = $answer;    	
-    	$data["info"] = $info;
+    	$data["info1"] = $info1;
+    	$data["info2"] = $info2;
+    	$data["info3"] = $info3;
     	$data["qtdpayed"] = $qtdpayed;
     	$data["portions"] = $portions;
     	
