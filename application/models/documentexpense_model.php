@@ -84,7 +84,7 @@ class documentexpense_model extends CK_Model {
             return NULL;
     }
 
-    public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus) {
+    public function insertNewPostingExpense($documentexpenseId, $postingDate, $postingValue, $postingType, $postingPortion, $paymentStatus,$status) {
         $sql = "INSERT into posting_expense (document_expense_id, posting_date, posting_value, posting_type, posting_portions, payment_status)
 					VALUES (?,?,?,?,?,?)";
 
@@ -95,7 +95,16 @@ class documentexpense_model extends CK_Model {
         
         if ($postingExpense) {
         	$person_id = $this->session->userdata('user_id');
-        	$log = $this->insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'criou forma de pag');
+        	
+        	if($postingPortion > 1){
+        		return $result;
+        	}else{
+	        	if($status == 'new')
+	        		$log = $this->insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'criou forma de pag');
+	        	else if($status == 'edit')
+	        		$log = $this->insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'editou forma de pag');
+        	}
+        	
         	if ($log)
         		return $log;
         	else
@@ -151,7 +160,20 @@ class documentexpense_model extends CK_Model {
                 . "payment_status=? "
                 . "WHERE document_expense_id=? and posting_portions=?";
         $resultSet = $this->execute($this->db, $sql, array($postingDate, $postingValue, $postingType, $paymentStatus, intval($documentexpenseId), $postingPortion));
-        return $resultSet;
+        
+        if ($resultSet)
+        	$postingExpense = $this->getPostingExpenseById($documentexpenseId, $postingPortion);
+        
+        if ($postingExpense) {
+        	$person_id = $this->session->userdata('user_id');
+        	$log = $this->insertNewLog($person_id, $postingExpense->document_expense_id, $postingExpense->posting_date, $postingExpense->posting_value, $postingExpense->posting_portions, 'editou forma de pag');
+        	if ($log)
+        		return $log;
+        	else
+        		return null;
+        }else {
+        	return null;
+        }
     }
 
     public function updateDocument($id, $date, $number, $description, $value, $name) {

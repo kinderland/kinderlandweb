@@ -32,6 +32,44 @@ class finance_model extends CK_Model{
 				return NULL;
 	}
 	
+	public function getPostingExpenseByDocumentId($document_id){
+		$sql = "SELECT * FROM v_all_posting_expenses_info
+				WHERE document_expense_id = ?";
+			
+		$result = $this->executeRows($this->db, $sql, array(intval($document_id)));
+			
+		if($result)
+			return $result;
+		else
+			return NULL;
+	}
+	
+	public function getMaxPostingPortionByDocumentId($document_id){
+		$sql = "SELECT max(posting_portions) as max FROM v_all_posting_expenses_info
+				WHERE document_expense_id = ?
+				group by document_expense_id";
+			
+		$result = $this->executeRow($this->db, $sql, array(intval($document_id)));
+			
+		if($result)
+			return $result -> max;
+		else
+			return NULL;
+	}
+	
+	public function getPostingTypeByDocumentId($document_id){
+		$sql = "SELECT posting_type FROM v_all_posting_expenses_info
+				WHERE document_expense_id = ?";
+		
+		$result = $this->executeRow($this->db, $sql, array(intval($document_id)));
+			
+		if($result)
+			return $result;
+		else
+			return NULL;
+		
+	}
+	
 	public function getPeopleOperationByPostingExpense(){
 		
 		$sql = "SELECT *
@@ -309,6 +347,50 @@ class finance_model extends CK_Model{
 			return $returnId;
 	
 		return false;
+	}
+	
+	public function deletePostingExpenses($document_id){
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$deleteSql = "DELETE FROM posting_expense WHERE document_expense_id = ?";
+	
+		return $this->execute($this->db, $deleteSql, array($document_id));
+	}
+	
+	public function deleteBankSlips($document_id){
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$deleteSql = 'DELETE FROM posting_bank_slip WHERE document_expense_id = ?';
+	
+		return $this->execute($this->db, $deleteSql, array($document_id));
+	}
+	
+	public function deleteBankChecks($document_id){
+		$this -> Logger -> info("Running: " . __METHOD__);
+	
+		$deleteSql = 'DELETE FROM posting_bank_check WHERE document_expense_id = ?';
+	
+		return $this->execute($this->db, $deleteSql, array($document_id));
+	}
+	
+	public function deleteBankTransfers($document_id){
+		$this -> Logger -> info("Running: " . __METHOD__);
+		$sql = 'SELECT *
+				FROM posting_bank_transfer pbt
+				INNER JOIN bank_data bd on bd.bank_data_id = pbt.bank_data_id
+				WHERE document_expense_id = ?';
+		
+		$result = $this->executeRow($this->db, $sql, array($document_id));		
+	
+		$deleteSql = 'DELETE FROM posting_bank_transfer WHERE document_expense_id = ?';
+	
+		$resultDelete = $this->execute($this->db, $deleteSql, array($document_id));
+		
+		$deleteBankData = 'DELETE FROM bank_data WHERE bank_data_id = ?';
+		
+		$resultDeleteBankData = $this->execute($this->db, $deleteBankData, array($result -> bank_data_id));
+		
+		return $resultDelete & $resultDeleteBankData;
 	}
 	
 	public function deleteAccount($account_name){

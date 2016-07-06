@@ -63,8 +63,17 @@
             form.submit();
         }
 
-        function sendInfoToModalEdit(postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
+        function sendInfoToModalEdit(payment_status, postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
             $("#documentexpenseId").html(documentExpenseId);
+
+            var rads = document.getElementsByName("formadepagamentoEdit");
+            
+      	  	for(var i = 0; i < rads.length; i++){
+      	   		if(rads[i].value == payment_status){
+      	   			rads[i].checked = true;
+      	   		}else
+      	   			rads[i].checked =  false;
+      	   	}
 			
             if(postingType == "Transferência")
             	$("#posting_Type").prop('selectedIndex', '5');
@@ -120,7 +129,6 @@
                 document.getElementById("TransferênciaEdit").style.display = "";
                 
                 document.getElementById("postingValueTransferenciaEdit").value = postingValue;
-                document.getElementById("postingDateTransferenciaEdit").value = postingDate;
                 document.getElementById("postingBankNumberTransferenciaEdit").value = postingBankNumber;
                 document.getElementById("postingAgencyTransferenciaEdit").value = postingAgency;
                 document.getElementById("postingAccountTransferenciaEdit").value = postingAccount;
@@ -133,6 +141,16 @@
                 document.getElementById("TransferênciaEdit").style.display = "none";
                 document.getElementById("BoletoEdit").style.display = "";
 
+                datas = postingDate.split("-");
+                valores = postingValue.split("-");
+
+                for(var i = 1; i <= datas.length-1 ; i++){ 
+                	document.getElementById("BoletoEdit".concat(i)).style.display = "";
+                	document.getElementById("postingValueBoletoEdit".concat(i)).value = valores[i-1];
+                	document.getElementById("postingDateBoletoEdit".concat(i)).value = datas[i-1]; 
+                }
+
+                $("#postingPortionsBoletoEdit").prop('selectedIndex', i-1);
             }
 
         }
@@ -142,16 +160,34 @@
 		}
 
 		function editarFormaPagamento(){
+			var rads = document.getElementsByName("formadepagamentoEdit");
+      	  	var payment_type;
+      	  	for(var i = 0; i < rads.length; i++){
+      	   		if(rads[i].checked){
+      	   			payment_type = rads[i].value;
+      	   		}
+      	   	}
+      	   	var status = "edit";
+      	   	
 			var documentexpenseId = document.getElementById("documentexpenseId").textContent;
 			var postingType = document.getElementById("posting_Type").value;
+			
             if (postingType == "Dinheiro") {
+                
+                var postingDate;
+                if(document.getElementById("postingDateDinheiroEdit")){
+                	postingDate = document.getElementById("postingDateDinheiroEdit").value;
+                }
+                else{
+                	postingDate = null;
+                }
 
                 var postingValue = document.getElementById("postingValueDinheiroEdit").value;
-                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
-                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType},
+                $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, payment_type: payment_type, status: status},
                         function (data) {
                             if (data == "true") {
-                                alert("Edição cadastrado com sucesso!");
+                                alert("Edição cadastrada com sucesso!");
                                 location.reload();
                             } else if (data == "false") {
                                 alert("Não foi possível editar o pagamento!");
@@ -161,15 +197,15 @@
                 );
             }
 
-            if (postingType == "Cheque") {
+            else if (postingType == "Cheque") {
 
                 var postingValue = document.getElementById("postingValueChequeEdit").value;
                 var postingNumberCheque = document.getElementById("postingNumberChequeEdit").value;
-                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
-                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
+                $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, numberCheque: postingNumberCheque, status: status},
                         function (data) {
                             if (data == "true") {
-                                alert("Edição cadastrado com sucesso!");
+                                alert("Edição cadastrada com sucesso!");
                                 location.reload();
                             } else if (data == "false") {
                                 alert("Não foi possível editar o pagamento!");
@@ -179,17 +215,17 @@
                 );
             }
 
-            if (postingType == "Transferência") {
+            else if (postingType == "Transferência") {
 
                 var postingValue = document.getElementById("postingValueTransferenciaEdit").value;
                 var postingBankNumber = document.getElementById("postingBankNumberTransferenciaEdit").value;
                 var postingAgency = document.getElementById("postingAgencyTransferenciaEdit").value;
                 var postingAccount = document.getElementById("postingAccountTransferenciaEdit").value;
-                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
-                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, postingNumberCheque: postingNumberCheque},
+                $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, bankNumber: postingBankNumber, bankAgency: postingAgency, accountNumber: postingAccount, status: status},
                         function (data) {
                             if (data == "true") {
-                                alert("Edição cadastrado com sucesso!");
+                                alert("Edição cadastrada com sucesso!");
                                 location.reload();
                             } else if (data == "false") {
                                 alert("Não foi possível editar o pagamento!");
@@ -199,16 +235,15 @@
                 );
             }
 
-            if (postingType == "Crédito") {
-				
+            else if (postingType == "Crédito") {
+            	var portions = document.getElementById("postingPortionsCreditoEdit").value;
                 var postingValue = document.getElementById("postingValueCreditoEdit").value;
                 var postingDate = document.getElementById("postingDateCreditoEdit").value;
-                alert(postingValue);
-                $.post('<?= $this->config->item('url_link'); ?>admin/updatePostingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType},
+                $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions, status: status},
                         function (data) {
                             if (data == "true") {
-                                alert("Edição cadastrado com sucesso!");
+                                alert("Edição cadastrada com sucesso!");
                                 location.reload();
                             } else if (data == "false") {
                                 alert("Não foi possível editar o pagamento!");
@@ -216,6 +251,33 @@
                             }
                         }
                 );
+            }
+            else if (postingType == "Boleto") {
+                var portions = document.getElementById("postingPortionsBoletoEdit").value;
+                var postingValue = "";
+                var postingDate = "";
+                for (var i = 1; i <= portions; i++) {
+                    if (i != portions) {
+                        postingValue = postingValue.concat(document.getElementById("postingValueBoletoEdit".concat(i)).value).concat("/");
+                        postingDate = postingDate.concat(document.getElementById("postingDateBoletoEdit".concat(i)).value).concat("/");
+                    } else {
+                        postingValue = postingValue.concat(document.getElementById("postingValueBoletoEdit".concat(i)).value);
+                        postingDate = postingDate.concat(document.getElementById("postingDateBoletoEdit".concat(i)).value);
+                    }
+                }
+                $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions, status: status},
+                        function (data) {
+                            if (data == "true") {
+                                alert("Edição cadastrada com sucesso!");
+                                location.reload();
+                            } else if (data == "false") {
+                                alert("Não foi possível editar o pagamento!");
+                                location.reload();
+                            }
+                        }
+                );
+
             }
 
 		}
@@ -229,6 +291,7 @@
       	   	}
             var documentexpenseId = document.getElementById("documentexpenseId").textContent;
             var postingType = document.getElementById("postingType").value;
+            var status = "new";
 
             if (postingType == "Crédito") {
 
@@ -236,7 +299,7 @@
                 var postingValue = document.getElementById("postingValueCredito").value;
                 var postingDate = document.getElementById("postingDateCredito").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions},
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions, status: status},
                         function (data) {
                             if (data.localeCompare("true") == 0) {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -260,7 +323,7 @@
                 	postingDate = null;
                 }
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, payment_type: payment_type},
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, payment_type: payment_type, status: status},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -277,7 +340,7 @@
                 var numberCheque = document.getElementById("postingNumberCheque").value;
                 var postingValue = document.getElementById("postingValueCheque").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, numberCheque: numberCheque},
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, numberCheque: numberCheque, status: status},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -295,7 +358,7 @@
                 var bankAgency = document.getElementById("postingAgencyTransferencia").value;
                 var accountNumber = document.getElementById("postingAccountTransferencia").value;
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, bankNumber: bankNumber, bankAgency: bankAgency, accountNumber: accountNumber},
+                        {documentexpenseId: documentexpenseId, postingValue: postingValue, postingType: postingType, bankNumber: bankNumber, bankAgency: bankAgency, accountNumber: accountNumber, status: status},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -321,7 +384,7 @@
                     }
                 }
                 $.post('<?= $this->config->item('url_link'); ?>admin/postingExpense',
-                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions},
+                        {documentexpenseId: documentexpenseId, postingDate: postingDate, postingValue: postingValue, postingType: postingType, portions: portions, status: status},
                         function (data) {
                             if (data == "true") {
                                 alert("Pagamento cadastrado com sucesso!");
@@ -338,6 +401,16 @@
 
 
 		function limpaDivEdit(){
+
+			var rads = document.getElementsByName("formadepagamentoEdit");
+      	  	for(var i = 0; i < rads.length; i++){
+      	   		if(rads[i].value == 'a pagar'){
+      	    		rads[i].checked = true;
+      	   		}
+      	   		else {
+      	   			rads[i].checked = false;
+      	   		}          	   		
+      	   	}
 			
 			document.getElementById("posting_Type").selectedIndex = 0;
 			document.getElementById("ChequeEdit").style.display = "none";
@@ -351,14 +424,14 @@
 			document.getElementById("postingPortionsCreditoEdit").value = "Selecione";
 			
 			document.getElementById("postingValueChequeEdit").value = null;
-			document.getElementById("postingDateChequeEdit").value = null;
 			document.getElementById("postingNumberChequeEdit").value = null;
 
 			document.getElementById("postingValueDinheiroEdit").value = null;
-			document.getElementById("postingDateDinheiroEdit").value = null;
+
+			if(document.getElementById("postingDateDinheiroEdit") != null)
+				document.getElementById("postingDateDinheiroEdit").value = null;
 
 			document.getElementById("postingValueTransferenciaEdit").value = null;
-			document.getElementById("postingDateTransferenciaEdit").value = null;
 			document.getElementById("postingBankNumberTransferenciaEdit").value = null;
 			document.getElementById("postingAgencyTransferenciaEdit").value = null;
 			document.getElementById("postingAccountTransferenciaEdit").value = null;					
@@ -374,6 +447,16 @@
 		}
 
 		function limpaDiv(){
+
+			var rads = document.getElementsByName("formadepagamento");
+      	  	for(var i = 0; i < rads.length; i++){
+      	   		if(rads[i].value == 'a pagar'){
+      	    		rads[i].checked = true;
+      	   		}
+      	   		else {
+      	   			rads[i].checked = false;
+      	   		}          	   		
+      	   	}
 			
 			document.getElementById("postingType").selectedIndex = 0;
 			document.getElementById("Cheque").style.display = "none";
@@ -495,6 +578,44 @@
       	   	else{
       	   		limpaDiv();
       	   		var type = document.getElementById("postingType").value;      	   		
+      	   	}
+
+      	   	
+        }
+
+        function paymentRadioTypeEdit(){
+        	var rads = document.getElementsByName("formadepagamentoEdit");
+      	  	var tipo;
+      	  	var type;
+      	  	for(var i = 0; i < rads.length; i++){
+      	   		if(rads[i].checked){
+      	    		tipo = rads[i].value;
+      	   		}
+      	   	}
+      	   	
+      	   	if(tipo == "caixinha"){
+          	   	type = "Dinheiro";
+          	  	$("#posting_Type").prop('selectedIndex', '4');
+          		document.getElementById("DinheiroDateEdit").style.display = "";
+          		document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "";
+      	   	}
+      	   	else if(tipo == "deb auto"){
+          	   	type = "Dinheiro";
+          	  	$("#posting_Type").prop('selectedIndex', '4');
+          		document.getElementById("DinheiroDateEdit").style.display = "";
+          		document.getElementById("BoletoEdit").style.display = "none";
+                document.getElementById("ChequeEdit").style.display = "none";
+                document.getElementById("CréditoEdit").style.display = "none";
+                document.getElementById("TransferênciaEdit").style.display = "none";
+                document.getElementById("DinheiroEdit").style.display = "";
+      	   	}
+      	   	else{
+      	   		limpaDivEdit();
+      	   		var type = document.getElementById("posting_Type").value;      	   		
       	   	}
 
       	   	
@@ -697,7 +818,7 @@ if (isset($documents)) {
         <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
                                     <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                 <?php } else { ?>
-                                    <td><button class="btn btn-success" onclick="sendInfoToModalEdit('<?= $document->posting_value ?>', '<?= $document->posting_date ?>', '<?= $document->posting_type ?>', '<?= $document->posting_portions ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#meuModalEditar">Tipo</button> </td>
+                                    <td><button class="btn btn-success" onclick="<?php if($document->posting_type == 'Boleto'){ ?>sendInfoToModalEdit('<?= $document->payment_status ?>','<?= $boleto[$document->document_expense_id]->posting_value ?>', '<?= $boleto[$document->document_expense_id]->posting_date ?>'<?php } else{?>sendInfoToModalEdit('<?= $document->payment_status ?>','<?= $document->posting_value ?>', '<?= $document->posting_date ?>' <?php }?>, '<?= $document->posting_type ?>', '<?php if($document->posting_type == 'Crédito') echo $posting_portions_credito[$document->document_expense_id]; else echo $document->posting_portions; ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#meuModalEditar">Tipo</button> </td>
                                 <?php } ?>
                             </tr>
 
@@ -909,9 +1030,9 @@ if (isset($documents)) {
 
                                 <div class="row">
                                     <form method="GET">
-                                        <input type="radio" name="formadepagamentoEdit" value="apagar" onclick="paymentType()" checked> A pagar
-                                        <input type="radio" name="formadepagamentoEdit" value="caixinha" onclick="paymentType()"> Caixinha
-                                        <input type="radio" name="formadepagamentoEdit"  value="debitoa" onclick="paymentType()"> Débito automático
+                                        <input type="radio" name="formadepagamentoEdit" value="a pagar" onclick="paymentRadioTypeEdit()" checked> A pagar
+                                        <input type="radio" name="formadepagamentoEdit" value="caixinha" onclick="paymentRadioTypeEdit()"> Caixinha
+                                        <input type="radio" name="formadepagamentoEdit"  value="deb auto" onclick="paymentRadioTypeEdit()"> Débito automático
                                     </form>
                                     
                                     <div class="form-group">
@@ -1020,6 +1141,14 @@ if (isset($documents)) {
                                     <td> Valor: </td><br>
                                     <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiroEdit" value="" name="postingValueDinheiro" ></input> <br><br>
                                     </tr>
+                                    
+                                <div id="DinheiroDateEdit" style="display: none"> 
+                                    <tr>
+                                        <td> Data: </td><br>
+                                    <input style="width: 200px" class="datepickers form-control" type="text" id="postingDateDinheiroEdit" name="postingDateDinheiroEdit" ></input> <br><br>
+                                    
+                                    </tr>
+                                </div>
 
                                 </div>
 

@@ -26,7 +26,7 @@
 
 </head>
 <body>
-    <header class="navbar navbar-sags" role="banner" id="top">
+    <header class="navbar <?php if ($this->db->database == 'kinderland_teste') echo "navbar-test"; else echo "navbar-sags";?>" role="banner" id="top">
         <div class="container">
             <?php if (isset($user_id)) { ?>
                 <a class="navbar-brand" href="<?= $this->config->item('url_link') ?>system/menu">
@@ -50,7 +50,7 @@
                                 echo "AMBIENTE DE TESTES<br>";
                             }
                             ?>
-
+                            
                             <a href="<?= $this->config->item('url_link') ?>login/logout">Sair do Sistema</a>
                         </span>
 
