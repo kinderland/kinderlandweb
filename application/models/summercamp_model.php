@@ -255,15 +255,15 @@ class summercamp_model extends CK_Model {
         return $camp;
     }
 
-    public function updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female) {
+    public function updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female, $mini_camp) {
         $this->Logger->info("Running: " . __METHOD__);
 
         $sql = 'UPDATE summer_camp SET camp_name = ?, date_start = ?, date_finish = ?, date_start_pre_subscriptions = ?, date_finish_pre_subscriptions = ?, 
-    			date_start_pre_subscriptions_associate = ?, date_finish_pre_subscriptions_associate =?,  capacity_male = ?, capacity_female = ?
+    			date_start_pre_subscriptions_associate = ?, date_finish_pre_subscriptions_associate =?,  capacity_male = ?, capacity_female = ?, mini_camp = ?
 				WHERE summer_camp_id = ?';
 
         $result = $this->execute($this->db, $sql, array($camp_name, $date_start, $date_finish, $date_start_pre, $date_finish_pre,
-            $date_start_pre_associate, $date_finish_pre_associate, $capacity_male, $capacity_female, $camp_id));
+            $date_start_pre_associate, $date_finish_pre_associate, $capacity_male, $capacity_female, $mini_camp, $camp_id));
 
         return $result;
     }

@@ -420,7 +420,7 @@
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates1" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto" || $i->payment_status == "pago") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates1" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
                                     	<?php if($i -> payment_status == "caixinha"){?>
                                     	<td><span title="<?php echo $i->person_operation;?>" > Caixinha </span></td>
@@ -532,7 +532,7 @@
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates2" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto" || $i->payment_status == "pago") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates2" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
                                     	<?php if($i -> payment_status == "caixinha"){?>
                                     	<td><span title="<?php echo $i->person_operation;?>" > Caixinha </span></td>
@@ -628,7 +628,7 @@
                                         <td><button <?php if ($i->posting_value == "" && $i->posting_portions == "") echo "disabled" ?> class="btn btn-success" onclick="accountUpdate('<?= $i->document_expense_id ?>', '<?= $i->posting_portions ?>')">Atualizar</button> </td>
                                     <?php } ?>
                                     <div style="text-align: center">
-                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates3" value="<?php echo $i->posting_date; ?>"></td>
+                                    	<td style="align:center"><input <?php if ($i->account_name == "" || $i -> payment_status == "caixinha" || $i -> payment_status == "deb auto" || $i->payment_status == "pago") echo "disabled" ?> style="align:center" type="text" class="datepickers required form-control" id="date_<?=$i->document_expense_id?>_<?= $i->posting_portions ?>" name = "posting_dates3" value="<?php echo $i->posting_date; ?>"></td>
                                     	</div>
                                     	<?php if($i -> payment_status == "caixinha"){?>
                                     	<td><span title="<?php echo $i->person_operation;?>" > Caixinha </span></td>

@@ -63,8 +63,9 @@
             form.submit();
         }
 
-        function sendInfoToModalEdit(payment_status, postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId) {
+        function sendInfoToModalEdit(payment_status, postingValue, postingDate, postingType, postingPortions, postingBankNumber, postingAgency, postingAccount, postingNumberCheque, documentExpenseId, payment_status) {
             $("#documentexpenseId").html(documentExpenseId);
+            $("#paymentStatus").html(payment_status);
 
             var rads = document.getElementsByName("formadepagamentoEdit");
             
@@ -85,6 +86,12 @@
             	$("#posting_Type").prop('selectedIndex', '3');
             else if(postingType == "Cheque")
             	$("#posting_Type").prop('selectedIndex', '2');
+
+        	if(payment_status == 'caixinha'){
+        		document.getElementById("posting_Type").disabled = true;
+        	}else if(payment_status == 'deb auto'){
+        		document.getElementById("posting_Type").disabled = true;
+        	}
             
             if (postingType == "Crédito") {
             	document.getElementById("ChequeEdit").style.display = "none";
@@ -160,6 +167,15 @@
 		}
 
 		function editarFormaPagamento(){
+			var paymentStatus = document.getElementById("paymentStatus").textContent;
+
+			if(paymentStatus == ("pago" || "caixinha" || "deb auto")){
+				t = confirm("O documento já se encontra pago. Caso prossiga, as informações de pagamento serão excluidas. Confirma?");
+				if(t == false){
+					return;
+				}
+			}
+			
 			var rads = document.getElementsByName("formadepagamentoEdit");
       	  	var payment_type;
       	  	for(var i = 0; i < rads.length; i++){
@@ -170,6 +186,7 @@
       	   	var status = "edit";
       	   	
 			var documentexpenseId = document.getElementById("documentexpenseId").textContent;
+			
 			var postingType = document.getElementById("posting_Type").value;
 			
             if (postingType == "Dinheiro") {
@@ -444,6 +461,8 @@
                 
             }   
 
+            document.getElementById("posting_Type").disabled = false;
+
 		}
 
 		function limpaDiv(){
@@ -487,7 +506,9 @@
             	document.getElementById("postingValueBoleto".concat(i)).value = null;
     			document.getElementById("postingDateBoleto".concat(i)).value = null;
                 
-            }            
+            }    
+
+            document.getElementById("postingType").disabled = false;        
 
 		}
 
@@ -564,6 +585,7 @@
                 document.getElementById("Crédito").style.display = "none";
                 document.getElementById("Transferência").style.display = "none";
                 document.getElementById("Dinheiro").style.display = "";
+                document.getElementById("postingType").disabled = true;
       	   	}
       	   	else if(tipo == "deb auto"){
           	   	type = "Dinheiro";
@@ -574,9 +596,11 @@
                 document.getElementById("Crédito").style.display = "none";
                 document.getElementById("Transferência").style.display = "none";
                 document.getElementById("Dinheiro").style.display = "";
+                document.getElementById("postingType").disabled = true;
       	   	}
       	   	else{
       	   		limpaDiv();
+      	   		document.getElementById("postingType").disabled = false;
       	   		var type = document.getElementById("postingType").value;      	   		
       	   	}
 
@@ -602,6 +626,7 @@
                 document.getElementById("CréditoEdit").style.display = "none";
                 document.getElementById("TransferênciaEdit").style.display = "none";
                 document.getElementById("DinheiroEdit").style.display = "";
+                document.getElementById("posting_Type").disabled = true;
       	   	}
       	   	else if(tipo == "deb auto"){
           	   	type = "Dinheiro";
@@ -612,9 +637,11 @@
                 document.getElementById("CréditoEdit").style.display = "none";
                 document.getElementById("TransferênciaEdit").style.display = "none";
                 document.getElementById("DinheiroEdit").style.display = "";
+                document.getElementById("posting_Type").disabled = true;
       	   	}
       	   	else{
       	   		limpaDivEdit();
+      	   		document.getElementById("posting_Type").disabled = false;
       	   		var type = document.getElementById("posting_Type").value;      	   		
       	   	}
 
@@ -818,7 +845,7 @@ if (isset($documents)) {
         <?php if ($document->posting_value == "" && $document->posting_date == "") { ?>
                                     <td><button class="btn btn-danger" onclick="sendInfoToModal('<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#myModal">Tipo</button></td>
                                 <?php } else { ?>
-                                    <td><button class="btn btn-success" onclick="<?php if($document->posting_type == 'Boleto'){ ?>sendInfoToModalEdit('<?= $document->payment_status ?>','<?= $boleto[$document->document_expense_id]->posting_value ?>', '<?= $boleto[$document->document_expense_id]->posting_date ?>'<?php } else{?>sendInfoToModalEdit('<?= $document->payment_status ?>','<?= $document->posting_value ?>', '<?= $document->posting_date ?>' <?php }?>, '<?= $document->posting_type ?>', '<?php if($document->posting_type == 'Crédito') echo $posting_portions_credito[$document->document_expense_id]; else echo $document->posting_portions; ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>')" data-toggle="modal" data-target="#meuModalEditar">Tipo</button> </td>
+                                    <td><button class="btn btn-success" onclick="<?php if($document->posting_type == 'Boleto'){ ?>sendInfoToModalEdit('<?= $document->payment_status ?>','<?= $boleto[$document->document_expense_id]->posting_value ?>', '<?= $boleto[$document->document_expense_id]->posting_date ?>'<?php } else{?>sendInfoToModalEdit('<?= $document->payment_status ?>','<?= $document->posting_value ?>', '<?= $document->posting_date ?>' <?php }?>, '<?= $document->posting_type ?>', '<?php if($document->posting_type == 'Crédito') echo $posting_portions_credito[$document->document_expense_id]; else echo $document->posting_portions; ?>', '<?= $document->bank_number ?>', '<?= $document->bank_agency ?>', '<?= $document->account_number ?>', '<?= $document->check_number ?>', '<?= $document->document_expense_id ?>', '<?= $payment_status[$document->document_expense_id];?>')" data-toggle="modal" data-target="#meuModalEditar">Tipo</button> </td>
                                 <?php } ?>
                             </tr>
 
@@ -1054,7 +1081,8 @@ if (isset($documents)) {
                                     </div>
 
 
-                                <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />	
+                                <input type="hidden" id="documentexpenseId" name="documentexpenseId" value="" />
+                                <input type="hidden" id="paymentStatus" name="paymentStatus" value="" />	
                                 <input type="hidden" id="postingType" name="postingType" value="" >		
                                 <br/>
 

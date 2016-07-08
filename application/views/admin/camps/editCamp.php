@@ -27,20 +27,17 @@
         
         
         <script>
+	    
             $(function() {
                 $("#sortable-table").tablesorter({widgets: ['zebra']});
-                $(function() {
-                    $( ".datepicker" ).datepicker({
-                        showOn: "button",
-                        dateFormat: "dd/mm/yy",
-                        buttonImage: "<?= $this->config->item('assets'); ?>images/calendar.gif",
-                        buttonImageOnly: true,
-                        buttonText: "Selecionar data"
-                    });
-                });
+                $(".datepicker").datepicker();
             });
 
-            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="Valor Associado" name="associated_price[]" id="associated_price"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
+            $(document).ready(function () {
+            	datepickers();
+            });
+
+            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="8"></td>			   		<td><input type="number" class="form-control" placeholder="Valor Associado" name="associated_price[]" id="associated_price"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
 
             function addTableLine(linhaAAdicionar){
             	if(!linhaAAdicionar)
@@ -128,6 +125,19 @@
                     alert(alertMsg);
             }
 
+            function chooseMiniCamp(value){
+            	var rads = document.getElementsByName("mini_camp");
+            	
+          	  	for(var i = 0; i < rads.length; i++){
+          	   		if(rads[i].value == value){
+          	    		rads[i].checked = true;
+          	   		}
+          	   		else {
+          	   			rads[i].checked = false;
+          	   		}          	   		
+          	   	}
+            }
+
             $(document).ready(function (){
                 <?php foreach($payments as $payment){ ?>
         		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?php echo $payment["full_price"]?>"></td>		   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="<?php echo $payment["payment_portions"]?>" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="Valor associado" name="associated_price[]" id="associated_price" value="<?php echo $payment["associated_price"];?>"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
@@ -163,12 +173,12 @@
                 <br/><br/><br />
                         <label for="date_start" style="width: 80px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;" class="col-lg-2 control-label"> Data Início: </label>
                         <div class="col-lg-3" style="padding-left:3px;">
-                            <input type="text" class="form-control" value  = "<?php echo $date_start ?> "name="date_start" id="date_start" />
+                            <input type="text" class="datepickers form-control" value  = "<?php echo Events::toMMDDYYYY($date_start); ?>" name="date_start" id="date_start" />
                         </div>
 
                         <label for="date_finish" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-2 control-label"> Data Fim: </label>
                         <div class="col-lg-3" style="padding-left:3px;">
-                            <input type="text" class="form-control" value  = "<?php echo $date_finish ?> "name="date_finish" id="date_finish" />
+                            <input type="text" class="datepickers form-control" value  = "<?php echo Events::toMMDDYYYY($date_finish); ?>" name="date_finish" id="date_finish" />
                         </div>
                  <br/><br/><br />
                     <div class="col-lg-4 form-group" style="float:left; padding-left:0px;">
@@ -177,13 +187,13 @@
                     <br/><br/>                    
                             <label for="capacity_male" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-3 control-label"> Masculino: </label>
                             <div class="col-lg-3" style="padding-left:10px;">
-                                <input type="text" class="form-control" value  = "<?php echo $capacity_male ?> "name="capacity_male" id="capacity_male" />
+                                <input type="text" class="form-control" value  = "<?php echo $capacity_male ?>" name="capacity_male" id="capacity_male" />
                             </div>
                        <br/><br/>
                            
                             <label for="capacity_female" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-3 control-label"> Feminino: </label>
                             <div class="col-lg-3" style="padding-left:10px;">
-                                <input type="text" class="form-control" value  = "<?php echo $capacity_female ?> "name="capacity_female" id="capacity_female" />
+                                <input type="text" class="form-control" value  = "<?php echo $capacity_female ?>" name="capacity_female" id="capacity_female" />
                             </div>
                            <br/><br/><br/> 
                 
@@ -193,11 +203,11 @@
                     <br/><br/>
                     <div class="col-lg-4 col-lg-offset-1" style="width: 140px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-left:0px;">
                                 <label for="mini_camp" class="control-label"> Kinderland Verão: </label>
-                                <input type="radio" name="mini_camp" value="false" checked />
+                                <input type="radio" name="mini_camp" value="false" onclick="chooseMiniCamp('false')"; <?php if($mini_camp == false) echo "checked";?>  />
                             </div>
                     <div class="col-lg-4 col-lg-offset-1" style="width: 200px; padding-left:15px; padding-right:0px; margin-bottom:0px; margin-left:0px;">
                                 <label for="mini_camp" class="control-label"> Mini Kinderland: </label>
-                                <input type="radio" name="mini_camp" value="true" />
+                                <input type="radio" name="mini_camp" value="true" onclick="chooseMiniCamp('true')"; <?php if($mini_camp == true) echo "checked";?>  />
                             </div> 
                             <br/><br />
                     <div class="col-lg-6 form-group" style="width: 300px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;">
@@ -206,12 +216,12 @@
                 <br/><br/> 
                         <label for="date_start_pre_associate" class="col-lg-2 control-label" style="width: 80px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;"> Data Início: </label>
                         <div class="col-lg-3" style="padding-left:3px;">
-                            <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" value ="<?php echo $date_start_pre_associate ?> " name="date_start_pre_associate" id="date_start_pre_associate"/>
+                            <input type="text" class="form-control datepickers" placeholder="dd/mm/yy" value ="<?php echo Events::toMMDDYYYY($date_start_pre_associate); ?>" name="date_start_pre_associate" id="date_start_pre_associate"/>
                         </div>
 
                         <label for="date_finish_pre_associate" class="col-lg-2 control-label" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;"> Data Fim: </label>
                         <div class="col-lg-3" style="padding-left:3px;">
-                            <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" value = "<?php echo $date_finish_pre_associate ?> " name="date_finish_pre_associate" id="date_finish_pre_associate"/>
+                            <input type="text" class="form-control datepickers" placeholder="dd/mm/yy" value = "<?php echo Events::toMMDDYYYY($date_finish_pre_associate); ?>" name="date_finish_pre_associate" id="date_finish_pre_associate"/>
                         </div>
                         <br/><br/><br/>
 
@@ -221,12 +231,12 @@
                 <br/><br/>
                         <label for="date_start_pre" class="col-lg-2 control-label" style="width: 80px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;"> Data Início: </label>
                         <div class="col-lg-3" style="padding-left:3px;">
-                            <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" value ="<?php echo $date_start_pre ?> " name="date_start_pre" id="date_start_pre"/>
+                            <input type="text" class="form-control datepickers" placeholder="dd/mm/yy" value ="<?php echo Events::toMMDDYYYY($date_start_pre); ?>" name="date_start_pre" id="date_start_pre"/>
                         </div>
 
                         <label for="date_finish_pre" class="col-lg-2 control-label" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;"> Data Fim: </label>
                         <div class="col-lg-3" style="padding-left:3px;">
-                            <input type="text" class="form-control datepicker" placeholder="dd/mm/yy" value = "<?php echo $date_finish_pre ?> " name="date_finish_pre" id="date_finish_pre"/>
+                            <input type="text" class="form-control datepickers" placeholder="dd/mm/yy" value = "<?php echo Events::toMMDDYYYY($date_finish_pre); ?>" name="date_finish_pre" id="date_finish_pre"/>
                         </div>
 				<br/><br/><br/>	
 					<div for="capacity_male" class="col-lg-1 control-label" style="width: 300px;"> Períodos para pagamento: </div><br /><br/>
