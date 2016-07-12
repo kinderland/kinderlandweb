@@ -170,6 +170,69 @@ class personuser_model extends CK_Model {
 
         return false;
     }
+    
+    public function getPersonByCpf($cpf) {
+    	$sql = "SELECT * 
+				FROM person_user pu
+				INNER JOIN person p on p.person_id = pu.person_id
+				WHERE cpf = ?";
+    	
+    	$resultSet = $this->executeRow($this->db, $sql, array($cpf));
+    
+    	if ($resultSet)
+    		return $resultSet;
+    
+    	return false;
+    }
+    
+    public function isPersonTemporaryAssociatedThisYear($associate_id,$temporary_associate_id,$year) {
+    	$sql = "SELECT * 
+				FROM temporary_associates
+				WHERE associate_id = ?
+				AND temporary_associate_id = ?
+				AND summercamp_year = ?";
+    	 
+    	$resultSet = $this->executeRow($this->db, $sql, array(intval($associate_id),intval($temporary_associate_id),$year));
+    
+    	if ($resultSet)
+    		return true;
+    
+    	return false;
+    }
+    
+    public function insertNewTemporary($associate_id, $temporary_associate_id, $year) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	
+    	$sql = 'INSERT INTO temporary_associates(associate_id, temporary_associate_id, summercamp_year) 
+    			VALUES (?,?,?)';
+    	
+    	if($this->execute($this->db, $sql, array(intval($associate_id), intval($temporary_associate_id), $year))){
+    		return true;    		
+    	}else 
+    		return false;    
+    }
+    
+    public function deleteTemporary($associate_id, $year) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	 
+    	$sql = 'DELETE FROM temporary_associates 
+    			WHERE associate_id = ?
+    			AND summercamp_year = ?';
+    	 
+    	if($this->execute($this->db, $sql, array(intval($associate_id), $year))){
+    		return true;
+    	}else
+    		return false;
+    }
+    
+    public function getAllUserAndPersonInfo(){
+    	$sql ="SELECT * 
+			  FROM person_user pu
+			  INNER JOIN person p on p.person_id = pu.person_id";
+    	
+    	$rows = $this->executeRows($this->db, $sql);
+    	return $rows;
+    }
 
     public function getAllUserRegistered() {
         $this->Logger->info("Running: " . __METHOD__);
@@ -376,6 +439,23 @@ class personuser_model extends CK_Model {
                 return TRUE;
         }
         return FALSE;
+    }
+    
+    public function getTemporaryAssociateByPersonIdAndYear($person_id,$year) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "SELECT *
+				FROM temporary_associates ta
+				INNER JOIN person p on p.person_id = ta.temporary_associate_id
+				INNER JOIN person_user pu on pu.person_id = p.person_id
+				WHERE ta.associate_id = ?
+    			AND ta.summercamp_year = ?";
+    	
+    	$row = $this->executeRow($this->db, $sql, array(intval($person_id),$year));
+    	
+    	if (isset($row)) {
+    		return $row;
+    	}
+    	return FALSE;
     }
 
     public function getEmailsByUserId($person_id) {

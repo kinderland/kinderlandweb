@@ -411,3 +411,7 @@
 "updatePostingUpload";"admin";4
 "verifyPostingExpense";"admin";2
 "verifyPostingExpense";"admin";4
+"createTemporaryAssociate";"admin";1
+"checkCPF";"admin";1
+"updateTemporaryAssociate";"admin";1
+"deleteTemporaryAssociate";"admin";1

@@ -93,6 +93,88 @@ class Admin extends CK_Controller {
             return;
         }
     }
+    
+    public function createTemporaryAssociate() {
+    	$temporaryAssociate = $this -> personuser_model -> getTemporaryAssociateByPersonIdAndYear($this->session->userdata("user_id"),date("Y"));
+    	
+    	if($temporaryAssociate !== FALSE){
+    		$data['temporaryAssociate'] = $temporaryAssociate;
+    	}else{
+    		$data['temporaryAssociate'] = null;
+    	}
+    	
+    	$people = $this->personuser_model ->getAllUserAndPersonInfo();
+    	$name = array();
+    	
+    	foreach($people as $p){
+    		$name[$p->cpf] = $p->fullname;
+    	}
+    	
+    	$data['name'] = $name;
+    	
+    	$this->loadView("admin/users/temporary_associates", $data);
+    }
+    
+    public function checkCPF(){
+    	$cpf = $this->input->post("cpf", true);
+    	
+    	if($this->personuser_model->cpfExists($cpf)){
+    		echo "true";
+    		return;
+    	}else{
+    		echo "false";
+    		return;
+    	}
+    }
+    
+    public function updateTemporaryAssociate(){
+    	$cpf = $this->input->post("cpf", true);
+    	$associate_id = $this->input->post("associate_id", true);
+    	$type = $this->input->post("type", true);
+    	
+    	$temporary_associate = $this->personuser_model->getPersonByCpf($cpf);
+    	
+    	if($type == 'atualiar'){
+	    	if(!$this->personuser_model->isPersonTemporaryAssociatedThisYear($associate_id,$temporary_associate->person_id,date("Y"))){
+	    		if($this->personuser_model->deleteTemporary($associate_id,date("Y"))){
+	    			if($this -> personuser_model ->insertNewTemporary($associate_id,$temporary_associate->person_id,date("Y"))){
+	    				echo "true";
+	    				return;
+	    			}else {
+	    				echo "false";
+	    				return;
+	    			}
+	    		}else {
+	    			echo "false";
+	    			return;
+	    		}
+	    	}else{
+	    		echo "true";
+	    		return;
+	    	}
+    	}else if($type == 'salvar'){
+    		if($this->personuser_model->insertNewTemporary($associate_id,$temporary_associate->person_id,date("Y"))){
+    			echo "true";
+    			return;
+    		}else {
+    			echo "false";
+    			return;
+    		}
+    	}   	
+    	
+    }
+    
+    public function deleteTemporaryAssociate(){
+    	$associate_id = $this->input->post("associate_id", true);
+    	
+    	if($this->personuser_model->deleteTemporary($associate_id,date("Y"))){
+    		echo "true";
+    		return;
+    	}else {
+    		echo "false";
+    		return;
+    	}
+    }
 
     public function manage_accounts() {
         $accounts = $this->finance_model->getAllAccountsInformations();
