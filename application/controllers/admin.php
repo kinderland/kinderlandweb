@@ -119,8 +119,13 @@ class Admin extends CK_Controller {
     	$cpf = $this->input->post("cpf", true);
     	
     	if($this->personuser_model->cpfExists($cpf)){
-    		echo "true";
-    		return;
+    		if(!$this->personuser_model->isCPFAssociate($cpf)){
+	    		echo "true";
+	    		return;
+    		}else{
+    			echo "false";
+    			return;
+    		}
     	}else{
     		echo "false";
     		return;
@@ -2605,7 +2610,7 @@ class Admin extends CK_Controller {
         		$paymentsError[] = array(
         				"payment_date_start" => $datePayment,
         				"payment_date_end" => $datePaymentEnd,
-        				"price" => $payment['full_price'],
+        				"price" => $payment['price'],
         				"payment_portions" => $payment['payment_portions'],
         				"associated_price" => $payment['associated_price'],
         		);

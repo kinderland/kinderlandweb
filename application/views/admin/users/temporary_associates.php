@@ -44,10 +44,10 @@
 	                {associate_id: associate_id},
 	                function (data) {
 	                    if (data == "true") {
-	                        alert("Sócio Temporário excluído com sucesso");
+	                        alert("CPF indicado excluído com sucesso");
 	                        location.reload();
 	                    } else if (data == "false") {
-	                        alert("Ocorreu um erro na exclusão de sócio temporário!");
+	                        alert("Ocorreu um erro na exclusão do CPF indicado!");
 	                        location.reload();
 	                    }
 	                }
@@ -65,15 +65,15 @@
                     function (data) {
                         if(data == "true"){
                             var name = <?php echo json_encode($name);?>;
-                            if(confirm("Deseja cadastrar ".concat(name[cpf]," como sócio temporário?"))){
+                            if(confirm("Deseja indicar ".concat(name[cpf]," para realizar pré-inscrição?"))){
                             	$.post('<?= $this->config->item('url_link'); ?>admin/updateTemporaryAssociate',
                                         {cpf: cpf, associate_id: associate_id, type:type},
                                         function (data) {
                                             if (data == "true") {
-                                                alert("Sócio Temporário Cadastrado com sucesso");
+                                                alert("CPF indicado Cadastrado com sucesso");
                                                 location.reload();
                                             } else if (data == "false") {
-                                                alert("Ocorreu um erro no cadastro de sócio temporário!");
+                                                alert("Ocorreu um erro no cadastro do CPF indicado!");
                                                 location.reload();
                                             }
                                         }
@@ -82,7 +82,7 @@
                             }
                         }
                         else if(data == "false"){
-                            alert("Esse CPF não está cadastrado no site. Tente novamente!");
+                            alert("Esse CPF não está cadastrado no site ou é inválido para o processo. Tente novamente!");
                         }
                     }
          );	

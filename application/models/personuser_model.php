@@ -441,6 +441,16 @@ class personuser_model extends CK_Model {
         return FALSE;
     }
     
+    public function isCPFAssociate($cpf) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "Select cpf from associates where cpf = ?";
+    	$row = $this->executeRow($this->db, $sql, array($cpf));
+    	if (isset($row)) {
+    		return TRUE;
+    	}
+    	return FALSE;
+    }
+    
     public function getTemporaryAssociateByPersonIdAndYear($person_id,$year) {
     	$this->Logger->info("Running: " . __METHOD__);
     	$sql = "SELECT *
