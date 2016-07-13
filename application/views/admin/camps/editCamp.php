@@ -37,7 +37,7 @@
             	datepickers();
             });
 
-            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="8"></td>			   		<td><input type="number" class="form-control" placeholder="Valor Associado" name="associated_price[]" id="associated_price"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
+            var linha = '<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="1" min="1" max="8"></td>			   		<td><input type="text" class="form-control" placeholder="Valor Associado" name="associated_price[]" id="associated_price"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	';
 
             function addTableLine(linhaAAdicionar){
             	if(!linhaAAdicionar)
@@ -138,9 +138,18 @@
           	   	}
             }
 
+            function validateNumberInput(evt) {
+
+                var key_code = (evt.which) ? evt.which : evt.keyCode;
+                if ((key_code >= 48 && key_code <= 57) || key_code == 9 || key_code == 8) {
+                    return true;
+                }
+                return false;
+            }
+
             $(document).ready(function (){
                 <?php foreach($payments as $payment){ ?>
-        		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?php echo $payment["full_price"]?>"></td>		   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="<?php echo $payment["payment_portions"]?>" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="Valor associado" name="associated_price[]" id="associated_price" value="<?php echo $payment["associated_price"];?>"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
+        		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td>			   		<td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?php echo $payment["full_price"]?>"></td>		   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="<?php echo $payment["payment_portions"]?>" min="1" max="5"></td>			   		<td><input type="text" class="form-control" placeholder="Valor associado" name="associated_price[]" id="associated_price" value="<?php echo $payment["associated_price"];?>"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
         		<?php } ?> 
             });
         </script>
@@ -187,13 +196,13 @@
                     <br/><br/>                    
                             <label for="capacity_male" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-3 control-label"> Masculino: </label>
                             <div class="col-lg-3" style="padding-left:10px;">
-                                <input type="text" class="form-control" value  = "<?php echo $capacity_male ?>" name="capacity_male" id="capacity_male" />
+                                <input onkeypress="return validateNumberInput(event);" type="text" class="form-control" value  = "<?php echo $capacity_male ?>" name="capacity_male" id="capacity_male" />
                             </div>
                        <br/><br/>
                            
                             <label for="capacity_female" style="width: 70px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-3 control-label"> Feminino: </label>
                             <div class="col-lg-3" style="padding-left:10px;">
-                                <input type="text" class="form-control" value  = "<?php echo $capacity_female ?>" name="capacity_female" id="capacity_female" />
+                                <input onkeypress="return validateNumberInput(event);" type="text" class="form-control" value  = "<?php echo $capacity_female ?>" name="capacity_female" id="capacity_female" />
                             </div>
                            <br/><br/><br/> 
                 

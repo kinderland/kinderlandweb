@@ -2116,6 +2116,9 @@ class Admin extends CK_Controller {
                 if (!$full_price[$i]){
                     $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " nÃ£o tem valor\\n";
                 }
+                if (!$associated_price[$i]){
+                	$errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor para sócio\\n";
+                }
                 if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
                     $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
                 }
@@ -2143,6 +2146,9 @@ class Admin extends CK_Controller {
                     $payment_date_end[$i] = explode("/", $payment_date_end[$i]);
                     $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
                 }
+                
+                $full_price[$i] = str_replace(",", ".", $full_price[$i]);
+                $associated_price[$i] = str_replace(",", ".", $associated_price[$i]);
 
                 $payments[] = array(
                     "payment_date_start" => $payment_date_start[$i],
@@ -2162,7 +2168,9 @@ class Admin extends CK_Controller {
             if (!$full_price){
                 $errors[] = "O pagamento nÃ£o tem valor\\n";
             }
-            
+            if (!$associated_price){
+            	$errors[] = "O pagamento nÃ£o tem valor para sócio\\n";
+            }
             if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
                 $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
             }
@@ -2179,6 +2187,9 @@ class Admin extends CK_Controller {
                     $payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
                 }
             }
+            
+            $full_price = str_replace(",", ".", $full_price);
+            $associated_price = str_replace(",", ".", $associated_price);
 
             $payments[] = array(
                 "payment_date_start" => $payment_date_start,
@@ -2398,6 +2409,10 @@ class Admin extends CK_Controller {
         $capacity_male = $_POST['capacity_male'];
         $capacity_female = $_POST['capacity_female'];
         $mini_camp = $_POST['mini_camp'];
+        
+        $error = $this->input->post("error", TRUE);
+        
+        $errors = array();
 
         $payments = array();
         $payment_date_end = $this->input->post("payment_date_end", TRUE);
@@ -2405,11 +2420,7 @@ class Admin extends CK_Controller {
         $full_price = $this->input->post("price", TRUE);
         $payment_portions = $this->input->post("payment_portions", TRUE);
         $associated_price = $this->input->post("associated_price", TRUE);
-        
-        $error = $this->input->post("error", TRUE);
-        
-        $errors = array();
-        
+              
         
         if ($camp_name === ""){
         	$errors[] = "O campo nome Ã© obrigatÃ³rio\n";
@@ -2464,6 +2475,9 @@ class Admin extends CK_Controller {
         		if (!$full_price[$i]){
         			$errors[] = "O periodo de pagamento de numero " . ($i + 1) . " nÃ£o tem valor\\n";
         		}
+        		if (!$associated_price[$i]){
+        			$errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor para sócio\\n";
+        		}
         		if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
         			$errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
         		}
@@ -2491,6 +2505,9 @@ class Admin extends CK_Controller {
         			$payment_date_end[$i] = explode("/", $payment_date_end[$i]);
         			$payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
         		}
+        		
+        		$full_price[$i] = str_replace(",", ".", $full_price[$i]);
+        		$associated_price[$i] = str_replace(",", ".", $associated_price[$i]);
         
         		$payments[] = array(
         				"payment_date_start" => $payment_date_start[$i],
@@ -2510,6 +2527,9 @@ class Admin extends CK_Controller {
         	if (!$full_price){
         		$errors[] = "O pagamento nÃ£o tem valor\\n";
         	}
+        	if (!$associated_price){
+        		$errors[] = "O pagamento não tem valor para sócio\\n";
+        	}
         	if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
         		$errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
         	}
@@ -2526,6 +2546,9 @@ class Admin extends CK_Controller {
         			$payment_date_end[$i] = strval($payment_date_end[$i][2]) . "-" . strval($payment_date_end[$i][1]) . "-" . strval($payment_date_end[$i][0] . " 23:59:59");
         		}
         	}
+        	
+        	$full_price = str_replace(",", ".", $full_price);
+        	$associated_price = str_replace(",", ".", $associated_price);
         
         	$payments[] = array(
         			"payment_date_start" => $payment_date_start,
@@ -2682,8 +2705,9 @@ class Admin extends CK_Controller {
 
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New summer camp successfully inserted");
-                redirect("admin/manageCamps");
-            }
+                return $this->manageCamps('Colônia criada com sucesso!');
+            } else 
+            	return $this->manageCamps('Ocorreu um erro ao tentar criar a colônia. Tente novamente!');
         } catch (Exception $ex) {
             $this->Logger->error("Failed to insert new camp");
             $this->generic_model->rollbackTransaction();
