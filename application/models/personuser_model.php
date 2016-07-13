@@ -441,6 +441,41 @@ class personuser_model extends CK_Model {
         return FALSE;
     }
     
+    public function isAssociateAndNotTemporary($person_id) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "Select associate from v_report_all_users where person_id = ?";
+    	$row = $this->executeRow($this->db, $sql, array(intval($person_id)));
+    	if (isset($row)) {
+    		if ($row->associate === "t"){
+    			$sql = "SELECT ta.temporary_associate_id 
+						 FROM temporary_associates ta
+						 WHERE ta.summercamp_year::text = date_part('year'::text, now())::text
+						 AND ta.temporary_associate_id = ?";
+    			$row = $this->executeRow($this->db, $sql, array(intval($person_id)));
+    			
+    			if(isset($row->temporary_associate_id))
+    				return FALSE;
+    			else 
+    				return TRUE;
+    		}
+    	}
+    	return FALSE;
+    }
+    
+    public function hasTemporary($person_id) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    			$sql = "SELECT ta.associate_id
+						 FROM temporary_associates ta
+						 WHERE ta.summercamp_year::text = date_part('year'::text, now())::text
+						 AND ta.associate_id = ?";
+    			$row = $this->executeRow($this->db, $sql, array(intval($person_id)));
+    			 
+    			if(!empty($row))
+    				return TRUE;
+    			else
+    				return FALSE;
+    }
+    
     public function isCPFAssociate($cpf) {
     	$this->Logger->info("Running: " . __METHOD__);
     	$sql = "Select cpf from associates where cpf = ?";

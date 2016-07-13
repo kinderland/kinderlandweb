@@ -34,6 +34,10 @@ class SummerCamps extends CK_Controller {
     public function index() {
         $this->Logger->info("Starting " . __METHOD__);
         $isAssociate = $this->personuser_model->isAssociate($this->session->userdata("user_id"));
+        
+        if($isAssociate)
+        	$isAssociate = !($this->personuser_model->hasTemporary($this->session->userdata("user_id")));
+        
         $data["summerCamps"] = $this->summercamp_model->getAvailableSummerCamps($isAssociate);
         $data["summerCampInscriptions"] = $this->summercamp_model->getSummerCampSubscriptionsOfUser($this->session->userdata("user_id"));
         $data["summercamp_model"] = $this->summercamp_model;
