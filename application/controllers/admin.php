@@ -2393,12 +2393,6 @@ class Admin extends CK_Controller {
         $capacity_male = $_POST['capacity_male'];
         $capacity_female = $_POST['capacity_female'];
         $mini_camp = $_POST['mini_camp'];
-        
-
-        $camp = new SummerCamp(null, $camp_name, null, $date_start, $date_finish, $date_start_pre, $date_finish_pre, $date_start_pre_associate, $date_finish_pre_associate, null, //description
-                true, //preEnabled
-                $_POST['capacity_male'], $_POST['capacity_female'], $_POST['mini_camp']
-        );
 
         $payments = array();
         $payment_date_end = $this->input->post("payment_date_end", TRUE);
@@ -2496,7 +2490,7 @@ class Admin extends CK_Controller {
         		$payments[] = array(
         				"payment_date_start" => $payment_date_start[$i],
         				"payment_date_end" => $payment_date_end[$i],
-        				"full_price" => $full_price[$i],
+        				"price" => $full_price[$i],
         				"payment_portions" => $payment_portions[$i],
         				"associated_price" => $associated_price[$i],
         		);
@@ -2531,7 +2525,7 @@ class Admin extends CK_Controller {
         	$payments[] = array(
         			"payment_date_start" => $payment_date_start,
         			"payment_date_end" => $payment_date_end,
-        			"full_price" => $full_price,
+        			"price" => $full_price,
         			"payment_portions" => $payment_portions,
         			"associated_price" => $associated_price,
         	);
@@ -2573,11 +2567,15 @@ class Admin extends CK_Controller {
         	$date_finish_pre = strval($date_x[0]) . "-" . strval($date_finish_pre[1]) . "-" . strval($date_finish_pre[0] . " 23:59:59");
         }
         
+        $camp = new SummerCamp(null, $camp_name, null, $date_start, $date_finish, $date_start_pre, $date_finish_pre, $date_start_pre_associate, $date_finish_pre_associate, null, //description
+        		true, //preEnabled
+        		$_POST['capacity_male'], $_POST['capacity_female'], $_POST['mini_camp']
+        );
         $camps = $this->summercamp_model->getAllSummerCamps();
         
-        foreach ($camps as $camp) {
+        foreach ($camps as $c) {
         
-        	if ($date_start && $date_finish && ((Events::verifyAntecedence($camp->getDateStart(), $date_start) && Events::verifyAntecedence($date_start, $camp->getDateFinish())) || (Events::verifyAntecedence($camp->getDateStart(), $date_finish) && Events::verifyAntecedence($date_finish, $camp->getDateFinish())))) {
+        	if ($date_start && $date_finish && ((Events::verifyAntecedence($c->getDateStart(), $date_start) && Events::verifyAntecedence($date_start, $c->getDateFinish())) || (Events::verifyAntecedence($c->getDateStart(), $date_finish) && Events::verifyAntecedence($date_finish, $c->getDateFinish())))) {
         		$errors[] = "HÃ¡ um evento nesse perÃ­odo\\n";
         		break;
         	}
@@ -2591,9 +2589,6 @@ class Admin extends CK_Controller {
         
         		$datePayment = null;
         		$datePaymentEnd = null;
-        		
-        		$this->Logger->info("DATA DE PAGAMENTO INICIAL: ".$payment['payment_date_start']);
-        		$this->Logger->info("DATA DE PAGAMENTO FINAL: ".$payment['payment_date_end']);
         
         		if ($payment['payment_date_start']) {
         			$datePayment = explode("-", $payment['payment_date_start']);
