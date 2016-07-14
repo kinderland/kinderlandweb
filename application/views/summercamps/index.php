@@ -58,6 +58,10 @@
 	   $("#msg_body").html(info);
    }
 
+   function alertMessage(){
+	   alert("Lembre-se de ENVIAR a pré-inscrição quando finalizar o seu preenchimento.");
+   }
+
 </script>
 
 <div class="row">
@@ -155,14 +159,20 @@
     <div id="all" class = "col-lg-10">
         <h1>Inscrições de colonistas:</h1>
         <?php if ($summerCamps) {
+        	echo "<script>setTimeout(alertMessage,50);</script>";
             ?>
             <h4>Adicionar colonista na colônia:</h4>
             <?php foreach ($summerCamps as $summerCamp) {
+            		//	if($this->personuser_model->hasPreviousSubscriptions($this->session->userdata("user_id"))){
                 ?>
+           <!--      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalGetPreviousSubscriptions">
+								<?php // $summerCamp->getCampName() ?>
+							</button> -->
+				<?php // } else{?>
                 <a href="<?= $this->config->item('url_link'); ?>summercamps/subscribeColonist?id=<?= $summerCamp->getCampId() ?>">
                     <input class=" btn btn-primary" type="button" value="<?= $summerCamp->getCampName() ?>" />
                 </a>
-            <?php } ?>
+            <?php  } ?>
         <?php } else { ?>
             Não é possível fazer inscrições no momento.
         <?php } ?>
@@ -371,6 +381,9 @@
                 $('#bodyPopup').append("<tr><td>Total:</td><td colspan='2'>R$ <?= $total ?>,00</td></tr>");
             </script>
         <?php } ?>
+        
+        
+        
 
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
