@@ -476,11 +476,27 @@ class personuser_model extends CK_Model {
     				return FALSE;
     }
     
+    public function hasPreviousSubscriptions($person_id) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "SELECT *
+				FROM summer_camp_subscription
+				WHERE person_user_id = ?
+				AND date_part('year',now()) != date_part('year',date_created)
+				AND situation not in (-1,-2,-3)";
+    	
+    	$row = $this->executeRows($this->db, $sql, array(intval($person_id)));
+    
+    	if(!empty($row))
+    		return TRUE;
+    	else
+    		return FALSE;
+    }
+    
     public function isCPFAssociate($cpf) {
     	$this->Logger->info("Running: " . __METHOD__);
     	$sql = "Select cpf from associates where cpf = ?";
     	$row = $this->executeRow($this->db, $sql, array($cpf));
-    	if (isset($row)) {
+    	if (!empty($row)) {
     		return TRUE;
     	}
     	return FALSE;

@@ -32,7 +32,7 @@
 	}); 
 
 	function createPDFMedicalFiles() {
-        window.location.href = "<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?=$ano_escolhido?>/<?=(isset($summer_camp_id)?$summer_camp_id:'')?>/<?=(isset($pavilhao)?$pavilhao:'')?>/<?=(isset($quarto)?$quarto:'')?>/simples";
+        window.location.href = "<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistMedicalFiles/<?php if(isset($ano_escolhido)) echo $ano_escolhido; else echo "";?>/<?php if(isset($summer_camp_id)) echo $summer_camp_id; else echo'';?>/<?php if(isset($pavilhao)) echo $pavilhao; else echo '';?>/<?php if(isset($quarto)) echo $quarto; else echo '';?>/simples";
     }
 
 </script>
@@ -307,7 +307,7 @@
 			</tr>
 
 		</table>
-		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">&nbsp;&nbsp;<button class="btn btn-primary" onclick="createPDFMedicalFiles()" value="">PDF com ficha médica</button>
+		<input type="submit" class="btn btn-primary" value="Salvar" id="upload">&nbsp;&nbsp;<!-- <button class="btn btn-primary" onclick="createPDFMedicalFiles()" value="">PDF com ficha médica</button> -->
 	</form>
 	<br />
 	<input type="submit" class="btn btn-warning" value="Voltar" id="upload" onClick="history.go(-1);return true;">

@@ -219,7 +219,7 @@
                     </div>
 
 
-                    <label for="schoolYear" class="col-lg-3 control-label"> Ano escolar (Fundamental)*: </label>
+                    <label for="schoolYear" class="col-lg-3 control-label"> Ano escolar em <?= date("Y");?> (Fundamental)*: </label>
                     <div class="col-lg-3">
                         <select  class="form-control" id="schoolYear" name="schoolYear" required
                                  oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
