@@ -59,6 +59,8 @@
    }
 
    function alertMessage(){
+	   $('a').removeAttr('href');
+	   window.location = "<?= $this->config->item('url_link'); ?>summercamps/index";
 	   alert("Lembre-se de ENVIAR a pré-inscrição quando finalizar o seu preenchimento.");
    }
 
@@ -158,21 +160,24 @@
 
     <div id="all" class = "col-lg-10">
         <h1>Inscrições de colonistas:</h1>
-        <?php if ($summerCamps) {
-        	echo "<script>setTimeout(alertMessage,50);</script>";
+        <?php if ($summerCamps) { 
+        		if($i !== NULL){
+        			echo "<script>setTimeout(alertMessage,50);</script>";
+        		}
             ?>
             <h4>Adicionar colonista na colônia:</h4>
-            <?php foreach ($summerCamps as $summerCamp) {
-            		//	if($this->personuser_model->hasPreviousSubscriptions($this->session->userdata("user_id"))){
+            <?php foreach ($summerCamps as $summerCamp) { 
+            			if(false){
+            			//$this->personuser_model->hasPreviousSubscriptions($this->session->userdata("user_id"))){
                 ?>
-           <!--      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalGetPreviousSubscriptions">
-								<?php // $summerCamp->getCampName() ?>
-							</button> -->
-				<?php // } else{?>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalGetPreviousSubscriptions">
+								<?= $summerCamp->getCampName() ?>
+							</button>
+				<?php } else{?>
                 <a href="<?= $this->config->item('url_link'); ?>summercamps/subscribeColonist?id=<?= $summerCamp->getCampId() ?>">
                     <input class=" btn btn-primary" type="button" value="<?= $summerCamp->getCampName() ?>" />
                 </a>
-            <?php  } ?>
+            <?php } } ?>
         <?php } else { ?>
             Não é possível fazer inscrições no momento.
         <?php } ?>
@@ -382,8 +387,71 @@
             </script>
         <?php } ?>
         
+        <script>
+			function getPreviousSubscriptions(){
+
+
+
+			}
+
+        </script>
         
         
+        <!-- Modal RESGATAR INSCRIÇÃO ANTIGA -->
+		<div class="modal fade" id="myModalGetPreviousSubscriptions" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="create_account_name">Resgatar Dados de Inscrições Passadas</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-lg-12 middle-content">
+								<div class="row">
+									
+								</div>
+
+								<div>
+								</div>
+																
+								<div class="eventInsForm" name="form_subscribe" id="form_subscribe">
+									<table class="table table-bordered table-striped table-min-td-size" style="width:300px" id="sortable-table">
+			                            <thead>
+			                                <tr>
+			                                    <th style="width:200px"> Colonista </th>
+			                                    <th style="width:100px"> Resgatar </th>
+			                                </tr>
+			                            </thead>
+			                            <tbody id="tablebody">
+			                                <?php 
+			                                $info = $this->summercamp_model->getOldSubscriptionByUserId($this->session->userdata("user_id"));
+			                                if($info){
+			                                foreach ($info as $i) {
+			                                	$colonist = $this -> colonist_model ->getColonist($i -> colonist_id);
+			                                    ?>
+			                                    <tr>
+			                                        <td><?= $colonist->getFullname(); ?></td>
+			                                        <td><input type="checkbox" name="checkboxColonist" value="<?php echo $colonist->getColonistId(); ?>"></td>
+			                                    </tr>
+			                                    <?php
+			                                }}
+			                                ?>
+			                            </tbody>
+			                        </table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+						<button type="button" class="btn btn-primary" onClick="getPreviousSubscriptions()">Confirmar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+<!-- Fim do RESGATAR INSCRIÇÃO ANTIGA -->
 
 		<!-- Modal -->
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="solicitar-convite" aria-hidden="true">

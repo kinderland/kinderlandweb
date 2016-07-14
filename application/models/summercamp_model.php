@@ -267,6 +267,36 @@ class summercamp_model extends CK_Model {
 
         return $result;
     }
+    
+    public function getOldSubscriptionByUserId($userId){
+    	
+    	
+    	$year = date("Y",strtotime("-1 year"));
+    	
+    	while(!isset($resultSet) && $year != '2014'){
+    	
+	    	$sql = "Select * 
+					from summer_camp_subscription scs
+					where scs.person_user_id = ?
+					AND DATE_PART('YEAR',date_created) = ?";
+	    	
+	    	$resultSet = $this->executeRows($this->db, $sql, array(intval($userId),$year));
+	    	
+	    	$year = date("Y",strtotime("-1 year",strtotime($year)));
+    	}
+    	
+    	$r = array();
+    	
+    	if($resultSet){
+    		foreach($resultSet as $row){
+    			$r[] = $row;
+    		}
+    		
+    		return $r;
+    	}else 
+    		return NULL;
+    	
+    }
 
     public function getSummerCampSubscriptionsOfUser($userId) {
         $sql = "Select * from summer_camp sc

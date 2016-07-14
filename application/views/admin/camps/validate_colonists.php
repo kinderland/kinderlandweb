@@ -292,12 +292,12 @@
                                         }
                                         ?>
                                         <?php if ($colonist->situation == SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) { ?>
-                                            <br>
+                                           
 
                                             <a target="_parent" href="<?= $this->config->item('url_link'); ?>admin/editColonistForm?colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>">
-                                                <button class="btn btn-primary">
+                                                
                                                     Editar cadastro
-                                                </button>
+                                               
                                             </a>
                                         <?php } ?>
                                         <?php

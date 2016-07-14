@@ -30,8 +30,12 @@ class SummerCamps extends CK_Controller {
         $this->telephone_model->setLogger($this->Logger);
         $this->validation_model->setLogger($this->Logger);
     }
+    
+    public function indexm(){
+    	return$this->index('1');
+    }
 
-    public function index() {
+    public function index($i = NULL) {
         $this->Logger->info("Starting " . __METHOD__);
         $isAssociate = $this->personuser_model->isAssociate($this->session->userdata("user_id"));
         
@@ -64,6 +68,8 @@ class SummerCamps extends CK_Controller {
                     break;
             }
         }
+        
+        $data['i'] = $i;
         $data["statusArray"] = $statusArray;
         $this->loadView('summercamps/index', $data);
     }

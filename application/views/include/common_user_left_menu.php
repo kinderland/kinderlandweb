@@ -7,7 +7,7 @@
         	<li><a href="<?= $this->config->item('url_link'); ?>admin/createTemporaryAssociate">Indicar CPF</a></li>
         <?php }?>
         <li><a href="<?= $this->config->item('url_link'); ?>events/index">Inscrições Eventos</a></li>
-        <li><a href="<?= $this->config->item('url_link'); ?>summercamps/index">Inscrições Colonia</a></li>
+        <li><a href="<?= $this->config->item('url_link'); ?>summercamps/indexm">Inscrições Colonia</a></li>
         <li><a href="<?= $this->config->item('url_link'); ?>payments/history">Histórico de doações</a></li>
       <li><a href="<?php echo $this->config->item('url_link'); ?>user/emails">Histórico de <br>e-mails</a></li>
     </ul>

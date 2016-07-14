@@ -415,3 +415,4 @@
 "checkCPF";"admin";1
 "updateTemporaryAssociate";"admin";1
 "deleteTemporaryAssociate";"admin";1
+"indexm";"summercamps";1
