@@ -2722,7 +2722,7 @@ class Admin extends CK_Controller {
         $camp = $this->summercamp_model->getSummerCampById($campId);
         $payments = $this->summercamp_model->getSummerCampPaymentPeriods($camp->getCampId());
 
-        if ($payments)
+        if ($camp->isEnabled() || $payments)
             echo $this->summercamp_model->updateCampPreEnabled($campId);
         else
             echo "0";

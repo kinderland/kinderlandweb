@@ -1334,8 +1334,6 @@ class summercamp_model extends CK_Model {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "Select * from summer_camp_payment_period where summer_camp_id = ?";
 
-
-
         $payment_periods = $this->executeRows($this->db, $sql, array($campId));
 
         $retorno = array();
