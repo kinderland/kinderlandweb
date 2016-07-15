@@ -297,6 +297,69 @@ class summercamp_model extends CK_Model {
     		return NULL;
     	
     }
+    
+    public function getOldSubscriptionByUserIdAndColonistIdAndInsertNew($userId, $colonistId,$summercampId){
+    	 
+    	 $sql = "Select *
+					from summer_camp_subscription scs
+					where scs.person_user_id = ?
+					AND scs.colonist_id = ?
+    	 			AND scs.date_created in(
+    	 				Select max(scs.date_created)
+						from summer_camp_subscription scs
+						where scs.person_user_id = ?
+						AND scs.colonist_id = ?)";
+    
+    		$resultSet = $this->executeRow($this->db, $sql, array(intval($userId),intval($colonistId),intval($userId),intval($colonistId)));
+        	 
+    	if($resultSet){
+    		if($this->subscribeColonist($summercampId, $colonistId, $userId, 0, $resultSet->school_name, $resultSet->school_year, $resultSet->roommate1, $resultSet->roommate2, $resultSet->roommate3)){
+    			
+    			$document = $this->getNewestDocument($resultSet->summer_camp_id, $colonistId, 3);
+    			if($document){
+    				$sql = "INSERT INTO document (summer_camp_id,colonist_id,date_created,user_id,filename,extension,document_type,file)
+    						VALUES (?,?,now(),(SELECT distinct user_id FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 3    				
+    						),(SELECT distinct filename FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 3),(SELECT distinct extension FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 3),(SELECT distinct document_type FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 3),(SELECT distinct file FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 3))";
+    				$resultSetT = $this->execute($this->db, $sql, array(intval($summercampId),intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId)));
+    				
+    			}
+    			
+    			$document = $this->getNewestDocument($resultSet->summer_camp_id, $colonistId, 5);
+    			if($document){
+    				$sql = "INSERT INTO document (summer_camp_id,colonist_id,date_created,user_id,filename,extension,document_type,file)
+    						VALUES (?,?,now(),(SELECT distinct user_id FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 5    				
+    						),(SELECT distinct filename FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 5),(SELECT distinct extension FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 5),(SELECT distinct document_type FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 5),(SELECT distinct file FROM document WHERE summer_camp_id = ? 
+							AND colonist_id = ?
+    						AND document_type = 5))";
+    				$resultSetT = $this->execute($this->db, $sql, array(intval($summercampId),intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId)));
+    				
+    			}
+    			
+    			return true;
+    		}
+    		
+    	}else
+    		return NULL;
+    	 
+    }
 
     public function getSummerCampSubscriptionsOfUser($userId) {
         $sql = "Select * from summer_camp sc
@@ -456,7 +519,7 @@ class summercamp_model extends CK_Model {
         if ($resultSet)
             foreach ($resultSet as $row) {
                 $this->Logger->info("Documento encontrado com sucesso, criando array");
-                $document = array("data" => $row->file, "name" => $row->filename, "extension" => $row->extension);
+                $document = array("data" => $row->file, "name" => $row->filename, "extension" => $row->extension, "document_id" => $row->document_id);
                 return $document;
             }
         $this->Logger->info("Nao achei o documento");

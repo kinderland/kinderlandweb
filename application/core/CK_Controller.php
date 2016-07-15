@@ -369,9 +369,11 @@ class CK_Controller extends CI_Controller {
         $to = $person->getEmail();
 
         if (ENVIRONMENT != 'production') {
-            $addToSubject = "[TESTE]";/*[to:$to][cc=";
-            foreach ($cc as $carboncopy) {
-                $addToSubject.=$carboncopy;
+            $addToSubject = "[TESTE][to:$to][cc=";
+            if($cc != null){
+                foreach ($cc as $carboncopy) {
+                    $addToSubject.=$carboncopy;
+                }
             }
             $addToSubject.="][bcc=";
             if ($bcc != null) {
@@ -380,9 +382,10 @@ class CK_Controller extends CI_Controller {
                 }
             }
             $addToSubject.="]";
-            $to = "teste.kinderland@gmail.com";
+            
+            $to = "teste_suporte@kinderland.com.br";
             $cc = NULL;
-            $bcc = NULL;*/
+            $bcc = NULL;
             $subject = $addToSubject . $subject;
         }
 

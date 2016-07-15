@@ -73,6 +73,28 @@ class SummerCamps extends CK_Controller {
         $data["statusArray"] = $statusArray;
         $this->loadView('summercamps/index', $data);
     }
+    
+    public function getPreviousSubscriptions(){
+    	$colonists_id = $this->input->post('colonists_id', TRUE);
+    	$this->Logger->info("COLONISTAS: ".$colonists_id);
+    	$colonists_id = explode("-",$colonists_id);
+    	
+    
+    	
+    	$summercampId = $this->input->post('summercampId', TRUE);
+    	
+    	foreach($colonists_id as $c){
+    		if($c !== ""){
+	    		if(!$this->summercamp_model->getOldSubscriptionByUserIdAndColonistIdAndInsertNew($this->session->userdata("user_id"),$c,$summercampId)){
+    					echo "false";
+    					return;
+	    		}
+    		}
+    	}
+    	
+    	echo "true";
+    	return;    	
+    }
 
     public function subscribeColonist() {
         $this->Logger->info("Starting " . __METHOD__);

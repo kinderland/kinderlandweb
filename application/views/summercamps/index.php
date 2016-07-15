@@ -167,10 +167,9 @@
             ?>
             <h4>Adicionar colonista na colônia:</h4>
             <?php foreach ($summerCamps as $summerCamp) { 
-            			if(false){
-            			//$this->personuser_model->hasPreviousSubscriptions($this->session->userdata("user_id"))){
+            			if($this->personuser_model->hasPreviousSubscriptions($this->session->userdata("user_id"))){
                 ?>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalGetPreviousSubscriptions">
+                <button onclick="sendInfoToModalCamp(<?= $summerCamp->getCampId() ?>);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalGetPreviousSubscriptions">
 								<?= $summerCamp->getCampName() ?>
 							</button>
 				<?php } else{?>
@@ -388,10 +387,38 @@
         <?php } ?>
         
         <script>
+
+        	function sendInfoToModalCamp(campId){
+        		$("#modalsummercampId").html(campId);
+
+        	}
 			function getPreviousSubscriptions(){
+				var checkedValue = ""; 
+				var summercampId = document.getElementById('modalsummercampId').textContent;
+				var inputElements = document.getElementsByClassName('checkboxColonist');
+				
+				for(var i=0; inputElements[i]; ++i){
+				      if(inputElements[i].checked){
+				           checkedValue = checkedValue.concat(inputElements[i].value,"-");
+				      }
+				}
 
-
-
+				$.post("<?= $this->config->item('url_link') ?>summercamps/getPreviousSubscriptions",
+                        {
+                            colonists_id: checkedValue,
+                            summercampId: summercampId
+                        },
+                        function (data) {
+                            alert(data);
+                            if (data == "true") {
+                                alert("Recuperação de dados executada com sucesso!");
+                                window.location.reload();
+                            } else {
+                                alert("Ocorreu um erro ao tentar recuperar os dados. Tente novamente!");
+                                window.location.reload();
+                            }
+                        }
+                );
 			}
 
         </script>
@@ -414,6 +441,7 @@
 
 								<div>
 								</div>
+								<input type="hidden" id="modalsummercampId" name="modalsummercampId" value="" />
 																
 								<div class="eventInsForm" name="form_subscribe" id="form_subscribe">
 									<table class="table table-bordered table-striped table-min-td-size" style="width:300px" id="sortable-table">
@@ -432,7 +460,7 @@
 			                                    ?>
 			                                    <tr>
 			                                        <td><?= $colonist->getFullname(); ?></td>
-			                                        <td><input type="checkbox" name="checkboxColonist" value="<?php echo $colonist->getColonistId(); ?>"></td>
+			                                        <td><input type="checkbox" class="checkboxColonist" value="<?php echo $colonist->getColonistId(); ?>"></td>
 			                                    </tr>
 			                                    <?php
 			                                }}

@@ -416,3 +416,4 @@
 "updateTemporaryAssociate";"admin";1
 "deleteTemporaryAssociate";"admin";1
 "indexm";"summercamps";1
+"getPreviousSubscriptions";"summercamps";1

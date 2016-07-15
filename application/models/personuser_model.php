@@ -482,7 +482,11 @@ class personuser_model extends CK_Model {
 				FROM summer_camp_subscription
 				WHERE person_user_id = ?
 				AND date_part('year',now()) != date_part('year',date_created)
-				AND situation not in (-1,-2,-3)";
+				AND situation not in (-1,-2,-3)
+    			AND colonist_id not in(
+    			SELECT colonist_id
+    			FROM summer_camp_subscription
+    			WHERE date_part('year',now()) = date_part('year',date_created))";
     	
     	$row = $this->executeRows($this->db, $sql, array(intval($person_id)));
     
