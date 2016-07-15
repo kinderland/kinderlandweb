@@ -378,7 +378,9 @@ class summercamp_model extends CK_Model {
 		join colonist c on scs.colonist_id = c.colonist_id
 		join person p on c.person_id = p.person_id
 		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
-		where scs.person_user_id = ? order by p.fullname";
+		where scs.person_user_id = ? 
+        AND DATE_PART('YEAR',scs.date_created) = DATE_PART('YEAR',now())
+        order by p.fullname";
         $resultSet = $this->executeRowsNoLog($this->db, $sql, array($userId));
 
         $summerCampSubscription = NULL;
