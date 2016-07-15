@@ -409,7 +409,6 @@
                             summercampId: summercampId
                         },
                         function (data) {
-                            alert(data);
                             if (data == "true") {
                                 alert("Recuperação de dados executada com sucesso!");
                                 window.location.reload();

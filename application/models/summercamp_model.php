@@ -278,7 +278,12 @@ class summercamp_model extends CK_Model {
 	    	$sql = "Select * 
 					from summer_camp_subscription scs
 					where scs.person_user_id = ?
-					AND DATE_PART('YEAR',date_created) = ?";
+					AND DATE_PART('YEAR',date_created) = ?
+	    			AND situation not in (-1,-2,-3)
+	    			AND colonist_id not in(
+	    			SELECT colonist_id
+	    			FROM summer_camp_subscription
+	    			WHERE date_part('year',now()) = date_part('year',date_created))";
 	    	
 	    	$resultSet = $this->executeRows($this->db, $sql, array(intval($userId),$year));
 	    	
@@ -314,6 +319,12 @@ class summercamp_model extends CK_Model {
         	 
     	if($resultSet){
     		if($this->subscribeColonist($summercampId, $colonistId, $userId, 0, $resultSet->school_name, $resultSet->school_year, $resultSet->roommate1, $resultSet->roommate2, $resultSet->roommate3)){
+    			
+    			$medicalFile = $this->medical_file_model->getMedicalFile($resultSet->summer_camp_id, $colonistId);
+    			
+    			$this->medical_file_model->insertNewMedicalFile($summercampId, $colonistId, $medicalFile->getBloodType(), $medicalFile->getRH(), $medicalFile->getWeight(), $medicalFile->getHeight(), $medicalFile->getPhysicalActivityRestriction(),
+    					$medicalFile->getVacineTetanus(), $medicalFile->getVacineMMR(), $medicalFile->getVacineHepatitis(), $medicalFile->getInfectoContagiousAntecedents(), $medicalFile->getRegularUseMedicine(),
+    					$medicalFile->getMedicineRestrictions(), $medicalFile->getAllergies(), $medicalFile->getAnalgesicAntipyretic(), $medicalFile->getDoctorId());
     			
     			$document = $this->getNewestDocument($resultSet->summer_camp_id, $colonistId, 3);
     			if($document){

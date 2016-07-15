@@ -272,7 +272,7 @@
 
                     <label for="phone2" class="col-lg-3 control-label"> Telefone Secundário: </label>
                     <div class="col-lg-3">
-                        <input type="text" id="phone2" class="form-control phone" <?php if($type!=null){ echo 'disabled';} ?> placeholder="(ddd) Telefone secundário"
+                        <input type="text" id="phone2" class="form-control phone" disabled placeholder="(ddd) Telefone secundário"
                                name="phone2" maxlength="25" onkeypress="return validateNumberInput(event);"
                                value="<?php
 							if (!empty($phone2)) {
@@ -594,7 +594,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 1: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate1" <?php if($type!=null){ echo 'disabled';} ?> class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
+                        <input type="text" id="roommate1" disabled class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
                         value="<?php
                                if (!empty($roommate1)) {
                                    echo $roommate1;
@@ -608,7 +608,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 2: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate2" <?php if($type!=null){ echo 'disabled';} ?> class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
+                        <input type="text" id="roommate2" disabled class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
                         value="<?php
                                if (!empty($roommate2)) {
                                    echo $roommate2;
@@ -622,7 +622,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 3: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate3" <?php if($type!=null){ echo 'disabled';} ?> class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
+                        <input type="text" id="roommate3" disabled class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
                         value="<?php
                                if (!empty($roommate3)) {
                                    echo $roommate3;
@@ -640,7 +640,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="nameResponsible" class="col-lg-6 control-label">Nome do responsável para comunicação imediata em caso de emergência*: </label>
-                        <input disabled Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php echo $miniCamp->responsible_name; ?>"/>
+                        <input disabled Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php if(isset($miniCamp->responsible_name))echo $miniCamp->responsible_name; ?>"/>
                     </div>
                 </div>
 
@@ -650,7 +650,7 @@
                     <div class="form-group">
                         <label for="phoneResponsible" class="col-lg-6 control-label">Telefone do responsável para comunicação em caso de emergência*: </label>
                         <input disabled Name="phoneResponsible" class="col-lg-3 phone" placeholder="(ddd) Telefone de emergência"
-                               maxlength="25" value="<?php echo $miniCamp->responsible_number; ?>"/>
+                               maxlength="25" value="<?php if(isset($miniCamp->responsible_number)) echo $miniCamp->responsible_number; ?>"/>
 
                     </div>
                 </div>
@@ -663,13 +663,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="sleepOut" value="1"
                             <?php
-                            if ($miniCamp->sleep_out == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleep_out))
+                            	if($miniCamp->sleep_out == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="sleepOut" value="0"
                             <?php
-                            if ($miniCamp->sleep_out == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleep_out))
+                            	if($miniCamp->sleep_out == 'f')
+                                	echo "checked='checked'"
                                 ?>/> Não
                         </div>
 
@@ -682,12 +684,14 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="wakeUpEarly" value="1"
                             <?php
-                            if ($miniCamp->wake_up_early == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->wake_up_early))
+                            		if($miniCamp->wake_up_early == 't')
+                                		echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="wakeUpEarly" value="0"
                             <?php
-                            if ($miniCamp->wake_up_early == 'f')
+                            if (isset($miniCamp->wake_up_early))
+                            		if($miniCamp->wake_up_early == 'f')
                                 echo "checked='checked'"
                                 ?>
                                    /> Não
@@ -702,13 +706,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="feedsIndependently" value="1"
                             <?php
-                            if ($miniCamp->eat_by_oneself == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->eat_by_oneself))
+                            	if($miniCamp->eat_by_oneself == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="feedsIndependently" value="0"
                             <?php
-                            if ($miniCamp->eat_by_oneself == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->eat_by_oneself))
+                            	if($miniCamp->eat_by_oneself == 'f')
+                                	echo "checked='checked'"
                                 ?>
                                    /> Não
                         </div>
@@ -722,13 +728,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="wcIndependent" value="1"
                             <?php
-                            if ($miniCamp->bathroom_freedom == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->bathroom_freedom))
+                            	if($miniCamp->bathroom_freedom == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="wcIndependent" value="0"
                             <?php
-                            if ($miniCamp->bathroom_freedom == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->bathroom_freedom))
+                            	if($miniCamp->bathroom_freedom == 'f')
+                                	echo "checked='checked'"
                                 ?>
                                    /> Não
                         </div>
@@ -742,13 +750,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="routineToFallAsleep" value="1"
                             <?php
-                            if ($miniCamp->sleep_routine == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleep_routine))
+                            	if($miniCamp->sleep_routine == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="routineToFallAsleep" value="0"
                             <?php
-                            if ($miniCamp->sleep_routine == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleep_routine))
+                            	if($miniCamp->sleep_routine == 'f')
+                                	echo "checked='checked'"
                                 ?>
                                    /> Não
                         </div>
@@ -761,13 +771,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="bunkBed" value="1"
                             <?php
-                            if ($miniCamp->bunk_restriction == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->bunk_restriction))
+                            	if($miniCamp->bunk_restriction == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="bunkBed" value="0"
                             <?php
-                            if ($miniCamp->bunk_restriction == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->bunk_restriction))
+                            	if($miniCamp->bunk_restriction == 'f')
+                                	echo "checked='checked'"
                                 ?>/> Não
                         </div>
                     </div>
@@ -779,13 +791,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="awakeAtNight" value="1"
                             <?php
-                            if ($miniCamp->wake_up_at_night == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->wake_up_at_night))
+                            	if($miniCamp->wake_up_at_night == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="awakeAtNight" value="0"
                             <?php
-                            if ($miniCamp->wake_up_at_night == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->wake_up_at_night))
+                            	if($miniCamp->wake_up_at_night == 'f')
+                                	echo "checked='checked'"
                                 ?>
                                    /> Não
                         </div>
@@ -798,13 +812,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="sleepwalk" value="1"
                             <?php
-                            if ($miniCamp->sleepwalk == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleepwalk))
+                            	if($miniCamp->sleepwalk == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
                             <input disabled type="radio" name="sleepwalk" value="0"
                             <?php
-                            if ($miniCamp->sleepwalk == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleepwalk))
+                            	if($miniCamp->sleepwalk == 'f')
+                                	echo "checked='checked'"
                                 ?>
                                    /> Não
                         </div>
@@ -818,14 +834,16 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="sleepEnuresis" value="1"
                             <?php
-                            if ($miniCamp->sleep_enuresis == 't')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleep_enuresis))
+                            	if($miniCamp->sleep_enuresis == 't')
+                                	echo "checked='checked'"
                                 ?>/> Sim
 
                             <input disabled type="radio" name="sleepEnuresis" value="0"
                             <?php
-                            if ($miniCamp->sleep_enuresis == 'f')
-                                echo "checked='checked'"
+                            if (isset($miniCamp->sleep_enuresis))
+                            	if($miniCamp->sleep_enuresis == 'f')
+                               	 echo "checked='checked'"
                                 ?>
                                    /> Não
                         </div>
@@ -837,7 +855,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="foodRestriction" class="col-lg-6 control-label">Possui restrição alimentar? Qual? </label>
-                        <textarea disabled Name="foodRestriction" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->food_restriction; ?></textarea>
+                        <textarea disabled Name="foodRestriction" class="col-lg-5" ROWS=5 COLS=20><?php if(isset($miniCamp->food_restriction))echo $miniCamp->food_restriction; ?></textarea>
                     </div>
                 </div>
                 <br />
@@ -846,7 +864,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="observationMini" class="col-lg-6 control-label">Há algo mais que seja relevante para a adaptação do colonista que você queira registrar? </label>
-                        <textarea disabled Name="observationMini" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->observation; ?></textarea>
+                        <textarea disabled Name="observationMini" class="col-lg-5" ROWS=5 COLS=20><?php if(isset($miniCamp->observation))echo $miniCamp->observation; ?></textarea>
                     </div>
                 </div>
 
@@ -857,7 +875,7 @@
 
         </form>
         <br />
-        <?php if($type!=null){ ?>
+        <?php if(isset($type)){ ?>
         	<button class="btn btn-warning" class="button" onclick="self.close()" value="Fechar">Fechar</button>
        	<?php } else { ?>
          <div class="row">
