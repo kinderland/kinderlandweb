@@ -97,7 +97,7 @@ class CI_DB_postgre_driver extends CI_DB {
 	 */
 	function db_pconnect()
 	{
-		return @pg_pconnect($this->_connect_string());
+		return @pg_connect($this->_connect_string(), PGSQL_CONNECT_FORCE_NEW);
 	}
 
 	// --------------------------------------------------------------------
