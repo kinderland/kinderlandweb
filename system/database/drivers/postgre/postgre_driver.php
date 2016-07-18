@@ -83,9 +83,8 @@ class CI_DB_postgre_driver extends CI_DB {
 	 */
 	function db_connect()
 	{
-		return @pg_connect($this->_connect_string());
-		/* RPO COnexão Sincrona */
-		/* return @pg_connect($this->_connect_string(), PGSQL_CONNECT_FORCE_NEW); */
+		/* RPO  conexao sincrona */
+		return @pg_connect($this->_connect_string(), PGSQL_CONNECT_FORCE_NEW);
 	}
 
 	// --------------------------------------------------------------------
