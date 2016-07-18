@@ -255,8 +255,7 @@
                                name="fullname" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               value="
-                               <?php
+                               value="<?php
                                if (!empty($_POST['fullname'])) {
                                    echo $_POST['fullname'];
                                }
