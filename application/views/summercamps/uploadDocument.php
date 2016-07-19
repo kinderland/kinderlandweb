@@ -78,7 +78,7 @@
 	if($oldSubscriptionRestored){
 		if($oldSubscriptionRestored->identification_document == 'f' || $oldSubscriptionRestored->photo == 'f'){?>
 				<button class="btn btn-success" onclick="confirmDocument(<?= $camp_id ?>,<?= $colonist_id ?>,<?= $document_type ?>)">
-						Confirmar documento recuperado
+						Confirmar documento recuperado do ano anterior
 					</button>
 		<?php }
 	}
