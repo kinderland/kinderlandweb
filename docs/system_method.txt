@@ -418,3 +418,4 @@
 "indexm";"summercamps";1
 "getPreviousSubscriptions";"summercamps";1
 "confirmDocument";"summercamps";1
+"checkSubscription";"admin";1

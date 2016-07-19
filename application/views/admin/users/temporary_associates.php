@@ -65,21 +65,31 @@
                     function (data) {
                         if(data == "true"){
                             var name = <?php echo json_encode($name);?>;
-                            if(confirm("Deseja indicar ".concat(name[cpf]," para realizar pré-inscrição?"))){
-                            	$.post('<?= $this->config->item('url_link'); ?>admin/updateTemporaryAssociate',
-                                        {cpf: cpf, associate_id: associate_id, type:type},
-                                        function (data) {
-                                            if (data == "true") {
-                                                alert("CPF indicado Cadastrado com sucesso");
-                                                location.reload();
-                                            } else if (data == "false") {
-                                                alert("Ocorreu um erro no cadastro do CPF indicado!");
-                                                location.reload();
-                                            }
-                                        }
-                                );
+                            $.post('<?= $this->config->item('url_link'); ?>admin/checkSubscription',
+                                    {associate_id: associate_id},
+                                    function (data) {
+                                        if(data == "true"){
+				                            if(confirm("Deseja indicar ".concat(name[cpf]," para realizar pré-inscrição?"))){
+				                            	$.post('<?= $this->config->item('url_link'); ?>admin/updateTemporaryAssociate',
+				                                        {cpf: cpf, associate_id: associate_id, type:type},
+				                                        function (data) {
+				                                            if (data == "true") {
+				                                                alert("CPF indicado Cadastrado com sucesso");
+				                                                location.reload();
+				                                            } else if (data == "false") {
+				                                                alert("Ocorreu um erro no cadastro do CPF indicado!");
+				                                                location.reload();
+				                                            }
+				                                        }
+				                                );
+				
+				                            }
+                                        }else if(data == "false"){
+                                            alert("Para indicar um CPF, o sócio não pode realizar pré-inscrições este ano. Caso deseje indicar, exclua suas pré-inscrições");
 
-                            }
+                                        }
+                                    }
+                               );
                         }
                         else if(data == "false"){
                             alert("Esse CPF não está cadastrado no site ou é inválido para o processo. Tente novamente!");

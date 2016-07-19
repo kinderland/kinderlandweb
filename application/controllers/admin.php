@@ -132,6 +132,18 @@ class Admin extends CK_Controller {
     	}
     }
     
+    public function checkSubscription(){
+    	$associate_id = $this->input->post("associate_id", true);
+    	
+    		if(!$this->summercamp_model->hasValidSubscription($associate_id)){
+    			echo "true";
+    			return;
+    		}else{
+    			echo "false";
+    			return;
+    		}
+    }
+    
     public function updateTemporaryAssociate(){
     	$cpf = $this->input->post("cpf", true);
     	$associate_id = $this->input->post("associate_id", true);
@@ -139,7 +151,7 @@ class Admin extends CK_Controller {
     	
     	$temporary_associate = $this->personuser_model->getPersonByCpf($cpf);
     	
-    	if($type == 'atualiar'){
+    	if($type == 'atualizar'){
 	    	if(!$this->personuser_model->isPersonTemporaryAssociatedThisYear($associate_id,$temporary_associate->person_id,date("Y"))){
 	    		if($this->personuser_model->deleteTemporary($associate_id,date("Y"))){
 	    			if($this -> personuser_model ->insertNewTemporary($associate_id,$temporary_associate->person_id,date("Y"))){

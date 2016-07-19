@@ -76,12 +76,18 @@
 	$oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($camp_id ,$colonist_id);
 	
 	if($oldSubscriptionRestored){
-		if($oldSubscriptionRestored->identification_document == 'f' || $oldSubscriptionRestored->photo == 'f'){?>
-				<button class="btn btn-success" onclick="confirmDocument(<?= $camp_id ?>,<?= $colonist_id ?>,<?= $document_type ?>)">
-						Confirmar documento recuperado do ano anterior
-					</button>
-		<?php }
-	}
+		if($document_type == 3){
+			if($oldSubscriptionRestored->identification_document == 'f') {?>
+					<button class="btn btn-success" onclick="confirmDocument(<?= $camp_id ?>,<?= $colonist_id ?>,<?= $document_type ?>)">
+							Confirmar documento recuperado do ano anterior
+						</button>
+		<?php } } else if($document_type == 5){
+			
+			if($oldSubscriptionRestored->photo == 'f') {?>
+					<button class="btn btn-success" onclick="confirmDocument(<?= $camp_id ?>,<?= $colonist_id ?>,<?= $document_type ?>)">
+							Confirmar foto recuperada do ano anterior
+						</button>
+	<?php }} }
 	?>
 	<br>
 	<br>

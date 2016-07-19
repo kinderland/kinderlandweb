@@ -453,6 +453,19 @@ class summercamp_model extends CK_Model {
 
         return $summerCampSubscription;
     }
+    
+    public function hasValidSubscription($userId) {
+    	$sql = "Select * from summer_camp_subscription
+				where person_user_id = ?
+				AND DATE_PART('YEAR',date_created) = DATE_PART('YEAR',now())
+				AND situation not in(-1,-2,-3)";
+    	$resultSet = $this->executeRowsNoLog($this->db, $sql, array(intval($userId)));
+    
+    	if($resultSet)
+    		return true;
+    	else 
+    		return false;
+    }
 
     public function getSummerCampSubscription($colonistId, $summerCampId) {
         $sql = "Select * from summer_camp sc
