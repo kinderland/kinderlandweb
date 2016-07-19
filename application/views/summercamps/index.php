@@ -72,10 +72,41 @@
 
     <?php
 
-    function insertFigure($object, $summer_camp_id, $colonist_id, $document_id, $validation) {
-        if ($object->summercamp_model->hasDocument($summer_camp_id, $colonist_id, $document_id)) {
+    function insertFigure($object, $summer_camp_id, $colonist_id, $document_type, $validation) {
+    	
+        if ($object->summercamp_model->hasDocument($summer_camp_id, $colonist_id, $document_type)) {
             if ($validation) {
-                if ($validation->verifyDocument($document_id)) {
+                if ($validation->verifyDocument($document_type)) {
+                $oldSubscriptionRestored = $object -> summercamp_model -> isOldSubscriptionRestored($summer_camp_id,$colonist_id);
+            	 
+            	if($oldSubscriptionRestored){
+            	
+            		if($document_type == 3){
+            			if($oldSubscriptionRestored->identification_document=='t'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            				return 1;
+            			}else if($oldSubscriptionRestored->identification_document=='f') {
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            				return 0;
+            			}
+            		}else if($document_type == 5){
+            			if($oldSubscriptionRestored->photo=='t'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            				return 1;
+            			}else if($oldSubscriptionRestored->photo=='f'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            				return 0;
+            			}
+            		}else if($document_type == 1){
+            			if($oldSubscriptionRestored->medical_file=='t'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            				return 1;
+            			}else if($oldSubscriptionRestored->medical_file=='f'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            				return 0;
+            			}
+            		}
+            	}
                     echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
                     return 1;
                 } else {
@@ -83,6 +114,36 @@
                     return 0;
                 }
             } else {
+            	$oldSubscriptionRestored = $object -> summercamp_model -> isOldSubscriptionRestored($summer_camp_id,$colonist_id);
+            	 
+            	if($oldSubscriptionRestored){
+            	
+            		if($document_type == 3){
+            			if($oldSubscriptionRestored->identification_document=='t'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            				return 1;
+            			}else if($oldSubscriptionRestored->identification_document=='f') {
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            				return 0;
+            			}
+            		}else if($document_type == 5){
+            			if($oldSubscriptionRestored->photo=='t'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            				return 1;
+            			}else if($oldSubscriptionRestored->photo=='f'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            				return 0;
+            			}
+            		}else if($document_type == 1){
+            			if($oldSubscriptionRestored->medical_file=='t'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            				return 1;
+            			}else if($oldSubscriptionRestored->medical_file=='f'){
+            				echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            				return 0;
+            			}
+            		}
+            	}
                 echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
                 return 1;
             }
@@ -92,9 +153,20 @@
         }
     }
 
-    function insertFigureRegister($object, $validation) {
+    function insertFigureRegister($object,$summer_camp_id, $colonist_id, $validation) {
         if ($validation) {
             if ($validation->verifySubscription()) {
+            	$oldSubscriptionRestored = $object -> summercamp_model -> isOldSubscriptionRestored($summer_camp_id,$colonist_id);
+            	
+            	if($oldSubscriptionRestored){
+            		if($oldSubscriptionRestored->register=='t'){
+            			echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+            			return 1;
+            		}else if($oldSubscriptionRestored->register=='f') {
+            			echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+            			return 0;
+            		}
+            	}
                 echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
                 return 1;
             } else {
@@ -102,6 +174,17 @@
                 return 0;
             }
         } else {
+        	$oldSubscriptionRestored = $object -> summercamp_model -> isOldSubscriptionRestored($summer_camp_id,$colonist_id);
+        	 
+        	if($oldSubscriptionRestored){
+        		if($oldSubscriptionRestored->register=='t'){
+        			echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
+        			return 1;
+        		}else if($oldSubscriptionRestored->register=='f') {
+        			echo '<img src="' . $object->config->item('assets') . 'images/payment/redicon.png" alt="Falta preencher" title="Falta preencher" width="20px" height="20px"/>';
+        			return 0;
+        		}
+        	}
             echo '<img src="' . $object->config->item('assets') . 'images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>';
             return 1;
         }
@@ -159,7 +242,7 @@
 
 
     <div id="all" class = "col-lg-10">
-        <h1>Inscrições de colonistas:</h1>
+        <h1>Inscrições nas Temporadas Kinderland</h1>
         <?php if ($summerCamps) { 
         		if($i !== NULL){
         			echo "<script>setTimeout(alertMessage,50);</script>";
@@ -184,9 +267,9 @@
             ?>
             <br />
             <br />
-            <p>Ao final do preenchimento dos dados da pré-inscrição, quando todos os ítens estiverem marcados com um
+            <span style="font-size:18px">Ao final do preenchimento dos dados da pré-inscrição, quando todos os ítens estiverem marcados com um
                 <img src="<?= $this->config->item('assets') ?>images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>
-                ,<br /> <span style="font-size:18px">não esquecer de <b>ENVIAR</b> a pré-inscrição</span> </p>
+                ,<br />não esquecer de <span style="color: red"><b>ENVIAR</b></span> a pré-inscrição. O status mudará para aguardando validação e um email automático será enviado, confirmando que a pré-inscrição foi encaminhada.</span> 
 
 
             <table class="table-bordered table table-striped">
@@ -240,7 +323,7 @@
                             <br>
                             <br>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_PHOTO_3X4 ?>"> Foto 3x4 </a></td>
-                        <td><?php $documents += insertFigureRegister($this, $validation); ?>
+                        <td><?php $documents += insertFigureRegister($this,$summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), $validation); ?>
 
                             <br>
                             <br>

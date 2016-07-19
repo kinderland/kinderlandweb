@@ -36,11 +36,53 @@
 	</h1>
 
 	<?php } ?>
+	
+	<script>
+
+		function confirmDocument(camp_id,colonist_id,document_type){
+			if(document_type == 3)
+				var status = 'Documento';
+			else if (document_type == 5)
+				var status = 'Foto';
+
+			$.post("<?= $this->config->item('url_link'); ?>summercamps/confirmDocument",
+                    { camp_id: camp_id,colonist_id:colonist_id, document_type: document_type },
+                        function ( data ){
+                            if(data == "true"){
+
+                            	location.replace("<?= $this->config->item('url_link'); ?>summercamps/index");
+                            	
+                            	if(document_type == 3)
+                                	alert('Documento confirmado com sucesso!');
+                            	else if (document_type == 5)
+                            		alert('Foto confirmada com sucesso!');
+                        		
+                            }
+                            else
+                                alert("Erro ao confirmar.");
+                        }
+                );
+
+
+		}
+
+	</script>
 
 	<a target="_blank" href="<?= $this -> config -> item('url_link'); ?>admin/verifyDocument?camp_id=<?=$camp_id ?>&colonist_id=<?=$colonist_id ?>&document_type=<?=$document_type ?>">
 	<button class="btn btn-primary" <?=$hasDocument ?>>
 		Visualizar último documento enviado
 	</button> </a>
+	<?php 
+	$oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($camp_id ,$colonist_id);
+	
+	if($oldSubscriptionRestored){
+		if($oldSubscriptionRestored->identification_document == 'f' || $oldSubscriptionRestored->photo == 'f'){?>
+				<button class="btn btn-success" onclick="confirmDocument(<?= $camp_id ?>,<?= $colonist_id ?>,<?= $document_type ?>)">
+						Confirmar documento recuperado
+					</button>
+		<?php }
+	}
+	?>
 	<br>
 	<br>
 	<input class="btn btn-warning" type="button" value="Voltar" onclick="history.back()" />

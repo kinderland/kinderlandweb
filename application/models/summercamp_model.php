@@ -320,6 +320,10 @@ class summercamp_model extends CK_Model {
     	if($resultSet){
     		if($this->subscribeColonist($summercampId, $colonistId, $userId, 0, $resultSet->school_name, $resultSet->school_year, $resultSet->roommate1, $resultSet->roommate2, $resultSet->roommate3)){
     			
+    			$sql = "INSERT INTO summer_camp_old_subscription(summer_camp_id,colonist_id) VALUES (?,?)";
+    			
+    			$this->execute($this->db,$sql,array(intval($summercampId),intval($colonistId)));
+    			
     			$medicalFile = $this->medical_file_model->getMedicalFile($resultSet->summer_camp_id, $colonistId);
     			
     			$this->medical_file_model->insertNewMedicalFile($summercampId, $colonistId, $medicalFile->getBloodType(), $medicalFile->getRH(), $medicalFile->getWeight(), $medicalFile->getHeight(), $medicalFile->getPhysicalActivityRestriction(),
@@ -675,6 +679,35 @@ class summercamp_model extends CK_Model {
             }
             return FALSE;
         }
+    }
+    
+    public function isOldSubscriptionRestored($summercampId, $colonistId){
+    	$sql = "SELECT *
+				FROM summer_camp_old_subscription
+				WHERE summer_camp_id = ?
+				AND colonist_id = ?";
+    	
+    	$resultSet = $this->executeRow($this->db, $sql, array(intval($summercampId),intval($colonistId)));
+    	
+    	if($resultSet)
+    		return $resultSet;
+    	else 
+    		return null;    	
+    }
+    
+    public function turnOnSummerCampOldSubscriptionStatus($summercampId,$colonistId,$status){
+    	$sql = "UPDATE summer_camp_old_subscription
+    			SET ".$status." = TRUE
+    			WHERE summer_camp_id = ?
+    			AND colonist_id = ?";
+    	
+    	$resultSet = $this->execute($this->db, $sql, array(intval($summercampId),intval($colonistId)));
+    	
+    	if($resultSet)
+    		return TRUE;
+    	else 
+    		return FALSE;
+    
     }
 
     public function getAllColonistsBySummerCampAndYearForValidation($year, $status = null) {

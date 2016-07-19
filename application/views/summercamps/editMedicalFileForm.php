@@ -11,9 +11,10 @@
 		O símbolo * indica preenchimento obrigatório!
 	</p>
 	<p>
-		Atenção: cabe ao responsável pela pré-inscrição garantir que as informações 
+		<u><b><span style="color:red">Atenção:</span> cabe ao responsável pela pré-inscrição garantir que as informações 
 		abaixo são corretas e verídicas. Recomendamos fortemente que, em caso de dúvidas, 
 		um médico seja consultado antes da confirmação do envio desta ficha médica.
+		</b></u>
 	</p>
 </div>
 
@@ -330,13 +331,14 @@
 			<tr>
 				<td colspan="4">
 				<p>
-					Atenção: cabe ao responsável pela pré-inscrição garantir que as informações abaixo são corretas 
-					e verídicas. Recomendamos fortemente que, em caso de dúvidas, um médico seja consultado 
-					antes da confirmação do envio desta ficha médica.
+					<u><b><span style="color:red">Atenção:</span> cabe ao responsável pela pré-inscrição garantir que as informações 
+					abaixo são corretas e verídicas. Recomendamos fortemente que, em caso de dúvidas, 
+					um médico seja consultado antes da confirmação do envio desta ficha médica.
+					</b></u>
 				</p>
 				<p class="required">
 					<input type="checkbox" required name="responsability" value="Ok" <?=$disabled?>>
-					<span style="font-size:20px; color:red">Assumo a correção e veracidade das informações</span>
+					<span style="font-size:20px; color:red">Assumo a responsabilidade pela correção e veracidade das informações desta ficha médica</span>
 					<br>
 				</p></td>
 			</tr>

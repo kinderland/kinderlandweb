@@ -108,6 +108,7 @@ class SummerCamps extends CK_Controller {
         $this->Logger->info("Starting " . __METHOD__);
         $colonistId = $this->input->get('colonistId', TRUE);
         $summerCampId = $this->input->get('summerCampId', TRUE);
+        $oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($summerCampId,$colonistId);
         $camper = $this->summercamp_model->getSummerCampSubscription($colonistId, $summerCampId);
         $address = $this->address_model->getAddressByPersonId($camper->getPersonId());
         $responsableId = $this->session->userdata("user_id");
@@ -123,8 +124,18 @@ class SummerCamps extends CK_Controller {
         $data["fullName"] = $camper->getFullName();
         $data["Gender"] = $camper->getGender();
         $data["birthdate"] = date("d-m-Y", strtotime($camper->getBirthDate()));
-        $data["school"] = $camper->getSchool();
-        $data["schoolYear"] = $camper->getSchoolYear();
+        if($oldSubscriptionRestored){
+	        if($oldSubscriptionRestored->register == 'f'){
+	        	$data["school"] = null;
+	        	$data["schoolYear"] = null;        	
+	        }else if($oldSubscriptionRestored->register == 't'){
+	        	$data["school"] = $camper->getSchool();
+	        	$data["schoolYear"] = $camper->getSchoolYear();
+	        }
+        }else{
+	        $data["school"] = $camper->getSchool();
+	        $data["schoolYear"] = $camper->getSchoolYear();
+        }
         $data["documentNumber"] = $camper->getDocumentNumber();
         $data["documentType"] = $camper->getDocumentType();
         $data["phone1"] = $camper->getDocumentType();
@@ -291,6 +302,12 @@ class SummerCamps extends CK_Controller {
                 $sleepEnuresis = $this->input->post('sleepEnuresis', TRUE);
                 $this->summercamp_model->updateSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
             }
+            
+            $oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($summerCampId,$colonistId);
+            
+            if($oldSubscriptionRestored){
+            	$this->summercamp_model->turnOnSummerCampOldSubscriptionStatus($summerCampId,$colonistId,'register');
+            }
 
             $this->Logger->info("Colonist sucessfully edited");
 
@@ -301,6 +318,26 @@ class SummerCamps extends CK_Controller {
             $data['error'] = true;
             redirect("summercamps/editSubscriptionColonistForm?colonistId=$colonistId&summerCampId=$summerCampId");
         }
+    }
+    
+    public function confirmDocument(){
+    	$camp_id = $this->input->post('camp_id', TRUE);
+    	$colonist_id = $this->input->post('colonist_id', TRUE);
+    	$document_type = $this->input->post('document_type', TRUE);
+    	
+    	if($document_type == 3)
+    		$status = 'identification_document';
+    	else if($document_type == 5)
+    		$status = 'photo';
+    	
+    	if($this->summercamp_model->turnOnSummerCampOldSubscriptionStatus($camp_id,$colonist_id,$status)){
+    		echo "true";
+    		return;
+    	}else {
+    		echo "false";
+    		return;
+    	}
+    		
     }
 
     public function completeSubscription() {
@@ -474,18 +511,52 @@ class SummerCamps extends CK_Controller {
             $medical_file = $this->medical_file_model->getMedicalFile($data["camp_id"], $data["colonist_id"]);
             $data["bloodType"] = $medical_file->getBloodType();
             $data["rh"] = $medical_file->getRH();
-            $data["weight"] = $medical_file->getWeight();
-            $data["height"] = $medical_file->getHeight();
-            $data["physicalActivityRestriction"] = $medical_file->getPhysicalActivityRestriction();
-            $data["vacineTetanus"] = $medical_file->getVacineTetanus();
-            $data["vacineMMR"] = $medical_file->getVacineMMR();
-            $data["vacineTetanus"] = $medical_file->getVacineTetanus();
-            $data["vacineHepatitis"] = $medical_file->getVacineHepatitis();
-            $data["antecedents"] = $medical_file->getInfectoContagiousAntecedents();
-            $data["regularUseMedicine"] = $medical_file->getRegularUseMedicine();
-            $data["medicineRestrictions"] = $medical_file->getMedicineRestrictions();
-            $data["allergies"] = $medical_file->getAllergies();
-            $data["analgesicAntipyretic"] = $medical_file->getAnalgesicAntipyretic();
+            
+            $oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($data["camp_id"],$data["colonist_id"]);
+            
+            if($oldSubscriptionRestored){
+            	if($oldSubscriptionRestored->medical_file == "f"){
+            		$data["weight"] = null;
+            		$data["height"] = null;
+            		$data["physicalActivityRestriction"] = null;
+            		$data["vacineTetanus"] = null;
+            		$data["vacineMMR"] = null;
+            		$data["vacineTetanus"] = null;
+            		$data["vacineHepatitis"] = null;
+            		$data["antecedents"] = null;
+            		$data["regularUseMedicine"] = null;
+            		$data["medicineRestrictions"] = null;
+            		$data["allergies"] = null;
+            		$data["analgesicAntipyretic"] = null;
+            	}else if($oldSubscriptionRestored->medical_file=='t'){
+            		$data["weight"] = $medical_file->getWeight();
+            		$data["height"] = $medical_file->getHeight();
+            		$data["physicalActivityRestriction"] = $medical_file->getPhysicalActivityRestriction();
+            		$data["vacineTetanus"] = $medical_file->getVacineTetanus();
+            		$data["vacineMMR"] = $medical_file->getVacineMMR();
+            		$data["vacineTetanus"] = $medical_file->getVacineTetanus();
+            		$data["vacineHepatitis"] = $medical_file->getVacineHepatitis();
+            		$data["antecedents"] = $medical_file->getInfectoContagiousAntecedents();
+            		$data["regularUseMedicine"] = $medical_file->getRegularUseMedicine();
+            		$data["medicineRestrictions"] = $medical_file->getMedicineRestrictions();
+            		$data["allergies"] = $medical_file->getAllergies();
+            		$data["analgesicAntipyretic"] = $medical_file->getAnalgesicAntipyretic();
+            	}
+            }else{
+	            $data["weight"] = $medical_file->getWeight();
+	            $data["height"] = $medical_file->getHeight();
+	            $data["physicalActivityRestriction"] = $medical_file->getPhysicalActivityRestriction();
+	            $data["vacineTetanus"] = $medical_file->getVacineTetanus();
+	            $data["vacineMMR"] = $medical_file->getVacineMMR();
+	            $data["vacineTetanus"] = $medical_file->getVacineTetanus();
+	            $data["vacineHepatitis"] = $medical_file->getVacineHepatitis();
+	            $data["antecedents"] = $medical_file->getInfectoContagiousAntecedents();
+	            $data["regularUseMedicine"] = $medical_file->getRegularUseMedicine();
+	            $data["medicineRestrictions"] = $medical_file->getMedicineRestrictions();
+	            $data["allergies"] = $medical_file->getAllergies();
+	            $data["analgesicAntipyretic"] = $medical_file->getAnalgesicAntipyretic();
+            }
+            
             $doctorId = $medical_file->getDoctorId();
             $doctor = $this->person_model->getPersonById($doctorId);
             $data["doctorName"] = $doctor->getFullName();
@@ -760,7 +831,7 @@ class SummerCamps extends CK_Controller {
                 $this->sendPreSubscriptionEmail($colonist_id, $camp_id);
                 echo "<script>alert('Envio realizado com sucesso'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
             } else
-                echo "<script>alert('O cadastro e os anexos devem ter o OK para poder enviar.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+                echo "<script>alert('O cadastro e os anexos devem estar indicados com o simbolo em verde para poder enviar.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         } else {
             echo "<script>alert('O status " . utf8_decode($summerCampSubscription->getSituation()) . utf8_decode(" não") . " permite envio'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         }
@@ -1146,8 +1217,15 @@ class SummerCamps extends CK_Controller {
         $vacineMMR = $this->input->post('MMR', TRUE);
         $vacineHepatitis = $this->input->post('vacineHepatitis', TRUE);
 
-        if ($this->medical_file_model->updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId))
-            echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+        if ($this->medical_file_model->updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId)){
+        	$oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($campId,$colonistId);
+        	
+        	if($oldSubscriptionRestored){
+        		$this->summercamp_model->turnOnSummerCampOldSubscriptionStatus($campId,$colonistId,'medical_file');
+        	}
+        	
+        	echo "<script>alert('Ficha medica atualizada com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
+        }
     }
     
     public function editMedicalFileStaff() {
