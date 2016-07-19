@@ -118,6 +118,7 @@
                             $("#colonist_situation_" + colonist_id + "_" + summer_camp_id).html(data);
                             $("#submit_btn_" + colonist_id + "_" + summer_camp_id).hide();
                             $("#save_btn_" + colonist_id + "_" + summer_camp_id).hide();
+                            location.reload();
                         } else {
                             alert("Ocorreu um erro ao confirmar validação do colonista");
                         }

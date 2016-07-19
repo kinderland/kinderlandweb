@@ -310,6 +310,9 @@
                             ?>
                             Colônia: <?= $campName ?>
                             <hr>
+                            
+                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifySubscription())){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_MEDICAL_FILE ?>"> Ficha Médica </a>
                             <br>
                             <br>
@@ -322,9 +325,27 @@
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_IDENTIFICATION_DOCUMENT ?>"> Documento de identificação </a>
                             <br>
                             <br>
-                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_PHOTO_3X4 ?>"> Foto 3x4 </a></td>
+                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_PHOTO_3X4 ?>"> Foto 3x4 </a>
+                            <?php } else{?>
+                            Ficha Médica
+                            <br>
+                            <br>
+                            Autorização de viagem 
+                            <br>
+                            <br>
+                            Normas gerais
+                            <br>
+                            <br>
+                            Documento de identificação
+                            <br>
+                            <br>
+                            Foto 3x4
+                            
+                            <?php }?>
+                            </td>
+                       
+                       
                         <td><?php $documents += insertFigureRegister($this,$summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), $validation); ?>
-
                             <br>
                             <br>
                             <hr>

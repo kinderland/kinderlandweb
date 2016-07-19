@@ -132,6 +132,18 @@ class Admin extends CK_Controller {
     	}
     }
     
+    public function checkTemporarySubscription(){
+    	$associate_id = $this->input->post("associate_id", true);
+    	 
+    	if(!$this->summercamp_model->temporaryHasSubscription($associate_id)){
+    		echo "true";
+    		return;
+    	}else{
+    		echo "false";
+    		return;
+    	}
+    }
+    
     public function checkSubscription(){
     	$associate_id = $this->input->post("associate_id", true);
     	

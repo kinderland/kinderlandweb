@@ -309,11 +309,10 @@
                 <div class="form-group">
                     <label for="street" class="col-lg-1 control-label"> Logradouro: </label>
                     <div class="col-lg-11">
-                        <input type="text" class="form-control endereco" placeholder="Logradouro"
+                        <input disabled type="text" class="form-control endereco" placeholder="Logradouro"
                                name="street" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
-                               disabled
                                value="<?php
 							if (!empty($street)) {
 								echo $street;
@@ -401,7 +400,7 @@
 
                     <label for="uf" class="col-lg-2 control-label"> Estado*: </label>
                     <div class="col-lg-3">
-                        <select  class="form-control endereco" id="uf" name="uf" required disabled
+                        <select  class="form-control endereco" id="uf" name="uf" disabled
                                  oninvalid="this.setCustomValidity('Favor escolher um item da lista.')"
                                  oninput="setCustomValidity('')">
                             <option value="" selected> -- Selecione -- </option>
@@ -878,12 +877,12 @@
         <?php if(isset($type)){ ?>
         	<button class="btn btn-warning" class="button" onclick="self.close()" value="Fechar">Fechar</button>
        	<?php } else { ?>
-         <div class="row">
-                <div class="col-lg-6">
-                  <button class="btn btn-primary" onclick="saveChanges(<?= $id ?>, <?= $colonistId ?>)"> Salvar alterações </button>
+         <!--  <div class="row">
+         		 <div class="col-lg-6">
+                  <button class="btn btn-primary" onclick="saveChanges(<?php // echo $id ?>, <?php // echo $colonistId ?>)"> Salvar alterações </button>
                 </div>
             </div>
-            <br />
+            <br /> -->
         <button class="btn btn-warning" class="button" onclick="window.history.back();" value="Voltar">Voltar</button>
     	<?php } ?>
     </div>

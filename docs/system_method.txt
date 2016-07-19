@@ -419,3 +419,4 @@
 "getPreviousSubscriptions";"summercamps";1
 "confirmDocument";"summercamps";1
 "checkSubscription";"admin";1
+"checkTemporarySubscription";"admin";1

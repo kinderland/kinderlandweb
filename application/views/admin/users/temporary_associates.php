@@ -38,21 +38,32 @@
 
     function temporaryAssociateDelete(associate_id){
 
-        if(confirm("Tem certeza que deseja excluir?")){
+    	$.post('<?= $this->config->item('url_link'); ?>admin/checkTemporarySubscription',
+                {associate_id: associate_id},
+                function (data) {
+                    if (data == "true") {
 
-	    	$.post('<?= $this->config->item('url_link'); ?>admin/deleteTemporaryAssociate',
-	                {associate_id: associate_id},
-	                function (data) {
-	                    if (data == "true") {
-	                        alert("CPF indicado excluído com sucesso");
-	                        location.reload();
-	                    } else if (data == "false") {
-	                        alert("Ocorreu um erro na exclusão do CPF indicado!");
-	                        location.reload();
-	                    }
-	                }
-	        );
-        }
+				        if(confirm("Tem certeza que deseja excluir?")){
+				
+					    	$.post('<?= $this->config->item('url_link'); ?>admin/deleteTemporaryAssociate',
+					                {associate_id: associate_id},
+					                function (data) {
+					                    if (data == "true") {
+					                        alert("CPF indicado excluído com sucesso");
+					                        location.reload();
+					                    } else if (data == "false") {
+					                        alert("Ocorreu um erro na exclusão do CPF indicado!");
+					                        location.reload();
+					                    }
+					                }
+					        );
+				        }
+                    } else if(data == "false"){
+                    	alert("O CPF indicado está realizando o processo de inscrição. Caso queira alterar a indicação, o atual deve excluir a pré-inscrição/inscrição.");
+                        location.reload();
+                    }
+                }
+           );
 
     }
 
