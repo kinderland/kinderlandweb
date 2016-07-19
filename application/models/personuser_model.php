@@ -383,8 +383,7 @@ class personuser_model extends CK_Model {
     $class, $method, $userType) {
         $this->Logger->info("Running: " . __METHOD__);
         foreach ($userType as $typeUser) {
-            $sql = "select system_method_id from system_method where lower(method_name) = ? and lower(controller_name) = ? and user_type = ?;
-                ";
+            $sql = "select system_method_id from system_method where lower(method_name) = ? and lower(controller_name) = ? and user_type = ?;";
             $rows = $this->executeRows($this->db, $sql, array(strtolower($method), strtolower($class), intval($typeUser)));
             if (count($rows) > 0) {
                 return true;
@@ -482,7 +481,7 @@ class personuser_model extends CK_Model {
 				FROM summer_camp_subscription
 				WHERE person_user_id = ?
 				AND date_part('year',now()) != date_part('year',date_created)
-				AND situation not in (-1,-2,-3)
+				AND situation not in (-1,-2,-3,0,1,6)
     			AND colonist_id not in(
     			SELECT colonist_id
     			FROM summer_camp_subscription

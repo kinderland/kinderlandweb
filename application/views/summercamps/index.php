@@ -390,8 +390,24 @@
 
         	function sendInfoToModalCamp(campId){
         		$("#modalsummercampId").html(campId);
+        	}
+
+        	function newSubscription(){
+        		var summercampId = document.getElementById('modalsummercampId').textContent;
+        		window.location.href= "<?= $this->config->item('url_link'); ?>summercamps/subscribeColonist?id=".concat(summercampId);
+        	}
+
+        	function fecharModal(){
+				var inputElements = document.getElementsByClassName('checkboxColonist');
+				
+				for(var i=0; inputElements[i]; ++i){
+				      if(inputElements[i].checked){
+				    	  inputElements[i].checked = false;
+				      }
+				}
 
         	}
+        	
 			function getPreviousSubscriptions(){
 				var checkedValue = ""; 
 				var summercampId = document.getElementById('modalsummercampId').textContent;
@@ -403,24 +419,39 @@
 				      }
 				}
 
-				$.post("<?= $this->config->item('url_link') ?>summercamps/getPreviousSubscriptions",
-                        {
-                            colonists_id: checkedValue,
-                            summercampId: summercampId
-                        },
-                        function (data) {
-                            if (data == "true") {
-                                alert("Recuperação de dados executada com sucesso!");
-                                window.location.reload();
-                            } else {
-                                alert("Ocorreu um erro ao tentar recuperar os dados. Tente novamente!");
-                                window.location.reload();
-                            }
-                        }
-                );
+				if(checkedValue == ""){
+					alert("É necessário selecionar pelo menos um colonista para resgatar os dados.");
+
+				}else{
+
+					$.post("<?= $this->config->item('url_link') ?>summercamps/getPreviousSubscriptions",
+	                        {
+	                            colonists_id: checkedValue,
+	                            summercampId: summercampId
+	                        },
+	                        function (data) {
+	                            if (data == "true") {
+	                                alert("Recuperação de dados executada com sucesso!");
+	                                window.location.reload();
+	                            } else {
+	                                alert("Ocorreu um erro ao tentar recuperar os dados. Tente novamente!");
+	                                window.location.reload();
+	                            }
+	                        }
+	                );
+				}
 			}
 
         </script>
+        
+        <style>
+        	.center-table
+				{
+				  margin: 0 auto !important;
+				  float: none !important;
+				}
+        
+        </style>
         
         
         <!-- Modal RESGATAR INSCRIÇÃO ANTIGA -->
@@ -434,19 +465,16 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-lg-12 middle-content">
-								<div class="row">
-									
-								</div>
-
-								<div>
-								</div>
+								<h5 style='color:red' >Ao resgatar não se esqueça de atualizar todas as informações, como Ano Escolar.</h5>
+								<br/>
 								<input type="hidden" id="modalsummercampId" name="modalsummercampId" value="" />
 																
 								<div class="eventInsForm" name="form_subscribe" id="form_subscribe">
-									<table class="table table-bordered table-striped table-min-td-size" style="width:300px" id="sortable-table">
+								
+									<table class="center-table table table-bordered table-striped table-min-td-size" style="width:400px" id="sortable-table">
 			                            <thead>
 			                                <tr>
-			                                    <th style="width:200px"> Colonista </th>
+			                                    <th style="width:300px"> Colonista </th>
 			                                    <th style="width:100px"> Resgatar </th>
 			                                </tr>
 			                            </thead>
@@ -464,15 +492,26 @@
 			                                    <?php
 			                                }}
 			                                ?>
+			                                <tr>
+			                                	<td></td>
+			                                	<td><button type="button" class="btn btn-success" onClick="getPreviousSubscriptions()">Confirmar</button></td>
+			                                </tr>
 			                            </tbody>
+			                            
 			                        </table>
 								</div>
 							</div>
 						</div>
 					</div>
+					<div class="modal-header">
+						<h4 class="modal-title" id="create_account_name3"> </h4>
+					</div>
+					<br/>
+					<h4 class="modal-title" id="create_account_name2">&nbsp;&nbsp;&nbsp;&nbsp;Não Desejo Resgatar Dados de Inscrições Passadas</h4>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
-						<button type="button" class="btn btn-primary" onClick="getPreviousSubscriptions()">Confirmar</button>
+						<input type="button" class="col-lg-4 btn btn-primary" onclick="newSubscription()" value="Criar Nova Pré-inscrição"/>
+						<button type="button" class="btn btn-danger" onclick="fecharModal()" data-dismiss="modal">Fechar</button>
+						
 					</div>
 				</div>
 			</div>

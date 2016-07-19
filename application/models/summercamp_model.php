@@ -279,7 +279,7 @@ class summercamp_model extends CK_Model {
 					from summer_camp_subscription scs
 					where scs.person_user_id = ?
 					AND DATE_PART('YEAR',date_created) = ?
-	    			AND situation not in (-1,-2,-3)
+	    			AND situation not in (-1,-2,-3,0,1,6)
 	    			AND colonist_id not in(
 	    			SELECT colonist_id
 	    			FROM summer_camp_subscription
@@ -332,16 +332,45 @@ class summercamp_model extends CK_Model {
     						VALUES (?,?,now(),(SELECT distinct user_id FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
     						AND document_type = 3    				
-    						),(SELECT distinct filename FROM document WHERE summer_camp_id = ? 
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 3)),(SELECT distinct filename FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 3),(SELECT distinct extension FROM document WHERE summer_camp_id = ? 
+    						AND document_type = 3
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 3)),(SELECT distinct extension FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 3),(SELECT distinct document_type FROM document WHERE summer_camp_id = ? 
+    						AND document_type = 3
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 3)),(SELECT distinct document_type FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 3),(SELECT distinct file FROM document WHERE summer_camp_id = ? 
+    						AND document_type = 3
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 3)),(SELECT distinct file FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 3))";
-    				$resultSetT = $this->execute($this->db, $sql, array(intval($summercampId),intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId)));
+    						AND document_type = 3
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 3)))";
+    				$resultSetT = $this->execute($this->db, $sql, array(intval($summercampId),intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId),intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId),intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId),intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId)));
     				
     			}
     			
@@ -351,16 +380,45 @@ class summercamp_model extends CK_Model {
     						VALUES (?,?,now(),(SELECT distinct user_id FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
     						AND document_type = 5    				
-    						),(SELECT distinct filename FROM document WHERE summer_camp_id = ? 
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 5)),(SELECT distinct filename FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 5),(SELECT distinct extension FROM document WHERE summer_camp_id = ? 
+    						AND document_type = 5
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 5)),(SELECT distinct extension FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 5),(SELECT distinct document_type FROM document WHERE summer_camp_id = ? 
+    						AND document_type = 5
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 5)),(SELECT distinct document_type FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 5),(SELECT distinct file FROM document WHERE summer_camp_id = ? 
+    						AND document_type = 5
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 5)),(SELECT distinct file FROM document WHERE summer_camp_id = ? 
 							AND colonist_id = ?
-    						AND document_type = 5))";
-    				$resultSetT = $this->execute($this->db, $sql, array(intval($summercampId),intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId)));
+    						AND document_type = 5
+    						AND date_created in
+    						(SELECT max(date_created)
+    						 FROM document
+    						 WHERE summer_camp_id = ? 
+						 AND colonist_id = ?
+    						 AND document_type = 5)))";
+    				$resultSetT = $this->execute($this->db, $sql, array(intval($summercampId),intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId),intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId),intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId),intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId), intval($resultSet->summer_camp_id), intval($colonistId)));
     				
     			}
     			

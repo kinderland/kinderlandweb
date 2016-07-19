@@ -214,7 +214,7 @@
 
                     </div>
 
-                    <label for="schoolYear" class="col-lg-3 control-label"> Ano escolar (fundamental)*: </label>
+                    <label for="schoolYear" class="col-lg-3 control-label"> Ano escolar em <?php echo date("Y");?> (fundamental)*: </label>
                     <div class="col-lg-3">
                         <select  class="form-control" id="schoolYear" name="schoolYear" required
                                  oninvalid="this.setCustomValidity('Por favor selecione uma opção.')"
