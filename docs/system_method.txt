@@ -420,3 +420,6 @@
 "confirmDocument";"summercamps";1
 "checkSubscription";"admin";1
 "checkTemporarySubscription";"admin";1
+"colonists_bytemporaryassociates";"reports";2
+"colonists_bytemporaryassociates";"reports";3
+"colonists_bytemporaryassociates";"reports";4

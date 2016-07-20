@@ -110,6 +110,57 @@ class summercamp_model extends CK_Model {
         $rows = $this->executeRows($this->db, $sql, array(intval($year)));
         return $rows;
     }
+    
+    public function getTemporaryAssociatesByYear($year) {
+    
+    	$sql = "SELECT *
+				FROM temporary_associates
+				WHERE summercamp_year = ?";
+    
+    	$rows = $this->executeRows($this->db, $sql, array(strval($year)));
+    	
+    	$result = array();
+    	
+    	if($rows){
+    		foreach($rows as $row){
+    			$result[] = $row;
+    		}
+    		
+    		return $result;
+    	} else{
+    		return null;
+    	}
+    }
+    
+    public function getCountSubscriptionsByTemporaryAssociates($userId, $year){
+    	$sql = "SELECT distinct p1.person_id as responsable_id,p1.fullname as responsable_name, p1.email as responsable_email,
+				p2.person_id as associate_id, p2.fullname as associate_name, (SELECT count(colonist_id)
+											      FROM summer_camp_subscription
+											      WHERE person_user_id = ?
+											      AND DATE_PART('YEAR',date_created) = ?
+											      AND situation in (0,1,2,3,4,6)) AS presubscription,
+				
+											      (SELECT count(colonist_id)
+											      FROM summer_camp_subscription
+											      WHERE person_user_id = ?
+											      AND DATE_PART('YEAR',date_created) = ?
+											      AND situation = 5) as subscription
+				FROM person p1
+				INNER JOIN summer_camp_subscription scs on scs.person_user_id = p1.person_id
+				INNER JOIN temporary_associates ta on (ta.temporary_associate_id = p1.person_id)
+				INNER JOIN person p2 on p2.person_id = ta.associate_id
+				WHERE ta.summercamp_year = ?
+				AND DATE_PART('YEAR',scs.date_created) = ?
+				AND p1.person_id = ?";
+    	
+    	$row = $this->executeRow($this->db, $sql, array(intval($userId),intval($year),intval($userId),intval($year),strval($year),intval($year),intval($userId)));
+    	
+    	if($row)
+    		return $row;
+    	else 
+    		return null;
+    	
+    }
 
     public function getAllSummerCampsByYear($year) {
         $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_created) = ? ORDER BY date_created ASC";

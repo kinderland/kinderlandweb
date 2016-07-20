@@ -1050,6 +1050,45 @@ class Reports extends CK_Controller {
         $data['qtdAssoc'] = $qtdAssoc;
         $this->loadReportView("reports/summercamps/colonists_byassociated", $data);
     }
+    
+    public function colonists_bytemporaryassociates() {
+    
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = date('Y');
+    	$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	$end = $date;
+    	while ($campsByYear != null) {
+    		$end = $date;
+    		$date++;
+    		$campsByYear = $this->summercamp_model->getAllSummerCampsByYear($date);
+    	}
+    	$years = $this->summercamp_model->getAllSummerCampsYears();
+    	$year = null;
+    
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    	else {
+    		$year = $years[0];
+    	}
+    
+    		$data['ano_escolhido'] = $year;
+    		$data['years'] = $years;
+    		
+    		$info = array();
+    		
+    		$temporaryAssociates = $this->summercamp_model->getTemporaryAssociatesByYear($year);
+    
+    		if($temporaryAssociates){
+	    		foreach($temporaryAssociates as $t){
+	    			$info[] = $this ->summercamp_model -> getCountSubscriptionsByTemporaryAssociates($t->temporary_associate_id,$year);
+	    		}
+    		}
+    
+    		$data['info'] = $info;
+    		$this->loadReportView("reports/summercamps/colonists_bytemporaryassociates", $data);
+    }
 
     public function subscriptions_bycamp() {
         $data = array();

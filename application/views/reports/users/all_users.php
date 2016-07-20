@@ -141,7 +141,7 @@
                                  When the empty value is picked, the selected array will contain all available keys. */
                                 return true;
                             }
-                        }],
+                        },false],
                     filterText: 'Escreva para filtrar... '
                 });
             });
@@ -157,6 +157,7 @@
                                     <th> Nome </th>
                                     <th> E-mail </th>
                                     <th> Sócio </th>
+                                    <th> Ações </th>
                                 </tr>
                             </thead>
                             <tbody id="tablebody">
@@ -167,6 +168,7 @@
                                         <td><a id="<?= $user->fullname ?>" target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $user->person_id ?>"><?= $user->fullname ?></a></td>
                                         <td><?= $user->email ?></td>
                                         <td><?= $user->associate ?></td>
+                                        <td><a target='blank' href="<?= $this -> config -> item('url_link');?>admin/viewEmails/<?= $user->person_id ?>"> Ver e-mails enviados</a></td>
                                     </tr>
                                     <?php
                                 }
