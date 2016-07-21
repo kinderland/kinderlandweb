@@ -34,9 +34,11 @@
 		function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
 			var qtda = <?php echo $qtdAssoc;?>;
 			var qtdb = <?php echo $qtdBenemerits;?>;
-			return 'Apresentando ' + totalRow + ' sócios, de um total de ' + totalRowUnfiltered+ ' sócios.'
-			+ 'Sócios contribuintes com inscritos = ' + qtda + ". " +
-			'Sócios beneméritos com inscritos = '+  qtdb + '.';
+			var qtdt = <?php echo $qtdTemp;?>;
+			return 'Apresentando ' + totalRow + ' sócios (total ' + totalRowUnfiltered+ ' sócios).                                                  \r\n'
+			+ 'Sócios contribuintes com inscritos = ' + qtda + ".                                                                       \r\n " +
+			'Sócios beneméritos com inscritos = '+  qtdb + '.  \r\n '
+			+ 'Indicados por sócio com inscritos = ' + qtdt + '.';
 		}
 
 		function sortLowerCase(l, r) {
@@ -66,7 +68,7 @@
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
 				sort : [sortLowerCase, sortLowerCase, true],
-				filters : [true,true,numero],
+				filters : [true,true,true],
 				filterText: 'Escreva para filtrar... ',
 				counterText	: showCounter
 				
@@ -90,13 +92,14 @@
 							?>
 						</select>
 						</form>
-					<div class="counter"></div>
+					<div class="counter" style="height: 90px;width:280px"></div>
                     <table class="table table-bordered table-striped table-min-td-size" style="width: 1100px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Responsável </th>
                                 <th> E-mail </th>
-                                <th> Número de Pré-inscrições </th>
+                                <th> Indicado por </th>
+                                <th> Pré-inscrições </th>
                                 <th> Tem Pré-inscrição? </th>
                                 <th> Ações </th>
                             </tr>
@@ -109,10 +112,15 @@
                                 <tr>
                                 	<td><a id="<?= $subscription -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> person_id ?>"><?= $subscription->fullname ?></a></td>
                                     <td><?= $subscription->email ?></td>
+                                    <?php if(isset($subscription -> associate_id)){?>
+                                    <td><a id="<?= $subscription -> associate_id ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> associate_id ?>"><?= $subscription->associate_name ?></a></td>
+                                    <?php } else {?>
+                                    <td></td>
+                                    <?php }?>
                                     <td><?= $subscription->total_inscritos ?></td>
                                     <td><img src="<?php if($subscription->total_inscritos == 0) echo $this -> config -> item('assets') . 'images/payment/redicon.png" width="20px" height="20px"'; 
         											else  echo $this -> config -> item('assets') . 'images/payment/greenicon.png" width="20px" height="20px"'; ?>"/></td>
-                                    <td><a target='blank' href="<?= $this -> config -> item('url_link');?>admin/viewEmails/<?= $subscription->person_id ?>"> Ver e-mails enviados</a></td>
+                                    <td><a target='blank' href="<?= $this -> config -> item('url_link');?>admin/viewEmails/<?= $subscription->person_id ?>"> e-mails enviados</a></td>
                                     
                                 </tr>                                   
                                   <?php

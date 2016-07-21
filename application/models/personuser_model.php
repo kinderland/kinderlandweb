@@ -76,8 +76,8 @@ class personuser_model extends CK_Model {
     public function userLogin($login, $password) {
         $this->Logger->info("Running: " . __METHOD__);
         //Not using log to hide the salt and password from the log.
-        $sql = "SELECT person_id,password FROM person_user WHERE login = ?";
-        $rs = $this->executeRowsNoLog($this->db, $sql, array($login));
+        $sql = "SELECT person_id,password FROM person_user WHERE lower(login) = ?";
+        $rs = $this->executeRowsNoLog($this->db, $sql, array(strtolower($login)));
         if (isset($rs[0]))
             if (personuser_model::comparePassword($password, $rs[0]->password))
                 return $rs[0]->person_id;
@@ -115,9 +115,9 @@ class personuser_model extends CK_Model {
 				p.person_id
 				FROM person_user AS pu
 				NATURAL JOIN person AS p
-				WHERE p.email = ?";
+				WHERE lower(p.email) = ?";
 
-        $row = $this->executeRow($this->db, $sql, array($email));
+        $row = $this->executeRow($this->db, $sql, array(strtolower($email)));
 
         if ($row) {
             return $row->person_id;

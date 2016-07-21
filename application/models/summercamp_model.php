@@ -531,7 +531,35 @@ class summercamp_model extends CK_Model {
     	else
     		return false;
     }
-
+    
+    public function isTemporaryAssociate($userId,$year){
+    	$sql = "Select * from temporary_associates 
+				where temporary_associate_id = ?
+				AND summercamp_year = ?";
+    	
+    	$resultSet = $this->executeRow($this->db, $sql, array(intval($userId),strval($year)));
+    	 
+    	if($resultSet)
+    		return true;
+    	else
+    		return false;
+    }
+    
+    public function getInfoAboutAssociateWithTemporaryAssociate($temporaryAssociateId,$year){
+    	$sql = "SELECT *
+				FROM temporary_associates ta
+				INNER JOIN person p on p.person_id = ta.associate_id
+				WHERE summercamp_year = ?
+				AND temporary_associate_id = ?";
+    	 
+    	$resultSet = $this->executeRow($this->db, $sql, array(strval($year),intval($temporaryAssociateId)));
+    
+    	if($resultSet)
+    		return $resultSet;
+    	else
+    		return null;
+    }
+    
     public function getSummerCampSubscription($colonistId, $summerCampId) {
         $sql = "Select * from summer_camp sc
 		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id

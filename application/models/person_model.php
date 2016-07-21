@@ -103,8 +103,8 @@ class person_model extends CK_Model {
     }
 
     public function emailExists($email) {
-        $sql = "SELECT * FROM person WHERE email=?";
-        $resultSet = $this->executeRow($this->db, $sql, array($email));
+        $sql = "SELECT * FROM person WHERE lower(email)=?";
+        $resultSet = $this->executeRow($this->db, $sql, array(strtolower($email)));
 
         if ($resultSet)
             return true;

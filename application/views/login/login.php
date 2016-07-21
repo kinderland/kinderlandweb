@@ -17,7 +17,7 @@ function validateLogin(){
 			<div class="form-group <?php if(isset($error)) echo" has-error"?>">
 				<label for="login" class="col-lg-2 control-label"> Login: </label>
 				<div class="col-lg-10">
-					<input type="text" class="form-control" placeholder="Login"
+					<input type="text" class="form-control" placeholder="Email"
 						name="login" />
 				</div>
 			</div>

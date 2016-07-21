@@ -1026,9 +1026,23 @@ class Reports extends CK_Controller {
 
         $qtdBenemerits = 0;
         $qtdAssoc = 0;
+        $qtdTemp = 0;
+        $info = array();
 
         foreach ($subscriptions as $subs) {
             $equal = false;
+            
+            $obj = new StdClass();
+            
+            $obj = $subs;
+            
+            if($this->summercamp_model->isTemporaryAssociate($subs->person_id,$year)){
+            	$associate = $this->summercamp_model->getInfoAboutAssociateWithTemporaryAssociate($subs->person_id,$year);
+            	$obj->associate_name = $associate->fullname;
+            	$obj->associate_id = $associate->person_id;
+            }
+            
+            
             if ($subs->total_inscritos > 0) {
                 foreach ($benemerits as $b) {
                     if ($b == $subs->person_id) {
@@ -1038,7 +1052,10 @@ class Reports extends CK_Controller {
                 }
 
                 if ($equal == false) {
-                    $qtdAssoc++;
+                	if($this->summercamp_model->isTemporaryAssociate($subs->person_id,$year)){
+                		$qtdTemp++;
+                	}else
+                    	$qtdAssoc++;
                 } else {
                     $qtdBenemerits++;
                 }
@@ -1048,6 +1065,7 @@ class Reports extends CK_Controller {
         $data['subscriptions'] = $subscriptions;
         $data['qtdBenemerits'] = $qtdBenemerits;
         $data['qtdAssoc'] = $qtdAssoc;
+        $data['qtdTemp'] = $qtdTemp;
         $this->loadReportView("reports/summercamps/colonists_byassociated", $data);
     }
     
