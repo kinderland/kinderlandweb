@@ -77,6 +77,7 @@
 			}
 		})
 	}); 
+    
 </script>
 
 
@@ -108,12 +109,12 @@
 				</select></td>
 
 				<td width = "25%"><span><b>*Peso:</b></span>
-				<input type="text" class="nome" <?=$disabled?> required maxlength="3" name="weight" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+				<input type="text" class="nome" <?=$disabled?> onkeypress='return event.charCode >= 48 && event.charCode <= 57' required maxlength="3" name="weight" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')" value="<?=$weight?>"
 >
 				kg </td>
 				<td width = "25%"><span><b>*Altura:</b></span>
-				<input type="text" class="nome" <?=$disabled?> required maxlength="4" name="height" id="height" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+				<input type="text" class="nome" <?=$disabled?> onkeypress='return event.charCode >= 48 && event.charCode <= 57' required maxlength="4" name="height" id="height" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')" value="<?=$height?>">
 				cm </td>
 			</tr>

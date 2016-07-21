@@ -63,7 +63,7 @@
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
 				sort : [sortLowerCase, sortLowerCase,sortLowerCase, true,true],
-				filters : [true,true,true,numero,numero],
+				filters : [true,true,true,false,false],
 				filterText: 'Escreva para filtrar... ',
 				counterText	: showCounter
 				
