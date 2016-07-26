@@ -326,35 +326,42 @@
                             <hr>
                             
                             <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
-                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifySubscription())){?>
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_MEDICAL_FILE))){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_MEDICAL_FILE ?>"> Ficha Médica </a>
+                            <?php } else {?>
+                            Ficha Médica
+                            <?php }?>
                             <br>
                             <br>
+                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_TRIP_AUTHORIZATION))){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_TRIP_AUTHORIZATION ?>"> Autorização de viagem </a>
+                            <?php } else{?>
+                            Autorização de viagem
+                            <?php }?>
                             <br>
                             <br>
+                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_GENERAL_RULES))){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_GENERAL_RULES ?>"> Normas gerais </a>
+                            <?php } else{?>
+                            Normas gerais
+                            <?php }?>
                             <br>
                             <br>
+                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_IDENTIFICATION_DOCUMENT))){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_IDENTIFICATION_DOCUMENT ?>"> Documento de identificação </a>
+                            <?php } else {?>
+                            Documento de identificação
+                            <?php }?>
                             <br>
                             <br>
+                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_PHOTO_3X4))){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_PHOTO_3X4 ?>"> Foto 3x4 </a>
                             <?php } else{?>
-                            Ficha Médica
-                            <br>
-                            <br>
-                            Autorização de viagem 
-                            <br>
-                            <br>
-                            Normas gerais
-                            <br>
-                            <br>
-                            Documento de identificação
-                            <br>
-                            <br>
                             Foto 3x4
-                            
                             <?php }?>
                             </td>
                        
