@@ -230,9 +230,10 @@ class summercamp_model extends CK_Model {
 						AND (UPPER(p1.fullname) = UPPER(p2.fullname) OR c1.document_number = c2.document_number)
 						AND c1.colonist_id != c2.colonist_id
 						AND DATE_PART('YEAR',sc1.date_created) = ?
-						AND DATE_PART('YEAR',sc2.date_created) = ?)";
+						AND DATE_PART('YEAR',sc2.date_created) = ?)
+        		AND DATE_PART('YEAR',sc1.date_created) = ?";
 
-        $resultSet = $this->executeRows($this->db, $sql, array($year, $year));
+        $resultSet = $this->executeRows($this->db, $sql, array($year, $year,$year));
 
         return $resultSet;
     }
