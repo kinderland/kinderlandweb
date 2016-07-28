@@ -8,6 +8,8 @@ class SummerCampSubscription extends Colonist {
 	private $situationId;
 	private $school;
 	private $schoolYear;
+	private $acceptedTerms;
+	private $acceptedTravelTerms;
 	private $roommate1;
 	private $roommate2;
 	private $roommate3;
@@ -20,7 +22,7 @@ class SummerCampSubscription extends Colonist {
 	$colonistId, $birthDate, $documentNumber, $documentType,$personUserId, 
 	$phone1,
 	$phone2, 
-	$summerCampId, $personUserId, $situation, $school, $schoolYear,$situationId,$roommate1,$roommate2,$roommate3, $queueNumber=null, $discount=null, $datePaymentLimit=null, $roomNumber=null) {
+	$summerCampId, $personUserId, $situation, $school, $schoolYear,$acceptedTerms,$acceptedTravelTerms,$situationId,$roommate1,$roommate2,$roommate3, $queueNumber=null, $discount=null, $datePaymentLimit=null, $roomNumber=null) {
 		parent::__construct($personId, $fullname, $gender, $email, $address, $colonistId, $birthDate, $documentNumber, $documentType, $phone1, $phone2);
 		$this -> summerCampId = $summerCampId;
 		$this -> personUserId = $personUserId;
@@ -28,6 +30,8 @@ class SummerCampSubscription extends Colonist {
 		$this -> school = $school;
 		$this -> schoolYear = $schoolYear;
 		$this -> situationId = $situationId;
+		$this -> acceptedTerms = $acceptedTerms;
+		$this -> acceptedTravelTerms = $acceptedTravelTerms;
 		$this -> roommate1 = $roommate1;
 		$this -> roommate2 = $roommate2;
 		$this -> roommate3 = $roommate3;
@@ -44,7 +48,7 @@ class SummerCampSubscription extends Colonist {
 		$resultRow -> colonist_id, $resultRow -> birth_date, $resultRow -> document_number, $resultRow -> document_type, $resultRow->person_user_id,
 		null, //phone1
 		null, //phone2
-		$resultRow -> summer_camp_id, $resultRow -> person_user_id, $resultRow -> situation_description, $resultRow -> school_name, $resultRow -> school_year,$resultRow -> situation,
+		$resultRow -> summer_camp_id, $resultRow -> person_user_id, $resultRow -> situation_description, $resultRow -> school_name, $resultRow -> school_year,$resultRow -> accepted_terms, $resultRow -> accepted_travel_terms,$resultRow -> situation,
 		$resultRow -> roommate1, $resultRow -> roommate2, $resultRow -> roommate3,
 		$resultRow -> queue_number,$resultRow -> discount, $resultRow -> date_payment_limit, $resultRow -> room_number);
 		if ($addressIncluded)
@@ -99,6 +103,22 @@ class SummerCampSubscription extends Colonist {
 
 	public function getSchoolYear() {
 		return $this -> schoolYear;
+	}
+	
+	public function setAcceptedTerms($acceptedTerms) {
+		$this -> acceptedTerms = $acceptedTerms;
+	}
+	
+	public function getAcceptedTerms() {
+		return $this -> acceptedTerms;
+	}
+	
+	public function setAcceptedTravelTerms($acceptedTravelTerms) {
+		$this -> acceptedTravelTerms = $acceptedTravelTerms;
+	}
+	
+	public function getAcceptedTravelTerms() {
+		return $this -> acceptedTravelTerms;
 	}
 
 	public function setSituationId($situationId) {

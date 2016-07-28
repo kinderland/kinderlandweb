@@ -345,9 +345,10 @@ class summercamp_model extends CK_Model {
     		
     	$oldSubs = $this->getSummerCampSubscription($colonistId,$campId);
     	
-    	$insertNewSubs = $this->subscribeColonist($newCamp->summer_camp_id, $colonistId, $oldSubs->getPersonUserId(), $oldSubs->getSituationId(), $oldSubs->getSchool(), $oldSubs->getSchoolYear(), $oldSubs->getRoommate1(), $oldSubs->getRoommate2(), $oldSubs->getRoommate3());
+    	$sql = 'INSERT INTO summer_camp_subscription (summer_camp_id,colonist_id,person_user_id,situation,school_name,school_year,accepted_terms,accepted_travel_terms,roommate1,roommate2,roommate3) VALUES (?, ?, ?, ?,?,?,?,?,?,?,?)';
+    	$returnId = $this->execute($this->db, $sql, array($newCamp->summer_camp_id, $colonistId, $oldSubs->getPersonUserId(), $oldSubs->getSituationId(), $oldSubs->getSchool(), $oldSubs->getSchoolYear(),$oldSubs->getAcceptedTerms(), $oldSubs->getAcceptedTravelTerms(), $oldSubs->getRoommate1(), $oldSubs->getRoommate2(), $oldSubs->getRoommate3()));
     	
-    	if(!$insertNewSubs)
+    	if(!$returnId)
     		return false;
     		
     	//MUDANDO A TABELA PARENT_SUMMER_CAMP_SUBSCRIPTION
