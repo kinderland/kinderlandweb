@@ -319,6 +319,151 @@ class summercamp_model extends CK_Model {
         return $result;
     }
     
+    public function changeCamp($colonistId,$campId) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	
+    	$oldCamp = $this->getSummerCampById($campId);
+    	
+    	$number = explode(" ",$oldCamp->getCampName());
+    	
+    	if($number[0] == "1a")
+    		$campNumber = 2;
+    	else
+    		$campNumber = 1;
+    	
+    	$sql = "select * 
+    			from summer_camp 
+    			where camp_name like '%?a%' 
+    			and date_part('year',date_created) = ".date("Y");
+    	
+    	$result = $this->executeRow($this->db, $sql, array($campNumber));
+    	
+    	if($result)
+    		$newCamp = $result;
+    	else 
+    		return false;
+    		
+    	$oldSubs = $this->getSummerCampSubscription($colonistId,$campId);
+    	
+    	$insertNewSubs = $this->subscribeColonist($newCamp->summer_camp_id, $colonistId, $oldSubs->getPersonUserId(), $oldSubs->getSituationId(), $oldSubs->getSchool(), $oldSubs->getSchoolYear(), $oldSubs->getRoommate1(), $oldSubs->getRoommate2(), $oldSubs->getRoommate3());
+    	
+    	if(!$insertNewSubs)
+    		return false;
+    		
+    	//MUDANDO A TABELA PARENT_SUMMER_CAMP_SUBSCRIPTION
+    	
+    	$sql = "select * from parent_summer_camp_subscription 
+				where summer_camp_id = ?
+				and colonist_id = ?";
+    	
+    	$result = $this->executeRows($this->db, $sql, array(intval($campId),intval($colonistId)));
+    	
+    	if($result){
+    		$sql = "UPDATE parent_summer_camp_subscription SET summer_camp_id = ?
+					WHERE summer_camp_id = ?
+					AND colonist_id = ?";
+    		
+    		$result = $this->execute($this->db, $sql, array(intval($newCamp->summer_camp_id),intval($campId),intval($colonistId)));
+    		
+    		if(!$result)
+    			return false;
+    	
+    	}
+    	
+    	//MUDANDO A TABELA DOCUMENT
+    	
+    	$sql = "select * from document
+				where summer_camp_id = ?
+				and colonist_id = ?";
+    	 
+    	$result = $this->executeRows($this->db, $sql, array(intval($campId),intval($colonistId)));
+    	 
+    	if($result){
+    		$sql = "UPDATE document SET summer_camp_id = ?
+					WHERE summer_camp_id = ?
+					AND colonist_id = ?";
+    	
+    		$result = $this->execute($this->db, $sql, array(intval($newCamp->summer_camp_id),intval($campId),intval($colonistId)));
+    		
+    		if(!$result)
+    			return false;
+    	
+    	}
+    	
+    	//MUDANDO A TABELA MEDICAL_FILE
+    	 
+    	$sql = "select * from medical_file
+				where summer_camp_id = ?
+				and colonist_id = ?";
+    	
+    	$result = $this->executeRows($this->db, $sql, array(intval($campId),intval($colonistId)));
+    	
+    	if($result){
+    		$sql = "UPDATE medical_file SET summer_camp_id = ?
+					WHERE summer_camp_id = ?
+					AND colonist_id = ?";
+    		 
+    		$result = $this->execute($this->db, $sql, array(intval($newCamp->summer_camp_id),intval($campId),intval($colonistId)));
+    		
+    		if(!$result)
+    			return false;
+    	
+    	}
+    	
+    	//MUDANDO A TABELA SUMMER_CAMP_OLD_SUBSCRIPTION
+    	 
+    	$sql = "select * from summer_camp_old_subscription
+				where summer_camp_id = ?
+				and colonist_id = ?";
+    	
+    	$result = $this->executeRows($this->db, $sql, array(intval($campId),intval($colonistId)));
+    	
+    	if($result){
+    		$sql = "UPDATE summer_camp_old_subscription SET summer_camp_id = ?
+					WHERE summer_camp_id = ?
+					AND colonist_id = ?";
+    		 
+    		$result = $this->execute($this->db, $sql, array(intval($newCamp->summer_camp_id),intval($campId),intval($colonistId)));
+    		
+    		if(!$result)
+    			return false;
+    	}
+    	
+    	//MUDANDO A TABELA VALIDATION
+    	
+    	$sql = "select * from validation
+				where summer_camp_id = ?
+				and colonist_id = ?";
+    	 
+    	$result = $this->executeRows($this->db, $sql, array(intval($campId),intval($colonistId)));
+    	 
+    	if($result){
+    		$sql = "UPDATE validation SET summer_camp_id = ?
+					WHERE summer_camp_id = ?
+					AND colonist_id = ?";
+    		 
+    		$result = $this->execute($this->db, $sql, array(intval($newCamp->summer_camp_id),intval($campId),intval($colonistId)));
+    	
+    		if(!$result)
+    			return false;
+    	}
+    	
+    	//DELETANDO A INSCRIÇÃO ANTIGA
+    	 
+    	$sql = "delete from summer_camp_subscription
+				where summer_camp_id = ?
+				and colonist_id = ?";
+    	
+    	$result = $this->execute($this->db, $sql, array(intval($campId),intval($colonistId)));
+    	  	
+    	if($result)
+    		return true;
+    	else 
+    		return false;
+    	
+    
+    }
+    
     public function getOldSubscriptionByUserId($userId){
     	
     	

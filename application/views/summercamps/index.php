@@ -64,6 +64,29 @@
 	   alert("Lembre-se de ENVIAR a pré-inscrição quando finalizar o seu preenchimento.");
    }
 
+   function changeCamp(colonistId,campId){
+
+	   if(confirm("Confirma a mudança de turma?")){
+
+		   $.post("<?= $this->config->item('url_link') ?>summercamps/changeCamp",
+	               {
+	                   'colonist_id': colonistId,
+	                   'camp_id': campId
+	               },
+	               function (data) {
+	                   if (data == "true") {
+	                       window.location.reload();
+	                       alert("Pré-inscrição alterada com sucesso!");
+	                   } else {
+	                       alert("Ocorreu um erro ao gravar a alteração da pré-inscrição.");
+	                   }
+	               }
+	       );
+	   }
+
+
+   }
+
 </script>
 
 <div class="row">
@@ -189,6 +212,7 @@
             return 1;
         }
     }
+    
     ?>
 
     <div class="col-lg-10" id="popUpDiv" style="display:none;">
@@ -460,6 +484,13 @@
                             <?php
                             if (($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS)) {  ?>
                             <p><p><button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="showReasonsMessage('<?=$validation->describeValidation()?>');">Motivos da não validação</button>
+                            	</p></p>
+                            <?php  }
+                            ?>
+                            <?php
+                            $number = explode(" ",$campName);
+                            if (($summerCampInscription->getSituationId() == (SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) && $number[0] == ("1a" || "2a"))) {  ?>
+                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>');">Mudar pré-inscrição para <?php if(strcmp($number[0],"1a") == 0) echo "2a Turma ".date("Y"); else echo "1a Turma ".date("Y"); ?></button>
                             	</p></p>
                             <?php  }
                             ?>

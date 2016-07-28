@@ -423,3 +423,4 @@
 "colonists_bytemporaryassociates";"reports";2
 "colonists_bytemporaryassociates";"reports";3
 "colonists_bytemporaryassociates";"reports";4
+"changeCamp";"summercamps";1

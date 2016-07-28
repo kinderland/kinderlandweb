@@ -2020,6 +2020,19 @@ class SummerCamps extends CK_Controller {
         else
             echo "false";
     }
+    
+    public function changeCamp(){
+    	 
+    	$colonistId = $this->input->post("colonist_id", true);
+    	$summerCampId = $this->input->post("camp_id", true);
+    	 
+    	$result = $this->summercamp_model->changeCamp($colonistId, $summerCampId);
+    
+    	if($result == true)
+    		echo "true";
+    	else
+    		echo "false";
+    }
 
     
     public function deleteCoordinator(){

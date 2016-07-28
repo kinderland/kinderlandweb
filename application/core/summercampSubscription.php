@@ -35,6 +35,7 @@ class SummerCampSubscription extends Colonist {
 		$this -> discount = $discount;
 		$this -> datePaymentLimit = $datePaymentLimit;
 		$this -> roomNumber = $roomNumber;
+		$this -> colonistId = $colonistId;
 	}
 
 	public static function createSummerCampSubscriptionObject($resultRow, $addressIncluded = false) {
@@ -58,6 +59,14 @@ class SummerCampSubscription extends Colonist {
 
 	public function getSummerCampId() {
 		return $this -> summerCampId;
+	}
+	
+	public function setColonistId($colonistId) {
+		$this -> colonistId = $colonistId;
+	}
+	
+	public function getColonistId() {
+		return $this -> colonistId;
 	}
 
 	public function setPersonUserId($personUserId) {
