@@ -492,7 +492,7 @@
                             ?>
                             <?php
                             $number = explode(" ",$campName);
-                            if (($summerCampInscription->getSituationId() == (SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) && !$this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->isMiniCamp())) {  ?>
+                            if ((($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) || ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) && !$this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->isMiniCamp())) {  ?>
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>');">Mudar pré-inscrição para <?php if(strcmp($number[0],"1a") == 0) echo "2a Turma ".date("Y"); else echo "1a Turma ".date("Y"); ?></button>
                             	</p></p>
                             <?php  }
