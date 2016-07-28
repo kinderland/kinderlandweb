@@ -298,9 +298,12 @@
 								 }?>" />
                 </a>
             <?php } } ?>
-        <?php } else { ?>
+        <?php } else { 
+        	if($hasTemporary){?>
+        	Você indicou um CPF para pre-inscrição. Assim, não é mais possível fazer pré-inscrições como responsável.
+        	<?php } else{?>
             Não é possível fazer inscrições no momento.
-        <?php } ?>
+        <?php } }?>
         <?php if ($summerCampInscriptions) {
             ?>
             <br />
@@ -489,7 +492,7 @@
                             ?>
                             <?php
                             $number = explode(" ",$campName);
-                            if (($summerCampInscription->getSituationId() == (SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) && $number[0] == ("1a" || "2a"))) {  ?>
+                            if (($summerCampInscription->getSituationId() == (SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) && !$this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->isMiniCamp())) {  ?>
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>');">Mudar pré-inscrição para <?php if(strcmp($number[0],"1a") == 0) echo "2a Turma ".date("Y"); else echo "1a Turma ".date("Y"); ?></button>
                             	</p></p>
                             <?php  }

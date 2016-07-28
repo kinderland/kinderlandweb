@@ -35,10 +35,9 @@
 			var qtda = <?php echo $qtdAssoc;?>;
 			var qtdb = <?php echo $qtdBenemerits;?>;
 			var qtdt = <?php echo $qtdTemp;?>;
-			return 'Apresentando ' + totalRow + ' sócios (total ' + totalRowUnfiltered+ ' sócios).                                                  \r\n'
-			+ 'Sócios contribuintes com inscritos = ' + qtda + ".                                                                       \r\n " +
-			'Sócios beneméritos com inscritos = '+  qtdb + '.  \r\n '
-			+ 'Indicados por sócio com inscritos = ' + qtdt + '.';
+			return 'Sócios contribuintes com pré-inscrições = ' + qtda + ".                                                                       \r\n " +
+			'Sócios beneméritos com pré-inscrições = '+  qtdb + '.  \r\n '
+			+ 'Indicados por sócio com pré-inscrições = ' + qtdt + '.';
 		}
 
 		function sortLowerCase(l, r) {
