@@ -424,3 +424,12 @@
 "colonists_bytemporaryassociates";"reports";3
 "colonists_bytemporaryassociates";"reports";4
 "changeCamp";"summercamps";1
+"event_reports";"reports";2
+"event_reports";"reports";3
+"event_reports";"reports";4
+"report_panel_byage";"reports";2
+"report_panel_byage";"reports";3
+"report_panel_byage";"reports";4
+"reportPanel";"reports";2
+"reportPanel";"reports";3
+"reportPanel";"reports";4
