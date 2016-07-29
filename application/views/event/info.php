@@ -67,7 +67,7 @@
 				var Ids;
 
 				if(personIds.length == 0){
-					alert("Selecione os convites que deseja pagar.");
+					alert("Acrescente convites para realizar doação.");
 					return;
 				}
 
@@ -215,7 +215,7 @@
 		?>
 			<div class='row'>
 				<div class="col-lg-8">
-					<h2><?=$event->getEventName();?></h2>
+					<h2>Inscrições <?=$event->getEventName();?></h2>
 					<h4 align="left"><strong><?=$event->getDescription();?></strong></h4>
 					<h4>
 						<strong>Período:</strong>
@@ -227,7 +227,7 @@
 				if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 			?>
 					<p align="left">
-						<?=$fullname?>, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos.
+						<?=$fullname?>, no período de inscrições atual, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos.
 					</p>
 			<?php
 				}
@@ -249,11 +249,11 @@
 								<th>R$ <?=number_format($p->middle_price, 2, ',', '.');?></th>
 								<th>R$ <?=number_format($p->children_price, 2, ',', '.');?></th>
 							<?php } else{?>
-								<td><?= date_format(date_create($p->date_start), 'd/m/y');?> 
+								<td style="color:grey"><?= date_format(date_create($p->date_start), 'd/m/y');?> 
 							<?= ($p->date_start != $p->date_finish)? " - ".date_format(date_create($p->date_finish), 'd/m/y'):""?></td>
-								<td>R$ <?=number_format($p->full_price, 2, ',', '.');?></td>
-								<td>R$ <?=number_format($p->middle_price, 2, ',', '.');?></td>
-								<td>R$ <?=number_format($p->children_price, 2, ',', '.');?></td>
+								<td style="color:grey">R$ <?=number_format($p->full_price, 2, ',', '.');?></td>
+								<td style="color:grey">R$ <?=number_format($p->middle_price, 2, ',', '.');?></td>
+								<td style="color:grey">R$ <?=number_format($p->children_price, 2, ',', '.');?></td>
 							<?php }?>
 							</tr>
 						<?php }?>
