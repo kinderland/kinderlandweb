@@ -70,7 +70,8 @@
         <div class="main-container-report">
             <div class = "row">
                 <div class="col-lg-12">
-                Lista de pré-inscrições com dados cadastrais e documentos anexos prontos para submissão, porém ainda não enviados pelo responsável. Inclui também pré-inscrições que não foram validadas, precisam ser consertadas pelo responsável e enviadas novamente para validação. <br></br>
+                Lista de pré-inscrições com dados cadastrais e documentos anexos prontos para submissão, porém ainda não enviados pelo responsável. <br />
+                Inclui também pré-inscrições que não foram validadas, precisam ser consertadas pelo responsável e enviadas novamente para validação. <br></br>
                 	<form method="GET">
 						Ano; <select name="ano_f" onchange="this.form.submit()" id="anos">
 					

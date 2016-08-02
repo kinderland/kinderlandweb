@@ -61,7 +61,7 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, true, false],
+				sort : [false, true, false],
 				filters : [true,false,false],
 				filterText: 'Escreva para filtrar... ',
 				counterText	: showCounter
@@ -89,6 +89,7 @@
 						Sócios contribuintes com pré-inscrições = <?php echo $qtdAssoc;?>. <br/>
 						Sócios beneméritos com pré-inscrições = <?php echo $qtdBenemerits;?>. <br/>
 						Indicados por sócio com pré-inscrições = <?php echo $qtdTemp;?>.<br/>
+						Total de sócios com pré-inscrições = <?php echo $qtdAssoc+$qtdBenemerits+$qtdTemp;?>.<br/>
 						Total de Sócios = <?php echo $qtdAssocT;?><br />
                     <table class="table table-bordered table-striped table-min-td-size" style="width: 600px; font-size:15px" id="sortable-table">
                         <thead>
@@ -107,7 +108,7 @@
                                 	<td><?php if(!isset($subscription->associate_id)){ ?>
                                 	<a id ="<?= $subscription -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> person_id ?>"><?= $subscription->fullname ?></a></td>
                                 	<?php }else{?>
-                                	<a id ="<?= $subscription -> associate_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> associate_id ?>"><?= $subscription->associate_name ?></a></td>
+                                	<a id ="<?= $subscription -> associate_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> associate_id ?>"><?= $subscription->associate_name ?></a> (indicando <?php echo $subscription->fullname ?>)</td>
                                 	<?php }if($subscription->total_inscritos >0){?>
                                     <td><a target="_blank" href="<?= $this->config->item('url_link'); ?>reports/subscriptionsByAssociates?year=<?= $ano_escolhido?>&user_id=<?php echo $subscription->person_id;?>"><?= $subscription->total_inscritos ?></td></a>
                                     <?php }else{?>
