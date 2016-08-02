@@ -32,12 +32,7 @@
 			}
 
 		function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
-			var qtda = <?php echo $qtdAssoc;?>;
-			var qtdb = <?php echo $qtdBenemerits;?>;
-			var qtdt = <?php echo $qtdTemp;?>;
-			return 'Sócios contribuintes com pré-inscrições = ' + qtda + ".                                                                       \r\n " +
-			'Sócios beneméritos com pré-inscrições = '+  qtdb + '.  \r\n '
-			+ 'Indicados por sócio com pré-inscrições = ' + qtdt + '.';
+			return '';
 		}
 
 		function sortLowerCase(l, r) {
@@ -66,8 +61,8 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [sortLowerCase, sortLowerCase, true],
-				filters : [true,true,true],
+				sort : [sortLowerCase, true, false],
+				filters : [true,false,false],
 				filterText: 'Escreva para filtrar... ',
 				counterText	: showCounter
 				
@@ -91,15 +86,15 @@
 							?>
 						</select>
 						</form>
-					<div class="counter" style="height: 90px;width:280px"></div>
-                    <table class="table table-bordered table-striped table-min-td-size" style="width: 1100px; font-size:15px" id="sortable-table">
+						Sócios contribuintes com pré-inscrições = <?php echo $qtdAssoc;?>. <br/>
+						Sócios beneméritos com pré-inscrições = <?php echo $qtdBenemerits;?>. <br/>
+						Indicados por sócio com pré-inscrições = <?php echo $qtdTemp;?>.<br/>
+						Total de Sócios = <?php echo $qtdAssocT;?><br />
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 600px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
-                                <th> Responsável </th>
-                                <th> E-mail </th>
-                                <th> Indicado por </th>
+                                <th> Nome do Sócio </th>
                                 <th> Pré-inscrições </th>
-                                <th> Tem Pré-inscrição? </th>
                                 <th> Ações </th>
                             </tr>
                         </thead>
@@ -109,16 +104,15 @@
                              foreach ($subscriptions as $subscription) {
                                ?> 
                                 <tr>
-                                	<td><a id="<?= $subscription -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> person_id ?>"><?= $subscription->fullname ?></a></td>
-                                    <td><?= $subscription->email ?></td>
-                                    <?php if(isset($subscription -> associate_id)){?>
-                                    <td><a id="<?= $subscription -> associate_id ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> associate_id ?>"><?= $subscription->associate_name ?></a></td>
-                                    <?php } else {?>
-                                    <td></td>
-                                    <?php }?>
+                                	<td><?php if(!isset($subscription->associate_id)){ ?>
+                                	<a id ="<?= $subscription -> fullname ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> person_id ?>"><?= $subscription->fullname ?></a></td>
+                                	<?php }else{?>
+                                	<a id ="<?= $subscription -> associate_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> associate_id ?>"><?= $subscription->associate_name ?></a></td>
+                                	<?php }if($subscription->total_inscritos >0){?>
+                                    <td><a target="_blank" href="<?= $this->config->item('url_link'); ?>reports/subscriptionsByAssociates?year=<?= $ano_escolhido?>&user_id=<?php echo $subscription->person_id;?>"><?= $subscription->total_inscritos ?></td></a>
+                                    <?php }else{?>
                                     <td><?= $subscription->total_inscritos ?></td>
-                                    <td><img src="<?php if($subscription->total_inscritos == 0) echo $this -> config -> item('assets') . 'images/payment/redicon.png" width="20px" height="20px"'; 
-        											else  echo $this -> config -> item('assets') . 'images/payment/greenicon.png" width="20px" height="20px"'; ?>"/></td>
+                                    <?php }?>
                                     <td><a target='blank' href="<?= $this -> config -> item('url_link');?>admin/viewEmails/<?= $subscription->person_id ?>"> e-mails enviados</a></td>
                                     
                                 </tr>                                   

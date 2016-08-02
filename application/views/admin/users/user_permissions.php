@@ -244,7 +244,7 @@
 				                                    <input type="checkbox" id="director" name="director" <?=($user->director)?"checked":""?> /> Diretor <br /><br />
 				                                    <input type="checkbox" id="secretary" name="secretary" <?=($user->secretary)?"checked":""?> /> SecretÃ¡ria <br /><br />
 				                                    <input type="checkbox" id="coordinator" name="coordinator" <?=($user->coordinator)?"checked":""?> /> Coordenador <br /><br />
-				                                    <input type="checkbox" id="doctor" name="doctor"  <?=($user->doctor)?"checked":""?> /> MÃ©dico <br /><br />
+				                                    <input type="checkbox" id="doctor" name="doctor"  <?=($user->doctor)?"checked":""?> /> Médico <br /><br />
 				                                    <input type="checkbox" id="monitor_instructor" name="monitor_instructor" <?=($user->monitor_instructor)?"checked":""?>/> Monitor/Instrutor
 												</div>
 											</div>

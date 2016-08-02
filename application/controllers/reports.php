@@ -18,6 +18,7 @@ class Reports extends CK_Controller {
         $this->load->model('event_model');
         $this->load->model('eventsubscription_model');
         $this->load->model('finance_model');
+        $this->load->model('colonist_model');
         $this->person_model->setLogger($this->Logger);
         $this->personuser_model->setLogger($this->Logger);
         $this->summercamp_model->setLogger($this->Logger);
@@ -28,6 +29,7 @@ class Reports extends CK_Controller {
         $this->event_model->setLogger($this->Logger);
         $this->eventsubscription_model->setLogger($this->Logger);
         $this->finance_model->setLogger($this->Logger);
+        $this->colonist_model->setLogger($this->Logger);
     }
 
     public function user_reports() {
@@ -1026,10 +1028,14 @@ class Reports extends CK_Controller {
 
         $qtdBenemerits = 0;
         $qtdAssoc = 0;
+        $qtdAssocT = 0;
         $qtdTemp = 0;
         $info = array();
 
         foreach ($subscriptions as $subs) {
+        	
+        	$qtdAssocT++;
+        	
             $equal = false;
             
             $obj = new StdClass();
@@ -1040,6 +1046,7 @@ class Reports extends CK_Controller {
             	$associate = $this->summercamp_model->getInfoAboutAssociateWithTemporaryAssociate($subs->person_id,$year);
             	$obj->associate_name = $associate->fullname;
             	$obj->associate_id = $associate->person_id;
+            	$qtdAssocT--;
             }
             
             
@@ -1065,6 +1072,7 @@ class Reports extends CK_Controller {
         $data['subscriptions'] = $subscriptions;
         $data['qtdBenemerits'] = $qtdBenemerits;
         $data['qtdAssoc'] = $qtdAssoc;
+        $data['qtdAssocT'] = $qtdAssocT;
         $data['qtdTemp'] = $qtdTemp;
         $this->loadReportView("reports/summercamps/colonists_byassociated", $data);
     }
@@ -1985,6 +1993,52 @@ class Reports extends CK_Controller {
         $data['type'] = 'camps_donations';
         $data['donations'] = $this->donation_model->getDonationsDetailed(DONATION_TYPE_SUMMERCAMP_SUBSCRIPTION, $month, $year);
         $this->loadReportView("reports/finances/donations", $data);
+    }
+    
+    public function eventSubscriptions() {
+    	$donationId = $this->input->get('donation_id', TRUE);
+   	
+    	$event = $this->eventsubscription_model->getDonationEventSubscription($donationId);
+    	
+    	if($event[0]->person_user_id != $this->session->userdata("user_id"))
+    		return $this->permissionNack();
+    	
+    	$donation = $this->donation_model->getDonationById($donationId);
+    	
+    	foreach ($event as $e){
+    		$e->person_name = $this->person_model->getPersonById($e->person_id)->getFullname();
+    		$e->age_group_name = $this ->eventsubscription_model->getAgeGroupById($e->age_group_id)->description;
+    		
+    		$prices = $this->eventsubscription_model->getPaymentPeriodByEventIdAndDate($e->event_id,$donation->getDateCreated());
+    		
+    		if($e->age_group_id == 1)
+    			$e->price = $prices->children_price;
+    		else if($e->age_group_id == 2)
+    			$e->price = $prices->middle_price;
+    		else if($e->age_group_id == 3)
+    			$e->price = $prices->full_price;
+    		
+    	}
+    	
+    	$data['event'] = $event;
+    	
+    	$this->loadView("reports/events/eventSubscriptions", $data);
+    }
+    
+    public function subscriptionsByAssociates() {
+    	$year = $this->input->get('year', TRUE);
+    	$userId = $this->input->get('user_id', TRUE);
+    
+    	$subscriptions = $this->summercamp_model->getSummerCampSubscriptionsOfUserByYear($userId,$year);
+    	
+    	foreach($subscriptions as $s){
+    		$s->colonist_name = $this->colonist_model->getColonist($s->getColonistId())->getFullname();
+    		$s->responsable_name = $this->personuser_model->getUserById($s->getPersonUserId())->getFullname();
+    		$s->camp_name = $this->summercamp_model->getSummerCampById($s->getSummerCampId())->getCampName();
+    	}
+    	$data['userId'] = $userId;
+    	$data['subscriptions'] = $subscriptions;
+    	$this->loadView("reports/summercamps/subscriptionsByAssociate", $data);
     }
 
     public function subscriptions() {

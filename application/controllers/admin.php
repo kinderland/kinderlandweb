@@ -378,9 +378,9 @@ class Admin extends CK_Controller {
         $payments_error = array();
         $periods_count = count($prep_payment_start);
         if (!isset($date_start) || empty($date_start))
-            $errors[] = 'Campo InÃ­cio Ã© obrigatÃ³rio.\n';
+            $errors[] = 'Campo InÃ­cio é obrigatório.\n';
         if (!isset($date_finish) || empty($date_finish))
-            $errors[] = 'Campo Fim Ã© obrigatÃ³rio.\n';
+            $errors[] = 'Campo Fim é obrigatório.\n';
         if (count($errors) === 0) {
             $new_date_start = explode("/", $date_start);
             $year = $new_date_start[2];
@@ -420,14 +420,14 @@ class Admin extends CK_Controller {
                 }
                 if ($i === ($periods_count - 1)) {
                     if ($prep_payment_end[$i] && $prep_payment_end[$i] !== $date_finish)
-                        $errors[] = "O último perÃ­odo de pagamento deve terminar no mesmo dia de tÃ©rmino da campanha\\n";
+                        $errors[] = "O último perÃ­odo de pagamento deve terminar no mesmo dia de término da campanha\\n";
                 }
                 else if ($prep_payment_end[$i] && $prep_payment_start[$i + 1]) {
                     $helper_finish = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_end[$i]))));
                     $helper_start = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_start[$i + 1]))));
                     $diff = $helper_finish->diff($helper_start)->days;
                     if ($diff !== 1)
-                        $errors[] = "O periodo de pagamento de número " . ($i + 2) . " deve começar 1 dia apÃ³s o tÃ©rmino do perÃ­odo de pagamento de número " . ($i + 1) . "\\n";
+                        $errors[] = "O periodo de pagamento de número " . ($i + 2) . " deve começar 1 dia após o término do perÃ­odo de pagamento de número " . ($i + 1) . "\\n";
                 }
 
                 if ($prep_payment_start[$i] && $prep_payment_end[$i] && !Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$i])) {
@@ -558,9 +558,9 @@ class Admin extends CK_Controller {
         $this->Logger->info("DATE START CAMPAIGN: ". $date_start);
         $this->Logger->info("DATE FINISH CAMPAIGN: ". $date_finish);
         if (!isset($date_start) || empty($date_start))
-            $errors[] = 'Campo InÃ­cio Ã© obrigatÃ³rio.\n';
+            $errors[] = 'Campo InÃ­cio é obrigatório.\n';
         if (!isset($date_finish) || empty($date_finish))
-            $errors[] = 'Campo Fim Ã© obrigatÃ³rio.\n';
+            $errors[] = 'Campo Fim é obrigatório.\n';
         if (count($errors) === 0) {
             $new_date_start = explode("/", $date_start);
             $year = $new_date_start[2];
@@ -610,14 +610,14 @@ class Admin extends CK_Controller {
                 }
                 if ($i === ($periods_count - 1)) {
                     if ($prep_payment_end[$i] && $prep_payment_end[$i] !== $date_finish)
-                        $errors[] = "O último perÃ­odo de pagamento deve terminar no mesmo dia de tÃ©rmino da campanha\\n";
+                        $errors[] = "O último perÃ­odo de pagamento deve terminar no mesmo dia de término da campanha\\n";
                 }
                 else if ($prep_payment_end[$i] && $prep_payment_start[$i + 1]) {
                     $helper_finish = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_end[$i]))));
                     $helper_start = DateTime::CreateFromFormat('Y-m-d', implode("-", array_reverse(explode("/", $prep_payment_start[$i + 1]))));
                     $diff = $helper_finish->diff($helper_start)->days;
                     if ($diff !== 1)
-                        $errors[] = "O periodo de pagamento de número " . ($i + 2) . " deve começar 1 dia apÃ³s o tÃ©rmino do perÃ­odo de pagamento de número " . ($i + 1) . "\\n";
+                        $errors[] = "O periodo de pagamento de número " . ($i + 2) . " deve começar 1 dia após o término do perÃ­odo de pagamento de número " . ($i + 1) . "\\n";
                 }
 
                 if ($prep_payment_start[$i] && $prep_payment_end[$i] && !Events::verifyAntecedence($prep_payment_start[$i], $prep_payment_end[$i])) {
@@ -712,7 +712,7 @@ class Admin extends CK_Controller {
 
 
         if ($event_name === "")
-            $errors[] = "O campo nome Ã© obrigatÃ³rio\n";
+            $errors[] = "O campo nome é obrigatório\n";
         if (!$date_start)
             $date_start = NULL;
         if (!$date_start_show)
@@ -745,10 +745,10 @@ class Admin extends CK_Controller {
 
         if (is_array($full_price)) {
             for ($i = 0; $i < count($full_price); $i++) {
-                $this->Logger->info("INÃ�CIO PAGAMENTO: " . $payment_date_start[$i]);
+                $this->Logger->info("INÍCIO PAGAMENTO: " . $payment_date_start[$i]);
                 $this->Logger->info("FINAL PAGAMENTO: " . $payment_date_end[$i]);
-                $this->Logger->info("INÃ�CIO INSCRIÃ‡Ã•ES: " . $date_start_show);
-                $this->Logger->info("FINAL INSCRIÃ‡Ã•ES: " . $date_finish_show);
+                $this->Logger->info("INÍCIO INSCRIÇÕES: " . $date_start_show);
+                $this->Logger->info("FINAL INSCRIÇÕES: " . $date_finish_show);
 
                 if (!$payment_date_start[$i])
                     $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem data de inicio\\n";
@@ -757,9 +757,9 @@ class Admin extends CK_Controller {
                 if (!$full_price[$i])
                     $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor\\n";
                 if (!$middle_price[$i])
-                    $middle_price[$i] = $full_price[$i];
+                    $middle_price[$i] = 0;
                 if (!$children_price[$i])
-                    $children_price[$i] = $middle_price[$i];
+                    $children_price[$i] = 0;
                 if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
                     $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
                 }
@@ -811,9 +811,9 @@ class Admin extends CK_Controller {
             if (!$full_price)
                 $errors[] = "O pagamento não tem valor\\n";
             if (!$middle_price)
-                $middle_price = $full_price;
+                $middle_price = 0;
             if (!$children_price)
-                $children_price = $middle_price;
+                $children_price = 0;
             if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
                 $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
             }
@@ -1603,7 +1603,7 @@ class Admin extends CK_Controller {
 
 
         if ($event_name === "")
-            $errors[] = "O campo nome Ã© obrigatÃ³rio\n";
+            $errors[] = "O campo nome é obrigatório\n";
         if (!$date_start)
             $date_start = NULL;
         if (!$date_start_show)
@@ -1642,9 +1642,9 @@ class Admin extends CK_Controller {
                 if (!$full_price[$i])
                     $errors[] = "O periodo de pagamento de numero " . ($i + 1) . " não tem valor\\n";
                 if (!$middle_price[$i])
-                    $middle_price[$i] = $full_price[$i];
+                    $middle_price[$i] = 0;
                 if (!$children_price[$i])
-                    $children_price[$i] = $middle_price[$i];
+                    $children_price[$i] = 0;
                 if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
                     $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
                 }
@@ -1696,9 +1696,9 @@ class Admin extends CK_Controller {
             if (!$full_price)
                 $errors[] = "O pagamento não tem valor\\n";
             if (!$middle_price)
-                $middle_price = $full_price;
+                $middle_price = 0;
             if (!$children_price)
-                $children_price = $middle_price;
+                $children_price = 0;
             if ($payment_date_start[$i] && $payment_date_end[$i] && !Events::verifyAntecedence($payment_date_start[$i], $payment_date_end[$i])) {
                 $errors[] = "O pagamento de numero " . ($i + 1) . " tinha data de fim anterior a data de inicio\\n";
             }
@@ -2088,7 +2088,7 @@ class Admin extends CK_Controller {
 
 
         if ($camp_name === ""){
-            $errors[] = "O campo nome Ã© obrigatÃ³rio\n";
+            $errors[] = "O campo nome é obrigatório\n";
         }
         if (!$date_start){
             $date_start = NULL;
@@ -2389,7 +2389,7 @@ class Admin extends CK_Controller {
         }
 
         $selected = 2;
-        $opcoes = array(0 => "SÃ³cios", 1 => "Não SÃ³cios", 2 => "Todos");
+        $opcoes = array(0 => "Sócios", 1 => "Não Sócios", 2 => "Todos");
 
         if (isset($_GET['opcao_f']))
             $selected = $_GET['opcao_f'];
@@ -2447,7 +2447,7 @@ class Admin extends CK_Controller {
               
         
         if ($camp_name === ""){
-        	$errors[] = "O campo nome Ã© obrigatÃ³rio\n";
+        	$errors[] = "O campo nome é obrigatório\n";
         }
         if (!$date_start){
         	$date_start = NULL;

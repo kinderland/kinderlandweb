@@ -652,6 +652,26 @@ class summercamp_model extends CK_Model {
         return $summerCampSubscription;
     }
     
+    public function getSummerCampSubscriptionsOfUserByYear($userId,$year) {
+    	$sql = "Select * from summer_camp sc
+		join summer_camp_subscription scs on sc.summer_camp_id = scs.summer_camp_id
+		join colonist c on scs.colonist_id = c.colonist_id
+		join person p on c.person_id = p.person_id
+		join (Select status,description as situation_description from summer_camp_subscription_status) scss on scs.situation = scss.status
+		where scs.person_user_id = ?
+        AND DATE_PART('YEAR',scs.date_created) = ?
+        order by p.fullname";
+    	$resultSet = $this->executeRowsNoLog($this->db, $sql, array($userId,$year));
+    
+    	$summerCampSubscription = NULL;
+    
+    	if ($resultSet)
+    		foreach ($resultSet as $row)
+    			$summerCampSubscription[] = SummerCampSubscription::createSummerCampSubscriptionObject($row);
+    
+    		return $summerCampSubscription;
+    }
+    
     public function hasValidSubscription($userId) {
     	$sql = "Select * from summer_camp_subscription
 				where person_user_id = ?

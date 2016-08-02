@@ -288,7 +288,7 @@ $(document).ready(function (){
 			<div class="row">	
 					<label for="capacity_male" style="width:300px" class="col-lg-1 control-label"> Períodos para pagamento: </label><br />
 			<div class="col-lg-12">
-               <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor</th><th>Valor 6-17 anos</th><th>Valor 0-5 anos</th><th>Parcelas max</th><th>Desconto Sócio</th></tr> 
+               <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor +18 anos</th><th>Valor 6-17 anos</th><th>Valor 0-5 anos</th><th>Parcelas max</th><th>Desconto Sócio</th></tr> 
 			   <tbody>
 			   </tbody>
 			   </table>

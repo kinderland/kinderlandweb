@@ -1,3 +1,12 @@
+<script>
+
+	function showEventSubscriptionReport(donation_id){
+		open("<?= $this->config->item('url_link'); ?>reports/eventSubscriptions?donation_id="+donation_id,'_blank');
+	}
+
+
+</script>
+
 <div class="row">
     <?php require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
     <div class="col-lg-10 middle-content">
@@ -18,7 +27,9 @@
                     ?>
                     <tr>
                         <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
-                        <td><?= $donation->donation_type ?>
+                        <td><?php if($donation->donation_type == 'inscrição'){?>
+                        <a onclick="showEventSubscriptionReport('<?php echo $donation->donation_id?>')">
+                        <?php  echo $donation->donation_type ?>
                             <?php
                             if (isset($donation->extra)) {
                                 foreach ($donation->extra as $extra) {
@@ -26,6 +37,8 @@
                                 }
                             }
                             ?>
+                            </a>
+                            <?php }?>
                         </td>
                         <td><?= $donation->donated_value ?></td>
                         <td><?= $donation->donation_status ?></td>

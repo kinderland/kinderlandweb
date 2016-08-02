@@ -185,6 +185,43 @@
             
             return $this->executeRows($this->db, $sql, array($eventId));
         }
+        
+        public function getDonationEventSubscription($donationId) {
+        	$sql = "select * from event e
+            inner join event_subscription es
+            on es.event_id = e.event_id
+            where es.donation_id = ?";
+        
+        	$resultSet = $this -> executeRows($this -> db, $sql, array(intval($donationId)));
+        
+        	$result = array();
+        
+        	if ($resultSet){
+        		foreach ($resultSet as $row){
+        			$result[] = $row;
+        		}
+        			
+        		return $result;
+        	}
+        
+        	return null;
+        
+        }
+        
+        public function getAgeGroupById($age_group_id){
+        	$sql = "SELECT * FROM age_group where age_group_id = ".$age_group_id;
+        
+        	return $this->executeRow($this->db, $sql);
+        }
+        
+        public function getPaymentPeriodByEventIdAndDate($eventId,$period){
+        	$sql = "SELECT * from payment_period
+		        	where event_id = ?
+		        	and date_start <= ? and date_finish >= ?";
+        	
+        	return $this->executeRow($this->db, $sql,array(intval($eventId),$period,$period));
+        
+        }
 
     }
 ?>

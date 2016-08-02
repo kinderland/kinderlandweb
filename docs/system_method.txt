@@ -433,3 +433,7 @@
 "reportPanel";"reports";2
 "reportPanel";"reports";3
 "reportPanel";"reports";4
+"eventSubscriptions";"reports";1
+"subscriptionsByAssociates";"reports";2
+"subscriptionsByAssociates";"reports";3
+"subscriptionsByAssociates";"reports";4

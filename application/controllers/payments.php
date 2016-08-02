@@ -222,6 +222,12 @@
 							$donation->extra[] = "<br>Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName;
 						}
 					}
+					
+					if($donation->donation_type == 'inscrição'){
+						$donation->extra = array();
+						$event = $this->event_model->getDonationEvent($donation->donation_id);
+						$donation->extra[] = "em evento ".$event->getEventName();
+					}
 				}
                 $data['donations'] = $donations;
                 $data['user'] = $this->person_model->getPersonById($userid);
@@ -236,6 +242,12 @@
 							$campName = $this -> summercamp_model -> getSummerCampById($summerCampSubscription -> getSummerCampId()) -> getCampName();
 							$donation->extra[] = "<br>Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName;
 						}
+					}
+					
+					if($donation->donation_type == 'inscrição'){
+						$donation->extra = array();
+						$event = $this->event_model->getDonationEvent($donation->donation_id);
+						$donation->extra[] = "em evento ".$event->getEventName();
 					}
 				}
                 $data['donations'] = $donations;
