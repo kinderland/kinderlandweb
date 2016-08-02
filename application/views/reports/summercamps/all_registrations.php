@@ -94,7 +94,7 @@
 				</form>
 				<div class="pad">
 				<table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 1000px;">
+					style="max-width: 1200px;">
 
 					<tr>
 						<th align="right"></th>
@@ -106,7 +106,7 @@
 					
 					
 					<tr>
-						<th align="right"></th>
+						<th align="right" width='700px'></th>
 						<th align="right">Sócio</th>
 						<th align="right">Não Sócio</th>
 						<th align="right">Sócio</th>
@@ -193,6 +193,13 @@
 							> <?php echo $countsAssociatedM->aguardando_pagamento; ?></a><?php } else echo $countsAssociatedM->aguardando_pagamento; ?></td>
 						<td align='right'><?php if($countsNotAssociatedM->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 4, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->aguardando_pagamento; ?></a><?php } else echo $countsNotAssociatedM->aguardando_pagamento; ?></td>
+					</tr>
+					<tr>
+						<th align="right">Subtotal(4+5+6)</th>
+						<td align='right'><?php echo $countsAssociatedF->aguardando_pagamento+$countsAssociatedF->fila_espera+$countsAssociatedF->validada ?></td>
+						<td align='right'><?php echo $countsNotAssociatedF->aguardando_pagamento+$countsNotAssociatedF->fila_espera+$countsNotAssociatedF->validada; ?></td>
+						<td align='right'><?php echo $countsAssociatedM->aguardando_pagamento+$countsAssociatedM->fila_espera+$countsAssociatedM->validada; ?></td>
+						<td align='right'><?php echo $countsNotAssociatedM->aguardando_pagamento+$countsNotAssociatedM->fila_espera+$countsNotAssociatedM->validada; ?></td>
 					</tr>
 					<!-- 
 					<tr>
