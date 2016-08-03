@@ -1108,7 +1108,21 @@ class Reports extends CK_Controller {
     
     		if($temporaryAssociates){
 	    		foreach($temporaryAssociates as $t){
-	    			$info[] = $this ->summercamp_model -> getCountSubscriptionsByTemporaryAssociates($t->temporary_associate_id,$year);
+	    			$infoTemp = $this ->summercamp_model -> getCountSubscriptionsByTemporaryAssociates($t->temporary_associate_id,$year);
+	    			
+	    			if($infoTemp){
+	    				$info[] = $infoTemp;
+	    			}else{
+	    				$obj = new StdClass();
+	    				$obj -> responsable_id = $t->temporary_associate_id;
+	    				$obj -> responsable_name = $this->personuser_model->getUserById($t->temporary_associate_id)->getFullname();
+	    				$obj -> associate_id = $t->associate_id;
+	    				$obj -> associate_name = $this->personuser_model->getUserById($t->associate_id)->getFullname();
+	    				$obj -> presubscription = 0;
+	    				$obj -> subscription = 0;
+	    				
+	    				$info[] = $obj;
+	    			}
 	    		}
     		}
     

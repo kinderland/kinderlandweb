@@ -63,7 +63,7 @@
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
 				sort : [sortLowerCase, sortLowerCase,sortLowerCase, true,true],
-				filters : [true,true,true,false,false],
+				filters : [true,true,false,false],
 				filterText: 'Escreva para filtrar... ',
 				counterText	: showCounter
 				
@@ -91,8 +91,7 @@
                     <table class="table table-bordered table-striped table-min-td-size" style="width: 1100px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
-                                <th> Responsável </th>
-                                <th> E-mail </th>
+                                <th> Responsável não-sócio </th>
                                 <th> Sócio que indicou </th>
                                 <th> Número de Pré-inscrições </th>
                                 <th> Número de Inscrições </th>
@@ -105,7 +104,6 @@
                                ?> 
                                 <tr>
                                 	<td><a id="<?= $i -> responsable_id ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $i -> responsable_id ?>"><?= $i -> responsable_name ?></a></td>
-                                    <td><?= $i -> responsable_email ?></td>
                                     <td><a id="<?= $i -> associate_id ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $i -> associate_id ?>"><?= $i -> associate_name ?></a></td>
                                     <td><?= $i -> presubscription ?></td>
                                     <td><?= $i -> subscription ?></td>
