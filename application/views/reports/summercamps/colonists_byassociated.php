@@ -35,8 +35,40 @@
 			return '';
 		}
 
-		function sortLowerCase(l, r) {
-			return l.toLowerCase().localeCompare(r.toLowerCase());
+		function sortLowerCaseLink(l, r) {
+			l = l.split('>');
+			l = l[1].split('<');
+			if(l[0].split('')[0] == ' ')
+				l[0] = l[0].replace(/\s+/g, '');
+
+			r = r.split('>');
+			r = r[1].split('<');
+			if(r[0].split('')[0] == ' ')
+				r[0] = r[0].replace(/\s+/g, '');
+			
+			return l[0].toLowerCase().localeCompare(r[0].toLowerCase());
+		}
+
+		function sortNumberLink(l, r) {
+
+			if(l == 0 && r == 0)
+				return 0;
+			if(l == 0)
+				return -1;
+			if(r == 0)
+				return 1;
+			
+			l = l.split('>');
+			l = l[1].split('<');
+			if(l[0].split('')[0] == ' ')
+				l[0] = l[0].replace(/\s+/g, '');
+
+			r = r.split('>');
+			r = r[1].split('<');
+			if(r[0].split('')[0] == ' ')
+				r[0] = r[0].replace(/\s+/g, '');
+			
+			return l[0].localeCompare(r[0]);
 		}
 
 		</script>
@@ -61,7 +93,7 @@
         $(document).ready(function() {
 			$('#sortable-table').datatable({
 				pageSize : Number.MAX_VALUE,
-				sort : [false, true, false],
+				sort : [sortLowerCaseLink, sortNumberLink, false],
 				filters : [true,false,false],
 				filterText: 'Escreva para filtrar... ',
 				counterText	: showCounter
@@ -110,7 +142,7 @@
                                 	<?php }else{?>
                                 	<a id ="<?= $subscription -> associate_name ?>" target="_blank" href="<?= $this -> config -> item('url_link') ?>user/details?id=<?= $subscription -> associate_id ?>"><?= $subscription->associate_name ?></a> (indicando <?php echo $subscription->fullname ?>)</td>
                                 	<?php }if($subscription->total_inscritos >0){?>
-                                    <td><a target="_blank" href="<?= $this->config->item('url_link'); ?>reports/subscriptionsByAssociates?year=<?= $ano_escolhido?>&user_id=<?php echo $subscription->person_id;?>"><?= $subscription->total_inscritos ?></td></a>
+                                    <td><a target="_blank" href="<?= $this->config->item('url_link'); ?>reports/subscriptionsByAssociates?year=<?= $ano_escolhido?>&user_id=<?php echo $subscription->person_id;?>"><?= $subscription->total_inscritos ?></a></td>
                                     <?php }else{?>
                                     <td><?= $subscription->total_inscritos ?></td>
                                     <?php }?>
