@@ -716,6 +716,96 @@ class Reports extends CK_Controller {
         $data['users'] = $this->personuser_model->getAllContributorsByYearDetailed($year);
         $this->loadReportView("reports/associated/associated_year", $data);
     }
+    
+    public function associates() {
+    	$data = array();
+        $years = array();
+
+        $start = 2015;
+        $date = date('Y');
+        $donationByYear = $this->donation_model->getAllDonationsByYear($date);
+        $end = $date;
+        while ($donationByYear != null) {
+            $end = $date;
+            $date++;
+            $donationByYear = $this->donation_model->getAllDonationsByYear($date);
+        }
+        $years = $this->donation_model->getAllDonationsYears();
+
+        $year = null;
+
+        if (isset($_GET['ano_f']))
+            $year = $_GET['ano_f'];
+        else {
+            $year = $years[0];
+        }
+
+        $data['ano_escolhido'] = $year;
+        $data['years'] = $years;
+        
+    	$associatesDonation = $this->personuser_model->getAllContributorsByYearDetailed($year);
+    	
+    	$benemeritsIds = $this->personuser_model->getPersonIdsBenemerits();
+    	
+    	$info = array();
+    	
+    	foreach ($benemeritsIds as $b){
+    		$obj = new StdClass();
+    		$p = 0;
+    		
+    		$benemerit = $this->person_model->getPersonById($b);
+    		
+	    	$telephone = $this->telephone_model->getTelephonesByPersonId($b);
+	        $tel = "";
+	            		foreach ($telephone as $t) {
+	            			if (!isset($t) || is_null($t) || empty($t)) {
+	            				
+	            		     } else {
+	            		     	if ($p == 0){
+	            		     		$tel = $t;
+	            		     		$p++;
+	            		     	}else
+	            					$tel = $tel . "*" . $t;
+	            			 }
+	            		}
+    		$obj->name = $benemerit->getFullname();
+    		$obj->id = $b;
+    		$obj->type = 'benemérito';
+    		$obj->phone = $tel;
+    		
+    		$info[] = $obj;
+    	}
+    	
+    	foreach($associatesDonation as $a){
+    		$obj = new StdClass();
+    		$p = 0;
+    		
+    		$telephone = $this->telephone_model->getTelephonesByPersonId($a->person_id);
+    		$tel = "";
+    		foreach ($telephone as $t) {
+    			if (!isset($t) || is_null($t) || empty($t)) {
+    				 
+    			} else {
+    				if ($p == 0){
+    					$tel = $t;
+    					$p++;
+    				}
+    				else
+    					$tel = $tel . "*" . $t;
+    			}
+    		}
+    		$obj->name = $a->fullname;
+    		$obj->id = $a->person_id;
+    		$obj->type = 'contribuinte';
+    		$obj->phone = $tel;
+    		
+    		$info[] = $obj;
+    	}
+    	
+    	$data['info'] = $info;
+    	
+    	$this->loadReportView("reports/users/associates", $data);
+    }
 
     public function all_transactions() {
         $this->Logger->info("Starting " . __METHOD__);
@@ -2197,15 +2287,149 @@ class Reports extends CK_Controller {
 
             $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
 
-
             $roomOccupation = [0, 0, 0, 0, 0, 0, 0];
             for ($i = 0; $i < count($roomOccupation); $i++) {
                 $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
                 $roomOccupation[$i] = count($roomColonists);
             }
+            
+            $info = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao, $quarto);
+                            
+            $colonists = array();
+            $j = 0;
+            $p;
+            $tel;
+            $temTelephone = null;
+            
+            foreach ($info as $i) {
+            	$temTelephone = 0;
+            	$p = 0;
+            	
+            	$this->Logger->info("$# COLONISTA DE ID: " . $i->colonist_id . " E NOME: " . $i->colonist_name . "///////");
+            	$obj = new stdClass();
+            	$father_id = null;
+            	$mother_id = null;
+            	$id = null;
+            	
+            	$father_id = $this->summercamp_model->getParentIdOfSummerCampSubscripted($campChosenId, $i->colonist_id, 'Pai');
+            	
+            	if ($father_id != FALSE) {
+            		$result = $this->person_model->getPersonById($father_id);
+            		$telephone = $this->telephone_model->getTelephonesByPersonId($father_id);
+            		
+            		foreach ($telephone as $t) {
+            			if (!isset($t) || is_null($t) || empty($t)) {
+            				
+            		     } else {
+            				if ($p == 0)
+            					$tel = $t;
+            				else
+            					$tel = $tel . "*" . $t;
+            					
+            				$temTelephone = 1;
+            				$this->Logger->info("$# COLONISTA TELEFONE DE PAI " . $result->getFullname() . ":" . $t);
+            			 }
+            		}
+            					
+            		$fatherName = $result->getFullname();
+            		$fatherEmail = $result->getEmail();
+            					
+            		$obj->fatherName = $fatherName;
+            		$obj->fatherEmail = $fatherEmail;
+            		$obj->fatherTel = $tel;
+            	}else {
+            		$obj->fatherName = null;
+            		$obj->fatherEmail = null;
+            		$obj->fatherTel = '-';
+            		$this->Logger->info("$# COLONISTA SEM ID DA PAI ///////");
+            	}
+            						
+            	$mother_id = $this->summercamp_model->getParentIdOfSummerCampSubscripted($campChosenId, $i->colonist_id, 'Mãe');
+            						                
+            	if ($mother_id != FALSE) {
+            		$result = $this->person_model->getPersonById($mother_id);
+            		$telephone = $this->telephone_model->getTelephonesByPersonId($mother_id);
+            							
+            		$p = 0;
+            							
+            		foreach ($telephone as $t) {
+            			if (!isset($t) || is_null($t) || empty($t)) {
+            									
+            			} else {
+            				if ($p == 0)
+            					$tel = $t;
+            				else
+            					$tel = $tel . "*" . $t;
+            										
+            				$temTelephone = 1;
+            				$this->Logger->info("$# COLONISTA TELEFONE DE MÃE " . $result->getFullname() . ":" . $t);
+            			}
+            		}
+            										
+            		$motherName = $result->getFullname();
+            		$motherEmail = $result->getEmail();
+            										
+            		$obj->motherName = $motherName;
+            		$obj->motherEmail = $motherEmail;
+            		$obj->motherTel = $tel;
+            	}else {
+            		$obj->motherName = null;
+            		$obj->motherEmail = null;
+            		$obj->motherTel = '-';
+            		$this->Logger->info("$# COLONISTA SEM ID DA MÃE ///////");
+            	}
+            											
+            	$id = $this->summercamp_model->getPersonUserIdByColonistId($i->colonist_id, $campChosenId);
+            	
+            	if ($id != null) {
+            												
+            		$result = $this->person_model->getPersonById($id->person_user_id);
+            		$responsableName = $result->getFullname();
+            		$responsableEmail = $result->getEmail();
+            												
+            		$obj->responsableName = $responsableName;
+            		$obj->responsableEmail = $responsableEmail;
+            												
+            		$telephone = $this->telephone_model->getTelephonesByPersonId($id->person_user_id);
+            		$tels = array();
+            		$add = 1;
+            												
+            		$p = 0;
+            												
+            		foreach ($telephone as $t) {
+            			if (!isset($t) || is_null($t) || empty($t)) {
+            														
+            			} else {
+            				if ($p == 0)
+            					$tel = $t;
+            				else
+            					$tel = $tel . "*" . $t;
+            			}
+            		}
+            															
+            		$obj->responsableTel = $tel;
+            	} else {
+            		$obj->responsableName = null;
+            		$obj->responsableEmail = null;
+            		$obj->responsableTel = '-';
+            	}
+            																
+            	$obj->colonist_name = $i->colonist_name;
+            	$obj->summer_camp_id = $i->summer_camp_id;
+            	$obj->colonist_id = $i->colonist_id;
+            	$obj->age = $i->age;
+            	$obj->birth_date = $i->birth_date;
+            	$obj->user_name = $i->user_name;
+            	$obj->email = $i->email;
+            	$obj->school_year = $i->school_year;
+            	$obj->logger = $this->Logger;
+            																
+            	$colonists[$j] = $obj;
+            	$j++;
+            }
 
             $data["room_occupation"] = $roomOccupation;
-            $data["colonists"] = $colonistsSelected;
+            $data["colonists"] = $colonists;
         }
 
         $this->loadReportView('reports/summercamps/rooms', $data);

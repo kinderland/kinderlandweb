@@ -437,3 +437,6 @@
 "subscriptionsByAssociates";"reports";2
 "subscriptionsByAssociates";"reports";3
 "subscriptionsByAssociates";"reports";4
+"associates";"reports";2
+"associates";"reports";3
+"associates";"reports";4

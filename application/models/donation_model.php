@@ -234,6 +234,37 @@ class donation_model extends CK_Model {
 
         return $resultSet;
     }
+    
+    public function getAllDonationsByYear($ano) {
+    	$sql = "SELECT *
+				FROM v_report_free_donations
+    			WHERE to_char(date_created, 'YYYY')::integer = " . $ano;
+    
+    	$sql .= " ORDER BY date_created DESC";
+    
+    	$resultSet = $this->executeRows($this->db, $sql);
+    
+    	return $resultSet;
+    }
+    
+    public function getAllDonationsYears() {
+    	$sql = "SELECT distinct to_char(date_created, 'YYYY') as year
+				FROM v_report_free_donations";
+    
+    	$sql .= " ORDER BY to_char(date_created, 'YYYY') DESC";
+    
+    	$resultSet = $this->executeRows($this->db, $sql);
+    	
+    	$result = array();
+    
+    	if($resultSet){
+    		foreach($resultSet as $r){
+    			$result[] = $r->year;
+    		}
+    		return $result;
+    	}
+    	return null;
+    }
 
     public function getTransactionAttemptFails($month = null, $year = null) {
         if ($year == null) {
