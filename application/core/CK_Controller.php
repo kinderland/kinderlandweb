@@ -523,6 +523,9 @@ class CK_Controller extends CI_Controller {
         	fclose($allPermissions);
         } 
         
+        if($class == 'login' && $method == 'index')
+        	$permission = true;
+        
         if ($permission === false) {
             $this->Logger->warn("Usuário com id = " . $this->session->userdata("user_id") . " tentou se conectar ao metodo " . $method . " da classe " . $class . " que ele não possui acesso.");
             return redirect("user/permissionNack");
