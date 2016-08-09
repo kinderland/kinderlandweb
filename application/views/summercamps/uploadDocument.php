@@ -15,7 +15,7 @@
 		Escolha um arquivo para enviar, aceitamos apenas arquivos .pdf, jpg, .jpeg e .png de até 2MB.
 		<br>
 		<p style="color:red; font-weight: bold;">
-		Atenção para os documentos que tenham frente e verso. Ambos são necessários.
+		Atenção: documentos que tenham frente e verso, ambos são necessários. E documentos de identidade devem conter os nomes dos pais.
 		</p>
 		<input type="hidden" name="document_type" value="<?=$document_type ?>" />
 		<br>

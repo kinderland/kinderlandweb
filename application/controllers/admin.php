@@ -2368,7 +2368,7 @@ class Admin extends CK_Controller {
         $data['years'] = $years;
 
         $campChosen = 0;
-        $camps = array(0 => "ColÃ´nia Verão", 1 => "Mini Kinderland");
+        $camps = array(0 => "Colônia Verão", 1 => "Mini Kinderland");
 
         if (isset($_GET['colonia_f']))
             $campChosen = $_GET['colonia_f'];
@@ -2389,7 +2389,7 @@ class Admin extends CK_Controller {
         }
 
         $selected = 2;
-        $opcoes = array(0 => "Sócios", 1 => "Não Sócios", 2 => "Todos");
+        $opcoes = array(0 => "Sócios e Indicados", 1 => "Não Sócios", 2 => "Todos");
 
         if (isset($_GET['opcao_f']))
             $selected = $_GET['opcao_f'];
