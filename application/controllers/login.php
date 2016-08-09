@@ -36,7 +36,7 @@ class Login extends CK_Controller {
         if (isset($_GET['rp']))
             $data['resetPassword'] = $_GET['rp'];
 
-        $this->loadView('login/pageOut', $data);
+        $this->loadView('login/login', $data);
     }
 
     public function signup() {
