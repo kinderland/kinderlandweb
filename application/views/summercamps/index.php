@@ -64,6 +64,11 @@
 	   alert("Lembre-se de ENVIAR a pré-inscrição quando finalizar o seu preenchimento.");
    }
 
+   function alertMessage2(){
+	   $('a').removeAttr('href');
+	   window.location = "<?= $this->config->item('url_link'); ?>summercamps/index";
+   }
+
    function changeCamp(colonistId,campId){
 
 	   if(confirm("Confirma a mudança de turma?")){
@@ -287,6 +292,7 @@
 								<?php }?>
 							</button>
 				<?php } else{?>
+				
                 <a href="<?= $this->config->item('url_link'); ?>summercamps/subscribeColonist?id=<?= $summerCamp->getCampId() ?>">
                     <input class=" btn btn-primary" type="button" value="<?= $summerCamp->getCampName() ?> (
 								<?php if($summerCamp->getCampId() == 10){
@@ -305,6 +311,9 @@
             Não é possível fazer inscrições no momento.
         <?php } }?>
         <?php if ($summerCampInscriptions) {
+        	if($i !== NULL){
+        		echo "<script>setTimeout(alertMessage2,50);</script>";
+        	}
             ?>
             <br />
             <br />
@@ -360,20 +369,10 @@
                             <?php }?>
                             <br>
                             <br>
-                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
-                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_TRIP_AUTHORIZATION))){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_TRIP_AUTHORIZATION ?>"> Autorização de viagem </a>
-                            <?php } else{?>
-                            Autorização de viagem
-                            <?php }?>
                             <br>
                             <br>
-                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
-                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_GENERAL_RULES))){?>
                             <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_GENERAL_RULES ?>"> Normas gerais </a>
-                            <?php } else{?>
-                            Normas gerais
-                            <?php }?>
                             <br>
                             <br>
                             <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
@@ -447,8 +446,15 @@
                                         $('#bodyPopup').append("<tr><td><?= $summerCampInscription->getFullname() ?></td><td>R$ <?= floor($summerCampPayment->getPrice() * $discount) ?>,00</td><td><?= $summerCampInscription->getDatePaymentLimitFormatted() ?></td></tr>");
                                         $('#formMultipleDonations').append("<input type='hidden' name='camp_id[]' value='<?= $summerCampInscription->getSummerCampId() ?>' /> <input type='hidden' name='colonist_id[]' value='<?= $summerCampInscription->getColonistId() ?>' /> <input type='hidden' name='price[]' value='<?php echo $total_now; ?>' />");
                                     </script>
+                                    <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_TRIP_AUTHORIZATION_SIGNED ?>"> 
+										<button class="btn btn-primary">
+											Autorização de viagem assinada										
+										</button>
+									</a>
+									
+									<br/><br/>
 
-                                    <a onclick="donation(<?= $summerCampInscription->getColonistId() ?>, <?= $summerCampInscription->getSummerCampId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>')">
+                                    <a <?php if(!$this->summercamp_model->getNewestDocument($summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_TRIP_AUTHORIZATION_SIGNED)){ echo 'onclick="message()"';}else{ ?> onclick="donation(<?= $summerCampInscription->getColonistId() ?>, <?= $summerCampInscription->getSummerCampId() ?>, '<?= addslashes($summerCampInscription->getFullname()) ?>')" <?php }?>>
                                         <button class="btn btn-primary">
                                             Doar R$ <?php echo $total_now; ?>,00
                                             <br>
@@ -565,6 +571,11 @@
 				      }
 				}
 
+        	}
+
+        	function message(){
+
+            	alert("Para realizar a doação, faça o upload da autorização de viagem assinada.");
         	}
         	
 			function getPreviousSubscriptions(){

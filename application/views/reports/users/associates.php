@@ -131,7 +131,7 @@
                                       }  
 
 
-        function gerarCSVcomTelefones() {
+        function gerarTXTcomTelefones() {
 
         	var data1 = [];
             var table = document.getElementById("tablebody");
@@ -243,7 +243,7 @@
                 var columName = [""];
                 var columnNameToSend = JSON.stringify(null);
 
-                post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
+                post('<?= $this->config->item('url_link'); ?>reports/toTXT', {data: dataToSend, name: name, columName: columnNameToSend});
 
         }
 
@@ -363,7 +363,7 @@
                         ?>
                     </select>
                     </form>
-                        <button class="btn btn-primary" onclick="gerarCSVcomTelefones()" value="">SMS</button>
+                        <button class="btn btn-primary" onclick="gerarTXTcomTelefones()" value="">SMS</button>
                         <table class="table table-bordered table-striped table-min-td-size" style="width: 600px; font-size:15px; margin-top:10px" id="sortable-table">
                             <thead>
                                 <tr>

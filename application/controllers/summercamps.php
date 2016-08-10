@@ -32,7 +32,7 @@ class SummerCamps extends CK_Controller {
     }
     
     public function indexm(){
-    	return$this->index('1');
+    	return $this->index('1');
     }
 
     public function index($i = NULL) {
@@ -660,7 +660,7 @@ class SummerCamps extends CK_Controller {
             $data["editable"] = TRUE;
             if ($validation && !$validation->verifyDocument($data["document_type"]))
                 $data["extra"] = $validation->getDocumentData($data["document_type"]);
-        } else
+        } else 
             $data["editable"] = TRUE;
         $data["document_name"] = FALSE;
         if ($data["document_type"] == DOCUMENT_MEDICAL_FILE)
@@ -673,6 +673,8 @@ class SummerCamps extends CK_Controller {
             $data["document_name"] = "Foto 3x4";
         else if ($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION)
             $data["document_name"] = "Autorização de viagem";
+        else if ($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION_SIGNED)
+            $data["document_name"] = "Autorização de viagem assinada";
         $data["hasDocument"] = "";
         if (!$this->summercamp_model->hasDocument($data["camp_id"], $data["colonist_id"], $data["document_type"]))
             $data["hasDocument"] = "disabled";

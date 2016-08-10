@@ -162,6 +162,7 @@ define('DOCUMENT_TRIP_AUTHORIZATION', 2);
 define('DOCUMENT_IDENTIFICATION_DOCUMENT', 3);
 define('DOCUMENT_GENERAL_RULES', 4); 
 define('DOCUMENT_PHOTO_3X4', 5);
+define('DOCUMENT_TRIP_AUTHORIZATION_SIGNED', 6);
 
 /*
 |--------------------------------------------------------------------------

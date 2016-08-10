@@ -127,7 +127,8 @@ function post(path, params, method) {
 				<br/>
 				</h2>-->
 				<?php $sub = $this->summercamp_model->getSummerCampSubscription($colonist_id,$camp_id);
-					if($sub->getSituation() == 5){
+				
+					if($sub->getSituation() == 'Pré-inscrição aguardando doação'){
 				?>
 				<input type="button" class="btn btn-primary" value = "Gerar PDF para impressão" onclick="geraAutorizacaoPDF('<?=$colonist->getColonistId()?>','<?=$summerCamp -> getCampId()?>')"/>
 				<br><br>
