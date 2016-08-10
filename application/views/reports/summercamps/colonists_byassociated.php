@@ -118,16 +118,17 @@
 							?>
 						</select>
 						</form>
-						Sócios contribuintes com pré-inscrições = <?php echo $qtdAssoc;?>. <br/>
-						Sócios beneméritos com pré-inscrições = <?php echo $qtdBenemerits;?>. <br/>
-						Indicados por sócio com pré-inscrições = <?php echo $qtdTemp;?>.<br/>
-						Total de sócios com pré-inscrições = <?php echo $qtdAssoc+$qtdBenemerits+$qtdTemp;?>.<br/>
+						1. Sócios contribuintes com pré e/ou inscrições = <?php echo $qtdAssoc;?>. <br/>
+						2. Sócios beneméritos com pré e/ou inscrições = <?php echo $qtdBenemerits;?>. <br/>
+						3. Sócios cujos indicados tem pré e/ou inscrições = <?php echo $qtdTemp;?>.<br/>
+						Total(1+2+3) = <?php echo $qtdAssoc+$qtdBenemerits+$qtdTemp;?>.<br/>
 						Total de Sócios = <?php echo $qtdAssocT;?><br />
-                    <table class="table table-bordered table-striped table-min-td-size" style="width: 600px; font-size:15px" id="sortable-table">
+						Sócios sem pré e/ou inscrições = <?php echo $qtdAssocT-($qtdAssoc+$qtdBenemerits+$qtdTemp); ?><br />
+                    <table class="table table-bordered table-striped table-min-td-size" style="width: 800px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
                                 <th> Nome do Sócio </th>
-                                <th> Pré-inscrições </th>
+                                <th> Pré e/ou Inscrições </th>
                                 <th> Ações </th>
                             </tr>
                         </thead>
