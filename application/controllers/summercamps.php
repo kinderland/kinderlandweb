@@ -724,15 +724,17 @@ class SummerCamps extends CK_Controller {
         } else {
             $this->validation_model->sentNewDocument($colonist_id, $camp_id, $document_type);
             
-            $oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($camp_id,$colonist_id);
-            
-            if($oldSubscriptionRestored){
-            	if($document_type == 3)
-            		$status = 'identification_document';
-            	else if ($document_type == 5)
-            		$status = 'photo';
-            	
-            	$this->summercamp_model->turnOnSummerCampOldSubscriptionStatus($camp_id,$colonist_id,$status);
+            if($document_type != 6){
+	            $oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($camp_id,$colonist_id);
+	            
+	            if($oldSubscriptionRestored){
+	            	if($document_type == 3)
+	            		$status = 'identification_document';
+	            	else if ($document_type == 5)
+	            		$status = 'photo';
+	            	
+	            	$this->summercamp_model->turnOnSummerCampOldSubscriptionStatus($camp_id,$colonist_id,$status);
+	            }
             }
             
             echo "<script>alert('Documento enviado com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
