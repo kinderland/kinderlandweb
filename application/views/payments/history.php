@@ -38,7 +38,14 @@
                             }
                             ?>
                             </a>
-                            <?php }?>
+                            <?php }else{
+                            	if (isset($donation->extra)) {
+                            		foreach ($donation->extra as $extra) {
+                            			echo $extra;
+                            		}
+                            	}
+                        }
+                    	?>
                         </td>
                         <td><?= $donation->donated_value ?></td>
                         <td><?= $donation->donation_status ?></td>

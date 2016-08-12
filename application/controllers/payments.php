@@ -215,6 +215,7 @@
                 $donations = $this->donation_model->getDonationsByUserId($userid);
 				foreach($donations as $donation){
 					$summerCampSubscriptions = $this->summercamp_model->getSubscriptionsByDonation($donation->donation_id);
+				
 					if($summerCampSubscriptions){
 						$donation->extra = array();
 						foreach($summerCampSubscriptions as $summerCampSubscription){
@@ -240,9 +241,9 @@
 						$donation->extra = array();
 						foreach($summerCampSubscriptions as $summerCampSubscription){
 							$campName = $this -> summercamp_model -> getSummerCampById($summerCampSubscription -> getSummerCampId()) -> getCampName();
-							$donation->extra[] = "<br>Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName;
+							$donation->extra[] = "Colonista: ".$summerCampSubscription->getFullname()."<br>Colonia: ".$campName."<br>";
 						}
-					}
+					}			
 					
 					if($donation->donation_type == 'inscrição'){
 						$donation->extra = array();
@@ -250,6 +251,7 @@
 						$donation->extra[] = "em evento ".$event->getEventName();
 					}
 				}
+				
                 $data['donations'] = $donations;
 
                 $this->loadView("payments/history", $data);

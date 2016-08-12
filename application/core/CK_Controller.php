@@ -145,8 +145,8 @@ class CK_Controller extends CI_Controller {
             $person = $this->person_model->getPersonById($donation->getPersonId());
             $event = $this->event_model->getDonationEvent($donation->getDonationId());
             $personsDonation = $this -> eventsubscription_model -> getPersonsIdByEventIdAndDonationId($event -> getEventId(), $donation->getDonationId());
-            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o " . $event->getEventName() . " foi recebida com sucesso. <br><br>" . "Seguem os convites 
-            desta inscrição:<br><br>";
+            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua inscrição para o " . $event->getEventName() . " foi processada com sucesso. <br><br>" . "Os seguintes convites 
+            são contemplados nesta inscrição:<br><br>";
             foreach($personsDonation as $p){
             	$name = $this->person_model->getPersonById($p->person_id);
             	
@@ -160,7 +160,7 @@ class CK_Controller extends CI_Controller {
             	$emailString = $emailString . $name->getFullname() . ", " . $p -> description . ", " . $nonsleeper . "<br><br>";
             }
             
-            $emailString = $emailString . "Muito obrigado pela sua contribuição e no interesse pelos evento da Kinderland!<br><br>" . "Diretoria da Associação Kinderland";
+            $emailString = $emailString . "Muito obrigado pela sua contribuição e no interesse pelos nossos eventos!<br><br>" . "Diretoria da Associação Kinderland";
             $emailSubject = "[Kinderland] Inscricao " . $event->getEventName() . " confirmada";
 
             return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));

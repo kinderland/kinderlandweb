@@ -28,6 +28,26 @@ class Events extends CK_Controller {
 			redirect("login/index");
 
 		$eventList = $this->event_model->getPublicOpenEvents();
+		
+		$qtdSubs = array();
+		
+		foreach($eventList as $e){
+			$subs = $this->eventsubscription_model->getSubscriptionsForEventByUserId($this->session->userdata["user_id"],$e->getEventId());
+			$qtdSubs[$e->getEventId()] = 0;
+			
+			if($subs){
+				foreach($subs as $s){
+					if($s -> subscription_status == 3){
+						$qtdSubs[$e->getEventId()]++;
+					}
+				}
+			}else{
+				$qtdSubs[$e->getEventId()] = 0;
+			}
+		}
+		
+		$data['qtdSubs'] = $qtdSubs;
+		
 		$data['events'] = $eventList;
 
 		$this->loadView("event/home", $data);
@@ -84,7 +104,7 @@ class Events extends CK_Controller {
 			$data['price'] = $price;
 			$data['age_groups'] = $this->eventsubscription_model->getAgeGroups();
 			$data['user_id'] = $this->session->userdata("user_id");
-			$data['user_associate'] = $this->personuser_model->isAssociate($this->session->userdata("user_id"));
+			$data['user_associate'] = $this->personuser_model->isAssociateAndNotTemporary($this->session->userdata("user_id"));
 			$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($this->session->userdata("user_id"));
 			$data['peoplejson'] = json_encode($data['people']);
 			$data['age_group'] = $age_group; 

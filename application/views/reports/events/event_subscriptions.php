@@ -39,6 +39,90 @@
 	
 	</style>
 	<body>
+	
+	<script>
+	function sortLowerCaseLink(l, r) {
+		l = l.split('>');
+		l = l[1].split('<');
+		if(l[0].split('')[0] == ' ')
+			l[0] = l[0].replace(/\s+/g, '');
+
+		r = r.split('>');
+		r = r[1].split('<');
+		if(r[0].split('')[0] == ' ')
+			r[0] = r[0].replace(/\s+/g, '');
+		
+		return l[0].toLowerCase().localeCompare(r[0].toLowerCase());
+	}
+
+	function sortAge(l, r) {
+		if(l == '+18 anos'){
+			if(r == '+18 anos')
+				return 0;
+			else
+				return 1;
+		}
+
+		if(r == '+18 anos'){
+			if(l == '+18 anos')
+				return 0;
+			else
+				return -1;
+		}
+
+		if(l == '0-6 anos'){
+			if(r == '0-6 anos')
+				return 0;
+			else
+				return -1;
+		}
+
+		if(r == '0-6 anos'){
+			if(l == '0-6 anos')
+				return 0;
+			else
+				return 1;
+		}
+
+		if(l == '7-17 anos'){
+			if(r == '7-17 anos')
+				return 0;
+			else if(r == '+18 anos')
+				return -1;
+			else if(r == '0-6 anos')
+				return 1;
+		}
+
+		if(r == '7-17 anos'){
+			if(l == '7-17 anos')
+				return 0;
+			else if(l == '+18 anos')
+				return 1;
+			else if(l == '0-6 anos')
+				return -1;
+		}			
+
+	}
+
+	function sortLowerCase(l, r) {
+		return l.toLowerCase().localeCompare(r.toLowerCase());
+	}
+
+	function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
+		return '';
+	}
+	
+        $(document).ready(function() {
+			$('#sortable-table').datatable({
+				pageSize : Number.MAX_VALUE,
+				sort : [sortLowerCaseLink, sortLowerCase, sortAge,false],
+				filters : [true,true,false,false],
+				filterText: 'Escreva para filtrar... ',
+				counterText	: showCounter
+				
+			});
+		});
+     </script>
 	<div class="scroll">
 		<div class="main-container-report">
 		            <div class = "row">
@@ -69,45 +153,24 @@
 		                    </form>
 		                  </div>
 		                </div>
-		                <?php if($event !== null){?>
+		                <?php if($info !== null){?>
 		                <div class="pad">
 		                <table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 800px;">
+					style="max-width: 800px;" id="sortable-table">
 							<tr>
-								<th style="width: 150px;"></th>
-								<th style="width: 250px;">Quantidade de Convites</th>
-								<th>Pagos</th>
-								<th style="width: 250px;">Aguardando Pagamento</th>
-								<th>Disponíveis</th>
+								<th style="width: 250px;">Responsável</th>
+								<th style="width: 250px;">Convite</th>
+								<th style="width: 150px;">Faixa Etária</th>
+								<th style="width: 100px;">Pernoite</th>
 							</tr>
-							<tr>
-								<th>Masculino </th>
-								<td><?php echo $male_eventSubscribed; ?></td>
-								<td><?php echo $male_paid;?></td>
-								<td><?php echo $male_eventSubscribed - $male_paid;?></td>
-								<td><?php echo $capacity_male;?></td>
-							</tr>
-							<tr>
-								<th>Feminino</th>
-								<td><?php echo $female_eventSubscribed; ?></td>
-								<td><?php echo $female_paid;?></td>
-								<td><?php echo $female_eventSubscribed - $female_paid;?></td>
-								<td><?php echo $capacity_female;?></td>
-							</tr>
-							<tr>
-								<th>Sem pernoite</th>
-								<td><?php echo $nonsleeper_eventSubscribed; ?></td>
-								<td><?php echo $nonsleeper_paid;?></td>
-								<td><?php echo $nonsleeper_eventSubscribed - $nonsleeper_paid;?></td>
-								<td><?php echo $capacity_nonsleeper;?></td>
-							</tr>
-							<tr>
-								<th>Total</th>
-								<td><?php echo $male_eventSubscribed+$female_eventSubscribed+$nonsleeper_eventSubscribed; ?></td>
-								<td><?php echo $male_paid+$female_paid+$nonsleeper_paid;?></td>
-								<td><?php echo ($male_eventSubscribed+$female_eventSubscribed+$nonsleeper_eventSubscribed) - ($male_paid+$female_paid+$nonsleeper_paid);?></td>
-								<td><?php echo $capacity_male+$capacity_female+$capacity_nonsleeper;?></td>
-							</tr>
+							<?php foreach($info as $i){?>
+								<tr>
+									<td><a target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $i->person_user_id ?>"><?= $i->responsable_name ?></a></td>
+									<td><?php echo $i->fullname;?></td>
+									<td><?php echo $i->description;?></td>
+									<td><?php if($i->nonsleeper === 't') echo 'Não'; else echo "Sim";?></td>
+								</tr>
+							<?php }?>
 						</table>
 						</div>
 						<?php }?>

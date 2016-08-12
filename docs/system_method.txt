@@ -440,3 +440,6 @@
 "associates";"reports";2
 "associates";"reports";3
 "associates";"reports";4
+"event_subscription";"reports";2
+"event_subscription";"reports";3
+"event_subscription";"reports";4

@@ -167,6 +167,7 @@
         public function getSubscriptionsByEventId ($eventId,$type = null,$status=null){
             $sql = "SELECT * FROM event_subscription es
             		INNER JOIN person p on p.person_id = es.person_id
+            		INNER JOIN age_group ag on ag.age_group_id = es.age_group_id
             		WHERE es.event_id = ?";
             
             if($type == "nonsleeper")          

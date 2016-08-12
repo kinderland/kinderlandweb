@@ -1741,12 +1741,12 @@ class summercamp_model extends CK_Model {
 		where donation_id = ?";
 
         $resultSet = $this->executeRows($this->db, $sql, array($donationId));
-        $summerCampSubscription = array();
+        $r = array();
 
         foreach ($resultSet as $resultSetIteration)
-            $summerCampSubscription[] = SummerCampSubscription::createSummerCampSubscriptionObject($resultSetIteration);
+            $r[] = SummerCampSubscription::createSummerCampSubscriptionObject($resultSetIteration);
 
-        return $summerCampSubscription;
+        return $r;
     }
 
     public function updateDiscount($colonistId, $summerCampId, $discount_value, $discount_reason_id) {
