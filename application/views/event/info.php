@@ -357,7 +357,7 @@
 					<th style="width:210px">Total:</th>
 					<td>R$<span id="price_total"><?php echo number_format($totalPrice,2,",","."); ?></span></td>
 					<?php
-					if($price != null){
+					if($price != null && $totalPrice != 0 ){
 				?>
 					<td>
 					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$event->getEventId()?>)">Prosseguir</button>
@@ -432,23 +432,23 @@
 											<div class="col-lg-7">
 												<p>
 													<?php
-														if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
+													//	if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 													?>
 														<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
 														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true";  ?>','<?php echo "associate_false";?>')"/> Sim 
 														<label for="associate_false" class="control-label"></label>
 														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false"; ?>','<?php echo "associate_true"; ?>')" /> Não
 													<?php
-														} else {
+													//	} else {
 													?>
-														<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
+											<!-- 		<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
 														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true"; ?>','<?php echo "associate_false";?>')" disabled/> Sim 
 														<label for="associate_false" class="control-label"></label>
 														<input type="radio" class="associate_no" name="associate" id="associate_false" value="true" onclick = "changeValue('<?php echo "associate_false";  ?>','<?php echo "associate_true"; ?>')" checked disabled/> Não
 													<?php
-														}
+													//	}
 													?>
-
+										  -->
 												</p>
 											</div>
 											</div>
