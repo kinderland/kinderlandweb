@@ -158,11 +158,9 @@
             }
             
             if($totalPrice > 0)
-            	$ok = 'true';
+            	return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted);
             else 
-            	$ok = 'false';
-        
-            return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted,"ok" => $ok);
+            	return null;
         }
 
         public function updateSubscriptionsStatusByDonationId($donation_id, $status) {
