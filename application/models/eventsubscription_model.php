@@ -158,9 +158,9 @@
             }
             
             if($totalPrice > 0)
-            	$ok = true;
+            	$ok = 'true';
             else 
-            	$ok = false;
+            	$ok = 'false';
         
             return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted,"ok" => $ok);
         }

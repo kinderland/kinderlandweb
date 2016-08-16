@@ -105,14 +105,11 @@ class Events extends CK_Controller {
 			$data['age_groups'] = $this->eventsubscription_model->getAgeGroups();
 			$data['user_id'] = $this->session->userdata("user_id");
 			$data['user_associate'] = $this->personuser_model->isAssociateAndNotTemporary($this->session->userdata("user_id"));
-			$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($this->session->userdata("user_id"));
-			$data['peoplejson'] = json_encode($data['people']);
+			
 			$data['age_group'] = $age_group; 
 			$data['nonsleeper'] = $nonsleeper;
 			$data['gender'] = $gender;
 			$data['name'] = "";
-			
-			$this->Logger->debug("People json: ".$data['peoplejson']);
 
 			$this->Logger->info("Loading screen");
 
@@ -319,7 +316,7 @@ class Events extends CK_Controller {
 			$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 						
-			while($totalPrice->ok === false){
+			while($totalPrice->ok === 'false'){
 				$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 				$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 			}

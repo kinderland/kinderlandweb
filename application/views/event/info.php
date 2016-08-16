@@ -79,26 +79,15 @@
 			}
 
 			$("document").ready(function(){
-				var peopleJson = <?=$peoplejson?>;
 				var subscriptions = <?=json_encode($subscriptions)?>;
 				var price = <?=json_encode($price)?>;
 
 				$("#box_options").change(function(){
-					var person = peopleJson[parseInt($("#box_options").val())];
-					if(person != null){
-						$("#fullname").val(person.fullname);
-						$("#gender").val(person.gender.toUpperCase());
-						$("#fullname").attr("disabled", true);
-						$("#gender").attr("disabled", true);
-						$("#person_id").val(person.personId);
-					}
-					else{
 						$("#fullname").val("");
 						$("#gender").val("");
 						$("#fullname").prop("disabled", false);
 						$("#gender").prop("disabled", false);;
 						$("#person_id").val("");
-					}	
 				});
 			});
 
