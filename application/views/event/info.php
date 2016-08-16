@@ -174,7 +174,6 @@
 								person_id: person_id, age_group: age_group, associate: associate, nonsleeper: nonsleeper, gender:gender, fullname: fullname},
 								function(data){
 									if(data){
-										alert("Convite criado com sucesso!");
 										$('#thisdiv').load(document.URL +  ' #thisdiv');
 										$('#myModal').modal('hide');
 										$('body').removeClass('modal-open');
@@ -222,7 +221,7 @@
 				if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 			?>
 					<p align="left">
-						<?=$fullname?>, no período de inscrições atual, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos.
+						<?=$fullname?>, no período de inscrições atual, você que é sócio, tem <?=$price->associate_discount*100?>% de desconto nos convites para você e seus dependentes diretos (somente conjuges e filhos).
 					</p>
 			<?php
 				}
@@ -451,7 +450,7 @@ function alertMessage(){
 													<?php
 													//	if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 													?>
-														<label for="associate_true" class="control-label"> Dependente de sócio*: </label>
+														<label for="associate_true" class="control-label"> Sócio ou Dependentes*: </label>
 														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true";  ?>','<?php echo "associate_false";?>')"/> Sim 
 														<label for="associate_false" class="control-label"></label>
 														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false"; ?>','<?php echo "associate_true"; ?>')" /> Não

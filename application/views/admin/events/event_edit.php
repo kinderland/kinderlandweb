@@ -149,11 +149,20 @@ $(document).ready(function (){
 	datepickers();
 
 	<?php  foreach($payments as $payment){ ?>
-		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td><td><input type="text" class="form-control" placeholder="Valor geral" name="full_price[]" id="full_price" value="<?php echo $payment["full_price"]?>"></td><td><input type="text" class="form-control" placeholder="Valor 6-17" name="middle_price[]" id="middle_price" value="<?php echo $payment["middle_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 0-5" name="children_price[]" id="children_price" value="<?php echo $payment["children_price"]?>"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="<?php echo $payment["payment_portions"]?>" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_discount[]" id="associated_discount" value="<?php echo $payment["associated_discount"]*100;?>" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
+		addTableLine('<tr><td><input type="text" class=" datepickers form-control" placeholder="Data de Início" name="payment_date_start[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_start"])?>"</td><td><input type="text" class=" datepickers form-control" placeholder="Data de Fim" name="payment_date_end[]" value="<?php echo Events::toMMDDYYYY($payment["payment_date_end"])?>"</td><td><input type="text" class="form-control" placeholder="Valor +18" name="full_price[]" id="full_price" value="<?php echo $payment["full_price"]?>"></td><td><input type="text" class="form-control" placeholder="Valor 6-17" name="middle_price[]" id="middle_price" value="<?php echo $payment["middle_price"]?>"></td>			   		<td><input type="text" class="form-control" placeholder="Valor 0-5" name="children_price[]" id="children_price" value="<?php echo $payment["children_price"]?>"></td>			   		<td><input type="number" class="form-control" name="payment_portions[]" id="payment_portions" value="<?php echo $payment["payment_portions"]?>" min="1" max="5"></td>			   		<td><input type="number" class="form-control" placeholder="%" name="associated_discount[]" id="associated_discount" value="<?php echo $payment["associated_discount"]*100;?>" min="0" max="100"> </td>			   		<td><img src="<?=$this->config->item('assets')?>images/forms/icon_minus.gif" style="cursor: pointer; cursor: hand;" class="delete""></button></td>				   	</tr>	');
 	<?php } ?> 
 	
 	
 });
+
+function makeTotal(){
+	var value1 = document.getElementById("capacity_male").value;
+	var value2 = document.getElementById("capacity_female").value;
+	var value3 = document.getElementById("capacity_nonsleeper").value;
+
+	document.getElementById("total").value = Number(value1) + Number(value2) + Number(value3);	
+
+}
 </script>
 
 <form name="event_form" onsubmit="alertRequiredFields()" method="POST" action="<?=$this->config->item('url_link')?>admin/updateEvent/<?php echo $event_id;?>" id="event_form">
@@ -161,6 +170,7 @@ $(document).ready(function (){
 		<div class="col-lg-12 middle-content">
 			<div class="row">
 				<div class="col-lg-8"><h4>Edição de evento</h4></div>
+				<div class="col-lg-4"><h6><span class="red_letters">Campos com * são de preenchimento obrigatório.</span></h6></div>
 			</div>
 			<hr />
 
@@ -180,7 +190,7 @@ $(document).ready(function (){
 				<div class="form-group">
 					<label for="description" class="col-lg-2 control-label"> Descrição do Evento: </label>
 					<div class="col-lg-6">
-						<input type="text" class="form-control" placeholder="Descrição do Evento" value="<?=$description?>" name="description"/>					
+						<input type="text" maxlength="120" class="form-control" placeholder="Descrição do Evento (120 caracteres)" value="<?=$description?>" name="description"/>					
 					</div>
 				</div>
 			</div>
@@ -240,7 +250,18 @@ $(document).ready(function (){
 					<?php }?>
 				</div>
 			</div>
-			<br />		
+			<br />	
+			<div class="row">	
+					<label for="capacity_male" style="width:300px" class="col-lg-1 control-label"> Períodos para pagamento: </label><br />
+			<div class="col-lg-12">
+               <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor +18 anos</th><th>Valor 6-17 anos</th><th>Valor 0-5 anos</th><th>Parcelas max</th><th>Desconto Sócio %</th></tr> 
+			   <tbody>
+			   </tbody>
+			   </table>
+			   <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
+			   </div>
+			</div>
+			<br/>	
 			<div class="row">
 				<div class="form-group">
 					<table class="table table-bordered table-striped" style="max-width:800px; min-width:700px; table-layout: fixed;">
@@ -252,8 +273,8 @@ $(document).ready(function (){
 							<th>Disponíveis</th>
 						</tr>
 						<tr>
-							<th>Masculino: </th>
-							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão Masculino" value="<?php echo $male_eventSubscribed + $capacity_male;?>" name="capacity_male" required 
+							<th>Pernoite Masculino: </th>
+							<td><input id="capacity_male" onchange="makeTotal()" type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão Masculino" value="<?php echo $male_eventSubscribed + $capacity_male;?>" name="capacity_male" required 
 							oninput="setCustomValidity('')"
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 							min="<?php echo $male_eventSubscribed; ?>"/></td>
@@ -262,8 +283,8 @@ $(document).ready(function (){
 							<td><?php echo $capacity_male;?></td>
 						</tr>
 						<tr>
-							<th>Feminino:</th>
-							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão feminino" value="<?php echo $female_eventSubscribed + $capacity_female;?>" name="capacity_female" required 
+							<th>Pernoite Feminino:</th>
+							<td><input id="capacity_female" onchange="makeTotal()" type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" placeholder="Pavilhão feminino" value="<?php echo $female_eventSubscribed + $capacity_female;?>" name="capacity_female" required 
 							oninput="setCustomValidity('')"
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 							min="<?php echo $female_eventSubscribed; ?>"/></td>
@@ -273,7 +294,7 @@ $(document).ready(function (){
 						</tr>
 						<tr>
 							<th>Sem pernoite:</th>
-							<td><input type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="Sem pernoite" value="<?php echo $nonsleeper_eventSubscribed + $capacity_nonsleeper;?>" name="capacity_nonsleeper" required 
+							<td><input id="capacity_nonsleeper" onchange="makeTotal()" type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="Sem pernoite" value="<?php echo $nonsleeper_eventSubscribed + $capacity_nonsleeper;?>" name="capacity_nonsleeper" required 
 							oninput="setCustomValidity('')"
 							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 							min="<?php echo $nonsleeper_eventSubscribed; ?>"/></td>
@@ -281,22 +302,20 @@ $(document).ready(function (){
 							<td><?php echo $nonsleeper_eventSubscribed - $nonsleeper_paid;?></td>
 							<td><?php echo $capacity_nonsleeper;?></td>
 						</tr>
+						<tr>
+							<th>Total de Vagas:</th>
+							<td><input disabled type="number" oninput="setCustomValidity('')" oninvalid="this.setCustomValidity('Este campo só aceita números')" class="form-control required" pattern="\d*" placeholder="" value="<?php echo $nonsleeper_eventSubscribed + $capacity_nonsleeper +$female_eventSubscribed + $capacity_female + $male_eventSubscribed + $capacity_male; ?>" name="total" id="total"
+							oninput="setCustomValidity('')"
+							oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+							/></td>
+							<td><?php echo $nonsleeper_paid+$female_paid+$male_paid;?></td>
+							<td><?php echo ($nonsleeper_eventSubscribed+$female_eventSubscribed+$male_eventSubscribed)- ($female_paid+$male_paid+$nonsleeper_paid);?></td>
+							<td><?php echo $capacity_nonsleeper+$capacity_female+$capacity_male;?></td>
+						</tr>
 					</table>
 					</div>
 				</div>
-			<br />
-			<div class="row">	
-					<label for="capacity_male" style="width:300px" class="col-lg-1 control-label"> Períodos para pagamento: </label><br />
-			<div class="col-lg-12">
-               <table id="table" name="table" class="table"><tr><th>De</th><th>Até</th><th>Valor +18 anos</th><th>Valor 6-17 anos</th><th>Valor 0-5 anos</th><th>Parcelas max</th><th>Desconto Sócio %</th></tr> 
-			   <tbody>
-			   </tbody>
-			   </table>
-			   <button type="button" value="" onclick="addTableLine()">Novo periodo</button>
-			   </div>
-			</div>
 		</div>
-	<br />
 	<br />
 	<div class="form-group">
 		<div class="col-lg-10">
