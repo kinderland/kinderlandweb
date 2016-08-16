@@ -370,8 +370,6 @@ function alertMessage(){
 		alert("Acrescente convites para realizar doação.");
 		return;
 	}
-	
-	document.getElementById("message").style.visibility = "";
 	paymentDetailsScreen();
 }
 
@@ -441,7 +439,7 @@ function alertMessage(){
 													<?php
 													//	if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 													?>
-														<label for="associate_true" class="control-label"> Sócio ou Dependentes (Conjuges ou filhos)*: </label>
+														<label for="associate_true" class="control-label"> Sócio ou Dependentes (conjuges ou filhos)*: </label>
 														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true";  ?>','<?php echo "associate_false";?>')"/> Sim 
 														<label for="associate_false" class="control-label"></label>
 														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false"; ?>','<?php echo "associate_true"; ?>')" /> Não
@@ -488,7 +486,7 @@ function alertMessage(){
 											</div>
 										</div>
 									</div>
-									Obs: O valor do convite com ou sem pernoite é o mesmo.
+									<p style="color:red"> Obs: O valor do convite com ou sem pernoite é o mesmo.</p>
 								</div>
 							</div>
 						</div>
