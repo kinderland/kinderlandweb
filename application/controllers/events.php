@@ -293,7 +293,7 @@ class Events extends CK_Controller {
 
 	public function checkoutSubscriptions(){
 		$this->Logger->info("Starting " . __METHOD__);
-
+		
 		if(!$this->checkSession())
 			redirect("login/index");
 
@@ -319,7 +319,7 @@ class Events extends CK_Controller {
 			$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 						
-			while($totalPrice->total_price == 0.00){
+			while($totalPrice->ok === false){
 				$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 				$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 			}

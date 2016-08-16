@@ -156,8 +156,13 @@
                     
                 $totalPrice += $value;
             }
+            
+            if($totalPrice > 0)
+            	$ok = true;
+            else 
+            	$ok = false;
         
-            return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted);
+            return array("total_price" => $totalPrice, "total_discounted" => $totalDiscounted,"ok" => $ok);
         }
 
         public function updateSubscriptionsStatusByDonationId($donation_id, $status) {
