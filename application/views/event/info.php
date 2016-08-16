@@ -226,7 +226,8 @@
 			<?php
 				}
 			?>
-					<h4><strong>Valores:</strong></h4>
+			<br/>
+					<h4><strong>Datas e valores de doações para este evento:</strong></h4>
 					<table class="table table-bordered table-striped" style="max-width:550px; min-width:550px; table-layout: fixed;">
 						<tr>
 							<th style="width:150px"></th>
@@ -269,13 +270,12 @@
 			?>
 						<div name="form_submit_payment" id="form_submit_payment">
 							<input type="hidden" name="user_id" value="<?php echo$user_id?>" />
-							<table class="table table-bordered table-striped" style="max-width:808px; min-width:550px; table-layout: fixed;">
+							<table class="table table-bordered table-striped" style="max-width:700px; min-width:550px; table-layout: fixed;">
 								<tr>
 									<th style="width:300px">Nome do convidado</th>
 									<th style="width:100px">Faixa etária</th>
 									<th style="width:80px">Pernoite</th>
-									<th style="width:165px">Dependente de Sócio</th>
-									<th style="width:165px">Descrição do convite</th>
+									<th style="width:100px">Valor</th>
 									<th style="width:165px">Status</th>
 									<th style="width:90px">Ação</th>
 								</tr>
@@ -289,7 +289,7 @@
 										<?php }?>
 										<td><?= $subscr->age_description ?></td>
 										<td><?php if(!empty($subscr->nonsleeper) && ($subscr->nonsleeper === "t")) echo 'Não'; else echo 'Sim'; ?></td>
-										<td><?php if(!empty($subscr->associate) && ($subscr->associate === "t")) echo 'Sim'; else echo 'Não'; ?></td>
+										
 										<td>
 											<?php
 												if($price != null){
@@ -332,9 +332,8 @@
 			<?php
 				} 
 			?>
-			<h4><strong>Doação:</strong></h4>
 			<div style= "margin-top: 15px; font-size:14px; width:1000px" id="cart-info">
-			<table  class="table table-bordered table-striped" style="max-width:775px; min-width:100px; table-layout:fixed">
+			<table  class="table table-bordered table-striped" style="max-width:825px; min-width:100px; table-layout:fixed">
 			
 				<tr>
 					<th style="width:210px">Quantidade de convites:</th>
@@ -353,18 +352,10 @@
 				<tr>
 					<th style="width:210px">Total:</th>
 					<td>R$<span id="price_total"><?php echo number_format($totalPrice,2,",","."); ?></span></td>
-				<?php
-					if($price != null){
-				?>
-					<td style="max-width:50px">
-					<button class="btn btn-primary" style="float:right; " onClick="alertMessage()">Prosseguir</button>
-					</td>
-					<td id="message" style="color: red;visibility: hidden">Aguarde, você será redirecionado em instantes!</td>
-				<?php
-					}
-				?>
+				
 				</tr>
 				</table>
+				<button class="btn btn-primary" style="float:left; " onClick="alertMessage()">Prosseguir com a doação</button>
 				
 		</div>	
 	</div>
@@ -445,12 +436,12 @@ function alertMessage(){
 
 									<div class="row">
 										<div class="form-group">
-											<div class="col-lg-7">
+											<div class="col-lg-12">
 												<p>
 													<?php
 													//	if($user_associate && $price->associate_discount > 0){ //$user->isAssociate()
 													?>
-														<label for="associate_true" class="control-label"> Sócio ou Dependentes*: </label>
+														<label for="associate_true" class="control-label"> Sócio ou Dependentes (Conjuges ou filhos)*: </label>
 														<input type="radio" class="associate_yes" name="associate" id="associate_true" value="false" onclick = "changeValue('<?php echo "associate_true";  ?>','<?php echo "associate_false";?>')"/> Sim 
 														<label for="associate_false" class="control-label"></label>
 														<input type="radio" class="associate_no" name="associate" id="associate_false" value="false" onclick = "changeValue('<?php echo "associate_false"; ?>','<?php echo "associate_true"; ?>')" /> Não
@@ -466,6 +457,7 @@ function alertMessage(){
 													?>
 										  -->
 												</p>
+												
 											</div>
 											</div>
 											</div>
@@ -496,6 +488,7 @@ function alertMessage(){
 											</div>
 										</div>
 									</div>
+									Obs: O valor do convite com ou sem pernoite é o mesmo.
 								</div>
 							</div>
 						</div>

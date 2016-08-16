@@ -318,8 +318,8 @@ class Events extends CK_Controller {
 			//Evaluate price to donate
 			$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
-			
-			while($totalPrice->total_price == 0){
+						
+			while($totalPrice->total_price == 0.00){
 				$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 				$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 			}
