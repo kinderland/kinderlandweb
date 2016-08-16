@@ -313,14 +313,13 @@ class Events extends CK_Controller {
 
 			$this->Logger->info("Calculating price");
 			//Evaluate price to donate
-			$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
-			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
+			
+			$totalPrice = null;
 						
-			while($totalPrice->ok === 'false'){
+			while(!isset($totalPrice)){
 				$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 				$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 			}
-			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 
 			$this->Logger->info("Creating donation");
 			//Create donation
