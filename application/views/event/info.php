@@ -22,7 +22,7 @@
 
     </head>
     <body>
-    
+    <div id="thisdiv">
 	<div class="row">
 	<?php require_once APPPATH.'views/include/common_user_left_menu.php' ?>
 	<div class="col-lg-10 middle-content">
@@ -71,6 +71,7 @@
 						Ids = personIds[i].getAttribute("Id");
 					else
 						Ids = Ids.concat(",").concat(personIds[i].getAttribute("Id"));
+
 				}
 
 				$.redirect( "<?=$this->config->item('url_link');?>events/checkoutSubscriptions", 
@@ -192,7 +193,7 @@
 
 
 		</script>
-		<div id="thisdiv">
+		
 		<?php 
 			if($event != null && $event instanceof Event) { 
 		?>

@@ -114,7 +114,10 @@
                     inner join age_group as ag on ag.age_group_id = es.age_group_id
                     where es.event_id = ? and es.person_user_id = ? and subscription_status >= 0 and es.person_id in (".$personIds.")";
 
-            return $this->executeRows($this->db, $sql, array(intval($eventId), intval($userId), $personIds));
+            if($this->executeRows($this->db, $sql, array(intval($eventId), intval($userId), $personIds)))
+            	return $this->executeRows($this->db, $sql, array(intval($eventId), intval($userId), $personIds));
+            else 
+            	return null;
         }
 
         public function updateSubscriptionsDonationId($personIds, $userId, $eventId, $donationId){

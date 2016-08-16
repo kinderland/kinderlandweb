@@ -304,7 +304,8 @@ class Events extends CK_Controller {
 			$this->Logger->info("Getting subscriptions: ". $personIds);
 			//Get subscriptions
 			$subscriptions = $this->eventsubscription_model->getSubscriptions($userId, $eventId, $personIds);
-
+			
+			
 			$this->Logger->info("Getting prices");
 			//Get prices
 			$prices = $this->eventsubscription_model->getEventPrices($eventId);
@@ -314,12 +315,8 @@ class Events extends CK_Controller {
 			$this->Logger->info("Calculating price");
 			//Evaluate price to donate
 			
-			$totalPrice = null;
-						
-			while(!isset($totalPrice)){
-				$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
-				$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
-			}
+			$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
+			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));			
 
 			$this->Logger->info("Creating donation");
 			//Create donation
