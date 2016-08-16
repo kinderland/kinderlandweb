@@ -61,15 +61,10 @@
 				);
 			}
 
-			function paymentDetailsScreen(event_id){
-				
+			function paymentDetailsScreen(){
+				var event_id = <?=$event->getEventId() ?>;
 				var personIds = document.getElementsByName("personIds");
 				var Ids;
-
-				if(personIds.length == 0){
-					alert("Acrescente convites para realizar doação.");
-					return;
-				}
 
 				for(var i = 0; i < personIds.length; i++){
 					if(i == 0)
@@ -339,11 +334,14 @@
 				} 
 			?>
 			<h4><strong>Doação:</strong></h4>
-			<div style= "margin-top: 15px; font-size:14px;" id="cart-info">
-			<table  class="table table-bordered table-striped" style="max-width:425px; min-width:100px; table-layout: fixed;">
+			<div style= "margin-top: 15px; font-size:14px; width:1000px" id="cart-info">
+			<table  class="table table-bordered table-striped" style="max-width:775px; min-width:100px; table-layout:fixed">
+			
 				<tr>
 					<th style="width:210px">Quantidade de convites:</th>
 					<td><span id="qtd_invites"><?php echo $qtd; ?></span></td>
+					<th style="width:110px;visibility: hidden"></th>
+					<th style="width:350px;visibility: hidden"></th>
 				</tr>
 				<tr>
 					<th style="width:210px">Subtotal:</th>
@@ -356,20 +354,39 @@
 				<tr>
 					<th style="width:210px">Total:</th>
 					<td>R$<span id="price_total"><?php echo number_format($totalPrice,2,",","."); ?></span></td>
-					<?php
-					if($price != null && $totalPrice != 0 ){
+				<?php
+					if($price != null){
 				?>
-					<td>
-					<button class="btn btn-primary" style="float:right; " onClick="paymentDetailsScreen(<?=$event->getEventId()?>)">Prosseguir</button>
+					<td style="max-width:50px">
+					<button class="btn btn-primary" style="float:right; " onClick="alertMessage()">Prosseguir</button>
 					</td>
+					<td id="message" style="color: red;visibility: hidden">Aguarde, você será redirecionado em instantes!</td>
 				<?php
 					}
 				?>
 				</tr>
 				</table>
+				
 		</div>	
 	</div>
 </div>
+
+<script>
+
+function alertMessage(){
+	var personIds = document.getElementsByName("personIds");
+
+	if(personIds.length == 0){
+		alert("Acrescente convites para realizar doação.");
+		return;
+	}
+	
+	document.getElementById("message").style.visibility = "";
+	paymentDetailsScreen();
+}
+
+
+</script>
 			
 		<?php 
 			} else {
@@ -498,11 +515,11 @@
 
 		function alertaTempoTotal(){
 			$('#thisdiv').load(document.URL +  ' #thisdiv');
-			alert("ATENÇÃO! Você terá 10 minutos para criar os convites e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
+			alert("ATENÇÃO! Você terá 30 minutos para criar os convites e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
 		}
 
 		function alertaTempoAcabando(){
-			alert("ATENÇÃO! Você tem mais 2 minutos para criar os convites e prosseguir com a doação.");
+			alert("ATENÇÃO! Você tem mais 5 minutos para criar os convites e prosseguir com a doação.");
 		}	
 
 		function deletAll(){
@@ -524,9 +541,9 @@
 			location.reload(true);
 		}
 
-		setTimeout(alertaAcabou,1000*60*10);
+		setTimeout(alertaAcabou,1000*60*30);
 
-		setTimeout(alertaTempoAcabando,1000*60*8);
+		setTimeout(alertaTempoAcabando,1000*60*25);
 
 		setTimeout(alertaTempoTotal,0);
 

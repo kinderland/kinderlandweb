@@ -135,7 +135,7 @@ class donation_model extends CK_Model {
 
     public function userIsAlreadyAssociate($userId) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * FROM associates WHERE person_id = ?";
+        $sql = "SELECT * FROM associates WHERE person_id = ? AND type = 'associado'";
         $resultSet = $this->executeRow($this->db, $sql, array(intval($userId)));
 
         if ($resultSet)

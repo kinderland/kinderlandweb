@@ -318,6 +318,12 @@ class Events extends CK_Controller {
 			//Evaluate price to donate
 			$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
 			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
+			
+			while($totalPrice->total_price != 0){
+				$totalPrice = $this->eventsubscription_model->evaluateCheckoutValues($subscriptions, $prices);
+				$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
+			}
+			$this->Logger->info("=====> Price: " . print_r($totalPrice, true));
 
 			$this->Logger->info("Creating donation");
 			//Create donation
@@ -426,7 +432,7 @@ class Events extends CK_Controller {
     		$data['price'] = $price;
     		$data['age_groups'] = $this->eventsubscription_model->getAgeGroups();
     		$data['user_id'] = $this->session->userdata("user_id");
-    		$data['user_associate'] = $this->personuser_model->isAssociate($this->session->userdata("user_id"));
+    		$data['user_associate'] = $this->personuser_model->isAssociateAndNotTemporary($this->session->userdata("user_id"));
     		$data['people'] = $this->eventsubscription_model->getPeopleRelatedToUser($this->session->userdata("user_id"));
     		$data['peoplejson'] = json_encode($data['people']);
     		$data['age_group'] = $age_group;

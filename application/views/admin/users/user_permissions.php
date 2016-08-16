@@ -89,7 +89,7 @@
 			        	admins++;
 
 			        if (user['person_id'] == personId){
-			        	$("#modal_title").text("PermissÃµes concedidas a " + user['fullname']);
+			        	$("#modal_title").text("Permissões concedidas a " + user['fullname']);
 
 			        	$("#person_id").val(user['person_id']);
 			        	$("#system_admin").prop('checked', user['system_admin']==1);
@@ -195,7 +195,7 @@
                                 <th> Nome </th>
                                 <th> Administrador </th>
                                 <th> Diretor </th>
-                                <th> SecretÃ¡ria </th>
+                                <th> Secretária </th>
                                 <th> Coordenador </th>
                                 <th> Médico </th>
                                 <th> Monitor </th>
@@ -242,7 +242,7 @@
 													<input type="hidden" id="person_id" name="person_id" value="" />
 													<input type="checkbox" id="system_admin" name="system_admin" <?= ($user->system_admin)?"checked":""?> /> Administrador <br /><br />
 				                                    <input type="checkbox" id="director" name="director" <?=($user->director)?"checked":""?> /> Diretor <br /><br />
-				                                    <input type="checkbox" id="secretary" name="secretary" <?=($user->secretary)?"checked":""?> /> SecretÃ¡ria <br /><br />
+				                                    <input type="checkbox" id="secretary" name="secretary" <?=($user->secretary)?"checked":""?> /> Secretária <br /><br />
 				                                    <input type="checkbox" id="coordinator" name="coordinator" <?=($user->coordinator)?"checked":""?> /> Coordenador <br /><br />
 				                                    <input type="checkbox" id="doctor" name="doctor"  <?=($user->doctor)?"checked":""?> /> Médico <br /><br />
 				                                    <input type="checkbox" id="monitor_instructor" name="monitor_instructor" <?=($user->monitor_instructor)?"checked":""?>/> Monitor/Instrutor
