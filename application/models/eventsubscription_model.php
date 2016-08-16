@@ -155,6 +155,7 @@
                 }
                     
                 $totalPrice += $value;
+                $this->Logger->info("TOTAL PRICE: ".$totalPrice);
             }
             
             if($totalPrice > 0)
