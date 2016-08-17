@@ -127,6 +127,66 @@ class Events extends CK_Controller {
 		}
 		
 	}
+	
+	public function info2(){
+		$userId = $this->session->userdata["user_id"];
+		
+		$waitingPayments = $this ->eventsubscription_model -> getSubscriptionsWaitingPaymentByUserId($userId);
+		
+		if($waitingPayments){
+			$i = 0;
+				
+			foreach($waitingPayments as $w){
+				if($i==0)
+					$personIds = $w->person_id;
+				else
+					$personIds = $personIds.",".$w->person_id;
+		
+				$eventId = $w->event_id;
+				$i++;
+			}
+		}
+		
+		$p = $this->eventsubscription_model->getEventPrices($eventId,"all");
+		$price = $this->eventsubscription_model->getEventPrices($eventId);
+		$totalPrice = 0.00;
+		$subtotalPrice = 0.00;
+		$discount = 0.00;
+		$qtd = 0;
+		$singlePrice;
+			
+		foreach($waitingPayments as $sub){
+			if($sub->subscription_status == 2){
+				if($sub->age_group_id == 1){
+					$singlePrice = $price->children_price;
+				} else if($sub->age_group_id == 2){
+					$singlePrice = $price->middle_price;
+				} else if($sub->age_group_id == 3){
+					$singlePrice = $price->full_price;
+				}
+					
+				$subtotalPrice += $singlePrice;
+					
+				if(!empty($sub->associate) && ($sub->associate === "t")){
+					$discount += $singlePrice*$price->associate_discount;
+					$singlePrice = $singlePrice - ($singlePrice*$price->associate_discount);
+				}
+					
+				$totalPrice += $singlePrice;
+				$qtd++;
+			}
+		}
+			
+		$data['totalPrice'] = $totalPrice;
+		$data['subtotalPrice'] = $subtotalPrice;
+		$data['discount'] = $discount;
+		$data['qtd'] = $qtd;
+		
+		$data['personIds'] = $personIds;
+		$data['eventId'] = $eventId;
+		$data['event'] = $this->event_model->getEventById($eventId);
+		$this->loadView('event/info2', $data);
+	}
 
 	public function subscribeNewPerson($eventId){
 		$this->Logger->info("Starting " . __METHOD__);
@@ -294,9 +354,9 @@ class Events extends CK_Controller {
 		if(!$this->checkSession())
 			redirect("login/index");
 
-		$personIds  = $_POST['person_ids'];
-		$userId 	= $this->session->userdata("user_id");//$_POST['user_id'];
-		$eventId 	= $_POST['event_id'];
+		$userId = $this->session->userdata("user_id");//$_POST['user_id'];
+		$eventId = $_POST['event_id'];
+		$personIds = $_POST['ids'];
 
 		try {
 			$this->generic_model->startTransaction();
@@ -304,7 +364,6 @@ class Events extends CK_Controller {
 			$this->Logger->info("Getting subscriptions: ". $personIds);
 			//Get subscriptions
 			$subscriptions = $this->eventsubscription_model->getSubscriptions($userId, $eventId, $personIds);
-			
 			
 			$this->Logger->info("Getting prices");
 			//Get prices

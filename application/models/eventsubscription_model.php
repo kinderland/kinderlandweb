@@ -59,6 +59,26 @@
 
             return $this->executeRows($this->db, $sql, array(intval($eventId), intval($userId)));
         }
+        
+        public function getSubscriptionsWaitingPaymentByUserId($userId){
+        	$this->Logger->info("AQUI");
+        	$sql = "SELECT es.*, p.fullname, ag.description as age_description from event_subscription as es
+                    inner join person as p on p.person_id = es.person_id
+                    inner join age_group as ag on ag.age_group_id = es.age_group_id
+                    where es.person_user_id = ? and subscription_status = 2";
+        
+        	$result = array();
+        	$rows = $this->executeRows($this->db, $sql, array(intval($userId)));
+        	if($rows){
+        		foreach($rows as $row){
+        			$result[] = $row;
+        		}
+        		
+        		return $result;
+        	}
+        	
+        	return null;
+        }
 
         public function getPeopleRelatedToUser($userId){
             $sql = "SELECT p.*, (SELECT phone_number FROM telephone WHERE person_id = ? LIMIT 1) AS phone1,

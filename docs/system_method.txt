@@ -443,3 +443,4 @@
 "event_subscription";"reports";2
 "event_subscription";"reports";3
 "event_subscription";"reports";4
+"info2";"events";1

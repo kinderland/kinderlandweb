@@ -62,21 +62,7 @@
 			}
 
 			function paymentDetailsScreen(){
-				var event_id = <?=$event->getEventId() ?>;
-				var personIds = document.getElementsByName("personIds");
-				var Ids;
-
-				for(var i = 0; i < personIds.length; i++){
-					if(i == 0)
-						Ids = personIds[i].getAttribute("Id");
-					else
-						Ids = Ids.concat(",").concat(personIds[i].getAttribute("Id"));
-
-				}
-
-				$.redirect( "<?=$this->config->item('url_link');?>events/checkoutSubscriptions", 
-										{ event_id: event_id, person_ids: Ids },
-										"POST");
+				window.location.href="<?= $this->config->item('url_link'); ?>events/info2/";
 			}
 
 			$("document").ready(function(){
@@ -345,26 +331,11 @@
 				
 				</tr>
 				</table>
-				<button class="btn btn-primary" style="float:left; " onClick="alertMessage()">Prosseguir com a doação</button>
+				<button class="btn btn-primary" style="float:left; " onClick="paymentDetailsScreen()">Prosseguir</button>
 				
 		</div>	
 	</div>
 </div>
-
-<script>
-
-function alertMessage(){
-	var personIds = document.getElementsByName("personIds");
-
-	if(personIds.length == 0){
-		alert("Acrescente convites para realizar doação.");
-		return;
-	}
-	paymentDetailsScreen();
-}
-
-
-</script>
 			
 		<?php 
 			} else {
@@ -491,40 +462,3 @@ function alertMessage(){
 		</div>
 </body>
 </html>
-<script type="text/javascript">
-
-		function alertaTempoTotal(){
-			$('#thisdiv').load(document.URL +  ' #thisdiv');
-			alert("ATENÇÃO! Você terá 30 minutos para criar os convites e prosseguir com a doação. Após esse prazo, todos os convites criados serão excluídos.");
-		}
-
-		function alertaTempoAcabando(){
-			alert("ATENÇÃO! Você tem mais 5 minutos para criar os convites e prosseguir com a doação.");
-		}	
-
-		function deletAll(){
-			var eventId = document.getElementById("event_id").value;
-			var personIds = document.getElementsByName("personIds");
-
-			for(var i = 0; i < personIds.length; i++){
-				deleteSubscription(eventId,personIds[i].getAttribute("Id"));
-			}
-		}
-
-		window.onbeforeunload = function() {
-			deletAll();
-			location.reload(true);
-		};
-
-		function alertaAcabou(){
-			alert("Tempo Esgotado!");
-			location.reload(true);
-		}
-
-		setTimeout(alertaAcabou,1000*60*30);
-
-		setTimeout(alertaTempoAcabando,1000*60*25);
-
-		setTimeout(alertaTempoTotal,0);
-
-</script>
