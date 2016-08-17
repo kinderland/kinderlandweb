@@ -128,10 +128,10 @@ class Events extends CK_Controller {
 		
 	}
 	
-	public function info2(){
+	public function info2($eventId){
 		$userId = $this->session->userdata["user_id"];
 		
-		$waitingPayments = $this ->eventsubscription_model -> getSubscriptionsWaitingPaymentByUserId($userId);
+		$waitingPayments = $this ->eventsubscription_model -> getSubscriptionsWaitingPaymentByUserId($userId,$eventId);
 		
 		if($waitingPayments){
 			$i = 0;
@@ -141,8 +141,7 @@ class Events extends CK_Controller {
 					$personIds = $w->person_id;
 				else
 					$personIds = $personIds.",".$w->person_id;
-		
-				$eventId = $w->event_id;
+				
 				$i++;
 			}
 		}

@@ -62,7 +62,7 @@
 			}
 
 			function paymentDetailsScreen(){
-				window.location.href="<?= $this->config->item('url_link'); ?>events/info2/";
+				window.location.href="<?= $this->config->item('url_link'); ?>events/info2/<?= $event->getEventId() ?>";
 			}
 
 			$("document").ready(function(){
