@@ -173,7 +173,13 @@
 						<td align='right'><?php echo $subt1NM+$countsNotAssociatedM->validada; ?></td>
 					</tr>
 					<tr>
-						<th align="right" width='200px'>5. Pré-inscrições na fila de espera</th>
+						<th align="right">5. Pré-inscrições validadas por Pavilhão</th>
+						<td colspan="2"><?php echo $countsAssociatedF->validada+$countsNotAssociatedF->validada; ?></td>
+						<td colspan="2"><?php echo $countsAssociatedM->validada+$countsNotAssociatedM->validada; ?></td>
+						
+					</tr>
+					<tr>
+						<th align="right" width='200px'>6. Pré-inscrições na fila de espera</th>
 						<td align='right'><?php if($countsAssociatedF->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 3, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->fila_espera; ?></a><?php } else echo $countsAssociatedF->fila_espera; ?></td>
 						<td align='right'><?php if($countsNotAssociatedF->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 3, 'false', 'F')" target="blank"
@@ -184,7 +190,7 @@
 							> <?php echo $countsNotAssociatedM->fila_espera; ?></a><?php } else echo $countsNotAssociatedM->fila_espera; ?></td>
 					</tr>
 					<tr>
-						<th align="right" width='200px'>6. Pré-inscrições aguardando doação</th>
+						<th align="right" width='200px'>7. Pré-inscrições aguardando doação</th>
 						<td align='right'><?php if($countsAssociatedF->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 4, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->aguardando_pagamento; ?></a><?php } else echo $countsAssociatedF->aguardando_pagamento; ?></td>
 						<td align='right'><?php if($countsNotAssociatedF->aguardando_pagamento !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 4, 'false', 'F')" target="blank"
@@ -195,7 +201,7 @@
 							> <?php echo $countsNotAssociatedM->aguardando_pagamento; ?></a><?php } else echo $countsNotAssociatedM->aguardando_pagamento; ?></td>
 					</tr>
 					<tr>
-						<th align="right">Subtotal(4+5+6)</th>
+						<th align="right">Subtotal(4+6+7)</th>
 						<td align='right'><?php echo $countsAssociatedF->aguardando_pagamento+$countsAssociatedF->fila_espera+$countsAssociatedF->validada ?></td>
 						<td align='right'><?php echo $countsNotAssociatedF->aguardando_pagamento+$countsNotAssociatedF->fila_espera+$countsNotAssociatedF->validada; ?></td>
 						<td align='right'><?php echo $countsAssociatedM->aguardando_pagamento+$countsAssociatedM->fila_espera+$countsAssociatedM->validada; ?></td>
@@ -210,7 +216,7 @@
 						<td align='right'><?php //echo $sumNotAssociatedM = $countsNotAssociatedM->aguardando_pagamento+$countsNotAssociatedM->fila_espera+$countsNotAssociatedM->validada+$countsNotAssociatedM->nao_validada+$countsNotAssociatedM->aguardando_validacao+$countsNotAssociatedM->elaboracao; ?></td>
 					</tr> -->
 					<tr>
-						<th align="right">7. Inscritos</th>
+						<th align="right">8. Inscritos</th>
 						<td align='right'><?php if($countsAssociatedF->inscrito !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 5, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->inscrito; ?></a><?php } else echo $countsAssociatedF->inscrito; ?></td>
 						<td align='right'><?php if($countsNotAssociatedF->inscrito !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 5, 'false', 'F')" target="blank"
@@ -221,7 +227,7 @@
 							> <?php echo $countsNotAssociatedM->inscrito; ?></a><?php } else echo $countsNotAssociatedM->inscrito; ?></td>
 					</tr>
 					<tr>
-						<th align="right">8. Inscritos por Pavilhão</th>
+						<th align="right">9. Inscritos por Pavilhão</th>
 						<td colspan="2"><?php echo $countsAssociatedF->inscrito+$countsNotAssociatedF->inscrito; ?></td>
 						<td colspan="2"><?php echo $countsAssociatedM->inscrito+$countsNotAssociatedM->inscrito; ?></td>
 						
@@ -235,7 +241,7 @@
 						<td align='right'><?php //echo $sumNotAssociatedM+$countsNotAssociatedM->inscrito; ?></td>
 					</tr> -->
 					<tr>
-						<th align="right">Vagas Oferecidas</th>
+						<th align="right">10. Vagas Oferecidas</th>
 						<td colspan="2"> <?php echo $vacancyFemale; ?>
 							
 						
@@ -243,7 +249,7 @@
 	                    
 					</tr>
 					<tr>
-						<th align="right">Vagas Disponíveis</th>
+						<th align="right">11. Vagas Disponíveis (10-9-7)</th>
 						<td colspan="2"> <?php echo $vacancyFemale - ($countsAssociatedF->aguardando_pagamento 
 						+ $countsAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento 
 						+ $countsNotAssociatedF->inscrito); ?>
