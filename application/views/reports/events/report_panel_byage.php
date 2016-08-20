@@ -74,22 +74,55 @@
 		                <table class="table table-bordered table-striped table-min-td-size"
 					style="max-width: 700px;">
 							<tr>
-							  	<th>Por faixa etária</th>
-							    <th>Feminino +18</th>
-							    <th>7 - 17</th>		
-							    <th>0 - 6</th>
-							    <th>Masculino +18</th>
-							    <th>7 - 17</th>		
-							    <th>0 - 6</th>
+							  	<th></th>
+							    <th align="right" colspan=3 style="text-align: center">Feminino</th>
+							    <th align="right" colspan=3 style="text-align: center">Masculino</th>
 							</tr>
 							<tr>
-							  	<td>Vendido</td>
-							    <td><?php echo $info["fem18"]; ?></td>
-							    <td><?php echo $info["fem717"]; ?></td>		
-							    <td><?php echo $info["fem06"]; ?></td>
-							    <td><?php echo $info["mas18"]; ?></td>
-							    <td><?php echo $info["mas717"]; ?></td>		
-							    <td><?php echo $info["mas06"]; ?></td>
+							  	<th></th>
+							    <th>"+18"</th>
+							    <th>"7-17"</th>
+							    <th>"0-6"</th>
+							    <th>"+18"</th>
+							    <th>"7-17"</th>
+							    <th>"0-6"</th>
+							</tr>
+							<tr>
+							  	<td>Com pernoite</td>
+							    <td><?php echo $info["fem18S"]; ?></td>
+							    <td><?php echo $info["fem717S"]; ?></td>		
+							    <td><?php echo $info["fem06S"]; ?></td>
+							    <td><?php echo $info["mas18S"]; ?></td>
+							    <td><?php echo $info["mas717S"]; ?></td>		
+							    <td><?php echo $info["mas06S"]; ?></td>
+							</tr>
+							<tr>
+							  	<td>Com pernoite por pavilhão</td>
+							    <td colspan=3><?php echo $info["femS"]; ?></td>
+							    <td colspan=3><?php echo $info["masS"]; ?></td>
+							</tr>
+							<tr>
+							  	<td>Sem pernoite</td>
+							    <td><?php echo $info["fem18N"]; ?></td>
+							    <td><?php echo $info["fem717N"]; ?></td>		
+							    <td><?php echo $info["fem06N"]; ?></td>
+							    <td><?php echo $info["mas18N"]; ?></td>
+							    <td><?php echo $info["mas717N"]; ?></td>		
+							    <td><?php echo $info["mas06N"]; ?></td>
+							</tr>
+							<tr>
+							  	<td>Sem pernoite por pavilhão</td>
+							    <td colspan=3><?php echo $info["femN"]; ?></td>
+							    <td colspan=3><?php echo $info["masN"]; ?></td>
+							</tr>
+							<tr>
+							  	<td>Total</td>
+							    <td><?php echo $info["fem18N"]+$info["fem18S"]; ?></td>
+							    <td><?php echo $info["fem717N"]+$info["fem717S"]; ?></td>		
+							    <td><?php echo $info["fem06N"]+$info["fem06S"]; ?></td>
+							    <td><?php echo $info["mas18N"]+$info["mas18S"]; ?></td>
+							    <td><?php echo $info["mas717N"]+$info["mas717S"]; ?></td>		
+							    <td><?php echo $info["mas06N"]+$info["mas06S"]; ?></td>
 							</tr>
 						</table>
 						</div>

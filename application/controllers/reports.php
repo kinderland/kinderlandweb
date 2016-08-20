@@ -423,18 +423,62 @@ class Reports extends CK_Controller {
 
         $gender = null;
         $age = null;
-        $type = array("fem" => 0, "mas" => 0, "non" => 0);
+        $type = array("fem2S" => 0, "mas2S" => 0, "non2S" => 0,
+        		"fem2N" => 0, "mas2N" => 0, "non2N" => 0,
+        		"fem3S" => 0, "mas3S" => 0, "non3S" => 0,
+        		"fem3N" => 0, "mas3N" => 0, "non3N" => 0,
+        		"3" => 0, "2" => 0);
         $subscriptions = $this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId);
 
         foreach ($subscriptions as $subs) {
             if ($subs->subscription_status == 3 && $subs->nonsleeper == 'f') {
-                if ($subs->gender == 'M') {
-                    $type["mas"] ++;
-                } else if ($subs->gender == 'F') {
-                    $type["fem"] ++;
-                }
+            	if($subs->associate == 't'){
+	                if ($subs->gender == 'M') {
+	                    $type["mas3S"] ++;
+	                } else if ($subs->gender == 'F') {
+	                    $type["fem3S"] ++;
+	                }
+            	}else if($subs->associate == 'f'){
+	                if ($subs->gender == 'M') {
+	                    $type["mas3N"] ++;
+	                } else if ($subs->gender == 'F') {
+	                    $type["fem3N"] ++;
+	                }
+            	}
+            	
+            	$type["3"]++;
             } else if ($subs->subscription_status == 3 && $subs->nonsleeper == 't') {
-                $type["non"] ++;
+            	if($subs->associate == 't'){
+                	$type["non3S"] ++;
+            	} else if($subs->associate == 'f'){
+                	$type["non3N"] ++;
+            	}
+            	
+            	$type["3"]++;
+            }else if ($subs->subscription_status == 2 && $subs->nonsleeper == 'f') {
+            	if($subs->associate == 't'){
+	                if ($subs->gender == 'M') {
+	                    $type["mas2S"] ++;
+	                } else if ($subs->gender == 'F') {
+	                    $type["fem2S"] ++;
+	                }
+            	}else if($subs->associate == 'f'){
+	                if ($subs->gender == 'M') {
+	                    $type["mas2N"] ++;
+	                } else if ($subs->gender == 'F') {
+	                    $type["fem2N"] ++;
+	                }
+            	}
+            	
+            	$type["2"]++;
+            } else if ($subs->subscription_status == 2 && $subs->nonsleeper == 't') {
+            	if($subs->associate == 't'){
+                	$type["non2S"] ++;
+            	} else if($subs->associate == 'f'){
+                	$type["non2N"] ++;
+            	}
+            	
+            	$type["2"]++;
             }
         }
 
@@ -442,6 +486,7 @@ class Reports extends CK_Controller {
 
         if ($eventChosenId !== null) {
             $event = $this->event_model->getEventById($eventChosenId);
+            /*
             
             $data['capacity_male'] = $event->getCapacityMale();
         
@@ -457,7 +502,7 @@ class Reports extends CK_Controller {
 	       
 	        $data['male_paid'] = count($this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId, "capacity_male", 3));
 	        $data['female_paid'] = count($this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId, "capacity_female", 3));
-	        $data['nonsleeper_paid'] = count($this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId, "nonsleeper", 3));
+	        $data['nonsleeper_paid'] = count($this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId, "nonsleeper", 3)); */
         }
 
         $data['event_id'] = $eventChosenId;
@@ -519,26 +564,53 @@ class Reports extends CK_Controller {
 
         $gender = null;
         $age = null;
-        $type = array("fem18" => 0, "fem717" => 0, "fem06" => 0, "mas18" => 0, "mas717" => 0, "mas06" => 0);
+        $type = array("fem18S" => 0, "fem717S" => 0, "fem06S" => 0, "mas18S" => 0, "mas717S" => 0, "mas06S" => 0,
+        		"fem18N" => 0, "fem717N" => 0, "fem06N" => 0, "mas18N" => 0, "mas717N" => 0, "mas06N" => 0
+        		, "femS" => 0,"masS" => 0, "femN" => 0,"masN" => 0);
         $subscriptions = $this->eventsubscription_model->getSubscriptionsByEventId($eventChosenId);
 
         foreach ($subscriptions as $subs) {
             if ($subs->subscription_status == 3 && $subs->nonsleeper == 'f') {
                 if ($subs->gender == 'M') {
                     if ($subs->age_group_id == 1)
-                        $type["mas06"] ++;
+                        $type["mas06S"] ++;
                     else if ($subs->age_group_id == 2)
-                        $type["mas717"] ++;
+                        $type["mas717S"] ++;
                     else if ($subs->age_group_id == 3)
-                        $type["mas18"] ++;
+                        $type["mas18S"] ++;
+                    
+                    $type["masS"] ++;
                 }
                 else if ($subs->gender == 'F') {
                     if ($subs->age_group_id == 1)
-                        $type["fem06"] ++;
+                        $type["fem06S"] ++;
                     else if ($subs->age_group_id == 2)
-                        $type["fem717"] ++;
+                        $type["fem717S"] ++;
                     else if ($subs->age_group_id == 3)
-                        $type["fem18"] ++;
+                        $type["fem18S"] ++;
+                    
+                    $type["femS"] ++;
+                }
+            }else if ($subs->subscription_status == 3 && $subs->nonsleeper == 't') {
+                if ($subs->gender == 'M') {
+                    if ($subs->age_group_id == 1)
+                        $type["mas06N"] ++;
+                    else if ($subs->age_group_id == 2)
+                        $type["mas717N"] ++;
+                    else if ($subs->age_group_id == 3)
+                        $type["mas18N"] ++;
+                    
+                    $type["masN"] ++;
+                }
+                else if ($subs->gender == 'F') {
+                    if ($subs->age_group_id == 1)
+                        $type["fem06N"] ++;
+                    else if ($subs->age_group_id == 2)
+                        $type["fem717N"] ++;
+                    else if ($subs->age_group_id == 3)
+                        $type["fem18N"] ++;
+                    
+                    $type["femN"] ++;
                 }
             }
         }

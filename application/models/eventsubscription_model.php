@@ -55,7 +55,8 @@
             $sql = "SELECT es.*, p.fullname, ag.description as age_description from event_subscription as es 
                     inner join person as p on p.person_id = es.person_id 
                     inner join age_group as ag on ag.age_group_id = es.age_group_id
-                    where es.event_id = ? and es.person_user_id = ? and subscription_status >= 0";
+                    where es.event_id = ? and es.person_user_id = ? and subscription_status >= 0
+            		ORDER BY date_created DESC";
 
             return $this->executeRows($this->db, $sql, array(intval($eventId), intval($userId)));
         }

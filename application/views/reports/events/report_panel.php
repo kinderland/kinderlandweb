@@ -72,41 +72,60 @@
 		                <?php if($event !== null){?>
 		                <div class="pad">
 		                <table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 800px;">
+					style="width: 920px;">
+							<tr>
+								<th style="width: 220px;"></th>
+								<th align="right" colspan=2 style="width: 220px;text-align: center">Feminino</th>
+								<th align="right" colspan=2 style="width: 220px;text-align: center">Masculino</th>
+								<th align="right" colspan=2 style="width: 220px;text-align: center">Sem Pernoite</th>
+								<th>Total</th>
+							</tr>
 							<tr>
 								<th style="width: 150px;"></th>
-								<th style="width: 250px;">Quantidade de Convites</th>
+								<th>Sócios</th>
+								<th>Não Sócios</th>
+								<th>Sócios</th>
+								<th>Não Sócios</th>
+								<th>Sócios</th>
+								<th>Não Sócios</th>
+								<th></th>
+							</tr>
+							<tr>
 								<th>Pagos</th>
-								<th style="width: 250px;">Aguardando Pagamento</th>
-								<th>Disponíveis</th>
+								<td><?php echo $info["fem3S"]; ?></td>
+								<td><?php echo $info["fem3N"];?></td>
+								<td><?php echo $info["mas3S"];?></td>
+								<td><?php echo $info["mas3N"];?></td>
+								<td><?php echo $info["non3S"];?></td>
+								<td><?php echo $info["non3N"];?></td>
+								<td><?php echo $info["3"];?></td>
 							</tr>
 							<tr>
-								<th>Masculino </th>
-								<td><?php echo $male_eventSubscribed; ?></td>
-								<td><?php echo $male_paid;?></td>
-								<td><?php echo $male_eventSubscribed - $male_paid;?></td>
-								<td><?php echo $capacity_male;?></td>
+								<th>Arguardando Pagamento</th>
+								<td><?php echo $info["fem2S"]; ?></td>
+								<td><?php echo $info["fem2N"];?></td>
+								<td><?php echo $info["mas2S"];?></td>
+								<td><?php echo $info["mas2N"];?></td>
+								<td><?php echo $info["non2S"];?></td>
+								<td><?php echo $info["non2N"];?></td>
+								<td><?php echo $info["2"];?></td>
 							</tr>
 							<tr>
-								<th>Feminino</th>
-								<td><?php echo $female_eventSubscribed; ?></td>
-								<td><?php echo $female_paid;?></td>
-								<td><?php echo $female_eventSubscribed - $female_paid;?></td>
-								<td><?php echo $capacity_female;?></td>
-							</tr>
-							<tr>
-								<th>Sem pernoite</th>
-								<td><?php echo $nonsleeper_eventSubscribed; ?></td>
-								<td><?php echo $nonsleeper_paid;?></td>
-								<td><?php echo $nonsleeper_eventSubscribed - $nonsleeper_paid;?></td>
-								<td><?php echo $capacity_nonsleeper;?></td>
+								<th>Total (Sócio/Não Sócio)</th>
+								<td><?php echo $info["fem2S"]+$info["fem3S"]; ?></td>
+								<td><?php echo $info["fem2N"]+$info["fem3N"];?></td>
+								<td><?php echo $info["mas2S"]+$info["mas3S"];?></td>
+								<td><?php echo $info["mas2N"]+$info["mas3N"];?></td>
+								<td><?php echo $info["non2S"]+$info["non3S"];?></td>
+								<td><?php echo $info["non2N"]+$info["non3N"];?></td>
+								<td><?php echo $info["2"]+$info["3"];?></td>
 							</tr>
 							<tr>
 								<th>Total</th>
-								<td><?php echo $male_eventSubscribed+$female_eventSubscribed+$nonsleeper_eventSubscribed; ?></td>
-								<td><?php echo $male_paid+$female_paid+$nonsleeper_paid;?></td>
-								<td><?php echo ($male_eventSubscribed+$female_eventSubscribed+$nonsleeper_eventSubscribed) - ($male_paid+$female_paid+$nonsleeper_paid);?></td>
-								<td><?php echo $capacity_male+$capacity_female+$capacity_nonsleeper;?></td>
+								<td colspan="2"><?php echo $info["fem2S"]+$info["fem3S"]+$info["fem2N"]+$info["fem3N"]; ?></td>
+								<td colspan="2"><?php echo $info["mas2S"]+$info["mas3S"]+$info["mas2N"]+$info["mas3N"];?></td>
+								<td colspan="2"><?php echo $info["non2S"]+$info["non3S"]+$info["non2N"]+$info["non3N"];?></td>
+								<td><?php echo $info["2"]+$info["3"];?></td>
 							</tr>
 						</table>
 						</div>

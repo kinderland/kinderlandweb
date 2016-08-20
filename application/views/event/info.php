@@ -236,10 +236,11 @@
 								Não há mais convite disponível
 							</button>
 							<?php } else{?>
-							<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+							<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
 								Novo convite
 							</button>
 							<?php }?>
+							<button class="btn btn-primary btn-lg" onClick="paymentDetailsScreen()">Prosseguir</button>
 							<br/><br/>
 							<?php 
 				if(count($subscriptions) > 0) {
@@ -331,7 +332,7 @@
 				
 				</tr>
 				</table>
-				<button class="btn btn-primary" style="float:left; " onClick="paymentDetailsScreen()">Prosseguir</button>
+				
 				
 		</div>	
 	</div>
