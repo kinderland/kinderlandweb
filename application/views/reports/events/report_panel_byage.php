@@ -72,23 +72,23 @@
 		                </div>
 		                <div class="pad">
 		                <table class="table table-bordered table-striped table-min-td-size"
-					style="max-width: 700px;">
+					style="max-width: 900px;">
 							<tr>
-							  	<th></th>
-							    <th align="right" colspan=3 style="text-align: center">Feminino</th>
-							    <th align="right" colspan=3 style="text-align: center">Masculino</th>
+							  	<th style="width: 200px;"></th>
+							    <th align="right" colspan=3 style="width: 150px;text-align: center">Feminino</th>
+							    <th align="right" colspan=3 style="width: 150px;text-align: center">Masculino</th>
 							</tr>
 							<tr>
 							  	<th></th>
-							    <th>"+18"</th>
-							    <th>"7-17"</th>
-							    <th>"0-6"</th>
-							    <th>"+18"</th>
-							    <th>"7-17"</th>
-							    <th>"0-6"</th>
+							    <th style="text-align: center">+18</th>
+							    <th style="text-align: center">7-17</th>
+							    <th style="text-align: center">0-6</th>
+							    <th style="text-align: center">+18</th>
+							    <th style="text-align: center">7-17</th>
+							    <th style="text-align: center">0-6</th>
 							</tr>
 							<tr>
-							  	<td>Com pernoite</td>
+							  	<th align="left">Com pernoite</th>
 							    <td><?php echo $info["fem18S"]; ?></td>
 							    <td><?php echo $info["fem717S"]; ?></td>		
 							    <td><?php echo $info["fem06S"]; ?></td>
@@ -97,12 +97,12 @@
 							    <td><?php echo $info["mas06S"]; ?></td>
 							</tr>
 							<tr>
-							  	<td>Com pernoite por pavilhão</td>
+							  	<th align="left">Com pernoite por pavilhão</th>
 							    <td colspan=3><?php echo $info["femS"]; ?></td>
 							    <td colspan=3><?php echo $info["masS"]; ?></td>
 							</tr>
 							<tr>
-							  	<td>Sem pernoite</td>
+							  	<th align="left">Sem pernoite</th>
 							    <td><?php echo $info["fem18N"]; ?></td>
 							    <td><?php echo $info["fem717N"]; ?></td>		
 							    <td><?php echo $info["fem06N"]; ?></td>
@@ -111,12 +111,12 @@
 							    <td><?php echo $info["mas06N"]; ?></td>
 							</tr>
 							<tr>
-							  	<td>Sem pernoite por pavilhão</td>
+							  	<th align="left">Sem pernoite por pavilhão</th>
 							    <td colspan=3><?php echo $info["femN"]; ?></td>
 							    <td colspan=3><?php echo $info["masN"]; ?></td>
 							</tr>
 							<tr>
-							  	<td>Total</td>
+							  	<th align="left">Total</th>
 							    <td><?php echo $info["fem18N"]+$info["fem18S"]; ?></td>
 							    <td><?php echo $info["fem717N"]+$info["fem717S"]; ?></td>		
 							    <td><?php echo $info["fem06N"]+$info["fem06S"]; ?></td>
