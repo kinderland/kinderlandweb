@@ -19,6 +19,7 @@
                     <option value="<?= $this->config->item('url_link'); ?>reports/free_donations">Doações avulsas</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/associate_campaign_donations">Doações Campanha de Sócios</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/camps_donations">Doações Colônias</option>
+                    <option value="<?= $this->config->item('url_link'); ?>reports/event_donation">Doações Eventos</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/user_donation_history">Histórico individual de doações</option>
 
                     <option value="<?= $this->config->item('url_link'); ?>reports/all_transactions">Transações Cielo</option>

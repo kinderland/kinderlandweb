@@ -362,6 +362,100 @@ class Reports extends CK_Controller {
     	
     	$this->loadReportView('reports/events/event_subscriptions', $data);
     }
+    
+    public function event_donation() {
+    	$data = array();
+    	$years = array();
+    	$start = 2015;
+    	$date = date('Y');
+    	$eventsByDate = $this->event_model->getAllEventsByYear($date);
+    	$end = $date;
+    	while ($eventsByDate != null) {
+    		$end = $date;
+    		$date++;
+    		$eventsByDate = $this->event_model->getAllEventsByYear($date);
+    	}
+    	$years = $this->event_model->getAllEventsYears();
+    	$year = null;
+    
+    	if (isset($_GET['ano_f']))
+    		$year = $_GET['ano_f'];
+    	else {
+    		$year = $years[0];
+    	}
+    
+    	$data['ano_escolhido'] = $year;
+    	$data['years'] = $years;
+    
+    	if ($year == date('Y')) {
+    		$today = date('Y') . "-" . date("m") . "-" . date("d");
+    		$allEvents = $this->event_model->getAllEventsPostDate($today);
+    	} else {
+    		$allEvents = $this->event_model->getAllEventsByYear($year);
+    	}
+    
+    	$eventsQtd = count($allEvents);
+    	$events = array();
+    	$start = $eventsQtd;
+    	$end = 1;
+    
+    	$eventChosen = $allEvents[0]->event_name;
+    
+    	if (isset($_GET['evento_f']))
+    		$eventChosen = $_GET['evento_f'];
+    
+    	$eventChosenId = null;
+    	foreach ($allEvents as $event) {
+    		$events[] = $event->event_name;
+    		if ($event->event_name == $eventChosen)
+    			$eventChosenId = $event->event_id;
+    	}
+    
+    	if ($eventChosenId === null) {
+    		$events = null;
+    		$eventChosen = $allEvents[0]->event_name;
+    		foreach ($allEvents as $event) {
+    			$events[] = $event->event_name;
+    			if ($event->event_name == $eventChosen)
+    				$eventChosenId = $event->event_id;
+    		}
+    	}
+    	 
+    	if ($eventChosenId !== null) {
+    		$info = array();
+    		$value = 0;
+    	
+    		$donationsIds = $this->eventsubscription_model->getDonationsIdByEventId($eventChosenId);
+    		
+    		if($donationsIds){
+	    		foreach($donationsIds as $ids){
+	    		
+		    		$subs = $this->eventsubscription_model->getPayedDonationsByDonationId($ids->donation_id);
+		    		if($subs){
+			    		$obj = new StdClass();
+			    		$subs->date_created = explode(" ",$subs->date_created);
+			    		$subs->date_created = explode("-",$subs->date_created[0]);
+			    		$subs->date_created = $subs->date_created[2]."/".$subs->date_created[1]."/".$subs->date_created[0];
+			    		$obj = $subs;
+			    		$obj->responsable_name = $this->personuser_model->getUserById($subs->person_id)->getFullname();
+			    		$obj->associate = $this->personuser_model->isAssociateAndNotTemporary($subs->person_id);
+			    		$value += $subs->donated_value;	 
+			    		$info[] = $obj;
+		    		}
+	    		}
+	    
+	    		$data['info'] = $info;
+	    		$data['value'] = $value;
+    		}
+    	}
+    	 
+    	$data['event_id'] = $eventChosenId;
+    	$data['evento_escolhido'] = $eventChosen;
+    	$data['events'] = $events;
+    	$data['event'] = $event;
+    	 
+    	$this->loadReportView('reports/finances/event_donation', $data);
+    }
 
     public function reportPanel() {
         $data = array();

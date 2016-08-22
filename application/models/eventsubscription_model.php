@@ -237,6 +237,44 @@
         
         }
         
+        public function getPayedDonationsByDonationId($donationId){
+        	$sql = "SELECT *
+					FROM donation d
+					INNER JOIN person p on p.person_id = d.person_id
+					INNER JOIN cielo_transaction ct on ct.donation_id = d.donation_id
+					WHERE d.donation_status = 2
+					AND d.donation_id = ?";
+        	
+        	$resultSet = $this -> executeRow($this -> db, $sql, array(intval($donationId)));
+        	
+        	if ($resultSet){
+        		return $resultSet;
+        	}
+        	
+        	return null;
+        }
+        
+        public function getDonationsIdByEventId($event_id){
+        	$sql = "SELECT distinct donation_id
+					FROM event_subscription
+					WHERE event_id = ?
+					AND donation_id is not null";
+        	
+        	$resultSet = $this -> executeRows($this -> db, $sql, array(intval($event_id)));
+        	
+        	$result = array();
+        	
+        	if ($resultSet){
+        		foreach ($resultSet as $row){
+        			$result[] = $row;
+        		}
+        		 
+        		return $result;
+        	}
+        	
+        	return null;
+        }
+        
         public function getAgeGroupById($age_group_id){
         	$sql = "SELECT * FROM age_group where age_group_id = ".$age_group_id;
         

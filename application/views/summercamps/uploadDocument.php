@@ -15,13 +15,17 @@
 		Escolha um arquivo para enviar, aceitamos apenas arquivos .pdf, jpg, .jpeg e .png de até 2MB.
 		<br>
 		<p style="color:red; font-weight: bold;">
+		<?php if($document_type == DOCUMENT_TRIP_AUTHORIZATION_SIGNED){?>
+		Atenção: Para assinar e realizar o envio, imprima antes o PDF da autorização de viagem que pode ser acessada na coluna Inscrição.
+		<?php } else if ($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){?>
 		Atenção: documentos que tenham frente e verso, ambos são necessários. E documentos de identidade devem conter os nomes dos pais.
+		<?php }?>
 		</p>
 		<input type="hidden" name="document_type" value="<?=$document_type ?>" />
 		<br>
 		<input  type="file" name="uploadedfile" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
 		<br />
-		<input type="submit" value="Enviar documento" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
+		<input type="submit" value="<?php if($document_type == DOCUMENT_TRIP_AUTHORIZATION_SIGNED){ echo "enviar autorização assinada"; } else if($document_type == DOCUMENT_PHOTO_3X4){ echo "enviar foto 3x4"; }else if($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){ echo "enviar documento"; }?>" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
 		<?php if(isset($extra)) { ?>
 		<br><br>
 		O último documento enviado tinha o seguinte problema: <?=$extra?>
@@ -70,7 +74,13 @@
 
 	<a target="_blank" href="<?= $this -> config -> item('url_link'); ?>admin/verifyDocument?camp_id=<?=$camp_id ?>&colonist_id=<?=$colonist_id ?>&document_type=<?=$document_type ?>">
 	<button class="btn btn-primary" <?=$hasDocument ?>>
-		Visualizar último documento enviado
+	<?php if($document_type == DOCUMENT_TRIP_AUTHORIZATION_SIGNED){?>
+	visualizar última autorização enviada
+	<?php } else if ($document_type == DOCUMENT_PHOTO_3X4){?>
+	visualizar última foto enviada
+	<?php } else if ($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){?>
+	visualizar último documento enviado
+	<?php }?>
 	</button> </a>
 	<?php 
 	$oldSubscriptionRestored = $this -> summercamp_model -> isOldSubscriptionRestored($camp_id ,$colonist_id);
