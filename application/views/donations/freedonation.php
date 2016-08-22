@@ -53,7 +53,7 @@
                 </div>
             </div>
             <br>
-            <h3 style="color:red"> Doação avulsa, não associada à colônias, eventos ou campanha de sócios.</h3>
+            <h3 style="color:red"> Doação avulsa e NÃO RELACIONADA com inscrições nas temporadas de colônias de férias, eventos (MaCK e outros) ou campanha de associados Kinderland. </h3>
             <div class="row">
                 <div class="col-lg-4">
                     <input type="submit" class="btn btn-primary" value="Prosseguir" onClick="validateForm(event)"/>

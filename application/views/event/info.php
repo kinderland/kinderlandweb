@@ -239,31 +239,47 @@
 							<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
 								Novo convite
 							</button>
-							<?php }?>
-							<button class="btn btn-primary btn-lg" onClick="paymentDetailsScreen()">Prosseguir</button>
-							<br/><br/>
-							<?php 
+							<?php } if($totalPrice != 0){?>
+							<button class="btn btn-primary btn-lg" onClick="paymentDetailsScreen()">Prosseguir para doação</button>
+							
+							<?php }
 				if(count($subscriptions) > 0) {
 			?>
+			<br/><br/>
 						<div name="form_submit_payment" id="form_submit_payment">
 							<input type="hidden" name="user_id" value="<?php echo$user_id?>" />
 							<table class="table table-bordered table-striped" style="max-width:700px; min-width:550px; table-layout: fixed;">
 								<tr>
+									<th style="width:90px">Ação</th>
 									<th style="width:300px">Nome do convidado</th>
+									<th style="width:165px">Status</th>
 									<th style="width:100px">Faixa etária</th>
 									<th style="width:80px">Pernoite</th>
 									<th style="width:100px">Valor</th>
-									<th style="width:165px">Status</th>
-									<th style="width:90px">Ação</th>
+									
+									
 								</tr>
 								<?php 
 									foreach($subscriptions as $subscr){
 								?>
-									<tr><?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK){?>
+									<tr><td>
+										 	<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK) { ?>
+										 		<button class="btn btn-danger" onclick="deleteSubscription(<?=$event->getEventId()?>, <?=$subscr->person_id?>)">Excluir</button>
+										 	<?php } ?>
+										 </td>
+										<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK){?>
 										<td name="personIds" id="<?=$subscr->person_id?>"><?= $subscr->fullname ?></td>
 										<?php } else{?>
 											<td><?= $subscr->fullname ?></td>
 										<?php }?>
+										<td>
+										  	<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK){
+										  			echo "Aguardando Doação";
+										  	} else{
+										  		echo "Doação Realizada";
+										  	}
+										  		?>											  										  
+										  </td>
 										<td><?= $subscr->age_description ?></td>
 										<td><?php if(!empty($subscr->nonsleeper) && ($subscr->nonsleeper === "t")) echo 'Não'; else echo 'Sim'; ?></td>
 										
@@ -287,19 +303,6 @@
 													echo "Prazo de doação terminado";
 												}
 										  ?></td>
-										  <td>
-										  	<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK){
-										  			echo "Aguardando Doação";
-										  	} else{
-										  		echo "Doação Realizada";
-										  	}
-										  		?>											  										  
-										  </td>
-										 <td>
-										 	<?php if($subscr->subscription_status != SUSCRIPTION_STATUS_SUBSCRIPTION_OK) { ?>
-										 		<button class="btn btn-danger" onclick="deleteSubscription(<?=$event->getEventId()?>, <?=$subscr->person_id?>)">Excluir</button>
-										 	<?php } ?>
-										 </td>
 									</tr>
 								<?php
 									}

@@ -132,9 +132,9 @@
             <div class="col-lg-3"><a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonistId ?>&camp_id=<?= $id ?>&document_type=3"> <button class="btn btn-primary">Ver documento de identificação</button> </a> </div>
             <div class="col-lg-2"><a target="_blank" href="<?= $this -> config -> item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonistId ?>&camp_id=<?= $id ?>&document_type=5"> <button class="btn btn-primary">Ver foto 3x4</button> </a></div>
             <div class="col-lg-2"><a target="_blank" href="<?= $this -> config -> item('url_link') ?>summercamps/colonistPDFMedicalFile?colonist_id=<?= $colonistId ?>&camp_id=<?= $id ?>"><button class="btn btn-primary">PDF da ficha médica</button></a></div>
-            <div class="col-lg-2"><a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $id ?>&colonist_id=<?= $colonistId ?>&document_type=<?= DOCUMENT_TRIP_AUTHORIZATION_SIGNED ?>"> 
+            <div class="col-lg-2"><a target="_blank" href="<?= $this->config->item('url_link'); ?>admin/verifyDocument?colonist_id=<?= $colonistId ?>&camp_id=<?= $id ?>&document_type=<?= DOCUMENT_TRIP_AUTHORIZATION_SIGNED ?>"> 
 										<button class="btn btn-primary">
-											Autorização de viagem assinada										
+											Ver autorização de viagem assinada										
 										</button>
 									</a></div>
         </div>
