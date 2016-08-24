@@ -267,9 +267,11 @@ class Reports extends CK_Controller {
     	
     	$accountNames = $this->finance_model->getAllAccountNames();
     	$answer = "";
-    	 
-    	foreach ($accountNames as $an) {
-    		$answer = $answer . "/" . $an->account_name;
+    	
+    	if($accountNames){
+	    	foreach ($accountNames as $an) {
+	    		$answer = $answer . "/" . $an->account_name;
+	    	}
     	}
     	$data['accountNames'] = $answer;    	
     	$data["info1"] = $info1;
