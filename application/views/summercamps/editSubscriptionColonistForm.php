@@ -112,7 +112,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Nome Completo*: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" placeholder="Nome Completo"
+                        <input maxlength="80" type="text" class="form-control" placeholder="Nome Completo"
                                name="fullname" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
@@ -174,7 +174,7 @@
                     </div>
                     <label for="documentNumber" class="col-lg-1 control-label"> Numero do documento*: </label>
                     <div class="col-lg-3">
-                        <input type="text" id="documentNumber" class="form-control" placeholder="Numero do documento"
+                        <input maxlength="100" type="text" id="documentNumber" class="form-control" placeholder="Numero do documento"
                                name="documentNumber" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('');"
@@ -303,7 +303,7 @@
                 <div class="form-group">
                     <label for="street" class="col-lg-1 control-label"> Logradouro: </label>
                     <div class="col-lg-11">
-                        <input type="text" class="form-control endereco" placeholder="Logradouro"
+                        <input maxlength="100" type="text" class="form-control endereco" placeholder="Logradouro"
                                name="street" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
@@ -320,7 +320,7 @@
                 <div class="form-group">
                     <label for="number" class="col-lg-1 control-label "> Número: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Número"
+                        <input maxlength="10" type="text" class="form-control endereco" placeholder="Número"
                                name="number" onkeypress="return validateLetterAndNumberInput(event);"
                                oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
@@ -333,7 +333,7 @@
 
                     <label for="complement" class="col-lg-2 control-label " > Complemento: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Complemento"
+                        <input maxlength="255" type="text" class="form-control endereco" placeholder="Complemento"
                                name="complement"
                                value="<?php
                                if (!empty($complement)) {
@@ -349,7 +349,7 @@
 
                     <label for="neighborhood" class="col-lg-1 control-label "> Bairro: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Bairro"
+                        <input maxlength="80" type="text" class="form-control endereco" placeholder="Bairro"
                                name="neighborhood" onkeypress="return validateLetterInput(event);"
                                value="<?php
                                if (!empty($neighborhood)) {
@@ -380,7 +380,7 @@
 
                     <label for="city" class="col-lg-1 control-label "> Cidade: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="form-control endereco" placeholder="Cidade"
+                        <input maxlength="40" type="text" class="form-control endereco" placeholder="Cidade"
                                name="city" onkeypress="return validateLetterInput(event);"
                                oninvalid="this.setCustomValidity('Este$this -> input -> post('neighborhood', TRUE) campo não pode ficar vazio.')"
                                oninput="setCustomValidity('')"
@@ -471,7 +471,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Nome: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="dad dad-form form-control" placeholder="Nome"
+                        <input maxlength="80" type="text" class="dad dad-form form-control" placeholder="Nome"
                                name="dadFullName" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -501,7 +501,7 @@
                     </div>
                     <label for="fullname" class="dad dad-form col-lg-1 control-label"> E-mail: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="dad dad-form form-control" placeholder="E-mail"
+                        <input maxlength="120" type="text" class="dad dad-form form-control" placeholder="E-mail"
                                name="dadEmail" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados do pai por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -531,7 +531,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Nome: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="mother mother-form form-control" placeholder="Nome"
+                        <input maxlength="80" type="text" class="mother mother-form form-control" placeholder="Nome"
                                name="motherFullName" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -561,7 +561,7 @@
                     </div>
                     <label for="fullname" class="mother mother-form col-lg-1 control-label"> E-mail: </label>
                     <div class="col-lg-3">
-                        <input type="text" class="mother mother-form form-control" placeholder="E-mail"
+                        <input maxlength="120" type="text" class="mother mother-form form-control" placeholder="E-mail"
                                name="motherEmail" onkeypress="return validateLetterInput(event);" required
                                oninvalid="this.setCustomValidity('Se não deseja preencher os dados da mãe por favor marque a caixa de não desejo preencher.')"
                                oninput="setCustomValidity('')"
@@ -586,7 +586,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 1: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
+                        <input maxlength="200" type="text" class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
                                value="<?php
                                if (!empty($roommate1)) {
                                    echo $roommate1;
@@ -600,7 +600,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 2: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
+                        <input maxlength="200" type="text" class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
                                value="<?php
                                if (!empty($roommate2)) {
                                    echo $roommate2;
@@ -614,7 +614,7 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 3: </label>
                     <div class="col-lg-6">
-                        <input type="text" class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
+                        <input maxlength="200" type="text" class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
                                value="<?php
                                if (!empty($roommate3)) {
                                    echo $roommate3;
@@ -634,7 +634,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="nameResponsible" class="col-lg-6 control-label">Nome do responsável para comunicação imediata em caso de emergência*: </label>
-                        <input Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php echo $miniCamp->responsible_name; ?>"/>
+                        <input maxlength="100" Name="nameResponsible" class="col-lg-5" ROWS=10 COLS=20 value="<?php echo $miniCamp->responsible_name; ?>"/>
                     </div>
                 </div>
 
@@ -831,7 +831,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="foodRestriction" class="col-lg-6 control-label">Possui restrição alimentar? Qual? </label>
-                        <textarea Name="foodRestriction" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->food_restriction; ?></textarea>
+                        <textarea maxlength="300" Name="foodRestriction" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->food_restriction; ?></textarea>
                     </div>
                 </div>
                 <br />
@@ -840,7 +840,7 @@
                 <div class="row">
                     <div class="form-group">
                         <label for="observationMini" class="col-lg-6 control-label">Há algo mais que seja relevante para a adaptação do colonista que você queira registrar? </label>
-                        <textarea Name="observationMini" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->observation; ?></textarea>
+                        <textarea maxlength="300" Name="observationMini" class="col-lg-5" ROWS=5 COLS=20><?php echo $miniCamp->observation; ?></textarea>
                     </div>
                 </div>
 
