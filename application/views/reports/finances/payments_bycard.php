@@ -137,8 +137,9 @@ function calcula_percentagem($num, $credito, $debito) {
                 <h4>Doações campanha de sócios: <?php formatarEMostrar(intval($associates), $option); ?>
                 </h4>				<h4>Doações avulsas: <?php formatarEMostrar(intval($avulsas), $option); ?>
                 </h4>				<h4>Doações colonias: <?php formatarEMostrar(intval($colonies), $option); ?>
+                </h4>				<h4>Doações eventos: <?php formatarEMostrar(intval($events), $option); ?>
                 </h4>
-                <h4>Total: <?php formatarEMostrar(intval($associates) + intval($avulsas) + intval($colonies), $option); ?>
+                <h4>Total: <?php formatarEMostrar(intval($associates) + intval($avulsas) + intval($colonies) + intval($events), $option); ?>
                 </h4>
 
                 <!--

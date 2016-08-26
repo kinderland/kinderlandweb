@@ -350,6 +350,30 @@ class Reports extends CK_Controller {
     			
     			$obj = $s;
     			$obj->responsable_name = $this->personuser_model->getUserById($s->person_user_id)->getFullname();
+    			$person = $this->person_model->getPersonById($s->person_id);
+    			$obj->gender = $person->getGender();
+    			$obj->date_created = explode(" ",$s->date_created);
+    			$obj->date_created = explode("-",$obj->date_created[0]);
+    			$obj->date_created = $obj->date_created[2]."/".$obj->date_created[1]."/".$obj->date_created[0];
+    			$p = 0;
+    			$responsable = $this->person_model->getPersonById($s->person_user_id);
+    			$telephone = $this->telephone_model->getTelephonesByPersonId($s->person_user_id);
+    			$tel = "";
+    			foreach ($telephone as $t) {
+    				if (!isset($t) || is_null($t) || empty($t)) {
+    			
+    				} else {
+    					if ($p == 0){
+    						$tel = $t;
+    						$p++;
+    					}
+    					else
+    						$tel = $tel . "*" . $t;
+    				}
+    			}
+    			$obj->name = $responsable->getFullname();
+    			$obj->id = $s->person_user_id;
+    			$obj->phone = $tel;
     			
     			$info[] = $obj;
     		}
@@ -931,10 +955,12 @@ class Reports extends CK_Controller {
             $data['avulsas'] = $this->donation_model->sumFreeDonations($year, $month);
             $data['associates'] = $this->donation_model->sumPayingAssociates($year, $month);
             $data['colonies'] = $this->donation_model->sumDonationsColony($year, $month);
+            $data['events'] = $this->donation_model->sumDonationsEvent($year, $month);
         } else {
             $data['avulsas'] = $this->donation_model->countFreeDonations($year, $month);
             $data['associates'] = $this->donation_model->countPayingAssociates($year, $month);
             $data['colonies'] = $this->donation_model->countDonationsColony($year, $month);
+            $data['events'] = $this->donation_model->countDonationsEvent($year, $month);
         }
         $creditos[1] = 0;
         $creditos[2] = 0;

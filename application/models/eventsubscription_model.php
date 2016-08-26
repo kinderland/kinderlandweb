@@ -212,6 +212,8 @@
             else if($status !== null)
             	$sql = $sql." AND es.subscription_status = ".$status;
             
+            $sql = $sql." ORDER BY es.date_created ASC";
+            
             return $this->executeRows($this->db, $sql, array($eventId));
         }
         
