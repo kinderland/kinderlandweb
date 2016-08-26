@@ -30,6 +30,19 @@
             }
             throw new ModelException("Failed to create subscription");
         }
+        
+        public function getEventDonationsSum($year, $month) {
+        	$sql = "SELECT sum(d.donated_value)
+                FROM donation d,event e, (SELECT DISTINCT ON (es.donation_id) *
+                                                 FROM event_subscription es) a
+                WHERE d.donation_id=a.donation_id
+                AND d.donation_status=2
+                AND  EXTRACT(YEAR FROM d.date_created) = '?'
+                AND  EXTRACT(MONTH FROM d.date_created) = '?'
+                AND a.event_id = e.event_id";
+        	$result = $this->executeRow($this->db, $sql, array(intval($year), intval($month)));
+        	return $result->sum;
+        }
 
         public function getSubscriptionByPersonIdAndEventId($personId, $eventId){
             $sql = "SELECT * FROM event_subscription WHERE person_id = ? AND event_id = ?";

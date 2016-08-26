@@ -97,7 +97,7 @@
 							    <td><?php echo $info["mas06S"]; ?></td>
 							</tr>
 							<tr>
-							  	<th align="left">Com pernoite por sexo</th>
+							  	<th align="left">Com pernoite por pavilhão</th>
 							    <td colspan=3><?php echo $info["femS"]; ?></td>
 							    <td colspan=3><?php echo $info["masS"]; ?></td>
 							</tr>

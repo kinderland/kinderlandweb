@@ -827,6 +827,7 @@ class Reports extends CK_Controller {
         $summercamp = array();
         $mini = array();
         $free = array();
+        $event = array();
         $total_per_period = array();
 
 
@@ -875,6 +876,7 @@ class Reports extends CK_Controller {
 
         $total_campaign = 0.0;
         $total_summercamp = 0.0;
+        $total_event = 0.0;
         $total_mini = 0.0;
         $total_free = 0.0;
         $total = 0.0;
@@ -891,8 +893,11 @@ class Reports extends CK_Controller {
             $total_summercamp+=$summercamp[$i];
             $free[$i] = $this->donation_model->getFreeDonationsByPeriod($selected_years[$i], $selected_months[$i]);
             $total_free+=$free[$i];
+            
+            $event[$i]=$this->eventsubscription_model->getEventDonationsSum($selected_years[$i], $selected_months[$i]);
+            $total_event+=$event[$i];
 
-            $total_per_period[$i]+=$campaign[$i] + $summercamp[$i] /*+ $mini[$i]*/ + $free[$i];
+            $total_per_period[$i]+=$campaign[$i] + $summercamp[$i] /*+ $mini[$i]*/ + $free[$i] + $event[$i];
             $total+=$total_per_period[$i];
         }
         $data['error'] = $error;
@@ -905,10 +910,12 @@ class Reports extends CK_Controller {
         $data['selected_months'] = $selected_months;
         $data['campaign'] = $campaign;
         $data['summercamp'] = $summercamp;
+        $data['event'] = $event;
         $data['mini'] = $mini;
         $data['free'] = $free;
         $data['total_campaign'] = $total_campaign;
         $data['total_summercamp'] = $total_summercamp;
+        $data['total_event'] = $total_event;
         $data['total_mini'] = $total_mini;
         $data['total_free'] = $total_free;
         $data['total_per_period'] = $total_per_period;
