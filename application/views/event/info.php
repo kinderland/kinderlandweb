@@ -286,19 +286,22 @@
 										<td>
 											<?php
 												if($price != null){
-													switch($subscr->age_group_id){
-														case 1:
-															echo "R$ ".number_format($price->children_price, 2, ',', '.');
-															break;
-														case 2:
-															echo "R$ ".number_format($price->middle_price, 2, ',', '.');
-															break;
-														case 3:
-														default:
-															echo "R$ ".number_format($price->full_price, 2, ',', '.');
-															break;
-													} 
-												
+													if($subscr->subscription_status == 2){
+														switch($subscr->age_group_id){
+															case 1:
+																echo "R$ ".number_format($price->children_price, 2, ',', '.');
+																break;
+															case 2:
+																echo "R$ ".number_format($price->middle_price, 2, ',', '.');
+																break;
+															case 3:
+															default:
+																echo "R$ ".number_format($price->full_price, 2, ',', '.');
+																break;
+														} 
+													}else if($subscr->subscription_status == 3){
+														echo "R$ ".number_format($subscr->price, 2, ',', '.');
+													}												
 												} else {
 													echo "Prazo de doação terminado";
 												}

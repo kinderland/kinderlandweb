@@ -91,6 +91,25 @@ class Events extends CK_Controller {
 					
 					$totalPrice += $singlePrice;
 					$qtd++;
+				}else if($sub->subscription_status == 3){
+					$donation = $this->donation_model->getDonationById($sub->donation_id);					
+					$paymentPeriod = $this->eventsubscription_model->getPaymentPeriodByEventIdAndDate($eventId,$donation->getDateCreated());
+					
+					if(!empty($sub->associate) && ($sub->associate === "t")){
+						$percent = $paymentPeriod -> associate_discount; 
+					}else{
+						$percent = 0;
+					}
+					
+					if($sub->age_group_id == 1){
+						$single = $paymentPeriod->children_price-($percent*$paymentPeriod->children_price);
+					} else if($sub->age_group_id == 2){
+						$single = $paymentPeriod->middle_price-($percent*$paymentPeriod->middle_price);
+					} else if($sub->age_group_id == 3){
+						$single = $paymentPeriod->full_price-($percent*$paymentPeriod->full_price);
+					}
+					
+					$sub->price = $single;
 				}
 			}
 			

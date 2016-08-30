@@ -81,8 +81,17 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a  class="navbar-brand"  data-toggle = "dropdown" href = "#" > Eventos
+                        <a <?php
+                        if ($paginaLink == "/index.php/reports/event_report_container") {
+                            echo 'class="link active';
+                        } else {
+                            echo 'class="';
+                        }
+                        ?> navbar-brand <?php echo $extra ?>  data-toggle = "dropdown" href = "#" > Eventos
                             <span class = "caret" > </span></a >
+                        <ul class = "dropdown-menu" >
+                            <li > <a href = "<?= $this->config->item('url_link'); ?>reports/event_reports" > Relatórios </a></li >
+                        </ul>
                     </li>
                     <li class="dropdown">
                         <a  <?php

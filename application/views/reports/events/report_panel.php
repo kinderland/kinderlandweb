@@ -101,7 +101,7 @@
 								<td><?php echo $info["3"];?></td>
 							</tr>
 							<tr>
-								<th>Arguardando Pagamento</th>
+								<th>Aguardando Doação</th>
 								<td><?php echo $info["fem2S"]; ?></td>
 								<td><?php echo $info["fem2N"];?></td>
 								<td><?php echo $info["mas2S"];?></td>

@@ -121,6 +121,26 @@ class donation_model extends CK_Model {
             return $result->sum;
         }
     }
+    
+    public function sumDonationsEvent($year = FALSE, $month = FALSE) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "Select sum(donated_value) as sum from donation d
+				  WHERE d.donation_type = 3 AND d.donation_status = 2";
+    
+    	if ($year !== FALSE) {
+    		$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+    	}
+    	if ($month !== FALSE) {
+    		$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+    	}
+    
+    
+    	$result = $this->executeRow($this->db, $sql);
+    
+    	if ($result) {
+    		return $result->sum;
+    	}
+    }
 
     public function updateDonationStatus($donationId, $donationStatus) {
         $this->Logger->info("Running: " . __METHOD__);
@@ -185,6 +205,19 @@ class donation_model extends CK_Model {
         }
 
         return $this->executeRow($this->db, $sql)->contagem;
+    }
+    
+    public function countDonationsEvent($year = FALSE, $month = FALSE) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    	$sql = "SELECT count(distinct donation_id) as contagem FROM donation WHERE donation_status = " . DONATION_STATUS_PAID . " and donation_type = " . DONATION_TYPE_SUBSCRIPTION;
+    	if ($year !== FALSE) {
+    		$sql .= " and EXTRACT(YEAR FROM date_created) = $year ";
+    	}
+    	if ($month !== FALSE) {
+    		$sql .= " and EXTRACT(MONTH FROM date_created) = $month ";
+    	}
+    
+    	return $this->executeRow($this->db, $sql)->contagem;
     }
 
     public function sumFreeDonations($year = FALSE, $month = FALSE) {

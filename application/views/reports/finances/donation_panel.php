@@ -205,6 +205,7 @@
                                 <td style="text-align: center;"><h4> <b>Avulsa</b></h4> </td>
                                 <td style="text-align: center;"><h4> <b>Campanha</b></h4> </td>
                                 <td style="text-align: center;"><h4> <b>Colônia</b></h4> </td>
+                                <td style="text-align: center;"><h4> <b>Evento</b></h4> </td>
                                <!-- <td style="text-align: center;"><h4> <b> MiniKinderland </b></h4> </td> -->
                                 <td style="text-align: center;"><h4> <b>Total</b></h4> </td>
                             </tr>
@@ -219,6 +220,10 @@
                                         echo formatarEMostrar(intval($summercamp[$i]));
                                         ;
                                         ?></td>
+                                        <td> <?php
+                                        echo formatarEMostrar(intval($event[$i]));
+                                        ;
+                                        ?></td>
                                     <!--<td> <?php
                                     echo formatarEMostrar(intval($mini[$i]));
                                     ;
@@ -231,6 +236,7 @@
                                 <td> <?php echo formatarEMostrar(intval($total_free)); ?></td>
                                 <td> <?php echo formatarEMostrar(intval($total_campaign)); ?></td>
                                 <td> <?php echo formatarEMostrar(intval($total_summercamp)); ?></td>
+                                <td> <?php echo formatarEMostrar(intval($total_event)); ?></td>
                                <!-- <td> <?php echo formatarEMostrar(intval($total_mini)); ?></td> -->
                                 <td> <?php echo formatarEMostrar(intval($total)); ?></td>
                         </tbody>
