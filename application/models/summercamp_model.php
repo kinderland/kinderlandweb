@@ -1043,7 +1043,7 @@ class summercamp_model extends CK_Model {
     }
 
     public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null, $gender = null, $room = null) {
-        $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
+        $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,scs.date_created as date_to_get,
 		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
 		v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,

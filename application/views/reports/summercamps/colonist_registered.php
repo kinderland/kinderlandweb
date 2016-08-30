@@ -538,8 +538,8 @@
             $(document).ready(function () {
                 $('#sortable-table').datatable({
                     pageSize: Number.MAX_VALUE,
-                    sort: [true, sortLowerCase, true, sortLowerCase],
-                    filters: [selectTodos, true, selectTodas, true],
+                    sort: [true,true, sortLowerCase, true, sortLowerCase],
+                    filters: [false,selectTodos, true, selectTodas, true],
                     filterText: 'Escreva para filtrar... ',
                     counterText: showCounter
                 });
@@ -568,6 +568,7 @@
                     <table class="table table-bordered table-striped table-min-td-size" style="width: 1000px; font-size:15px" id="sortable-table">
                         <thead>
                             <tr>
+                            	<th>Data de criação</th>
                                 <th>Status da Inscrição</th>
                                 <th>Nome do Colonista</th>
                                 <th>Colônia</th>
@@ -590,6 +591,7 @@
                             	$k++;
                                 ?>
                                 <tr>
+                                	<td><?= $colonist->date_to_get ?></td>
                                     <td id="colonist_situation_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"><font color="
                                                                                                                                      <?php
                                                                                                                                      switch ($colonist->situation) {
@@ -614,7 +616,28 @@
                                                                                                                                          case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50";
                                                                                                                                              break;
                                                                                                                                      }
-                                                                                                                                     ?>"><?= $colonist->situation_description ?></td>
+                                                                                                                                     ?>"><?php switch ($colonist->situation) {
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION: echo "Aguardando validação";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "Validada";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS: echo "Não validada";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN: echo "Em elaboração";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_CANCELLED: echo "Cancelado";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_EXCLUDED: echo "Excluído";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_GIVEN_UP: echo "Desistente";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE: echo "Fila de espera";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "Aguardando doação";
+                                                                                                                                             break;
+                                                                                                                                         case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "Inscrito";
+                                                                                                                                             break;
+                                                                                                                                     } ?></td>
 
                                     <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
                                     <td><?= $colonist->camp_name ?></td>

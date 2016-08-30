@@ -307,12 +307,7 @@ class Reports extends CK_Controller {
     	$data['ano_escolhido'] = $year;
     	$data['years'] = $years;
     
-    	if ($year == date('Y')) {
-    		$today = date('Y') . "-" . date("m") . "-" . date("d");
-    		$allEvents = $this->event_model->getAllEventsPostDate($today);
-    	} else {
-    		$allEvents = $this->event_model->getAllEventsByYear($year);
-    	}
+    	$allEvents = $this->event_model->getAllEventsByYear($year);
     
     	$eventsQtd = count($allEvents);
     	$events = array();
@@ -389,12 +384,7 @@ class Reports extends CK_Controller {
     	$data['ano_escolhido'] = $year;
     	$data['years'] = $years;
     
-    	if ($year == date('Y')) {
-    		$today = date('Y') . "-" . date("m") . "-" . date("d");
-    		$allEvents = $this->event_model->getAllEventsPostDate($today);
-    	} else {
-    		$allEvents = $this->event_model->getAllEventsByYear($year);
-    	}
+    	$allEvents = $this->event_model->getAllEventsByYear($year);
     
     	$eventsQtd = count($allEvents);
     	$events = array();
@@ -483,12 +473,7 @@ class Reports extends CK_Controller {
         $data['ano_escolhido'] = $year;
         $data['years'] = $years;
 
-        if ($year == date('Y')) {
-            $today = date('Y') . "-" . date("m") . "-" . date("d");
-            $allEvents = $this->event_model->getAllEventsPostDate($today);
-        } else {
-            $allEvents = $this->event_model->getAllEventsByYear($year);
-        }
+        $allEvents = $this->event_model->getAllEventsByYear($year);
 
         $eventsQtd = count($allEvents);
         $events = array();
@@ -634,12 +619,7 @@ class Reports extends CK_Controller {
         $data['ano_escolhido'] = $year;
         $data['years'] = $years;
 
-        if ($year == date('Y')) {
-            $today = date('Y') . "-" . date("m") . "-" . date("d");
-            $allEvents = $this->event_model->getAllEventsPostDate($today);
-        } else {
-            $allEvents = $this->event_model->getAllEventsByYear($year);
-        }
+        $allEvents = $this->event_model->getAllEventsByYear($year);
 
         $eventsQtd = count($allEvents);
         $events = array();
@@ -1085,6 +1065,11 @@ class Reports extends CK_Controller {
         }
         if ($mes)
             $data['mes'] = $mes;
+        else {
+        	$date = new DateTime('NOW');
+        	$data['mes'] = $date->format("m");
+        	$mes = date('m');
+        }
         $data['payments'] = $this->cielotransaction_model->getPaymentsDetailed($ano, $mes);
         $this->loadReportView("reports/finances/all_transactions", $data);
     }
@@ -1123,9 +1108,20 @@ class Reports extends CK_Controller {
         $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, $shownStatus);
         $info = array();
         
+        if($colonists){        
         foreach($colonists as $c){
         	$p = 0;
         	$obj = new StdClass();
+        	
+        	$dateAtt = explode(" ",$c->date_to_get);
+        	$dateAtt = explode("-",$dateAtt[0]);
+        	$i = 0;
+        	foreach($dateAtt as $d){
+        		$this->Logger->info("data ".$i.": ".$d);
+        		$i++;
+        	}
+        	$c -> date_to_get = $dateAtt[2]."/".$dateAtt[1]."/".$dateAtt[0];
+        	
         	$obj = $c;
         	$responsable = $this->person_model->getPersonById($c->person_user_id);
         	$telephone = $this->telephone_model->getTelephonesByPersonId($c->person_user_id);
@@ -1147,6 +1143,7 @@ class Reports extends CK_Controller {
         	$obj->phone = $tel;
         	
         	$info[] = $obj;
+        }
         }
         $data['colonists'] = $info;
         $this->loadReportView("reports/summercamps/colonist_registered", $data);
