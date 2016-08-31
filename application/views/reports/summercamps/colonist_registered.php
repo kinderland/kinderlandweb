@@ -526,6 +526,23 @@
                 return l.toLowerCase().localeCompare(r.toLowerCase());
             }
 
+            function sortDate(l, r) {
+
+				var d1 = l.split('/');
+				var d2 = r.split('/');
+
+				var l = '';
+				var r = '';
+
+				for(i=d1.length-1; i>=0; i--){
+					l = l.concat(d1[i]);
+					r = r.concat(d2[i]);
+				}
+
+				return l.localeCompare(r);
+
+            }
+
             function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalRowUnfiltered) {
                 return 'Apresentando ' + totalRow + ' inscrições, de um total de ' + totalRowUnfiltered + ' inscrições';
             }
@@ -538,7 +555,7 @@
             $(document).ready(function () {
                 $('#sortable-table').datatable({
                     pageSize: Number.MAX_VALUE,
-                    sort: [true,true, sortLowerCase, true, sortLowerCase],
+                    sort: [sortDate,true, sortLowerCase, true, sortLowerCase],
                     filters: [false,selectTodos, true, selectTodas, true],
                     filterText: 'Escreva para filtrar... ',
                     counterText: showCounter
