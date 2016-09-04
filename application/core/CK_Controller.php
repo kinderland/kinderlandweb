@@ -286,13 +286,20 @@ class CK_Controller extends CI_Controller {
     		if($mail != $person->getEmail())
     			$cc[] = $mail;
     	}
-    	$emailSubject = "[Kinderland] ". $summerCampName . " inscricao disponivel para " . $colonist->getFullname();
+    	$emailSubject = "[Kinderland] ". $summerCampName . " inscrição disponível para " . $colonist->getFullname();
     	$emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>A inscrição 
-    		do colonista " . $colonist->getFullname() . " na colonia " . $summerCampName . " já pode ser finalizada.<br>
-			Para tanto, acesse o sistema kinderland e realize a doação até o dia " . $dateLimit.  ". Esta é a única forma de efetivar a inscrição.<br>
-			Solicitamos que não aguarde até o prazo final.<br><br> 
-			Obrigado pelo interesse nas Colonias Kinderland.<br><br>
-			Secretaria Kinderland";
+    		do(a) colonista " . $colonist->getFullname() . " na colônia " . $summerCampName . " já pode ser finalizada.<br><br>
+			Para tanto, acesse novamente o Sistema Kinderland e, por gentileza, realize as seguintes etapas:<br><br>
+    		1. Baixe (download) a versão em PDF da autorização de viagem gerada automaticamente na pré-inscrição e pré-autorizada por você;<br>
+    		2. Usando letra de forma e legível, coloque seu nome por extenso, número de documento de identidade e assine;<br>
+    		3. Digitalize (scan ou foto) a autorização assinada e suba (upload) a autorização assinada para o nosso Sistema;<br>
+    		4. Efetue a doação do valor da contribuição da colônia para a respectiva temporada.<br><br>
+    				
+    		Estas 4 etapas devem ser feitas até o dia " . $dateLimit.  " e solicitamos que sejam feitas antes do último dia, 
+    		evitando problemas tecnológicos ou comunicação. Se a inscrição não finalizar até esta data, a pré-inscrição será 
+    		considerada com status de 'desistente'.<br><br> 
+			Agradecemos pelo interesse em nossas Colônias.<br><br>
+			Associação Kinderland";
     
     	return $this->sendMail($emailSubject, $emailString, $person, $cc);
     }
