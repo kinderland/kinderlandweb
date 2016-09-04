@@ -32,7 +32,7 @@
                 <?php if (in_array(SYSTEM_ADMIN, $permissions)) { ?>
                     <option value="<?= $this->config->item('url_link'); ?>reports/discounts">Descontos</option>
                 <?php } ?>
-                <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions) || in_array(COORDINATOR, $permissions)) { ?>
+                <?php if (in_array(SYSTEM_ADMIN, $permissions) || in_array(SECRETARY, $permissions) || in_array(DIRECTOR, $permissions) || in_array(COORDINATOR, $permissions)) { ?>
                     <option value="<?= $this->config->item('url_link'); ?>reports/queue">Fila de Espera por Turma e Pavilhão</option>
                 <?php } ?>
 
