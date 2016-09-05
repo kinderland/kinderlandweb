@@ -202,6 +202,7 @@
 "colonist_byage";"reports";3
 "colonist_byage";"reports";4
 "queue";"reports";2
+"queue";"reports";3
 "queue";"reports";4
 "excludeColonist";"summercamps";1
 "updateInfoPostSubscription";"summercamps";1
