@@ -83,6 +83,24 @@
             			}
             			});
             	  });
+
+            	  $("[name='my-checkbox2']").bootstrapSwitch();
+            	  $("[name='my-checkbox2']").each(function( index ) {
+            	  	if($(this).attr("checkedInDatabase") != undefined)
+            	  		$(this).bootstrapSwitch('state', true, true);
+            	  });
+            	  $('input[name="my-checkbox2"]').on('switchChange.bootstrapSwitch', function(event, state) {
+            	    var string = "<?=$this->config->item("url_link")?>admin/changeEditFriendsEnabledStatus/".concat($(this).attr("key"));
+            	    var recarrega = "<?=$this->config->item("url_link")?>admin/manageCamps/";
+            	    $.post( string ).done(function( data ) {
+            	        if(data == 1)
+            			    alert( "Colônia modificada com sucesso" );
+            			else{
+            				alert( "Problema ao modificar o estado da colônia" );
+            				window.location=recarrega;
+            			}
+            			});
+            	  });
             	});
 
             <?php if($message){?>
@@ -119,7 +137,7 @@
                             <?php
                                 if(isset($camps) && is_array($camps)){
                                 	?>
-                                	<table class="table"><tr><th>Nome</th><th>Data Inicio</th><th>Data Fim</th><th>Habilitar pré-inscrições</th><th>Capacidade</th><th>Ações</th></tr>
+                                	<table class="table"><tr><th>Nome</th><th>Data Inicio</th><th>Data Fim</th><th>Habilitar pré-inscrições</th><th>Capacidade</th><th>Habilitar edição de amigos</th><th>Ações</th></tr>
                                 	<?php 
                                     foreach($camps as $camp){
                             ?>
@@ -132,6 +150,8 @@
                                	<td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$camp->getCampId()?>" 
         						<?php if($camp->isEnabled()) echo "checkedInDatabase='true'"; else echo " disabled ";?> /> </td>
                                 <td>M: <?=$camp->getCapacityMale()?> | F: <?=$camp->getCapacityFemale()?></td>
+                                <td><input type="checkbox" data-inverse="true" name="my-checkbox2" data-size="mini" key="<?=$camp->getCampId()?>" 
+        						<?php if($camp->isEditFriendsEnabled()) echo "checkedInDatabase='true'"; else echo " ";?> /> </td>
                                 <td><a target="_blank" href="<?=$this->config->item('url_link')?>summercamps/manageStaff/<?=$camp->getCampId()?>"> Equipe </a> <td/>
                             </tr>
 

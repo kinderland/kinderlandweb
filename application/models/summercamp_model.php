@@ -778,6 +778,14 @@ class summercamp_model extends CK_Model {
 
         return $result;
     }
+    
+    public function updateEditFriendsEnabled($campId) {
+    	 
+    	$sql = "UPDATE summer_camp SET edit_friends_enabled = NOT edit_friends_enabled WHERE summer_camp_id = ?";
+    	$result = $this->execute($this->db, $sql, array(intval($campId)));
+    
+    	return $result;
+    }
 
     public function subscribeColonist($summerCampId, $colonistId, $userId, $situation, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3) {
         $this->Logger->info("Running: " . __METHOD__);

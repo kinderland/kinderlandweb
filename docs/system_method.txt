@@ -447,3 +447,5 @@
 "event_donation";"reports";2
 "event_donation";"reports";3
 "event_donation";"reports";4
+"changeEditFriendsEnabledStatus";"admin";2
+"updateFriend";"admin";1

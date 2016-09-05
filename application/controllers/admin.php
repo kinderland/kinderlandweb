@@ -193,6 +193,25 @@ class Admin extends CK_Controller {
     	
     }
     
+    public function updateFriend(){
+    	$camp_id = $this->input->post("camp_id", true);
+    	$colonist_id = $this->input->post("colonist_id", true);
+    	$number = $this->input->post("number", true);
+    	$name1 = $this->input->post("name1", true);
+    	$name2 = $this->input->post("name2", true);
+    	$name3 = $this->input->post("name3", true);
+    		
+    	 
+    		if($this->summercamp_model->updateRoomates($colonist_id,$camp_id,$name1,$name2,$name3)){
+    			echo "true";
+    			return;
+    		}else {
+    			echo "false";
+    			return;
+    		}
+    	 
+    }
+    
     public function deleteTemporaryAssociate(){
     	$associate_id = $this->input->post("associate_id", true);
     	
@@ -2746,6 +2765,17 @@ class Admin extends CK_Controller {
             echo $this->summercamp_model->updateCampPreEnabled($campId);
         else
             echo "0";
+    }
+    
+    public function changeEditFriendsEnabledStatus($campId) {
+    	$this->Logger->info("Running: " . __METHOD__);
+    
+    	$camp = $this->summercamp_model->getSummerCampById($campId);
+    
+    	if ($camp->isEditFriendsEnabled() !== null)
+    		echo $this->summercamp_model->updateEditFriendsEnabled($campId);
+    	else
+    		echo "0";
     }
 
     public function validateColonists() {

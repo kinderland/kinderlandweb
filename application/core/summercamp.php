@@ -17,8 +17,9 @@ class SummerCamp {
     private $capacityFemale;
     private $miniCamp;
     private $daysToPay;
+    private $editFriendsEnabled;
 
-    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false, $daysToPay = 5) {
+    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false, $daysToPay = 5,$editFriendsEnabled) {
         $this->campId = $campId;
         $this->campName = $campName;
         $this->dateCreated = $dateCreated;
@@ -34,6 +35,7 @@ class SummerCamp {
         $this->capacityFemale = $capacityFemale;
         $this->miniCamp = $miniCamp;
         $this->daysToPay = $daysToPay;
+        $this->editFriendsEnabled = $editFriendsEnabled;
     }
 
     public static function createCampObject($resultRow) {
@@ -52,7 +54,8 @@ class SummerCamp {
                 $resultRow->capacity_male, 
                 $resultRow->capacity_female, 
                 $resultRow->mini_camp, 
-                $resultRow->days_to_pay
+                $resultRow->days_to_pay,
+        		$resultRow->edit_friends_enabled
         );
     }
 
@@ -144,6 +147,16 @@ class SummerCamp {
         if ($this->preEnabled == "t")
             return TRUE;
         return FALSE;
+    }
+    
+    public function setEditFriendsEnabled($editFriendsEnabled) {
+    	$this->editFriendsEnabled = $editFriendsEnabled;
+    }
+    
+    public function isEditFriendsEnabled() {
+    	if ($this->editFriendsEnabled == "t")
+    		return TRUE;
+    		return FALSE;
     }
 
     public function setCapacityMale($capacityMale) {

@@ -598,43 +598,105 @@
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 1: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate1" disabled class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
+                        <input type="text" id="roommate1"
+                        <?php if(!$summerCamp->isEditFriendsEnabled()) echo 'disabled'; ?>  class="form-control" placeholder="Nome Completo Amigo 1" name="roommate1"
                         value="<?php
                                if (!empty($roommate1)) {
                                    echo $roommate1;
                                }
-                               ?>"/>
+                               ?>"/> &nbsp;
+                    <?php 
+                    
+                    	if($summerCamp->isEditFriendsEnabled()){
+                    
+                    		if (!empty($roommate1)) {?>
+                                        <button class="btn btn-success" onclick="editFriends('<?= $summerCamp->getCampId() ?>','<?= $colonistId ?>')">Atualizar</button>
+                                        
+                            <?php } else { ?>
+                                        <button class="btn btn-danger" onclick="editFriends('<?= $summerCamp->getCampId() ?>','<?= $colonistId ?>')">Salvar</button>
+                    <?php }} ?>
+                    
                     </div>
                 </div>
             </div>
+            <br/>
 
             <div class="row">
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 2: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate2" disabled class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
+                        <input type="text" id="roommate2" <?php if(!$summerCamp->isEditFriendsEnabled()) echo 'disabled'; ?> class="form-control" placeholder="Nome Completo Amigo 2" name="roommate2"
                         value="<?php
                                if (!empty($roommate2)) {
                                    echo $roommate2;
                                }
-                               ?>"/>
+                               ?>"/> &nbsp;
+                    <?php 
+                    
+                    	if($summerCamp->isEditFriendsEnabled()){
+                    
+                    		if (!empty($roommate2)) {?>
+                                        <button class="btn btn-success" onclick="editFriends('<?= $summerCamp->getCampId() ?>','<?= $colonistId ?>')">Atualizar</button>
+                                        
+                            <?php } else { ?>
+                                        <button class="btn btn-danger" onclick="editFriends('<?= $summerCamp->getCampId() ?>','<?= $colonistId ?>')">Salvar</button>
+                    <?php }} ?>
+                    
                     </div>
                 </div>
             </div>
+            
+            <br/>
 
             <div class="row">
                 <div class="form-group">
                     <label for="fullname" class="col-lg-2 control-label"> Amigo de quarto 3: </label>
                     <div class="col-lg-6">
-                        <input type="text" id="roommate3" disabled class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
+                        <input type="text" id="roommate3" <?php if(!$summerCamp->isEditFriendsEnabled()) echo 'disabled'; ?> class="form-control" placeholder="Nome Completo Amigo 3" name="roommate3"
                         value="<?php
                                if (!empty($roommate3)) {
                                    echo $roommate3;
                                }
-                               ?>"/>
+                               ?>"/> &nbsp;
+                    
+                    <?php 
+                    
+                    	if($summerCamp->isEditFriendsEnabled()){
+                    
+                    		if (!empty($roommate3)) {?>
+                                        <button class="btn btn-success" onclick="editFriends('<?= $summerCamp->getCampId() ?>','<?= $colonistId ?>','3')">Atualizar</button>
+                                        
+                            <?php } else { ?>
+                                        <button class="btn btn-danger" onclick="editFriends('<?= $summerCamp->getCampId() ?>','<?= $colonistId ?>','3')">Salvar</button>
+                    <?php }} ?>
+                    
                     </div>
                 </div>
             </div>
+            
+            <script>
+
+		            function editFriends(camp_id,colonist_id){
+
+			            var name1 = document.getElementById('roommate1').value;
+			            var name2 = document.getElementById('roommate2').value;
+			            var name3 = document.getElementById('roommate3').value;
+		                
+		        		$.post('<?= $this->config->item('url_link'); ?>admin/updateFriend',
+		        				                                        {camp_id: camp_id, colonist_id: colonist_id,name1: name1,name2: name2,name3: name3},
+		        				                                        function (data) {
+		        				                                            if (data == "true") {
+		        				                                                alert("Amigo cadastrado com sucesso");
+		        				                                                location.reload();
+		        				                                            } else if (data == "false") {
+		        				                                                alert("Ocorreu um erro no cadastro do amigo!");
+		        				                                                location.reload();
+		        				                                            }
+		        				                                        }
+		        				                                );
+		        	}
+
+            </script>
 		
             <?php if ($summerCamp->isMiniCamp()) { ?>
                 <input type="hidden" name="summerCampMini" value="1"/>

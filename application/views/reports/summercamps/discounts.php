@@ -150,7 +150,7 @@
 								<td align='right'><?php echo number_format(($discountsT -> same_school + $discountsT -> second_brother + 
 												$discountsT -> third_brother + $discountsT -> child_home + $discountsT -> others)/100,2); ?> </td>
 								<td align='right'> <?php echo number_format(($discountsI -> same_school + $discountsI -> second_brother + 
-												$discountsI -> third_brother + $discountsI -> child_home + $discountsT -> others)/100,2); ?> </td>
+												$discountsI -> third_brother + $discountsI -> child_home + $discountsI -> others)/100,2); ?> </td>
 							</tr>
 						</tbody>
 					</table>
