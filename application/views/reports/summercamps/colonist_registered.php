@@ -348,6 +348,8 @@
                 var filtroStatus = filtros[0].value;
                 var nomePadrao = "inscricoes";
 
+                console.log(nomePadrao);
+
 
                 if (filtroNomeColonista == "" && filtroNomeResponsavel == "") {
 
@@ -373,27 +375,28 @@
                         else if (filtroStatus == "Desistente") {
                             return nomePadrao.concat("_desistentes");
                         }
-                        else if (filtroStatus == "Pré-inscrição em elaboração") {
+                        else if (filtroStatus == "Em elaboração") {
                             return nomePadrao.concat("_em_elaboração");
                         }
-                        else if (filtroStatus == "Pré-inscrição aguardando validação") {
+                        else if (filtroStatus == "Aguardando validação") {
                             return nomePadrao.concat("_aguardando_validação");
                         }
                         else if (filtroStatus == "Pré-inscrição validada") {
                             return nomePadrao.concat("_validados");
                         }
-                        else if (filtroStatus == "Pré-inscrição na fila de espera") {
+                        else if (filtroStatus == "Fila de espera") {
                             return nomePadrao.concat("_em_fila_espera");
                         }
-                        else if (filtroStatus == "Pré-inscrição aguardando pagamento") {
-                            return nomePadrao.concat("_aguardando_pagamento");
+                        else if (filtroStatus == "Aguardando doação") {
+                            return nomePadrao.concat("_aguardando_doação");
                         }
-                        else if (filtroStatus == "Pré-inscrição não validada") {
+                        else if (filtroStatus == "Não validada") {
                             return nomePadrao.concat("_não_validados");
                         }
                         else if (filtroStatus == "Inscrito") {
                             return nomePadrao.concat("_inscritos");
                         }
+
                     }
                 }
                 else {
@@ -464,7 +467,7 @@
                     var email = elements[i].getAttribute('id');
 
                     data2.push(email);
-                    data2.push(row.cells[3].innerHTML.split("<")[1].split(">")[1]);
+                    data2.push(row.cells[4].innerHTML.split("<")[1].split(">")[1]);
                     data.push(data2)
                 }
                 if (i == 0) {
@@ -489,10 +492,9 @@
                 for (var i = 0, row; row = table.rows[i]; i++) {
                     var data2 = []
                     //Nome, retira pega o que esta entre um <> e outro <>
-                    var email = elements[i].getAttribute('key');
+                    var colonist_id = elements[i].getAttribute('key');
 
-                    data2.push(email);
-                    data2.push(row.cells[3].innerHTML.split("<")[1].split(">")[1]);
+                    data2.push(colonist_id);
                     data.push(data2)
                 }
                 if (i == 0) {
@@ -501,9 +503,7 @@
                 }
                 var dataToSend = JSON.stringify(data);
                 var filtersToSend = JSON.stringify(filtersWindow);
-                var columName = ["Email", "Nome"];
-                var columnNameToSend = JSON.stringify(columName);
-                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend, name: name, columName: columnNameToSend, type: type});
+                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithColonistData', {data: dataToSend, filters: filtersToSend,name: name, type: type});
             }
 
             var selectTodas = {

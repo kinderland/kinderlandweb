@@ -1612,6 +1612,7 @@ class SummerCamps extends CK_Controller {
         $dataIn = $this->input->post('data', TRUE);
         $dataArray = json_decode($dataIn);
         $data['nameFile'] = $this->input->post('name', TRUE);
+        $this->Logger->info("////// name: ".$this->input->post('name', TRUE));
         $data['type'] = $this->input->post('type', TRUE);
         if(($this->input->post('summercamp', TRUE)) != null){
         	$summercampId = $this->input->post('summercampId', TRUE);
@@ -1636,7 +1637,13 @@ class SummerCamps extends CK_Controller {
         date_default_timezone_set('America/Sao_Paulo');
         $data['time'] = date('d-m-Y G:i:sa');
         
-        $colonists = $this->summercamp_model->getColonistDataFromPDF($dataArray);
+        $colonists = array();
+        
+        foreach ($dataArray as $d){
+        	foreach($d as $c){
+        		$colonists[] = $this->summercamp_model->getColonistDataFromPDF($c);
+        	}
+        }
         for ($i = 0; $i < count($colonists); $i++) {
             $data['report'][$i]['summercamp'] = $colonists[$i];
             $data['report'][$i]['colonist'] = $this->person_model->getPersonFullById($data['report'][$i]['summercamp']->person_id);

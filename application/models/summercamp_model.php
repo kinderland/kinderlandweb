@@ -1917,14 +1917,8 @@ class summercamp_model extends CK_Model {
         return $resultSet;
     }
 
-    public function getColonistDataFromPDF($idsColonist) {
-        $list = "";
-        for ($i = 0; $i < count($idsColonist); $i++) {
-            if ($list) {
-                $list .= ",";
-            }
-            $list .= $idsColonist[$i][0];
-        }
+    public function getColonistDataFromPDF($id) {
+    	$this->Logger->info("///////// ID: ".$id);
         $sql = "Select
                 p.person_id,
         		c.colonist_id as colonist_id,
@@ -1942,11 +1936,14 @@ class summercamp_model extends CK_Model {
                         join person pr on pr.person_id = scs.person_user_id
                         left join parent_summer_camp_subscription fatherPS on fatherPS.colonist_id = c.colonist_id and fatherPS.relation = 'Pai'
                         left join parent_summer_camp_subscription motherPS on motherPS.colonist_id = c.colonist_id and motherPS.relation = 'Mãe'
-                where c.colonist_id in (" . $list . ") order by p.gender, scs.room_number, p.fullname";
-        $resultSet = $this->executeRows($this->db, $sql);
+                where c.colonist_id = ? order by p.gender, scs.room_number, p.fullname";
+        $resultSet = $this->executeRows($this->db, $sql,array(intval($id)));
+        
         if (!$resultSet)
             return array();
-        return $resultSet;
+        else{
+        	return $resultSet[count($resultSet)-1];
+        }        
     }
 
     public function getPersonFullById($personId) {
