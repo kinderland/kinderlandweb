@@ -1397,7 +1397,7 @@ class SummerCamps extends CK_Controller {
                 $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist, $pavilhao);
             }
 
-            $roomOccupation = [0,0,0,0,0,0,0];
+            $roomOccupation = [0,0,0,0,0,0,0,0];
             for($i = 0; $i < count($roomOccupation); $i++){
                 $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
                 $roomOccupation[$i] = count($roomColonists);
@@ -1545,14 +1545,21 @@ class SummerCamps extends CK_Controller {
 
         $summerCampId = $this->input->post("summer_camp_id", true);
         $gender = $this->input->post("gender", true);
+        
+        if($gender == 'F'){
+        	$number = 7;
+        }else if($gender == 'M'){
+        	$number = 6;
+        }
 
         $colonists = $this->summercamp_model->getColonistsToDistributeInRooms($summerCampId, $gender);
-        $colonistsPerRoom = ceil(count($colonists) / 6.0);
+        $colonistsPerRoom = ceil(count($colonists) / $number);
         $this->Logger->info("Colonists to distribute in 6 rooms: " . count($colonists));
         $this->Logger->info("Colonists per room: " . $colonistsPerRoom);
         $actualRoom = 1;
         $totalUpdated = 0;
-        while ($actualRoom <= 6) {
+        
+        while ($actualRoom <= $number) {
             for ($i = 0; $i < $colonistsPerRoom && $totalUpdated < count($colonists); $i++) {
                 $this->summercamp_model->updateRoomNumber($colonists[(($actualRoom - 1) * $colonistsPerRoom) + $i]->colonist_id, $summerCampId, $actualRoom);
                 $totalUpdated++;

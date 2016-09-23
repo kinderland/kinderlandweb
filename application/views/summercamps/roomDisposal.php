@@ -61,10 +61,17 @@
             }
         }
 
-        function saveRoomNumber(colonistId, summerCampId) {
+        function saveRoomNumber(colonistId, summerCampId, gender) {
             var roomNumber = $("#colonist_room_" + colonistId + "_" + summerCampId).val();
-            if (roomNumber == "" || roomNumber == null || !(roomNumber > 0 && roomNumber <= 6)) {
-                alert("Número do quarto inválido. Favor entrar com números de 1 até 6.");
+
+            if(gender == 'F'){
+                var number = 7;
+            }else if(gender == 'M'){
+            	var number = 6;
+            }
+            
+            if (roomNumber == "" || roomNumber == null || !(roomNumber > 0 && roomNumber <= number)) {
+                alert("Número do quarto inválido. Favor entrar com números de 1 até ".concat(number));
                 return 0;
             } else {
                 $.post("<?= $this->config->item('url_link') ?>summercamps/updateRoomNumber",
@@ -185,7 +192,7 @@
 
     <style>
         .T { color: green; }
-        .TF, .TF1M, .TF2M, .TF3M, .TF4M, .TF5M, .TF6M, .TF1F, .TF2F, .TF3F, .TF4F, .TF5F, .TF6F { color: brown; }
+        .TF, .TF1M, .TF2M, .TF3M, .TF4M, .TF5M, .TF6M, .TF1F, .TF2F, .TF3F, .TF4F, .TF5F, .TF6F , .TF7F{ color: brown; }
         .F { color: red; }
     </style>
     <div class = "col-lg-12">
@@ -236,6 +243,9 @@
                                 <th> <button class="btn btn-default" id="btn_room_4" style="margin-left:5px" onclick="openRoomDisposal(4)"> 4<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_5" style="margin-left:5px" onclick="openRoomDisposal(5)"> 5<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
                                 <th> <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> 6<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
+                                <?php if (isset($pavilhao) && $pavilhao == "F") {?>
+                                <th> <button class="btn btn-default" id="btn_room_7" style="margin-left:5px" onclick="openRoomDisposal(7)"> 7<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
+                                <?php }?>
                                 <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
                             </tr>
                             <?php if (isset($room_occupation)) { ?>
@@ -247,13 +257,26 @@
                                     <td align="center"><?= $room_occupation[4] ?></td>
                                     <td align="center"><?= $room_occupation[5] ?></td>
                                     <td align="center"><?= $room_occupation[6] ?></td>
-                                    <td align="center"><?=
-                                        $room_occupation[1] +
+                                    <?php if (isset($pavilhao) && $pavilhao == "F") {?>
+                                    	<td align="center"><?= $room_occupation[7] ?></td>
+                                    <?php }?>
+                                    <td align="center"><?php
+                                    if (isset($pavilhao) && $pavilhao == "F"){
+                                    	echo $room_occupation[1] +
+                                    	$room_occupation[2] +
+                                    	$room_occupation[3] +
+                                    	$room_occupation[4] +
+                                    	$room_occupation[5] +
+                                    	$room_occupation[6] +
+                                    	$room_occupation[7];
+                                    }else{
+                                    	echo $room_occupation[1] +
                                         $room_occupation[2] +
                                         $room_occupation[3] +
                                         $room_occupation[4] +
                                         $room_occupation[5] +
-                                        $room_occupation[6]
+                                        $room_occupation[6];
+                                    }
                                         ?>
                                         <img src="<?= $this->config->item('assets') ?>images/kinderland/help.png" width="15" height="15"
                                              title="Número de colonistas por quarto."/>
@@ -363,8 +386,8 @@
                                                                         <td><span class="<?= $colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?= (($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF") ? "<br />[" . substr($colonist->roommate3_status, 2, 2) . "]" : '') ?></span></td>
                                                                     <?php } ?>
                                                                     <td><?= $colonist->friend_roommates ?></td>
-                                                                    <td><input type="number" min="0" max="6" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>
-                                                                    <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>)">Salvar</button></td>
+                                                                    <td><input type="number" min="0" max="<?php if (isset($pavilhao) && $pavilhao == "F") { echo "7";} else if (isset($pavilhao) && $pavilhao == "M"){ echo "6";}?>" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>
+                                                                    <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>,'<?= $pavilhao ?>')">Salvar</button></td>
                                                                     </tr>
                                                                 <?php } ?>
                                                                 </tbody>
