@@ -65,6 +65,40 @@
         $(document).ready(function () {
             datepickers();
         });
+
+        function validateNumberInput(evt) {
+
+            var key_code = (evt.which) ? evt.which : evt.keyCode;
+            if ((key_code >= 48 && key_code <= 57) || key_code == 9 || key_code == 8) {
+                return true;
+            }
+            return false;
+        }
+
+        function maskIt(w,e,m,r,a){
+        	// Cancela se o evento for Backspace
+        	if (!e) var e = window.event
+        	if (e.keyCode) code = e.keyCode;
+        	else if (e.which) code = e.which;
+        	// Variáveis da função
+        	var txt  = (!r) ? w.value.replace(/[^\d]+/gi,'') : w.value.replace(/[^\d]+/gi,'').reverse();
+        	var mask = (!r) ? m : m.reverse();
+        	var pre  = (a ) ? a.pre : "";
+        	var pos  = (a ) ? a.pos : "";
+        	var ret  = "";
+        	if(code == 9 || code == 8 || txt.length == mask.replace(/[^#]+/g,'').length) return false;
+        	// Loop na máscara para aplicar os caracteres
+        	for(var x=0,y=0, z=mask.length;x<z && y<txt.length;){
+        	if(mask.charAt(x)!='#'){
+        	ret += mask.charAt(x); x++; } 
+        	else {
+        	ret += txt.charAt(y); y++; x++; } }
+        	// Retorno da função
+        	ret = (!r) ? ret : ret.reverse()	
+        	w.value = pre+ret+pos; }
+        	// Novo método para o objeto 'String'
+        	String.prototype.reverse = function(){
+        	return this.split('').reverse().join(''); };
     </script>
 <form method="POST" action="<?= $this->config->item('url_link') ?>admin/createDocument">
     <div class="col-lg-12">
@@ -74,11 +108,11 @@
         <div class="row">
             <div class ="col- lg-8">
                 <select class="report-select" onchange="this.form.submit()" name="document_type" id="document_type">
+                	<option <?php if ($selected == "no_select") { ?>selected <?php } ?> value="no_select">-- Selecione -- </option>
                     <option <?php if ($selected == "nota fiscal") { ?>selected <?php } ?> value="nota fiscal"  >Nota Fiscal</option>
                     <option <?php if ($selected == "cupom fiscal") { ?>selected <?php } ?> value="cupom fiscal" >Cupom Fiscal</option>  
                     <option <?php if ($selected == "recibo") { ?>selected <?php } ?> value="recibo">Recibo</option>  
                     <option <?php if ($selected == "boleto") { ?>selected <?php } ?> value="boleto">Boleto</option> 
-                    <option <?php if ($selected == "no_select") { ?>selected <?php } ?> value="no_select">--Selecione-- </option>
                 </select>
             </div>
         </div>
@@ -91,7 +125,7 @@
             <div class="row">
                 <label for="document_number" class="col-lg-1" style="padding-top:15px">Número: </label>
                 <div class="col-lg-2">
-                    <input  type="number" name="document_number" style="margin-left:-20px" value="<?php echo $number; ?>" class="form-control required"/>
+                    <input onkeypress="return validateNumberInput(event);" name="document_number" style="margin-left:-20px" value="<?php echo $number; ?>" class="form-control required"/>
                 </div>
             </div>
             <div class="row">
@@ -115,7 +149,7 @@
             <div class="row">
                 <label for="document_value" class="col-lg-2" style="padding-top:15px;width:15%"> Valor: </label>
                 <div class="col-lg-2">
-                    <input class="form-control" type="number" size="6" name="document_value" style="margin-left:-100px" value="<?php echo $value; ?>"> 
+                    <input class="form-control" type="text" size="8" name="document_value" style="margin-left:-100px" value="<?php echo $value;?>" onKeyUp="maskIt(this,event,'######,##',true)" onkeypress="return validateNumberInput(event);"> 
                 </div>
             </div>
             <div class="row">

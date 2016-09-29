@@ -722,6 +722,40 @@
 
         }
 
+        function validateNumberInput(evt) {
+
+            var key_code = (evt.which) ? evt.which : evt.keyCode;
+            if ((key_code >= 48 && key_code <= 57) || key_code == 9 || key_code == 8) {
+                return true;
+            }
+            return false;
+        }
+
+        function maskIt(w,e,m,r,a){
+        	// Cancela se o evento for Backspace
+        	if (!e) var e = window.event
+        	if (e.keyCode) code = e.keyCode;
+        	else if (e.which) code = e.which;
+        	// Variáveis da função
+        	var txt  = (!r) ? w.value.replace(/[^\d]+/gi,'') : w.value.replace(/[^\d]+/gi,'').reverse();
+        	var mask = (!r) ? m : m.reverse();
+        	var pre  = (a ) ? a.pre : "";
+        	var pos  = (a ) ? a.pos : "";
+        	var ret  = "";
+        	if(code == 9 || code == 8 || txt.length == mask.replace(/[^#]+/g,'').length) return false;
+        	// Loop na máscara para aplicar os caracteres
+        	for(var x=0,y=0, z=mask.length;x<z && y<txt.length;){
+        	if(mask.charAt(x)!='#'){
+        	ret += mask.charAt(x); x++; } 
+        	else {
+        	ret += txt.charAt(y); y++; x++; } }
+        	// Retorno da função
+        	ret = (!r) ? ret : ret.reverse()	
+        	w.value = pre+ret+pos; }
+        	// Novo método para o objeto 'String'
+        	String.prototype.reverse = function(){
+        	return this.split('').reverse().join(''); };
+
     </script>
 
     <?php
@@ -928,7 +962,7 @@ if (isset($documents)) {
                                                 <div class="col-lg-12">
                                                     <label for="postingValueBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" name="postingValueBoleto<?php echo $i ?>Edit" ></input> 
+                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoleto<?php echo $i ?>" name="postingValueBoleto<?php echo $i ?>Edit" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> 
                                                     </div>
                                                     <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
@@ -955,7 +989,7 @@ if (isset($documents)) {
                                     </tr>
                                     <tr> 
                                         <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCheque" name="postingValueCheque" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     
 
                                     </tr>
@@ -966,7 +1000,7 @@ if (isset($documents)) {
 
                                     <tr> 
                                         <td> Valor: </td><br/>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCredito" name="postingValueCredito" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     </tr><br/>
                                     <tr>
                                         <td> Número de parcelas: </td><br/>
@@ -989,7 +1023,7 @@ if (isset($documents)) {
                                 <div id = "Dinheiro" style="display: none"> 
                                 <tr>
                                     <td> Valor: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiro" name="postingValueDinheiro" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     </tr>
                                     
                                  <div id="DinheiroDate" style="display: none"> 
@@ -1005,7 +1039,7 @@ if (isset($documents)) {
 
                                 <div id = "Transferência" style="display: none"> 
                                     <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferencia" name="postingValueTransferencia" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     </tr>
                                     <tr> 
                                         <td> Banco: </td> <br>
@@ -1107,7 +1141,7 @@ if (isset($documents)) {
                                                 <div class="col-lg-12">
                                                     <label for="postingValueBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label"> Valor: </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
-                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoletoEdit<?php echo $i ?>" value="" name="postingValueBoleto<?php echo $i ?>" ></input> 
+                                                        <input style="width: 200px" class="form-control" type="text" id="postingValueBoletoEdit<?php echo $i ?>" value="" name="postingValueBoleto<?php echo $i ?>" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> 
                                                     </div>
                                                     <label for="postingDateBoleto<?php echo $i ?>" style="width: 50px; padding-left:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-1 control-label">Data </label>
                                                     <div style="width: 210px; padding-left:0px" class="col-lg-2 control-label">
@@ -1134,7 +1168,7 @@ if (isset($documents)) {
 
                                     <tr> 
                                         <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueChequeEdit" value="" name="postingValueCheque" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueChequeEdit" value="" name="postingValueCheque" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     
 
                                     </tr>
@@ -1145,7 +1179,7 @@ if (isset($documents)) {
 
                                     <tr> 
                                         <td> Valor: </td><br/>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCreditoEdit" value="" name="postingValueCredito" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueCreditoEdit" value="" name="postingValueCredito" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     </tr><br/>
                                     <tr>
                                         <td> Número de parcelas: </td><br/>
@@ -1167,7 +1201,7 @@ if (isset($documents)) {
                                 </div>                                                            
                                 <div id = "DinheiroEdit" style="display: none"> 
                                     <td> Valor: </td><br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiroEdit" value="" name="postingValueDinheiro" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueDinheiroEdit" value="" name="postingValueDinheiro" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     </tr>
                                     
                                 <div id="DinheiroDateEdit" style="display: none"> 
@@ -1182,7 +1216,7 @@ if (isset($documents)) {
 
                                 <div id = "TransferênciaEdit" style="display: none"> 
                                     <td> Valor: </td> <br>
-                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferenciaEdit" value="" name="postingValueTransferencia" ></input> <br><br>
+                                    <input style="width: 200px" class="form-control" type="text" id="postingValueTransferenciaEdit" value="" name="postingValueTransferencia" onKeyUp="maskIt(this,event,'######.##',true)" onkeypress="return validateNumberInput(event);"></input> <br><br>
                                     </tr>
                                     <tr> 
                                         <td> Banco: </td> <br>
