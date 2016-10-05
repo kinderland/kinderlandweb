@@ -452,3 +452,5 @@
 "updateFriend";"admin";1
 "addRoom";"summercamps";2
 "dropRoom";"summercamps";2
+"addRoom";"summercamps";5
+"dropRoom";"summercamps";5

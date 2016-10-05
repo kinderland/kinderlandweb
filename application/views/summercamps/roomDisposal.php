@@ -125,7 +125,8 @@
                     },
                     function (data) {
                         if (data == "true") {
-                            window.location.reload();
+                            alert("Quarto adicionado com sucesso");
+                            window.location.reload(true);
                         } else {
                             alert("Ocorreu um erro ao adicionar um quarto.");
                         }
@@ -134,20 +135,22 @@
         }
 
         function dropRoom(summer_camp_id,pavilhao){
-            alfa = $.post("<?= $this->config->item('url_link') ?>summercamps/dropRoom",
-                    {
-                        'summer_camp_id': summer_camp_id,
-                        'pavilhao': pavilhao,
-                        'year': <?=$ano_escolhido?>
-                    },
-                    function (data) {
-                        if (data == "true") {
-                            window.location.reload();
-                        } else {
-                            alert("Ocorreu um erro ao remover um quarto.");
+            if(confirm("Você pediu para deletar um quarto. Se algum colonista estiver designado a esse quarto ele ficará sem quarto. Deseja confimar?"))
+                alfa = $.post("<?= $this->config->item('url_link') ?>summercamps/dropRoom",
+                        {
+                            'summer_camp_id': summer_camp_id,
+                            'pavilhao': pavilhao,
+                            'year': <?=$ano_escolhido?>
+                        },
+                        function (data) {
+                            if (data == "true") {
+                                alert("Quarto removido com sucesso");
+                                window.location.reload(true);
+                            } else {
+                                alert("Ocorreu um erro ao remover um quarto.");
+                            }
                         }
-                    }
-            );
+                );
         }
 
 
@@ -283,8 +286,8 @@
                                 ?>                                
                                 <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
                                 <th> &nbsp &nbsp &nbsp &nbsp</th>
-                                <th> <button class="btn btn-default" id="btn_room_-1" onclick="addRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Adicionar quarto </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_-1" onclick="dropRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Remover quarto </button> </th>
+                                <th> <a class="btn btn-default" id="btn_room_-1" onclick="addRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Adicionar quarto </a> </th>
+                                <th> <a class="btn btn-default" id="btn_room_-1" onclick="dropRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Remover quarto </a> </th>
                             </tr>
                             <?php if (isset($room_occupation)) { ?>
                                 <tr>
