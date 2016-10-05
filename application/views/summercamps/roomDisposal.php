@@ -63,13 +63,14 @@
 
         function saveRoomNumber(colonistId, summerCampId, gender) {
             var roomNumber = $("#colonist_room_" + colonistId + "_" + summerCampId).val();
-
-            if(gender == 'F'){
-                var number = 7;
-            }else if(gender == 'M'){
-            	var number = 6;
-            }
+            var number = <?= (isset($num_quartos)) ? $num_quartos : 0 ?>;
             
+            if(number <= 0)
+            {
+                alert("Nao existem quartos, por favor crie um quarto para poder prosseguir.");
+                return 0;
+            }
+
             if (roomNumber == "" || roomNumber == null || !(roomNumber > 0 && roomNumber <= number)) {
                 alert("Número do quarto inválido. Favor entrar com números de 1 até ".concat(number));
                 return 0;
@@ -115,6 +116,40 @@
         function sortNumber(a, b) {
             return a - b;
         }
+
+        function addRoom(summer_camp_id,pavilhao){
+            alfa = $.post("<?= $this->config->item('url_link') ?>summercamps/addRoom",
+                    {
+                        'summer_camp_id': summer_camp_id,
+                        'pavilhao': pavilhao
+                    },
+                    function (data) {
+                        if (data == "true") {
+                            window.location.reload();
+                        } else {
+                            alert("Ocorreu um erro ao adicionar um quarto.");
+                        }
+                    }
+            );
+        }
+
+        function dropRoom(summer_camp_id,pavilhao){
+            alfa = $.post("<?= $this->config->item('url_link') ?>summercamps/dropRoom",
+                    {
+                        'summer_camp_id': summer_camp_id,
+                        'pavilhao': pavilhao,
+                        'year': <?=$ano_escolhido?>
+                    },
+                    function (data) {
+                        if (data == "true") {
+                            window.location.reload();
+                        } else {
+                            alert("Ocorreu um erro ao remover um quarto.");
+                        }
+                    }
+            );
+        }
+
 
         function post(path, params, method) {
             method = method || "post"; // Set method to post by default if not specified.
@@ -237,50 +272,37 @@
                         <table>
                             <tr>
                                 <th> <button class="btn btn-default" id="btn_room_0" style="margin-left:5px" onclick="openRoomDisposal(0)"> Sem Quarto </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_1" style="margin-left:5px" onclick="openRoomDisposal(1)"> 1<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_2" style="margin-left:5px" onclick="openRoomDisposal(2)"> 2<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_3" style="margin-left:5px" onclick="openRoomDisposal(3)"> 3<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_4" style="margin-left:5px" onclick="openRoomDisposal(4)"> 4<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_5" style="margin-left:5px" onclick="openRoomDisposal(5)"> 5<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
-                                <th> <button class="btn btn-default" id="btn_room_6" style="margin-left:5px" onclick="openRoomDisposal(6)"> 6<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
-                                <?php if (isset($pavilhao) && $pavilhao == "F") {?>
-                                <th> <button class="btn btn-default" id="btn_room_7" style="margin-left:5px" onclick="openRoomDisposal(7)"> 7<?= (isset($pavilhao)) ? $pavilhao : "" ?> </button> </th>
-                                <?php }?>
+                                <?php
+                                    if(isset($num_quartos))
+                                    {
+                                        for($i=1;$i<=$num_quartos;$i++)
+                                        {
+                                            echo "<th> <button class='btn btn-default' id='btn_room_$i' style='margin-left:5px' onclick='openRoomDisposal($i)'> $i$pavilhao </button> </th>";
+                                        }
+                                    }
+                                ?>                                
                                 <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
+                                <th> &nbsp &nbsp &nbsp &nbsp</th>
+                                <th> <button class="btn btn-default" id="btn_room_-1" onclick="addRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Adicionar quarto </button> </th>
+                                <th> <button class="btn btn-default" id="btn_room_-1" onclick="dropRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Remover quarto </button> </th>
                             </tr>
                             <?php if (isset($room_occupation)) { ?>
                                 <tr>
-                                    <td align="center"><?= $room_occupation[0] ?></td>
-                                    <td align="center"><?= $room_occupation[1] ?></td>
-                                    <td align="center"><?= $room_occupation[2] ?></td>
-                                    <td align="center"><?= $room_occupation[3] ?></td>
-                                    <td align="center"><?= $room_occupation[4] ?></td>
-                                    <td align="center"><?= $room_occupation[5] ?></td>
-                                    <td align="center"><?= $room_occupation[6] ?></td>
-                                    <?php if (isset($pavilhao) && $pavilhao == "F") {?>
-                                    	<td align="center"><?= $room_occupation[7] ?></td>
-                                    <?php }?>
-                                    <td align="center"><?php
-                                    if (isset($pavilhao) && $pavilhao == "F"){
-                                    	echo $room_occupation[1] +
-                                    	$room_occupation[2] +
-                                    	$room_occupation[3] +
-                                    	$room_occupation[4] +
-                                    	$room_occupation[5] +
-                                    	$room_occupation[6] +
-                                    	$room_occupation[7];
-                                    }else{
-                                    	echo $room_occupation[1] +
-                                        $room_occupation[2] +
-                                        $room_occupation[3] +
-                                        $room_occupation[4] +
-                                        $room_occupation[5] +
-                                        $room_occupation[6];
+                                <?php
+                                    $sum_occupation = 0;
+                                    if(isset($num_quartos))
+                                    {
+                                        for($i=0;$i<=$num_quartos;$i++)
+                                        {
+                                            $sum_occupation += $room_occupation[$i];
+                                            echo "<td align='center'>$room_occupation[$i]</td>";
+                                        }
                                     }
-                                        ?>
+                                ?>                                
+                                    <td align="center"><?= $sum_occupation ?>
                                         <img src="<?= $this->config->item('assets') ?>images/kinderland/help.png" width="15" height="15"
                                              title="Número de colonistas por quarto."/>
-                                    <td>
+                                    </td>
 
                                 </tr>
                             <?php } ?>

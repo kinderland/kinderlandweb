@@ -1386,10 +1386,13 @@ class SummerCamps extends CK_Controller {
 
 
         if ($campChosenId != null && isset($_GET['quarto']) && isset($_GET["pavilhao"])) {
-            $quarto = $_GET['quarto'];
-            $data["quarto"] = $quarto;
+
             $pavilhao = $_GET['pavilhao'];
+            $quarto = $_GET['quarto'];
+
+            $data["quarto"] = $quarto;
             $data["pavilhao"] = $pavilhao;
+            $num_quartos = $this->summercamp_model->getRoomQuantityForSummerCamp($campChosenId, $pavilhao);  
             $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
 
             $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
@@ -1397,12 +1400,13 @@ class SummerCamps extends CK_Controller {
                 $colonist->friend_roommates = $this->countFriendRoommates($colonists, $colonist, $pavilhao);
             }
 
-            $roomOccupation = [0,0,0,0,0,0,0,0];
+            $roomOccupation = array_fill ( 0 , $num_quartos+1 , 0);
             for($i = 0; $i < count($roomOccupation); $i++){
                 $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
                 $roomOccupation[$i] = count($roomColonists);
             }
 
+            $data["num_quartos"] = $num_quartos;
             $data["room_occupation"] = $roomOccupation;
             $data["colonists"] = $colonistsSelected;
         }
@@ -1540,21 +1544,58 @@ class SummerCamps extends CK_Controller {
         return $resultArray;
     }
 
+    public function addRoom(){
+        $this->Logger->info("Running:" . __METHOD__);
+
+        $summerCampId = $this->input->post("summer_camp_id", true);
+        $pavilhao = $this->input->post("pavilhao", true);
+
+        $this->summercamp_model->addRoom($summerCampId,$pavilhao);
+    }
+
+    public function dropRoom(){
+        $this->Logger->info("Running:" . __METHOD__);
+
+        $summerCampId = $this->input->post("summer_camp_id", true);
+        $pavilhao = $this->input->post("pavilhao", true);
+        $year = $this->input->post("year", true);
+
+        $result = $this->summercamp_model->getLastRoom($summerCampId,$pavilhao);
+        $ids = array();
+        if($result)
+        {
+            $quarto = $result->id;
+            $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $summerCampId, $pavilhao);
+
+            $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
+            foreach($colonistsSelected as $colonist)
+                $ids[] = $colonist->colonist_id; 
+            if($this->summercamp_model->dropRoom($summerCampId,$pavilhao,$quarto,$ids))
+                echo "true";
+            else
+                echo "false";   
+        }
+        else
+            echo "false";
+
+
+    }
+
+
     public function autoFillRooms() {
         $this->Logger->info("Running:" . __METHOD__);
 
         $summerCampId = $this->input->post("summer_camp_id", true);
         $gender = $this->input->post("gender", true);
-        
-        if($gender == 'F'){
-        	$number = 7;
-        }else if($gender == 'M'){
-        	$number = 6;
-        }
+        $number = $this->summercamp_model->getLastRoom($summerCampId,$gender)->id;
+
+        if($number == "")
+            return false;
+
 
         $colonists = $this->summercamp_model->getColonistsToDistributeInRooms($summerCampId, $gender);
         $colonistsPerRoom = ceil(count($colonists) / $number);
-        $this->Logger->info("Colonists to distribute in 6 rooms: " . count($colonists));
+        $this->Logger->info("Colonists to distribute in $number rooms: " . count($colonists));
         $this->Logger->info("Colonists per room: " . $colonistsPerRoom);
         $actualRoom = 1;
         $totalUpdated = 0;

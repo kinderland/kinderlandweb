@@ -450,3 +450,5 @@
 "event_donation";"reports";4
 "changeEditFriendsEnabledStatus";"admin";2
 "updateFriend";"admin";1
+"addRoom";"summercamps";2
+"dropRoom";"summercamps";2

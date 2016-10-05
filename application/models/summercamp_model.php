@@ -34,6 +34,17 @@ class summercamp_model extends CK_Model {
         return $resultSet;
     }
 
+    public function getRoomQuantityForSummerCamp($campChosenId, $pavilhao){
+        $sql = "Select count(distinct room_id) as num_quartos 
+                from summer_camp_room 
+                where summer_camp_id = ? and gender = ?";
+
+        $resultSet = $this->executeRow($this->db, $sql, array($campChosenId,$pavilhao));
+
+        return $resultSet->num_quartos;
+
+    }
+
     public function getPersonUserIdByColonistId($colonist_id, $summercamp_id) {
         $sql = "SELECT person_user_id from summer_camp_subscription where colonist_id = ? and summer_camp_id = ?";
 
@@ -1962,6 +1973,62 @@ class summercamp_model extends CK_Model {
 
         return $result;
     }
+
+    public function getLastRoom($summer_camp_id,$gender){
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $sql = "Select MAX(room_id) as id
+                from summer_camp_room
+                where summer_camp_id = ? and gender = ?";
+
+        $result = $this->executeRow($this->db, $sql, array(intval($summer_camp_id),$gender));
+
+        return $result;
+        
+    }
+
+    public function addRoom($summer_camp_id,$gender)
+    {
+        $this->Logger->info("Running: " . __METHOD__);
+
+        $result = $this->getLastRoom($summer_camp_id,$gender);
+        if(!$result)
+            $id = 1;
+        else
+            $id = $result->id + 1;
+
+        $sql = "Insert into summer_camp_room(summer_camp_id,gender,room_id,room_name)
+                values (?,?,?,?);";
+
+        $room_name = "$gender$id";
+
+        if($this->execute($this->db, $sql, array(intval($summer_camp_id), $gender, intval($id),$room_name)))
+            echo "true";
+        else
+            echo "false";
+
+    }
+
+    public function dropRoom($summer_camp_id,$gender,$room_id,$ids)
+    {
+        $this->Logger->info("Running: " . __METHOD__);
+
+
+        $sql = "Delete from summer_camp_room where gender = ? and summer_camp_id = ? and room_id = ?";
+        if($this->execute($this->db, $sql, array($gender,intval($summer_camp_id), intval($room_id))))
+        {
+            foreach($ids as $id)
+            {
+                $sql = "update summer_camp_subscription set room_number = NULL  where colonist_id = ? and summer_camp_id = ? and room_number = ?";        
+                if(!$this->execute($this->db, $sql, array(intval($id),intval($summer_camp_id), intval($room_id))))
+                    return FALSE;
+            }
+        }
+        else
+            return FALSE;
+        return TRUE;
+    }
+
 
     public function getCampStaff($summerCampId) {
         $sql = "SELECT * FROM summer_camp_staff staff
