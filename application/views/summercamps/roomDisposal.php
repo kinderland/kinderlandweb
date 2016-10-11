@@ -286,8 +286,8 @@
                                 ?>                                
                                 <th> <button class="btn btn-default" id="btn_room_-1" onclick="openRoomDisposal(-1)"> Todos os quartos </button> </th>
                                 <th> &nbsp &nbsp &nbsp &nbsp</th>
-                                <th> <a class="btn btn-default" id="btn_room_-1" onclick="addRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Adicionar quarto </a> </th>
-                                <th> <a class="btn btn-default" id="btn_room_-1" onclick="dropRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Remover quarto </a> </th>
+                                <th> <a class="btn btn-primary" id="btn_room_-1" onclick="addRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Adicionar quarto </a> </th>
+                                <th> <a class="btn btn-primary" id="btn_room_-1" onclick="dropRoom(<?= (isset($summer_camp_id)) ? $summer_camp_id : "" ?>, '<?= (isset($pavilhao)) ? $pavilhao : "" ?>');"> Remover quarto </a> </th>
                             </tr>
                             <?php if (isset($room_occupation)) { ?>
                                 <tr>
