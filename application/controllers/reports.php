@@ -2603,15 +2603,17 @@ class Reports extends CK_Controller {
             $data["quarto"] = $quarto;
             $pavilhao = $_GET['pavilhao'];
             $data["pavilhao"] = $pavilhao;
+            $num_quartos = $this->summercamp_model->getRoomQuantityForSummerCamp($campChosenId, $pavilhao);  
             $colonists = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao);
-
+            $data["num_quartos"] = $num_quartos;
             $colonistsSelected = $this->filterColonists($colonists, $quarto, $pavilhao);
 
-            $roomOccupation = [0, 0, 0, 0, 0, 0, 0];
-            for ($i = 0; $i < count($roomOccupation); $i++) {
+            $roomOccupation = array_fill ( 0 , $num_quartos+1 , 0);
+            for($i = 0; $i < count($roomOccupation); $i++){
                 $roomColonists = $this->filterColonists($colonists, $i, $pavilhao);
                 $roomOccupation[$i] = count($roomColonists);
             }
+            $data["roomOccupation"] = $roomOccupation;
             
             $info = $this->summercamp_model->getAllColonistsBySummerCampAndYear($year, SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED, $campChosenId, $pavilhao, $quarto);
                             
