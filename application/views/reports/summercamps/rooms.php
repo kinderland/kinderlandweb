@@ -375,10 +375,12 @@
 									}
 									else{
 										if(z==0){
-											if((telephone[k] + telephone[k + 1]).localeCompare("55") == 0)
-												telephoneFinal = telephone[k];
+											if((telephone[k] + telephone[k + 1]).localeCompare("55") == 0){
+												telephoneFinal = "";
+                                                k++;
+                                            }
 											else
-												telephoneFinal = "55" + telephone[k];
+												telephoneFinal = telephone[k];
 												
 											z++;
 										}
@@ -435,7 +437,7 @@
 											if((telephone[k]+telephone[k+1]).localeCompare("55") == 0)
 												telephoneFinal = telephone[k];
 											else
-												telephoneFinal = "55"+telephone[k];
+												telephoneFinal = telephone[k];
 												
 											z++;
 										}
@@ -490,7 +492,7 @@
 											if((telephone[k]+telephone[k+1]).localeCompare("55") == 0)
 												telephoneFinal = telephone[k];
 											else
-												telephoneFinal = "55"+telephone[k];
+												telephoneFinal = telephone[k];
 												
 											z++;
 										}
