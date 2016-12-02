@@ -1919,7 +1919,7 @@ class SummerCamps extends CK_Controller
         $path              = "/tmp/" . $time;
         mkdir($path);
         foreach ($colonistsSelected as $colonist ) {
-            $nome = $colonist->colonist_name;
+            $nome = utf8_decode($colonist->colonist_name);
             $id = $colonist->colonist_id;
             $document = $this->summercamp_model->getNewestDocument($campChosenId, $id, DOCUMENT_TRIP_AUTHORIZATION_SIGNED);
             if ($document) {
@@ -1944,7 +1944,7 @@ class SummerCamps extends CK_Controller
         {
             $quarto_string = "{$quarto}{$pavilhao}";
         }
-
+        $campchosen = utf8_decode($campChosen);
         $zippedFile = "/tmp/Autorizacoes_Assinadas_colonia_{$campChosen}_quarto_{$quarto_string}_{$time}.zip";
         $this->zipFolder($path,$zippedFile);
 
