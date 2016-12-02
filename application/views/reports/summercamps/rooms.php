@@ -610,6 +610,18 @@
                 }
             }
 
+            function generatePDFWithSignedAuthorizations()
+            {
+                ano = $("#anos").val();
+                colonia = $("#colonia").val();
+                pavilhao = $("#pavilhao").val();
+                quarto = $("#room").val();
+                post('<?= $this->config->item('url_link'); ?>summercamps/generatePDFWithSignedAuthorizations', {ano: ano, colonia: colonia, pavilhao: pavilhao, quarto: quarto});
+
+
+
+            }
+
             function openRoomDisposal( roomFilter ) {
                 if($("#anos").val() != null && $("#colonia").val() != 0 && $("#pavilhao").val() != "") {
                     $("#room").val(roomFilter);
@@ -752,7 +764,8 @@
                 <div class="col-lg-12">
                   <button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Lista')" value="">Lista</button>&nbsp;<button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Documentos')" value="">Documentos</button>&nbsp;
                   <button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Cadastros')" value="">Cadastros</button>&nbsp;<button class="btn btn-primary" onclick="createPDFMedicalFiles()" value="">Fichas Médicas</button>&nbsp;
-                  <button class="btn btn-primary" onclick="geraAutorizacaoPDF('<?=$summer_camp_id?>')" value="">Autorizações</button>&nbsp;<button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Contatos')" value="">Contatos</button>&nbsp;
+                  <button class="btn btn-primary" onclick="geraAutorizacaoPDF('<?=$summer_camp_id?>')" value="">Autorizações</button>&nbsp;                 
+                  <button class="btn btn-primary" onclick="generatePDFWithSignedAuthorizations();" value="">Autorizações Assinadas</button></a>&nbsp;<button class="btn btn-primary" onclick="gerarPDFcomDadosCadastrais('Contatos')" value="">Contatos</button>&nbsp;
                   <button class="btn btn-primary" onclick="sendTableToCSV()" value="">E-mails</button>&nbsp;<button class="btn btn-primary" onclick="gerarTXTcomTelefones()" value="">SMS</button>
                   <br /><br />
                     <table class="table table-bordered table-striped table-min-td-size" style="max-width: 700px; font-size:15px" id="sortable-table">

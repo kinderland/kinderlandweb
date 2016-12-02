@@ -454,3 +454,9 @@
 "dropRoom";"summercamps";2
 "addRoom";"summercamps";5
 "dropRoom";"summercamps";5
+"generatePDFWithSignedAuthorizations";"summercamps";2
+"generatePDFWithSignedAuthorizations";"summercamps";3
+"generatePDFWithSignedAuthorizations";"summercamps";4
+"generatePDFWithSignedAuthorizations";"summercamps";5
+"generatePDFWithSignedAuthorizations";"summercamps";6
+"generatePDFWithSignedAuthorizations";"summercamps";7
