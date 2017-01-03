@@ -129,28 +129,29 @@
                 }
             }
 
-            function updateMonitor(campId, oldMonitorId1, oldMonitorId2, oldMonitorId3, oldMonitorId4, oldMonitorId5, oldMonitorId6, oldMonitorId7, oldMonitorId8, oldMonitorId9, oldMonitorId10, oldMonitorId11, oldMonitorId12) {
+            function updateMonitor(campId, oldMonitorId1, oldMonitorId2, oldMonitorId3, oldMonitorId4, oldMonitorId5, oldMonitorId6, oldMonitorId7, oldMonitorId8, oldMonitorId9, oldMonitorId10, oldMonitorId11, oldMonitorId12,oldMonitorId13) {
                 var monitorId1 = $("#monitores_1F").val();
                 var monitorId2 = $("#monitores_2F").val();
                 var monitorId3 = $("#monitores_3F").val();
                 var monitorId4 = $("#monitores_4F").val();
                 var monitorId5 = $("#monitores_5F").val();
                 var monitorId6 = $("#monitores_6F").val();
-                var monitorId7 = $("#monitores_1M").val();
-                var monitorId8 = $("#monitores_2M").val();
-                var monitorId9 = $("#monitores_3M").val();
-                var monitorId10 = $("#monitores_4M").val();
-                var monitorId11 = $("#monitores_5M").val();
-                var monitorId12 = $("#monitores_6M").val();
+                var monitorId7 = $("#monitores_7F").val();
+                var monitorId8 = $("#monitores_1M").val();
+                var monitorId9 = $("#monitores_2M").val();
+                var monitorId10 = $("#monitores_3M").val();
+                var monitorId11 = $("#monitores_4M").val();
+                var monitorId12 = $("#monitores_5M").val();
+                var monitorId13 = $("#monitores_6M").val();
                 var func = 2;
                 
-                if( monitorId1!=0 || monitorId2!=0 || monitorId3!=0 || monitorId4!=0 || monitorId5!=0 || monitorId6!=0 || monitorId7!=0 || monitorId8!=0 || monitorId9!=0 || monitorId10!=0 || monitorId11!=0 || monitorId12!=0){
+                if( monitorId1!=0 || monitorId2!=0 || monitorId3!=0 || monitorId4!=0 || monitorId5!=0 || monitorId6!=0 || monitorId7!=0 || monitorId8!=0 || monitorId9!=0 || monitorId10!=0 || monitorId11!=0 || monitorId12!=0 || monitorId13 != 0){
                 	$.post("<?= $this->config->item('url_link'); ?>summercamps/deleteMonitor",
                             { camp_id: campId },
                                 function ( data ){
                                     if(data == "true"){
 				                               $.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-						                        { camp_id: campId, monitorId1: monitorId1, monitorId2: monitorId2, monitorId3: monitorId3, monitorId4: monitorId4, monitorId5: monitorId5, monitorId6: monitorId6, monitorId7: monitorId7, monitorId8: monitorId8, monitorId9: monitorId9, monitorId10: monitorId10, monitorId11: monitorId11, monitorId12: monitorId12 },
+						                        { camp_id: campId, monitorId1: monitorId1, monitorId2: monitorId2, monitorId3: monitorId3, monitorId4: monitorId4, monitorId5: monitorId5, monitorId6: monitorId6, monitorId7: monitorId7, monitorId8: monitorId8, monitorId9: monitorId9, monitorId10: monitorId10, monitorId11: monitorId11, monitorId12: monitorId12, monitorId13:monitorId13 },
 						                            function ( data ){
 						                                if(data == "true"){
 						                                    alert("Monitores atualizados");
@@ -158,7 +159,7 @@
 						                                }
 						                                else{
 						                                	$.post("<?= $this->config->item('url_link'); ?>summercamps/updateMonitor",
-						                                            { camp_id: campId, monitorId1: oldMonitorId1, monitorId2: oldMonitorId2, monitorId3: oldMonitorId3, monitorId4: oldMonitorId4, monitorId5: oldMonitorId5, monitorId6: oldMonitorId6, monitorId7: oldMonitorId7, monitorId8: oldMonitorId8, monitorId9: oldMonitorId9, monitorId10: oldMonitorId10, monitorId11: oldMonitorId11, monitorId12: oldMonitorId12 });
+						                                            { camp_id: campId, monitorId1: oldMonitorId1, monitorId2: oldMonitorId2, monitorId3: oldMonitorId3, monitorId4: oldMonitorId4, monitorId5: oldMonitorId5, monitorId6: oldMonitorId6, monitorId7: oldMonitorId7, monitorId8: oldMonitorId8, monitorId9: oldMonitorId9, monitorId10: oldMonitorId10, monitorId11: oldMonitorId11, monitorId12: oldMonitorId12,monitorId13:oldMonitor13Id });
 						                                    alert("Erro ao atualizar monitores");
 						                                    location.reload();
 						                                }
@@ -266,10 +267,10 @@
             <div class = "row">
                 <div class="col-lg-12">
                     <?php 
-                        $monitors = array(1 => null, 2 => null, 3 => null, 4 => null, 5 => null, 6 => null, 7 => null, 8 => null, 9 => null, 10 => null, 11 => null, 12 => null);
+                        $monitors = array(1 => null, 2 => null, 3 => null, 4 => null, 5 => null, 6 => null, 7 => null, 8 => null, 9 => null, 10 => null, 11 => null, 12 => null, 13 => null);
                         $coordinators = array(1 => null, 2 => null, 3 => null);
                         $coordinatorsId = array(1 => 0, 2 => 0, 3 => 0);
-                        $monitorsId = array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0);
+                        $monitorsId = array(1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0, 6 => 0, 7 => 0, 8 => 0, 9 => 0, 10 => 0, 11 => 0, 12 => 0,13 => 0);
                         $doctor = null;
                         $room = null;
                         $assistants = array();
@@ -312,18 +313,20 @@
 	                                		$room = 5;
 	                                	else if($s->room_number == '6F')
 	                                		$room = 6;
-	                                	else if($s->room_number == '1M')
+	                                	else if($s->room_number == '7F')
 	                                		$room = 7;
-	                                	else if($s->room_number == '2M')
+	                                	else if($s->room_number == '1M')
 	                                		$room = 8;
-	                                	else if($s->room_number == '3M')
+	                                	else if($s->room_number == '2M')
 	                                		$room = 9;
-	                                	else if($s->room_number == '4M')
+	                                	else if($s->room_number == '3M')
 	                                		$room = 10;
-	                                	else if($s->room_number == '5M')
+	                                	else if($s->room_number == '4M')
 	                                		$room = 11;
-	                                	else if($s->room_number == '6M')
+	                                	else if($s->room_number == '5M')
 	                                		$room = 12;
+	                                	else if($s->room_number == '6M')
+	                                		$room = 13;
 	                                	
 	                                    $monitors[$room] = $s;
                                 	}
@@ -429,7 +432,7 @@
                                     <select name="monitor" id="monitores_<?=$i?><?=$gender?>">
                                         <option value="">-- Selecione --</option>
                                         <?php
-                                        	if($j<=6) {
+                                        	if($j<=7) {
                                         		if($possibleFemaleMonitors!=null)
                                         		foreach ($possibleFemaleMonitors as $pm ) {
                                         			$selected = "";
@@ -461,7 +464,7 @@
                             </tr>
 
                             <?php
-                            		if($i == 6){
+                            		if($i == 7){
                             			$i=1;
                             			$gender = 'M';
                             		}
@@ -476,7 +479,7 @@
                         </table>
                         
                     </p>
-                     <button class="btn btn-primary" onClick="updateMonitor(<?=$summerCamp->getCampId();?>,<?= $monitorsId[1]?>,<?= $monitorsId[2]?>,<?= $monitorsId[3]?>,<?= $monitorsId[4]?>,<?= $monitorsId[5]?>,<?= $monitorsId[6]?>,<?= $monitorsId[7]?>,<?= $monitorsId[8]?>,<?= $monitorsId[9]?>,<?= $monitorsId[10]?>,<?= $monitorsId[11]?>,<?= $monitorsId[12]?>)">Salvar </button>
+                     <button class="btn btn-primary" onClick="updateMonitor(<?=$summerCamp->getCampId();?>,<?= $monitorsId[1]?>,<?= $monitorsId[2]?>,<?= $monitorsId[3]?>,<?= $monitorsId[4]?>,<?= $monitorsId[5]?>,<?= $monitorsId[6]?>,<?= $monitorsId[7]?>,<?= $monitorsId[8]?>,<?= $monitorsId[9]?>,<?= $monitorsId[10]?>,<?= $monitorsId[11]?>,<?= $monitorsId[12]?>, <?= $monitorsId[13]?>)">Salvar </button>
                     <p><br /><br />
                        <h4><b> Auxiliares: </b> </h4>
                         <table class="sortable-table" style="max-width: 500px;" >

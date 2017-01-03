@@ -2475,6 +2475,7 @@ class SummerCamps extends CK_Controller
         $monitorId10  = $this->input->post("monitorId10", true);
         $monitorId11  = $this->input->post("monitorId11", true);
         $monitorId12  = $this->input->post("monitorId12", true);
+        $monitorId13  = $this->input->post("monitorId13", true);
 
         $ids = array();
 
@@ -2525,41 +2526,48 @@ class SummerCamps extends CK_Controller
         if ($monitorId7 != 0) {
             $obj       = new stdClass();
             $obj->id   = $monitorId7;
-            $obj->room = '1M';
+            $obj->room = '7F';
             $ids[$i]   = $obj;
             $i++;
         }
         if ($monitorId8 != 0) {
             $obj       = new stdClass();
             $obj->id   = $monitorId8;
-            $obj->room = '2M';
+            $obj->room = '1M';
             $ids[$i]   = $obj;
             $i++;
         }
         if ($monitorId9 != 0) {
             $obj       = new stdClass();
             $obj->id   = $monitorId9;
-            $obj->room = '3M';
+            $obj->room = '2M';
             $ids[$i]   = $obj;
             $i++;
         }
         if ($monitorId10 != 0) {
             $obj       = new stdClass();
             $obj->id   = $monitorId10;
-            $obj->room = '4M';
+            $obj->room = '3M';
             $ids[$i]   = $obj;
             $i++;
         }
         if ($monitorId11 != 0) {
             $obj       = new stdClass();
             $obj->id   = $monitorId11;
-            $obj->room = '5M';
+            $obj->room = '4M';
             $ids[$i]   = $obj;
             $i++;
         }
         if ($monitorId12 != 0) {
             $obj       = new stdClass();
             $obj->id   = $monitorId12;
+            $obj->room = '5M';
+            $ids[$i]   = $obj;
+            $i++;
+        }
+        if ($monitorId13 != 0) {
+            $obj       = new stdClass();
+            $obj->id   = $monitorId13;
             $obj->room = '6M';
             $ids[$i]   = $obj;
             $i++;
