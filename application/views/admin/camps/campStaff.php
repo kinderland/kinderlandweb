@@ -425,9 +425,13 @@
                                 $j = 1;
                                 $gender = 'F';
                                 foreach($monitors as $monitor){
+					$hidden = "";
+					if($j == 7 && $summerCamp->getCampId() != 11)
+						$hidden = "style='display:none'";
+
                             ?>
 
-                            <tr>
+                            <tr <?=$hidden?>>
                                 <td>
                                     <select name="monitor" id="monitores_<?=$i?><?=$gender?>">
                                         <option value="">-- Selecione --</option>
@@ -440,6 +444,7 @@
                                         				$selected = "selected";
                                         				$monitorsId[$j] = $monitor->person_id;
                                         			}
+								$hidden = "";
                                         			echo "<option $selected value='".$pm->getPersonId()."'>".$pm->getFullname()."</option>";
                                         		}                                        		
                                         	}
