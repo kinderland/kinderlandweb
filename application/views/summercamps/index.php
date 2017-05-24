@@ -282,26 +282,17 @@
             			if($this->personuser_model->hasPreviousSubscriptions($this->session->userdata("user_id"))){
                 ?>
                 <button onclick="sendInfoToModalCamp(<?= $summerCamp->getCampId() ?>);" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModalGetPreviousSubscriptions">
-								<?= $summerCamp->getCampName() ?> (
-								<?php if($summerCamp->getCampId() == 10){?>
-								2º ao 4º ano em 2016)
-								<?php } else if($summerCamp->getCampId() ==11){?>
-								7º ao 9º ano em 2016)
-								<?php } else if($summerCamp->getCampId() ==12){?>
-								3º ao 6º ano em 2016)
-								<?php }?>
-							</button>
+                                <?= $summerCamp->getCampName() ?>
+                                <br/>     
+                                <?= $summerCamp->getSchoolingDescription() ?> 
+            				</button>
 				<?php } else{?>
 				
                 <a href="<?= $this->config->item('url_link'); ?>summercamps/subscribeColonist?id=<?= $summerCamp->getCampId() ?>">
-                    <input class=" btn btn-primary" type="button" value="<?= $summerCamp->getCampName() ?> (
-								<?php if($summerCamp->getCampId() == 10){
-								echo "2º ao 4º ano em 2016)";
-								 } else if($summerCamp->getCampId() ==11){
-								echo "7º ao 9º ano em 2016)";
-								 } else if($summerCamp->getCampId() ==12){
-								echo "3º ao 6º ano em 2016)";
-								 }?>" />
+
+                    <button class=" btn btn-primary"><?= $summerCamp->getCampName() ?><br/><?= $summerCamp->getSchoolingDescription() ?></button>
+<!--                    <input class=" btn btn-primary" type="button" value="<?= $summerCamp->getCampName() ?>  <?= $summerCamp->getSchoolingDescription() ?>" />
+-->
                 </a>
             <?php } } ?>
         <?php } else { 

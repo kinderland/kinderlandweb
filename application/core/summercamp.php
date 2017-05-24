@@ -19,7 +19,7 @@ class SummerCamp {
     private $daysToPay;
     private $editFriendsEnabled;
 
-    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false, $daysToPay = 5,$editFriendsEnabled) {
+    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false, $daysToPay = 5,$editFriendsEnabled, $schoolingDescription) {
         $this->campId = $campId;
         $this->campName = $campName;
         $this->dateCreated = $dateCreated;
@@ -36,6 +36,7 @@ class SummerCamp {
         $this->miniCamp = $miniCamp;
         $this->daysToPay = $daysToPay;
         $this->editFriendsEnabled = $editFriendsEnabled;
+        $this->schoolingDescription = $schoolingDescription;
     }
 
     public static function createCampObject($resultRow) {
@@ -55,7 +56,8 @@ class SummerCamp {
                 $resultRow->capacity_female, 
                 $resultRow->mini_camp, 
                 $resultRow->days_to_pay,
-        		$resultRow->edit_friends_enabled
+        		$resultRow->edit_friends_enabled,
+                $resultRow->schooling_description
         );
     }
 
@@ -191,6 +193,10 @@ class SummerCamp {
 
     public function getDaysToPay() {
         return $this->daysToPay;
+    }
+
+    public function getSchoolingDescription() {
+        return $this->schoolingDescription;
     }
 }
 
