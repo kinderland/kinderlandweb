@@ -331,18 +331,26 @@ class summercamp_model extends CK_Model {
         return $result;
     }
     
-    public function changeCamp($colonistId,$campId) {
+    public function changeCamp($colonistId,$campId,$newCampId) {
     	$this->Logger->info("Running: " . __METHOD__);
     	
-    	$oldCamp = $this->getSummerCampById($campId);
+//    	$oldCamp = $this->getSummerCampById($campId);
     	
-    	$number = explode(" ",$oldCamp->getCampName());
+//    	$number = explode(" ",$oldCamp->getCampName());
     	
-    	if($number[0] == "1a")
-    		$campNumber = 2;
-    	else
-    		$campNumber = 1;
-    	
+//    	if($number[0] == "1a")
+//    		$campNumber = 2;
+//    	else
+//    		$campNumber = 1;
+
+        if($newCampId == "1a")
+            $campNumber = 1;
+    	else 
+            if($newCampId == "2a")
+                $campNumber = 2;
+            else
+                $campNumber = 3;
+
     	$sql = "select * 
     			from summer_camp 
     			where camp_name like '%?a%' 

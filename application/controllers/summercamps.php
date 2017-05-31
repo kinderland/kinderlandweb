@@ -2377,8 +2377,9 @@ class SummerCamps extends CK_Controller
 
         $colonistId   = $this->input->post("colonist_id", true);
         $summerCampId = $this->input->post("camp_id", true);
+        $newCampId = $this->input->post("new_camp_id", true);
 
-        $result = $this->summercamp_model->changeCamp($colonistId, $summerCampId);
+        $result = $this->summercamp_model->changeCamp($colonistId, $summerCampId,$newCampId);
 
         if ($result == true) {
             echo "true";

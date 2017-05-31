@@ -69,14 +69,15 @@
 	   window.location = "<?= $this->config->item('url_link'); ?>summercamps/index";
    }
 
-   function changeCamp(colonistId,campId){
+   function changeCamp(colonistId,campId,newCampId){
 
 	   if(confirm("Confirma a mudança de turma?")){
 
 		   $.post("<?= $this->config->item('url_link') ?>summercamps/changeCamp",
 	               {
 	                   'colonist_id': colonistId,
-	                   'camp_id': campId
+	                   'camp_id': campId,
+                       'new_camp_id': newCampId
 	               },
 	               function (data) {
 	                   if (data == "true") {
@@ -490,10 +491,25 @@
                             <?php
                             $number = explode(" ",$campName);
                             if (((($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) || ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN)) && !$this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->isMiniCamp())) {  ?>
-                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>');">Mudar pré-inscrição para <?php if(strcmp($number[0],"1a") == 0) echo "2a Turma ".date("Y"); else echo "1a Turma ".date("Y"); ?></button>
+                            <?php if(strcmp($number[0],"1a") == 0) {?>
+                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','2a');">Mudar pré-inscrição para <?php echo "2a Turma ".date("Y");  ?></button>
                             	</p></p>
+                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','3a');">Mudar pré-inscrição para <?php echo "3a Turma ".date("Y");  ?></button>
+                                </p></p>
+                            <?php }if(strcmp($number[0],"2a") == 0) {?>
+                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','1a');">Mudar pré-inscrição para <?php echo "1a Turma ".date("Y");  ?></button>
+                                </p></p>
+                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','3a');">Mudar pré-inscrição para <?php echo "3a Turma ".date("Y");  ?></button>
+                                </p></p>
+                            <?php }if(strcmp($number[0],"3a") == 0) {?>
+                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','1a');">Mudar pré-inscrição para <?php echo "1a Turma ".date("Y");  ?></button>
+                                </p></p>
+                            <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','2a');">Mudar pré-inscrição para <?php echo "2a Turma ".date("Y");  ?></button>
+                                </p></p>
+                            <?php }?>
                             <?php  }
                             ?>
+                            
                         </td>
 
                         <td>

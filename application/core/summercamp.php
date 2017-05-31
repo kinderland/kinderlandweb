@@ -198,6 +198,7 @@ class SummerCamp {
     public function getSchoolingDescription() {
         return $this->schoolingDescription;
     }
+    
 }
 
 ?>
