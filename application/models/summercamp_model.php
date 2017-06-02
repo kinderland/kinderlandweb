@@ -275,11 +275,11 @@ class summercamp_model extends CK_Model {
             $sql = "SELECT * FROM summer_camp where pre_subscriptions_enabled and
             (date_start_pre_subscriptions_associate <= now()
                 and date_finish_pre_subscriptions_associate >= now())
-            ORDER BY date_start_pre_subscriptions ASC";
+            ORDER BY date_start_pre_subscriptions ASC, summer_camp_id ASC";
         } else {
             $sql = "SELECT * FROM summer_camp where pre_subscriptions_enabled and
             (date_start_pre_subscriptions <= now() and date_finish_pre_subscriptions >= now())
-            ORDER BY date_start_pre_subscriptions ASC";
+            ORDER BY date_start_pre_subscriptions ASC, summer_camp_id ASC";
         }
 
         $resultSet = $this->executeRows($this->db, $sql);

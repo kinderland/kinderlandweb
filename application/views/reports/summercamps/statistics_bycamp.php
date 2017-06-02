@@ -87,7 +87,7 @@
 						<tr>
 							<th align="right"></th>
 							<?php $i = 0; foreach($campsNames as $campName) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 							?>
@@ -97,7 +97,7 @@
 					    <tr>
 							<th align="right"></th>
 							<?php $i = 0; foreach($campsNames as $campName) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 							?>
@@ -107,7 +107,7 @@
 					    <tr>
 							<th align="right">Inscritos</th>
 							<?php $i = 0; foreach($campsNames as $camp) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 								$countsFI[$i] = $countsAssociatedF[$i]->inscrito + $countsNotAssociatedF[$i]->inscrito;
@@ -122,7 +122,7 @@
 						<tr>
 							<th align="right" >Aguardando doação</th>
 							<?php $i = 0; foreach($campsNames as $camp) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 								$countsMA[$i] = $countsAssociatedM[$i]->aguardando_pagamento + $countsNotAssociatedM[$i]->aguardando_pagamento;
@@ -138,7 +138,7 @@
 						<tr>
 							<th align="right" width='200px'>Total</th>
 							<?php $countsTF = array(); $countsTM = array(); $i = 0; foreach($campsNames as $camp) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 							?>
@@ -149,7 +149,7 @@
 						<tr>
 							<th	align="right" width='200px'>Porcentagem de Inscritos</th>
 							<?php $i = 0; foreach($campsNames as $camp) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 							?>
@@ -160,7 +160,7 @@
 						<tr>
 							<th align="right">Potencial de Inscritos por Colônia</th>
 							<?php $i = 0; foreach($campsNames as $camp) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 							?>
@@ -170,7 +170,7 @@
 						<tr>
 							<th align="right">Inscritos por Colônia</th>
 							<?php $i = 0; foreach($campsNames as $camp) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 							?>
@@ -180,7 +180,7 @@
 						<tr>
 							<th align="right">Inscritos por Colônia (%)</th>
 							<?php $i = 0; foreach($campsNames as $camp) {
-								if($i == 3){
+								if($i == 4){
 									break;
 								}
 							?>
