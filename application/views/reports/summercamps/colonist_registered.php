@@ -190,7 +190,8 @@
 										if((telephone[k]+telephone[k+1]).localeCompare("55") == 0)
 											telephoneFinal = telephone[k];
 										else
-											telephoneFinal = "55"+telephone[k];
+//											telephoneFinal = "55"+telephone[k];
+                      telephoneFinal = telephone[k];
 											
 										z++;
 									}
@@ -219,7 +220,7 @@
 										var data4 = [];
 										tels[q] = telephoneRes[r];
 										data4.push(telephoneRes[r]);
-										data4.push(removeDiacritics(colonRes[0]));
+//										data4.push(removeDiacritics(colonRes[0]));
 										data1.push(data4);
 										console.log(data4);
 										q++;
@@ -476,6 +477,7 @@
                 }
                 var dataToSend = JSON.stringify(data);
                 var columName = ["Email", "Nome"];
+                var columName = ["Email"];
                 var columnNameToSend = JSON.stringify(columName);
 
                 post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
