@@ -32,8 +32,8 @@
         $(document).ready(function () {
             $('#sortable-table').datatable({
                 pageSize: Number.MAX_VALUE,
-                sort: [sortLowerCase, sortNumber, sortLowerCase],
-                filters: [true, selectTodas, true],
+                sort: [sortLowerCase, sortNumber, sortLowerCase, sortNumber],
+                filters: [true, selectTodas, true, selectTodos],
                 filterText: 'Escreva para filtrar...'
             });
 
@@ -389,7 +389,8 @@
                                     <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link'); ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
                                     <td><?= explode(" ", $colonist->age)[0] ?></td>
                                     <td><?= $colonist->school_name ?></td>
-                                    <td><?= $colonist->school_year ?></td>
+<!--                                    <td><?= $colonist->school_year ?></td> -->
+                                    <td><?= explode(" ", $colonist->school_year)[0] ?></td>
                                     <?php
                                     if ($colonist->roommate1_status == "F") {
                                         ?>
