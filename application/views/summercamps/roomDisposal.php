@@ -33,7 +33,7 @@
             $('#sortable-table').datatable({
                 pageSize: Number.MAX_VALUE,
                 sort: [sortLowerCase, sortNumber, sortLowerCase, sortnumber],
-                filters: [true, selectTodas, true, selectTodas],
+                filters: [true, selectTodas, true, selectTodos],
                 filterText: 'Escreva para filtrar...'
             });
 
@@ -230,7 +230,7 @@
 
     <style>
         .T { color: green; }
-        .TF, .TF1M, .TF2M, .TF3M, .TF4M, .TF5M, .TF6M, .TF1F, .TF2F, .TF3F, .TF4F, .TF5F, .TF6F , .TF7F{ color: brown; }
+        .TF, .TF1M, .TF2M, .TF3M, .TF4M, .TF5M, .TF6M, .TF7M, .TF8M, .TF9M, .TF10M,  .TF1F, .TF2F, .TF3F, .TF4F, .TF5F, .TF6F , .TF7F, .TF8F, .TF9F, .TF10F{ color: brown; }
         .F { color: red; }
     </style>
     <div class = "col-lg-12">
