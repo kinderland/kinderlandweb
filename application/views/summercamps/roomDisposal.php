@@ -32,7 +32,7 @@
         $(document).ready(function () {
             $('#sortable-table').datatable({
                 pageSize: Number.MAX_VALUE,
-                sort: [sortLowerCase, sortNumber, sortLowerCase, sortnumber],
+                sort: [sortLowerCase, sortNumber, sortLowerCase],
                 filters: [true, selectTodas, true],
                 filterText: 'Escreva para filtrar...'
             });
@@ -411,7 +411,7 @@
                                                                         <td><span class="<?= $colonist->roommate3_status ?>"><?= $colonist->roommate3 ?> <?= (($colonist->roommate3_status != "T" && $colonist->roommate3_status != "F" && $colonist->roommate3_status != "TF") ? "<br />[" . substr($colonist->roommate3_status, 2, 2) . "]" : '') ?></span></td>
                                                                     <?php } ?>
                                                                     <td><?= $colonist->friend_roommates ?></td>
-                                                                    <td><input type="number" min="0" max="<?php if (isset($pavilhao) && $pavilhao == "F") { echo "9";} else if (isset($pavilhao) && $pavilhao == "M"){ echo  $num_quartos;}?>" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>
+                                                                    <td><input type="number" min="0" max="<?php if (isset($pavilhao) && $pavilhao == "F") { echo $num_quartos;} else if (isset($pavilhao) && $pavilhao == "M"){ echo  $num_quartos;}?>" style="width:40px!important" value="<?= $colonist->room_number ?>" id="colonist_room_<?= $colonist->colonist_id ?>_<?= $colonist->summer_camp_id ?>"></td>
                                                                     <td><button class="btn btn-primary" onclick="saveRoomNumber(<?= $colonist->colonist_id ?>,<?= $colonist->summer_camp_id ?>,'<?= $pavilhao ?>')">Salvar</button></td>
                                                                     </tr>
                                                                 <?php } ?>
