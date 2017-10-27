@@ -32,8 +32,8 @@
         $(document).ready(function () {
             $('#sortable-table').datatable({
                 pageSize: Number.MAX_VALUE,
-                sort: [sortLowerCase, sortNumber, sortLowerCase],
-                filters: [true, selectTodas, true],
+                sort: [sortLowerCase, sortNumber, sortLowerCase, sortnumber],
+                filters: [true, selectTodas, true, selectTodas],
                 filterText: 'Escreva para filtrar...'
             });
 
