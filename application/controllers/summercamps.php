@@ -1564,10 +1564,14 @@ class SummerCamps extends CK_Controller
 
     private function countFriendRoommates($colonists, $colonist, $gender)
     {
+        $unwanted_array = array('Á'=>'A', 'À'=>'A', 'Ã'=>'A','Â'=>'A','É=>'E', 'È'=>'E','Ê'=>'E','Í'=>'I','Ó'=>'O', 'Õ'=>'O','Ô'=>'O','Ú'=>'U', 'á'=>'a', 'à'=>'a', 'ã'=>'a','â'=>'a','é'=>'e', 'è'=>'e','ê'=>'e','í'=>'i','ó'=>'o', 'õ'=>'o','ô'=>'o','ú'=>'u', 'Ç'=>'c', 'ç'=>'c')
 
-        $roommate1Pattern = $this->createNamePattern($colonist->roommate1);
-        $roommate2Pattern = $this->createNamePattern($colonist->roommate2);
-        $roommate3Pattern = $this->createNamePattern($colonist->roommate3);
+        $roommate1Pattern = $this->createNamePattern(trim(strtolower($colonist->roommate1)));
+        $roommate1Pattern = strtr($roommate1Pattern, $unwanted_array);
+        $roommate2Pattern = $this->createNamePattern(trim(strtolower($colonist->roommate2)));
+        $roommate2Pattern = strtr($roommate2Pattern, $unwanted_array);
+        $roommate3Pattern = $this->createNamePattern(trim(strtolower($colonist->roommate3)));
+        $roommate3Pattern = strtr($roommate3Pattern, $unwanted_array);
 
         $colonist->roommate1_status = "F";
         $colonist->roommate2_status = "F";
@@ -1579,8 +1583,8 @@ class SummerCamps extends CK_Controller
         $matchesRoommate3 = 0;
 
         foreach ($colonists as $c) {
-
             $colonistNameLowerCase = trim(strtolower($c->colonist_name));
+            $colonistNameLowerCase = strtr($colonistNameLowerCase, $unwanted_array);
             if ($roommate1Pattern != null && preg_match($roommate1Pattern, $colonistNameLowerCase)) {
                 $matchesRoommate1++;
                 if ($c->room_number == $colonist->room_number && $c->room_number != "") {
