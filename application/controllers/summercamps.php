@@ -1564,7 +1564,7 @@ class SummerCamps extends CK_Controller
 
     private function countFriendRoommates($colonists, $colonist, $gender)
     {
-        $unwanted_array = array('Á'=>'A', 'À'=>'A', 'Ã'=>'A','Â'=>'A','É=>'E', 'È'=>'E','Ê'=>'E','Í'=>'I','Ó'=>'O', 'Õ'=>'O','Ô'=>'O','Ú'=>'U', 'á'=>'a', 'à'=>'a', 'ã'=>'a','â'=>'a','é'=>'e', 'è'=>'e','ê'=>'e','í'=>'i','ó'=>'o', 'õ'=>'o','ô'=>'o','ú'=>'u', 'Ç'=>'c', 'ç'=>'c')
+        $unwanted_array = array('Á'=>'A', 'À'=>'A', 'Ã'=>'A','Â'=>'A','É=>'E', 'È'=>'E','Ê'=>'E','Í'=>'I','Ó'=>'O', 'Õ'=>'O','Ô'=>'O','Ú'=>'U', 'á'=>'a', 'à'=>'a', 'ã'=>'a','â'=>'a','é'=>'e', 'è'=>'e','ê'=>'e','í'=>'i','ó'=>'o', 'õ'=>'o','ô'=>'o','ú'=>'u', 'Ç'=>'c', 'ç'=>'c');
 
         $roommate1Pattern = $this->createNamePattern(trim(strtolower($colonist->roommate1)));
         $roommate1Pattern = strtr($roommate1Pattern, $unwanted_array);
