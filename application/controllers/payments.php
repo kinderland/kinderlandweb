@@ -81,7 +81,7 @@
             $xml = $transaction -> createTransactionCieloBuyPage($description);
 
             $status = $xml->status;
-            if ($status == NULL || ($status != "0" && $status != "10") ) {
+            if ($status == NULL || ($status != "0" && $status != "10" && $status != "1" ) ) {
                 $this -> Logger -> error("Erro ao iniciar operação com a Cielo, código de erro: " . $status . "\nDetalhes do erro: " . var_export($xml, true));
                 //TODO Pagina de erro.                
                 return;
