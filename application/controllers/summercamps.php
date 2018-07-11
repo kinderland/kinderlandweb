@@ -313,6 +313,7 @@ class SummerCamps extends CK_Controller
 
             if ($summerCampMini) {
                 $sleepOut            = $this->input->post('sleepOut', true);
+                $summerInterest      = $this->input->post('summerInterest', true);
                 $wakeUpEarly         = $this->input->post('wakeUpEarly', true);
                 $foodRestriction     = $this->input->post('foodRestriction', true);
                 $feedsIndependently  = $this->input->post('feedsIndependently', true);
@@ -325,7 +326,7 @@ class SummerCamps extends CK_Controller
                 $phoneResponsible    = $this->input->post('phoneResponsible', true);
                 $observationMini     = $this->input->post('observationMini', true);
                 $sleepEnuresis       = $this->input->post('sleepEnuresis', true);
-                $this->summercamp_model->updateSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
+                $this->summercamp_model->updateSummerCampMini($summerCampId, $colonistId, $sleepOut, $summerInterest, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
             }
 
             $oldSubscriptionRestored = $this->summercamp_model->isOldSubscriptionRestored($summerCampId, $colonistId);
@@ -474,6 +475,7 @@ class SummerCamps extends CK_Controller
 
             if ($summerCampMini) {
                 $sleepOut            = $this->input->post('sleepOut', true);
+                $summerInterest      = $this->input->post('summerInterest', true);
                 $wakeUpEarly         = $this->input->post('wakeUpEarly', true);
                 $foodRestriction     = $this->input->post('foodRestriction', true);
                 $feedsIndependently  = $this->input->post('feedsIndependently', true);
@@ -486,7 +488,7 @@ class SummerCamps extends CK_Controller
                 $phoneResponsible    = $this->input->post('phoneResponsible', true);
                 $observationMini     = $this->input->post('observationMini', true);
                 $sleepEnuresis       = $this->input->post('sleepEnuresis', true);
-                $this->summercamp_model->saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
+                $this->summercamp_model->saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $summerInterest,  $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible);
             }
 
             $this->generic_model->commitTransaction();

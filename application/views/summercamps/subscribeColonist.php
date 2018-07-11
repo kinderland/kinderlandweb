@@ -804,6 +804,28 @@
 
                 <br />
                 <br />
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="summer" class="col-lg-6 control-label">Tenho interesse, havendo vaga, em participar da 1a Turma <?= date("Y")+1;?>* : </label>
+                    <div class="col-lg-6">
+                            <input required type="radio" name="summerInterest" value="1"
+                            <?php
+                            if ((!empty($_POST['summerInterest']) && ($_POST['summerInterest'] == "1")))
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input type="radio" name="summerInterest" value="0"
+                            <?php if (!empty($_POST['summerInterest']) && ($_POST['summerInterest'] == "0")) echo "checked='checked'" ?>
+                                   /> Não
+                    </div>
+            
+                </div>
+	    </div>
+            <br />
+
+
+
+
             <?php } ?>
             <div class="form-group">
                 <div class="col-lg-6">
