@@ -1976,7 +1976,7 @@ class Admin extends CK_Controller {
         $this->loadReportView("admin/camps/manage_camps", $data);
     }
     							
-    public function createCamp($errors = array(), $camp_name = NULL, $date_start = NULL, $date_finish = NULL, $date_start_pre_associate = NULL, $date_finish_pre_associate = NULL, $date_start_pre = NULL, $date_finish_pre = NULL,  $capacity_male = NULL, $capacity_female = NULL, $payments = array(), $type = NULL) {
+    public function createCamp($errors = array(), $camp_name = NULL, $date_start = NULL, $date_finish = NULL, $date_start_pre_associate = NULL, $date_finish_pre_associate = NULL, $date_start_pre = NULL, $date_finish_pre = NULL,  $capacity_male = NULL, $capacity_female = NULL, $payments = array(), $type = NULL, $schooling_description = NULL) {
         $data['payments'] = $payments;
         $data['errors'] = $errors;
         $data['camp_name'] = $camp_name;
@@ -1988,6 +1988,7 @@ class Admin extends CK_Controller {
         $data['date_finish_pre'] = $date_finish_pre;
         $data['capacity_male'] = $capacity_male;
         $data['capacity_female'] = $capacity_female;
+        $data['schooling_description'] = $schooling_description;
         
         if($type == NULL)
         	$type = false;
@@ -2037,6 +2038,7 @@ class Admin extends CK_Controller {
         $date = $dateDay[0] . "/" . $date[1] . "/" . $date[0];
         $data['date_finish_pre'] = $date;
 
+        $data['schooling_description'] = $camp->getSchoolingDescription();
 
 
         $data['enabled'] = $camp->isEnabled();
@@ -2089,6 +2091,7 @@ class Admin extends CK_Controller {
         $capacity_female = $this->input->post('capacity_female', TRUE);
         $mini_camp = $this->input->post('mini_camp', TRUE);
         
+        $schooling_description = $this->input->post('schooling_description', TRUE);
 
         $payments = array();
         $payment_date_end = $this->input->post("payment_date_end", TRUE);
@@ -2330,7 +2333,7 @@ class Admin extends CK_Controller {
             $this->Logger->info("Updating SummerCamp " . $camp_name);
             $this->generic_model->startTransaction();
 
-            $campId = $this->summercamp_model->updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female, $mini_camp);
+            $campId = $this->summercamp_model->updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female, $mini_camp, $schooling_description);
 
             if ($campId) {
                 $this->summercamp_model->deleteSummerCampPaymentPeriods($camp_id);
@@ -2341,15 +2344,15 @@ class Admin extends CK_Controller {
 
                 $this->generic_model->commitTransaction();
                 $this->Logger->info("New SummerCamp successfully inserted");
-                return $this->manageCamps('ColÃ´nia atualizada com sucesso!');
+                return $this->manageCamps('Colônia atualizada com sucesso!');
             } else
-                return $this->manageCamps('Ocorreu um erro ao atualizar a colÃ´nia. Tente novamente.');
+                return $this->manageCamps('Ocorreu um erro ao atualizar a colônia. Tente novamente.');
         } catch (Exception $ex) {
             $this->Logger->error("Failed to insert new summercamp");
             $this->generic_model->rollbackTransaction();
             $data['error'] = true;
 
-            return $this->manageCamps('Ocorreu um erro ao atualizar a colÃ´nia. Tente novamente.');
+            return $this->manageCamps('Ocorreu um erro ao atualizar a colônia. Tente novamente.');
 
 //$this->loadReportView('admin/events/event_edit', $data);
         }
@@ -2460,6 +2463,7 @@ class Admin extends CK_Controller {
         $payment_portions = $this->input->post("payment_portions", TRUE);
         $associated_price = $this->input->post("associated_price", TRUE);
               
+        $schooling_description = $_POST['schooling_description'];
         
         if ($camp_name === ""){
         	$errors[] = "O campo nome é obrigatório\n";
@@ -2636,7 +2640,7 @@ class Admin extends CK_Controller {
         
         $camp = new SummerCamp(null, $camp_name, null, $date_start, $date_finish, $date_start_pre, $date_finish_pre, $date_start_pre_associate, $date_finish_pre_associate, null, //description
         		true, //preEnabled
-        		$_POST['capacity_male'], $_POST['capacity_female'], $_POST['mini_camp']
+        		$_POST['capacity_male'], $_POST['capacity_female'], $_POST['mini_camp'], 5, false, "", $schooling_description
         );
         $camps = $this->summercamp_model->getAllSummerCamps();
         
@@ -2728,7 +2732,7 @@ class Admin extends CK_Controller {
         		$this->Logger->info("Error: " . $e);
         	}
         
-        	return $this->createCamp($errors, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female,$paymentsError, $mini_camp);
+        	return $this->createCamp($errors, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female,$paymentsError, $mini_camp, $schooling_description);
         }  
 
         try {

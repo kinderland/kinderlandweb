@@ -10,6 +10,7 @@
 		private $vacineTetanus;
 		private $vacineMMR;
 		private $vacineHepatitis;
+		private $vacineYellowFever;
 		private $infectoContagiousAntecedents;
 		private $regularUseMedicine;
 		private $medicineRestrictions;
@@ -22,7 +23,7 @@
 
 		public function __construct($campId, $colonistId, $bloodType, $rh, 
 			$weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, 
-			$vacineHepatitis, $infectoContagiousAntecedents,
+			$vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents,
 			$regularUseMedicine, $medicineRestrictions,
 			$allergies, $analgesicAntipyretic,$doctorId, $date, $doctorObservations=null){
 			$this->campId = $campId;
@@ -35,6 +36,7 @@
 			$this->vacineTetanus = $vacineTetanus;
 			$this->vacineMMR = $vacineMMR;
 			$this->vacineHepatitis = $vacineHepatitis;
+			$this->vacineYellowFever = $vacineYellowFever;
 			$this->infectoContagiousAntecedents = $infectoContagiousAntecedents;
 			$this->regularUseMedicine = $regularUseMedicine;
 			$this->medicineRestrictions = $medicineRestrictions;
@@ -57,6 +59,7 @@
 				$resultRow->vacine_tetanus,
 				$resultRow->vacine_mmr,
 				$resultRow->vacine_hepatitis,
+				$resultRow->vacine_yellow_fever,
 				$resultRow->infecto_contagious_antecedents,
 				$resultRow->regular_use_medicine,
 				$resultRow->medicine_restrictions,
@@ -151,6 +154,13 @@
 		}
 		public function getVacineHepatitis(){
 			return $this->vacineHepatitis;
+		}
+
+		public function setVacineYellowFever($vacineYellowFever){
+			$this->vacineYellowFever = $vacineYellowFever;
+		}
+		public function getVacineYellowFever(){
+			return $this->vacineYellowFever;
 		}
 
 		public function setInfectoContagiousAntecedents($infectoContagiousAntecedents){

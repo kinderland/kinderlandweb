@@ -17,12 +17,14 @@ class SummerCampSubscription extends Colonist {
 	private $discount;
 	private $datePaymentLimit;
 	private $roomNumber;
+	private $specialCare;
+	private $specialCareObs;
 
 	public function __construct($personId, $fullname, $gender, $email,$address,
 	$colonistId, $birthDate, $documentNumber, $documentType,$personUserId, 
 	$phone1,
 	$phone2, 
-	$summerCampId, $personUserId, $situation, $school, $schoolYear,$acceptedTerms,$acceptedTravelTerms,$situationId,$roommate1,$roommate2,$roommate3, $queueNumber=null, $discount=null, $datePaymentLimit=null, $roomNumber=null) {
+	$summerCampId, $personUserId, $situation, $school, $schoolYear,$acceptedTerms,$acceptedTravelTerms,$situationId,$roommate1,$roommate2,$roommate3, $queueNumber=null, $discount=null, $datePaymentLimit=null, $roomNumber=null, $specialCare, $specialCareObs) {
 		parent::__construct($personId, $fullname, $gender, $email, $address, $colonistId, $birthDate, $documentNumber, $documentType, $phone1, $phone2);
 		$this -> summerCampId = $summerCampId;
 		$this -> personUserId = $personUserId;
@@ -40,6 +42,8 @@ class SummerCampSubscription extends Colonist {
 		$this -> datePaymentLimit = $datePaymentLimit;
 		$this -> roomNumber = $roomNumber;
 		$this -> colonistId = $colonistId;
+		$this -> specialCare = $specialCare;
+		$this -> specialCareObs = $specialCareObs;
 	}
 
 	public static function createSummerCampSubscriptionObject($resultRow, $addressIncluded = false) {
@@ -50,7 +54,8 @@ class SummerCampSubscription extends Colonist {
 		null, //phone2
 		$resultRow -> summer_camp_id, $resultRow -> person_user_id, $resultRow -> situation_description, $resultRow -> school_name, $resultRow -> school_year,$resultRow -> accepted_terms, $resultRow -> accepted_travel_terms,$resultRow -> situation,
 		$resultRow -> roommate1, $resultRow -> roommate2, $resultRow -> roommate3,
-		$resultRow -> queue_number,$resultRow -> discount, $resultRow -> date_payment_limit, $resultRow -> room_number);
+		$resultRow -> queue_number,$resultRow -> discount, $resultRow -> date_payment_limit, $resultRow -> room_number,
+		$resultRow -> special_care, $resultRow -> special_care_obs);
 		if ($addressIncluded)
 			$summerCampSubscription -> setAddress(Address::createAddressObject($resultRow));
 
@@ -193,6 +198,22 @@ class SummerCampSubscription extends Colonist {
 
 	public function getRoomNumber() {
 		return $this -> roomNumber;
+	}
+
+	public function setSpecialCare($specialCare) {
+		$this -> specialCare = $specialCare;
+	}
+
+	public function getSpecialCare() {
+		return $this -> specialCare;
+	}
+
+	public function setSpecialCareObs($specialCareObs) {
+		$this -> specialCareObs = $specialCareObs;
+	}
+
+	public function getSpecialCareObs() {
+		return $this -> specialCareObs;
 	}
 }
 ?>

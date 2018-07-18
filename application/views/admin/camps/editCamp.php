@@ -180,6 +180,12 @@
                               placeholder="Nome da colônia"  value="<?= $camp_name ?>" name="camp_name" id="camp_name"/>
                         </div>
                 <br/><br/><br />
+                <label for="schooling_description" style="width: 125px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px;" class="col-lg-2 control-label"> Texto complementar: </label>
+                        <div class="col-lg-6" style="width: 590px; padding-left:0px;">
+                            <input type="text" class="form-control"
+                              placeholder="Texto complementar"  value="<?= $schooling_description ?>" name="schooling_description" id="schooling_description"/>
+                        </div>
+                <br/><br/><br />
                         <label for="date_start" style="width: 80px; padding-left:0px; padding-right:0px; margin-bottom:0px; margin-top:7px; float:left;" class="col-lg-2 control-label"> Data Início: </label>
                         <div class="col-lg-3" style="padding-left:3px;">
                             <input type="text" class="datepickers form-control" value  = "<?php echo Events::toMMDDYYYY($date_start); ?>" name="date_start" id="date_start" />

@@ -318,15 +318,15 @@ class summercamp_model extends CK_Model {
         return $camp;
     }
 
-    public function updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female, $mini_camp) {
+    public function updateCamp($camp_id, $camp_name, $date_start, $date_finish, $date_start_pre_associate, $date_finish_pre_associate, $date_start_pre, $date_finish_pre, $capacity_male, $capacity_female, $mini_camp, $schooling_description) {
         $this->Logger->info("Running: " . __METHOD__);
 
         $sql = 'UPDATE summer_camp SET camp_name = ?, date_start = ?, date_finish = ?, date_start_pre_subscriptions = ?, date_finish_pre_subscriptions = ?, 
-    			date_start_pre_subscriptions_associate = ?, date_finish_pre_subscriptions_associate =?,  capacity_male = ?, capacity_female = ?, mini_camp = ?
+    			date_start_pre_subscriptions_associate = ?, date_finish_pre_subscriptions_associate =?,  capacity_male = ?, capacity_female = ?, mini_camp = ? , schooling_description = ?
 				WHERE summer_camp_id = ?';
 
         $result = $this->execute($this->db, $sql, array($camp_name, $date_start, $date_finish, $date_start_pre, $date_finish_pre,
-            $date_start_pre_associate, $date_finish_pre_associate, $capacity_male, $capacity_female, $mini_camp, $camp_id));
+            $date_start_pre_associate, $date_finish_pre_associate, $capacity_male, $capacity_female, $mini_camp, $schooling_description, $camp_id));
 
         return $result;
     }
@@ -365,8 +365,8 @@ class summercamp_model extends CK_Model {
     		
     	$oldSubs = $this->getSummerCampSubscription($colonistId,$campId);
     	
-    	$sql = 'INSERT INTO summer_camp_subscription (summer_camp_id,colonist_id,person_user_id,situation,school_name,school_year,accepted_terms,accepted_travel_terms,roommate1,roommate2,roommate3) VALUES (?, ?, ?, ?,?,?,?,?,?,?,?)';
-    	$returnId = $this->execute($this->db, $sql, array($newCamp->summer_camp_id, $colonistId, $oldSubs->getPersonUserId(), $oldSubs->getSituationId(), $oldSubs->getSchool(), $oldSubs->getSchoolYear(),$oldSubs->getAcceptedTerms(), $oldSubs->getAcceptedTravelTerms(), $oldSubs->getRoommate1(), $oldSubs->getRoommate2(), $oldSubs->getRoommate3()));
+    	$sql = 'INSERT INTO summer_camp_subscription (summer_camp_id,colonist_id,person_user_id,situation,school_name,school_year,accepted_terms,accepted_travel_terms,roommate1,roommate2,roommate3,special_care,special_care_obs) VALUES (?, ?, ?, ?,?,?,?,?,?,?,?,?,?)';
+    	$returnId = $this->execute($this->db, $sql, array($newCamp->summer_camp_id, $colonistId, $oldSubs->getPersonUserId(), $oldSubs->getSituationId(), $oldSubs->getSchool(), $oldSubs->getSchoolYear(),$oldSubs->getAcceptedTerms(), $oldSubs->getAcceptedTravelTerms(), $oldSubs->getRoommate1(), $oldSubs->getRoommate2(), $oldSubs->getRoommate3(), $oldSubs->getSpecialCare(), $oldSubs->getSpecialCareObs()));
     	
     	if(!$returnId)
     		return false;
@@ -535,7 +535,7 @@ class summercamp_model extends CK_Model {
     		$resultSet = $this->executeRow($this->db, $sql, array(intval($userId),intval($colonistId),intval($userId),intval($colonistId)));
         	 
     	if($resultSet){
-    		if($this->subscribeColonist($summercampId, $colonistId, $userId, 0, $resultSet->school_name, $resultSet->school_year, $resultSet->roommate1, $resultSet->roommate2, $resultSet->roommate3)){
+    		if($this->subscribeColonist($summercampId, $colonistId, $userId, 0, $resultSet->school_name, $resultSet->school_year, $resultSet->roommate1, $resultSet->roommate2, $resultSet->roommate3, $resultSet->special_care, $resultSet->special_care_obs)){
     			
     			$sql = "INSERT INTO summer_camp_old_subscription(summer_camp_id,colonist_id) VALUES (?,?)";
     			
@@ -775,12 +775,13 @@ class summercamp_model extends CK_Model {
                     pre_subscriptions_enabled,
                     capacity_male,
                     capacity_female,
-                    mini_camp
+                    mini_camp,
+                    schooling_description
                 ) VALUES (
-                    ?,?,?,?,?,?,?,?," . (($camp->isEnabled()) ? "true" : "false") . ",?,?," . (($camp->isMiniCamp()) ? "true" : "false") . "
+                    ?,?,?,?,?,?,?,?," . (($camp->isEnabled()) ? "true" : "false") . ",?,?," . (($camp->isMiniCamp()) ? "true" : "false") . ",?
                 )";
 
-        $paramArray = array($camp->getCampName(), $camp->getDateStart(), $camp->getDateFinish(), $camp->getDateStartPre(), $camp->getDateFinishPre(), $camp->getDateStartPreAssociate(), $camp->getDateFinishPreAssociate(), $camp->getDescription(), intval($camp->getCapacityMale()), intval($camp->getCapacityFemale()));
+        $paramArray = array($camp->getCampName(), $camp->getDateStart(), $camp->getDateFinish(), $camp->getDateStartPre(), $camp->getDateFinishPre(), $camp->getDateStartPreAssociate(), $camp->getDateFinishPreAssociate(), $camp->getDescription(), intval($camp->getCapacityMale()), intval($camp->getCapacityFemale()), $camp->getSchoolingDescription());
 
         $campId = $this->executeReturningId($this->db, $sql, $paramArray);
 
@@ -806,21 +807,21 @@ class summercamp_model extends CK_Model {
     	return $result;
     }
 
-    public function subscribeColonist($summerCampId, $colonistId, $userId, $situation, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3) {
+    public function subscribeColonist($summerCampId, $colonistId, $userId, $situation, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3, $specialCare, $specialCareObs) {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = 'INSERT INTO summer_camp_subscription (summer_camp_id,colonist_id,person_user_id,situation,school_name,school_year,roommate1,roommate2,roommate3) VALUES (?, ?, ?, ?,?,?,?,?,?)';
-        $returnId = $this->execute($this->db, $sql, array($summerCampId, $colonistId, $userId, $situation, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3));
+        $sql = 'INSERT INTO summer_camp_subscription (summer_camp_id,colonist_id,person_user_id,situation,school_name,school_year,roommate1,roommate2,roommate3,special_care, special_care_obs) VALUES (?, ?, ?, ?,?,?,?,?,?,?,?)';
+        $returnId = $this->execute($this->db, $sql, array($summerCampId, $colonistId, $userId, $situation, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3, $specialCare, $specialCareObs));
         if ($returnId)
             return TRUE;
 
         return FALSE;
     }
 
-    public function editColonistSubscription($summerCampId, $colonistId, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3) {
+    public function editColonistSubscription($summerCampId, $colonistId, $schoolName, $schoolYear, $roommate1, $roommate2, $roommate3, $specialCare, $specialCareObs) {
         $this->Logger->info("Running: " . __METHOD__);
 
-        $sql = 'UPDATE summer_camp_subscription SET school_name=?, school_year=?, roommate1=?, roommate2=?, roommate3=? where summer_camp_id = ? and colonist_id = ? ';
-        $returnId = $this->execute($this->db, $sql, array($schoolName, $schoolYear, $roommate1, $roommate2, $roommate3, intval($summerCampId), intval($colonistId)));
+        $sql = 'UPDATE summer_camp_subscription SET school_name=?, school_year=?, roommate1=?, roommate2=?, roommate3=?, special_care=?, special_care_obs=? where summer_camp_id = ? and colonist_id = ? ';
+        $returnId = $this->execute($this->db, $sql, array($schoolName, $schoolYear, $roommate1, $roommate2, $roommate3, $specialCare, $specialCareObs, intval($summerCampId), intval($colonistId)));
         if ($returnId)
             return TRUE;
 
@@ -1593,7 +1594,7 @@ class summercamp_model extends CK_Model {
 
     public function getSchools() {
         $this->Logger->info("Running: " . __METHOD__);
-        $sql = "SELECT * FROM school";
+        $sql = "SELECT * FROM school ORDER BY school_name ASC";
         $resultSet = $this->executeRows($this->db, $sql);
         if ($resultSet) {
             $schools = array();

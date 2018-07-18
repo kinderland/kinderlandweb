@@ -109,12 +109,12 @@
 				</select></td>
 
 				<td width = "25%"><span><b>*Peso:</b></span>
-				<input type="text" class="nome" <?=$disabled?> onkeypress='return event.charCode >= 48 && event.charCode <= 57' required maxlength="3" name="weight" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+				<input type="text" class="nome" <?=$disabled?> onkeypress='return event.charCode >= 48 && event.charCode <= 57' required maxlength="3" name="weight" size="4px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')" value="<?=$weight?>"
 >
 				kg </td>
 				<td width = "25%"><span><b>*Altura:</b></span>
-				<input type="text" class="nome" <?=$disabled?> onkeypress='return event.charCode >= 48 && event.charCode <= 57' required maxlength="4" name="height" id="height" size="1px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+				<input type="text" class="nome" <?=$disabled?> onkeypress='return event.charCode >= 48 && event.charCode <= 57' required maxlength="4" name="height" id="height" size="4px" 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')" value="<?=$height?>">
 				cm </td>
 			</tr>
@@ -165,6 +165,15 @@
 						<option value="">-- Selecione --</option>
 						<option value="t" <?php if (!empty($vacineHepatitis) && ($vacineHepatitis === "t")) echo "selected" ?> >Sim</option>
 						<option value="f" <?php if (!empty($vacineHepatitis) && ($vacineHepatitis === "f")) echo "selected" ?>>Não</option>
+					</select>
+					<br>
+					<span class="required"><b>*Febre amarela:</b></span>
+					<select class="required" name="vacineYellowFever" required <?=$disabled?>
+
+>
+						<option value="">-- Selecione --</option>
+						<option value="t" <?php if (!empty($vacineYellowFever) && ($vacineYellowFever === "t")) echo "selected" ?> >Sim</option>
+						<option value="f" <?php if (!empty($vacineYellowFever) && ($vacineYellowFever === "f")) echo "selected" ?>>Não</option>
 					</select>
 					<br>
 				</p></td>

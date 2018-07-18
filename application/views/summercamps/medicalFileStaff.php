@@ -138,6 +138,15 @@
 						<option value="f" >Não</option>
 					</select>
 					<br>
+					<span class="required"><b>*Febre amarela:</b></span>
+					<select class="required" name="vacineYellowFever" required 
+
+>
+						<option value="">-- Selecione --</option>
+						<option value="t" >Sim</option>
+						<option value="f" >Não</option>
+					</select>
+					<br>
 				</p></td>
 			</tr>
 			<tr>

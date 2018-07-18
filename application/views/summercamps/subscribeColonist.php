@@ -227,12 +227,50 @@
                                  >
                             <option value="" selected>-- Selecione --</option>
                             <?php
-                            for ($__school_year__ = 2; $__school_year__ <= 9; $__school_year__++) {
-                                echo "<option value='" . $__school_year__ . "' ";
-                                if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
-                                    echo "selected";
-                                echo ">" . $__school_year__ . "</option>";
-                            }
+            			if ($summerCamp->isMiniCamp()) {
+                            		for ($__school_year__ = 2; $__school_year__ <= 3; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
+                                    			echo "selected";
+                                		echo ">" . $__school_year__ . "</option>";
+                            		}
+				} else {
+					switch ($summerCamp->getCampType()) {
+					case "1":
+                            		for ($__school_year__ = 4; $__school_year__ <= 5; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
+                                    			echo "selected";
+                                		echo ">" . $__school_year__ . "</option>";
+                            		}
+					break;
+					case "2":
+                            		for ($__school_year__ = 8; $__school_year__ <= 9; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
+                                    			echo "selected";
+                                		echo ">" . $__school_year__ . "</option>";
+                            		}
+					break;
+					case "3":
+                            		for ($__school_year__ = 6; $__school_year__ <= 7; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
+                                    			echo "selected";
+                                		echo ">" . $__school_year__ . "</option>";
+                            		}
+					break;
+					default:
+                            		for ($__school_year__ = 1; $__school_year__ <= 9; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
+                                    			echo "selected";
+                                		echo ">" . $__school_year__ . "</option>";
+                            		}
+
+					}
+
+				}
                             ?>
                         </select>
                     </div>
@@ -805,6 +843,7 @@
                 <br />
                 <br />
 
+
             <div class="row">
                 <div class="form-group">
                     <label for="summer" class="col-lg-6 control-label">Tenho interesse, havendo vaga, em participar da 1a Turma <?= date("Y")+1;?>* : </label>
@@ -820,13 +859,43 @@
                     </div>
             
                 </div>
+		
 	    </div>
             <br />
 
-
-
-
             <?php } ?>
+
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="specialcare" class="col-lg-6 control-label">O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?* : </label>
+                    <div class="col-lg-6">
+                            <input required type="radio" name="specialCare" value="1"
+                            <?php
+                            if ((!empty($_POST['specialCare']) && ($_POST['specialCare'] == "1")))
+                                echo "checked='checked'"
+                                ?>/> Sim
+                            <input type="radio" name="specialCare" value="0"
+                            <?php if (!empty($_POST['specialCare']) && ($_POST['specialCare'] == "0")) echo "checked='checked'" ?>
+                                   /> Não
+                    </div>
+            
+                </div>
+		
+	    </div>
+            <br />
+
+                <div class="row">
+                    <div class="form-group">
+                        <label for="specialcareobs" class="col-lg-6 control-label">Qual? </label>
+                        <textarea maxlength="300" Name="specialCareObs" class="col-lg-5" ROWS=5 COLS=20><?php if (!empty($_POST['specialCareObs'])) echo $_POST['specialCareObs']; ?></textarea>
+                    </div>
+                </div>
+                <br />
+                <br />
+
+
+
             <div class="form-group">
                 <div class="col-lg-6">
                     <button class="btn btn-primary" style="margin-right:40px" onClick="validateForm(event)">Confirmar</button>

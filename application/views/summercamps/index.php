@@ -309,10 +309,11 @@
             ?>
             <br />
             <br />
+<!--
             <span style="font-size:18px">Ao final do preenchimento dos dados da pré-inscrição, quando todos os ítens estiverem marcados com um
                 <img src="<?= $this->config->item('assets') ?>images/payment/greenicon.png" alt="Preenchido" title="Preenchido" width="20px" height="20px"/>
                 ,<br />não esquecer de <span style="color: red"><b>ENVIAR</b></span> a pré-inscrição. O status mudará para aguardando validação e um email automático será enviado, confirmando que a pré-inscrição foi encaminhada.</span> 
-
+-->
 
             <table class="table-bordered table table-striped">
                 <thead>
@@ -340,10 +341,17 @@
                     ?>
                     <tr>
                         <td><?php
+
                             if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
                                     ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifySubscription())) {
                                 ?>
+                            	<a> Status do envio da pré-inscrição</a>
+                            	<br>
+                            	<br>
                                 <a href="<?= $this->config->item('url_link'); ?>summercamps/editSubscriptionColonistForm?colonistId=<?= $summerCampInscription->getColonistId() ?>&summerCampId=<?= $summerCampInscription->getSummerCampId() ?>">Cadastro:</a><?php } else { ?>
+                            	<a> Pré-inscrição enviada </a>
+                            	<br>
+                            	<br>
                                 <a href="<?= $this->config->item('url_link'); ?>summercamps/viewColonistInfo?colonistId=<?= $summerCampInscription->getColonistId() ?>&summerCampId=<?= $summerCampInscription->getSummerCampId() ?>">Cadastro:</a><?php } ?>
                             <?= $summerCampInscription->getFullname() ?>
                             <br>
@@ -382,9 +390,19 @@
                             Foto 3x4
                             <?php }?>
                             </td>
+
                        
-                       
-                        <td><?php $documents += insertFigureRegister($this,$summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), $validation); ?>
+                        <td>
+
+                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_MEDICAL_FILE))){
+            			echo '<img src="' . $this->config->item('assets') . 'images/payment/redicon.png" width="20px" height="20px"/>';
+                            } else {
+            			echo '<img src="' . $this->config->item('assets') . 'images/payment/greenicon.png" width="20px" height="20px"/>';
+                            }?>
+                            <br>
+                            <br>
+			    <?php $documents += insertFigureRegister($this,$summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), $validation); ?>
                             <br>
                             <br>
                             <hr>

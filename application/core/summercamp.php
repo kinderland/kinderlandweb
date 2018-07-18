@@ -18,8 +18,10 @@ class SummerCamp {
     private $miniCamp;
     private $daysToPay;
     private $editFriendsEnabled;
+    private $schoolingDescription;
+    private $campType;
 
-    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false, $daysToPay = 5,$editFriendsEnabled, $schoolingDescription) {
+    public function __construct($campId, $campName, $dateCreated, $dateStart, $dateFinish, $dateStartPre, $dateFinishPre, $dateStartPreAssociate, $dateFinishPreAssociate, $description, $preEnabled, $capacityMale, $capacityFemale, $miniCamp = false, $daysToPay = 5,$editFriendsEnabled, $schoolingDescription, $campType) {
         $this->campId = $campId;
         $this->campName = $campName;
         $this->dateCreated = $dateCreated;
@@ -37,6 +39,7 @@ class SummerCamp {
         $this->daysToPay = $daysToPay;
         $this->editFriendsEnabled = $editFriendsEnabled;
         $this->schoolingDescription = $schoolingDescription;
+        $this->campType = $campType;
     }
 
     public static function createCampObject($resultRow) {
@@ -57,7 +60,8 @@ class SummerCamp {
                 $resultRow->mini_camp, 
                 $resultRow->days_to_pay,
         		$resultRow->edit_friends_enabled,
-                $resultRow->schooling_description
+                $resultRow->schooling_description,
+                $resultRow->camp_type 
         );
     }
 
@@ -197,6 +201,18 @@ class SummerCamp {
 
     public function getSchoolingDescription() {
         return $this->schoolingDescription;
+    }
+
+    public function setSchoolingDescription($schoolingDescription) {
+        $this->schoolingDescription = $schoolingDescription;
+    }
+
+    public function setCampType($campType) {
+        $this->campType = $campxxiTypeId;
+    }
+
+    public function getCampType() {
+        return $this->campType;
     }
     
 }
