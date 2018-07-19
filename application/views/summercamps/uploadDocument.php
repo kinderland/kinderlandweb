@@ -94,9 +94,12 @@
 		<?php } } else if($document_type == 5){
 			
 			if($oldSubscriptionRestored->photo == 'f') {?>
+<!--
 					<button class="btn btn-success" onclick="confirmDocument(<?= $camp_id ?>,<?= $colonist_id ?>,<?= $document_type ?>)">
 							Confirmar foto recuperada do ano anterior
 						</button>
+-->
+
 	<?php }} }
 	?>
 	<br>
