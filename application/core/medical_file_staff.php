@@ -18,13 +18,15 @@
 		private $doctorId;
 		private $date;
 		private $doctorObservations;
+		private $specialCare;
+		private $specialCareObs;
 
 
 		public function __construct($personId, $bloodType, $rh, 
 			$weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, 
 			$vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents,
 			$regularUseMedicine, $medicineRestrictions,
-			$allergies, $analgesicAntipyretic,$doctorId, $date, $doctorObservations=null){
+			$allergies, $analgesicAntipyretic,$doctorId, $date, $doctorObservations=null, $specialCare, $specialCareObs){
 			$this->personId = $personId;
 			$this->bloodType = $bloodType;
 			$this->rh = $rh;
@@ -43,6 +45,8 @@
 			$this->doctorId = $doctorId;
 			$this->date = $date;
 			$this->doctorObservations = $doctorObservations;
+			$this->specialCare = $specialCare;
+			$this->specialCareObs = $specialCareObs;
 		}
 
 		public static function createMedicalFileStaffObject($resultRow){
@@ -64,7 +68,9 @@
 				$resultRow->analgesic_antipyretic,
 				$resultRow->doctor_id,
 				$resultRow->date,
-				$resultRow->doctor_observations		
+				$resultRow->doctor_observations,		
+				$resultRow->special_care,		
+				$resultRow->special_careobs		
 			);
 		}
 
@@ -210,6 +216,19 @@
 			return $this->doctorObservations;
 		}
 
+		public function setSpecialCare($specialCare){
+			$this->specialCare = $specialCare;
+		}
+		public function getSpecialCare(){
+			return $this->specialCare;
+		}
+
+		public function setSpecialCareObs($specialCareObs){
+			$this->specialCareObs = $specialCareObs;
+		}
+		public function getSpecialCareObs(){
+			return $this->specialCareObs;
+		}
 
 	}
 ?>

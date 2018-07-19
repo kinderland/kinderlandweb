@@ -609,7 +609,9 @@
 
             <br/>
             <br/>
-            <label class="control-label">Opcional: indique até 3 amigos(as) que gostaria que fizessem parte do quarto do(a) colonista: </label>
+            <label class="control-label">Opcional: <br>Indique até 3 amigos(as) que gostaria que fizessem parte do quarto do(a) colonista.</br>
+			A coordenação fará o possível para alocar pelo menos um amigo(a) indicado(a) no quarto.
+	    </label>
             <br/>
             <br/>
 
