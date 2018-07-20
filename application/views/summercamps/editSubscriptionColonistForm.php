@@ -230,12 +230,40 @@
                                 	echo ">" . $__school_year__ . "</option>";
                             		}
 				} else {
-                            		for ($__school_year__ = 4; $__school_year__ <= 9; $__school_year__++) {
+					switch ($summerCamp->getCampType()) {
+					case "1": 
+                            		for ($__school_year__ = 4; $__school_year__ <= 5; $__school_year__++) {
                                 		echo "<option value='" . $__school_year__ . "' ";
                                 		if (!empty($school) && ($schoolYear == $__school_year__))
                                     		echo "selected";
                                 	echo ">" . $__school_year__ . "</option>";
                             		}
+					break;
+					case "2": 
+                            		for ($__school_year__ = 8; $__school_year__ <= 9; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($school) && ($schoolYear == $__school_year__))
+                                    		echo "selected";
+                                	echo ">" . $__school_year__ . "</option>";
+                            		}
+					break;
+					case "3": 
+                            		for ($__school_year__ = 6; $__school_year__ <= 7; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($school) && ($schoolYear == $__school_year__))
+                                    		echo "selected";
+                                	echo ">" . $__school_year__ . "</option>";
+                            		}
+					break;
+					default: 
+                            		for ($__school_year__ = 1; $__school_year__ <= 9; $__school_year__++) {
+                                		echo "<option value='" . $__school_year__ . "' ";
+                                		if (!empty($school) && ($schoolYear == $__school_year__))
+                                    		echo "selected";
+                                	echo ">" . $__school_year__ . "</option>";
+                            		}
+
+					}
 				}
                             ?>
                         </select>

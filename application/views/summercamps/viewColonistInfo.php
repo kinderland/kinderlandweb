@@ -590,7 +590,9 @@
 
           <br/>
             <br/>
-            <label class="control-label">Opcional: indique até 3 amigos(as) que gostaria que fizessem parte do quarto do(a) colonista: </label>
+            <label class="control-label">Opcional:<br>Indique até 3 amigos(as) que gostaria que fizessem parte do quarto do(a) colonista.</br>
+			A coordenação fará o possível para alocar pelo menos um(a) amigo(a) indicado(a) no quarto.
+	    </label>
             <br/>
             <br/>
 
@@ -936,7 +938,48 @@
 
                 <br />
                 <br />
+
             <?php } ?>
+            <br />
+            <br />
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="special_care" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?*: </label>
+                    <div class="col-lg-6">
+                        <input type="radio" disabled  name="specialCare" value="1" 
+                        <?php if ( empty($specialCare) || 
+                        (!empty($specialCare) && ($specialCare == "t")
+						)) echo "checked='checked'" ?>/> Sim
+                        <input type="radio" disabled  name="specialCare" value="0"                         
+                        <?php if (!empty($specialCare) && ($specialCare == "f")) echo "checked='checked'" ?>
+						/> Não
+                    </div>
+
+
+                </div>
+            </div>
+            <br />
+            <br />
+
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="special_care_obs" class="col-lg-6 control-label"> Qual? </label>
+                    <div class="col-lg-6">
+                        <input type="text" disabled class="form-control" 
+                               value="<?php
+							if (!empty($specialCareObs)) {
+								echo $specialCareObs;
+							}
+					 ?>"/>
+	             </div>
+                </div>
+            </div>
+            <br />
+            <br />
+
+
 
 
         </form>
