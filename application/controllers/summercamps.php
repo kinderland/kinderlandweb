@@ -581,7 +581,7 @@ class SummerCamps extends CK_Controller
                     $data["medicineRestrictions"]        = null;
                     $data["allergies"]                   = null;
                     $data["analgesicAntipyretic"]        = null;
-                    $data["specialCareObs"]              = null;
+                    $data["specialCareMedical"]          = null;
                 } else if ($oldSubscriptionRestored->medical_file == 't') {
                     $data["weight"]                      = $medical_file->getWeight();
                     $data["height"]                      = $medical_file->getHeight();
@@ -596,7 +596,7 @@ class SummerCamps extends CK_Controller
                     $data["medicineRestrictions"]        = $medical_file->getMedicineRestrictions();
                     $data["allergies"]                   = $medical_file->getAllergies();
                     $data["analgesicAntipyretic"]        = $medical_file->getAnalgesicAntipyretic();
-                    $data["specialCareObs"]              = $medical_file->getSpecialCareObs();
+                    $data["specialCareMedical"]          = $medical_file->getSpecialCareMedical();
                 }
             } else {
                 $data["weight"]                      = $medical_file->getWeight();
@@ -612,7 +612,7 @@ class SummerCamps extends CK_Controller
                 $data["medicineRestrictions"]        = $medical_file->getMedicineRestrictions();
                 $data["allergies"]                   = $medical_file->getAllergies();
                 $data["analgesicAntipyretic"]        = $medical_file->getAnalgesicAntipyretic();
-                $data["specialCareObs"]              = $medical_file->getSpecialCareObs();
+                $data["specialCareMedical"]          = $medical_file->getSpecialCareMedical();
             }
 
             $doctorId            = $medical_file->getDoctorId();
@@ -681,7 +681,7 @@ class SummerCamps extends CK_Controller
             $data["doctorName"]                  = $doctor->getFullName();
             $data["doctorEmail"]                 = $doctor->getEmail();
             $tels                                = $this->telephone_model->getTelephonesByPersonId($doctorId);
-            $data["specialCareObs"]              = $medical_file->getSpecialCareObs();
+            $data["specialCareMedical"]          = $medical_file->getSpecialCareMedical();
             if (isset($tels[0])) {
                 $data["doctorPhone1"] = $tels[0];
             } else {
@@ -1206,10 +1206,10 @@ class SummerCamps extends CK_Controller
             $analgesicAntipyretic = null;
         }
 
-        if ($this->input->post('special_care', true)) {
-            $specialCareObs = $this->input->post('special_care_obs', true);
+        if ($this->input->post('specialcare_radio', true)) {
+            $specialCareMedical = $this->input->post('specialcare_text', true);
         } else {
-            $specialCareObs = null;
+            $specialCareMedical = null;
         }
 
         $doctorName   = $this->input->post('doctor_name', true);
@@ -1231,15 +1231,8 @@ class SummerCamps extends CK_Controller
         $vacineMMR       = $this->input->post('MMR', true);
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
-/*
-	$specialCare = $this->input->post('specialCare', true);
-	$specialCareObs = $this->input->post('specialCareObs', true);
-        if ($specialCareObs && $specialCareObs === "") {
-            $specialCareObs = null;
-        }
-*/
 
-        if ($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs)) {
+        if ($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
             echo "<script>alert('Ficha medica salva com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         }
 
@@ -1295,10 +1288,10 @@ class SummerCamps extends CK_Controller
             $analgesicAntipyretic = null;
         }
 
-        if ($this->input->post('special_care', true)) {
-            $specialCareObs = $this->input->post('special_care_obs', true);
+        if ($this->input->post('specialcare_radio', true)) {
+            $specialCareMedical = $this->input->post('specialcare_text', true);
         } else {
-            $specialCareObs = null;
+            $specialCareMedical = null;
         }
 
 
@@ -1322,15 +1315,7 @@ class SummerCamps extends CK_Controller
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
 
-/*
-        $specialCare = $this->input->post('specialCare', true);
-        $specialCareObs = $this->input->post('specialCareObs', true);
-        if ($specialCareObs && $specialCareObs === "") {
-            $specialCareObs = null;
-        }
-*/
-
-        if ($this->medical_file_model->insertNewStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs)) {
+        if ($this->medical_file_model->insertNewStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
             echo "<script>alert('Ficha medica salva com sucesso.'); window.close();</script>";
         }
 
@@ -1387,10 +1372,10 @@ class SummerCamps extends CK_Controller
             $analgesicAntipyretic = null;
         }
 
-        if ($this->input->post('special_care', true)) {
-            $specialCareObs = $this->input->post('special_care_obs', true);
+        if ($this->input->post('specialcare_radio', true)) {
+            $specialCareMedical = $this->input->post('specialcare_text', true);
         } else {
-            $specialCareObs = null;
+            $specialCareMedical = null;
         }
 
 
@@ -1414,15 +1399,7 @@ class SummerCamps extends CK_Controller
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
 
-/*
-        $specialCare = $this->input->post('specialCare', true);
-        $specialCareObs = $this->input->post('specialCareObs', true);
-        if ($specialCareObs && $specialCareObs === "") {
-            $specialCareObs = null;
-        }
-*/
-
-        if ($this->medical_file_model->updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs)) {
+        if ($this->medical_file_model->updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
             $oldSubscriptionRestored = $this->summercamp_model->isOldSubscriptionRestored($campId, $colonistId);
 
             if ($oldSubscriptionRestored) {
@@ -1483,12 +1460,11 @@ class SummerCamps extends CK_Controller
             $analgesicAntipyretic = null;
         }
 
-        if ($this->input->post('special_care', true)) {
-            $specialCareObs = $this->input->post('special_care_obs', true);
+        if ($this->input->post('specialcare_radio', true)) {
+            $specialCareMedical = $this->input->post('specialcare_text', true);
         } else {
-            $specialCareObs = null;
+            $specialCareMedical = null;
         }
-
 
         $doctorName   = $this->input->post('doctor_name', true);
         $doctorMail   = $this->input->post('doctor_email', true);
@@ -1510,15 +1486,7 @@ class SummerCamps extends CK_Controller
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
 
-/*
-        $specialCare = $this->input->post('specialCare', true);
-        $specialCareObs = $this->input->post('specialCareObs', true);
-        if ($specialCareObs && $specialCareObs === "") {
-            $specialCareObs = null;
-        }
-*/
-
-        if ($this->medical_file_model->updateStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs)) {
+        if ($this->medical_file_model->updateStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
             echo "<script>alert('Ficha medica atualizada com sucesso.'); window.close();</script>";
         }
 
@@ -1532,7 +1500,6 @@ class SummerCamps extends CK_Controller
         $roommate1    = $_POST["roommate1"];
         $roommate2    = $_POST["roommate2"];
         $roommate3    = $_POST["roommate3"];
-        $specialCareObs  = $_POST["specialCareObs"];
 
         $phone1 = $_POST["phone1"];
         $phone2 = $_POST["phone2"];

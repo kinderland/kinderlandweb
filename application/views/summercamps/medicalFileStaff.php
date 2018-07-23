@@ -239,6 +239,24 @@
 					<br>
 				</p></td>
 			</tr>
+			<tr>
+				<td colspan="4">
+				<p>
+					<b>*O membro da equipe necessita de algum cuidado médico especial?</b>
+					<br>
+					<input type="radio" name="specialcare_radio" value="0" required 
+>
+					Não se aplica
+					<br>
+					<input type="radio" name="specialcare_radio" value="1"                                onchange="setCustomValidity('')">
+					Se aplica
+					<br>
+					<textarea id="specialcare_text" style="display:none;" required                                 
+					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+					oninput="setCustomValidity('')"
+ rows="2" disabled cols="100" class="nome required" name="specialcare_text"></textarea>
+				</p></td>
+			</tr>
 
 			<tr>
 				<td colspan="4">

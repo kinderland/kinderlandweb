@@ -197,30 +197,6 @@
 				</p></td>
 			</tr>
 
-
-			<tr>
-				<td colspan="4">
-				<p>
-					<b>*O colonista necessita de algum cuidado médico especial?</b>
-					<br>
-					<input type="radio" name="special_care" value="0" required <?=$disabled?>   <?php if ($specialCareObs == NULL) echo "checked" ?>
->
-					Não se aplica
-					<br>
-					<input type="radio" name="special_care" value="1" <?=$disabled?>  <?php if ($specialCareObs != NULL) echo "checked" ?> >
-					Se aplica
-					<br>
-					<textarea id="special_care_obs" style="display:none;" required                                 
-					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
-					oninput="setCustomValidity('')" <?=$disabled?>
- rows="2" disabled cols="100" class="nome required" name="special_care_obs"><?=$specialCareObs?></textarea>
-				</p></td>
-			</tr>
-
-			<tr>
-
-
-
 			<tr>
 				<td colspan="2">
 				<p class="required">
@@ -297,6 +273,30 @@
 					<br>
 				</p></td>
 			</tr>
+
+
+			<tr>
+				<td colspan="4">
+				<p>
+					<b>*O colonista necessita de algum cuidado médico especial?</b>
+					<br>
+					<input type="radio" name="specialcare_radio" value="0" required <?=$disabled?>   <?php if ($specialCareMedical == NULL) echo "checked" ?>
+>
+					Não se aplica
+					<br>
+					<input type="radio" name="specialcare_radio" id="siml" value="1" <?=$disabled?>  <?php if ($specialCareMedical != NULL) echo "checked" ?> >
+					Se aplica
+					<br>
+					<textarea id="specialcare_text" style="display:none;" required  <?=$disabled?>                               
+					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+					oninput="setCustomValidity('')" 
+ required rows="2" cols="100" name="specialcare_text" disabled class="required"><?=$specialCareMedical?></textarea>
+				</p></td>
+			</tr>
+
+			<tr>
+
+
 
 
 

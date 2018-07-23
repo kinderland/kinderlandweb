@@ -247,17 +247,16 @@
 				<p>
 					<b>*O colonista necessita de algum cuidado médico especial?</b>
 					<br>
-					<input type="radio" name="special_care" value="0" required 
->
+					<input type="radio" name="specialcare_radio" value="0" required >
 					Não
 					<br>
-					<input type="radio" name="special_care" value="1"                                onchange="setCustomValidity('')">
+					<input type="radio" name="specialcare_radio" value="1"                                onchange="setCustomValidity('')">
 					Sim
 					<br>
-					<textarea id="special_care_obs" style="display:none;" required                                 
+					<textarea id="specialcare_text" style="display:none;" required                                 
 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')"
- rows="2" disabled cols="300" class="nome required" name="special_care_obs"></textarea>
+ required rows="2" cols="100" name="specialcare_text" disabled class="required"></textarea>
 				</p></td>
 			</tr>
 

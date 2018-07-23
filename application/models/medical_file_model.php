@@ -10,15 +10,15 @@ class medical_file_model extends CK_Model{
 
 	public function insertNewMedicalFile($summerCampId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs){
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical){
 		$this->Logger->info("Running: " . __METHOD__);
 
 		$sql = 'INSERT INTO medical_file (summer_camp_id, colonist_id, blood_type, rh, weight, height, physical_activity_restriction,
 		vacine_tetanus, vacine_mmr, vacine_hepatitis, vacine_yellow_fever, infecto_contagious_antecedents, regular_use_medicine, 
-		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, special_careobs) VALUES (?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?, ?)';
+		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, special_care) VALUES (?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?, ?)';
 		$returnId = $this->execute($this->db, $sql, array(intval($summerCampId), intval($colonistId), intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareObs));
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareMedical));
 		if($returnId)
 			return $returnId;
 
@@ -28,15 +28,15 @@ class medical_file_model extends CK_Model{
 
 	public function updateMedicalFile($summerCampId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs){
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical){
  		$this->Logger->info("Running: " . __METHOD__);
  		
 		$sql = 'UPDATE medical_file SET blood_type = ?, rh = ?, weight = ?, height = ?, physical_activity_restriction = ?,
 		vacine_tetanus = ?, vacine_mmr = ?, vacine_hepatitis = ?, vacine_yellow_fever = ?, infecto_contagious_antecedents = ?, regular_use_medicine = ?, 
-		medicine_restrictions = ?, allergies = ?, analgesic_antipyretic = ?, doctor_id =?, special_careobs = ? where summer_camp_id = ? and colonist_id = ?';
+		medicine_restrictions = ?, allergies = ?, analgesic_antipyretic = ?, doctor_id =?, special_care = ? where summer_camp_id = ? and colonist_id = ?';
 		$result = $this->execute($this->db, $sql, array(intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareObs, intval($summerCampId), intval($colonistId)));
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareMedical, intval($summerCampId), intval($colonistId)));
 
         if ($result)
             return true;
@@ -59,15 +59,15 @@ class medical_file_model extends CK_Model{
 
     public function insertNewStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs){
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical){
 		$this->Logger->info("Running: " . __METHOD__);
 
 		$sql = 'INSERT INTO medical_file_staff (person_id, blood_type, rh, weight, height, physical_activity_restriction,
 		vacine_tetanus, vacine_mmr, vacine_hepatitis, vacine_yellow_fever, infecto_contagious_antecedents, regular_use_medicine, 
-		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, special_careobs) VALUES (?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?, ?)';
+		medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, special_care) VALUES (?, ?, ?,?, ?, ?, ?,?, ?, ?, ?,?, ?, ?, ?, ?, ?)';
 		$returnId = $this->executeReturningId($this->db, $sql, array(intval($personId), intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareObs));
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareMedical));
 		if($returnId)
 			return $returnId;
 
@@ -77,15 +77,15 @@ class medical_file_model extends CK_Model{
 
 	public function updateStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareObs){
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical){
  		$this->Logger->info("Running: " . __METHOD__);
  		
 		$sql = 'UPDATE medical_file_staff SET blood_type = ?, rh = ?, weight = ?, height = ?, physical_activity_restriction = ?,
 		vacine_tetanus = ?, vacine_mmr = ?, vacine_hepatitis = ?, vacine_yellow_fever = ?,  infecto_contagious_antecedents = ?, regular_use_medicine = ?, 
-		medicine_restrictions = ?, allergies = ?, analgesic_antipyretic = ?, doctor_id =?, special_careobs = ? where person_id = ?';
+		medicine_restrictions = ?, allergies = ?, analgesic_antipyretic = ?, doctor_id =?, special_care = ? where person_id = ?';
 		$result = $this->execute($this->db, $sql, array(intval($bloodType), $rh, $weight, $height, $physicalActivityRestriction,
 		$vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, 
-		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareObs, intval($personId)));
+		$medicineRestrictions, $allergies, $analgesicAntipyretic, intval($doctorId), $specialCareMedical, intval($personId)));
 
         if ($result)
             return true;
@@ -96,7 +96,7 @@ class medical_file_model extends CK_Model{
 
     public function getStaffMedicalFile($personId){
     	$this->Logger->info("Running: " . __METHOD__);
-    	$sql = "SELECT person_id, blood_type, rh, weight, height, physical_activity_restriction, vacine_tetanus, vacine_mmr, vacine_hepatitis, vacine_yellow_fever, infecto_contagious_antecedents, regular_use_medicine, medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, date, doctor_observations, special_careobs FROM medical_file_staff WHERE person_id = ?";
+    	$sql = "SELECT person_id, blood_type, rh, weight, height, physical_activity_restriction, vacine_tetanus, vacine_mmr, vacine_hepatitis, vacine_yellow_fever, infecto_contagious_antecedents, regular_use_medicine, medicine_restrictions, allergies, analgesic_antipyretic, doctor_id, date, doctor_observations, special_care FROM medical_file_staff WHERE person_id = ?";
     	$result = $this->executeRow($this->db, $sql, array(intval($personId)));
 
     	if($result)
