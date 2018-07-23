@@ -535,7 +535,7 @@ class summercamp_model extends CK_Model {
     		$resultSet = $this->executeRow($this->db, $sql, array(intval($userId),intval($colonistId),intval($userId),intval($colonistId)));
         	 
     	if($resultSet){
-    		if($this->subscribeColonist($summercampId, $colonistId, $userId, 0, $resultSet->school_name, $resultSet->school_year, $resultSet->roommate1, $resultSet->roommate2, $resultSet->roommate3, $resultSet->special_care, $resultSet->special_car_eobs)){
+    		if($this->subscribeColonist($summercampId, $colonistId, $userId, 0, $resultSet->school_name, $resultSet->school_year, $resultSet->roommate1, $resultSet->roommate2, $resultSet->roommate3, $resultSet->special_care, $resultSet->special_care_obs)){
     			
     			$sql = "INSERT INTO summer_camp_old_subscription(summer_camp_id,colonist_id) VALUES (?,?)";
     			
