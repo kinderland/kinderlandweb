@@ -660,7 +660,9 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-lg-12 middle-content">
-								<h5 style='color:red' >Ao resgatar não se esqueça de atualizar todas as informações, como Ano Escolar.</h5>
+								<h5 style='color:red' >O resgate de dados só pode ser realizado uma vez por inscrição passada.
+								<br> <br>Ao resgatar, não se esqueça de atualizar todas as informações, como Ano Escolar.</br>
+								</h5>
 								<br/>
 								<input type="hidden" id="modalsummercampId" name="modalsummercampId" value="" />
 																
