@@ -232,7 +232,7 @@
 				} else {
 					switch ($summerCamp->getCampType()) {
 					case "1": 
-                            		for ($__school_year__ = 4; $__school_year__ <= 5; $__school_year__++) {
+                            		for ($__school_year__ = 3; $__school_year__ <= 5; $__school_year__++) {
                                 		echo "<option value='" . $__school_year__ . "' ";
                                 		if (!empty($school) && ($schoolYear == $__school_year__))
                                     		echo "selected";
