@@ -16,6 +16,19 @@
 		}
 	}
 	
+	function specialCare() {
+		var val = $('input:radio[name=specialCare]:checked').val();
+		var changeTo = true;
+		if (val == "n") {
+			changeTo = false;
+		}
+		var labels = $(".specialcare");
+		for ( index = 0,
+		len = labels.length; index < len; ++index) {
+			labels[index].disabled = changeTo;
+		}
+	}
+	
 	function toggleInputStatusIn(element, disable) {
 		if (disable == true)	 {
 			$(element).find(':input').prop('disabled', true);
@@ -943,10 +956,48 @@
             <br />
             <br />
 
+
+<!--
             <div class="row">
                 <div class="form-group">
-                    <label for="special_care" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?*: </label>
+                    <label for="school" class="col-lg-6 control-label"> Portador?*: </label>
                     <div class="col-lg-6">
+                        <input type="radio" disabled onchange="specialCare();" name="specialCare" value="s" 
+                        <?php if ( empty($specialCare) || 
+                        (!empty($specialCare) && ($specialCare == "s")
+						)) echo "checked='checked'" ?>/> Sim
+                        <input type="radio" disabled onchange="specialCare();" name="specialCare" value="n"                         
+                        <?php if (!empty($specialCare) && ($specialCare == "n")) echo "checked='checked'" ?>
+						/> Não
+                    </div>
+
+
+                </div>
+            </div>
+-->
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="specialCare" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?*: </label>
+                    <div class="col-lg-6">
+
+                            <input disabled type="radio" name="specialCare" value="1"
+                            <?php
+                            if (isset($specialCare))
+                            	if($specialCare == 't')
+                                	echo "checked='checked'"
+                                ?>/> Sim
+
+                            <input disabled type="radio" name="specialCare" value="0"
+                            <?php
+                            if (isset($speciaCare))
+                            	if($specialCare == 'f')
+                               	 echo "checked='checked'"
+                                ?>
+                                   /> Não
+
+<!--
+
                         <input type="radio" disabled  name="specialCare" value="1" 
                         <?php if ( empty($specialCare) || 
                         (!empty($specialCare) && ($specialCare == "t")
@@ -954,11 +1005,16 @@
                         <input type="radio" disabled  name="specialCare" value="0"                         
                         <?php if (!empty($specialCare) && ($specialCare == "f")) echo "checked='checked'" ?>
 						/> Não
+-->
+
                     </div>
 
 
                 </div>
             </div>
+
+
+
             <br />
             <br />
 
@@ -967,12 +1023,16 @@
                 <div class="form-group">
                     <label for="special_care_obs" class="col-lg-6 control-label"> Qual? </label>
                     <div class="col-lg-6">
+
+                        <textarea disabled Name="specialCareObs" class="col-lg-5" ROWS=3 COLS=100><?php if(isset($specialCareObs))echo $specialCareObs; ?></textarea>
+<!--
                         <input type="text" disabled class="form-control" 
                                value="<?php
 							if (!empty($specialCareObs)) {
 								echo $specialCareObs;
 							}
 					 ?>"/>
+-->
 	             </div>
                 </div>
             </div>

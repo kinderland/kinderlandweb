@@ -33,6 +33,20 @@
         }
     }
 
+    function specialCare() {
+
+        var val = $('input:radio[name=specialCare]:checked').val();
+        var changeTo = true;
+        if (val == "s") {
+        } else {
+            changeTo = false;
+        }
+        var labels = $(".specialcare");
+        for (index = 0, len = labels.length; index < len; ++index) {
+            labels[index].disabled = changeTo;
+        }
+    }
+
     function toggleInputStatusIn(element, disable) {
         if (disable == true) {
             $(element).find(':input').prop('disabled', true);
@@ -867,7 +881,28 @@
 
             <?php } ?>
 
+            <div class="row">
+                <div class="form-group">
+                    <label for="school" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?*: </label>
+                    <div class="col-lg-6">
+                        <input type="radio" onchange="specialCare();" name="specialCare" value="s"
+                        <?php
+                                if ((!empty($_POST['specialCare']) && ($_POST['specialCare'] == "s")
+                                ))
+                            echo "checked='checked'"
+                            ?>/> Sim
+                        <input type="radio" onchange="specialCare();" name="specialCare" value="n"
+                        <?php 
+			if (empty($_POST['specialCare']) || 
+				($_POST['specialCare'] == "n")) 
+				echo "checked='checked'" ?>
+                               /> Não
+                    </div>
 
+
+                </div>
+            </div>
+<!--
             <div class="row">
                 <div class="form-group">
                     <label for="specialcare" class="col-lg-6 control-label">O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?* : </label>
@@ -884,7 +919,9 @@
             
                 </div>
 		
-	    </div>
+	    </div>a
+-->
+
             <br />
 
                 <div class="row">
