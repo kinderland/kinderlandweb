@@ -25,7 +25,7 @@
 		<br>
 		<input  type="file" name="uploadedfile" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
 		<br />
-		<input type="submit" value="<?php if($document_type == DOCUMENT_TRIP_AUTHORIZATION_SIGNED){ echo "enviar autorização assinada"; } else if($document_type == DOCUMENT_PHOTO_3X4){ echo "enviar foto 3x4"; }else if($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){ echo "enviar documento"; }?>" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
+		<input type="submit" value="<?php if($document_type == DOCUMENT_TRIP_AUTHORIZATION_SIGNED){ echo "enviar autorização assinada"; } else if($document_type == DOCUMENT_PHOTO_3X4){ echo "enviar foto 3x4"; }else if($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){ echo "enviar documento"; } else if($document_type == DOCUMENT_MEDICAL_CARD){ echo "enviar carteira plano de saude"; }?>" <?php if($status == '5') {?> class="btn btn-primary" disabled <?php } else{ ?> class="btn btn-primary" <?php }?> /> 
 		<?php if(isset($extra)) { ?>
 		<br><br>
 		O último documento enviado tinha o seguinte problema: <?=$extra?>
@@ -80,6 +80,8 @@
 	visualizar última foto enviada
 	<?php } else if ($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){?>
 	visualizar último documento enviado
+	<?php } else if ($document_type == DOCUMENT_MEDICAL_CARD){?>
+	visualizar últiaocarteira do plano de saude enviada
 	<?php }?>
 	</button> </a>
 	<?php 

@@ -273,10 +273,11 @@
 
     <div id="all" class = "col-lg-10">
         <h1>Inscrições nas Temporadas Kinderland</h1>
-        <?php if ($summerCamps) { 
+        <?php  if ($summerCamps) { 
+		/*
         		if($i !== NULL){
         			echo "<script>setTimeout(alertMessage,50);</script>";
-        		}
+        		} */
             ?>
             <h4>Adicionar colonista na colônia:</h4>
             <?php foreach ($summerCamps as $summerCamp) { 
@@ -296,7 +297,9 @@
 -->
                 </a>
             <?php } } ?>
-        <?php } else { 
+        <?php } else {
+/* BUG ruben */
+$hasTemporary = 0; 
         	if($hasTemporary){?>
         	Você indicou um CPF para pre-inscrição. Assim, não é mais possível fazer pré-inscrições como responsável.
         	<?php } else{?>
@@ -389,6 +392,14 @@
                             <?php } else{?>
                             Foto 3x4
                             <?php }?>
+                            <br>
+                            <br>
+                            <?php if($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN ||
+                                    ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS && !$validation->verifyDocument(DOCUMENT_MEDICAL_CARD))){?>
+                            <a href="<?= $this->config->item('url_link'); ?>summercamps/uploadDocument?camp_id=<?= $summerCampInscription->getSummerCampId() ?>&colonist_id=<?= $summerCampInscription->getColonistId() ?>&document_type=<?= DOCUMENT_MEDICAL_CARD ?>"> Carteira do Plano de Saude </a>
+                            <?php } else{?>
+                            Carteira do Plano de Saude
+                            <?php }?>
                             </td>
 
                        
@@ -419,6 +430,9 @@
                             <br>
                             <br>
                             <?php $documents += insertFigure($this, $summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_PHOTO_3X4, $validation); ?>
+                            <br>
+                            <br>
+                            <?php $documents += insertFigure($this, $summerCampInscription->getSummerCampId(), $summerCampInscription->getColonistId(), DOCUMENT_MEDICAL_CARD, $validation); ?>
                             <br>
                             <br>
                         </td>
@@ -502,26 +516,32 @@
                             </button>
                             <?php
                             if (($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS)) {  ?>
-                            <p><p><button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="showReasonsMessage('<?=$validation->describeValidation()?>');">Motivos da não validação</button>
+                            <p><p><button class="btn btn-danger" data-toggle="modal" data-target="#myModal" onclick="showReasonsMessage('<?=$validation->describeValidation()?>');">Motivos da não validação</button>
                             	</p></p>
                             <?php  }
                             ?>
                             <?php
                             $number = explode(" ",$campName);
                             if (((($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS) || ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN)) && !$this->summercamp_model->getSummerCampById($summerCampInscription->getSummerCampId())->isMiniCamp())) {  ?>
+<!--
                             <?php if(strcmp($number[0],"1a") == 0) {?>
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','2a');">Mudar pré-inscrição para <?php echo "2a Turma ".date("Y");  ?></button>
                             	</p></p>
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','3a');">Mudar pré-inscrição para <?php echo "3a Turma ".date("Y");  ?></button>
                                 </p></p>
+-->
                             <?php }if(strcmp($number[0],"2a") == 0) {?>
+<!--
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','1a');">Mudar pré-inscrição para <?php echo "1a Turma ".date("Y");  ?></button>
                                 </p></p>
+-->
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','3a');">Mudar pré-inscrição para <?php echo "3a Turma ".date("Y");  ?></button>
                                 </p></p>
                             <?php }if(strcmp($number[0],"3a") == 0) {?>
+<!--
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','1a');">Mudar pré-inscrição para <?php echo "1a Turma ".date("Y");  ?></button>
                                 </p></p>
+-->
                             <p><p><button class="btn btn-primary" onclick="changeCamp('<?=$summerCampInscription->getColonistId()?>','<?=$summerCampInscription->getSummerCampId()?>','2a');">Mudar pré-inscrição para <?php echo "2a Turma ".date("Y");  ?></button>
                                 </p></p>
                             <?php }?>
@@ -600,7 +620,7 @@
 
         	function message(){
 
-            	alert("Para realizar a doação, faça o upload da autorização de viagem assinada.");
+            	alert("Para poder realizar a doação, faça o upload da autorização de viagem assinada. O documento para assinar, você deve gerar pelo link da autorização na inscrição.");
         	}
         	
 			function getPreviousSubscriptions(){

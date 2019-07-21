@@ -84,6 +84,11 @@
                         return;
                     }
 
+                    var radioMedicalCard = $(formName + ' input[name=medical_card]:checked').val();
+                    if (radioMedicalCard != "true" && radioMedicalCard != "false") {
+                        alert("Validaçãoa dcarteira de saude não foi selecionada.");
+                        return;
+                    }
                     var radioBirthdate = $(formName + ' input[name=birthday]:checked').val();
                     if (radioBirthdate != "true" && radioBirthdate != "false") {
                         alert("Validação de data de nascimento não foi selecionada.");
@@ -111,6 +116,7 @@
                                 'parents_name': radioParentsName,
                                 'colonist_name': radioName,
                                 'picture': radioPicture,
+                                'medical_card': radioMedicalCard,
                                 'identity': radioIdentity
                             },
                     function (data) {
@@ -131,6 +137,7 @@
                 var radioGender = $(formName + ' input[name=gender]:checked').val();
                 var radioIdentity = $(formName + ' input[name=identity]:checked').val();
                 var radioPicture = $(formName + ' input[name=picture]:checked').val();
+                var radioMedicalCard = $(formName + ' input[name=medical_card]:checked').val();
                 var radioBirthdate = $(formName + ' input[name=birthday]:checked').val();
                 var radioParentsName = $(formName + ' input[name=parents_name]:checked').val();
                 var radioName = $(formName + ' input[name=colonist_name]:checked').val();
@@ -138,6 +145,7 @@
                 var msgGender = $(formName + ' input[name=msg_gender]').val();
                 var msgIdentity = $(formName + ' input[name=msg_identity]').val();
                 var msgPicture = $(formName + ' input[name=msg_picture]').val();
+                var msgMedicalCard = $(formName + ' input[name=msg_medical_card]').val();
                 var msgBirthdate = $(formName + ' input[name=msg_birthday]').val();
                 var msgParentsName = $(formName + ' input[name=msg_parents_name]').val();
                 var msgName = $(formName + ' input[name=msg_colonist_name]').val();
@@ -148,6 +156,8 @@
                     $(formName + ' input[name=msg_identity]').val("");
                 if (radioPicture == "true")
                     $(formName + ' input[name=msg_picture]').val("");
+                if (radioMedicalCard == "true")
+                    $(formName + ' input[name=msg_medical_card]').val("");
                 if (radioBirthdate == "true")
                     $(formName + ' input[name=msg_birthday]').val("");
                 if (radioParentsName == "true")
@@ -164,12 +174,14 @@
                             'parents_name': radioParentsName,
                             'colonist_name': radioName,
                             'picture': radioPicture,
+                            'medical_card': radioMedicalCard,
                             'identity': radioIdentity,
                             'msg_gender': msgGender,
                             'msg_birthday': msgBirthdate,
                             'msg_parents_name': msgParentsName,
                             'msg_colonist_name': msgName,
                             'msg_picture': msgPicture,
+                            'msg_medical_card': msgMedicalCard,
                             'msg_identity': msgIdentity
                         },
                 function (data) {
@@ -407,6 +419,19 @@
                                                         </td>
                                                         <td>
                                                             <input type="text" <?= ($colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) ? "disabled" : "" ?> name="msg_picture" class="form-control" value="<?= $colonist->colonist_picture_msg ?>"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> <a target="_blank" href="<?= $this->config->item('url_link') ?>admin/verifyDocument?colonist_id=<?= $colonist->colonist_id ?>&camp_id=<?= $colonist->summer_camp_id ?>&document_type=7"> Carteira Saude </a>
+                                                            <img src="<?= $this->config->item('assets') ?>images/kinderland/help.png" width="15" height="15"
+                                                                 title="Verificar se a imagem da carteira do plano de saude."/>
+                                                        </td>
+                                                        <td>
+                                                            <input type="radio" <?= ($colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) ? "disabled" : "" ?> name="medical_card" value="true" <?= (isset($colonist->colonist_medical_card_ok) && $colonist->colonist_medical_card_ok == "t") ? "checked" : "" ?> /> Sim
+                                                            <input type="radio" <?= ($colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) ? "disabled" : "" ?> name="medical_card" value="false" <?= (isset($colonist->colonist_medical_card_ok) && $colonist->colonist_medical_card_ok == "f") ? "checked" : "" ?> /> Não
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" <?= ($colonist->situation != SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION) ? "disabled" : "" ?> name="msg_medical_card" class="form-control" value="<?= $colonist->colonist_medical_card_msg ?>"/>
                                                         </td>
                                                     </tr>
                                                 </tbody>

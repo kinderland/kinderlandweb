@@ -4,28 +4,32 @@ class Validation {
 	private $colonistId;
 	private $colonistGenderOk;
 	private $colonistPictureOk;
+	private $colonistMedicalCardOk;
 	private $colonistIdentityOk;
 	private $colonistBirthdayOk;
 	private $colonistParentsNameOk;
 	private $colonistNameOk;
 	private $colonistGenderMsg;
 	private $colonistPictureMsg;
+	private $colonistMedicalCardMsg;
 	private $colonistIdentityMsg;
 	private $colonistBirthdayMsg;
 	private $colonistParentsNameMsg;
 	private $colonistNameMsg;
 
-	public function __construct($campId, $colonistId, $colonistGenderOk, $colonistPictureOk, $colonistIdentityOk, $colonistBirthdayOk, $colonistParentsNameOk, $colonistNameOk, $colonistGenderMsg, $colonistPictureMsg, $colonistIdentityMsg, $colonistBirthdayMsg, $colonistParentsNameMsg, $colonistNameMsg) {
+	public function __construct($campId, $colonistId, $colonistGenderOk, $colonistPictureOk, $colonistMedicalCardOk, $colonistIdentityOk, $colonistBirthdayOk, $colonistParentsNameOk, $colonistNameOk, $colonistGenderMsg, $colonistPictureMsg, $colonistMedicalCardMsg, $colonistIdentityMsg, $colonistBirthdayMsg, $colonistParentsNameMsg, $colonistNameMsg) {
 		$this -> campId = $campId;
 		$this -> colonistId = $colonistId;
 		$this -> colonistGenderOk = $colonistGenderOk;
 		$this -> colonistPictureOk = $colonistPictureOk;
+		$this -> colonistMedicalCardOk = $colonistMedicalCardOk;
 		$this -> colonistIdentityOk = $colonistIdentityOk;
 		$this -> colonistBirthdayOk = $colonistBirthdayOk;
 		$this -> colonistParentsNameOk = $colonistParentsNameOk;
 		$this -> colonistNameOk = $colonistNameOk;
 		$this -> colonistGenderMsg = $colonistGenderMsg;
 		$this -> colonistPictureMsg = $colonistPictureMsg;
+		$this -> colonistMedicalCardMsg = $colonistMedicalCardMsg;
 		$this -> colonistIdentityMsg = $colonistIdentityMsg;
 		$this -> colonistBirthdayMsg = $colonistBirthdayMsg;
 		$this -> colonistParentsNameMsg = $colonistParentsNameMsg;
@@ -33,7 +37,7 @@ class Validation {
 	}
 
 	public static function createValidationObject($resultRow) {
-		return new Validation($resultRow -> summer_camp_id, $resultRow -> colonist_id, $resultRow -> colonist_gender_ok, $resultRow -> colonist_picture_ok, $resultRow -> colonist_identity_ok, $resultRow -> colonist_birthday_ok, $resultRow -> colonist_parents_name_ok, $resultRow -> colonist_name_ok, $resultRow -> colonist_gender_msg, $resultRow -> colonist_picture_msg, $resultRow -> colonist_identity_msg, $resultRow -> colonist_birthday_msg, $resultRow -> colonist_parents_name_msg, $resultRow -> colonist_name_msg);
+		return new Validation($resultRow -> summer_camp_id, $resultRow -> colonist_id, $resultRow -> colonist_gender_ok, $resultRow -> colonist_picture_ok, $resultRow -> colonist_medical_card_ok, $resultRow -> colonist_identity_ok, $resultRow -> colonist_birthday_ok, $resultRow -> colonist_parents_name_ok, $resultRow -> colonist_name_ok, $resultRow -> colonist_gender_msg, $resultRow -> colonist_picture_msg, $resultRow -> colonist_medical_card_msg, $resultRow -> colonist_identity_msg, $resultRow -> colonist_birthday_msg, $resultRow -> colonist_parents_name_msg, $resultRow -> colonist_name_msg);
 	}
 
 	public function setCampId($campId) {
@@ -66,6 +70,14 @@ class Validation {
 
 	public function getColonistPictureOk() {
 		return $this -> colonistPictureOk;
+	}
+
+	public function setColonistMedicalCardOk($colonistMedicalCardOk) {
+		$this -> colonistMedicalCardOk = $colonistMedicalCardOk;
+	}
+
+	public function getColonistMedicalCardOk() {
+		return $this -> colonistMedicalCardOk;
 	}
 
 	public function setColonistIdentityOk($colonistIdentityOk) {
@@ -116,6 +128,14 @@ class Validation {
 		return $this -> colonistPictureMsg;
 	}
 
+	public function setColonistMedicalCardMsg($colonistMedicalCardMsg) {
+		$this -> colonistMedicalCardMsg = $colonistMedicalCardMsg;
+	}
+
+	public function getColonistMedicalCardMsg() {
+		return $this -> colonistMedicalCardMsg;
+	}
+
 	public function setColonistIdentityMsg($colonistIdentityMsg) {
 		$this -> colonistIdentityMsg = $colonistIdentityMsg;
 	}
@@ -162,6 +182,8 @@ class Validation {
 			$text .= "<br><b>Documento de identificação:</b> " . $this -> colonistIdentityMsg;
 		if ($this -> colonistPictureOk === "f")
 			$text .= "<br><b>Foto 3x4:</b> " . $this -> colonistPictureMsg;
+		if ($this -> colonistMedicalCardOk === "f")
+			$text .= "<br><b>Carteira Saude:</b> " . $this -> colonistMedicalCardMsg;
 		return $text;
 	}
 	
@@ -185,6 +207,10 @@ class Validation {
 				return $this -> colonistPictureOk === "t";
 				break;
 
+			case DOCUMENT_MEDICAL_CARD :
+				return $this -> colonistMedicalCardOk === "t";
+				break;
+
 			default :
 				return false;
 				break;
@@ -205,6 +231,10 @@ class Validation {
 
 			case DOCUMENT_PHOTO_3X4 :
 				return $this -> colonistPictureMsg;
+				break;
+
+			case DOCUMENT_MEDICAL_CARD :
+				return $this -> colonistMedicalCardMsg;
 				break;
 
 			default :

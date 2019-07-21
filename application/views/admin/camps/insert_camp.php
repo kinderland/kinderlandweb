@@ -205,7 +205,7 @@
                                 <input type="radio" name="mini_camp" value="false" onclick="chooseMiniCamp('false')"; checked />
                             </div>
                     <div class="col-lg-4 col-lg-offset-1" style="width: 200px; padding-left:15px; padding-right:0px; margin-bottom:0px; margin-left:0px;">
-                                <label for="mini_camp" class="control-label"> Mini Kinderland: </label>
+                                <label for="mini_camp" class="control-label"> Mini ou 1a Turma: </label>
                                 <input type="radio" name="mini_camp" value="true" onclick="chooseMiniCamp('true')"; <?php if($mini_camp == 'true') echo "checked";?> />
                             </div> 
                             <br/><br />

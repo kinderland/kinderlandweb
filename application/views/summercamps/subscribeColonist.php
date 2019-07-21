@@ -4,6 +4,23 @@
 
 <script>
 
+/*
+    function validateForm(event) {
+
+    	var birthDate = document.getElementById("birthdate");
+
+	if (passErr && emailErr && cpfInvalidErr) {
+		alert(" Confira a data de nascimeno." + '\n' +
+                    "O sistema identificou como fora do padrao para esta colonia." + '\n'
+                 ");
+            return false;
+        }
+
+
+
+    }
+*/
+
     function verifyOtherSchool() {
         var val = $("#school_select").val();
         if (val == -1) {
@@ -241,17 +258,17 @@
                                  >
                             <option value="" selected>-- Selecione --</option>
                             <?php
-            			if ($summerCamp->isMiniCamp()) {
+					switch ($summerCamp->getCampType()) {
+					case "0":
                             		for ($__school_year__ = 2; $__school_year__ <= 3; $__school_year__++) {
                                 		echo "<option value='" . $__school_year__ . "' ";
                                 		if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
                                     			echo "selected";
                                 		echo ">" . $__school_year__ . "</option>";
                             		}
-				} else {
-					switch ($summerCamp->getCampType()) {
+					break;
 					case "1":
-                            		for ($__school_year__ = 3; $__school_year__ <= 5; $__school_year__++) {
+                            		for ($__school_year__ = 4; $__school_year__ <= 5; $__school_year__++) {
                                 		echo "<option value='" . $__school_year__ . "' ";
                                 		if (!empty($_POST['schoolYear']) && ($_POST['schoolYear'] == $__school_year__))
                                     			echo "selected";
@@ -284,7 +301,6 @@
 
 					}
 
-				}
                             ?>
                         </select>
                     </div>
@@ -323,7 +339,7 @@
 
             <div class="row">
                 <div class="form-group">
-                    <label for="school" class="col-lg-6 control-label"> Endereço do(a) colonista é o mesmo do(a) responsável?*: </label>
+                    <label for="school" class="col-lg-6 control-label"> Endereço do(a) colonista é o mesmo do(a) responsável cadastrado?*: </label>
                     <div class="col-lg-6">
                         <input type="radio" onchange="addressResponsable();" name="sameAddressResponsable" value="s"
                         <?php
@@ -658,9 +674,10 @@
 
             <br />
             <br />
-            <?php if ($summerCamp->isMiniCamp()) { ?>
+
+            <?php if ($summerCamp->getCampType()== "0" || $summerCamp->getCampType()== "1") { ?> 
                 <input type="hidden" name="summerCampMini" value="1"/>
-                <label class="control-label"><h4>MINI-KINDERLAND: </h4></label>
+                <label class="control-label"><h4>MINI-KINDERLAND e 1a Turma: </h4></label>
                 <br />
 
                 <div class="row">
@@ -859,7 +876,7 @@
                 <br />
                 <br />
 
-
+            <?php if ($summerCamp->getCampType()== "0") { ?> 
             <div class="row">
                 <div class="form-group">
                     <label for="summer" class="col-lg-6 control-label">Tenho interesse, havendo vaga, em participar da 1a Turma <?= date("Y")+1;?>* : </label>
@@ -877,6 +894,8 @@
                 </div>
 		
 	    </div>
+
+            <?php } ?>
             <br />
 
             <?php } ?>

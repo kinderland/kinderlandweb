@@ -203,6 +203,21 @@ class summercamp_model extends CK_Model {
         return $yearsArray;
     }
 
+
+    public function getAllMiniCampsByYear($year) {
+/*  aaa */
+        $sql = "SELECT * FROM summer_camp WHERE DATE_PART('YEAR',date_created) = ? ORDER BY date_created ASC";
+        $resultSet = $this->executeRows($this->db, $sql, array(intval($year)));
+
+        $campArray = array();
+
+        if ($resultSet)
+            foreach ($resultSet as $row)
+                $campArray[] = SummerCamp::createCampObject($row);
+
+        return $campArray;
+    }
+
     public function getMiniCampsOrNotByYear($year, $minicamp) {
         $sql = "SELECT * FROM summer_camp
     			WHERE mini_camp " . (($minicamp != 0) ? "!" : "") . "= FALSE
@@ -1013,9 +1028,9 @@ class summercamp_model extends CK_Model {
 
     public function getAllColonistsBySummerCampAndYearForValidation($year, $status = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
-        v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
+        v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_medical_card_ok, v.colonist_identity_ok,
         v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
-        v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
+        v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_medical_card_msg, v.colonist_identity_msg,
         v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
         p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id
         from summer_camp sc
@@ -1038,9 +1053,9 @@ class summercamp_model extends CK_Model {
 
     public function getAllColonistsByYearSummerCampAndStatus($year, $summercampId = null, $status = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,
-        v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
+        v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_medical_card_ok, v.colonist_identity_ok,
         v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
-        v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
+        v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_medical_card_msg, v.colonist_identity_msg,
         v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
         p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id,
         age(c.birth_date) as age
@@ -1072,9 +1087,9 @@ class summercamp_model extends CK_Model {
 
     public function getAllColonistsBySummerCampAndYear($year, $status = null, $summercampId = null, $gender = null, $room = null) {
         $sql = "Select sc.*, scs.*, c.*, p.*, pr.*, scss.*,scs.date_created as date_to_get,
-		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_identity_ok,
+		v.colonist_gender_ok, v.colonist_picture_ok, v.colonist_medical_card_ok, v.colonist_identity_ok,
 		v.colonist_parents_name_ok, v.colonist_birthday_ok, v.colonist_name_ok,
-		v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_identity_msg,
+		v.colonist_gender_msg, v.colonist_picture_msg, v.colonist_medical_card_msg, v.colonist_identity_msg,
 		v.colonist_parents_name_msg, v.colonist_birthday_msg, v.colonist_name_msg,
 		p.fullname as colonist_name, pr.fullname as user_name, p.person_id as person_colonist_id,
         p.gender as colonist_gender, age(c.birth_date) as age
@@ -1171,6 +1186,23 @@ class summercamp_model extends CK_Model {
 
         return $resultSet;
     }
+
+    public function getColonistsDetailsSubscriptionsMinikInterest1Turma($year, $summercampId){
+
+        $sql = "SELECT  p.fullname AS colonist_name,
+                        p1.fullname AS responsable_name
+                FROM person p
+                        JOIN colonist c ON c.person_id = p.person_id
+                        JOIN summer_camp_subscription scs ON c.colonist_id = scs.colonist_id
+                        JOIN person p1 ON p1.person_id = scs.person_user_id
+                        JOIN mini_colonist_observations m ON scs.summer_camp_id = m.summer_camp_id AND scs.colonist_id = m.colonist_id
+                        WHERE m.summer_interest = true AND AND scs.summer_camp_id = ?";
+
+        $resultSet = $this->executeRows($this->db, $sql, array($summercampId));
+
+        return $resultSet;
+    }
+
 
     public function getColonistsResponsableNotParentsByYear($year) {
 
@@ -1643,6 +1675,8 @@ class summercamp_model extends CK_Model {
     }
 
     public function saveSummerCampMini($summerCampId, $colonistId, $sleepOut, $summerInterest, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible) {
+
+	if ($summerInterest == NULL) { $summerInterest = "0"; }
         $sql = "INSERT INTO mini_colonist_observations(
             summer_camp_id, colonist_id, sleep_out, summer_interest, wake_up_early, food_restriction,
             eat_by_oneself, bathroom_freedom, sleep_routine, bunk_restriction,
@@ -1660,6 +1694,7 @@ class summercamp_model extends CK_Model {
     }
 
     public function updateSummerCampMini($summerCampId, $colonistId, $sleepOut, $summerInterest, $wakeUpEarly, $foodRestriction, $feedsIndependently, $wcIndependent, $routineToFallAsleep, $bunkBed, $awakeAtNight, $sleepEnuresis, $sleepwalk, $observationMini, $nameResponsible, $phoneResponsible) {
+	if ($summerInterest == NULL) { $summerInterest = "0"; }
         $sql = "UPDATE mini_colonist_observations
                 SET sleep_out=?, summer_interest=?, wake_up_early=?,
                     food_restriction=?, eat_by_oneself=?, bathroom_freedom=?, sleep_routine=?,

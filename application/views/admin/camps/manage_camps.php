@@ -144,7 +144,7 @@
                             
 
                             <tr>
-                                <td><a href="<?php echo $this->config->item("url_link");?>admin/editCamp/<?php echo $camp->getCampId()?>"><?php echo $camp->getCampName() . ( ($camp->isMiniCamp())? " (Mini)":"" );?></a></td>
+                                <td><a href="<?php echo $this->config->item("url_link");?>admin/editCamp/<?php echo $camp->getCampId()?>"><?php echo $camp->getCampName() . ( ($camp->isMiniCamp())? " ":"" );?></a></td>
                                 <td><?= date_format(date_create($camp->getDateStart()), 'd/m/y');?></td>
                                 <td><?= date_format(date_create($camp->getDateFinish()), 'd/m/y');?></td>
                                	<td><input type="checkbox" data-inverse="true" name="my-checkbox" data-size="mini" id="<?=$camp->getCampId()?>" 
