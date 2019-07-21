@@ -3121,6 +3121,7 @@ class Admin extends CK_Controller {
 
         $genderOk = (isset($_POST['gender'])) ? $_POST['gender'] : null;
         $pictureOk = (isset($_POST['picture'])) ? $_POST['picture'] : null;
+        $medicalCardOk = (isset($_POST['medical_card'])) ? $_POST['medical_card'] : null;
         $identityOk = (isset($_POST['identity'])) ? $_POST['identity'] : null;
         $birthdayOk = (isset($_POST['birthday'])) ? $_POST['birthday'] : null;
         $parentsNameOk = (isset($_POST['parents_name'])) ? $_POST['parents_name'] : null;
@@ -3128,12 +3129,13 @@ class Admin extends CK_Controller {
 
         $msgGender = ($genderOk == "false") ? $_POST['msg_gender'] : "";
         $msgPicture = ($pictureOk == "false") ? $_POST['msg_picture'] : "";
+        $msgMedicalCard = ($medicalCardOk == "false") ? $_POST['msg_medical_card'] : "";
         $msgIdentity = ($identityOk == "false") ? $_POST['msg_identity'] : "";
         $msgBirthdate = ($birthdayOk == "false") ? $_POST['msg_birthday'] : "";
         $msgParentsName = ($parentsNameOk == "false") ? $_POST['msg_parents_name'] : "";
         $msgColonistName = ($colonistNameOk == "false") ? $_POST['msg_colonist_name'] : "";
 
-        $validationReturn = $this->validation_model->updateColonistValidation($colonistId, $summerCampId, $genderOk, $pictureOk, $identityOk, $birthdayOk, $parentsNameOk, $colonistNameOk, $msgGender, $msgPicture, $msgIdentity, $msgBirthdate, $msgParentsName, $msgColonistName);
+        $validationReturn = $this->validation_model->updateColonistValidation($colonistId, $summerCampId, $genderOk, $pictureOk, $medicalCardOk, $identityOk, $birthdayOk, $parentsNameOk, $colonistNameOk, $msgGender, $msgPicture, $msgMedicalCard, $msgIdentity, $msgBirthdate, $msgParentsName, $msgColonistName);
 
         if ($validationReturn)
             echo "true";
@@ -3147,6 +3149,7 @@ class Admin extends CK_Controller {
         $summerCampId = $_POST['summer_camp_id'];
         $gender = $_POST['gender'];
         $picture = $_POST['picture'];
+        $medicalCard = $_POST['medical_card'];
         $identity = $_POST['identity'];
         $birthday = $_POST['birthday'];
         $parentsName = $_POST['parents_name'];
@@ -3160,7 +3163,7 @@ class Admin extends CK_Controller {
         }
 
         $status = 0;
-        if ($gender == "true" && $picture == "true" && $identity == "true" && $birthday == "true" && $parentsName == "true" && $colonistName == "true")
+        if ($gender == "true" && $picture == "true" && $medicalCard == "true"  && $identity == "true" && $birthday == "true" && $parentsName == "true" && $colonistName == "true")
             $status = SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED;
         else
             $status = SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS;
