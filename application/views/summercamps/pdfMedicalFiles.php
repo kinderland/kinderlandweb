@@ -70,6 +70,8 @@ for($i = 0; $i < count($colonists); $i++) {
                                 <span class="required"><b>MMR (Caxumba, Rubéola, Sarampo):</b> <?=(($medicalFile->getVacineMMR() === "t") ? "Sim":"Não")?></span>
                                 <br />
                                 <span class="required"><b>Hepatite A:</b> <?=(($medicalFile->getVacineHepatitis() === "t") ? "Sim":"Não")?></span>
+                                <br />
+                                <span class="required"><b>Febre Amarela:</b> <?=(($medicalFile->getVacineYellowFever() === "t") ? "Sim":"Não")?></span>
                             </p>
                         </td>
                     </tr>
@@ -139,6 +141,35 @@ for($i = 0; $i < count($colonists); $i++) {
                             </p>
                         </td>
                     </tr>
+                    <tr>
+                        <td colspan="4">
+                            <p class="required">
+                                <b>Cuidado medico especial</b>
+                                <br>
+                                <?php if ($medicalFile->getSpecialCareMedical() == NULL) { ?>
+                                    <span> Não se aplica. </span>
+                                <?php } else { ?>
+                                    <span> Se aplica. </span><br />
+                                    <span> <?=$medicalFile->getSpecialCareMedical()?> </span>
+                                <?php } ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <p class="required">
+                                <b>Medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento</b>
+                                <br>
+                                <?php if ($medicalFile->getPsychMedication() == NULL) { ?>
+                                    <span> Não se aplica. </span>
+                                <?php } else { ?>
+                                    <span> Se aplica. </span><br />
+                                    <span> <?=$medicalFile->getPsychMedication()?> </span>
+                                <?php } ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
                     <tr>
                         <td colspan="4">
                             <p class="campo"><b>Observações do médico da colônia:</b></p>

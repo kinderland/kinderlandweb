@@ -290,6 +290,25 @@
 
 			<tr>
 				<td colspan="4">
+				<p>
+					<b>*O membro da equipe toma medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento?</b>
+					<br>
+					<input type="radio" name="psych_radio" value="0" required <?=$disabled?>   <?php if ($psychMedication == NULL) echo "checked" ?>
+>
+					Não se aplica
+					<br>
+					<input type="radio" name="psych_radio" value="1" <?=$disabled?>  <?php if ($psychMedication != NULL) echo "checked" ?> >
+					Se aplica
+					<br>
+					<textarea id="psych_text" style="display:none;" required                                 
+					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+					oninput="setCustomValidity('')" <?=$disabled?>
+ rows="2" disabled cols="100" class="nome required" name="psych_text"><?=$psychMedication?></textarea>
+				</p></td>
+			</tr>
+
+			<tr>
+				<td colspan="4">
 				<p class="campo">
 					<b>Observações:</b>
 					<ol style="font-size:12px">

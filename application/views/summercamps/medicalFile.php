@@ -262,6 +262,24 @@
 
 			<tr>
 				<td colspan="4">
+				<p>
+					<b>*O colonista toma medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento ?</b>
+					<br>
+					<input type="radio" name="psych_radio" value="0" required >
+					Não
+					<br>
+					<input type="radio" name="psych_radio" value="1"                                onchange="setCustomValidity('')">
+					Sim
+					<br>
+					<textarea id="psych_text" style="display:none;" required                                 
+					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+					oninput="setCustomValidity('')"
+ required rows="2" cols="100" name="psych_text" disabled class="required"></textarea>
+				</p></td>
+			</tr>
+
+			<tr>
+				<td colspan="4">
 				<p class="campo">
 					<b>Observações:</b>
 					<ol style="font-size:12px">

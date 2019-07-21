@@ -58,20 +58,22 @@ for($i = 0; $i < count($staffWithMedicalFile); $i++) {
 
                         <td colspan="2">
                             <p class="required">
-                                <b>Vacinas em dia?</b>
+                                <b>Vacinas em dia</b>
                                 <br />
                                 <span class="required"><b>Anti-Tetânica:</b> <?=(($medicalFile->getVacineTetanus() === "t") ? "Sim":"Não")?></span>
                                 <br />
                                 <span class="required"><b>MMR (Caxumba, Rubéola, Sarampo):</b> <?=(($medicalFile->getVacineMMR() === "t") ? "Sim":"Não")?></span>
                                 <br />
                                 <span class="required"><b>Hepatite A:</b> <?=(($medicalFile->getVacineHepatitis() === "t") ? "Sim":"Não")?></span>
+                                <br />
+                                <span class="required"><b>Febre Amarela:</b> <?=(($medicalFile->getVacineYellowFever() === "t") ? "Sim":"Não")?></span>
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="4">
                             <p class="required">
-                                <b>Antecedentes Infecto-Contagiosos?</b>
+                                <b>Antecedentes Infecto-Contagiosos</b>
                                 <br>
                                 <?php if ($medicalFile->getInfectoContagiousAntecedents() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -123,13 +125,41 @@ for($i = 0; $i < count($staffWithMedicalFile); $i++) {
                         </td>
                         <td colspan="2">
                             <p class="required">
-                                <b>Antitérmico/Analgésico Habitual:</b>
+                                <b>Antitérmico/Analgésico Habitul:</b>
                                 <br>
                                 <?php if ($medicalFile->getAnalgesicAntipyretic() == NULL) { ?>
                                     <span> Não se aplica. </span>
                                 <?php } else { ?>
                                     <span> Se aplica. </span><br />
                                     <span> <?=$medicalFile->getAnalgesicAntipyretic()?> </span>
+                                <?php } ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <p class="required">
+                                <b>Cuidado medico especial</b>
+                                <br>
+                                <?php if ($medicalFile->getSpecialCareMedical() == NULL) { ?>
+                                    <span> Não se aplica. </span>
+                                <?php } else { ?>
+                                    <span> Se aplica. </span><br />
+                                    <span> <?=$medicalFile->getSpecialCareMedical()?> </span>
+                                <?php } ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <p class="required">
+                                <b>Medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento</b>
+                                <br>
+                                <?php if ($medicalFile->getPsychMedication() == NULL) { ?>
+                                    <span> Não se aplica. </span>
+                                <?php } else { ?>
+                                    <span> Se aplica. </span><br />
+                                    <span> <?=$medicalFile->getPsychMedication()?> </span>
                                 <?php } ?>
                             </p>
                         </td>

@@ -295,6 +295,25 @@
 			</tr>
 
 			<tr>
+				<td colspan="4">
+				<p>
+					<b>*O colonista toma medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento?</b>
+					<br>
+					<input type="radio" name="psych_radio" value="0" required <?=$disabled?>   <?php if ($psychMedication == NULL) echo "checked" ?>
+>
+					Não se aplica
+					<br>
+					<input type="radio" name="psych_radio" id="siml" value="1" <?=$disabled?>  <?php if ($psychMedication != NULL) echo "checked" ?> >
+					Se aplica
+					<br>
+					<textarea id="psych_text" style="display:none;" required  <?=$disabled?>                               
+					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
+					oninput="setCustomValidity('')" 
+ required rows="2" cols="100" name="psych_text" disabled class="required"><?=$psychMedication?></textarea>
+				</p></td>
+			</tr>
+
+			<tr>
 
 
 

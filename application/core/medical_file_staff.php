@@ -19,13 +19,14 @@
 		private $date;
 		private $doctorObservations;
 		private $specialCareMedical;
+		private $psychMedication;
 
 
 		public function __construct($personId, $bloodType, $rh, 
 			$weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, 
 			$vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents,
 			$regularUseMedicine, $medicineRestrictions,
-			$allergies, $analgesicAntipyretic,$doctorId, $date, $doctorObservations=null, $specialCareMedical){
+			$allergies, $analgesicAntipyretic,$doctorId, $date, $doctorObservations=null, $specialCareMedical, $psychMedication){
 			$this->personId = $personId;
 			$this->bloodType = $bloodType;
 			$this->rh = $rh;
@@ -45,6 +46,7 @@
 			$this->date = $date;
 			$this->doctorObservations = $doctorObservations;
 			$this->specialCareMedical = $specialCareMedical;
+			$this->psychMedication = $psychMedication;
 		}
 
 		public static function createMedicalFileStaffObject($resultRow){
@@ -67,7 +69,8 @@
 				$resultRow->doctor_id,
 				$resultRow->date,
 				$resultRow->doctor_observations,		
-				$resultRow->special_care
+				$resultRow->special_care,
+				$resultRow->psych_medication
 			);
 		}
 
@@ -218,6 +221,13 @@
 		}
 		public function getSpecialCareMedical(){
 			return $this->specialCareMedical;
+		}
+
+		public function setPsychMedication($psychMedication){
+			$this->psychMedication = $psychMedication;
+		}
+		public function getPsychMedication(){
+			return $this->psychMedication;
 		}
 
 	}
