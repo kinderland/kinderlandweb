@@ -582,6 +582,7 @@ class SummerCamps extends CK_Controller
                     $data["allergies"]                   = null;
                     $data["analgesicAntipyretic"]        = null;
                     $data["specialCareMedical"]          = null;
+                    $data["psychMedication"]             = null;
                 } else if ($oldSubscriptionRestored->medical_file == 't') {
                     $data["weight"]                      = $medical_file->getWeight();
                     $data["height"]                      = $medical_file->getHeight();
@@ -597,6 +598,7 @@ class SummerCamps extends CK_Controller
                     $data["allergies"]                   = $medical_file->getAllergies();
                     $data["analgesicAntipyretic"]        = $medical_file->getAnalgesicAntipyretic();
                     $data["specialCareMedical"]          = $medical_file->getSpecialCareMedical();
+                    $data["psychMedication"]             = $medical_file->getPsychMedication();
                 }
             } else {
                 $data["weight"]                      = $medical_file->getWeight();
@@ -613,6 +615,7 @@ class SummerCamps extends CK_Controller
                 $data["allergies"]                   = $medical_file->getAllergies();
                 $data["analgesicAntipyretic"]        = $medical_file->getAnalgesicAntipyretic();
                 $data["specialCareMedical"]          = $medical_file->getSpecialCareMedical();
+                $data["psychMedication"]             = $medical_file->getPsychMedication();
             }
 
             $doctorId            = $medical_file->getDoctorId();
@@ -682,6 +685,7 @@ class SummerCamps extends CK_Controller
             $data["doctorEmail"]                 = $doctor->getEmail();
             $tels                                = $this->telephone_model->getTelephonesByPersonId($doctorId);
             $data["specialCareMedical"]          = $medical_file->getSpecialCareMedical();
+            $data["psychMedication"]             = $medical_file->getPsychMedication();
             if (isset($tels[0])) {
                 $data["doctorPhone1"] = $tels[0];
             } else {
@@ -740,6 +744,8 @@ class SummerCamps extends CK_Controller
             $data["document_name"] = "Autorização de viagem";
         } else if ($data["document_type"] == DOCUMENT_TRIP_AUTHORIZATION_SIGNED) {
             $data["document_name"] = "Autorização de viagem assinada";
+        } else if ($data["document_type"] == DOCUMENT_MEDICAL_CARD) {
+            $data["document_name"] = "Carteira do Plano de Saude";
         }
 
         $data["hasDocument"] = "";
@@ -926,7 +932,7 @@ class SummerCamps extends CK_Controller
         $documents              = $this->input->get('documents', true);
         $summerCampSubscription = $this->summercamp_model->getSummerCampSubscription($colonist_id, $camp_id);
         if ($summerCampSubscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED_WITH_ERRORS || $summerCampSubscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_FILLING_IN) {
-            if ($documents == 6) {
+            if ($documents == 7) {
                 $this->summercamp_model->updateColonistStatus($colonist_id, $camp_id, SUMMER_CAMP_SUBSCRIPTION_STATUS_WAITING_VALIDATION);
                 $this->sendPreSubscriptionEmail($colonist_id, $camp_id);
                 echo "<script>alert('Envio realizado com sucesso'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
@@ -1212,6 +1218,12 @@ class SummerCamps extends CK_Controller
             $specialCareMedical = null;
         }
 
+        if ($this->input->post('psych_radio', true)) {
+            $psychMedication = $this->input->post('psych_text', true);
+        } else {
+            $psychMedication = null;
+        }
+
         $doctorName   = $this->input->post('doctor_name', true);
         $doctorMail   = $this->input->post('doctor_email', true);
         $doctorPhone1 = $this->input->post('doctor_phone1', true);
@@ -1232,7 +1244,7 @@ class SummerCamps extends CK_Controller
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
 
-        if ($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
+        if ($this->medical_file_model->insertNewMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical, $psychMedication)) {
             echo "<script>alert('Ficha medica salva com sucesso.'); window.location.replace('" . $this->config->item('url_link') . "summercamps/index');</script>";
         }
 
@@ -1294,6 +1306,13 @@ class SummerCamps extends CK_Controller
             $specialCareMedical = null;
         }
 
+        if ($this->input->post('psych_radio', true)) {
+            $psychMedication = $this->input->post('psych_text', true);
+        } else {
+            $psychMedication = null;
+        }
+
+
 
         $doctorName   = $this->input->post('doctor_name', true);
         $doctorMail   = $this->input->post('doctor_email', true);
@@ -1315,7 +1334,7 @@ class SummerCamps extends CK_Controller
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
 
-        if ($this->medical_file_model->insertNewStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
+        if ($this->medical_file_model->insertNewStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical, $psychMedication)) {
             echo "<script>alert('Ficha medica salva com sucesso.'); window.close();</script>";
         }
 
@@ -1378,6 +1397,13 @@ class SummerCamps extends CK_Controller
             $specialCareMedical = null;
         }
 
+        if ($this->input->post('psych_radio', true)) {
+            $psychMedication = $this->input->post('psych_text', true);
+        } else {
+            $psychMedication = null;
+        }
+
+
 
         $doctorName   = $this->input->post('doctor_name', true);
         $doctorMail   = $this->input->post('doctor_email', true);
@@ -1399,7 +1425,7 @@ class SummerCamps extends CK_Controller
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
 
-        if ($this->medical_file_model->updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
+        if ($this->medical_file_model->updateMedicalFile($campId, $colonistId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical, $psychMedication)) {
             $oldSubscriptionRestored = $this->summercamp_model->isOldSubscriptionRestored($campId, $colonistId);
 
             if ($oldSubscriptionRestored) {
@@ -1466,6 +1492,12 @@ class SummerCamps extends CK_Controller
             $specialCareMedical = null;
         }
 
+        if ($this->input->post('psych_radio', true)) {
+            $psychMedication§ = $this->input->post('psych_text', true);
+        } else {
+            $psychMedication = null;
+        }
+
         $doctorName   = $this->input->post('doctor_name', true);
         $doctorMail   = $this->input->post('doctor_email', true);
         $doctorPhone1 = $this->input->post('doctor_phone1', true);
@@ -1486,7 +1518,7 @@ class SummerCamps extends CK_Controller
         $vacineHepatitis = $this->input->post('vacineHepatitis', true);
         $vacineYellowFever = $this->input->post('vacineYellowFever', true);
 
-        if ($this->medical_file_model->updateStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical)) {
+        if ($this->medical_file_model->updateStaffMedicalFile($personId, $bloodType, $rh, $weight, $height, $physicalActivityRestriction, $vacineTetanus, $vacineMMR, $vacineHepatitis, $vacineYellowFever, $infectoContagiousAntecedents, $regularUseMedicine, $medicineRestrictions, $allergies, $analgesicAntipyretic, $doctorId, $specialCareMedical, $psychMedication)) {
             echo "<script>alert('Ficha medica atualizada com sucesso.'); window.close();</script>";
         }
 
