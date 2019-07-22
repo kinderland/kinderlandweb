@@ -559,8 +559,8 @@ class summercamp_model extends CK_Model {
     			$medicalFile = $this->medical_file_model->getMedicalFile($resultSet->summer_camp_id, $colonistId);
     			
     			$this->medical_file_model->insertNewMedicalFile($summercampId, $colonistId, $medicalFile->getBloodType(), $medicalFile->getRH(), $medicalFile->getWeight(), $medicalFile->getHeight(), $medicalFile->getPhysicalActivityRestriction(),
-    					$medicalFile->getVacineTetanus(), $medicalFile->getVacineMMR(), $medicalFile->getVacineHepatitis(), $medicalFile->getInfectoContagiousAntecedents(), $medicalFile->getRegularUseMedicine(),
-    					$medicalFile->getMedicineRestrictions(), $medicalFile->getAllergies(), $medicalFile->getAnalgesicAntipyretic(), $medicalFile->getDoctorId());
+    					$medicalFile->getVacineTetanus(), $medicalFile->getVacineMMR(), $medicalFile->getVacineHepatitis(), $medicalFile->getVacineYellowFever, $medicalFile->getInfectoContagiousAntecedents(), $medicalFile->getRegularUseMedicine(),
+    					$medicalFile->getMedicineRestrictions(), $medicalFile->getAllergies(), $medicalFile->getAnalgesicAntipyretic(), $medicalFile->getDoctorId(), $medicalFile->getSpecialCareMedical, $medicalFile->getPsychMedication);
     			
     			$document = $this->getNewestDocument($resultSet->summer_camp_id, $colonistId, 3);
     			if($document){
