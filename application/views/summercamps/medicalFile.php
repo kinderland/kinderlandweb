@@ -112,6 +112,10 @@
 				<p class="required">
 					<b>*Vacinas em dia?</b>
 					<br>
+					<span align="right" style="color:red">
+						Informe a situação atual. Mas é fundamental estarem em dia até a colônia.
+					</span>
+					<br>
 					<span class="required"><b>*Anti-Tetânica:</b></span>
 					<select class="required" name="antiTetanus" required 
 
