@@ -14,6 +14,8 @@
 		<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
 		Escolha um arquivo para enviar, aceitamos apenas arquivos .pdf, jpg, .jpeg e .png de até 2MB.
 		<br>
+		<span style="color:red">Atenço: o arquivo deve conter AMBAS as partes do documento.</span>
+		<br>
 		<p style="color:red; font-weight: bold;">
 		<?php if($document_type == DOCUMENT_TRIP_AUTHORIZATION_SIGNED){?>
 		Atenção: Para assinar e realizar o envio, imprima antes o PDF da autorização de viagem que pode ser acessada na coluna Inscrição.
