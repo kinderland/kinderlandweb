@@ -124,7 +124,7 @@
 -->
 							<th align="right">1. Pré-inscrições em elaboração</th>
 						<td align='right'><?php if($countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao  !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'F')" target="blank"
-							> <?php echo $countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao $countsNotAssociatedF->elaboracao; ?></td>
+							> <?php echo $countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao; ?></td>
 
 
 
