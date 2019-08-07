@@ -115,11 +115,20 @@
 					
 					<tr>
 							<?php if(!isset($colonia_escolhida)) { $colonia_escolhida = 'Todas';} ?>
+<!--							
 							<th align="right">1. Pré-inscrições em elaboração</th>
 						<td align='right'><?php if($countsAssociatedF->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao; ?></td>
 						<td align='right'><?php if($countsNotAssociatedF->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'false', 'F')" target="blank"
 							> <?php echo $countsNotAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedF->elaboracao; ?></td>
+-->
+							<th align="right">1. Pré-inscrições em elaboração</th>
+						<td align='right'><?php if($countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao  !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao $countsNotAssociatedF->elaboracao; ?></td>
+
+
+
+
 						<td align='right'><?php if($countsAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'M')" target="blank"
 							> <?php echo $countsAssociatedM->elaboracao; ?></a><?php } else echo $countsAssociatedM->elaboracao; ?></td>
 						<td align='right'><?php if($countsNotAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'false', 'M')" target="blank"
