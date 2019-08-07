@@ -34,14 +34,11 @@
 	src="<?= $this->config->item('assets'); ?>js/jquery.tablesorter.js"></script>
 <script type="text/javascript">
 	function showSubReport (camp, year, status, associated, gender) {
-/*
+
 		if(associated != null)
 			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?camp="+camp+"&year="+year+"&status="+status+"&associated="+associated+"&gender="+gender;
 		else
 			var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?camp="+camp+"&year="+year+"&status="+status+"&gender="+gender;
-*/
-
-		var url = "<?= $this->config->item('url_link'); ?>reports/subscriptions?camp="+camp+"&year="+year+"&status="+status+"&gender="+gender;
 
 		window.open(url, '_blank');
 	}
