@@ -189,6 +189,7 @@
 						<td colspan="2"><?php echo $subt1AM = $countsAssociatedM->nao_validada+$countsAssociatedM->aguardando_validacao+$countsAssociatedM->elaboracao + $countsNotAssociatedM->nao_validada+$countsNotAssociatedM->aguardando_validacao+$countsNotAssociatedM->elaboracao; ?></td>
 					</tr>
 					<tr>
+<!--
 						<th align="right" width='200px'>4. Pré-inscrições validadas</th>
 						<td align='right'><?php if($countsAssociatedF->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 2, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->validada; ?></a><?php } else echo $countsAssociatedF->validada; ?></td>
@@ -198,13 +199,25 @@
 							> <?php echo $countsAssociatedM->validada; ?></a><?php } else echo $countsAssociatedM->validada; ?></td>
 						<td align='right'><?php if($countsNotAssociatedM->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 2, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->validada; ?></a><?php } else echo $countsNotAssociatedM->validada; ?></td>
+-->
+						<th align="right" width='200px'>4. Pré-inscrições validadas</th>
+
+						<td colspan="2"><?php if($countsAssociatedF->validada + $countsNotAssociatedF->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 2, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->validada + $countsNotAssociatedF->validada; ?></a><?php } else echo $countsAssociatedF->validada + $countsNotAssociatedF->validada; ?></td>
+						<td colspan="2"><?php if($countsAssociatedM->validada + $countsNotAssociatedM->validada !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 2, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->validada + $countsNotAssociatedM->validada; ?></a><?php } else echo $countsAssociatedM->validada + $countsNotAssociatedM->validada; ?></td>
 					</tr>
 					<tr>
+<!--
 						<th align="right">Subtotal(1+2+3+4)</th>
 						<td align='right'><?php echo $subt1AF+$countsAssociatedF->validada; ?></td>
 						<td align='right'><?php echo $subt1NF+$countsNotAssociatedF->validada; ?></td>
 						<td align='right'><?php echo $subt1AM+$countsAssociatedM->validada; ?></td>
 						<td align='right'><?php echo $subt1NM+$countsNotAssociatedM->validada; ?></td>
+-->
+						<th align="right">Subtotal(1+2+3+4)</th>
+						<td colspan="2"><?php echo $subt1AF+$countsAssociatedF->validada + $subt1NF+$countsNotAssociatedF->validada; ?></td>
+						<td colspan="2"><?php echo $subt1AM+$countsAssociatedM->validada + $subt1NM+$countsNotAssociatedM->validada; ?></td>
 					</tr>
 					<tr>
 						<th align="right">5. Pré-inscrições validadas por Pavilhão</th>
@@ -213,6 +226,7 @@
 						
 					</tr>
 					<tr>
+<!--
 						<th align="right" width='200px'>6. Pré-inscrições na fila de espera</th>
 						<td align='right'><?php if($countsAssociatedF->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 3, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->fila_espera; ?></a><?php } else echo $countsAssociatedF->fila_espera; ?></td>
@@ -222,6 +236,12 @@
 							> <?php echo $countsAssociatedM->fila_espera; ?></a><?php } else echo $countsAssociatedM->fila_espera; ?></td>
 						<td align='right'><?php if($countsNotAssociatedM->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 3, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->fila_espera; ?></a><?php } else echo $countsNotAssociatedM->fila_espera; ?></td>
+-->
+						<th align="right" width='200px'>6. Pré-inscrições na fila de espera</th>
+						<td colspan="2"><?php if($countsAssociatedF->fila_espera + $countsNotAssociatedF->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 3, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->fila_espera + $countsNotAssociatedF->fila_espera; ?></a><?php } else echo $countsAssociatedF->fila_espera + $countsNotAssociatedF->fila_espera; ?></td>
+						<td colspan="2"><?php if($countsAssociatedM->fila_espera + $countsNotAssociatedM->fila_espera !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 3, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->fila_espera + $countsNotAssociatedM->fila_espera; ?></a><?php } else echo $countsAssociatedM->fila_espera + $countsNotAssociatedM->fila_espera; ?></td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>7. Pré-inscrições aguardando doação</th>
