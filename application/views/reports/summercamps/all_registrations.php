@@ -99,7 +99,7 @@
 					style="max-width: 1200px;">
 
 					<tr>
-						<th>align="right"</th>
+						<th align="right"> </th>
 						<th align="right" colspan=2 style="text-align: center">Feminino</th>
 						<th align="right" colspan=2 style="text-align: center">Masculino</th>
 					
