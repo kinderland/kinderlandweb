@@ -123,7 +123,7 @@
 							> <?php echo $countsNotAssociatedF->elaboracao; ?></a><?php } else echo $countsNotAssociatedF->elaboracao; ?></td>
 -->
 							<th align="right">1. Pré-inscrições em elaboração</th>
-						<td align='right'><?php if($countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao  !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'F')" target="blank"
+						<td colspan="2"><?php if($countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao  !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao; ?></a><?php } else echo $countsAssociatedF->elaboracao + $countsNotAssociatedF->elaboracao; ?></td>
 <!--
 
@@ -135,7 +135,7 @@
 							> <?php echo $countsNotAssociatedM->elaboracao; ?></a><?php } else echo $countsNotAssociatedM->elaboracao; ?></td>
 -->
 
-						<td align='right'><?php if($countsAssociatedM->elaboracao + $countsNotAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'M')" target="blank"
+						<td colspan="2"><?php if($countsAssociatedM->elaboracao + $countsNotAssociatedM->elaboracao !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $ano_escolhido?>', 0, 'true', 'M')" target="blank"
 							> <?php echo $countsAssociatedM->elaboracao + $countsNotAssociatedM->elaboracao; ?></a><?php } else echo $countsAssociatedM->elaboracao + $countsNotAssociatedM->elaboracao; ?></td>
 
 					</tr>
