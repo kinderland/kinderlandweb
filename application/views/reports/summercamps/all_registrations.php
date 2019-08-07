@@ -185,7 +185,7 @@
 						<td align='right'><?php echo $subt1AM = $countsAssociatedM->nao_validada+$countsAssociatedM->aguardando_validacao+$countsAssociatedM->elaboracao; ?></td>
 						<td align='right'><?php echo $subt1NM = $countsNotAssociatedM->nao_validada+$countsNotAssociatedM->aguardando_validacao+$countsNotAssociatedM->elaboracao; ?></td>
 -->
-						<th align="right">Subtotal(1+2+3)</th>
+						<th align="center">Subtotal(1+2+3)</th>
 						<td colspan="2"><?php echo $subt1AF = $countsAssociatedF->nao_validada+$countsAssociatedF->aguardando_validacao+$countsAssociatedF->elaboracao + $countsNotAssociatedF->nao_validada+$countsNotAssociatedF->aguardando_validacao+$countsNotAssociatedF->elaboracao; ?></td>
 
 						<td colspan="2"><?php echo $subt1AM = $countsAssociatedM->nao_validada+$countsAssociatedM->aguardando_validacao+$countsAssociatedM->elaboracao + $countsNotAssociatedM->nao_validada+$countsNotAssociatedM->aguardando_validacao+$countsNotAssociatedM->elaboracao; ?></td>
