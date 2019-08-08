@@ -3609,6 +3609,17 @@ class Admin extends CK_Controller {
         }
     }
 
+    public function checaPrimeiraLiberacao() {
+
+        $this->Logger->info("Starting " . __METHOD__);
+
+        $summer_camp_id = $this->input->post('summer_camp_id');
+
+        if(!sizeof($this->summercamp_model->jaFoiLiberado($summer_camp_id)))
+            echo("true");
+
+    }
+
     public function sorteiaTodos() {
         
         $this->Logger->info("Starting " . __METHOD__);
@@ -3738,6 +3749,12 @@ class Admin extends CK_Controller {
             $this->Logger->debug("Summer Camp Ids: " . $campsIdStr);
             if (strlen($campsIdStr) == 0)
                 throw new Exception("Nenhuma colonia encontrada com os parametros dados.");
+
+            $this->Logger->info("Checking if the user was already called for presential subscription"); // from neam
+            if ($this->summercamp_model->checaLiberados($userId, $campsIdStr)) {
+                echo("ja liberado");
+                return;
+            }
 
             $this->Logger->info("Checking if the given position is already occupied by another person");
             if (!$this->summercamp_model->checkQueueNumberAvailability($userId, $campsIdStr, $position))

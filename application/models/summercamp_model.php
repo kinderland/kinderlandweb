@@ -1731,6 +1731,39 @@ class summercamp_model extends CK_Model {
         return true;
     }
 
+        public function jaFoiLiberado($summerCamp) {
+
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT *
+                FROM summer_camp_subscription
+                WHERE summer_camp_id = ?
+                AND situation = 5";
+
+        return $this->executeRows($this->db, $sql, array(intval($summerCamp)));
+
+    }
+
+    public function checaPreInscAberta($summerCamps) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT *
+                FROM summer_camp
+                WHERE now() < date_finish_pre_subscriptions
+                AND summer_camp_id in (" . $summerCamps . ")";
+        
+        return $this->executeRows($this->db, $sql);
+    }
+
+    public function checaLiberados($usersId, $summerCamps) {
+        $this->Logger->info("Running: " . __METHOD__);
+        $sql = "SELECT *
+                FROM summer_camp_subscription
+                WHERE situation = 5
+                AND summer_camp_id in (" . $summerCamps . ")
+                AND person_user_id in (" . $usersId . ")";
+
+        return $this->executeRows($this->db, $sql);
+    }
+
     public function updateQueueNumber($userId, $summerCamps, $position) {
         $this->Logger->info("Running: " . __METHOD__);
         $sql = "UPDATE summer_camp_subscription

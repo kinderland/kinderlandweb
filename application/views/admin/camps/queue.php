@@ -151,7 +151,7 @@ function saveQueuePosition(personId, userName, index){
 	var yearSelected = $("#anos").val();
 	var position = $("#queue_number_"+index).val();
 
-	//if(confirm("Deseja atribuir a posição " + position + " ao responsável " + userName + "?")){
+	// if(confirm("Deseja atribuir a posição " + position + " ao responsável " + userName + "?")){
 		$.post("<?= $this->config->item('url_link') ?>admin/updateQueueNumber",
 	        {
 	            'user_id': personId,
@@ -170,7 +170,7 @@ function saveQueuePosition(personId, userName, index){
 	            }
 	        }
 	    );
-	//}
+	// }
 	
 }
 
@@ -210,12 +210,12 @@ div.scroll{
 					
 							<?php
 							if(isset($years))
-							foreach ( $years as $year ) {
-								$selected = "";
-								if ($ano_escolhido == $year)
-									$selected = "selected";
-								echo "<option $selected value='$year'>$year</option>";
-							}
+								foreach ( $years as $year ) {
+									$selected = "";
+									if ($ano_escolhido == $year)
+										$selected = "selected";
+									echo "<option $selected value='$year'>$year</option>";
+								}
 							?>
 						</select>
 						Colônia: <select name="colonia_f" onchange="this.form.submit()" id="colonia">
