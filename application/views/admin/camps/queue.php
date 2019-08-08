@@ -209,6 +209,7 @@ div.scroll{
 					Ano: <select name="ano_f" onchange="this.form.submit()" id="anos">
 					
 							<?php
+							if(isset($years))
 							foreach ( $years as $year ) {
 								$selected = "";
 								if ($ano_escolhido == $year)
@@ -233,6 +234,7 @@ div.scroll{
 							<?php
 							$index = 0;
 							foreach ( $opcoes as $opcao ) {
+								if ($opcao != "Todos") continue;
 								$selected = "";
 								if ($selecionado == $index)
 									$selected = "selected";
