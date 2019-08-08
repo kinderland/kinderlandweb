@@ -103,18 +103,19 @@
 					
 					<tr>
 					
-					
+<!--					
 					<tr>
 						<th align="right"></th>
 						<th align="right">Sócio</th>
 						<th align="right">Não Sócio</th>
 						<th align="right">Sócio</th>
 						<th align="right">Não Sócio</th>
-					
+-->					
 					
 					<tr>
 							<?php if(!isset($colonia_escolhida)) { $colonia_escolhida = 'Todas';} ?>
 							<th align="right">Pré-inscrições Canceladas</th>
+<!--
 						<td align='right'><?php if($countsAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'true', 'F')" target="blank"
 							><?php echo $countsAssociatedF->cancelado; ?></a><?php } else echo $countsAssociatedF->cancelado; ?></td>
 						<td align='right'><?php if($countsNotAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'false', 'F')" target="blank"
@@ -123,9 +124,15 @@
 							> <?php echo $countsAssociatedM->cancelado; ?></a><?php } else echo $countsAssociatedM->cancelado; ?> </td>
 						<td align='right'><?php if($countsNotAssociatedM->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->cancelado; ?></a><?php } else echo $countsNotAssociatedM->cancelado; ?> </td>
+-->
+						<td colspan="2"><?php if($countsAssociatedF->cancelado + $countsNotAssociatedF->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'true', 'F')" target="blank"
+							><?php echo $countsAssociatedF->cancelado + $countsNotAssociatedF->cancelado; ?></a><?php } else echo $countsAssociatedF->cancelado + $countsNotAssociatedF->cancelado; ?></td>
+						<td colspan="2"><?php if($countsAssociatedM->cancelado + $countsNotAssociatedM->cancelado !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -3, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->cancelado + $countsNotAssociatedM->cancelado; ?></a><?php } else echo $countsAssociatedM->cancelado + $countsNotAssociatedM->cancelado; ?> </td>
 					</tr>
 					<tr>
 						<th align="right">Pré-inscrições Desistentes</th>
+<!--
 						<td align='right'><?php if($countsAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->desistente; ?></a><?php } else echo $countsAssociatedF->desistente; ?> </td>
 						<td align='right'><?php if($countsNotAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'false', 'F')" target="blank"
@@ -134,9 +141,15 @@
 							> <?php echo $countsAssociatedM->desistente; ?></a><?php } else echo $countsAssociatedM->desistente; ?> </td>
 						<td align='right'><?php if($countsNotAssociatedM->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->desistente; ?></a><?php } else echo $countsNotAssociatedM->desistente; ?> </td>
+-->
+						<td colspan="2"><?php if($countsAssociatedF->desistente + $countsNotAssociatedF->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->desistente + $countsNotAssociatedF->desistente; ?></a><?php } else echo $countsAssociatedF->desistente + $countsNotAssociatedF->desistente; ?> </td>
+						<td colspan="2"><?php if($countsAssociatedM->desistente + $countsNotAssociatedM->desistente !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -1, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->desistente + $countsNotAssociatedM->desistente; ?></a><?php } else echo $countsAssociatedM->desistente + $countsNotAssociatedM->desistente; ?> </td>
 					</tr>
 					<tr>
 						<th align="right" width='200px'>Pré-inscrições Excluídas</th>
+<!--						
 						<td align='right'><?php if($countsAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'true', 'F')" target="blank"
 							> <?php echo $countsAssociatedF->excluido; ?></a><?php } else echo $countsAssociatedF->excluido; ?> </td>
 						<td align='right'><?php if($countsNotAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'false', 'F')" target="blank"
@@ -145,9 +158,14 @@
 							> <?php echo $countsAssociatedM->excluido; ?></a><?php } else echo $countsAssociatedM->excluido; ?> </td>
 						<td align='right'><?php if($countsNotAssociatedM->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'false', 'M')" target="blank"
 							> <?php echo $countsNotAssociatedM->excluido; ?></a><?php } else echo $countsNotAssociatedM->excluido; ?> </td>
+-->
+						<td colspan="2"><?php if($countsAssociatedF->excluido + $countsNotAssociatedF->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'true', 'F')" target="blank"
+							> <?php echo $countsAssociatedF->excluido + $countsNotAssociatedF->excluido; ?></a><?php } else echo $countsAssociatedF->excluido + $countsNotAssociatedF->excluido; ?> </td>
+						<td colspan="2"><?php if($countsAssociatedM->excluido + $countsNotAssociatedM->excluido !=0){?><a onclick="showSubReport('<?= $colonia_escolhida?>', '<?= $year?>', -2, 'true', 'M')" target="blank"
+							> <?php echo $countsAssociatedM->excluido + $countsNotAssociatedM->excluido; ?></a><?php } else echo $countsAssociatedM->excluido + $countsNotAssociatedM->excluido; ?> </td>
 					</tr>
 					<tr>
-						<th align="right" width='200px'>Total</th>
+						<th class="text-right" width='200px'>Total</th>
 						<td align='right'> <?php echo $countsAssociatedF->cancelado + $countsAssociatedF->desistente + $countsAssociatedF->excluido; ?> </td>
 						<td align='right'> <?php echo $countsNotAssociatedF->cancelado + $countsNotAssociatedF->desistente + $countsNotAssociatedF->excluido; ?> </td>
 						<td align='right'> <?php echo $countsAssociatedM->cancelado + $countsAssociatedM->desistente + $countsAssociatedM->excluido; ?> </td>
