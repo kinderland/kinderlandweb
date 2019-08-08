@@ -197,14 +197,14 @@
 
                             <input disabled type="radio" name="specialCare" value="1"
                             <?php
-                            if (isset($specialCare))
+                            
                               if($specialCare == 't')
                                   echo "checked='checked'"
                                 ?>/> Sim
 
                             <input disabled type="radio" name="specialCare" value="0"
                             <?php
-                            if (isset($speciaCare))
+                            
                               if($specialCare == 'f')
                                  echo "checked='checked'"
                                 ?>
@@ -217,7 +217,7 @@
 
 
 
-            
+
             <div class="row">
                 <div class="form-group">
                     <label for="birthdate" class="col-lg-2 control-label"> Data de Nascimento*: </label>
