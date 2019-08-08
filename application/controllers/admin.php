@@ -3601,6 +3601,116 @@ class Admin extends CK_Controller {
         }
     }
 
+        public function sorteiaTodos() {
+        
+        $this->Logger->info("Starting " . __METHOD__);
+        
+        $usersId = $this->input->post('users_id', TRUE);
+        $usersId = explode("-", $usersId);
+        array_pop($usersId);
+        $summerCampType = $this->input->post('summer_camp_type', TRUE);
+        $yearSelected = $this->input->post('year', TRUE);
+
+        if($usersId != null && sizeof($usersId) > 0) {
+        
+            try {
+                $this->Logger->info("Getting summer camps id");
+                $summerCamps = $this->summercamp_model->getMiniCampsOrNotByYear($yearSelected, $summerCampType);
+                $campsIdStr = "";
+                if ($summerCamps != null && count($summerCamps) > 0) {
+                    $campsIdStr = $summerCamps[0]->getCampId();
+                    for ($i = 1; $i < count($summerCamps); $i++)
+                        $campsIdStr .= "," . $summerCamps[$i]->getCampId();
+                }
+                $this->Logger->debug("Summer Camp Ids: " . $campsIdStr);
+                if (strlen($campsIdStr) == 0)
+                    throw new Exception("Nenhum evento encontrado com os parâmetros dados.");
+
+                $this->Logger->info("Check for open subscriptions");
+                // VERIFICA SE A DATA DE PRÉ-INSCRIÇÃO AINDA ESTÁ ABERTA
+                if(sizeof($this->summercamp_model->checaPreInscAberta($campsIdStr))) {
+                    echo("pre-inscricoes abertas");
+                    return;
+                }
+
+                $this->Logger->info("Check for called students");
+                // VERIFICA SE HÁ CANDIDATOS JÁ LIBERADOS E IMPEDE O USO DE SORTEAR TODOS
+                $usersIdStr = $usersId[0];
+                
+                for ($i = 1; $i < count($usersId); $i++)
+                        $usersIdStr .= "," . $usersId[$i];
+
+                if(sizeof($this->summercamp_model->checaLiberados($usersIdStr, $campsIdStr))) {
+                    echo("candidato ja liberado");
+                    return;
+                }
+                
+                // FAZ O SORTEIO
+                $sorteiaPeople = [];
+                $sizeUsers = sizeof($usersId);
+
+                $this->Logger->info("First lottery started");
+
+                for($i = 0; $i < $sizeUsers; $i++) {
+                    
+                    // sorteia um índice
+                    $temp = 0;
+                    if($i !== $sizeUsers-1)
+                        $temp = rand(0,$sizeUsers-$i-1);
+                    
+                    // adiciona o elemento da lista desse índice a uma lista sorteio
+                    $sorteiaPeople[$i] = $usersId[$temp];
+                    
+                    // retira o elemento já usado e reenumera a lista de pessoas
+                    unset($usersId[$temp]);
+                    $usersId = array_values($usersId);
+                }
+                
+                // REFAZ O SORTEIO
+                $this->Logger->info("Second lottery started");
+
+                for($i = 0; $i < $sizeUsers; $i++) {
+                    
+                    // sorteia um índice
+                    $temp = 0;
+                    if($i !== $sizeUsers-1)
+                        $temp = rand(0,$sizeUsers-$i-1);
+                    
+                    // adiciona o elemento da lista desse índice a uma lista sorteio
+                    $usersId[$i] = $sorteiaPeople[$temp];
+                    
+                    // retira o elemento já usado e reenumera a lista de pessoas
+                    unset($sorteiaPeople[$temp]);
+                    $sorteiaPeople = array_values($sorteiaPeople);
+                }
+                // TERMINOU A FASE DE SORTEIO
+                $this->Logger->info("Lottery phase finished");
+
+                $this->Logger->info("Updating queue number in database for each subscription");
+                $this->generic_model->startTransaction();
+                foreach($usersId as $position=>$userId) {
+                    if (!$this->summercamp_model->updateQueueNumber($userId, $campsIdStr, $position+47))
+                        throw new Exception("Falha ao atualizar o banco de dados");
+                    $this->generic_model->commitTransaction();
+                }
+                echo "true";
+                return;
+            } catch (Exception $e) {
+                $this->Logger->error("Failed to insert new user");
+                $this->generic_model->rollbackTransaction();
+                echo utf8_decode($ex->getMessage());
+            }
+        } else {
+            echo("Não há usuários na fila de espera.");
+            return;
+        }
+    }
+
+
+
+
+    
+
     public function updateQueueNumber() {
         $this->Logger->info("Starting " . __METHOD__);
         $userId = $this->input->post('user_id', TRUE);

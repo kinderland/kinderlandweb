@@ -110,6 +110,42 @@ function showCounter(currentPage, totalPage, firstRow, lastRow, totalRow, totalR
 	return '';
 }
 
+function sorteioAllQueue() {
+	var summerCampType = $("#colonia").val();
+	var yearSelected = $("#anos").val();
+	var peopleID = document.getElementsByClassName('peopleID');
+	var usersID = "";
+
+	for(var i=0; peopleID[i]; ++i)
+	{
+		usersID = usersID.concat(peopleID[i].value,"-");
+		//alert(usersID);
+	}
+
+	if(confirm("Deseja fazer um sorteio para todos os candidatos desse ano?"))
+		$.post("<?= $this->config->item('url_link') ?>admin/sorteiaTodos",
+		{
+			'users_id': usersID,
+			'summer_camp_type': summerCampType,
+			'year': yearSelected
+		},
+		function (data) {
+			if (data == "true") {
+				alert("Posições sorteadas!");
+				window.location.reload();
+			} else if(data == "candidato ja liberado") {
+				alert("Não é possível sortear todos, pois já há candidatos liberados para esse evento.");
+			} else if (data == "pre-inscricoes abertas") {
+				alert("Não é possível sortear todos, pois o período de pré-inscrições do evento ainda está aberto.");
+			} else {
+				alert(data);
+			}
+		});
+
+}
+
+
+
 function saveQueuePosition(personId, userName, index){
 	var summerCampType = $("#colonia").val();
 	var yearSelected = $("#anos").val();
