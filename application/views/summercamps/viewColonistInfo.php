@@ -1014,7 +1014,11 @@
                     <label for="special_care_obs" class="col-lg-6 control-label"> Qual? </label>
                     <div class="col-lg-6">
 
-                        <textarea disabled Name="specialCareObs" class="col-lg-5" ROWS=3 COLS=100><?php if(isset($specialCareObs))echo $specialCareObs; ?></textarea>
+                        <textarea disabled Name="specialCareObs" class="col-lg-5" ROWS=3 COLS=100>
+<!--
+                        <?php if(isset($specialCareObs))echo $specialCareObs; ?></textarea>
+-->
+                       <?php echo $specialCareObs; ?></textarea>
 <!--
                         <input type="text" disabled class="form-control" 
                                value="<?php
