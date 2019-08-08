@@ -166,10 +166,14 @@
 					</tr>
 					<tr>
 						<th class="text-right" width='200px'>Total</th>
+<!--
 						<td align='right'> <?php echo $countsAssociatedF->cancelado + $countsAssociatedF->desistente + $countsAssociatedF->excluido; ?> </td>
 						<td align='right'> <?php echo $countsNotAssociatedF->cancelado + $countsNotAssociatedF->desistente + $countsNotAssociatedF->excluido; ?> </td>
 						<td align='right'> <?php echo $countsAssociatedM->cancelado + $countsAssociatedM->desistente + $countsAssociatedM->excluido; ?> </td>
 						<td align='right'> <?php echo $countsNotAssociatedM->cancelado + $countsNotAssociatedM->desistente + $countsNotAssociatedM->excluido; ?> </td>
+-->
+						<td colspan="2"> <?php echo $countsAssociatedF->cancelado + $countsAssociatedF->desistente + $countsAssociatedF->excluido + $countsNotAssociatedF->cancelado + $countsNotAssociatedF->desistente + $countsNotAssociatedF->excluido; ?> </td>
+						<td colspan="2"> <?php echo $countsAssociatedM->cancelado + $countsAssociatedM->desistente + $countsAssociatedM->excluido + $countsNotAssociatedM->cancelado + $countsNotAssociatedM->desistente + $countsNotAssociatedM->excluido; ?> </td>
 					</tr>
 				</table>
 				</div>
