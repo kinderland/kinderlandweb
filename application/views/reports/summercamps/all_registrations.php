@@ -217,7 +217,7 @@
 						<td align='right'><?php echo $subt1AM+$countsAssociatedM->validada; ?></td>
 						<td align='right'><?php echo $subt1NM+$countsNotAssociatedM->validada; ?></td>
 -->
-						<th align="right">Subtotal(1+2+3+4)</th>
+						<th class="text-right">Subtotal(1+2+3+4)</th>
 						<td colspan="2"><?php echo $subt1AF+$countsAssociatedF->validada + $subt1NF+$countsNotAssociatedF->validada; ?></td>
 						<td colspan="2"><?php echo $subt1AM+$countsAssociatedM->validada + $subt1NM+$countsNotAssociatedM->validada; ?></td>
 					</tr>
@@ -271,7 +271,7 @@
 						<td align='right'><?php echo $countsAssociatedM->aguardando_pagamento+$countsAssociatedM->fila_espera+$countsAssociatedM->validada; ?></td>
 						<td align='right'><?php echo $countsNotAssociatedM->aguardando_pagamento+$countsNotAssociatedM->fila_espera+$countsNotAssociatedM->validada; ?></td>
 -->
-						<th align="right">Subtotal(4+6+7)</th>
+						<th class="text-right">Subtotal(4+6+7)</th>
 						<td colspan="2"><?php echo $countsAssociatedF->aguardando_pagamento+$countsAssociatedF->fila_espera+$countsAssociatedF->validada + $countsNotAssociatedF->aguardando_pagamento+$countsNotAssociatedF->fila_espera+$countsNotAssociatedF->validada ?></td>
 						<td colspan="2"><?php echo $countsAssociatedM->aguardando_pagamento+$countsAssociatedM->fila_espera+$countsAssociatedM->validada + $countsNotAssociatedM->aguardando_pagamento+$countsNotAssociatedM->fila_espera+$countsNotAssociatedM->validada; ?></td>
 					</tr>
@@ -324,7 +324,7 @@
 	                    
 					</tr>
 					<tr>
-						<th align="right">11. Vagas Disponíveis (10-9-7)</th>
+						<th class="text-right">Vagas Disponíveis (10-9-7)</th>
 						<td colspan="2"> <?php echo $vacancyFemale - ($countsAssociatedF->aguardando_pagamento 
 						+ $countsAssociatedF->inscrito + $countsNotAssociatedF->aguardando_pagamento 
 						+ $countsNotAssociatedF->inscrito); ?>
