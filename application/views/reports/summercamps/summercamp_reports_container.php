@@ -17,8 +17,10 @@
                     <option value="<?= $this->config->item('url_link'); ?>reports/colonist_registered">Listagem de Inscrições</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/colonists_byschool">Colonistas por Escola</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/colonist_byage">Colonistas por Idade</option>
-                    <option value="<?= $this->config->item('url_link'); ?>reports/colonists_byassociated">Inscrições por Sócio</option>
+     <!--
+                    <option value="<?= $this->config->item('url_link'); ?>reports/colonists_byassociated">Inscrições por Sócio</option> 
                     <option value="<?= $this->config->item('url_link'); ?>reports/colonists_bytemporaryassociates">Inscrições por Indicação de CPF</option>
+    -->
                     <!-- <option value="<?= $this->config->item('url_link'); ?>reports/subscriptions_bycamp">Pré-inscrições por Colônia</option> -->
                     <option value="<?= $this->config->item('url_link'); ?>reports/parents_notregistered">Pais Cadastrados por Colonista</option>
                     <option value="<?= $this->config->item('url_link'); ?>reports/responsables_notparents">Responsáveis que não são os Pais</option>
