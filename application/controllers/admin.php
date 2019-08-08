@@ -2425,10 +2425,18 @@ class Admin extends CK_Controller {
                 $campsIdStr .= "," . $campsId[$i];
         }
         $people = $this->summercamp_model->getAssociatedOrNotByStatusAndSummerCamp($campsIdStr, $selected);
+
+        $peopleID = [];
+        
+        foreach($people as $person) {
+            array_push($peopleID, $person -> person_id);
+        }
+
         $nextPosition = $this->summercamp_model->getNextAvailablePosition($campsIdStr);
 
         $data['nextPosition'] = $nextPosition;
         $data['people'] = $people;
+        $data['peopleID'] = $peopleID;
         $this->loadReportView("admin/camps/queue", $data);
     }
 
@@ -3601,7 +3609,7 @@ class Admin extends CK_Controller {
         }
     }
 
-        public function sorteiaTodos() {
+    public function sorteiaTodos() {
         
         $this->Logger->info("Starting " . __METHOD__);
         
@@ -3709,7 +3717,7 @@ class Admin extends CK_Controller {
 
 
 
-    
+
 
     public function updateQueueNumber() {
         $this->Logger->info("Starting " . __METHOD__);
