@@ -249,7 +249,18 @@ div.scroll{
 							<th align="right">Sequencial</th>
 							<th align="right">Posição</th>
 							<th align="right">Ações</th>
-						</tr>	
+						</tr>
+
+						<tr>
+							<td colspan="3"></td>
+							<td>
+								<button class="btn btn-success" onclick="sorteioAllQueue()">Sortear Todos</button>
+								<?php foreach($peopleID as $personID):?>
+									<input type="checkbox" class="peopleID" hidden value="<?php echo($personID); ?>">
+								<?php endforeach; ?>
+							</td>
+						</tr>
+
 					 </thead>
 					 <tbody id="tablebody"> 
 					 <?php
