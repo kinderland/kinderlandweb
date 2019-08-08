@@ -19,9 +19,7 @@
 		<p style="color:red; font-weight: bold;">
 		<?php if($document_type == DOCUMENT_TRIP_AUTHORIZATION_SIGNED){?>
 		Atenção: Para assinar e realizar o envio, imprima antes o PDF da autorização de viagem que pode ser acessada na coluna Inscrição.
-		<?php } else if ($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){?>
-		Atenção: documentos que tenham frente e ver, ambos são necessários. E documentos de identidade devem conter os nomes dos pais.
-		<?php }?>
+		<?php } ?>
 		</p>
 		<input type="hidden" name="document_type" value="<?=$document_type ?>" />
 		<br>
