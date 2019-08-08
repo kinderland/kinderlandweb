@@ -188,6 +188,36 @@
             </div>
             <br />
             <br />
+
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="specialCare" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?*: </label>
+                    <div class="col-lg-6">
+
+                            <input disabled type="radio" name="specialCare" value="1"
+                            <?php
+                            if (isset($specialCare))
+                              if($specialCare == 't')
+                                  echo "checked='checked'"
+                                ?>/> Sim
+
+                            <input disabled type="radio" name="specialCare" value="0"
+                            <?php
+                            if (isset($speciaCare))
+                              if($specialCare == 'f')
+                                 echo "checked='checked'"
+                                ?>
+                                   /> Não
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            
             <div class="row">
                 <div class="form-group">
                     <label for="birthdate" class="col-lg-2 control-label"> Data de Nascimento*: </label>
@@ -996,21 +1026,7 @@
                                	 echo "checked='checked'"
                                 ?>
                                    /> Não
-
-<!--
-
-                        <input type="radio" disabled  name="specialCare" value="1" 
-                        <?php if ( empty($specialCare) || 
-                        (!empty($specialCare) && ($specialCare == "t")
-						)) echo "checked='checked'" ?>/> Sim
-                        <input type="radio" disabled  name="specialCare" value="0"                         
-                        <?php if (!empty($specialCare) && ($specialCare == "f")) echo "checked='checked'" ?>
-						/> Não
--->
-
                     </div>
-
-
                 </div>
             </div>
 
