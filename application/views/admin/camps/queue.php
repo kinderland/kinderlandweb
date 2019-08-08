@@ -162,6 +162,9 @@ function saveQueuePosition(personId, userName, index){
 	        function (data) {
 	            if (data == "true") {
 	                alert("Posição de fila de espera cadastrada!");
+	                window.location.reload();
+	            } else if (data == "ja liberado") {
+					alert("A posição do responsável não pode mais ser modificada, pois o mesmo já foi liberado para inscrição.");
 	            } else {
 	                alert(data);
 	            }
