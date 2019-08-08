@@ -218,8 +218,8 @@
 						<td align='right'><?php echo $subt1NM+$countsNotAssociatedM->validada; ?></td>
 -->
 						<th class="text-right">Subtotal(1+2+3+4)</th>
-						<td colspan="2"><?php echo $subt1AF+$countsAssociatedF->validada + $subt1NF+$countsNotAssociatedF->validada; ?></td>
-						<td colspan="2"><?php echo $subt1AM+$countsAssociatedM->validada + $subt1NM+$countsNotAssociatedM->validada; ?></td>
+						<td colspan="2"><?php echo $subt1AF+$countsAssociatedF->validada + $countsNotAssociatedF->validada; ?></td>
+						<td colspan="2"><?php echo $subt1AM+$countsAssociatedM->validada + $countsNotAssociatedM->validada; ?></td>
 					</tr>
 					<tr>
 						<th align="right">5. Pré-inscrições validadas por Pavilhão</th>

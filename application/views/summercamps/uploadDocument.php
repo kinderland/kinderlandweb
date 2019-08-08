@@ -81,7 +81,7 @@
 	<?php } else if ($document_type == DOCUMENT_IDENTIFICATION_DOCUMENT){?>
 	visualizar último documento enviado
 	<?php } else if ($document_type == DOCUMENT_MEDICAL_CARD){?>
-	visualizar últiaocarteira do plano de saude enviada
+	visualizar última carteira do plano de saúde enviada
 	<?php }?>
 	</button> </a>
 	<?php 
