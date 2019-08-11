@@ -982,7 +982,7 @@
 
             <div class="row">
                 <div class="form-group">
-                    <label for="specialCare" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?*: </label>
+                    <label for="specialCare" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?**: </label>
                     <div class="col-lg-6">
 
                             <input disabled type="radio" name="specialCare" value="1"
