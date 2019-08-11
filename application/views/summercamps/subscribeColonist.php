@@ -904,16 +904,16 @@
                 <div class="form-group">
                     <label for="school" class="col-lg-6 control-label"> O colonista é portador de alguma necessidade especial ou necessita de cuidados especiais?*: </label>
                     <div class="col-lg-6">
-                        <input type="radio" onchange="specialCare();" name="specialCare" value="s"
+                        <input type="radio" onchange="specialCare();" name="specialCare" value="1"
                         <?php
-                                if ((!empty($_POST['specialCare']) && ($_POST['specialCare'] == "s")
+                                if ((!empty($_POST['specialCare']) && ($_POST['specialCare'] == "1")
                                 ))
                             echo "checked='checked'"
                             ?>/> Sim
-                        <input type="radio" onchange="specialCare();" name="specialCare" value="n"
+                        <input type="radio" onchange="specialCare();" name="specialCare" value="0"
                         <?php 
 			if (empty($_POST['specialCare']) || 
-				($_POST['specialCare'] == "n")) 
+				($_POST['specialCare'] == "0")) 
 				echo "checked='checked'" ?>
                                /> Não
                     </div>
