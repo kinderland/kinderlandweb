@@ -961,6 +961,35 @@
             <br />
 
 
+<?php if ($summerCamp->getCampType()== "0") { ?> 
+            <div class="row">
+                <div class="form-group">
+                    <label for="summer" class="col-lg-6 control-label">Tenho interesse, havendo vaga, em participar da 1a Turma <?= date("Y")+1;?>* : </label>
+                    <div class="col-lg-6">
+
+                            <input disabled type="radio" name="summerInterest" value="1"
+                            <?php
+                            if (isset($summerInterest))
+                              if($summerInterest == 't')
+                                  echo "checked='checked'"
+                                ?>/> Sim
+
+                            <input disabled type="radio" name="summerInterest" value="0"
+                            <?php
+                            if (isset($summerInterest))
+                              if($summerInterest == 'f')
+                                 echo "checked='checked'"
+                                ?>
+                                   /> Não
+                    </div>
+                </div>
+    
+      </div>
+
+<?php } ?>
+
+
+
 <!--
             <div class="row">
                 <div class="form-group">
