@@ -1147,7 +1147,10 @@ class SummerCamps extends CK_Controller
 
         if ($camper->getSpecialCare()) {
             $data['specialCare'] = $camper->getSpecialCare();
+        } else {
+            $data['specialCare'] = false;
         }
+
 
         if ($camper->getSpecialCareObs()) {
             $data['specialCareObs'] = $camper->getSpecialCareObs();
