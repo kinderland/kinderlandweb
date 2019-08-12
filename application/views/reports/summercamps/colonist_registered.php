@@ -592,7 +592,6 @@
                                 <th>Nome do Colonista</th>
                                 <th>Colônia</th>
                                 <th>Responsável</th>
-                                <th>Interesse na 1a</th>
                             </tr>
                         </thead>
                         <tbody id="tablebody">
@@ -662,8 +661,6 @@
                                     <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
                                     <td><?= $colonist->camp_name ?></td>
                                     <td><a name= "responsavel" key="<?php echo $colonist->person_user_id;?>" id="<?= $colonist->email ?>" target="_blank" href="<?= $this->config->item('url_link') ?>user/details?id=<?= $colonist->person_user_id ?>"><?= $colonist->user_name ?></a></td>
-                                    <td><a name= "colonista" id="<?= $colonist->colonist_name ?>" key="<?= $colonist->colonist_id ?>" target="_blank" href="<?= $this->config->item('url_link') ?>admin/viewColonistInfo?type=report&colonistId=<?= $colonist->colonist_id ?>&summerCampId=<?= $colonist->summer_camp_id ?>"><?= $colonist->colonist_name ?></a></td>
-                                	
                                 </tr>
                                 <?php
                             }
