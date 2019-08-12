@@ -979,9 +979,6 @@
                         </div>
                     </div>
                 </div>
-                <br />
-                <br />
-
 
 <?php } ?>
             <br />
@@ -1014,15 +1011,15 @@
 
                             <input disabled type="radio" name="specialCare" value="1"
                             <?php
-                            if (isset($specialCare))
-                            	if($specialCare == 't')
+                            if (isset($special_care))
+                            	if($special_care == 't')
                                 	echo "checked='checked'"
                                 ?>/> Sim
 
                             <input disabled type="radio" name="specialCare" value="0"
                             <?php
-                            if (isset($speciaCare))
-                            	if($specialCare == 'f')
+                            if (isset($special_care))
+                            	if($special_care == 'f')
                                	 echo "checked='checked'"
                                 ?>
                                    /> Não
@@ -1040,7 +1037,7 @@
                 <div class="form-group">
                     <label for="special_care_obs" class="col-lg-6 control-label"> Qual? </label>
                     <div class="col-lg-6">
-                        <textarea disabled Name="specialCareObs" class="col-lg-5" ROWS=5 COLS=20><?php echo $specialCareObs; ?></textarea>
+                        <textarea disabled Name="specialCareObs" class="col-lg-5" ROWS=5 COLS=20><?php echo $special_care_obs; ?></textarea>
 	             </div>
                 </div>
             </div>
