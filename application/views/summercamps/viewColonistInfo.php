@@ -720,7 +720,7 @@
 <?php if ($summerCamp->getCampType()== "0" || $summerCamp->getCampType()== "1") { ?> 		
 
                 <input type="hidden" name="summerCampMini" value="1"/>
-                <label class="control-label"><h4>MINI-KINDERLAND: </h4></label>
+                <label class="control-label"><h4>MINI-KINDERLAND e 1a Turma: </h4></label>
                 <br />
 
                 <div class="row">
@@ -957,7 +957,9 @@
                 <br />
                 <br />
 
+<?php } ?>
 
+<?php if ($summerCamp->getCampType()== "0") { ?> 
             <div class="row">
                     <div class="form-group">
                         <label for="summerInterest" class="col-lg-6 control-label">Tenho interesse, havendo vaga, em participar da 1a Turma <?= date("Y")+1;?>* : </label>
