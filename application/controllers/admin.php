@@ -3403,8 +3403,9 @@ class Admin extends CK_Controller {
             $data['roommate3'] = $camper->getRoommate3();
 
         $data['specialCare'] = $camper->getSpecialCare();
-         
-        if ($camper->getSpecialCareObs())
+
+//        if ($camper->getSpecialCareObs())
+        if ($camper->getCampType()== "0" || $camper->getCampType()== "1")
             $data['specialCareObs'] = $camper->getSpecialCareObs();
 
         if ($data["summerCamp"]->isMiniCamp()) {
