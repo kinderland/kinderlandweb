@@ -719,6 +719,8 @@
 
 <?php if ($summerCamp->getCampType()== "0" || $summerCamp->getCampType()== "1") { ?> 		
 
+                <br />
+                <br />
                 <input type="hidden" name="summerCampMini" value="1"/>
                 <label class="control-label"><h4>MINI-KINDERLAND e 1a Turma: </h4></label>
                 <br />
