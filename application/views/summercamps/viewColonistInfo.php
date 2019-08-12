@@ -1038,12 +1038,9 @@
                     <label for="special_care_obs" class="col-lg-6 control-label"> Qual? </label>
                     <div class="col-lg-6">
                         <textarea disabled Name="specialCareObs" class="col-lg-5" ROWS=5 COLS=20>
-
                           <?php 
 if (isset($specialCare))
-                              if($specialCare == 't')
-
-                        echo $specialCareObs; ?></textarea>
+                              if($specialCare == 't') echo $specialCareObs; ?></textarea>
 	             </div>
                 </div>
             </div>
