@@ -3401,8 +3401,9 @@ class Admin extends CK_Controller {
             $data['roommate2'] = $camper->getRoommate2();
         if ($camper->getRoommate3())
             $data['roommate3'] = $camper->getRoommate3();
-        if ($camper->getSpecialCare())
-            $data['specialCare'] = $camper->getSpecialCare(); 
+
+        $data['specialCare'] = $camper->getSpecialCare();
+         
         if ($camper->getSpecialCareObs())
             $data['specialCareObs'] = $camper->getSpecialCareObs();
 
