@@ -957,12 +957,7 @@
                 <br />
                 <br />
 
-            <?php } ?>
-            <br />
-            <br />
 
-
-<?php if ($summerCamp->getCampType()== "0") { ?> 
             <div class="row">
                     <div class="form-group">
                         <label for="summerInterest" class="col-lg-6 control-label">Tenho interesse, havendo vaga, em participar da 1a Turma <?= date("Y")+1;?>* : </label>
@@ -989,7 +984,8 @@
 
 
 <?php } ?>
-
+            <br />
+            <br />
 
 
 <!--
