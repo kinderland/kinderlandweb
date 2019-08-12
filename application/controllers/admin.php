@@ -3404,11 +3404,11 @@ class Admin extends CK_Controller {
 
         $data['specialCare'] = $camper->getSpecialCare();
 
-//        if ($camper->getSpecialCareObs())
-        if ($camper->getCampType()== "0" || $camper->getCampType()== "1")
+        if ($camper->getSpecialCareObs())
             $data['specialCareObs'] = $camper->getSpecialCareObs();
 
-        if ($data["summerCamp"]->isMiniCamp()) {
+//        if ($data["summerCamp"]->isMiniCamp()) {
+        if ($this->summercamp_model->getCampType() == "0" || $this->summercamp_model->getCampType() == "1") {    
             $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
             $data['miniCamp'] = $miniCamp;
         }
