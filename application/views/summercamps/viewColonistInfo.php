@@ -969,15 +969,13 @@
 
                             <input disabled type="radio" name="summerInterest" value="1"
                             <?php
-                            if (isset($summerInterest))
-                              if($summerInterest == 't')
+                              if(miniCamp->$summerInterest == 't')
                                   echo "checked='checked'"
                                 ?>/> Sim
 
                             <input disabled type="radio" name="summerInterest" value="0"
                             <?php
-                            if (isset($summerInterest))
-                              if($summerInterest == 'f')
+                              if(miniCamp->$summerInterest == 'f')
                                  echo "checked='checked'"
                                 ?>
                                    /> Não
