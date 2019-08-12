@@ -969,15 +969,15 @@
                         <div class="col-lg-6">
                             <input disabled type="radio" name="summerInterest" value="1"
                             <?php
-                            if (isset($miniCamp->summerInterest))
-                              if($miniCamp->summerInterest == 't')
+                            if (isset($miniCamp->summer_interest))
+                              if($miniCamp->summer_interest == 't')
                                   echo "checked='checked'"
                                 ?>/> Sim
 
                             <input disabled type="radio" name="summerInterest" value="0"
                             <?php
-                            if (isset($miniCamp->summerInterest))
-                              if($miniCamp->summerInterest == 'f')
+                            if (isset($miniCamp->summer_interest))
+                              if($miniCamp->summer_interest == 'f')
                                  echo "checked='checked'"
                                 ?>
                                    /> Não
