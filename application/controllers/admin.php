@@ -3395,6 +3395,7 @@ class Admin extends CK_Controller {
         } else {
             $data["noMother"] = TRUE;
         }
+
         if ($camper->getRoommate1())
             $data['roommate1'] = $camper->getRoommate1();
         if ($camper->getRoommate2())
@@ -3407,8 +3408,7 @@ class Admin extends CK_Controller {
         if ($camper->getSpecialCareObs())
             $data['specialCareObs'] = $camper->getSpecialCareObs();
 
-//        if ($data["summerCamp"]->isMiniCamp()) {
-        if ($this->summercamp_model->getCampType() == "0" || $this->summercamp_model->getCampType() == "1") {    
+        if ($data["summerCamp"]->isMiniCamp()) {
             $miniCamp = $this->summercamp_model->getMiniCampObs($summerCampId, $colonistId);
             $data['miniCamp'] = $miniCamp;
         }
