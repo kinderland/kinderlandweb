@@ -3732,12 +3732,49 @@ class Admin extends CK_Controller {
         }
     }
 
-
-
-
-
-
     public function updateQueueNumber() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $userId = $this->input->post('user_id', TRUE);
+        $summerCampType = $this->input->post('summer_camp_type', TRUE);
+        $yearSelected = $this->input->post('year', TRUE);
+        $position = $this->input->post('position', TRUE);
+
+        try {
+            $this->Logger->info("Getting summer camps id");
+            $summerCamps = $this->summercamp_model->getMiniCampsOrNotByYear($yearSelected, $summerCampType);
+            $campsIdStr = "";
+            if ($summerCamps != null && count($summerCamps) > 0) {
+                $campsIdStr = $summerCamps[0]->getCampId();
+                for ($i = 1; $i < count($summerCamps); $i++)
+                    $campsIdStr .= "," . $summerCamps[$i]->getCampId();
+            }
+            $this->Logger->debug("Summer Camp Ids: " . $campsIdStr);
+            if (strlen($campsIdStr) == 0)
+                throw new Exception("Nenhuma colonia encontrada com os parametros dados.");
+
+            $this->Logger->info("Checking if the given position is already occupied by another person");
+            if (!$this->summercamp_model->checkQueueNumberAvailability($userId, $campsIdStr, $position))
+                throw new Exception("Falha ao atualizar fila de espera, verifique se outra pessoa possui o mesmo valor");
+
+            $this->Logger->info("Updating queue number in database");
+            $this->generic_model->startTransaction();
+            if (!$this->summercamp_model->updateQueueNumber($userId, $campsIdStr, $position))
+                throw new Exception("Falha ao atualizar o banco de dados");
+            $this->generic_model->commitTransaction();
+
+            echo "true";
+        } catch (Exception $ex) {
+            $this->Logger->error("Failed to insert new user");
+            $this->generic_model->rollbackTransaction();
+            echo utf8_decode($ex->getMessage());
+        }
+    }
+
+
+
+
+
+    public function updateQueueNumberNEAM() {
         $this->Logger->info("Starting " . __METHOD__);
         $userId = $this->input->post('user_id', TRUE);
         $summerCampType = $this->input->post('summer_camp_type', TRUE);
