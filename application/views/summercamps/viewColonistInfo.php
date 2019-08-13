@@ -1027,7 +1027,8 @@
 
                             <input disabled type="radio" name="specialCare" value="0"
                             <?php
-                            if (!isset($speciaCare) || $specialCare != 't')
+                            if (isset($speciaCare))
+                              if($specialCare != 't')
                                  echo "checked='checked'"
                                 ?>
                                    /> Não
