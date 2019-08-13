@@ -975,7 +975,7 @@
 
                             <input disabled type="radio" name="summerInterest" value="0"
                             <?php
-                              if($miniCamp->summer_interest == 'f')
+                              if($miniCamp->summer_interest != 't')
                                  echo "checked='checked'"
                                 ?>
                                    /> Não
