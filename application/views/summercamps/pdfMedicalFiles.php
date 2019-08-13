@@ -78,7 +78,7 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                         <td colspan="4">
                             <p class="required">
-                                <b>Antecedentes Infecto-Contagiosos?</b>
+                                <b>Antecedentes Infecto-Contagiosos</b>
                                 <br>
                                 <?php if ($medicalFile->getInfectoContagiousAntecedents() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -92,7 +92,7 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                         <td colspan="2">
                             <p class="required">
-                                <b>Medicamentos Habituais ou de uso regular:</b>
+                                <b>Medicamentos habituais ou de uso regular</b>
                                 <br>
                                 <?php if ($medicalFile->getRegularUseMedicine() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -104,7 +104,7 @@ for($i = 0; $i < count($colonists); $i++) {
                         </td>
                         <td colspan="2">
                             <p class="required">
-                                <b>Restrições Medicamentosas:</b>
+                                <b>Restrições medicamentosas</b>
                                 <br>
                                 <?php if ($medicalFile->getMedicineRestrictions() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -118,7 +118,7 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                         <td colspan="2">
                             <p class="required">
-                                <b>Alergias (Alimentares/Respiratórias/De Contato):</b>
+                                <b>Alergias (Alimentares/Respiratórias/De Contato)</b>
                                 <br>
                                 <?php if ($medicalFile->getAllergies() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -130,7 +130,7 @@ for($i = 0; $i < count($colonists); $i++) {
                         </td>
                         <td colspan="2">
                             <p class="required">
-                                <b>Antitérmico/Analgésico Habitual:</b>
+                                <b>Antitérmico / analgésico habitual</b>
                                 <br>
                                 <?php if ($medicalFile->getAnalgesicAntipyretic() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -144,7 +144,7 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                         <td colspan="4">
                             <p class="required">
-                                <b>Cuidado medico especial</b>
+                                <b>Cuidado médico especial</b>
                                 <br>
                                 <?php if ($medicalFile->getSpecialCareMedical() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -158,7 +158,7 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                         <td colspan="4">
                             <p class="required">
-                                <b>Medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento</b>
+                                <b>Medicamentos psiquiátricos ou medicação para deficit de atenção ou de comportamento</b>
                                 <br>
                                 <?php if ($medicalFile->getPsychMedication() == NULL) { ?>
                                     <span> Não se aplica. </span>
@@ -172,7 +172,7 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                     <tr>
                         <td colspan="4">
-                            <p class="campo"><b>Observações do médico da colônia:</b></p>
+                            <p class="campo"><b>Observações do médico da colônia</b></p>
                             <p><?=$medicalFile->getDoctorObservations()?></p>
                         </td>
                     </tr>
@@ -187,14 +187,14 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                         <td colspan="3">
                             <p class="campo">
-                                <b>Nome do Médico:</b>
+                                <b>Nome do médico</b>
                                 <span><?= $doctor->getFullname(); ?></span>
                             </p>
                         </td>
 
                         <td>
                             <p class="campo">
-                                <b>Telefone 1:</b>
+                                <b>Telefone 1</b>
                                 <span><?= $doctor->getPhone1(); ?></span>
                             </p>
                         </td>
@@ -203,14 +203,14 @@ for($i = 0; $i < count($colonists); $i++) {
                     <tr>
                         <td colspan="3">
                             <p class="campo">
-                                <b>Email:</b>
+                                <b>Email</b>
                                 <span><?= $doctor->getEmail(); ?></span>
                             </p>
                         </td>
 
                         <td>
                             <p class="campo">
-                                <b>Telefone 2:</b>
+                                <b>Telefone 2</b>
                                 <span><?= $doctor->getPhone2(); ?></span>
                             </p>
                         </td>
