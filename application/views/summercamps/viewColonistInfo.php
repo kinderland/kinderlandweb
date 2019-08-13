@@ -975,7 +975,6 @@
 
                             <input disabled type="radio" name="summerInterest" value="0"
                             <?php
-                            if (isset($miniCamp->summer_interest))
                               if($miniCamp->summer_interest == 'f')
                                  echo "checked='checked'"
                                 ?>
