@@ -572,7 +572,7 @@ $hasTemporary = 0;
                                 } else if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId()
                                     && ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE)) { ?>
                                     <p style='color:red; font-weight:bold' >
-                                        &nbsp; &nbsp; &nbsp;Número na fila: <?= $summerCampInscription->getQueueNumber() ?>
+                                        &nbsp; &nbsp; &nbsp;Número de inscrição: <?= $summerCampInscription->getQueueNumber() ?>
                                     </p>
                                 <?php
                                 }
