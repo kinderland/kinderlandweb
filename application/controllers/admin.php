@@ -2407,8 +2407,8 @@ class Admin extends CK_Controller {
         }
 
         $selected = 2;
-//        $opcoes = array(0 => "Sócios e Indicados", 1 => "Não Sócios", 2 => "Todos");
-//
+        $opcoes = array(0 => "Sócios e Indicados", 1 => "Não Sócios", 2 => "Todos");
+
 //        if (isset($_GET['opcao_f']))
 //            $selected = $_GET['opcao_f'];
 
