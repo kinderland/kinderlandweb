@@ -261,7 +261,7 @@ div.scroll{
 							<td>
 								<?php if ($nextPosition = 1) { ?> 
 								<button class="btn btn-success" onclick="sorteioAllQueue()">Sortear Todos</button>
-								<?php else { ?> 
+								<?php } else { ?> 
 								<button class="btn btn-success" disabled>Sortear Todos</button>
 								<?php else } ?>	
 								<?php foreach($peopleID as $personID):?>
