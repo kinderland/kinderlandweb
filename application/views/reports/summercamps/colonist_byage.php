@@ -137,9 +137,11 @@
 							}
 							?>
 						</select>
+						<button class="btn btn-primary" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
 					</form>
 
-					<button class="btn btn-primary" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
+
+
 
 					<div class="counter"></div> <br>
 					<?php if (isset($colonia_escolhida) && isset($colonists)){ ?>
