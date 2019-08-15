@@ -3715,7 +3715,7 @@ class Admin extends CK_Controller {
                 $this->Logger->info("Updating queue number in database for each subscription");
                 $this->generic_model->startTransaction();
                 foreach($usersId as $position=>$userId) {
-                    if (!$this->summercamp_model->updateQueueNumber($userId, $campsIdStr, $position+2))
+                    if (!$this->summercamp_model->updateQueueNumber($userId, $campsIdStr, $position+6))
                         throw new Exception("Falha ao atualizar o banco de dados");
                     $this->generic_model->commitTransaction();
                 }
