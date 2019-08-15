@@ -34,33 +34,6 @@
 		    return points.sort(function(a, b){return a-b});
 		}
 
-		function sendTableToCSV() {
-                var data = [];
-                var table = document.getElementById("tablebody");
-                var name = getCSVName();
-                var elements = document.getElementsByName('responsavel');
-                var tablehead = document.getElementsByTagName("thead")[0];
-                for (var i = 0, row; row = table.rows[i]; i++) {
-                    var data2 = []
-                    //Nome, retira pega o que esta entre um <> e outro <>
-                    var email = elements[i].getAttribute('id');
-
-                    data2.push(email);
-                    data2.push(row.cells[4].innerHTML.split("<")[1].split(">")[1]);
-                    data.push(data2)
-                }
-                if (i == 0) {
-                    alert('Não há dados para geração da planilha');
-                    return;
-                }
-                var dataToSend = JSON.stringify(data);
-                var columName = ["Email", "Nome"];
-                var columName = ["Email"];
-                var columnNameToSend = JSON.stringify(columName);
-
-                post('<?= $this->config->item('url_link'); ?>reports/toCSV', {data: dataToSend, name: name, columName: columnNameToSend});
-        }
-
 
 		var selectTodos = {
 				element : null,
@@ -141,7 +114,6 @@
 					</form>
 
 					<div class="counter"></div> <br>
-					<button class="btn btn-primary" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
 
 					<?php if (isset($colonia_escolhida) && isset($colonists)){ ?>
                     <table class="table table-bordered table-striped table-min-td-size" style="width: 1100px; font-size:15px" id="sortable-table">
