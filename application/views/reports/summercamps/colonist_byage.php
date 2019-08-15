@@ -132,6 +132,7 @@
                                  	 <td id="colonist_situation_<?=$colonist->colonist_id?>_<?=$colonist->camp_id?>"><font color="
 	                                <?php
 	                                    switch ($colonist->situation) {
+	                                    	case SUMMER_CAMP_SUBSCRIPTION_STATUS_VALIDATED: echo "#061B91"; break;
 	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_PENDING_PAYMENT: echo "#061B91"; break;
 	                                        case SUMMER_CAMP_SUBSCRIPTION_STATUS_SUBSCRIBED: echo "#017D50"; break;
 	                                    }
