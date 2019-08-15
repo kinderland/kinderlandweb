@@ -314,7 +314,7 @@ class summercamp_model extends CK_Model {
 				FROM colonist c INNER JOIN summer_camp_subscription scs on scs.colonist_id = c.colonist_id
 				INNER JOIN person p on c.person_id = p.person_id
 				INNER JOIN summer_camp_subscription_status scss on scss.status = scs.situation
-				WHERE scs.situation in ('5','4') AND scs.summer_camp_id = ? AND p.gender = ?";
+				WHERE scs.situation in ('5','4','2') AND scs.summer_camp_id = ? AND p.gender = ?";
 
         $resultSet = $this->executeRows($this->db, $sql, array($summercampId, $gender));
 
