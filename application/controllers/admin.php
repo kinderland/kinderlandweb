@@ -3732,6 +3732,7 @@ class Admin extends CK_Controller {
         }
     }
 
+
     public function updateQueueNumber() {
         $this->Logger->info("Starting " . __METHOD__);
         $userId = $this->input->post('user_id', TRUE);
@@ -3773,7 +3774,7 @@ class Admin extends CK_Controller {
 
 
 
-
+/*
     public function updateQueueNumberNEAM() {
         $this->Logger->info("Starting " . __METHOD__);
         $userId = $this->input->post('user_id', TRUE);
@@ -3817,6 +3818,8 @@ class Admin extends CK_Controller {
             echo utf8_decode($ex->getMessage());
         }
     }
+
+    */
 
     public function updateToWaitingPaymentIndividual() {
         $this->Logger->info("Starting " . __METHOD__);
