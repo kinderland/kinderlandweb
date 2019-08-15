@@ -259,7 +259,7 @@ div.scroll{
 						<tr>
 							<td colspan="3"></td>
 							<td>
-								<?php if ($nextPosition == 3) { ?> 
+								<?php if ($nextPosition == 1) { ?> 
 								<button class="btn btn-success" onclick="sorteioAllQueue()">Sortear Todos</button>
 								<?php } else { ?> 
 								<button class="btn btn-success" disabled>Sortear Todos</button>
