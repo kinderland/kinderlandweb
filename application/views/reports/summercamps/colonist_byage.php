@@ -137,13 +137,12 @@
 							}
 							?>
 						</select>
-						<button class="btn btn-primary" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
+						
 					</form>
 
-
-
-
 					<div class="counter"></div> <br>
+					<button class="btn btn-primary" onclick="sendTableToCSV()" value="">Fazer download da tabela abaixo como csv</button>
+
 					<?php if (isset($colonia_escolhida) && isset($colonists)){ ?>
                     <table class="table table-bordered table-striped table-min-td-size" style="width: 1100px; font-size:15px" id="sortable-table">
                         <thead>
