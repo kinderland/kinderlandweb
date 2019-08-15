@@ -289,11 +289,12 @@ class CK_Controller extends CI_Controller {
     	$emailSubject = "[Kinderland] ". $summerCampName . " inscrição disponível para " . $colonist->getFullname();
     	$emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>A inscrição 
     		do(a) colonista " . $colonist->getFullname() . " na colônia " . $summerCampName . " já pode ser finalizada.<br><br>
-			Para tanto, acesse novamente o Sistema Kinderland e, por gentileza, realize as seguintes etapas:<br><br>
+            Antes de prosseguir, lembramos que o/a colonista deverá ir e voltar da colônia utilizando apenas o transporte contratado pela Associação Kinderland, nos dias marcados para a turma na qual está inscrito (item 2 das normas gerais). <br><br>
+			Para finalizar a inscrição, acesse novamente o Sistema Kinderland e, por gentileza, realize as seguintes etapas:<br><br>
     		1. Baixe (download) a versão em PDF da autorização de viagem gerada automaticamente na pré-inscrição e pré-autorizada por você;<br>
     		2. Usando letra de forma e legível, coloque seu nome por extenso, número de documento de identidade e assine;<br>
     		3. Digitalize (scan ou foto) a autorização assinada e suba (upload) a autorização assinada para o nosso Sistema;<br>
-    		4. Efetue a doação do valor da contribuição da colônia para a respectiva temporada.<br><br>
+    		4. Na tela da inscrição, efetue a doação do valor da contribuição da colônia para a respectiva temporada.<br><br>
     				
     		Estas 4 etapas devem ser feitas até o dia " . $dateLimit.  " e solicitamos que sejam feitas antes do último dia, 
     		evitando problemas tecnológicos ou comunicação. Se a inscrição não finalizar até esta data, a pré-inscrição será 
