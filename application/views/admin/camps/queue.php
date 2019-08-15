@@ -259,11 +259,11 @@ div.scroll{
 						<tr>
 							<td colspan="3"></td>
 							<td>
-								<?php if ($nextPosition = 1) { ?> 
+								<?php if ($nextPosition == 1) { ?> 
 								<button class="btn btn-success" onclick="sorteioAllQueue()">Sortear Todos</button>
 								<?php } else { ?> 
 								<button class="btn btn-success" disabled>Sortear Todos</button>
-								<?php else } ?>	
+								<?php } ?>	
 								<?php foreach($peopleID as $personID):?>
 									<input type="checkbox" class="peopleID" hidden value="<?php echo($personID); ?>">
 								<?php endforeach; ?>
