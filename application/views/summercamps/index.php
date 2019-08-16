@@ -558,7 +558,7 @@ $hasTemporary = 0;
                                     $color = "style='background-color:lightgreen; padding: 5px 5px; font-weight:bold'";
                                 
                                 $statusArray[4]["text"] = "Número da pré-inscrição";
-                                if $summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE) {
+                                if ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE) {
                                     $statusArray[4]["text"] = "Número da pré-inscrição" . $summerCampInscription->getQueueNumber(); 
                                 }
                                 ?>
