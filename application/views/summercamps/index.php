@@ -576,8 +576,9 @@ $hasTemporary = 0;
 $statusArray[4]["text"] = "Número de da pré-inscrição: " . $summerCampInscription->getQueueNumber(); 
 
                                         ?>  
-                                    <p style='color:red; font-weight:bold' >
+<!--                                    <p style='color:red; font-weight:bold' >
                                         &nbsp; &nbsp; &nbsp;Número de da pré-inscrição: <?= $summerCampInscription->getQueueNumber() ?>
+-->
                                     </p>
                                 <?php
                                 }
