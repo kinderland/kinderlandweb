@@ -557,7 +557,7 @@ $hasTemporary = 0;
                                 if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId())
                                     $color = "style='background-color:lightgreen; padding: 5px 5px; font-weight:bold'";
 
-                                $statusArray[6]["text"] = "Número da pré-inscrição";
+                                $statusArray[4]["text"] = "Número da pré-inscrição";
                                 ?>
                                 <p <?= $color ?> >
                                     <?= $statusArray[$i]["text"];?>
@@ -573,7 +573,7 @@ $hasTemporary = 0;
                                     <?php
                                 } else if ($statusArray[$i]["database_id"] === $summerCampInscription->getSituationId()
                                     && ($summerCampInscription->getSituationId() == SUMMER_CAMP_SUBSCRIPTION_STATUS_QUEUE)) { 
-$statusArray[6]["text"] = "Número de da pré-inscrição: " . $summerCampInscription->getQueueNumber(); 
+$statusArray[4]["text"] = "Número de da pré-inscrição: " . $summerCampInscription->getQueueNumber(); 
 
                                         ?>  
                                     <p style='color:red; font-weight:bold' >
