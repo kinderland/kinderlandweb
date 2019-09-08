@@ -278,7 +278,7 @@
 >
 					Não se aplica
 					<br>
-					<input type="radio" name="specialcare_radio" value="1" <?=$disabled?>  <?php if ($specialCareMecical != NULL) echo "checked" ?> >
+					<input type="radio" name="specialcare_radio" value="1" <?=$disabled?>  <?php if ($specialCareMedical != NULL) echo "checked" ?> >
 					Se aplica
 					<br>
 					<textarea id="specialcare_text" style="display:none;" required                                 
