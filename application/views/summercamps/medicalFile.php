@@ -252,10 +252,10 @@
 					<b>*O colonista necessita de algum cuidado médico especial?</b>
 					<br>
 					<input type="radio" name="specialcare_radio" value="0" required >
-					Não
+					Não se aplica
 					<br>
 					<input type="radio" name="specialcare_radio" value="1"                                onchange="setCustomValidity('')">
-					Sim
+					Se aplica
 					<br>
 					<textarea id="specialcare_text" style="display:none;" required                                 
 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
@@ -267,7 +267,7 @@
 			<tr>
 				<td colspan="4">
 				<p>
-					<b>*O colonista toma medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento ?</b>
+					<b>*O colonista toma medicamentos psiquiatricos ou medicação para deficit de atenção ou de comportamento?</b>
 					<br>
 					<input type="radio" name="psych_radio" value="0" required >
 					Não

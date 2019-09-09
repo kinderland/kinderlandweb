@@ -43,9 +43,10 @@
 		O símbolo * indica preenchimento obrigatório!
 	</p>
 	<p>
-		Atenção: cabe ao responsável pela pré-inscrição garantir que as informações 
+		<u><b><span style="color:red">Atenção:</span> cabe ao responsável por esta ficha garantir que as informações 
 		abaixo são corretas e verídicas. Recomendamos fortemente que, em caso de dúvidas, 
 		um médico seja consultado antes da confirmação do envio desta ficha médica.
+		</b></u>
 	</p>
 </div>
 
@@ -110,6 +111,11 @@
 				<td colspan="2">
 				<p class="required">
 					<b>*Vacinas em dia?</b>
+					<br>
+					<br>
+					<span align="right" style="color:red">
+						Informe a situação atual. Mas é fundamental estarem em dia até a colônia.
+					</span>
 					<br>
 					<span class="required"><b>*Anti-Tetânica:</b></span>
 					<select class="required" name="antiTetanus" required 
@@ -242,10 +248,9 @@
 			<tr>
 				<td colspan="4">
 				<p>
-					<b>*O membro da equipe necessita de algum cuidado médico especial?</b>
+					<b>*O colonista necessita de algum cuidado médico especial?</b>
 					<br>
-					<input type="radio" name="specialcare_radio" value="0" required 
->
+					<input type="radio" name="specialcare_radio" value="0" required >
 					Não se aplica
 					<br>
 					<input type="radio" name="specialcare_radio" value="1"                                onchange="setCustomValidity('')">
@@ -254,27 +259,33 @@
 					<textarea id="specialcare_text" style="display:none;" required                                 
 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')"
- rows="2" disabled cols="100" class="nome required" name="specialcare_text"></textarea>
+ required rows="2" cols="100" name="specialcare_text" disabled class="required"></textarea>
 				</p></td>
+
+
+
 			</tr>
 
 			<tr>
 				<td colspan="4">
 				<p>
-					<b>*O membro da equipe toma medicamentos psiquiatricos ou medicacao para deficit de atencao ou de comportamento?</b>
+					<b>*O membro da equipe toma medicamentos psiquiatricos ou medicação para deficit de atenção ou de comportamento?</b>
 					<br>
-					<input type="radio" name="psych_radio" value="0" required 
->
-					Não se aplica
+					<input type="radio" name="psych_radio" value="0" required >
+					Não
 					<br>
 					<input type="radio" name="psych_radio" value="1"                                onchange="setCustomValidity('')">
-					Se aplica
+					Sim
 					<br>
 					<textarea id="psych_text" style="display:none;" required                                 
 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
 					oninput="setCustomValidity('')"
- rows="2" disabled cols="100" class="nome required" name="psych_text"></textarea>
+ required rows="2" cols="100" name="psych_text" disabled class="required"></textarea>
 				</p></td>
+
+
+
+
 			</tr>
 
 			<tr>
