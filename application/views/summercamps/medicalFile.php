@@ -245,7 +245,6 @@
 				</p></td>
 			</tr>
 
-
 			<tr>
 				<td colspan="4">
 				<p>
