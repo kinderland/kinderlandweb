@@ -251,10 +251,10 @@
 					<b>*O colonista necessita de algum cuidado médico especial?</b>
 					<br>
 					<input type="radio" name="specialcare_radio" value="0" required >
-					Não se aplica
+					Não
 					<br>
 					<input type="radio" name="specialcare_radio" value="1"                                onchange="setCustomValidity('')">
-					Se aplica
+					Sim
 					<br>
 					<textarea id="specialcare_text" style="display:none;" required                                 
 					oninvalid="this.setCustomValidity('Este campo não pode ficar vazio.')"
