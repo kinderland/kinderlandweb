@@ -51,8 +51,10 @@
 
 <div id='form'>
 	<form enctype="multipart/form-data" action="<?= $this -> config -> item('url_link'); ?>summercamps/submitMedicalFileStaff" method="post">
+		<!--
 		<input type="hidden" name="camp_id" value="<?=$camp_id ?>" />
 		<input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" />
+		-->
 		<table class="table table-bordered" border=1 align="center">
 			<tr>
 				<td width = "25%"><span class="required"><b>*Grupo Sanguíneo:</b></span>
