@@ -55,6 +55,7 @@
 		<input type="hidden" name="camp_id" value="<?=$camp_id ?>" />
 		<input type="hidden" name="colonist_id" value="<?=$colonist_id ?>" />
 		-->
+		<input type="hidden" name="person_id" value="<?=$person_id ?>" />
 		<table class="table table-bordered" border=1 align="center">
 			<tr>
 				<td width = "25%"><span class="required"><b>*Grupo Sanguíneo:</b></span>
