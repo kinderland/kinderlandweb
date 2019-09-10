@@ -251,7 +251,7 @@
 			<tr>
 				<td colspan="4">
 				<p>
-					<b>*O colonista necessita de algum cuidado médico especial?</b>
+					<b>*O membro da equipe necessita de algum cuidado médico especial?</b>
 					<br>
 					<input type="radio" name="specialcare_radio" value="0" required >
 					Não
@@ -269,7 +269,7 @@
 			<tr>
 				<td colspan="4">
 				<p>
-					<b>*O colonista toma medicamentos psiquiatricos ou medicação para deficit de atenção ou de comportamento?</b>
+					<b>*O membro da equipe toma medicamentos psiquiatricos ou medicação para deficit de atenção ou de comportamento?</b>
 					<br>
 					<input type="radio" name="psych_radio" value="0" required >
 					Não
@@ -294,7 +294,7 @@
 							receita médica e medicamento.
 						</li>
 						<li>
-							Em caso de emergência, o atendimento à criança no hospital mais próximo será sempre priorizado e os responsáveis serão
+							Em caso de emergência, o atendimento no hospital mais próximo será sempre priorizado e os responsáveis serão
 							devidamente informados.
 						</li>
 						<li>
@@ -348,7 +348,7 @@
 			<tr>
 				<td colspan="4">
 				<p>
-					<u><b><span style="color:red">Atenção:</span> cabe ao responsável pela pré-inscrição garantir que as informações 
+					<u><b><span style="color:red">Atenção:</span> cabe ao responsável pela ficha garantir que as informações 
 					abaixo são corretas e verídicas. Recomendamos fortemente que, em caso de dúvidas, 
 					um médico seja consultado antes da confirmação do envio desta ficha médica.
 					</b></u>
