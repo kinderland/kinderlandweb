@@ -1491,7 +1491,7 @@ class SummerCamps extends CK_Controller
         }
 
         if ($this->input->post('psych_radio', true)) {
-            $psychMedication§ = $this->input->post('psych_text', true);
+            $psychMedication = $this->input->post('psych_text', true);
         } else {
             $psychMedication = null;
         }
