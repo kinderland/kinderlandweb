@@ -32,7 +32,7 @@ for($i = 0; $i < count($colonists); $i++) {
                 <h2><?= $colonist->colonist_name ?></h2>
                 <table class="table table-bordered" border=1 align="center">
                     <tr>
-                        <td width = "25%"><span class="required"><b>Grupo Sanguíneo:</b></span>
+                        <td width = "25%"><span class="required"><b>Grupo Sanguineo:</b></span>
                             <span><?=$medicalFile->getBloodTypeName()?></span>
                         </td>
                         <td width = "25%"><span class="required"><b>Fator RH:</b></span>
