@@ -220,11 +220,6 @@ for($i = 0; $i < count($colonists); $i++) {
             </div>
         </div>
     </div>
-<!--
-    <?php if($i % 2 == 1 && $i < count($colonists)-1){ ?>
+
         <p style="page-break-before: always"></p>    
-    <?php
-        }
-    }
-    ?>
--->
+
