@@ -221,5 +221,8 @@ for($i = 0; $i < count($colonists); $i++) {
         </div>
     </div>
 
-        <p style="page-break-before: always"></p>    
-
+    <?php if($i % 2 == 1 && $i < count($colonists)-1){ ?>
+    <?php
+        }
+    }
+    ?>
