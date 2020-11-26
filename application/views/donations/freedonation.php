@@ -9,6 +9,10 @@
         }
     }
 
+    function setValue(value){
+          document.getElementById("donation_value").value= value;
+    }
+
 </script>
 
 <div class="row">
@@ -31,7 +35,7 @@
                 <p align="justify">Para colaborar com a Associação Kinderland basta escolher como realizar sua doação (opções de cartão de crédito ou débito) - e definir o valor. Você será redirecionado para uma tela da operadora de cartões Cielo, para entrada dos dados do cartão. Em alguns casos, pode aparecer outra tela de validação e confirmação da doação, um controle adicional do próprio banco emissor do cartão. Cabe observar que, para a segurança de todos, nem a Kinderland nem a Cielo guardam os dados do cartão em seus bancos de dados.</p>
 
                 <p align="justify">Ao final do processo, um email será enviado automaticamente confirmando ou não o sucesso da operação. Também mantemos em sua página nos Sistemas Kinderland o histórico de doações efetuadas. Agradecemos, antecipadamente, pelo interesse em contribuir com a Kinderland!</p>
-                <p align="justify">Devido aos custos operacionais e taxas bancárias, pedimos apenas que o valor da doação seja igual ou superior a R$<?= number_format(20, 2, ',', '.') ?>.
+                <p align="justify">Devido aos custos operacionais e taxas bancárias, pedimos apenas que o valor da doação seja igual ou superior a R$<?= number_format(50, 2, ',', '.') ?>.
 
                 <p align="justfy">Atenção: as doações referentes aos associados do ano corrente devem ser feitas pela opção dos Sistemas Kinderland “Campanha de Sócios”.</p>
 
@@ -46,9 +50,11 @@
             <div class="row">
                 <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
                 <div class="col-lg-4">
+                    <input type="button" onclick="setValue(170)" value="170">
+                    <input type="button" onclick="setValue(360)" value="360">
                     <input type="text" min="20" class="form-control" value=""
                            name="donation_value" id="donation_value"
-                           oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$20,00.')"/>
+                           oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/>
 
                 </div>
             </div>
