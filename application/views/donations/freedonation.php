@@ -3,8 +3,8 @@
     function validateForm(event) {
         var donation_value = document.getElementById("donation_value");
 
-        if (parseInt(donation_value.value, 10) < 20) {
-            alert("O valor mínimo para doação é de R$20,00.");
+        if (parseInt(donation_value.value, 10) < 50) {
+            alert("O valor mínimo para doação é de R$50,00.");
             event.preventDefault();
         }
     }
@@ -14,7 +14,7 @@
 <div class="row">
     <?php require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
     <div class="col-lg-10 middle-content">
-        <h3>DOAÇÕES AVULSASS para a ASSOCIAÇÃO KINDERLAND </h3>
+        <h3>DOAÇÃO EMERGENCIAL para a ASSOCIAÇÃO KINDERLAND </h3>
         <div class="row">
             <div class="col-lg-9">
                 <p align="justify">
