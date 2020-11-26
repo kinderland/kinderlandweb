@@ -52,9 +52,10 @@
                 <div class="col-lg-4">
                     <input type="button" onclick="setValue(170)" value="170">
                     <input type="button" onclick="setValue(360)" value="360">
-                    <input type="text" min="20" class="form-control" value=""
+                    <input type="text" min="10" class="form-control" value=""
                            name="donation_value" id="donation_value"
                            oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/>
+                    <input type="button" onclick="setValue(360)" value="980">
 
                 </div>
             </div>
