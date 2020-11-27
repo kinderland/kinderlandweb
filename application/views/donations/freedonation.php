@@ -70,8 +70,9 @@
 
             <h3 style="color:red"> Doação avulsa e NÃO RELACIONADA com inscrições nas temporadas de colônias de férias, eventos (MaCK e outros) ou campanha de associados Kinderland. </h3>
 -->
-
+            <div class="row">
                     <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
+            </div>
 
                     <div class="btn_room_row" >
                         <table>
