@@ -13,7 +13,7 @@
 
     <div class="col-lg-10" bgcolor="red">
          <a href="<?= $this->config->item('url_link'); ?>donations/freeDonation">
-         <button  class="btn btn-primary" style="margin: auto; width: 20%; ">Quero doar</button>
+         <button  class="btn btn-primary" style="margin: auto;  ">Quero doar</button>
          </a>
     </div>
 
