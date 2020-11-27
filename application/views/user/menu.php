@@ -44,7 +44,6 @@
                 <p align="justfy">Ao final do processo, um email será enviado automaticamente confirmando ou não o sucesso da operação. Também mantemos em sua página nos Sistemas Kinderland o histórico de doações efetuadas. Agradecemos, antecipadamente, pelo interesse em contribuir com a Kinderland!</p>
 
                 <p align="justfy">Devido aos custos operacionais e taxas bancárias, pedimos apenas que o valor da doação seja igual ou superior a R$50,00. Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br.</p>
-                <br /><br />
 
                 </p>
             </div>
