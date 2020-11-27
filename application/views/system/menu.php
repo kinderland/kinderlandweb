@@ -24,6 +24,8 @@ function hasPermission($permissions, $permissionRequested) {
         <div class="row" >
             <center><h1> Bem <?= ($gender == "M") ? "vindo" : "vinda" ?>, <?= $fullname ?>.</h1></center>
             <br />
+            <tr>
+            <p align="justify">Texto doação emergencial...</p>    
 
             <!--TO DO: Completar hrefs com os links para as devidas chamadas quando estiverem prontas-->
 

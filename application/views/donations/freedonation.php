@@ -26,6 +26,8 @@
                     <?= ($gender = "M") ? "Prezado" : "Prezada" ?> <?= $fullname ?>, <br />
                     <br />
 
+                <p align="justify">Texto doação emergencial...</p>
+<!--
                 <p align="justify">A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de contribuições e doações regulares. Elas são utilizadas na manutenção e investimentos no espaço onde a Colônia de Férias é realizada, além de ajudar com os demais custos institucionais.</p>
 
                 <p align="justify">Estas doações podem ser espontâneas e feitas a qualquer momento, como contribuições de itens úteis para a colônia de férias, material de construção ou equipamentos em geral. Agradecemos a todos que indistintamente contribuem regularmente a cada ano.</p>
@@ -40,7 +42,7 @@
                 <p align="justfy">Atenção: as doações referentes aos associados do ano corrente devem ser feitas pela opção dos Sistemas Kinderland “Campanha de Sócios”.</p>
 
                 <p align="justfy">Se houver dúvidas, favor entrar em contato conosco por telefone (21) 2266-1980 ou e-mail secretaria@kinderland.com.br.</p><br /><br />
-
+-->
                 </p>
             </div>
         </div>
