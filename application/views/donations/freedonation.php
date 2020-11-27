@@ -71,10 +71,11 @@
             <h3 style="color:red"> Doação avulsa e NÃO RELACIONADA com inscrições nas temporadas de colônias de férias, eventos (MaCK e outros) ou campanha de associados Kinderland. </h3>
 -->
 
+                    <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
+
                     <div class="btn_room_row" >
                         <table>
                             <tr>
-                                <th> <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label> </th>
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(180)" value="180"> </th>
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(360)" value="360"> </th>
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(720)" value="720"> </th>
