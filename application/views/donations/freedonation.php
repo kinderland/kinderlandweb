@@ -49,16 +49,16 @@
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
             <div class="row">
                 <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <input type="button" onclick="setValue(170)" value="180">
                     <input type="button" onclick="setValue(360)" value="360">
                     <input type="button" onclick="setValue(720)" value="720">
                     <input type="button" onclick="setValue(1440)" value="1440">
-
+<!--
                 </div>
                 <div class="col-lg-6">
-
-                    <input type="text" min="20" class="form-control" value=""
+-->
+                    <input type="text" size="20" class="form-control" value=""
                            name="donation_value" id="donation_value"
                            oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/>
 
