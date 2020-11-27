@@ -45,6 +45,8 @@
             </div>
         </div>
 
+        <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
+
 <!--
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
             <div class="row">
@@ -77,7 +79,7 @@
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(720)" value="720"> </th>
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(1440)" value="1440"> </th>
                                 <th> <input type="text" size="10" class="form-control" value=""
-                           name="donation_value" id="donation_value"
+                           name="donation_value" id="donation_value" style="margin-left:10px"
                            oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/> </th>
                               
                         </table>
