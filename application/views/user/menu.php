@@ -47,9 +47,7 @@
 
                 <p align="justfy">Ao final do processo, um email será enviado automaticamente confirmando ou não o sucesso da operação.</p>
 
-                <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.</p>
-
-                <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br.</p>
+                <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.<br>Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br.</p>
 
                 </p>
             </div>
