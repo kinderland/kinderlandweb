@@ -26,7 +26,9 @@
                     <?= ($gender = "M") ? "Prezado" : "Prezada" ?> <?= $fullname ?>, <br />
                     <br />
 
-                <p align="justify">Texto doação emergencial...</p>
+                <p align="justify">Texto maior sobre doação emergencial...</p>
+                <tr>
+                <tr>
 <!--
                 <p align="justify">A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de contribuições e doações regulares. Elas são utilizadas na manutenção e investimentos no espaço onde a Colônia de Férias é realizada, além de ajudar com os demais custos institucionais.</p>
 
