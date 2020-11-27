@@ -75,12 +75,12 @@
                         <table>
                             <tr>
                                 <th> <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label> </th>
-                                <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(170)" value="180"> </th>
+                                <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(180)" value="180"> </th>
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(360)" value="360"> </th>
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(720)" value="720"> </th>
                                 <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(1440)" value="1440"> </th>
                                 <th> <input type="text" size="10" class="form-control" value=""
-                           name="donation_value" id="donation_value" style="margin-left:10px;border:2px solid #008CBA"
+                           name="donation_value" id="donation_value" style="margin-left:10px;border:2px solid #008CBA" onmouseover="this.style.color='#0F0'"
                            oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/> </th>
                               
                         </table>
