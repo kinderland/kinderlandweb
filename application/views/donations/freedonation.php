@@ -56,7 +56,7 @@
                     <input type="button" onclick="setValue(1440)" value="1440">
 
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-8">
 
                     <input type="text" size="10" class="form-control" value=""
                            name="donation_value" id="donation_value"
