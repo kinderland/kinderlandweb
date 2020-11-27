@@ -11,7 +11,7 @@
     </div>
     <tr>
     <div class="row">
-                    <div  class="col-lg-4 col-lg-offset-4" style="padding-bottom:10px">
+                    <div  class="col-lg-4" style="padding-bottom:10px">
                         <a href="<?= $this->config->item('url_link'); ?>donations/freeDonation">
                             <button  class="btn btn-primary" style="margin: auto; width: 100%; ">Quero doar</button>
                         </a>
