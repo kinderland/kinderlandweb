@@ -27,7 +27,7 @@
                     <?= ($gender = "M") ? "Prezado" : "Prezada" ?> <?= $fullname ?>, <br />
                     <br />
 -->
-                <p align="justify">Quando a gente contar você não vai acreditar!<br></br>Que um pedaço de terra possa tanto importar!</p>
+                <p align="justify">Quando a gente contar você não vai acreditar!<br>Que um pedaço de terra possa tanto importar!</p>
 
                 <p align="justify">Diante da pandemia do Coronavírus e seguindo as orientações da Comissão Médica, infelizmente decidimos cancelar as temporadas da MiniK/2020 e Verão/2021 da nossa tradicional Colônia de Férias, realizada desde 1952.</p>
 
@@ -41,9 +41,9 @@
 
                 <p align="justfy">Ao final do processo, um email será enviado automaticamente confirmando ou não o sucesso da operação.</p>
 
-                <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.</p>
+                <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.<br>Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br.</p>
 
-                <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br.</p>                
+                </p>              
                 <tr>
 <!--
                 <p align="justify">A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de contribuições e doações regulares. Elas são utilizadas na manutenção e investimentos no espaço onde a Colônia de Férias é realizada, além de ajudar com os demais custos institucionais.</p>
