@@ -21,7 +21,7 @@
             }
             
             function verificaValor(objTextBox){
-                var valorMinimo = '20,00';
+                var valorMinimo = '50,00';
                 var valorString = objTextBox.value;
                 valorString = valorString.replace('.','');
                 var valorCampo = parseFloat(valorString);
