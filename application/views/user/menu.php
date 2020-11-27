@@ -33,9 +33,7 @@
                     <br />
 -->
 
-                <p align="justify">Quando a gente contar você não vai acreditar!
-
-                Que um pedaço de terra possa tanto importar!</p>
+                <p align="justify">Quando a gente contar você não vai acreditar!<br>Que um pedaço de terra possa tanto importar!</p>
 
                 <p align="justify">Diante da pandemia do Coronavírus e seguindo as orientações da Comissão Médica, infelizmente decidimos cancelar as temporadas da MiniK/2020 e Verão/2021 da nossa tradicional Colônia de Férias, realizada desde 1952.</p>
 
