@@ -49,7 +49,7 @@
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
             <div class="row">
                 <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
-                <div class="col-lg-8">
+                <div class="col-lg-4">
                     <input type="button" onclick="setValue(170)" value="180">
                     <input type="button" onclick="setValue(360)" value="360">
                     <input type="button" onclick="setValue(720)" value="720">
