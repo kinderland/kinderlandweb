@@ -27,10 +27,11 @@
         <div class="row">
             <div class="col-lg-9">
                 <p align="justify">
+<!--
                     <br />
                     <?= ($gender = "M") ? "Prezado" : "Prezada" ?> <?= $fullname ?>, <br />
                     <br />
-
+-->
                 <p align="justify">Diante da pandemia do Coronavírus e seguindo as orientações da Comissão Médica, decidimos cancelar as temporadas da MiniK/2020 e Verão/2021 da nossa tradicional Colônia de Férias, realizada desde 1952.</p>
 
                 <p align="justify">A Associação Kinderland é uma entidade sem fins lucrativos e a manutenção da nossa estrutura física bem como dos nossos funcionários depende quase exclusivamente do valor arrecadado nas temporadas. A não realização das mesmas, nos coloca em uma situação delicada, que ameaça a nossa própria existência. Para garantir a sobrevivência da nossa instituição, precisaremos de todo apoio possível.</p>
