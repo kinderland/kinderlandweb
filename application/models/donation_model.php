@@ -48,7 +48,7 @@ class donation_model extends CK_Model {
                 return $result->portions;
             else {
                 if ($donation->getDonationType() == 1) {
-                    return 6;
+                    return 8;
                 } else {
                     return 1;
                 }
