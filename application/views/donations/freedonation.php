@@ -4,7 +4,7 @@
         var donation_value = document.getElementById("donation_value");
 
         if ((parseInt(donation_value.value, 10) < 50) || (is_null(donation_value.value))) {
-            alert("O valor mínimo para doação é de R$50,00.");
+            alert("O Valor mínimo para doação é de R$50,00.");
             event.preventDefault();
         }
         else {
