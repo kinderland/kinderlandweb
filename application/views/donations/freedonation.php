@@ -80,7 +80,7 @@
                                                               
                         </table>
                     </div>
-            <tr>
+            <br></br>
             <div class="row">
                     <label for="fullname" class="col-lg-2 control-label"> Outro valor: </label>
             </div>
