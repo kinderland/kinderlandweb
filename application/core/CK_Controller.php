@@ -126,19 +126,25 @@ class CK_Controller extends CI_Controller {
             return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
         } else if ($donation->getDonationType() == DONATION_TYPE_FREEDONATION) {
             $person = $this->person_model->getPersonById($donation->getPersonId());
-            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "Sua doação para a Kinderland
+            $emailString = "Prezad" . (($person->getGender() == 'F') ? 'a' : 'o') . " " . $person->getFullname() . ", <br><br>" . "A doação para a Kinderland
 			foi recebida com sucesso. <br><br>" .
-                    "A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de <br>" .
-                    "contribuições e doações regulares. Elas são utilizadas na manutenção do espaço onde <br>" .
-                    "a Colônia de Férias é realizada, além de ajudar com os custos operacionais durante o ano <br><br>" .
-                    "Agradecemos a todos que indistintamente contribuem como associados ou doadores.<br>" .
-                    "A Associação Kinderland realiza projetos sociais com jovens de comunidades carentes,<br>" .
-                    "oferece bolsas parciais ou integrais para crianças do Lar da Criança nas temporadas <br>" .
-                    "de verão e participa de várias outras iniciativas comunitárias. Somente com estas <br>" .
-                    "contribuições regulares isto torna-se possível. <br><br>" .
-                    "Muito obrigado pela sua contribuição, ela é muito importante para
-			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
-            $emailSubject = "[Kinderland] Doacao avulsa";
+//                    "A Associação KINDERLAND é uma entidade sem fins lucrativos que necessita de <br>" .
+//                    "contribuições e doações regulares. Elas são utilizadas na manutenção do espaço onde <br>" .
+//                    "a Colônia de Férias é realizada, além de ajudar com os custos operacionais durante o ano <br><br>" .
+//                    "Agradecemos a todos que indistintamente contribuem como associados ou doadores.<br>" .
+//                    "A Associação Kinderland realiza projetos sociais com jovens de comunidades carentes,<br>" .
+//                    "oferece bolsas parciais ou integrais para crianças do Lar da Criança nas temporadas <br>" .
+//                    "de verão e participa de várias outras iniciativas comunitárias. Somente com estas <br>" .
+//                    "contribuições regulares isto torna-se possível. <br><br>" .
+//                    "Muito obrigado pela sua contribuição, ela é muito importante para
+//			nós.<br><br><br><br>" . "Diretoria da Associação Kinderland";
+//            $emailSubject = "[Kinderland] Doacao avulsa";
+                    "Agradecemos muito pela sua participação nesse momento tão complicado do mundo. Sua contribuição nos permitirá continuar a oferecer nos próximos anos para as crianças e jovens uma experiência única de convívio e alegria.<br><br>" .
+                    "Contamos com você para a divulgação da campanha de arrecadação emergencial! Basta copiar o texto abaixo e compartilhar nos seus grupos de amigos! <br><br>" .
+                    "A KINDERLAND ESTÁ PRECISANDO DA SUA AJUDA! ACESSE http://www.sistemaskinderland.com.br/ E FAÇA UMA DOAÇÃO! <br><br>" .
+                    "Muito obrigado.<br>" .
+                    "Associação Kinderland";
+            $emailSubject = "[Kinderland] Doação Emergencial - KINDERLAND";
 
             return $this->sendMail($emailSubject, $emailString, $person, array("secretaria@kinderland.com.br"));
         } else if ($donation->getDonationType() == DONATION_TYPE_SUBSCRIPTION) {
