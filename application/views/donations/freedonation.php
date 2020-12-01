@@ -75,17 +75,27 @@
                             <tr>
                                 <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="180" onClick="setValue(180);validateForm(event)"/> </th>
                                 <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="360" onClick="setValue(360);validateForm(event)"/> </th>
-                                <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(180)" value="180"> </th>
-                                <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(360)" value="360"> </th>
-                                <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(720)" value="720"> </th>
-                                <th> <input type="button" class="btn btn-default" style="margin-left:5px" onclick="setValue(1440)" value="1440"> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="720" onClick="setValue(720);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="1440" onClick="setValue(1440);validateForm(event)"/> </th>
+                                                              
+                        </table>
+                    </div>
+            <div class="row">
+                    <label for="fullname" class="col-lg-2 control-label"> Outro valor: </label>
+            </div>
+
+                    <div class="btn_room_row" >
+                        <table>
+                            <tr>
                                 <th> <input type="text" size="10" class="form-control" value=""
                            name="donation_value" id="donation_value" style="margin-left:20px;border:2px solid #008CBA" 
                            oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/> </th>
-                           <th> <input type="submit" class="btn btn-primary" value="Prosseguir" onClick="validateForm(event)"/> </th>
-                              
+                           <th> <input type="submit" class="btn btn-primary" value="Prosseguir" onClick="validateForm(event)"/> </th>                              
                         </table>
                     </div>
+
+
+
 
 
             <tr>
