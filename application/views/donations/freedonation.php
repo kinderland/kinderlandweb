@@ -91,7 +91,7 @@
                                 <th> <input type="text" size="10" class="form-control" value=""
                            name="donation_value" id="donation_value" style="margin-left:5px;border:2px solid #008CBA" 
                            oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/> </th>
-                           <th> <input type="submit" class="btn btn-primary" value="Prosseguir" onClick="validateForm(event)"/> </th>                              
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="Prosseguir" onClick="validateForm(event)"/> </th>                              
                         </table>
                     </div>
 
