@@ -27,21 +27,21 @@
                     <?= ($gender = "M") ? "Prezado" : "Prezada" ?> <?= $fullname ?>, <br />
                     <br />
 -->
-                <p align="justify">Quando a gente contar você não vai acreditar!<br>Que um pedaço de terra possa tanto importar!</p>
+                <p align="right">Kinderland,<br>onde passei os melhores momentos, talvez os melhores da vida!</p>
 
-                <p align="justify">Diante da pandemia do Coronavírus e seguindo as orientações da Comissão Médica, infelizmente decidimos cancelar as temporadas da MiniK/2020 e Verão/2021 da nossa tradicional Colônia de Férias, realizada desde 1952.</p>
+                <p align="justify">Diante da pandemia do Coronavírus e seguindo as orientações da Comissão Médica, infelizmente decidimos cancelar as temporadas da MiniK/2020 e Verão/2021 da tradicional Colônia de Férias, realizada desde 1952.</p>
 
                 <p align="justify">Entendemos que a Kinderland é um lugar onde não há espaço para o distanciamento. É um lugar de abraços, de proximidade. Um lugar onde não é possível viver de máscara. Portanto, não teríamos como garantir, neste momento, o cumprimento dos protocolos de segurança.</p>
 
-                <p align="justify">Somos uma entidade sem fins lucrativos e a manutenção da nossa estrutura física bem como dos nossos funcionários depende quase exclusivamente do valor arrecadado nas temporadas. A não realização das mesmas nos coloca em uma situação delicada, que ameaça a nossa própria existência. Para garantir a sobrevivência da nossa instituição, precisaremos de todo apoio possível.</p>
+                <p align="justify">Somos uma entidade sem fins lucrativos e a manutenção da nossa estrutura física bem como dos nossos funcionários depende quase exclusivamente do valor arrecadado nas temporadas. A não realização das mesmas nos coloca em uma situação delicada, que ameaça a nossa própria existência. Para garantir a sobrevivência da KINDERLAND, precisaremos de todo apoio possível.</p>
 
-                <p align="justify">Para viabilizar os custos de 2021 e os necessários investimentos no patrimônio da Colônia para que possamos promover as devidas adequações do espaço físico, precisamos atingir a meta de R$ 550.000. Contamos com a sua ajuda para a Colônia passar por esse difícil período, permitindo-nos continuar a oferecer, por muitos anos, a melhor colônia de todas!</p>
+                <p align="justify">Para viabilizar os custos de 2021 e os necessários investimentos no patrimônio da Colônia para promover as devidas adequações do espaço físico, <b>precisamos atingir a meta de R$ 550.000.</b> Contamos com a sua ajuda para passar por esse difícil período e continuar a oferecer, por muitos anos, a melhor colônia de todas!</p>
 
-                <p align="justify">Para colaborar com a Associação Kinderland basta escolher como realizar sua doação (opções de cartão de crédito ou débito) - e definir o valor (em até 8 vezes no cartão de crédito). Você será redirecionado para uma tela da operadora de cartões Cielo, para entrada dos dados do cartão. Em alguns casos, pode aparecer outra tela de validação e confirmação da doação, um controle adicional do próprio banco emissor do cartão. Para a segurança de todos, nem a Kinderland nem a Cielo guardam os dados do cartão em seus bancos de dados.</p>
+                <p align="justify">Basta escolher o valor entre as opções abaixo que poderão ser pagas no <b>cartão de crédito em até 8 vezes ou no cartão de débito à vista.</b> Tomamos como referência o valor equivalente a um colonista da temporada da 2ª Turma.</p>
 
-                <p align="justfy">Ao final do processo, um email será enviado automaticamente confirmando ou não o sucesso da operação.</p>
+                <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.</p>
 
-                <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.<br>Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br.</p>
+                <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
 
                 </p>              
                 <tr>
