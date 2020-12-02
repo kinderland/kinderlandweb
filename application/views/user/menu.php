@@ -41,7 +41,7 @@
 
                 <p align="justify">Somos uma entidade sem fins lucrativos e a manutenção da nossa estrutura física bem como dos nossos funcionários depende quase exclusivamente do valor arrecadado nas temporadas. A não realização das mesmas nos coloca em uma situação delicada, que ameaça a nossa própria existência. Para garantir a sobrevivência da KINDERLAND, precisaremos de todo apoio possível.</p>
 
-                <p align="justify">Para viabilizar os custos de 2021 e os necessários investimentos no patrimônio da Colônia para promover as devidas adequações do espaço físico, <b>precisamos atingir a meta de R$ 550.000.</b> Contamos com a sua ajuda para passar por esse difícil período e continuar a oferecer, por muitos anos, a melhor colônia de todas!</p>
+                <p align="justify">Para viabilizar os custos de 2021 e os necessários investimentos no patrimônio da Colônia para promover as devidas adequações do espaço físico, <b>precisamos atingir a meta de R$ 550.000 até 31/12.</b> Contamos com a sua ajuda para passar por esse difícil período e continuar a oferecer, por muitos anos, a melhor colônia de todas!</p>
 
                 <p align="justify">Basta escolher o valor entre as opções abaixo que poderão ser pagas no <b>cartão de crédito em até 8 vezes ou no cartão de débito à vista.</b> Tomamos como referência o valor equivalente a um colonista da temporada da 2ª Turma.</p>
 
