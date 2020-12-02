@@ -108,7 +108,8 @@
             $retString = "";
             switch ($status) {
                 case CieloTransaction::TRANSACAO_CAPTURADA:
-                    $retString = "Doação realizada com sucesso! <br /><br />Acompanhe suas doações pelo histórico no menu principal do sistema.";
+//                    $retString = "Doação realizada com sucesso! <br /><br />Acompanhe suas doações pelo histórico no menu principal do sistema.";
+                    $retString = "Doação realizada com sucesso! <br /><br />Agradecemos muito pela sua participação nesse momento tão complicado do mundo. Sua contribuição nos permitirá continuar a oferecer nos próximos anos para as crianças e jovens uma experiência única de convívio e alegria.<br /><br />Contamos com você para a divulgação da campanha de arrecadação emergencial! Basta copiar o texto abaixo e compartilhar nos seus grupos de amigos! <br /><br />A KINDERLAND ESTÁ PRECISANDO DA SUA AJUDA! ACESSE http://www.sistemaskinderland.com.br/ E FAÇA UMA DOAÇÃO! <br /><br />Muito obrigado. <br />Associação Kinderland";
                     break;
                     
                 case CieloTransaction::TRANSACAO_CANCELADA:
@@ -124,7 +125,7 @@
                 case CieloTransaction::TRANSACAO_EM_AUTENTICACAO:
                 case CieloTransaction::TRANSACAO_EM_CANCELAMENTO:
                     $retString = "Doação sendo processada. <br /><br />Favor acompanhar pelo histórico de doações a efetivação ou não da mesma. <br />
-                    É possível que a confirmação do pagamento leve até 2h para chegar até nós. <br /><br />Qualquer dúvida entre em contato com a secretaria.";
+                    É possível que a confirmação do pagamento leve até 2h para chegar até nós. <br /><br />Qualquer dúvida entre em contato com a secretaria. <br /><br />Agradecemos muito pela sua participação nesse momento tão complicado do mundo. Sua contribuição nos permitirá continuar a oferecer nos próximos anos para as crianças e jovens uma experiência única de convívio e alegria.<br /><br />Contamos com você para a divulgação da campanha de arrecadação emergencial! Basta copiar o texto abaixo e compartilhar nos seus grupos de amigos! <br /><br />A KINDERLAND ESTÁ PRECISANDO DA SUA AJUDA! ACESSE http://www.sistemaskinderland.com.br/ E FAÇA UMA DOAÇÃO! <br /><br />Muito obrigado. <br />Associação Kinderland";
                     break;
                 
                 default:
