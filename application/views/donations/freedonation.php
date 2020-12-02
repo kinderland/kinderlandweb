@@ -73,10 +73,10 @@
                     <div class="btn_room_row" >
                         <table>
                             <tr>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="180" onClick="setValue(180);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="360" onClick="setValue(360);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="720" onClick="setValue(720);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="1440" onClick="setValue(1440);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="900" onClick="setValue(900);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="1800" onClick="setValue(1800);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="2700" onClick="setValue(2700);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="3600" onClick="setValue(3600);validateForm(event)"/> </th>
                                                               
                         </table>
                     </div>
