@@ -63,7 +63,7 @@
 -->
                 </p>
 
-                <p align="right"><button class="btn btn-primary" style="margin-left:5px" value="900" /></p>
+                <p align="right"><input class="btn btn-primary" style="margin-left:5px" value="Arrecadado ate ontem: R$ 1.900" /></p>
 
             </div>
         </div>
