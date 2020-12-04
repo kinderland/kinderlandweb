@@ -63,9 +63,7 @@
 -->
                 </p>
                 
-                <p align="right">
-                    <label for="fullname" class="col-lg-2 control-label"> Arrecadado até o momento: R$29.000,00 </label>
-                </p>
+
             </div>
 
             </div>
