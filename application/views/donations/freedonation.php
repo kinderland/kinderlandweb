@@ -63,7 +63,7 @@
 -->
                 </p>
 
-                <p align="right"><button border="none" color="white" background-color="#4CAF50" text-align="center" display="inline-block" value="Arrecadado ate ontem: R$ 1.900" /></p>
+                <p align="right"><button style="border:none;color:white;background-color:#4CAF50;text-align:center;display:inline-block" value="Arrecadado ate ontem: R$ 1.900" /></p>
 
             </div>
         </div>
