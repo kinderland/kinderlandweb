@@ -66,6 +66,13 @@
         </div>
 
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
+
+            <div class="row">
+                <p align="right">
+                    <label for="fullname" class="col-lg-2 control-label"> Arrecadado até o momento: R$29.000,00 </label>
+                </p>
+            </div>
+
             <div class="row">
                     <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
             </div>
