@@ -104,6 +104,7 @@
             </div>
 -->
         </form>
+        <p align="right"><button  class="btn btn-primary" style="margin-left:5px" value="Arrecadado: 35.900,00"/></p>
 
 
     </div>
