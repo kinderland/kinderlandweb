@@ -62,16 +62,16 @@
                 <p align="justfy">Se houver dúvidas, favor entrar em contato conosco por telefone (21) 2266-1980 ou e-mail secretaria@kinderland.com.br.</p><br /><br />
 -->
                 </p>
-            </div>
-        </div>
-
-        <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
-
-            <div class="row">
+                
                 <p align="right">
                     <label for="fullname" class="col-lg-2 control-label"> Arrecadado até o momento: R$29.000,00 </label>
                 </p>
             </div>
+
+            </div>
+        </div>
+
+        <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
 
             <div class="row">
                     <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
@@ -111,7 +111,6 @@
             </div>
 -->
         </form>
-        <p align="right"><button  class="btn btn-primary" style="margin-left:5px" value="Arrecadado: 35.900,00"/></p>
 
 
     </div>
