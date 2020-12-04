@@ -63,7 +63,7 @@
 -->
                 </p>
 
-                <p align="right"><input style="border:none;color:white;background-color:#f3a90d;text-align:center;display:inline-block;font-size:16px;padding: 15px 32px" value="Arrecadado ate ontem: R$ 1.900" /></p>
+                <p align="right"><label style="border:none;color:white;background-color:#f3a90d;text-align:center;display:inline-block;font-size:16px;padding: 15px 32px" value="Arrecadado ate ontem: R$ 1.900" /></p>
 
             </div>
         </div>
