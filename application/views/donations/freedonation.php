@@ -63,7 +63,7 @@
 -->
                 </p>
 
-                <p align="right">Arrecadado até ontem: R$29.000,00</p>
+                <p align="right"><button class="btn btn-primary" style="margin-left:5px" value="900" /></p>
 
             </div>
         </div>
