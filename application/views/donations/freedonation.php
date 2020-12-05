@@ -63,7 +63,7 @@
 -->
                 </p>
                 
-                <p align="right" style="border: 2px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca">Arrecadado até ontem: R$ 41.900</button></p>
+                <p align="right" style="border: 2px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca">Arrecadado até ontem: R$ 41.900</button></p>
 
             </div>
         </div>
