@@ -62,9 +62,9 @@
                 <p align="justfy">Se houver dúvidas, favor entrar em contato conosco por telefone (21) 2266-1980 ou e-mail secretaria@kinderland.com.br.</p><br /><br />
 -->
                 </p>
-                
+<!--                
                 <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Arrecadado até ontem: R$ 41.900</button></p>
-
+-->
             </div>
         </div>
 
