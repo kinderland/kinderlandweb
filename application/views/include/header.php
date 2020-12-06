@@ -36,7 +36,7 @@
 
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
-                <a> <span class="login-span" style="width: 400px;justify-content:center;align-items: center;">
+                <a> <span class="login-span" style="width: 1400px;justify-content:center;align-items: center;">
                     Voce chegou no lugar certo !
                     </span>
                 </a>
