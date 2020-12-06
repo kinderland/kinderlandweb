@@ -36,8 +36,9 @@
 
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
-                
+                <a class="navbar-brand -form navbar-center" >
                     Voce chegou no lugar certo !
+                </a>
                 
                 <div class="navbar-form navbar-right" style="margin-top:20px">
                     <?php if (isset($user_id)) { ?>
