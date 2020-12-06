@@ -36,7 +36,7 @@
 
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
-                <a class="navbar-brand -form navbar-center" >
+                <a class="navbar-brand navbar-center" >
                     Voce chegou no lugar certo !
                 </a>
                 
