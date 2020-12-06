@@ -37,7 +37,7 @@
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
                 <a  style="font-size:42px;color:black;justify-content:center;align-items: center">
-                    Voce chegou no lugar certo !
+                    Voce chegou no lugar certo !<br>Entre ou cadastre-se para DOAR para a Kinderland!
                 </a>
                 <div class="navbar-form navbar-right" style="margin-top:20px">
                     <?php if (isset($user_id)) { ?>
