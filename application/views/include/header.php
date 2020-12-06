@@ -36,9 +36,9 @@
 
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
-                <div  style="font-size:42px;justify-content:center;align-items: center">
+                <a  style="font-size:42px;justify-content:center;align-items: center">
                     Voce chegou no lugar certo !
-                </div>
+                </a>
                 <div class="navbar-form navbar-right" style="margin-top:20px">
                     <?php if (isset($user_id)) { ?>
                         <span class="login-span">
