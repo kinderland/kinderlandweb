@@ -36,8 +36,9 @@
 
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
-                <a class="navbar-brand navbar-center" >
+                <a> <span class="login-span" style="width: 400px;justify-content:center;align-items: center;">
                     Voce chegou no lugar certo !
+                    </span>
                 </a>
                 
                 <div class="navbar-form navbar-right" style="margin-top:20px">
