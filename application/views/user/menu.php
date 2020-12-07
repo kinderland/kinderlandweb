@@ -50,9 +50,9 @@
                 <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
 
                 </p>
-<!--                  
-                 <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Arrecadado até ontem: R$ 41.900</button></p>
--->
+                 
+                 <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Arrecadado até ontem: R$ 99.030</button></p>
+
             </div>
         </div>
 
