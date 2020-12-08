@@ -57,9 +57,9 @@
                     <?php } else { ?>
                  
                 <a  style="font-size:28px;color:black;display:inline-block;text-align:center;justify-content:center">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
                     Você chegou no lugar certo !<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
                     Entre ou cadastre-se para DOAR para a Kinderland!
                 </a>   
                 <!--    <a href="<?php // echo $this->config->item('url_link') ?>events/token"><button class="btn btn-primary">Eventos</button></a> -->
