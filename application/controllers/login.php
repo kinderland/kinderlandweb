@@ -45,10 +45,10 @@ class Login extends CK_Controller {
         $this->loadView('login/signup', $data);
     }
 
-    public function loggeddonation() {
+    public function unloggeddonation() {
         $this->Logger->info("Starting " . __METHOD__);
         $data = array();
-        $this->loadView('login/loggeddonation', $data);
+        $this->loadView('login/unloggeddonation', $data);
     }
 
  	public function loginSuccessful() {
