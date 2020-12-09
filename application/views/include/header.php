@@ -63,11 +63,11 @@
                     <?php } else { ?>
                     
                 <!--    <a href="<?php // echo $this->config->item('url_link') ?>events/token"><button class="btn btn-primary">Eventos</button></a> -->
-
-                    <a href="<?= $this->config->item('url_link') ?>login/signup"><button class="btn btn-primary">Cadastre-se</button></a>
 <!--
-                    <a href="<?= $this->config->item('url_link') ?>login/guestLoginSuccessful"><button class="btn btn-primary">Quero doar</button></a>
+                    <a href="<?= $this->config->item('url_link') ?>login/signup"><button class="btn btn-primary">Cadastre-se</button></a>
 -->
+                    <a href="<?= $this->config->item('url_link') ?>login/guestLoginSuccessful"><button class="btn btn-primary">Quero doar</button></a>
+
                     <?php } ?>
                 </div>
         </div>
