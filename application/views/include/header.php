@@ -37,10 +37,10 @@
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
                 <a  style="font-size:28px;color:black;display:inline-block;text-align:center;justify-content:center">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     Você chegou no lugar certo !<br>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    Entre ou faça sua DOAÇÃO por aqui<a href="<?= $this->config->item('url_link') ?>login/guestLoginSuccessful"><button class="btn btn-primary">Quero doar</button></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Entre ou cadastre-se para DOAR para a Kinderland!
                 </a>
                 <div class="navbar-form navbar-right" style="margin-top:20px">
                     <?php if (isset($user_id)) { ?>
@@ -65,9 +65,9 @@
                 <!--    <a href="<?php // echo $this->config->item('url_link') ?>events/token"><button class="btn btn-primary">Eventos</button></a> -->
 <!--
                     <a href="<?= $this->config->item('url_link') ?>login/signup"><button class="btn btn-primary">Cadastre-se</button></a>
-
-                    <a href="<?= $this->config->item('url_link') ?>login/guestLoginSuccessful"><button class="btn btn-primary">Quero doar</button></a>
 -->
+                    <a href="<?= $this->config->item('url_link') ?>login/guestLoginSuccessful"><button class="btn btn-primary" style="font-size:24px;">Quero doar</button></a>
+
                     <?php } ?>
                 </div>
         </div>
