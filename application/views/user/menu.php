@@ -26,7 +26,7 @@
 <div class="col-lg-10 middle-content">
         <div class="row">
             <div class="col-lg-9">
-                <img src="<?= $this->config->item('assets'); ?>images/kinderland/KinderlandDoeoeoa.jpeg" height=300/>
+                <img align="center" src="<?= $this->config->item('assets'); ?>images/kinderland/KinderlandDoeoeoa.jpeg" height=300/>
 
 
 <!--
