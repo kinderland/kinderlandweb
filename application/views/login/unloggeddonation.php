@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
+        <form action="<?= $this->config->item('url_link') ?>login/guestLoginSuccessfull" method="POST">
             <div class="row">
                     <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
             </div>

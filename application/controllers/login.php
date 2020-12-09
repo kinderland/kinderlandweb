@@ -88,6 +88,43 @@ class Login extends CK_Controller {
         }
     }
 
+        public function guestLoginSuccessful() {
+        $this->Logger->info("Starting " . __METHOD__);
+        $login = 'paulorzon@gmail.com';
+        $password = 'aaa';
+
+        $this->Logger->info("Login given: " . $login);
+
+        $this->Logger->info("Authenticating user...");
+        $userId = $this->personuser_model->userLogin($login, $password);
+        $this->Logger->info("UserId found given the credentials: " . $userId);
+        if ($userId) {
+            $this->Logger->info("Found, retrieving data about personuser");
+            $user = $this->personuser_model->getUserById($userId);
+
+            $permissions = $user->getUserTypes();
+
+            $this->Logger->info("User type: " . print_r($user->getUserTypes(), true));
+            $this->Logger->info("Saving data in session");
+            $this->session->set_userdata("user_id", $user->getPersonId());
+            $this->session->set_userdata("fullname", $user->getFullname());
+            $this->session->set_userdata("gender", $user->getGender());
+            $this->session->set_userdata("user_types", $permissions);
+            
+            $rows = $this -> personuser_model -> checkAllPermissionsByUserType($permissions);
+            
+            $this->setPermissions($rows);
+            
+            if (count($permissions) == 1)
+                $this->redirectToSystemScreen($permissions[0]);
+            else
+                redirect("system/menu"); //permissions are saved in session
+        } else {
+            $this->Logger->error("Nothing found, redirecting to login with error screen");
+            redirect("login/index?error=true");
+        }
+    }
+
     private function redirectToSystemScreen($permission) {
         $this->Logger->info("Starting " . __METHOD__);
         switch ($permission) {
