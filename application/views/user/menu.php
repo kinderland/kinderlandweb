@@ -44,12 +44,14 @@
         <h4>A NOSSA META É DE R$ 550.000 ATÉ O DIA 20/12.</h4>
         <p></p>
 
+        <div class="row">
+            <div class="col-lg-8">
         <p align="justify">Basta escolher o valor entre as opções abaixo que poderão ser pagas no cartão de crédito em até 8 vezes ou no cartão de débito à vista. </b> Tomamos como referência o valor equivalente a um colonista da temporada da 2ª Turma.</p>  
         
         <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.</p> 
 
         <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
-    
+        </div>
         
 <!--
         <h3>DOAÇÃO EMERGENCIAL para a ASSOCIAÇÃO KINDERLAND </h3>
