@@ -39,10 +39,17 @@
             </div>
         </div>
 
-        <h3>AJUDE A COLÔNIA!</h3>
+        <h4>AJUDE A COLÔNIA!</h4>
         <p></p>
-        <h3>A NOSSA META É DE R$ 550.000 ATÉ O DIA 20/12.</h3>
+        <h4>A NOSSA META É DE R$ 550.000 ATÉ O DIA 20/12.</h4>
         <p></p>
+
+        <p align="justify">Basta escolher o valor entre as opções abaixo que poderão ser pagas no cartão de crédito em até 8 vezes ou no cartão de débito à vista. </b> Tomamos como referência o valor equivalente a um colonista da temporada da 2ª Turma.</p>  
+        
+        <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.</p> 
+
+        <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
+    
         
 <!--
         <h3>DOAÇÃO EMERGENCIAL para a ASSOCIAÇÃO KINDERLAND </h3>
