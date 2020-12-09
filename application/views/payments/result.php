@@ -1,5 +1,5 @@
 <div class="row">
-    <?php require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
+    <?php if ($fullname != 'Visitante') require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
     <div class="col-lg-10 middle-content">
 
         <?php
