@@ -29,12 +29,23 @@
                 <img src="<?= $this->config->item('assets'); ?>images/kinderland/KinderlandDoeoeoa.jpeg" height=300/>
 
 
-
-            <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 20:00): R$ 180.123</button></p>
+<!--
+            <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 20:00): R$ 180.123</button></p>a
+-->
             </div>
         </div>
 
+        <p>Kinderland,<br>onde passei os melhores momentos, talvez os melhores da vida!</p>
+
+        <h3>AJUDE A COLÔNIA!</h3>
+        <p></p>
+        <h3>A NOSSA META É DE R$ 550.000 ATÉ O DIA 20/12.</h3>
+        <p></p>
+        <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 20:00): R$ 180.123</button></p>
+
+<!--
         <h3>DOAÇÃO EMERGENCIAL para a ASSOCIAÇÃO KINDERLAND </h3>
+-->
         <div class="row">
             <div class="col-lg-9">
                 <p align="justify">
@@ -43,7 +54,7 @@
                     <?= ($gender = "M") ? "Prezado" : "Prezada" ?> <?= $fullname ?>, <br />
                     <br />
 -->
-
+<!--
                 <p align="right">Kinderland,<br>onde passei os melhores momentos, talvez os melhores da vida!</p>
 
                 <p align="justify">Diante da pandemia do Coronavírus e seguindo as orientações da Comissão Médica, infelizmente decidimos cancelar as temporadas da MiniK/2020 e Verão/2021 da tradicional Colônia de Férias, realizada desde 1952.</p>
@@ -61,6 +72,7 @@
                 <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
 
                 </p>
+-->
 <!--                 
                  <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Valor arrecadado (atualizado às 17:30): R$ 175.523</button></p>
 -->
