@@ -90,8 +90,8 @@ class Login extends CK_Controller {
 
         public function guestLoginSuccessful() {
         $this->Logger->info("Starting " . __METHOD__);
-        $login = 'paulorzon@gmail.com';
-        $password = 'aaa';
+        $login = 'kinderlanddoacao@gmail.com';
+        $password = 'doe';
 
         $this->Logger->info("Login given: " . $login);
 
