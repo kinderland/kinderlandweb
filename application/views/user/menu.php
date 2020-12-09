@@ -20,6 +20,7 @@
 
     <div class="col-lg-10" bgcolor="red">
         <h3>Bem <?= ($gender == "M") ? "vindo" : "vinda" ?>, <?= $fullname ?></h3>
+        <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Valor arrecadado: R$ 175.523</button></p>
     </div>
     <tr>
 
@@ -51,9 +52,9 @@
                 <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
 
                 </p>
-                 
-                 <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Arrecadado até ontem: R$ 135.410</button></p>
-
+<!--                 
+                 <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Valor arrecadado (atualizado às 17:30): R$ 175.523</button></p>
+-->
             </div>
         </div>
 
