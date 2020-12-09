@@ -37,7 +37,7 @@
                     <img src="<?= $this->config->item('assets'); ?>images/kinderland/logo-kinderland.png" width=140 height=50 />
                 </a>
                 <a  style="font-size:28px;color:black;display:inline-block;text-align:center;justify-content:center">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     Você chegou no lugar certo ! Entre ou DOE por aqui<br>
                 </a>
                 <div class="navbar-form navbar-right" style="margin-top:20px">
