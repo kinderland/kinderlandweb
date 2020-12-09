@@ -20,7 +20,7 @@
     <div class="col-lg-10 middle-content">
         <div class="row">
             <div class="col-lg-9">
-            <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 17:30): R$ 175.523</button></p>
+            <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 20:00): R$ 180.123</button></p>
             </div>
         </div>
         <h3>DOAÇÃO EMERGENCIAL para a ASSOCIAÇÃO KINDERLAND </h3>
