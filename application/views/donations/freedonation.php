@@ -80,6 +80,9 @@
                                 <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="1800" onClick="setValue(1800);validateForm(event)"/> </th>
                                 <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="2700" onClick="setValue(2700);validateForm(event)"/> </th>
                                 <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="3600" onClick="setValue(3600);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="5400" onClick="setValue(5400);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="7200" onClick="setValue(7200);validateForm(event)"/> </th>
+                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="9000" onClick="setValue(9000);validateForm(event)"/> </th>
                                                               
                         </table>
                     </div>
