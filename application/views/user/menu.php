@@ -25,17 +25,15 @@
 
 <div class="col-lg-10 middle-content">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-2">
                 <img src="<?= $this->config->item('assets'); ?>images/kinderland/KinderlandDoeoeoa.jpeg" height=300/>
 
-
+        <h2><p>Kinderland,<br>onde passei os melhores momentos, talvez os melhores da vida!</p></h2>
 <!--
             <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 20:00): R$ 180.123</button></p>a
 -->
             </div>
         </div>
-
-        <p>Kinderland,<br>onde passei os melhores momentos, talvez os melhores da vida!</p>
 
         <h3>AJUDE A COLÔNIA!</h3>
         <p></p>
