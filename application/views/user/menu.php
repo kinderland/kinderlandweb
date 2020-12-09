@@ -25,7 +25,7 @@
 
 <div class="col-lg-10 middle-content">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-7">
                 <img src="<?= $this->config->item('assets'); ?>images/kinderland/KinderlandDoeoeoa.jpeg" height=300/>
 
         <h4><p>Kinderland,<br>onde passei os melhores momentos, talvez os melhores da vida!</p></h4>
