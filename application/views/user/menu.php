@@ -19,8 +19,9 @@
     <?php if ($fullname != 'Visitante') require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
 
     <div class="col-lg-10" bgcolor="red">
-        <h3>Bem <?= ($gender == "M") ? "vindo" : "vinda" ?>, <?= $fullname ?></h3>
-        <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Valor arrecadado: R$ 175.523</button></p>
+        <h3>Bem <?= ($gender == "M") ? "vindo" : "vinda" ?>, <?= $fullname ?>
+            <a align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Valor arrecadado: R$ 175.523</button></a>
+        </h3>
     </div>
     <tr>
 
