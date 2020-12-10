@@ -89,12 +89,13 @@
             </div>
         </div>
 
-        
+
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
             <div class="row">
-                    <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
+            <div class="col-lg-8">
+                    <label> Valor da doação: </label>
             </div>
-
+            </div>
                     <div class="btn_room_row" >
                         <table>
                             <tr>
