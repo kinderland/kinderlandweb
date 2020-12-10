@@ -51,6 +51,8 @@
         <p align="justfy">Agradecemos muito o seu carinho e colaboração para mantermos a KINDERLAND viva neste momento delicado.</p> 
 
         <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
+
+        <label for="fullname" class="col-lg-3 control-label"> Valor da doação: </label>
         </div>
         
 <!--
@@ -142,13 +144,7 @@
 
 
     </div>
-        <div class="container">
-        <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <a href="http://www.kinderland.com.br/colonias-atuais/" target="_blank"><button class="btn btn-secondary" style="font-size:14px;color:#428bca;border-radius:5px;border:3px solid #428bca">SOBRE A CAMPANHA</button></a>
-        </div>
-        </div>
-        </div>
+
 
 <!--
     <div class="col-lg-10" bgcolor="red">
