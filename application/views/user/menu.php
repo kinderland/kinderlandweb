@@ -52,9 +52,7 @@
 
         <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
 
-        <p align="justfy"><b>Valor da doação:</b></p>
-
-                <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
+        <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
             <div class="row">
                     <label for="fullname" class="col-lg-3 control-label"> Valor da doação: </label>
             </div>
@@ -128,44 +126,6 @@
             </div>
         </div>
 
-
-        <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
-            <div class="row">
-                    <label for="fullname" class="col-lg-3 control-label"> Valor da doação: </label>
-            </div>
-
-                    <div class="btn_room_row" >
-                        <table>
-                            <tr>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="900" onClick="setValue(900);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="1800" onClick="setValue(1800);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="2700" onClick="setValue(2700);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="3600" onClick="setValue(3600);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="5400" onClick="setValue(5400);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="7200" onClick="setValue(7200);validateForm(event)"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="9000" onClick="setValue(9000);validateForm(event)"/> </th>                                                              
-                        </table>
-                    </div>
-            <br></br>
-            <div class="row">
-                    <label for="fullname" class="col-lg-2 control-label"> Outro valor: </label>
-            </div>
-
-                    <div class="btn_room_row" >
-                        <table>
-                            <tr>
-                                <th> <input type="text" size="10" class="form-control" value=""
-                           name="donation_value" id="donation_value" style="margin-left:5px;border:2px solid #008CBA" 
-                           oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/> </th>
-                                <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="Prosseguir" onClick="validateForm(event)"/> </th>                        
-                        </table>
-                    </div>
-
-            <tr>
-
-        </form>
-
-        <br></br>
         <div class="row">
             <div class="col-lg-8">
                 <p align="right"><a href="http://www.kinderland.com.br/colonias-atuais/" target="_blank"><button align="right" class="btn btn-secondary" style="font-size:14px;color:#428bca;border-radius:5px;border:3px solid #428bca">SOBRE A CAMPANHA</button></a></p>
