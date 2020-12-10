@@ -119,7 +119,7 @@
                            name="donation_value" id="donation_value" style="margin-left:5px;border:2px solid #008CBA" 
                            oninvalid="this.setCustomValidity('O valor mínimo para doação é de R$50,00.')"/> </th>
                                 <th> <input type="submit" class="btn btn-primary" style="margin-left:5px" value="Prosseguir" onClick="validateForm(event)"/> </th>  
-                                <th> href="http://www.kinderland.com.br/colonias-atuais/" target="_blank"><button align="right" class="btn btn-secondary" style="font-size:14px;color:#428bca;border-radius:5px;border:3px solid #428bca">SOBRE A CAMPANHA</button></th>                            
+                                <th><a href="http://www.kinderland.com.br/colonias-atuais/" target="_blank"><button align="right" class="btn btn-secondary" style="font-size:14px;color:#428bca;border-radius:5px;border:3px solid #428bca">SOBRE A CAMPANHA</button></th>                            
                         </table>
                     </div>
 
