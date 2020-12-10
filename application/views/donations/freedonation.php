@@ -16,6 +16,7 @@
 </script>
 
 <div class = "row">
+    <?php if ($fullname != 'Visitante') require_once APPPATH . 'views/include/common_user_left_menu.php' ?>
 
     <tr>
 
