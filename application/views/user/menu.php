@@ -52,7 +52,8 @@
 
         <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
 
-        <label for="fullname" class="col-lg-3 control-label"> Valor da doação: </label>
+        <p align="justfy"><b>Valor da doação:</b></p>
+        
         </div>
         
 <!--
