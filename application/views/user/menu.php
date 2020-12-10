@@ -133,8 +133,12 @@
         </form>
 
         <br></br>
-        <a href="http://www.kinderland.com.br/colonias-atuais/"><button class="btn btn-secondary" style="font-size:18px;color:#428bca;border-radius:5px;border:3px solid #428bca">SOBRE A CAMPANHA</button></a>
-
+        <div class="col-lg-5 middle-content">
+        <div class="row">
+            <div class="col-lg-2">
+        <a href="http://www.kinderland.com.br/colonias-atuais/"><button class="btn btn-secondary" style="font-size:14px;color:#428bca;border-radius:5px;border:3px solid #428bca">SOBRE A CAMPANHA</button></a>
+        </div>
+        </div>
     </div>
 
 
