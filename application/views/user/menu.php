@@ -39,6 +39,9 @@
             </div>
         </div>
 
+        <p></p>
+        <p></p>
+
         <h4>AJUDE A COLÔNIA!</h4>
         <p></p>
         <h4>A NOSSA META É DE R$ 550.000 ATÉ O DIA 20/12.</h4>
