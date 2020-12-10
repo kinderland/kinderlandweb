@@ -86,11 +86,8 @@
 <!--                 
                  <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:#428bca;background-color:white;border-radius:5px">Valor arrecadado (atualizado às 17:30): R$ 175.523</button></p>
 -->
-            </div>
-        </div>
+        
 
-        <div class="row">
-            <div class="col-lg-8">
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
             <div class="row">
                     <label for="fullname" class="col-lg-2 control-label"> Valor da doação: </label>
@@ -132,8 +129,10 @@
             </div>
 -->
         </form>
+
+    </div>
         </div>
-        </div>
+
 
     </div>
 
