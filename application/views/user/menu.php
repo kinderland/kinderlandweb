@@ -52,6 +52,7 @@
 
         <p align="justfy">Se houver dúvidas, favor entrar em contato conosco pelo e-mail secretaria@kinderland.com.br ou pelo Whataspp: (21) 98344-9449</p>
 
+        <p></p>
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
             <div class="row">
                     <label for="fullname" class="col-lg-3 control-label"> Valor da doação: </label>
