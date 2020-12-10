@@ -39,8 +39,7 @@
             </div>
         </div>
 
-        <p></p>
-        <p></p>
+        <br></br>
 
         <h4>AJUDE A COLÔNIA!</h4>
         <p></p>
