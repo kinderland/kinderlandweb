@@ -26,7 +26,7 @@
 <div class="col-lg-10 middle-content">
         <div class="row">
             <div class="col-lg-8">
-                <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:black;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 23:30): R$ 282.879</button></p>
+                <p align="right" style="border: 1px;font-size:16px;color:#428bca;"><button style="border: 3px solid #428bca;color:black;background-color:white;border-radius:5px;pointer-events:none">Valor arrecadado (atualizado às 11:30): R$ 294.474</button></p>
             </div>
             <div class="col-lg-8">
                 <img src="<?= $this->config->item('assets'); ?>images/kinderland/KinderlandDoeoeoa.jpeg" align="center" height=360/>
