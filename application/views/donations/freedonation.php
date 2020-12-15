@@ -53,6 +53,21 @@
 
         <br></br>
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
+
+            <?php if ($fullname != 'Visitante') 
+            <div class="row">
+                    <label for="fullname" class="col-lg-2 control-label"> Nome ou email (não obrigatório): </label>
+            </div>
+
+                    <div class="btn_room_row" >
+                        <table>
+                            <tr>
+                                <th> <input type="text" size="50" class="form-control" value=""
+                           name="donator_value" id="donator_value" style="margin-left:5px;border:2px solid #008CBA" 
+                                /> </th>                        
+                        </table>
+                    </div>
+             ?>
             <div class="row">
                     <label for="fullname" class="col-lg-3 control-label"> Valor da doação: </label>
             </div>
