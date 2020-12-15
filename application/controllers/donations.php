@@ -88,10 +88,15 @@ class Donations extends CK_Controller {
 		$userId = $this->session->userdata("user_id");
 		$donationValue = floatval(str_replace(",",".",$donationValueString));
 
+		$visitorName = $_POST['visitorname_value'];
+
 		try{
 			$this->generic_model->startTransaction();
 
 			$this->Logger->info("Value to be donated: R$". $donationValue);
+
+			$this->Logger->info("To be donated by: ". $visitorName);
+			$this->Logger->info("donationId: ". $donationId);
 
 			$donationId = $this->donation_model->createDonation($userId, $donationValue, DONATION_TYPE_FREEDONATION);
 			$this->Logger->info("Created donation with id: ". $donationId);

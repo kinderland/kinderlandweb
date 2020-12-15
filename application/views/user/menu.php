@@ -66,7 +66,7 @@
                         <table>
                             <tr>
                                 <th> <input type="text" size="30" class="form-control" value=""
-                           name="donator_value" id="donator_value" style="margin-left:5px;border:2px solid #008CBA" 
+                           name="visitorname_value" id="visitorname_value" style="margin-left:5px;border:2px solid #008CBA" 
                                 /> </th>                        
                         </table>
                     </div>
