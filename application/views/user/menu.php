@@ -61,7 +61,7 @@
             <div class="row">
                     <label for="fullname" class="col-lg-8 control-label"> Nome ou email (não obrigatório): </label>
             </div>
-            <tr>
+            <p></p>
                     <div class="btn_room_row" >
                         <table>
                             <tr>
@@ -73,7 +73,7 @@
              <?php }?>
 
              <tr>
-                
+
             <div class="row">
                     <label for="fullname" class="col-lg-3 control-label"> Valor da doação: </label>
             </div>
