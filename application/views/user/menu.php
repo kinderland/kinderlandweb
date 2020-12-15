@@ -59,7 +59,7 @@
 
             <?php if ($fullname == 'Visitante') { ?>
             <div class="row">
-                    <label for="fullname" class="col-lg-4 control-label"> Nome ou email (não obrigatório): </label>
+                    <label for="fullname" class="col-lg-8 control-label"> Nome ou email (não obrigatório): </label>
             </div>
 
                     <div class="btn_room_row" >
