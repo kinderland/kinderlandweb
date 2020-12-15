@@ -60,6 +60,8 @@
             <?php if ($fullname == 'Visitante') { ?>
             <div class="row">
                     <label for="fullname" class="col-lg-8 control-label"> Nome ou email (não obrigatório): </label>
+                    <input type="text" size="50" class="form-control" value=""
+                           name="donator_value" id="donator_value" style="margin-left:5px;border:2px solid #008CBA" />
             </div>
 
                     <div class="btn_room_row" >
