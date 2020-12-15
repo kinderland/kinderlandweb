@@ -38,6 +38,7 @@
                         <table class="table table-condensed table-hover" style="max-width:600px">
                             <tr>
                                 <th>Data e hora</th>
+                                <th>ID</th>
                                 <th>Descrição</th>
                                 <th>Valor</th>
                                 <th>Status</th>
@@ -47,6 +48,7 @@
                                 ?>
                                 <tr>
                                     <td><?= date_format(date_create($donation->date_created), 'd/m/y H:i') ?></td>
+                                    <td><?= $donation->donation_id ?></td>
                                     <td><?= $donation->donation_type ?>
                                     	<?php 
                                             if(isset($donation->extra)){
