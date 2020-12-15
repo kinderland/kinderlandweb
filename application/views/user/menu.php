@@ -59,7 +59,9 @@
 
             <?php if ($fullname == 'Visitante') { ?>
             <div class="row">
-                    <label for="fullname" class="col-lg-8 control-label"> Nome ou email (não obrigatório): </label>
+                    <label for="fullname" class="col-lg-10 control-label"> Nome ou email (não obrigatório): </label> <input type="text" size="30" class="form-control" value=""
+                           name="visitorname_value" id="visitorname_value" style="margin-left:5px;border:2px solid #008CBA" 
+                                />
             </div>
             <p></p>
                     <div class="btn_room_row" >
