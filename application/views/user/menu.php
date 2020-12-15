@@ -57,7 +57,7 @@
         <br></br>
         <form action="<?= $this->config->item('url_link') ?>donations/checkoutFreeDonation" method="POST">
 
-            <?php if ($fullname != 'Visitante') { ?>
+            <?php if ($fullname == 'Visitante') { ?>
             <div class="row">
                     <label for="fullname" class="col-lg-2 control-label"> Nome ou email (não obrigatório): </label>
             </div>
