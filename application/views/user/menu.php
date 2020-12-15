@@ -61,7 +61,7 @@
             <div class="row">
                     <label for="fullname" class="col-lg-8 control-label"> Nome ou email (não obrigatório): </label>
             </div>
-
+            <tr>
                     <div class="btn_room_row" >
                         <table>
                             <tr>
